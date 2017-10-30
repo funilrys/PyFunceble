@@ -17,3 +17,10 @@
 #
 # - Let's contribute to PyFunceble !
 ##########################################################################
+
+
+class Settings(object):
+    """
+    Serve as "saver" of all needed settings or parameters.
+    """
+²
