@@ -80,6 +80,8 @@ class Settings(object):
     debug = False
     # This will save the domain that is currently under test.
     domain = ''
+    # Activate/Deactivate the generation of hosts file
+    generate_hosts = True
     # Used to check if the header has been already printed on screen.
     header_printed = False
     # Domain to filter. For example \.blogspot\. will test only blogspot.*
