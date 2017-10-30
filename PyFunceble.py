@@ -170,3 +170,14 @@ class Settings(object):
     # Potentially inactive codes
     down_potentially_codes = [400, 402, 403, 404, 409, 410, 412, 414, 415, 416]
     ##########################################################################
+    ########################### File Manipulation ############################
+    # Used to check if we already cleaned the given file
+    cleaned_done = False
+    # Default hosts file filename
+    hosts_default_filename = 'hosts'
+    # Default plain list domain filename
+    plain_list_domain_default_filename = 'list'
+    # If set to True, we don't generate any files.
+    # Please note: This does not apply to hosts files
+    no_files = False
+    ##########################################################################
