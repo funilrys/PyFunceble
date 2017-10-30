@@ -18,6 +18,8 @@
 # - Let's contribute to PyFunceble !
 ##########################################################################
 
+from time import strftime
+
 
 class Settings(object):
     """
@@ -111,4 +113,8 @@ class Settings(object):
     link_to_repo = 'https://github.com/funilrys/PyFunceble'
     # IANA whois Servers
     iana_server = 'whois.iana.org'
+    ##########################################################################
+    ################################## Time ##################################
+    # Current date & Time
+    current_datetime = strftime("%a %d %b %H:%m:%S %Z %Y")
     ##########################################################################
