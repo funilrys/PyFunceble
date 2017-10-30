@@ -12,7 +12,7 @@
 # Written by: @Funilrys, Nissar Chababy <contact at funilrys dot com>
 # GitHub : https://github.com/funilrys/PyFunceble
 
-################################ Contributors ############################
+################################ Contributors ################################
 # - All contributors of https://github.com/funilrys/Funceble
 #
 # - Let's contribute to PyFunceble !
@@ -24,7 +24,7 @@ class Settings(object):
     Serve as "saver" of all needed settings or parameters.
     """
 
-    ################################### Status ###############################
+    ################################# Status #################################
     # Default index for "official" returned status
     # Why 5 ? Simply luck I started to write the status and it's appears that the
     # fifth index is simply what we used in Funceble.
@@ -65,7 +65,7 @@ class Settings(object):
     # represent an 'INACTIVE' domain.
     potentially_down_status = ['potentially_down', 'potentially_inactive']
     ##########################################################################
-    #################################### Defaults ############################
+    ################################ Defaults ################################
     # Activation/Deactivation of the autocontinue system.
     auto_continue = True
     # We use are going to use this variable is order to pass some command before
@@ -105,4 +105,10 @@ class Settings(object):
     travis_autosave_minutes = 15
     # Output into unified files
     unified_file = True
+    ##########################################################################
+    ############################ Links / Servers #############################
+    # Link of the repository
+    link_to_repo = 'https://github.com/funilrys/PyFunceble'
+    # IANA whois Servers
+    iana_server = 'whois.iana.org'
     ##########################################################################
