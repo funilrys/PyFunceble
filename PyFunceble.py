@@ -24,7 +24,7 @@ class Settings(object):
     Serve as "saver" of all needed settings or parameters.
     """
 
-    ################################### Status #################################
+    ################################### Status ###############################
     # Default index for "official" returned status
     # Why 5 ? Simply luck I started to write the status and it's appears that the
     # fifth index is simply what we used in Funceble.
@@ -35,7 +35,16 @@ class Settings(object):
     # Official down status
     official_down_status = down_status[official_status_index]
     # List of valid up status
-    up_status =  ['up', 'Up', 'UP', 'active','Active', 'ACTIVE', 'valid', 'Valid', 'VALID']
+    up_status = [
+        'up',
+        'Up',
+        'UP',
+        'active',
+        'Active',
+        'ACTIVE',
+        'valid',
+        'Valid',
+        'VALID']
     # Official up status
     official_up_status = up_status[official_status_index]
     # List of valid invalid status
@@ -45,14 +54,55 @@ class Settings(object):
     # Generic status
     # Why generic ? Good question that the first word who come to discribed the
     # unified table system.
-    generic_status = ['generic','Generic','GENERIC']
+    generic_status = ['generic', 'Generic', 'GENERIC']
     # Potentionally up status
     # Why potentially ? Please note: https://git.io/vFttS
     # I consider them as potentially because for example we can't be sure that
-    # a 403 HTTP code status represent an 'INACTIVE' domain
+    # a 403 HTTP code status represent an 'INACTIVE' domain.
     potentialy_up_status = ['potentially_up', 'potentially_active']
     # Potentially down status
     # As an example, We can't be sure that a 400 HTTP code status result
-    # represent an 'INACTIVE' domain
+    # represent an 'INACTIVE' domain.
     potentially_down_status = ['potentially_down', 'potentially_inactive']
-    ############################################################################
+    ##########################################################################
+    #################################### Defaults ############################
+    # Activation/Deactivation of the autocontinue system.
+    auto_continue = True
+    # We use are going to use this variable is order to pass some command before
+    # the final commit in case auto_continue = True.
+    command_before_end = ''
+    # Set the custom IP in case we need to generate hosts files according to our
+    # results.
+    custom_ip = '0.0.0.0'
+    # Generate debug file if logs are activated.
+    debug = False
+    # This will save the domain that is currently under test.
+    domain = ''
+    # Used to check if the header has been already printed on screen.
+    header_printed = False
+    # Domain to filter. For example \.blogspot\. will test only blogspot.*
+    # domains.
+    to_filter = ''
+    # Activate/Deactive the output of every informations.
+    less = False
+    # Activate/Deactivate the output of logs
+    logs = True
+    # Activate/Deactivate the generation of plain list of domains accoding to
+    # out status.
+    plain_list_domain = False
+    # Activate/Deactive the quiet mode
+    quiet = False
+    # HTTP Status code timeout
+    # Consider this as the minimum time in seconds that we need before
+    seconds_before_http_timeout = 1
+    # Show/hide the percentage
+    show_percentage = True
+    # If set to true, we generate the files into the 'splited/' directory
+    split_files = False
+    # Activation/Deactivation of Travis CI autosave system
+    travis = False
+    # Minimum of minutes before we start commiting to upstream under Travis CI
+    travis_autosave_minutes = 15
+    # Output into unified files
+    unified_file = True
+    ##########################################################################
