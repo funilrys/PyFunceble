@@ -134,3 +134,37 @@ class Settings(object):
     # Percentage of invalid
     percentage_of_invalid = 0
     ##########################################################################
+    ################################ HTTP Code ###############################
+    # Activate/Deactivate the used of the http code
+    http_code_status = True
+    # Active considered codes.
+    # Note that if nslookup = inactive and http code is in the following list,
+    # We set the domain to active.
+    active_http_codes = [100, 101, 200, 201, 202, 203, 204, 205, 206]
+    # Potentially active codes
+    potentially_up_codes = [
+        000,
+        300,
+        301,
+        302,
+        303,
+        304,
+        305,
+        307,
+        403,
+        405,
+        406,
+        407,
+        408,
+        411,
+        413,
+        417,
+        500,
+        501,
+        502,
+        503,
+        504,
+        505]
+    # Potentially inactive codes
+    down_potentially_codes = [400, 402, 403, 404, 409, 410, 412, 414, 415, 416]
+    ##########################################################################
