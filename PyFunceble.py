@@ -118,3 +118,19 @@ class Settings(object):
     # Current date & Time
     current_datetime = strftime("%a %d %b %H:%m:%S %Z %Y")
     ##########################################################################
+    ################################# Counter ################################
+    # Counter of the number of tested
+    number_of_tested = 0
+    # Counter of the number of active/up
+    number_of_up = 0
+    # Counter of the number of inactive/down
+    number_of_down = 0
+    # Counter of the number of invalid
+    number_of_invalid = 0
+    # Percentage of active/up
+    percentage_of_up = 0
+    # Percentage of inactive/down
+    percentage_of_down = 0
+    # Percentage of invalid
+    percentage_of_invalid = 0
+    ##########################################################################
