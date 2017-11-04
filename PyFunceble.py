@@ -254,6 +254,8 @@ class Settings(object):
     # Please note that this directory will keep the percentage of the current
     # session.
     percentage_logs_dir = logs_dir + 'percentage/'
+    # Output of percentae logs.
+    output_percentage_log = percentage_logs_dir + 'percentage.txt'
     # Execution time logs.
     # Please note that this file is generated when Settings.show_execution_time
     # is activated.
