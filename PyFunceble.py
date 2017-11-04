@@ -204,3 +204,16 @@ class Settings(object):
     down_domains_dir = domains_dir + official_down_status + '/'
     # INVALID domains directory.
     invalid_domains_dir = domains_dir + official_invalid_status + '/'
+
+    ##########################################################################
+    #                               `output/hosts/`
+    # This directory will keep the generated hosts files according to their
+    # official status.
+    ##########################################################################
+    # hosts directory.
+    hosts_dir = output_dir + 'hosts/'
+    # ACTIVE/Up hosts directory.
+    up_hosts_dir = hosts_dir + official_up_status + '/'
+    # INACTIVE/Down hosts directory.
+    down_hosts_dir = hosts_dir + official_down_status + '/'
+    # INVALID hosts directory.
