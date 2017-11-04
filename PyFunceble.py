@@ -18,7 +18,7 @@
 # - Let's contribute to PyFunceble !
 ##########################################################################
 
-from os import path
+from os import path, remove
 from time import strftime
 
 
@@ -329,3 +329,54 @@ class PyFunceble(object):
 
                 if not read.startswith('#'):
                     list_to_test.append(read)
+
+
+class Helpers(object):
+    """
+    PyFunceble's helpers.
+    """
+
+    class File(object):
+        """
+        File treatment/manipulations.
+
+        :param file: A string, a path to the file to manipulate.
+        """
+
+        def __init__(self, file):
+            self.file = file
+
+        def write(self, data_to_write):
+            """
+            Write or append data into the given file path.
+
+            :param data_to_write: A string, the data to write.
+            """
+
+            if data_to_write is not None and isinstance(data_to_write, str):
+                if path.isfile(self.file):
+                    with open(self.file, 'a') as f:
+                        f.write(data_to_write)
+                else:
+                    with open(self.file, 'w') as f:
+                        f.write(data_to_write)
+
+        def read(self):
+            """
+            Read a given file path and return its content.
+            """
+
+            with open(self.file, 'r') as f:
+                funilrys = f.read()
+
+            return funilrys
+
+        def delete(self):
+            """
+            Delete a given file path.
+            """
+
+            try:
+                remove(self.file)
+            except OSError:
+                pass
