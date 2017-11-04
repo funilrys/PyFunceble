@@ -279,3 +279,29 @@ class Settings(object):
     output_down_result = output_splited_results + official_down_status
     # Output of INVALID results.
     output_invalid_result + output_splited_results + official_invalid_status
+
+    ##########################################################################
+    #                               `output/HTTP_Analytic/`
+    # This directory will keep all the results of the HTTP status code
+    # analyze.
+    # Please note that this only works if Settings.http_code_status
+    # is activated.
+    ##########################################################################
+    # HTTP analytic directory.
+    output_http_analytic = output_dir + 'HTTP_Analytic/'
+    # Active HTTP codes directory.
+    http_up = output_http_analytic + official_up_status + '/'
+    # Output of Active codes.
+    # Please note that a domain is set into the following file only if
+    # the official status is not normally `ACTIVE`.
+    # Please also note that the domains listed here are automatically set
+    # into all ACTIVE results files.
+    output_http_up = http_up + official_up_status
+    # Potentially active codes directory.
+    http_potentially_up = output_http_analytic + 'POTENTIALLY_ACTIVE/'
+    # Output of potentially active codes.
+    output_http_potentially_up = http_potentially_up + 'potentially_active'
+    # Potentially inactive codes directory.
+    http_potentially_down = output_http_analytic + 'POTENTIALLY_INACTIVE/'
+    # Output of potentially inactive codes.
+    output_http_potentially_down = http_potentially_down + 'inactive_or_potentially'
