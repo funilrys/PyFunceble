@@ -198,12 +198,20 @@ class Settings(object):
     ##########################################################################
     # Domains directory.
     domains_dir = output_dir + 'domains/'
+    # Default filename.
+    domains_default_filename = 'list'
     # ACTIVE/Up domains directory.
     up_domains_dir = domains_dir + official_up_status + '/'
     # INACTIVE/Down domains directory.
     down_domains_dir = domains_dir + official_down_status + '/'
     # INVALID domains directory.
     invalid_domains_dir = domains_dir + official_invalid_status + '/'
+    # Output of ACTIVE/Up domains.
+    output_up_domain = up_domains_dir + domains_default_filename
+    # Output of INACTIVE/Down domains.
+    output_down_domain = down_domains_dir + domains_default_filename
+    # Output of INVALID domains.
+    output_invalid_domain = invalid_domains_dir + domains_default_filename
 
     ##########################################################################
     #                               `output/hosts/`
