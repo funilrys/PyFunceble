@@ -181,3 +181,26 @@ class Settings(object):
     # Please note: This does not apply to hosts files
     no_files = False
     ##########################################################################
+    ################################# Outputs ################################
+    # Note: DO NOT FORGET `/` AT THE END.
+
+    # Output directory.
+    # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
+    output_dir = '/home/funilrys/Projects/PyFunceble/output/'
+    # Autocontinue log file.
+    # Please not that this file is != from Funceble.
+    autocontinue_log_file = output_dir + 'continue.json'
+
+    ##########################################################################
+    #                               `output/domains/`
+    # This directory will keep the plain list of domain to their
+    # official status.
+    ##########################################################################
+    # Domains directory.
+    domains_dir = output_dir + 'domains/'
+    # ACTIVE/Up domains directory.
+    up_domains_dir = domains_dir + official_up_status + '/'
+    # INACTIVE/Down domains directory.
+    down_domains_dir = domains_dir + official_down_status + '/'
+    # INVALID domains directory.
+    invalid_domains_dir = domains_dir + official_invalid_status + '/'
