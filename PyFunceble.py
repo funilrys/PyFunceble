@@ -18,6 +18,7 @@
 # - Let's contribute to PyFunceble !
 ##########################################################################
 
+from os import path
 from time import strftime
 
 
@@ -278,7 +279,7 @@ class Settings(object):
     # Output of INACTIVE/Down results.
     output_down_result = output_splited_results + official_down_status
     # Output of INVALID results.
-    output_invalid_result + output_splited_results + official_invalid_status
+    output_invalid_result = output_splited_results + official_invalid_status
 
     ##########################################################################
     #                               `output/HTTP_Analytic/`
