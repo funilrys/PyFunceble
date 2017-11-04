@@ -27,16 +27,16 @@ class Settings(object):
     """
 
     ################################# Status #################################
-    # Default index for "official" returned status
+    # Default index for "official" returned status.
     # Why 5 ? Simply luck I started to write the status and it's appears that the
     # fifth index is simply what we used in Funceble.
     official_status_index = 5
-    # List of valid down status
+    # List of valid down status.
     down_status = ['down', 'Down', 'DOWN', 'inactive',
                    'Inactive', 'INACTIVE', 'error', 'Error', 'ERROR']
-    # Official down status
+    # Official down status.
     official_down_status = down_status[official_status_index]
-    # List of valid up status
+    # List of valid up status.
     up_status = [
         'up',
         'Up',
@@ -47,13 +47,13 @@ class Settings(object):
         'valid',
         'Valid',
         'VALID']
-    # Official up status
+    # Official up status.
     official_up_status = up_status[official_status_index]
-    # List of valid invalid status
+    # List of valid invalid status.
     invalid_status = ['ouch', 'Ouch', 'OUCH', 'invalid', 'Invalid', 'INVALID']
-    # Official invalid status
+    # Official invalid status.
     official_invalid_status = invalid_status[official_status_index]
-    # Generic status
+    # Generic status.
     # Why generic ? Good question that the first word who come to discribed the
     # unified table system.
     generic_status = ['generic', 'Generic', 'GENERIC']
@@ -80,7 +80,7 @@ class Settings(object):
     debug = False
     # This will save the domain that is currently under test.
     domain = ''
-    # Activate/Deactivate the generation of hosts file
+    # Activate/Deactivate the generation of hosts file.
     generate_hosts = True
     # Used to check if the header has been already printed on screen.
     header_printed = False
@@ -89,61 +89,61 @@ class Settings(object):
     to_filter = ''
     # Activate/Deactive the output of every informations.
     less = False
-    # Activate/Deactivate the output of logs
+    # Activate/Deactivate the output of logs.
     logs = True
     # Activate/Deactivate the generation of plain list of domains accoding to
     # out status.
     plain_list_domain = False
-    # Activate/Deactive the quiet mode
+    # Activate/Deactive the quiet mode.
     quiet = False
-    # HTTP Status code timeout
-    # Consider this as the minimum time in seconds that we need before
+    # HTTP Status code timeout.
+    # Consider this as the minimum time in seconds that we need before.
     seconds_before_http_timeout = 1
-    # Show/hide the percentage
+    # Show/hide the percentage.
     show_percentage = True
-    # If set to true, we generate the files into the 'splited/' directory
+    # If set to true, we generate the files into the 'splited/' directory.
     split_files = False
-    # Activation/Deactivation of Travis CI autosave system
+    # Activation/Deactivation of Travis CI autosave system.
     travis = False
-    # Minimum of minutes before we start commiting to upstream under Travis CI
+    # Minimum of minutes before we start commiting to upstream under Travis CI.
     travis_autosave_minutes = 15
-    # Output into unified files
+    # Output into unified files.
     unified_file = True
     ##########################################################################
     ############################ Links / Servers #############################
-    # Link of the repository
+    # Link of the repository.
     link_to_repo = 'https://github.com/funilrys/PyFunceble'
-    # IANA whois Servers
+    # IANA whois Servers.
     iana_server = 'whois.iana.org'
     ##########################################################################
     ################################## Time ##################################
-    # Current date & Time
+    # Current date & Time.
     current_datetime = strftime("%a %d %b %H:%m:%S %Z %Y")
     ##########################################################################
     ################################# Counter ################################
-    # Counter of the number of tested
+    # Counter of the number of tested.
     number_of_tested = 0
-    # Counter of the number of active/up
+    # Counter of the number of active/up.
     number_of_up = 0
-    # Counter of the number of inactive/down
+    # Counter of the number of inactive/down.
     number_of_down = 0
-    # Counter of the number of invalid
+    # Counter of the number of invalid.
     number_of_invalid = 0
-    # Percentage of active/up
+    # Percentage of active/up.
     percentage_of_up = 0
-    # Percentage of inactive/down
+    # Percentage of inactive/down.
     percentage_of_down = 0
-    # Percentage of invalid
+    # Percentage of invalid.
     percentage_of_invalid = 0
     ##########################################################################
     ################################ HTTP Code ###############################
-    # Activate/Deactivate the used of the http code
+    # Activate/Deactivate the used of the http code.
     http_code_status = True
     # Active considered codes.
     # Note that if nslookup = inactive and http code is in the following list,
     # We set the domain to active.
     active_http_codes = [100, 101, 200, 201, 202, 203, 204, 205, 206]
-    # Potentially active codes
+    # Potentially active codes.
     potentially_up_codes = [
         000,
         300,
@@ -167,18 +167,18 @@ class Settings(object):
         503,
         504,
         505]
-    # Potentially inactive codes
+    # Potentially inactive codes.
     down_potentially_codes = [400, 402, 403, 404, 409, 410, 412, 414, 415, 416]
     ##########################################################################
     ########################### File Manipulation ############################
-    # Used to check if we already cleaned the given file
+    # Used to check if we already cleaned the given file.
     cleaned_done = False
-    # Default hosts file filename
+    # Default hosts file filename.
     hosts_default_filename = 'hosts'
-    # Default plain list domain filename
+    # Default plain list domain filename.
     plain_list_domain_default_filename = 'list'
     # If set to True, we don't generate any files.
-    # Please note: This does not apply to hosts files
+    # Please note: This does not apply to hosts files.
     no_files = False
     ##########################################################################
     ################################# Outputs ################################
@@ -217,3 +217,31 @@ class Settings(object):
     # INACTIVE/Down hosts directory.
     down_hosts_dir = hosts_dir + official_down_status + '/'
     # INVALID hosts directory.
+
+    ##########################################################################
+    #                               `output/logs/`
+    # This directory will keep all generated logs of the current session
+    # if Settings.logs is activated.
+    ##########################################################################
+    # logs directory.
+    logs_dir = output_dir + 'logs/'
+    # WHOIS logs output.
+    # Please note that this directory will keep the whois records according to
+    # WHOIS server only if Settings.debug is activated.
+    whois_logs_dir = logs_dir + 'whois/'
+    # Wrong date format logs output.
+    # Please note thet this directory will keep a record of all wrong formated
+    # date.
+    date_format_logs_dir = logs_dir + 'date_format/'
+    # Percentages logs.
+    # Please note that this directory will keep the percentage of the current
+    # session.
+    percentage_logs_dir = logs_dir + 'percentage/'
+    # Execution time logs.
+    # Please note that this file is generated when Settings.show_execution_time
+    # is activated.
+    execution_time_logs = logs_dir + 'execution.log'
+    # No referer logs.
+    # Please note that this directory will keep a record of all domains
+    # extensions which don't have any known referer.
+    no_referer_logs_dir = logs_dir + 'no_referer/'
