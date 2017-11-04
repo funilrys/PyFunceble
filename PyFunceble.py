@@ -262,3 +262,18 @@ class Settings(object):
     # Please note that this directory will keep a record of all domains
     # extensions which don't have any known referer.
     no_referer_logs_dir = logs_dir + 'no_referer/'
+
+    ##########################################################################
+    #                               `output/splited/`
+    # This directory will keep all the results of execution according to
+    # the different matched status.
+    # Please note that this only works if Settings.split_files is activated.
+    ##########################################################################
+    # Splited directory.
+    output_splited_results = output_dir + 'splited/'
+    # Output of ACTIVE/Up results.
+    output_up_result = output_splited_results + official_up_status
+    # Output of INACTIVE/Down results.
+    output_down_result = output_splited_results + official_down_status
+    # Output of INVALID results.
+    output_invalid_result + output_splited_results + official_invalid_status
