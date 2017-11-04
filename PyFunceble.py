@@ -184,8 +184,12 @@ class Settings(object):
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
     output_dir = '/home/funilrys/Projects/PyFunceble/output/'
     # Autocontinue log file.
-    # Please not that this file is != from Funceble.
+    # Please note that this file is != from Funceble.
     autocontinue_log_file = output_dir + 'continue.json'
+    # Output of unified results.
+    # Please note that this the default output unless Settings.split_files is
+    # activated.
+    output_unified_results = output_dir + 'results.txt'
 
     ##########################################################################
     #                               `output/domains/`
