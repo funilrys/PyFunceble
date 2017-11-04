@@ -331,6 +331,42 @@ class PyFunceble(object):
                     list_to_test.append(read)
 
 
+class Prints(object):
+    """
+    Print data on screen and into a file if needed.
+
+    :param to_print: A list, the list of data to print.
+    :param template: A string, the template to use. Possibilities: Percentage, Less, HTTP and any status you want.
+    :param output_file: A string, the file to write.
+    :param only_on_file: A boolean, if true, we don't print data on screen.
+    """
+
+    def __init__(
+            self,
+            to_print,
+            template,
+            output_file=None,
+            only_on_file=False):
+        self.template = template
+        self.output = output_file
+        self.data_to_print = to_print
+        self.only_on_file = only_on_file
+
+    def before_header(self):
+        """
+        Print informations about PyFunceble and the date of generation of a file into a given path, if doesn't exist.
+        """
+
+        if self.output is not None and self.output != '' and not path.isfile(
+                self.output):
+            link = ("# File generated with %s\n" % Settings.link_to_repo)
+            date_of_generation = (
+                "# Date of generation: %s \n\n" %
+                Settings.current_datetime)
+
+            Helpers().File(self.output).write(link + date_of_generation)
+
+
 class Helpers(object):
     """
     PyFunceble's helpers.
