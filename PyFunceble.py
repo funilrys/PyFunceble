@@ -173,10 +173,6 @@ class Settings(object):
     ########################### File Manipulation ############################
     # Used to check if we already cleaned the given file.
     cleaned_done = False
-    # Default hosts file filename.
-    hosts_default_filename = 'hosts'
-    # Default plain list domain filename.
-    plain_list_domain_default_filename = 'list'
     # If set to True, we don't generate any files.
     # Please note: This does not apply to hosts files.
     no_files = False
@@ -220,11 +216,20 @@ class Settings(object):
     ##########################################################################
     # hosts directory.
     hosts_dir = output_dir + 'hosts/'
+    # Default filename.
+    hosts_default_filename = 'hosts'
     # ACTIVE/Up hosts directory.
     up_hosts_dir = hosts_dir + official_up_status + '/'
     # INACTIVE/Down hosts directory.
     down_hosts_dir = hosts_dir + official_down_status + '/'
     # INVALID hosts directory.
+    invalid_hosts_dir = hosts_dir + official_invalid_status + '/'
+    # Output of ACTIVE/Up hosts.
+    output_up_host = up_hosts_dir + hosts_default_filename
+    # Output of INACTIVE/Down hosts.
+    output_down_host = down_hosts_dir + hosts_default_filename
+    # Output of INVALID hosts.
+    output_invalid_host = invalid_hosts_dir + hosts_default_filename
 
     ##########################################################################
     #                               `output/logs/`
