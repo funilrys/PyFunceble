@@ -557,8 +557,8 @@ class Helpers(object):
                     with open(self.file, 'a') as file:
                         file.write(data_to_write)
                 else:
-                    with open(self.file, 'w') as f:
-                        f.write(data_to_write)
+                    with open(self.file, 'w') as file:
+                        file.write(data_to_write)
 
         def read(self):
             """
