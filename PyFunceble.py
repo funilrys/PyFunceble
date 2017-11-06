@@ -565,8 +565,8 @@ class Helpers(object):
             Read a given file path and return its content.
             """
 
-            with open(self.file, 'r') as f:
-                funilrys = f.read()
+            with open(self.file, 'r') as file:
+                funilrys = file.read()
 
             return funilrys
 
