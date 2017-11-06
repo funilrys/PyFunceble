@@ -1,5 +1,11 @@
 #!/bin/env python3
 
+"""
+PyFunceble is the litle sister of Funceble (https://github.com/funilrys/PyFunceble).
+Consider PyFunceble as a tool to check the status of a given domain name
+or IP.
+"""
+
 #  _______           _______           _        _______  _______  ______
 # (  ____ )|\     /|(  ____ \|\     /|( (    /|(  ____ \(  ____ \(  ___ \ ( \      (  ____ \
 # | (    )|( \   / )| (    \/| )   ( ||  \  ( || (    \/| (    \/| (   ) )| (      | (    \/
@@ -310,7 +316,8 @@ class Settings(object):
 
 class PyFunceble(object):
     """
-    Main entry to Funceble. Brain of the program. Also known as "put everything together to make the system works".
+    Main entry to Funceble. Brain of the program. Also known as "put everything
+    together to make the system works".
 
     :param domain: A string, a domain to test.
     :param file_path: A string, a path to a file to read.
@@ -334,9 +341,10 @@ class PyFunceble(object):
 class Prints(object):
     """
     Print data on screen and into a file if needed.
+    Template Possibilities: Percentage, Less, HTTP and any status you want.
 
     :param to_print: A list, the list of data to print.
-    :param template: A string, the template to use. Possibilities: Percentage, Less, HTTP and any status you want.
+    :param template: A string, the template to use.
     :param output_file: A string, the file to write.
     :param only_on_file: A boolean, if true, we don't print data on screen.
     """
@@ -354,7 +362,8 @@ class Prints(object):
 
     def before_header(self):
         """
-        Print informations about PyFunceble and the date of generation of a file into a given path, if doesn't exist.
+        Print informations about PyFunceble and the date of generation of a file
+        into a given path, if doesn't exist.
         """
 
         if self.output is not None and self.output != '' and not path.isfile(
@@ -366,11 +375,147 @@ class Prints(object):
 
             Helpers().File(self.output).write(link + date_of_generation)
 
+    def header_constructor(self, data_to_print, separator='-'):
+        """
+        Construct header of the table according to template.
+
+
+
+
+        :param data_to_print: A list, the list of data to print into the header.
+        :param separator: A string, the separator to use forr the table generation.
+        """
+
+        header_data = []
+        header_size = ''
+        before_size = '%-'
+        after_size = 's '
+
+        if separator:
+            separator_data = []
+
+        for data in data_to_print:
+            size = data_to_print[data]
+            header_data.append(data)
+
+            header_size += before_size + str(size) + after_size
+
+            if separator:
+                separator_data.append(separator * size)
+
+        if separator:
+            return [
+                header_size %
+                tuple(header_data),
+                header_size %
+                tuple(separator_data)]
+        return [header_size % tuple(header_data)]
+
+    def header(self):
+        """
+        Management and creation of templates of header.
+        Please consider as "header" the title of each columns.
+        """
+
+        if not Settings.header_printed or self.template == 'Percentage':
+            headers = {
+                Settings.official_up_status: {
+                    'Domain': 100,
+                    'Expiration Date': 17,
+                    'Source': 10,
+                    'HTTP Code': 10,
+                    'Analyze Date': 20
+                },
+                Settings.official_down_status: {
+                    'Domain': 100,
+                    'WHOIS Server': 35,
+                    'Status': 11,
+                    'Source': 10,
+                    'HTTP Code': 10,
+                    'Analyze Date': 20
+                },
+                Settings.official_invalid_status: {
+                    'Domain': 100,
+                    'Source': 10,
+                    'HTTP Code': 10,
+                    'Analyze Date': 20
+                },
+                'Less': {
+                    'Domain': 100,
+                    'Status': 11,
+                    'HTTP Code': 10
+                },
+                'Percentage': {
+                    'Status': 11,
+                    'Percentage': 12,
+                    'Numbers': 12
+                },
+                'HTTP': {
+                    'Domain': 100,
+                    'Status': 11,
+                    'HTTP Code': 10,
+                    'Analyze Date': 20
+                }
+            }
+
+            if self.template in Settings.up_status or \
+                    self.template in Settings.generic_status or self.template == 'Generic_File':
+                to_print = headers[Settings.official_up_status]
+
+                if self.template in Settings.generic_status:
+                    to_print = Helpers.Dict(
+                        to_print).remove_key('Analyze Date')
+            elif self.template in Settings.down_status:
+                to_print = headers[Settings.official_down_status]
+            elif self.template in Settings.invalid_status:
+                to_print = headers[Settings.official_invalid_status]
+            elif self.template == 'Less' or self.template == 'Percentage' \
+                    or self.template == 'HTTP':
+                to_print = headers[self.template]
+
+                if self.template == 'Less' and not Settings.http_code_status:
+                    to_print['Source'] = 10
+
+            if not Settings.http_code_status:
+                to_print = Helpers.Dict(to_print).remove_key('HTTP Code')
+
+            self.before_header()
+
+            for formated_template in self.header_constructor(to_print):
+                if not self.only_on_file:
+                    print(formated_template)
+                if self.output is not None and self.output != '':
+                    Helpers.File(self.output).write(string + '\n')
+
 
 class Helpers(object):
     """
     PyFunceble's helpers.
     """
+
+    class Dict(object):
+        """
+        Dictionary manipulations.
+        """
+
+        def __init__(self, main_dictionnary):
+            self.main_dictionnary = main_dictionnary
+
+        def remove_key(self, key_to_remove):
+            """
+            Remove a given key from a given dictionary.
+
+            :param key_to_remove: A string or a list, the key(s) to delete.
+            """
+
+            if isinstance(self.main_dictionnary, dict):
+                if isinstance(key_to_remove, list):
+                    for k in key_to_remove:
+                        del self.main_dictionnary[k]
+                else:
+                    del self.main_dictionnary[key_to_remove]
+                return self.main_dictionnarydict1
+            return None
 
     class File(object):
         """
