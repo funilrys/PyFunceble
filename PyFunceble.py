@@ -554,8 +554,8 @@ class Helpers(object):
 
             if data_to_write is not None and isinstance(data_to_write, str):
                 if path.isfile(self.file):
-                    with open(self.file, 'a') as f:
-                        f.write(data_to_write)
+                    with open(self.file, 'a') as file:
+                        file.write(data_to_write)
                 else:
                     with open(self.file, 'w') as f:
                         f.write(data_to_write)
