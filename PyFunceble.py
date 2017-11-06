@@ -532,7 +532,7 @@ class Helpers(object):
                         del self.main_dictionnary[k]
                 else:
                     del self.main_dictionnary[key_to_remove]
-                return self.main_dictionnarydict1
+                return self.main_dictionnary
             return None
 
     class File(object):
