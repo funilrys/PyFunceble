@@ -503,7 +503,7 @@ class Prints(object):
                 if not self.only_on_file:
                     print(formated_template)
                 if self.output is not None and self.output != '':
-                    Helpers.File(self.output).write(string + '\n')
+                    Helpers.File(self.output).write(formated_template + '\n')
 
 
 class Helpers(object):
