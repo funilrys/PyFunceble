@@ -24,6 +24,7 @@ or IP.
 # - Let's contribute to PyFunceble !
 ##########################################################################
 
+import argparse
 from os import path, remove
 from time import strftime
 
@@ -338,7 +339,18 @@ class PyFunceble(object):
         :param domain: A string, a domain or IP to test.
         """
 
+        ExecutionTime('start')
+
         Settings.domain = domain.lower()
+
+        if not Settings.quiet:
+            print('\n')
+            if Settings.less:
+                Prints(None, 'Less').header()
+            else:
+                Prints(None, 'Generic').header()
+
+        ExecutionTime('stop')
 
     def file(self, file_path):
         """
@@ -347,6 +359,9 @@ class PyFunceble(object):
 
         :param file_path: A string, a path to a file to read.
         """
+
+        ExecutionTime('start')
+
         list_to_test = []
 
         for read in open(file_path):
@@ -354,6 +369,71 @@ class PyFunceble(object):
 
             if not read.startswith('#'):
                 list_to_test.append(read)
+
+        ExecutionTime('stop')
+
+
+class ExecutionTime(object):
+    """
+    Set and return the exection time of the program.
+
+    :param action: A string, 'start' or 'stop'.
+    :param return_result: A boolean, if true, we return the executionn time.
+    """
+
+    def __init__(self, action='start'):
+        if action == 'start':
+            self.starting_time()
+        elif action == 'stop':
+            self.stoping_time()
+
+            print('\nExecution Time:')
+            print(self.format_execution_time())
+
+    def starting_time(self):
+        """
+        Set the starting time.
+        """
+
+        Settings.start = int(strftime('%s'))
+
+    def stoping_time(self):
+        """
+        Set the ending time.
+        """
+
+        Settings.end = int(strftime('%s'))
+
+    def calculate(self):
+        """
+        calculate the difference between starting and ending time.
+        """
+
+        time_difference = Settings.end - Settings.start
+
+        return {
+            'days': str((time_difference // 24) % 24).zfill(2),
+            'hours': str(time_difference // 3600).zfill(2),
+            'minutes': str((time_difference % 3600) // 60).zfill(2),
+            'seconds': str(time_difference % 60).zfill(2)
+        }
+
+    def format_execution_time(self):
+        """
+        Format the calculated time into a human readable format.
+        """
+
+        result = ''
+        calculated_time = self.calculate()
+        times = list(calculated_time.keys())
+
+        for time in times:
+            result += calculated_time[time]
+
+            if time != times[-1]:
+                result += ':'
+
+        return result
 
 
 class Prints(object):
@@ -656,3 +736,14 @@ class Helpers(object):
                 remove(self.file)
             except OSError:
                 pass
+
+
+PARSER = argparse.ArgumentParser(
+    description=None,
+    epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
+
+PARSER.add_argument('-d', '--domain', type=str, help='Domain to analyze')
+
+ARGS = PARSER.parse_args()
+
+PyFunceble(ARGS.domain)
