@@ -378,6 +378,48 @@ class Prints(object):
         self.data_to_print = to_print
         self.only_on_file = only_on_file
 
+        self.headers = {
+            Settings.official_up_status: {
+                'Domain': 100,
+                'Expiration Date': 17,
+                'Source': 10,
+                'HTTP Code': 10,
+                'Analyze Date': 20
+            },
+            Settings.official_down_status: {
+                'Domain': 100,
+                'WHOIS Server': 35,
+                'Status': 11,
+                'Source': 10,
+                'HTTP Code': 10,
+                'Analyze Date': 20
+            },
+            Settings.official_invalid_status: {
+                'Domain': 100,
+                'Source': 10,
+                'HTTP Code': 10,
+                'Analyze Date': 20
+            },
+            'Less': {
+                'Domain': 100,
+                'Status': 11,
+                'HTTP Code': 10
+            },
+            'Percentage': {
+                'Status': 11,
+                'Percentage': 12,
+                'Numbers': 12
+            },
+            'HTTP': {
+                'Domain': 100,
+                'Status': 11,
+                'HTTP Code': 10,
+                'Analyze Date': 20
+            }
+        }
+
+        self.currently_used_header = {}
+
     def before_header(self):
         """
         Print informations about PyFunceble and the date of generation of a file
@@ -396,9 +438,6 @@ class Prints(object):
     def header_constructor(self, data_to_print, separator='-'):
         """
         Construct header of the table according to template.
-
-
-
 
         :param data_to_print: A list, the list of data to print into the header.
         :param separator: A string, the separator to use forr the table generation.
@@ -436,60 +475,20 @@ class Prints(object):
         """
 
         if not Settings.header_printed or self.template == 'Percentage':
-            headers = {
-                Settings.official_up_status: {
-                    'Domain': 100,
-                    'Expiration Date': 17,
-                    'Source': 10,
-                    'HTTP Code': 10,
-                    'Analyze Date': 20
-                },
-                Settings.official_down_status: {
-                    'Domain': 100,
-                    'WHOIS Server': 35,
-                    'Status': 11,
-                    'Source': 10,
-                    'HTTP Code': 10,
-                    'Analyze Date': 20
-                },
-                Settings.official_invalid_status: {
-                    'Domain': 100,
-                    'Source': 10,
-                    'HTTP Code': 10,
-                    'Analyze Date': 20
-                },
-                'Less': {
-                    'Domain': 100,
-                    'Status': 11,
-                    'HTTP Code': 10
-                },
-                'Percentage': {
-                    'Status': 11,
-                    'Percentage': 12,
-                    'Numbers': 12
-                },
-                'HTTP': {
-                    'Domain': 100,
-                    'Status': 11,
-                    'HTTP Code': 10,
-                    'Analyze Date': 20
-                }
-            }
-
             if self.template in Settings.up_status or \
                     self.template in Settings.generic_status or self.template == 'Generic_File':
-                to_print = headers[Settings.official_up_status]
+                to_print = self.headers[Settings.official_up_status]
 
                 if self.template in Settings.generic_status:
                     to_print = Helpers.Dict(
                         to_print).remove_key('Analyze Date')
             elif self.template in Settings.down_status:
-                to_print = headers[Settings.official_down_status]
+                to_print = self.headers[Settings.official_down_status]
             elif self.template in Settings.invalid_status:
-                to_print = headers[Settings.official_invalid_status]
+                to_print = self.headers[Settings.official_invalid_status]
             elif self.template == 'Less' or self.template == 'Percentage' \
                     or self.template == 'HTTP':
-                to_print = headers[self.template]
+                to_print = self.headers[self.template]
 
                 if self.template == 'Less' and not Settings.http_code_status:
                     to_print['Source'] = 10
@@ -497,6 +496,7 @@ class Prints(object):
             if not Settings.http_code_status:
                 to_print = Helpers.Dict(to_print).remove_key('HTTP Code')
 
+            self.currently_used_header = to_print
             self.before_header()
 
             for formated_template in self.header_constructor(to_print):
@@ -504,6 +504,83 @@ class Prints(object):
                     print(formated_template)
                 if self.output is not None and self.output != '':
                     Helpers.File(self.output).write(formated_template + '\n')
+
+    def data_constructor(self, size):
+        """
+        Construct the table of data according to given size.
+
+        :param size: A list, The maximal length of each string in the table.
+        """
+
+        result = {}
+
+        if len(self.data_to_print) == len(size):
+            i = 0
+            while i < len(self.data_to_print):
+                result[self.data_to_print[i]] = size[i]
+
+                i += 1
+        else:
+            # This should never happend. If it's happens then there is something
+           # wrong from the inputed data.
+            raise Exception(
+                'Inputed: ' +
+                len(self.data_to_print) +
+                '; Size: ' +
+                len(size))
+
+    def size_from_header(self, header):
+        """
+        Get the size of each columns from the header.
+
+        :param header_type: The header we have to get.
+        """
+
+        result = []
+
+        for data in header:
+            result.append(header[data])
+
+        return result
+
+    def data(self):
+        """
+        Management and input of data to the table.
+        Please consider as "
+        """
+
+        if isinstance(self.data_to_print, list):
+            to_print = {}
+            to_print_size = []
+
+            alone_cases = ['Percentage', 'HTTP']
+            without_header = ['FullHosts', 'PlainDomain']
+
+            if self.template not in alone_cases and self.template not in without_header:
+                to_print_size = self.size_from_header(
+                    self.currently_used_header)
+            elif self.template in without_header:
+                for data in self.data_to_print:
+                    to_print_size.append(len(data))
+            else:
+                to_print_size = self.size_from_header(
+                    self.headers[self.template])
+
+            to_print = self.data_constructor(to_print_size)
+
+            self.before_header()
+
+            for data in self.header_constructor(to_print, False):
+                if self.template in Settings.generic_status or self.template in [
+                        'Less', 'Percentage']:
+                    if not self.only_on_file:
+                        print(data)
+                if self.output is not None and self.output != '':
+                    Helpers.File(self.output).write(data + '\n')
+        else:
+            # This should never happend. If it's happens then there's a big issue
+            # around data_to_print.
+            raise Exception('Please review Prints().data()')
 
 
 class Helpers(object):
