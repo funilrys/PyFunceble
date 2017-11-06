@@ -319,23 +319,41 @@ class PyFunceble(object):
     Main entry to Funceble. Brain of the program. Also known as "put everything
     together to make the system works".
 
-    :param domain: A string, a domain to test.
+    :param domain: A string, a domain or IP to test.
     :param file_path: A string, a path to a file to read.
     """
 
     def __init__(self, domain=None, file_path=None):
 
         if domain is not None and domain != '':
-            Settings.domain = domain.lower()
+            self.domain(domain)
 
         elif file_path is not None and file_path != '':
-            list_to_test = []
+            self.file(file_path)
 
-            for read in open(file_path):
-                read = read.rstrip('\n').strip()
+    def domain(self, domain):
+        """
+        Manage the case that we want to test only a domain.
 
-                if not read.startswith('#'):
-                    list_to_test.append(read)
+        :param domain: A string, a domain or IP to test.
+        """
+
+        Settings.domain = domain.lower()
+
+    def file(self, file_path):
+        """
+        Manage the case that need to test each domain of a given file path.
+        Note: 1 domain per line.
+
+        :param file_path: A string, a path to a file to read.
+        """
+        list_to_test = []
+
+        for read in open(file_path):
+            read = read.rstrip('\n').strip()
+
+            if not read.startswith('#'):
+                list_to_test.append(read)
 
 
 class Prints(object):
