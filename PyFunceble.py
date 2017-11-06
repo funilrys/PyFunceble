@@ -28,6 +28,8 @@ import argparse
 from os import path, remove
 from time import strftime
 
+import requests
+
 
 class Settings(object):
     """
@@ -661,6 +663,46 @@ class Prints(object):
             # This should never happend. If it's happens then there's a big issue
             # around data_to_print.
             raise Exception('Please review Prints().data()')
+
+
+class HTTPCode(object):
+    """
+    Get and return the HTTP code status of a given domain.
+    """
+
+    def access(self):
+        """
+        Get the HTTP code status.
+        """
+
+        try:
+            try:
+                req = requests.get(Settings.domain,
+                                   timeout=Settings.seconds_before_http_timeout)
+            except requests.exceptions.Timeout:
+                return
+
+            return req.status_code
+        except requests.ConnectionError:
+            return
+
+    def get(self):
+        """
+        Return the HTTP code status.
+        """
+
+        http_code = self.access()
+        list_of_valid_http_code = []
+
+        for codes in [
+                Settings.active_http_codes,
+                Settings.potentially_up_codes,
+                Settings.potentially_down_status]:
+            list_of_valid_http_code.extend(codes)
+
+        if http_code not in list_of_valid_http_code or http_code is None:
+            return '*' * 3
+        return http_code
 
 
 class Helpers(object):
