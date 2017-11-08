@@ -23,8 +23,9 @@ or IP.
 #
 # - Let's contribute to PyFunceble !
 ##########################################################################
-
+#pylint: disable=too-many-lines
 import argparse
+import socket
 from os import path, remove
 from re import compile as comp
 from time import strftime
@@ -71,12 +72,20 @@ class Settings(object):
     # Potentionally up status
     # Why potentially ? Please note: https://git.io/vFttS
     # I consider them as potentially because for example we can't be sure that
-    # a 403 HTTP code status represent an 'INACTIVE' domain.
+    # a 403 HTTP status code represent an 'INACTIVE' domain.
     potentialy_up_status = ['potentially_up', 'potentially_active']
     # Potentially down status
-    # As an example, We can't be sure that a 400 HTTP code status result
+    # As an example, We can't be sure that a 400 HTTP status code result
     # represent an 'INACTIVE' domain.
     potentially_down_status = ['potentially_down', 'potentially_inactive']
+    # Active status
+    # As exemple, we are sure that a 200 HTTP status code represent an
+    # 'ACTIVE' domain.
+    http_active_status = [
+        'http_active',
+        'HTTP_ACTIVE',
+        'HTTP_active',
+        'HTTP_Active']
     ##########################################################################
     ################################ Defaults ################################
     # Activation/Deactivation of the autocontinue system.
@@ -107,6 +116,8 @@ class Settings(object):
     plain_list_domain = False
     # Activate/Deactive the quiet mode.
     quiet = False
+    # The following will save the referer
+    referer = ''
     # HTTP Status code timeout.
     # Consider this as the minimum time in seconds that we need before.
     seconds_before_http_timeout = 1
@@ -150,6 +161,8 @@ class Settings(object):
     ################################ HTTP Code ###############################
     # Activate/Deactivate the used of the http code.
     http_code_status = True
+    # The following will get the http code
+    http_code = ''
     # Active considered codes.
     # Note that if nslookup = inactive and http code is in the following list,
     # We set the domain to active.
@@ -706,7 +719,577 @@ class HTTPCode(object):
         return http_code
 
 
-class Helpers(object):
+class Lookup(object):
+    """
+    This class can be used to NSLOOKUP or WHOIS lookup.
+    """
+
+    def nslookup(self):
+        """
+        Implementation of UNIX nslookup.
+        """
+
+        try:
+            try:
+                socket.gethostbyaddr(Settings.domain)
+            except socket.herror:
+                return False
+
+            return True
+        # except socket.gaierror or socket.herror:
+        except socket.gaierror:
+            return False
+
+    def whois(self, whois_server):
+        """
+        Implementation of UNIX whois.
+
+        :param whois_server: The whois server to use to get the record.
+        """
+
+        if whois_server is not None and whois_server != '':
+            req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            try:
+                req.connect((whois_server, 43))
+            except socket.error:
+                return None
+
+            req.send((Settings.domain + '\r\n').encode())
+            response = b""
+
+            while True:
+                data = req.recv(4096)
+                response += data
+                if not data:
+                    break
+
+            req.close()
+
+            return response.decode()
+        return None
+
+
+class Percentage(object):
+    """
+    Calculation of the percentage of each status.
+
+    :param domain_status: A string, the status to increment.
+    :param init: A dict, Dictionary of data to initiate.
+    """
+
+    def __init__(self, domain_status=None, init=None):
+        self.status = domain_status
+
+        if init is not None and isinstance(init, dict):
+            for data in init:
+                setattr(Settings, data, init[data])
+
+    def count(self):
+        """
+        Count the number of domain for each status.
+        """
+
+        if self.status is not None or self.status != '':
+            Settings.number_of_tested += 1
+
+            if self.status in Settings.up_status:
+                Settings.number_of_up += 1
+            elif self.status in Settings.down_status:
+                Settings.number_of_down += 1
+            else:
+                Settings.number_of_invalid += 1
+
+    def calculate(self):
+        """
+        Calculate the percentage of each status.
+        """
+
+        percentages = {
+            'percentage_of_up': Settings.number_of_up,
+            'percentage_of_down': Settings.number_of_down,
+            'percentage_of_invalid': Settings.number_of_invalid
+        }
+
+        for percentage in percentages:
+            setattr(
+                Settings,
+                percentage,
+                percentages[percentage] *
+                100 //
+                Settings.number_of_tested)
+
+    def log(self):
+        """
+        Print on screen and on file the percentages for each status.
+        """
+
+        if Settings.show_percentage and Settings.number_of_tested > 0:
+            Helpers.File(Settings.output_percentage_log).delete()
+
+            self.calculate()
+
+            print('\n')
+            Prints(None, 'Percentage', Settings.output_percentage_log).header()
+
+            for to_print in [[Settings.official_up_status,
+                              str(Settings.percentage_of_up) + '%',
+                              Settings.number_of_up],
+                             [Settings.official_down_status,
+                              str(Settings.percentage_of_down) + '%',
+                              Settings.number_of_down],
+                             [Settings.official_invalid_status,
+                              str(Settings.percentage_of_invalid) + '%',
+                              Settings.number_of_invalid]]:
+                Prints(
+                    to_print,
+                    'Percentage',
+                    Settings.output_percentage_log).data()
+
+
+class Generate(object):
+    """
+    Generate different sort of files.
+
+    :param domain_status: A string, the domain status.
+    :param source: A string, the source of the given status.
+    :param expiration_date: A string, the expiration date of the domain.
+    """
+
+    def __init__(self, domain_status, source=None, expiration_date=None):
+        self.domain_status = domain_status
+        self.source = source
+        self.expiration_date = expiration_date
+
+        self.refer_status = ''
+        self.output = ''
+
+    def hosts_file(self):
+        """
+        Generate a hosts file.
+        """
+
+        if Settings.generate_hosts or Settings.plain_list_domain:
+            splited_destination = ''
+
+            if self.domain_status in Settings.up_status:
+                hosts_destination = plain_destination = Settings.output_up_host
+            elif self.domain_status in Settings.down_status:
+                hosts_destination = plain_destination = Settings.output_down_host
+            elif self.domain_status in Settings.invalid_status:
+                hosts_destination = plain_destination = Settings.output_invalid_host
+            elif self.domain_status in Settings.potentialy_up_status \
+                or self.domain_status in Settings.potentially_down_status \
+                    or self.domain_status in Settings.http_active_status:
+
+                if self.domain_status in Settings.potentialy_up_status:
+                    output_dir = Settings.output_http_potentially_up
+                elif self.domain_status in Settings.potentially_down_status:
+                    output_dir = Settings.output_http_potentially_down
+                else:
+                    output_dir = Settings.output_http_up
+
+                hosts_destination = output_dir + Settings.hosts_default_filename
+                plain_destination = output_dir + Settings.domains_default_filename
+
+                if Settings.split_files:
+                    splited_destination = output_dir + Settings.http_code
+
+            if Settings.generate_hosts:
+                Prints([Settings.custom_ip, Settings.domain],
+                       'FullHosts', hosts_destination).data()
+
+            if Settings.plain_list_domain:
+                Prints([Settings.domain], 'PlainDomain',
+                       plain_destination).data()
+
+            if Settings.split_files and splited_destination != '':
+                Prints([Settings.domain], 'PlainDomain',
+                       splited_destination).data()
+
+    def unified_file(self):
+        """
+        Generate unified file. Understand by that that we use an unified table
+        instead of a separate table for each status which could result into a
+        misunderstanding.
+        """
+
+        if Settings.unified_file:
+            if Settings.less:
+                if Settings.http_code_status:
+                    to_print = [
+                        Settings.domain,
+                        self.domain_status,
+                        Settings.http_code]
+                else:
+                    to_print = [
+                        Settings.domain,
+                        self.domain_status,
+                        self.source]
+
+                Prints(
+                    to_print,
+                    'Less',
+                    Settings.output_unified_results,
+                    True).data()
+            else:
+                to_print = [
+                    Settings.domain,
+                    self.domain_status,
+                    self.expiration_date,
+                    self.source,
+                    Settings.http_code,
+                    Settings.current_datetime]
+
+                Prints(
+                    to_print,
+                    'Generic_File',
+                    Settings.output_unified_results,
+                    True).data()
+
+    def analytic_file(self, new_status, old_status):
+        """
+        Generate HTTP_Analytic/* files.
+
+        :param new_status: A string, the new status of the domain.
+        :param old_status: A strinf, the old status of the domain.
+        """
+
+        if new_status in Settings.up_status:
+            output = Settings.output_http_up
+            Generate('HTTP_Active').hosts_file()
+        elif new_status in Settings.potentialy_up_status:
+            output = Settings.output_http_potentially_up
+            Generate('potentially_up').hosts_file()
+        else:
+            output = Settings.output_http_potentially_down
+
+        Prints([Settings.domain, old_status, Settings.http_code,
+                Settings.current_datetime], 'HTTP', output, True).data()
+
+    def status_file(self):
+        """
+        Generate a file according to the domain status.
+        """
+
+        if self.domain_status in Settings.up_status:
+            if self.expiration_date in [None, '', False]:
+                self.expiration_date = 'Unknown'
+
+            if Settings.http_code_status and Settings.http_code in Settings.down_potentially_codes:
+                self.analytic_file(
+                    Settings.official_down_status,
+                    self.domain_status)
+
+                regex_to_match = [
+                    r'\.doubleclick\.net', r'\.liveadvert\.com']
+
+                for regx in regex_to_match:
+                    if Helpers.Regex(
+                            Settings.domain, regx, return_data=False).match():
+                        self.source = 'SPECIAL'
+                        self.domain_status = Settings.official_down_status
+                        self.output = Settings.output_down_result
+
+                regex_blogspot = r'\.blogspot\.'
+                regex_blogger = [r'create-blog.g?', r'87065']
+
+                if Helpers.Regex(
+                        Settings.domain,
+                        regex_blogspot,
+                        return_data=False).match() and Settings.http_code == 302:
+                    blogger_content_request = requests.get(
+                        'http://' + Settings.domain + ':80')
+                    blogger_content = blogger_content_request.text
+
+                    for regx in regex_blogger:
+                        if regx in blogger_content:
+                            self.source = 'SPECIAL'
+                            self.domain_status = Settings.official_down_status
+                            self.output = Settings.output_down_result
+                            break
+
+            if self.source != 'SPECIAL':
+                self.domain_status = Settings.official_up_status
+                self.output = Settings.output_up_result
+
+        elif self.domain_status in Settings.down_status:
+            self.refer_status = 'Not Found'
+            self.expiration_date = 'Unknown'
+
+            if Settings.http_code_status:
+                if Settings.http_code in Settings.active_http_codes:
+                    self.analytic_file(
+                        Settings.official_up_status, self.domain_status)
+                    self.source = 'HTTP Code'
+                    self.domain_status = Settings.official_up_status
+                    self.output = Settings.output_up_result
+                elif Settings.http_code in Settings.potentially_up_codes:
+                    self.analytic_file('potentially_up', self.domain_status)
+
+            if self.source != 'HTTP Code':
+                self.domain_status = Settings.official_down_status
+                self.output = Settings.output_down_result
+        elif self.domain_status in Settings.invalid_status:
+            self.expiration_date = 'Unknown'
+
+            if Settings.http_code_status:
+                if Settings.http_code in Settings.active_http_codes:
+                    self.analytic_file(
+                        Settings.official_up_status, self.domain_status)
+                    self.source = 'HTTP Code'
+                    self.domain_status = Settings.official_up_status
+                    self.output = Settings.output_up_result
+                elif Settings.http_code in Settings.potentially_up_codes:
+                    self.analytic_file(
+                        'potentially_up', self.domain_status)
+                elif Settings.http_code in Settings.down_potentially_codes:
+                    self.analytic_file(
+                        Settings.official_down_status, self.domain_status)
+
+                if self.source != 'HTTP Code':
+                    self.domain_status = Settings.official_invalid_status
+                    self.output = Settings.output_invalid_result
+
+        Generate(
+            self.domain_status,
+            self.source,
+            self.expiration_date).hosts_file()
+        Percentage(self.domain_status).count()
+
+        if not Settings.quiet:
+            if Settings.less:
+                Prints([Settings.domain,
+                        self.domain_status,
+                        Settings.http_code],
+                       'Less').data()
+            else:
+                Prints([Settings.domain,
+                        self.domain_status,
+                        self.expiration_date,
+                        self.source,
+                        Settings.http_code],
+                       'Generic').data()
+
+        if not Settings.no_files and Settings.split_files:
+            if Settings.less:
+                Prints([Settings.domain, self.domain_status,
+                        self.source], 'Less', self.output, True).data()
+            else:
+                if self.domain_status in Settings.up_status:
+                    Prints([Settings.domain,
+                            self.domain_status,
+                            self.expiration_date,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_up_status,
+                           self.output,
+                           True).data()
+                elif self.domain_status in Settings.down_status:
+                    Prints([Settings.domain,
+                            Settings.referer,
+                            self.domain_status,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_down_status,
+                           self.output,
+                           True).data()
+                elif self.domain_status in Settings.invalid_status:
+                    Prints([Settings.domain,
+                            self.domain_status,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_invalid_status,
+                           self.output,
+                           True).data()
+        else:
+            self.unified_file()
+
+
+class Status(object):
+    """
+    Return the domain status in case we don't use WHOIS or in case that WHOIS
+    record is not readable.
+
+    :param matched_status: A string, the previously catched status.
+    """
+
+    def __init__(self, matched_status):
+        self.matched_status = matched_status
+
+    def handle(self):
+        """
+        Handle the lack of WHOIS. :)
+        """
+
+        internal_status = ''
+        source = 'NSLOOKUP'
+
+        if self.matched_status not in Settings.invalid_status:
+            if Lookup().nslookup():
+                Generate(Settings.official_up_status, source).status_file()
+                return
+        else:
+            internal_status = 'Unknown'
+
+        if internal_status == 'Unknown' and self.matched_status in Settings.down_status:
+            Generate(Settings.official_down_status, source).status_file()
+            return
+
+        Generate(Settings.official_invalid_status,
+                 'IANA').status_file()
+        return
+
+
+class Referer(object):
+    """
+    Get the WHOIS server (referer) of the current domain extension according to
+        the IANA database.
+    """
+
+    def __init__(self):
+        self.domain_extension = Settings.domain[Settings.domain.rindex(
+            '.') + 1:]
+        self.regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
+
+        self.manual_server = {
+            'bm': 'whois.afilias-srs.net',
+            'bz': 'whois.afilias-grs.net',
+            'cd': 'chois.nic.cd',
+            'cm': 'whois.netcom.cm',
+            'fj': 'whois.usp.ac.fj',
+            'ga': 'whois.my.ga',
+            'lc': 'whois2.afilias-grs.net',
+            'lk': 'whois.nic.lk',
+            'nyc': 'whois.nic.nyc',
+            'ps': 'whois.pnina.ps',
+            'ren': 'whois.nic.ren',
+            'rw': 'whois.ricta.org.rw',
+            'shop': 'whois.nic.shop',
+            'sl': 'whois.nic.sl',
+            'stream': 'whois.nic.stream',
+            'tokyp': 'whois.nic.tokyo',
+            'uno': 'whois.nic.uno',
+            'za': 'whois.registry.net.za'
+        }
+
+        self.list_of_excluded_extension = [
+            'ad',
+            'al',
+            'an',
+            'ao',
+            'arpa',
+            'az',
+            'ba',
+            'bd',
+            'bf',
+            'bh',
+            'bs',
+            'comm',
+            'cu',
+            'dj',
+            'eg',
+            'fm',
+            'ge',
+            'gh',
+            'gm',
+            'gp',
+            'gr',
+            'gt',
+            'jo',
+            'kh',
+            'lb',
+            'mil',
+            'mm',
+            'mt',
+            'mw',
+            'ne',
+            'np',
+            'nr',
+            'pa',
+            'ph',
+            'pn',
+            'pk',
+            'py',
+            'rr',
+            'sd',
+            'sr',
+            'sv',
+            'sz',
+            'tj',
+            'tp',
+            'tt',
+            'vi',
+            'vn',
+            'xx',
+            'z',
+            'zw']
+
+    def iana_database(self):
+        """
+        Convert `iana-domains-db` into a list.
+        """
+
+        file_to_read = Settings.output_dir + 'iana-domains-db'
+
+        return [extension.rstrip('\n') for extension in open(file_to_read)]
+
+    def from_iana(self):
+        """
+        Return the referer from IANA database.
+        """
+
+        whois_record = Lookup().whois(Settings.iana_server)
+
+        regex_referer = r'(refer:)\s+(.*)'
+
+        if Helpers.Regex(
+                whois_record,
+                regex_referer,
+                return_data=False).match():
+            return Helpers.Regex(
+                whois_record,
+                regex_referer,
+                return_data=True,
+                group=2).match()
+        return None
+
+    def get(self):
+        """
+        Return the referer aka the WHOIS server of the current domain extension.
+        """
+
+        referer = None
+
+        if not Helpers.Regex(
+                Settings.domain,
+                self.regex_ipv4,
+                return_data=False).match():
+            if self.domain_extension in self.iana_database():
+                if self.domain_extension in self.list_of_excluded_extension:
+                    Status(Settings.official_down_status)
+                    referer = True
+                elif self.domain_extension in self.manual_server:
+                    referer = self.manual_server[self.domain_extension]
+                else:
+                    referer = self.from_iana()
+
+                    if referer is None:
+                        Status(Settings.official_down_status)
+            else:
+                Status(Settings.official_invalid_status)
+                referer = True
+        else:
+            Status(Settings.official_down_status)
+            referer = True
+
+        return referer
+
+
+class Helpers(object):  # pylint: disable=too-few-public-methods
     """
     PyFunceble's helpers.
     """
@@ -794,8 +1377,6 @@ class Helpers(object):
         """
 
         def __init__(self, data, regex, **args):
-            super(Regex, self).__init__()
-
             # We initiate the needed variable in order to be usable all over
             # class
             self.data = data
