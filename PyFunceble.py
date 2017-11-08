@@ -398,13 +398,14 @@ class ExecutionTime(object):
     """
 
     def __init__(self, action='start'):
-        if action == 'start':
-            self.starting_time()
-        elif action == 'stop':
-            self.stoping_time()
+        if Settings.show_execution_time:
+            if action == 'start':
+                self.starting_time()
+            elif action == 'stop':
+                self.stoping_time()
 
-            print('\nExecution Time:')
-            print(self.format_execution_time())
+                print('\nExecution Time:')
+                print(self.format_execution_time())
 
     def starting_time(self):
         """
