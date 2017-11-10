@@ -28,6 +28,7 @@ import argparse
 import socket
 from os import path, remove
 from re import compile as comp
+from re import sub as substrings
 from time import strftime
 
 import requests
@@ -121,6 +122,8 @@ class Settings(object):
     # HTTP Status code timeout.
     # Consider this as the minimum time in seconds that we need before.
     seconds_before_http_timeout = 1
+    # Show/hide execution time
+    show_execution_time = False
     # Show/hide the percentage.
     show_percentage = True
     # If set to true, we generate the files into the 'splited/' directory.
@@ -204,9 +207,11 @@ class Settings(object):
     ################################# Outputs ################################
     # Note: DO NOT FORGET `/` AT THE END.
 
+    # Current directory.
+    current_dir = '%%current_dir%%'
     # Output directory.
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
-    output_dir = '/home/funilrys/Projects/PyFunceble/output/'
+    output_dir = current_dir + 'output/'
     # Autocontinue log file.
     # Please note that this file is != from Funceble.
     autocontinue_log_file = output_dir + 'continue.json'
@@ -365,6 +370,8 @@ class PyFunceble(object):
                 Prints(None, 'Less').header()
             else:
                 Prints(None, 'Generic').header()
+
+        ExpirationDate()
 
         ExecutionTime('stop')
 
@@ -692,8 +699,9 @@ class HTTPCode(object):
 
         try:
             try:
-                req = requests.get(Settings.domain,
-                                   timeout=Settings.seconds_before_http_timeout)
+                req = requests.get(
+                    'http://' + Settings.domain + ':80',
+                    timeout=Settings.seconds_before_http_timeout)
             except requests.exceptions.Timeout:
                 return
 
@@ -1121,6 +1129,8 @@ class Status(object):
     def __init__(self, matched_status):
         self.matched_status = matched_status
 
+        self.handle()
+
     def handle(self):
         """
         Handle the lack of WHOIS. :)
@@ -1234,7 +1244,7 @@ class Referer(object):
         Convert `iana-domains-db` into a list.
         """
 
-        file_to_read = Settings.output_dir + 'iana-domains-db'
+        file_to_read = Settings.current_dir + 'iana-domains-db'
 
         return [extension.rstrip('\n') for extension in open(file_to_read)]
 
@@ -1290,6 +1300,282 @@ class Referer(object):
         return referer
 
 
+class ExpirationDate(object):
+    """
+    Get, format and return the epiration date of a domain if exist.
+    """
+
+    def __init__(self):
+        Settings.http_code = HTTPCode().get()
+
+        self.log_separator = '=' * 100 + ' \n'
+
+        self.expiration_date = ''
+        self.whois_record = ''
+
+        print('ouch')
+
+        if '.' in Settings.domain:
+            Settings.referer = Referer().get()
+
+            if Settings.referer in [True, False]:
+                return
+            elif Settings.referer is not None:
+                self.extract()
+            else:
+                Status(Settings.official_down_status)
+        else:
+            Status(Settings.official_invalid_status)
+
+    def whois_log(self):
+        """
+        Log the whois record into a file
+        """
+
+        if Settings.debug and Settings.logs:
+            log = self.log_separator + self.whois_record + '\n' + self.log_separator
+
+            Helpers.File(Settings.whois_logs_dir + Settings.referer).write(log)
+
+    def convert_1_to_2_digits(self, number):
+        """
+        Convert 1 digit number to two digits.
+        """
+
+        return str(number).zfill(2)
+
+    def convert_or_shorten_month(self, data):
+        """
+        Convert a given month into our unified format.
+
+        :param data: A string, The month to convert or shorten.
+        """
+
+        short_month = {
+            'jan': [str(1), '01', 'Jan', 'January'],
+            'feb': [str(2), '02', 'Feb', 'February'],
+            'mar': [str(3), '03', 'Mar', 'March'],
+            'apr': [str(4), '04', 'Apr', 'April'],
+            'may': [str(5), '05', 'May'],
+            'jun': [str(6), '06', 'Jun', 'June'],
+            'jul': [str(7), '07', 'Jul', 'July'],
+            'aug': [str(8), '08', 'Aug', 'August'],
+            'sep': [str(9), '09', 'Sep', 'September'],
+            'oct': [str(10), 'Oct', 'October'],
+            'nov': [str(11), 'Nov', 'November'],
+            'dec': [str(12), 'Dec', 'December']
+        }
+
+        for month in short_month:
+            if data in short_month[month]:
+                return month
+
+        return data
+
+    def log(self):
+        """
+        Log the extracted expiration date and domain into a file.
+        """
+
+        if Settings.logs:
+            log = self.log_separator + 'Expiration Date: %s \n' % self.expiration_date
+            log += 'Tested domain: %s \n' % Settings.domain
+
+            Helpers.File(
+                Settings.date_format_logs_dir +
+                Settings.referer).write(log)
+
+    def format(self):
+        """
+        Format the expiration date into an unified format (01-jan-1970).
+        """
+
+        regex_dates = {
+            # Date in format: 02-jan-2017
+            '1': r'([0-9]{2})-([a-z]{3})-([0-9]{4})',
+            # Date in format: 02.01.2017 // Month: jan
+            '2': r'([0-9]{2})\.([0-9]{2})\.([0-9]{4})$',
+            # Date in format: 02/01/2017 // Month: jan
+            '3': r'([0-3][0-9])\/(0[1-9]|1[012])\/([0-9]{4})',
+            # Date in format: 2017-01-02 // Month: jan
+            '4': r'([0-9]{4})-([0-9]{2})-([0-9]{2})$',
+            # Date in format: 2017.01.02 // Month: jan
+            '5': r'([0-9]{4})\.([0-9]{2})\.([0-9]{2})$',
+            # Date in format: 2017/01/02 // Month: jan
+            '6': r'([0-9]{4})\/([0-9]{2})\/([0-9]{2})$',
+            # Date in format: 2017.01.02 15:00:00
+            '7': r'([0-9]{4})\.([0-9]{2})\.([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
+            # Date in format: 20170102 15:00:00 // Month: jan
+            '8': r'([0-9]{4})([0-9]{2})([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
+            # Date in format: 2017-01-02 15:00:00 // Month: jan
+            '9': r'([0-9]{4})-([0-9]{2})-([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
+            # Date in format: 02.01.2017 15:00:00 // Month: jan
+            '10': r'([0-9]{2})\.([0-9]{2})\.([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
+            # Date in format: 02-Jan-2017 15:00:00 UTC
+            '11': r'([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{1}.*',
+            # Date in format: 2017/01/02 01:00:00 (+0900) // Month: jan
+            '12': r'([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s\(.*\)',
+            # Date in format: 2017/01/02 01:00:00 // Month: jan
+            '13': r'([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}$',
+            # Date in format: Mon Jan 02 15:00:00 GMT 2017
+            '14': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{3}\s([0-9]{4})',
+            # Date in format: Mon Jan 02 2017
+            '15': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s([0-9]{4})',
+            # Date in format: 2017-01-02T15:00:00 // Month: jan
+            '16': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}$',
+            # Date in format: 2017-01-02T15:00:00Z // Month: jan${'7}
+            '17': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[A-Z].*',
+            # Date in format: 2017-01-02T15:00:00+0200 // Month: jan
+            '18': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{4}',
+            # Date in format: 2017-01-02T15:00:00+0200.622265+03:00 //
+            # Month: jan
+            '19': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[+-][0-9]{2}:[0-9]{2}',
+            # Date in format: 2017-01-02T15:00:00+0200.622265 // Month: jan
+            '20': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}$',
+            # Date in format: 2017-01-02T23:59:59.0Z // Month: jan
+            '21': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[A-Z]',
+            # Date in format: 02-01-2017 // Month: jan
+            '22': r'([0-9]{2})-([0-9]{2})-([0-9]{4})',
+            # Date in format: 2017. 01. 02. // Month: jan
+            '23': r'([0-9]{4})\.\s([0-9]{2})\.\s([0-9]{2})\.',
+            # Date in format: 2017-01-02T00:00:00+13:00 // Month: jan
+            '24': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}',
+            # Date in format: 20170102 // Month: jan
+            '25': r'(?=[0-9]{8})(?=([0-9]{4})([0-9]{2})([0-9]{2}))',
+            # Date in format: 02-Jan-2017
+            '26': r'([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})$',
+            # Date in format: 02.1.2017 // Month: jan
+            '27': r'([0-9]{2})\.([0-9]{1})\.([0-9]{4})',
+            # Date in format: 02 Jan 2017
+            '28': r'([0-9]{1,2})\s([A-Z]{1}[a-z]{2})\s([0-9]{4})',
+            # Date in format: 02-January-2017
+            '29': r'([0-9]{2})-([A-Z]{1}[a-z]*)-([0-9]{4})',
+            # Date in format: 2017-Jan-02.
+            '30': r'([0-9]{4})-([A-Z]{1}[a-z]{2})-([0-9]{2})\.',
+            # Date in format: Mon Jan 02 15:00:00 2017
+            '31': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{1,2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s([0-9]{4})',
+            # Date in format: Mon Jan 2017 15:00:00
+            '32': r'()[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
+            # Date in format: January 02 2017-Jan-02
+            '33': r'([A-Z]{1}[a-z]*)\s([0-9]{1,2})\s([0-9]{4})',
+            # Date in format: 2.1.2017 // Month: jan
+            '34': r'([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})',
+            # Date in format: 20170102000000 // Month: jan
+            '35': r'([0-9]{4})([0-9]{2})([0-9]{2})[0-9]+',
+            # Date in format: 01/02/2017 // Month: jan
+            '36': r'(0[1-9]|1[012])\/([0-3][0-9])\/([0-9]{4})'
+        }
+
+        # 'fourth': [[25],[2,1,0]] ==> To test
+        cases = {
+            'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
+            'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
+            'third': [[4, 5, 6, 7, 8, 9, 12, 13,
+                       16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]
+        }
+
+        got = False
+        for regx in regex_dates:
+            matched_result = Helpers.Regex(
+                self.expiration_date,
+                regex_dates[regx],
+                return_data=True,
+                rematch=True).match()
+
+            if matched_result:
+                for case in cases:
+                    if regx in case[0]:
+                        day = self.convert_1_to_2_digits(
+                            matched_result[case[1][0]])
+                        month = self.convert_or_shorten_month(
+                            matched_result[case[1][1]])
+                        year = str(matched_result[case[1][2]])
+
+                        got = True
+                    else:
+                        continue
+
+        if got:
+            self.expiration_date = day + '-' + month + '-' + year
+
+        if self.expiration_date != '' and Helpers.Regex(
+                self.expiration_date,
+                r'[0-9]{2}\-[a-z]{3}\-2[0-9]{3}',
+                return_data=False).match() != True:
+            self.log()
+
+    def extract(self):
+        """
+        Extract the expiration date from the whois record.
+        """
+
+        # TODO: Review this line before production
+        self.whois_record = Lookup().whois(Settings.referer)
+
+        to_match = [
+            r'expire:',
+            r'expire on:',
+            r'Expiry Date:',
+            r'free-date',
+            r'expires:',
+            r'Expiration date:',
+            r'Expiry date:',
+            r'Expire Date:',
+            r'renewal date:',
+            r'Expires:',
+            r'validity:',
+            r'Expiration Date             :',
+            r'Expiry :',
+            r'expires at:',
+            r'domain_datebilleduntil:',
+            r'Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):',
+            r'Fecha de expiración \(Expiration date\):',
+            r'\[Expires on\]',
+            r'Record expires on',
+            r'status:      OK-UNTIL',
+            r'renewal:',
+            r'expires............:',
+            r'expire-date:',
+            r'Exp date:',
+            r'Valid-date',
+            r'Expires On:',
+            r'Fecha de vencimiento:',
+            r'Expiration:.........',
+            r'Fecha de Vencimiento:',
+            r'Registry Expiry Date:',
+            r'Expires on..............:',
+            r'Expiration Time:',
+            r'Expiration Date:',
+            r'Expired:',
+            r'Date d\'expiration:']
+
+        for string in to_match:
+            string += r'(.*)'
+            expiration_date = Helpers.Regex(
+                self.whois_record, string, return_data=True).match()
+
+            if expiration_date != '' and expiration_date:
+                self.expiration_date = expiration_date[expiration_date.index(
+                    ':') + 1:].strip()
+
+                regex_rumbers = r'[0-9]'
+                if Helpers.Regex(
+                        self.expiration_date,
+                        regex_rumbers,
+                        return_data=False).match():
+
+                    self.format()
+                    Generate(Settings.official_up_status, 'WHOIS',
+                             self.expiration_date).status_file()
+                    return
+
+                # TODO: Add else statement
+
+            elif Helpers.Regex(string, to_match[-1], return_data=False).match():
+                self.whois_log()
+                Status(Settings.official_down_status)
+
+
 class Helpers(object):  # pylint: disable=too-few-public-methods
     """
     PyFunceble's helpers.
@@ -1329,14 +1615,15 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         def __init__(self, file):
             self.file = file
 
-        def write(self, data_to_write):
+        def write(self, data_to_write, overwrite=False):
             """
             Write or append data into the given file path.
 
             :param data_to_write: A string, the data to write.
             """
 
-            if data_to_write is not None and isinstance(data_to_write, str):
+            if data_to_write is not None and isinstance(
+                    data_to_write, str) or overwrite:
                 if path.isfile(self.file):
                     with open(self.file, 'a') as file:
                         file.write(data_to_write)
@@ -1375,6 +1662,8 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         :param group: A integer, the group to return
         :param rematch: A boolean, if True, return the matched groups into a
             formated list. (implementation of Bash ${BASH_REMATCH})
+        :param replace_with: A string, the value to replace the matched regex with.
+        :param occurences: A int, the number of occurence to replace.
         """
 
         def __init__(self, data, regex, **args):
@@ -1387,7 +1676,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             optional_arguments = {
                 "return_data": True,
                 "group": 0,
-                "rematch": False
+                "rematch": False,
+                "replace_with": None,
+                "occurences": 0
             }
 
             # We initiate our optional_arguments in order to be usable all over the
@@ -1429,6 +1720,17 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             elif not self.return_data and pre_result is not None:  # pylint: disable=no-member
                 return True
             return False
+
+        def replace(self):
+            """Used to replace a matched string with another."""
+
+            if self.replace_with is not None:  # pylint: disable=no-member
+                return substrings(
+                    self.regex,
+                    self.replace_with,  # pylint: disable=no-member
+                    self.data,
+                    self.occurences)  # pylint: disable=no-member
+            return self.data
 
 
 PARSER = argparse.ArgumentParser(
