@@ -208,7 +208,7 @@ class Settings(object):
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '%%current_dir%%'
+    current_dir = '/home/funilrys/Projects/PyFunceble/'
     # Output directory.
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
     output_dir = current_dir + 'output/'
@@ -354,7 +354,19 @@ class PyFunceble(object):
             self.file(file_path)
 
     @classmethod
-    def domain(cls, domain):
+    def print_header(cls):
+        """
+        Decide if we print or not the header.
+        """
+
+        if not Settings.quiet:
+            print('\n')
+            if Settings.less:
+                Prints(None, 'Less').header()
+            else:
+                Prints(None, 'Generic').header()
+
+    def domain(self, domain):
         """
         Manage the case that we want to test only a domain.
 
@@ -365,19 +377,12 @@ class PyFunceble(object):
 
         Settings.domain = domain.lower()
 
-        if not Settings.quiet:
-            print('\n')
-            if Settings.less:
-                Prints(None, 'Less').header()
-            else:
-                Prints(None, 'Generic').header()
-
+        self.print_header()
         ExpirationDate()
 
         ExecutionTime('stop')
 
-    @classmethod
-    def file(cls, file_path):
+    def file(self, file_path):
         """
         Manage the case that need to test each domain of a given file path.
         Note: 1 domain per line.
@@ -389,13 +394,56 @@ class PyFunceble(object):
 
         list_to_test = []
 
+        self.print_header()
+
         for read in open(file_path):
             read = read.rstrip('\n').strip()
 
             if not read.startswith('#'):
                 list_to_test.append(read)
 
+        for domain in list_to_test:
+            regex_listing = [
+                r'^#',
+                r'.*localhost.*',
+                r'.*local.*',
+                r'.*broadcasthost.*']
+            match_result = []
+
+            for regx in regex_listing:
+                match_result.append(
+                    Helpers.Regex(
+                        domain,
+                        regx,
+                        return_data=False).match())
+
+            domain = domain.rstrip('\n')
+
+            regex_ip = r'127\.0\.0\.1'
+            regex_ip2 = r'0\.0\.0\.0'
+
+            double_space = ' ' * 2
+
+            if domain == '' or True in match_result:
+                continue
+            elif Helpers.Regex(domain, regex_ip, return_data=False).match() \
+                    or Helpers.Regex(domain, regex_ip2, return_data=False).match():
+                if double_space in domain:
+                    splited_domain = domain.split(double_space)[1]
+                else:
+                    splited_domain = domain.split(' ')[1]
+            else:
+                if double_space in domain:
+                    splited_domain = domain.split(double_space)[0]
+                else:
+                    splited_domain = domain.split(' ')[0]
+
+            Settings.domain = splited_domain.split('#')[0]
+
+            ExpirationDate()
+
         ExecutionTime('stop')
+        Percentage().log()
 
 
 class ExecutionTime(object):
@@ -552,7 +600,8 @@ class Prints(object):
 
             Helpers().File(self.output).write(link + date_of_generation)
 
-    def header_constructor(self, data_to_print, separator='-'):
+    @classmethod
+    def header_constructor(cls, data_to_print, separator='-'):
         """
         Construct header of the table according to template.
 
@@ -1765,7 +1814,12 @@ if __name__ == '__main__':
         epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
 
     PARSER.add_argument('-d', '--domain', type=str, help='Domain to analyze')
+    PARSER.add_argument(
+        "-f",
+        "--file",
+        type=str,
+        help="Test a file with a list of domains")
 
     ARGS = PARSER.parse_args()
 
-    PyFunceble(ARGS.domain)
+    PyFunceble(ARGS.domain, ARGS.file)
