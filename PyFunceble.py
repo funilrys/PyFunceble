@@ -1733,12 +1733,13 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             return self.data
 
 
-PARSER = argparse.ArgumentParser(
-    description=None,
-    epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
+if __name__ == '__main__':
+    PARSER = argparse.ArgumentParser(
+        description=None,
+        epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
 
-PARSER.add_argument('-d', '--domain', type=str, help='Domain to analyze')
+    PARSER.add_argument('-d', '--domain', type=str, help='Domain to analyze')
 
-ARGS = PARSER.parse_args()
+    ARGS = PARSER.parse_args()
 
-PyFunceble(ARGS.domain)
+    PyFunceble(ARGS.domain)
