@@ -483,6 +483,14 @@ class Prints(object):
         self.only_on_file = only_on_file
 
         self.headers = {
+            'Generic': {
+                'Domain': 100,
+                'Status': 11,
+                'Expiration Date': 17,
+                'Source': 10,
+                'HTTP Code': 10,
+                'Analyze Date': 20
+            },
             Settings.official_up_status: {
                 'Domain': 100,
                 'Expiration Date': 17,
@@ -572,20 +580,21 @@ class Prints(object):
                 tuple(separator_data)]
         return [header_size % tuple(header_data)]
 
-    def header(self):
+    def header(self, do_not_print=False):
         """
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.
         """
 
         if not Settings.header_printed or self.template == 'Percentage':
-            if self.template in Settings.up_status or \
-                    self.template in Settings.generic_status or self.template == 'Generic_File':
-                to_print = self.headers[Settings.official_up_status]
+            if self.template in Settings.generic_status or self.template == 'Generic_File':
+                to_print = self.headers['Generic']
 
                 if self.template in Settings.generic_status:
                     to_print = Helpers.Dict(
                         to_print).remove_key('Analyze Date')
+            if self.template in Settings.up_status:
+                to_print = self.headers[Settings.official_up_status]
             elif self.template in Settings.down_status:
                 to_print = self.headers[Settings.official_down_status]
             elif self.template in Settings.invalid_status:
@@ -601,13 +610,15 @@ class Prints(object):
                 to_print = Helpers.Dict(to_print).remove_key('HTTP Code')
 
             self.currently_used_header = to_print
-            self.before_header()
 
-            for formated_template in self.header_constructor(to_print):
-                if not self.only_on_file:
-                    print(formated_template)
-                if self.output is not None and self.output != '':
-                    Helpers.File(self.output).write(formated_template + '\n')
+            if not do_not_print:
+                self.before_header()
+                for formated_template in self.header_constructor(to_print):
+                    if not self.only_on_file:
+                        print(formated_template)
+                    if self.output is not None and self.output != '':
+                        Helpers.File(
+                            self.output).write(formated_template + '\n')
 
     def data_constructor(self, size):
         """
@@ -617,7 +628,6 @@ class Prints(object):
         """
 
         result = {}
-
         if len(self.data_to_print) == len(size):
             i = 0
             while i < len(self.data_to_print):
@@ -626,12 +636,14 @@ class Prints(object):
                 i += 1
         else:
             # This should never happend. If it's happens then there is something
-           # wrong from the inputed data.
+            # wrong from the inputed data.
             raise Exception(
                 'Inputed: ' +
-                len(self.data_to_print) +
+                str(len(self.data_to_print)) +
                 '; Size: ' +
-                len(size))
+                str(len(size)))
+
+        return result
 
     def size_from_header(self, header):
         """
@@ -661,11 +673,12 @@ class Prints(object):
             without_header = ['FullHosts', 'PlainDomain']
 
             if self.template not in alone_cases and self.template not in without_header:
+                self.header(True)
                 to_print_size = self.size_from_header(
                     self.currently_used_header)
             elif self.template in without_header:
                 for data in self.data_to_print:
-                    to_print_size.append(len(data))
+                    to_print_size.append(str(len(data)))
             else:
                 to_print_size = self.size_from_header(
                     self.headers[self.template])
@@ -1313,8 +1326,6 @@ class ExpirationDate(object):
         self.expiration_date = ''
         self.whois_record = ''
 
-        print('ouch')
-
         if '.' in Settings.domain:
             Settings.referer = Referer().get()
 
@@ -1412,13 +1423,13 @@ class ExpirationDate(object):
             # Date in format: 02.01.2017 15:00:00 // Month: jan
             '10': r'([0-9]{2})\.([0-9]{2})\.([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
             # Date in format: 02-Jan-2017 15:00:00 UTC
-            '11': r'([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{1}.*',
+            '11': r'([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{1}.*',  # pylint: disable=line-too-long
             # Date in format: 2017/01/02 01:00:00 (+0900) // Month: jan
             '12': r'([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s\(.*\)',
             # Date in format: 2017/01/02 01:00:00 // Month: jan
             '13': r'([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}$',
             # Date in format: Mon Jan 02 15:00:00 GMT 2017
-            '14': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{3}\s([0-9]{4})',
+            '14': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{3}\s([0-9]{4})',  # pylint: disable=line-too-long
             # Date in format: Mon Jan 02 2017
             '15': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s([0-9]{4})',
             # Date in format: 2017-01-02T15:00:00 // Month: jan
@@ -1429,7 +1440,7 @@ class ExpirationDate(object):
             '18': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{4}',
             # Date in format: 2017-01-02T15:00:00+0200.622265+03:00 //
             # Month: jan
-            '19': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[+-][0-9]{2}:[0-9]{2}',
+            '19': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[+-][0-9]{2}:[0-9]{2}',  # pylint: disable=line-too-long
             # Date in format: 2017-01-02T15:00:00+0200.622265 // Month: jan
             '20': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}$',
             # Date in format: 2017-01-02T23:59:59.0Z // Month: jan
@@ -1439,7 +1450,7 @@ class ExpirationDate(object):
             # Date in format: 2017. 01. 02. // Month: jan
             '23': r'([0-9]{4})\.\s([0-9]{2})\.\s([0-9]{2})\.',
             # Date in format: 2017-01-02T00:00:00+13:00 // Month: jan
-            '24': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}',
+            '24': r'([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}',  # pylint: disable=line-too-long
             # Date in format: 20170102 // Month: jan
             '25': r'(?=[0-9]{8})(?=([0-9]{4})([0-9]{2})([0-9]{2}))',
             # Date in format: 02-Jan-2017
@@ -1453,7 +1464,7 @@ class ExpirationDate(object):
             # Date in format: 2017-Jan-02.
             '30': r'([0-9]{4})-([A-Z]{1}[a-z]{2})-([0-9]{2})\.',
             # Date in format: Mon Jan 02 15:00:00 2017
-            '31': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{1,2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s([0-9]{4})',
+            '31': r'[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{1,2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s([0-9]{4})',  # pylint: disable=line-too-long
             # Date in format: Mon Jan 2017 15:00:00
             '32': r'()[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}',
             # Date in format: January 02 2017-Jan-02
