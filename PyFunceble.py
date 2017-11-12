@@ -353,7 +353,8 @@ class PyFunceble(object):
         elif file_path is not None and file_path != '':
             self.file(file_path)
 
-    def domain(self, domain):
+    @classmethod
+    def domain(cls, domain):
         """
         Manage the case that we want to test only a domain.
 
@@ -375,7 +376,8 @@ class PyFunceble(object):
 
         ExecutionTime('stop')
 
-    def file(self, file_path):
+    @classmethod
+    def file(cls, file_path):
         """
         Manage the case that need to test each domain of a given file path.
         Note: 1 domain per line.
@@ -414,21 +416,24 @@ class ExecutionTime(object):
                 print('\nExecution Time:')
                 print(self.format_execution_time())
 
-    def starting_time(self):
+    @classmethod
+    def starting_time(cls):
         """
         Set the starting time.
         """
 
         Settings.start = int(strftime('%s'))
 
-    def stoping_time(self):
+    @classmethod
+    def stoping_time(cls):
         """
         Set the ending time.
         """
 
         Settings.end = int(strftime('%s'))
 
-    def calculate(self):
+    @classmethod
+    def calculate(cls):
         """
         calculate the difference between starting and ending time.
         """
@@ -645,7 +650,8 @@ class Prints(object):
 
         return result
 
-    def size_from_header(self, header):
+    @classmethod
+    def size_from_header(cls, header):
         """
         Get the size of each columns from the header.
 
@@ -705,7 +711,8 @@ class HTTPCode(object):
     Get and return the HTTP code status of a given domain.
     """
 
-    def access(self):
+    @classmethod
+    def access(cls):
         """
         Get the HTTP code status.
         """
@@ -746,7 +753,8 @@ class Lookup(object):
     This class can be used to NSLOOKUP or WHOIS lookup.
     """
 
-    def nslookup(self):
+    @classmethod
+    def nslookup(cls):
         """
         Implementation of UNIX nslookup.
         """
@@ -762,7 +770,8 @@ class Lookup(object):
         except socket.gaierror:
             return False
 
-    def whois(self, whois_server):
+    @classmethod
+    def whois(cls, whois_server):
         """
         Implementation of UNIX whois.
 
@@ -822,7 +831,8 @@ class Percentage(object):
             else:
                 Settings.number_of_invalid += 1
 
-    def calculate(self):
+    @classmethod
+    def calculate(cls):
         """
         Calculate the percentage of each status.
         """
@@ -969,7 +979,8 @@ class Generate(object):
                     Settings.output_unified_results,
                     True).data()
 
-    def analytic_file(self, new_status, old_status):
+    @classmethod
+    def analytic_file(cls, new_status, old_status):
         """
         Generate HTTP_Analytic/* files.
 
@@ -1252,7 +1263,8 @@ class Referer(object):
             'z',
             'zw']
 
-    def iana_database(self):
+    @classmethod
+    def iana_database(cls):
         """
         Convert `iana-domains-db` into a list.
         """
@@ -1261,7 +1273,8 @@ class Referer(object):
 
         return [extension.rstrip('\n') for extension in open(file_to_read)]
 
-    def from_iana(self):
+    @classmethod
+    def from_iana(cls):
         """
         Return the referer from IANA database.
         """
@@ -1348,14 +1361,16 @@ class ExpirationDate(object):
 
             Helpers.File(Settings.whois_logs_dir + Settings.referer).write(log)
 
-    def convert_1_to_2_digits(self, number):
+    @classmethod
+    def convert_1_to_2_digits(cls, number):
         """
         Convert 1 digit number to two digits.
         """
 
         return str(number).zfill(2)
 
-    def convert_or_shorten_month(self, data):
+    @classmethod
+    def convert_or_shorten_month(cls, data):
         """
         Convert a given month into our unified format.
 
