@@ -1476,6 +1476,31 @@ class ExpirationDate(object):
                 Settings.date_format_logs_dir +
                 Settings.referer).write(log)
 
+    @classmethod
+    def cases_management(cls, regex_number, matched_result):
+        """
+        A little helper of self.format. (Avoiding of nested loops)
+        """
+
+        #  Note: 'fourth': [[25],[2,1,0]] ==> To test
+        cases = {
+            'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
+            'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
+            'third': [[4, 5, 6, 7, 8, 9, 12, 13,
+                       16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]
+        }
+
+        for case in cases:
+            case_data = cases[case]
+
+            if int(regex_number) in case_data[0]:
+                return [matched_result[case_data[1][0]],
+                        matched_result[case_data[1][1]],
+                        matched_result[case_data[1][2]]]
+            else:
+                continue
+        return None
+
     def format(self):
         """
         Format the expiration date into an unified format (01-jan-1970).
@@ -1557,15 +1582,6 @@ class ExpirationDate(object):
             '36': r'(0[1-9]|1[012])\/([0-3][0-9])\/([0-9]{4})'
         }
 
-        # 'fourth': [[25],[2,1,0]] ==> To test
-        cases = {
-            'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
-            'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
-            'third': [[4, 5, 6, 7, 8, 9, 12, 13,
-                       16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]
-        }
-
-        got = False
         for regx in regex_dates:
             matched_result = Helpers.Regex(
                 self.expiration_date,
@@ -1574,20 +1590,15 @@ class ExpirationDate(object):
                 rematch=True).match()
 
             if matched_result:
-                for case in cases:
-                    if regx in case[0]:
-                        day = self.convert_1_to_2_digits(
-                            matched_result[case[1][0]])
-                        month = self.convert_or_shorten_month(
-                            matched_result[case[1][1]])
-                        year = str(matched_result[case[1][2]])
+                date = self.cases_management(regx, matched_result)
 
-                        got = True
-                    else:
-                        continue
+                if date is not None:
+                    day = self.convert_1_to_2_digits(date[0])
+                    month = self.convert_or_shorten_month(date[1])
+                    year = str(date[2])
 
-        if got:
-            self.expiration_date = day + '-' + month + '-' + year
+                    self.expiration_date = day + '-' + month + '-' + year
+                break
 
         if self.expiration_date != '' and Helpers.Regex(
                 self.expiration_date,
