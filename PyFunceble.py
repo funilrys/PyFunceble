@@ -1844,10 +1844,10 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             if data_to_write is not None and isinstance(
                     data_to_write, str):
                 if overwrite or not path.isfile(self.file):
-                    with open(self.file, 'w') as file:
+                    with open(self.file, 'w', encoding="utf-8") as file:
                         file.write(data_to_write)
                 else:
-                    with open(self.file, 'a') as file:
+                    with open(self.file, 'a', encoding="utf-8") as file:
                         file.write(data_to_write)
 
         def read(self):
