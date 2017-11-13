@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/env python
 
 """
 This tool come along with PyFunceble. Its main purpose is to help installing or

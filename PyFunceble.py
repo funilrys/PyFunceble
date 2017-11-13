@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 PyFunceble is the litle sister of Funceble (https://github.com/funilrys/PyFunceble).
