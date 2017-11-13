@@ -32,11 +32,13 @@ class Check(object):
     """
 
     def __init__(self):
+        self.done = '✔'.encode('utf-8')
+        self.error = '✘'.encode('utf-8')
+
         self.script()
         self.dependencies()
 
-    @classmethod
-    def dependencies(cls):
+    def dependencies(self):
         """
         Check if all needed modules are installed.
         """
@@ -54,12 +56,11 @@ class Check(object):
 
             try:
                 __import__(dependency)
-                print('✔')
+                print(self.done.decode('utf-8'))
             except ImportError:
-                print('✘')
+                print(self.error.decode('utf-8'))
 
-    @classmethod
-    def script(cls):
+    def script(self):
         """
         Check if the script is needed.
         """
@@ -71,23 +72,23 @@ class Check(object):
 
         print('Script exist', end=' ')
         if path.exists(location):
-            print('✔')
+            print(self.done.decode('utf-8'))
         else:
-            print('✘')
+            print(self.error.decode('utf-8'))
             exit(1)
 
         print('Script readable', end=' ')
         if access(location, R_OK):
-            print('✔')
+            print(self.done.decode('utf-8'))
         else:
-            print('✘')
+            print(self.error.decode('utf-8'))
             exit(1)
 
         print('Script executable', end=' ')
         if access(location, X_OK):
-            print('✔')
+            print(self.done.decode('utf-8'))
         else:
-            print('✘')
+            print(self.error.decode('utf-8'))
             exit(1)
 
         print('\n')
