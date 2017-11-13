@@ -1364,6 +1364,7 @@ class Referer(object):
                     referer = self.from_iana()
 
                     if referer is None:
+                        self.log()
                         Status(Settings.official_down_status)
             else:
                 Status(Settings.official_invalid_status)
@@ -1373,6 +1374,21 @@ class Referer(object):
             referer = True
 
         return referer
+
+    def log(self):
+        """
+        Log if no referer is found for a domain extension.
+        """
+
+        if Settings.logs:
+            logs = '=' * 100
+            logs += '\nNo referer found for: %s domains\n' % self.domain_extension
+            logs += '=' * 100
+            logs += '\n'
+
+            Helpers.File(
+                Settings.no_referer_logs_dir +
+                self.domain_extension).write(logs)
 
 
 class ExpirationDate(object):
