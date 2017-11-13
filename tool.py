@@ -272,8 +272,6 @@ if __name__ == '__main__':
 
     ARGS = PARSER.parse_args()
 
-    print(ARGS)
-
     if not ARGS.installation:
         Install(None, ARGS.installation)
     elif ARGS.production:
