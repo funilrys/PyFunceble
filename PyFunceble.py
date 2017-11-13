@@ -26,6 +26,7 @@ or IP.
 #pylint: disable=too-many-lines
 import argparse
 import socket
+from json import decoder, dump, loads
 from os import path, remove
 from re import compile as comp
 from re import sub as substrings
@@ -392,6 +393,8 @@ class PyFunceble(object):
 
         ExecutionTime('start')
 
+        backup = {}
+        AutoContinue().restore(file_path)
         list_to_test = []
 
         self.print_header()
@@ -402,7 +405,22 @@ class PyFunceble(object):
             if not read.startswith('#'):
                 list_to_test.append(read)
 
-        for domain in list_to_test:
+        if Settings.number_of_tested == 0 or list_to_test[
+                Settings.number_of_tested - 1] == list_to_test[-1]:
+            to_initiate = [
+                'number_of_up',
+                'number_of_down',
+                'number_of_invalid',
+                'number_of_tested']
+
+            for string in to_initiate:
+                setattr(Settings, string, 0)
+
+        i = int(Settings.number_of_tested)
+
+        while i < len(list_to_test):
+            domain = list_to_test[i]
+
             regex_listing = [
                 r'^#',
                 r'.*localhost.*',
@@ -425,6 +443,7 @@ class PyFunceble(object):
             double_space = ' ' * 2
 
             if domain == '' or True in match_result:
+                i += 1
                 continue
             elif Helpers.Regex(domain, regex_ip, return_data=False).match() \
                     or Helpers.Regex(domain, regex_ip2, return_data=False).match():
@@ -442,8 +461,73 @@ class PyFunceble(object):
 
             ExpirationDate()
 
+            backup[file_path] = {
+                "number_of_tested": Settings.number_of_tested,
+                "number_of_up": Settings.number_of_up,
+                "number_of_down": Settings.number_of_down,
+                "number_of_invalid": Settings.number_of_invalid
+            }
+
+            AutoContinue().backup(backup)
+
+            i += 1
+
         ExecutionTime('stop')
         Percentage().log()
+
+
+class AutoContinue(object):
+    """
+    Autocontinue logic/subsystem.
+    """
+
+    def __init__(self):
+        if Settings.auto_continue:
+            if path.isfile(Settings.autocontinue_log_file):
+                self.backup_content = Helpers.Dict().from_json(
+                    Helpers.File(Settings.autocontinue_log_file).read())
+
+                # if self.backup_content is None:
+                #     self.backup_content = {}
+            else:
+                Helpers.File(Settings.autocontinue_log_file).write("{}")
+                self.backup_content = {}
+
+    def backup(self, data_to_backup):
+        """
+        Backup the current execution state.
+
+        :param data_to_backup: The data to restore.
+        """
+
+        if Settings.auto_continue and data_to_backup is not None:
+            to_save = {}
+
+            to_save.update(self.backup_content)
+            to_save.update(data_to_backup)
+
+            Helpers.Dict(to_save).to_json(Settings.autocontinue_log_file)
+
+    def restore(self, file_to_restore):
+        """
+        Restore data from the given path.
+
+        :param file_to_restore: A string, a path to file to test.
+        """
+
+        if Settings.auto_continue and self.backup_content != {}:
+            if file_to_restore in self.backup_content:
+                to_initiate = [
+                    'number_of_up',
+                    'number_of_down',
+                    'number_of_invalid',
+                    'number_of_tested']
+
+                for string in to_initiate:
+                    setattr(
+                        Settings,
+                        string,
+                        self.backup_content[file_to_restore][string])
 
 
 class ExecutionTime(object):
@@ -1671,7 +1755,7 @@ class ExpirationDate(object):
                              self.expiration_date).status_file()
                     return
 
-                # TODO: Add else statement
+                # TODO: Add else statement ?
 
             elif Helpers.Regex(string, to_match[-1], return_data=False).match():
                 self.whois_log()
@@ -1688,8 +1772,12 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         Dictionary manipulations.
         """
 
-        def __init__(self, main_dictionnary):
-            self.main_dictionnary = main_dictionnary
+        def __init__(self, main_dictionnary=None):
+
+            if main_dictionnary is None:
+                self.main_dictionnary = {}
+            else:
+                self.main_dictionnary = main_dictionnary
 
         def remove_key(self, key_to_remove):
             """
@@ -1706,6 +1794,35 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
                     del self.main_dictionnary[key_to_remove]
                 return self.main_dictionnary
             return None
+
+        def to_json(self, destination):
+            """
+            Save a dictionnary into a JSON file.
+
+            :param destination: A string, A path to a file where we're going to
+            write the converted dict into a JSON format.
+            """
+
+            with open(destination, 'w') as file:
+                dump(
+                    self.main_dictionnary,
+                    file,
+                    ensure_ascii=False,
+                    indent=4,
+                    sort_keys=True)
+
+        @classmethod
+        def from_json(cls, data):
+            """
+            Convert a JSON formated string into a dictionary.
+
+            :param data: A string, a JSON formeted string to convert to dict format.
+            """
+
+            try:
+                return loads(data)
+            except decoder.JSONDecodeError:
+                return {}
 
     class File(object):
         """
