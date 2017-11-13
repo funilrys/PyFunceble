@@ -1855,7 +1855,7 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             Read a given file path and return its content.
             """
 
-            with open(self.file, 'r') as file:
+            with open(self.file, 'r',encoding="utf-8") as file:
                 funilrys = file.read()
 
             return funilrys
