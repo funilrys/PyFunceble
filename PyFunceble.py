@@ -23,7 +23,7 @@ or IP.
 #
 # - Let's contribute to PyFunceble !
 ##########################################################################
-#pylint: disable=too-many-lines
+# pylint: disable=too-many-lines
 import argparse
 import socket
 from json import decoder, dump, loads
@@ -486,9 +486,6 @@ class AutoContinue(object):
             if path.isfile(Settings.autocontinue_log_file):
                 self.backup_content = Helpers.Dict().from_json(
                     Helpers.File(Settings.autocontinue_log_file).read())
-
-                # if self.backup_content is None:
-                #     self.backup_content = {}
             else:
                 Helpers.File(Settings.autocontinue_log_file).write("{}")
                 self.backup_content = {}
@@ -1293,22 +1290,16 @@ class Status(object):
         Handle the lack of WHOIS. :)
         """
 
-        internal_status = ''
         source = 'NSLOOKUP'
 
         if self.matched_status not in Settings.invalid_status:
             if Lookup().nslookup():
                 Generate(Settings.official_up_status, source).status_file()
-                return
+            else:
+                Generate(Settings.official_down_status, source).status_file()
         else:
-            internal_status = 'Unknown'
+            Generate(Settings.official_invalid_status, 'IANA').status_file()
 
-        if internal_status == 'Unknown' and self.matched_status in Settings.down_status:
-            Generate(Settings.official_down_status, source).status_file()
-            return
-
-        Generate(Settings.official_invalid_status,
-                 'IANA').status_file()
         return
 
 
@@ -1321,7 +1312,6 @@ class Referer(object):
     def __init__(self):
         self.domain_extension = Settings.domain[Settings.domain.rindex(
             '.') + 1:]
-        self.regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
 
         self.manual_server = {
             'bm': 'whois.afilias-srs.net',
@@ -1432,11 +1422,12 @@ class Referer(object):
         Return the referer aka the WHOIS server of the current domain extension.
         """
 
+        regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
         referer = None
 
         if not Helpers.Regex(
                 Settings.domain,
-                self.regex_ipv4,
+                regex_ipv4,
                 return_data=False).match():
             if self.domain_extension in self.iana_database():
                 if self.domain_extension in self.list_of_excluded_extension:
@@ -1755,11 +1746,17 @@ class ExpirationDate(object):
                              self.expiration_date).status_file()
                     return
 
-                # TODO: Add else statement ?
-
-            elif Helpers.Regex(string, to_match[-1], return_data=False).match():
                 self.whois_log()
                 Status(Settings.official_down_status)
+
+                return
+
+                # TODO: Add else statement ?
+
+            elif string == to_match[-1]:
+                self.whois_log()
+                Status(Settings.official_down_status)
+                return
 
 
 class Helpers(object):  # pylint: disable=too-few-public-methods
@@ -1855,7 +1852,7 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             Read a given file path and return its content.
             """
 
-            with open(self.file, 'r',encoding="utf-8") as file:
+            with open(self.file, 'r', encoding="utf-8") as file:
                 funilrys = file.read()
 
             return funilrys
