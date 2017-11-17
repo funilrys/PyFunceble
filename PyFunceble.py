@@ -27,9 +27,10 @@ or IP.
 import argparse
 import socket
 from json import decoder, dump, loads
-from os import path, remove
+from os import environ, path, remove
 from re import compile as comp
 from re import sub as substrings
+from subprocess import PIPE, Popen
 from time import strftime
 
 import requests
@@ -133,6 +134,10 @@ class Settings(object):
     travis = False
     # Minimum of minutes before we start commiting to upstream under Travis CI.
     travis_autosave_minutes = 15
+    # Default travis final commit message
+    travis_autosave_final_commit = 'PyFunceble - Results'
+    # Default travis commit message
+    travis_autosave_commit = 'PyFunceble - Autosave'
     # Output into unified files.
     unified_file = True
     ##########################################################################
@@ -470,6 +475,11 @@ class PyFunceble(object):
 
             AutoContinue().backup(backup)
 
+            if i == len(list_to_test) - 1:
+                AutoSave(True)
+            else:
+                AutoSave()
+
             i += 1
 
         ExecutionTime('stop')
@@ -525,6 +535,69 @@ class AutoContinue(object):
                         Settings,
                         string,
                         self.backup_content[file_to_restore][string])
+
+
+class AutoSave(object):
+    """
+    Logic behind autosave.
+    """
+
+    def __init__(self, last_domain=False):
+        if Settings.travis:
+            self.last = last_domain
+            self.travis()
+
+    @classmethod
+    def travis_permissions(cls):
+        """
+        Set permissions in order to avoid issues before commiting.
+        """
+
+        build_dir = environ['TRAVIS_BUILD_DIR']
+        commands = [
+            'chown -R travis:travis ' + build_dir,
+            'chgrp -R travis ' + build_dir,
+            'chmod -R g+rwX ' + build_dir,
+            'chmod 777 -Rf ' + build_dir + '/.git',
+            'find ' + build_dir + " -type d -exec chmod g+x '{}'"
+        ]
+
+        for command in commands:
+            Helpers.Command(command).execute()
+
+        if Helpers.Command('git config core.sharedRepository').execute() == '':
+            Helpers.Command('git config core.sharedRepository group').execute()
+
+        return
+
+    def travis(self):
+        """
+        Logic behind travis auto save.
+        """
+        current_time = strftime('%s')
+        time_of_start = int(Settings.start) + \
+            int(Settings.travis_autosave_minutes) * 60
+
+        if current_time >= time_of_start or self.last:
+            Percentage().log()
+            self.travis_permissions()
+
+            command = 'git add --all && git commit -a -m "%s"'
+
+            if self.last:
+                if Settings.command_before_end != '':
+                    Helpers.Command(Settings.command_before_end).execute()
+
+                Helpers.Command(
+                    command %
+                    Settings.travis_autosave_final_commit +
+                    ' [ci skip]').execute()
+            else:
+                Helpers.Command(command %
+                                Settings.travis_autosave_commit).execute()
+
+            Helpers.Command('git push origin master')
+            exit(0)
 
 
 class ExecutionTime(object):
@@ -1272,7 +1345,7 @@ class Generate(object):
             self.unified_file()
 
 
-class Status(object):
+class Status(object):  # pylint: disable=too-few-public-methods
     """
     Return the domain status in case we don't use WHOIS or in case that WHOIS
     record is not readable.
@@ -1750,9 +1823,6 @@ class ExpirationDate(object):
                 Status(Settings.official_down_status)
 
                 return
-
-                # TODO: Add else statement ?
-
             elif string == to_match[-1]:
                 self.whois_log()
                 Status(Settings.official_down_status)
@@ -1763,6 +1833,31 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
     """
     PyFunceble's helpers.
     """
+
+    class Command(object):
+        """Shell command execution."""
+
+        def __init__(self, command):
+            self.decode_type = 'utf-8'
+            self.command = command
+
+        def decode_output(self, to_decode):
+            """Decode the output of a shell command in order to be readable.
+
+            :param to_decode: byte(s), Output of a command to decode.
+            """
+
+            return to_decode.decode(self.decode_type)
+
+        def execute(self):
+            """Execute the given command."""
+
+            process = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=True)
+            (output, error) = process.communicate()
+
+            if process.returncode != 0:
+                return self.decode_output(error)
+            return self.decode_output(output)
 
     class Dict(object):
         """
