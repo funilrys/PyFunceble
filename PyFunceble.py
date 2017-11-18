@@ -349,7 +349,8 @@ class Settings(object):
 
         links = {
             'auto_continue': 'https://git.io/v7xma',
-            'debug': 'https://git.io/v7xmD'
+            'debug': 'https://git.io/v7xmD',
+            'show_execution_time': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2107,6 +2108,12 @@ if __name__ == '__main__':
         help="Test a file with a list of domains"
     )
     PARSER.add_argument(
+        '-ex',
+        '--execution',
+        action='store_true',
+        help='Show the execution time.'
+    )
+    PARSER.add_argument(
         '--less',
         action='store_true',
         help='Output less informations on screen.'
@@ -2127,5 +2134,8 @@ if __name__ == '__main__':
 
     if ARGS.debug:
         Settings.debug = Settings().switch('debug')
+
+    if ARGS.execution:
+        Settings.show_execution_time = Settings.switch('show_execution_time')
 
     PyFunceble(ARGS.domain, ARGS.file)
