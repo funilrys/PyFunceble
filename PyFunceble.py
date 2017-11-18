@@ -359,7 +359,8 @@ class Settings(object):
             'logs': 'Unknown',
             'unified_file': 'Unknown',
             'no_whois': 'Unknown',
-            'percentage': 'https://git.io/v7xtP'
+            'percentage': 'https://git.io/v7xtP',
+            'plain_list_domain': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2182,6 +2183,11 @@ if __name__ == '__main__':
         action='store_true',
         help='Switch the default value of the percentage output mode to its opposite.'
     )
+    PARSER.add_argument(
+        '--plain',
+        action='store_true',
+        help='Switch the default value of the generation of the plain list of domain to its opposite.'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2225,5 +2231,8 @@ if __name__ == '__main__':
 
     if ARGS.percentage:
         Settings.show_percentage = Settings().switch('show_percentage')
+
+    if ARGS.plain:
+        Settings.plain_list_domain = Settings().switch('plain_list_domain')
 
     PyFunceble(ARGS.domain, ARGS.file)
