@@ -138,9 +138,9 @@ class Settings(object):
     # Minimum of minutes before we start commiting to upstream under Travis CI.
     travis_autosave_minutes = 15
     # Default travis final commit message
-    travis_autosave_final_commit = 'PyFunceble - Results'
+    travis_autosave_final_commit = "PyFunceble - Results"
     # Default travis commit message
-    travis_autosave_commit = 'PyFunceble - Autosave'
+    travis_autosave_commit = "PyFunceble - Autosave"
     # Output into unified files.
     unified_file = True
     ##########################################################################
