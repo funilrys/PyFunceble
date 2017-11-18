@@ -347,8 +347,9 @@ class Settings(object):
         Switch class variables to their opposite.
         """
 
-        variables = {
-            'auto_continue': 'https://git.io/v7xma'
+        links = {
+            'auto_continue': 'https://git.io/v7xma',
+            'debug': 'https://git.io/v7xmD'
         }
 
         current_state = getattr(Settings, variable)
@@ -361,7 +362,7 @@ class Settings(object):
         to_print = 'Your configuration is not valid.\n'
         to_print += 'Please use the auto update or post an issue to %s'
 
-        print(to_print % variables[variable])
+        print(to_print % links[variable])
         exit(1)
 
 
@@ -2095,14 +2096,21 @@ if __name__ == '__main__':
         type=str,
         help='Analyze the given domain.')
     PARSER.add_argument(
+        '--debug',
+        action='store_true',
+        help='Switch the default value of the debug mode to its opposite.'
+    )
+    PARSER.add_argument(
         "-f",
         "--file",
         type=str,
-        help="Test a file with a list of domains")
+        help="Test a file with a list of domains"
+    )
     PARSER.add_argument(
         '--less',
         action='store_true',
-        help='Output less informations on screen.')
+        help='Output less informations on screen.'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2116,5 +2124,8 @@ if __name__ == '__main__':
 
     if ARGS.auto_continue:
         Settings.auto_continue = Settings().switch('auto_continue')
+
+    if ARGS.debug:
+        Settings.debug = Settings().switch('debug')
 
     PyFunceble(ARGS.domain, ARGS.file)
