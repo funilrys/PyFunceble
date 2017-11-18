@@ -2055,6 +2055,11 @@ if __name__ == '__main__':
         action='store_false',
         help='Output all available informations on screen.')
     PARSER.add_argument(
+        '--cmd-before-end',
+        type=str,
+        help='Pass a command before the results (final) commit of travis mode.'
+    )
+    PARSER.add_argument(
         '-d',
         '--domain',
         type=str,
@@ -2075,5 +2080,8 @@ if __name__ == '__main__':
         Settings.less = ARGS.less
     else:
         Settings.less = ARGS.all
+
+    if ARGS.cmd_before_end:
+        Settings.command_before_end = ARGS.cmd_before_end
 
     PyFunceble(ARGS.domain, ARGS.file)
