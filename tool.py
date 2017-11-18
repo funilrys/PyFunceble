@@ -269,6 +269,50 @@ class Install(object):
         print('done')
 
 
+class Clean(object):
+    """
+    Directory cleaning logic.
+    """
+
+    def __init__(self):
+        self.them_all()
+
+    @classmethod
+    def file_to_delete(cls):
+        """
+        Return the list of file to delete.
+        """
+
+        from os import getcwd, walk
+
+        directory = getcwd() + '/output/'
+        result = []
+
+        for root, dirs, files in walk(  # pylint: disable=unused-variable
+                directory):
+            for file in files:
+                if file not in ['.gitignore', '.keep']:
+                    if root.endswith('/'):
+                        result.append(root + file)
+                    else:
+                        result.append(root + '/' + file)
+
+        return result
+
+    def them_all(self):
+        """
+        Delete all discovered files.
+        """
+
+        from PyFunceble import Helpers
+
+        to_delete = self.file_to_delete()
+
+        for file in to_delete:
+            print(file)
+            Helpers.File(file).delete()
+
+
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
         description=None,
@@ -279,6 +323,12 @@ if __name__ == '__main__':
         type=int,
         help="Replace the  minimum of minutes before we start commiting \
             to upstream under Travis CI."
+    )
+    PARSER.add_argument(
+        '-c',
+        '--clean',
+        action='store_true',
+        help='Clean all files under output.'
     )
     PARSER.add_argument(
         '-i',
@@ -299,6 +349,9 @@ if __name__ == '__main__':
 
     if ARGS.autosave_minutes:
         DATA['to_install']['travis_autosave_minutes'] = ARGS.autosave_minutes
+
+    if ARGS.clean:
+        Clean()
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
