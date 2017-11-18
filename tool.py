@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """
 This tool come along with PyFunceble. Its main purpose is to help installing or
@@ -99,7 +100,11 @@ class Install(object):
     Installations scripts.
     """
 
-    def __init__(self, file_to_install=None, production=False):
+    def __init__(
+            self,
+            file_to_install=None,
+            data_to_install=None,
+            production=False):
         Check()
 
         from os import getcwd
@@ -118,6 +123,7 @@ class Install(object):
 
         self.file_to_install = self.path + self.file_to_install
         self.production = production
+        self.data_to_install = data_to_install
 
         self.execute()
 
@@ -226,14 +232,22 @@ class Install(object):
         else:
             replacement_list = replacement_installation
 
+            if self.data_to_install is not None:
+                replacement_list.update(self.data_to_install)
+
         script = PyFuncebleHelpers.File(
             self.file_to_install).read()
 
         for to_replace in replacement_list:
-            if to_replace == 'to_replace':
+            if to_replace == 'to_replace' or to_replace == 'to_install':
                 for variable in replacement_list[to_replace]:
-                    replacement = variable + ' = ' + \
-                        self.default_values()[variable]
+
+                    if to_replace == 'to_install':
+                        replacement = variable + ' = ' + \
+                            str(replacement_list[to_replace][variable])
+                    else:
+                        replacement = variable + ' = ' + \
+                            self.default_values()[variable]
 
                     script = PyFuncebleHelpers.Regex(
                         script,
@@ -261,19 +275,32 @@ if __name__ == '__main__':
         epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
 
     PARSER.add_argument(
+        '--autosave-minutes',
+        type=int,
+        help="Replace the  minimum of minutes before we start commiting \
+            to upstream under Travis CI."
+    )
+    PARSER.add_argument(
         '-i',
         '--installation',
         action='store_false',
-        help="Execute the installation script.")
+        help="Execute the installation script."
+    )
     PARSER.add_argument(
         '-p',
         '--production',
         action='store_true',
-        help="Prepare the repository for production.")
+        help="Prepare the repository for production."
+    )
 
     ARGS = PARSER.parse_args()
 
+    DATA = {'to_install': {}}
+
+    if ARGS.autosave_minutes:
+        DATA['to_install']['travis_autosave_minutes'] = ARGS.autosave_minutes
+
     if not ARGS.installation:
-        Install(None, ARGS.installation)
+        Install(None, DATA, ARGS.installation)
     elif ARGS.production:
-        Install(None, ARGS.production)
+        Install(None, DATA, ARGS.production)
