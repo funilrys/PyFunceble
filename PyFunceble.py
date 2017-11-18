@@ -350,7 +350,8 @@ class Settings(object):
         links = {
             'auto_continue': 'https://git.io/v7xma',
             'debug': 'https://git.io/v7xmD',
-            'show_execution_time': 'Unknown'
+            'show_execution_time': 'Unknown',
+            'generate_hosts': 'Unknown',
         }
 
         current_state = getattr(Settings, variable)
@@ -2121,6 +2122,12 @@ if __name__ == '__main__':
         help='Show this help message and exit.'
     )
     PARSER.add_argument(
+        '-h',
+        '--host',
+        action='store_true',
+        help='Activate the generation of hosts file.'
+    )
+    PARSER.add_argument(
         '--less',
         action='store_true',
         help='Output less informations on screen.'
@@ -2144,5 +2151,8 @@ if __name__ == '__main__':
 
     if ARGS.execution:
         Settings.show_execution_time = Settings.switch('show_execution_time')
+
+    if ARGS.host:
+        Settings.generate_hosts = Settings.switch('generate_hosts')
 
     PyFunceble(ARGS.domain, ARGS.file)
