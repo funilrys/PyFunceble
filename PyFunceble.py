@@ -352,6 +352,7 @@ class Settings(object):
             'debug': 'https://git.io/v7xmD',
             'show_execution_time': 'Unknown',
             'generate_hosts': 'Unknown',
+            'http_code_status': 'https://git.io/v5vHm'
         }
 
         current_state = getattr(Settings, variable)
@@ -2128,6 +2129,11 @@ if __name__ == '__main__':
         help='Activate the generation of hosts file.'
     )
     PARSER.add_argument(
+        '--http',
+        action='store_true',
+        help='Switch the default value of the usage of HTTP code.'
+    )
+    PARSER.add_argument(
         '--less',
         action='store_true',
         help='Output less informations on screen.'
@@ -2150,9 +2156,12 @@ if __name__ == '__main__':
         Settings.debug = Settings().switch('debug')
 
     if ARGS.execution:
-        Settings.show_execution_time = Settings.switch('show_execution_time')
+        Settings.show_execution_time = Settings().switch('show_execution_time')
 
     if ARGS.host:
-        Settings.generate_hosts = Settings.switch('generate_hosts')
+        Settings.generate_hosts = Settings().switch('generate_hosts')
+
+    if ARGS.http:
+        Settings.http_code_status = Settings().switch('http')
 
     PyFunceble(ARGS.domain, ARGS.file)
