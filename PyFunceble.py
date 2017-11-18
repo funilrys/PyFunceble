@@ -2049,13 +2049,31 @@ if __name__ == '__main__':
         description=None,
         epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
 
-    PARSER.add_argument('-d', '--domain', type=str, help='Domain to analyze')
+    PARSER.add_argument(
+        '-a',
+        '--all',
+        action='store_false',
+        help='Output all available informations on screen.')
+    PARSER.add_argument(
+        '-d',
+        '--domain',
+        type=str,
+        help='Analyze the given domain.')
     PARSER.add_argument(
         "-f",
         "--file",
         type=str,
         help="Test a file with a list of domains")
+    PARSER.add_argument(
+        '--less',
+        action='store_true',
+        help='Output less informations on screen.')
 
     ARGS = PARSER.parse_args()
+
+    if ARGS.less:
+        Settings.less = ARGS.less
+    else:
+        Settings.less = ARGS.all
 
     PyFunceble(ARGS.domain, ARGS.file)
