@@ -354,7 +354,8 @@ class Settings(object):
             'generate_hosts': 'Unknown',
             'http_code_status': 'https://git.io/v5vHm',
             'no_files': 'Unknown',
-            'logs': 'Unknown'
+            'logs': 'Unknown',
+            'unified_file': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2149,13 +2150,19 @@ if __name__ == '__main__':
         '-n',
         '--no-files',
         action='store_true',
-        help='Deactivate the production of output files'
+        help='Deactivate the production of output files.'
     )
     PARSER.add_argument(
         '-nl',
         '--no-logs',
         action='store_true',
-        help='Deactivate the production of logs files in case we encounter some errors'
+        help='Deactivate the production of logs files in case we encounter some errors.'
+    )
+    PARSER.add_argument(
+        '-nu',
+        '--no-unified',
+        action='store_true',
+        help='Deactivate the production of result.txt as unified result under the output directory.'
     )
 
     ARGS = PARSER.parse_args()
@@ -2191,5 +2198,8 @@ if __name__ == '__main__':
 
     if ARGS.no_logs:
         Settings.logs = Settings().switch('logs')
+
+    if ARGS.no_unified:
+        Settings.unified_file = Settings().switch('unified_file')
 
     PyFunceble(ARGS.domain, ARGS.file)
