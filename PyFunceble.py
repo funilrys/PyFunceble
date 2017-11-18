@@ -2087,7 +2087,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
-        description=None,
+        description='Python version of Funceble, an awesome script to check \
+            domains or IP accessibility. Also described as "[an] excellent script \
+            for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
         epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m",
         add_help=False)
 
@@ -2208,6 +2210,12 @@ if __name__ == '__main__':
         '--travis',
         action='store_true',
         help='Activate the travis mode.'
+    )
+    PARSER.add_argument(
+        '-v',
+        '--version',
+        action='version',
+        version='%(prog)s 0.0.1-beta'
     )
 
     ARGS = PARSER.parse_args()
