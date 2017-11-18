@@ -360,7 +360,8 @@ class Settings(object):
             'unified_file': 'Unknown',
             'no_whois': 'Unknown',
             'percentage': 'https://git.io/v7xtP',
-            'plain_list_domain': 'Unknown'
+            'plain_list_domain': 'Unknown',
+            'quiet': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2186,7 +2187,14 @@ if __name__ == '__main__':
     PARSER.add_argument(
         '--plain',
         action='store_true',
-        help='Switch the default value of the generation of the plain list of domain to its opposite.'
+        help='Switch the default value of the generation \
+            of the plain list of domain to its opposite.'
+    )
+    PARSER.add_argument(
+        '-q',
+        '--quiet',
+        action='store_true',
+        help='Split outputed files.'
     )
 
     ARGS = PARSER.parse_args()
@@ -2234,5 +2242,8 @@ if __name__ == '__main__':
 
     if ARGS.plain:
         Settings.plain_list_domain = Settings().switch('plain_list_domain')
+
+    if ARGS.quiet:
+        Settings.quiet = Settings().switch('quiet')
 
     PyFunceble(ARGS.domain, ARGS.file)
