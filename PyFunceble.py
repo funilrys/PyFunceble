@@ -353,7 +353,8 @@ class Settings(object):
             'show_execution_time': 'Unknown',
             'generate_hosts': 'Unknown',
             'http_code_status': 'https://git.io/v5vHm',
-            'no_files': 'Unknown'
+            'no_files': 'Unknown',
+            'logs': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2150,6 +2151,12 @@ if __name__ == '__main__':
         action='store_true',
         help='Deactivate the production of output files'
     )
+    PARSER.add_argument(
+        '-nl',
+        '--no-logs',
+        action='store_true',
+        help='Deactivate the production of logs files in case we encounter some errors'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2181,5 +2188,8 @@ if __name__ == '__main__':
 
     if ARGS.no_files:
         Settings.no_files = Settings().switch('no_files')
+
+    if ARGS.no_logs:
+        Settings.logs = Settings().switch('logs')
 
     PyFunceble(ARGS.domain, ARGS.file)
