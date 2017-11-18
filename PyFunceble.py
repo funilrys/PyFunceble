@@ -114,6 +114,8 @@ class Settings(object):
     less = False
     # Activate/Deactivate the output of logs.
     logs = True
+    # Activate/Deactivate the usage of WHOIS.
+    no_whois = False
     # Activate/Deactivate the generation of plain list of domains accoding to
     # out status.
     plain_list_domain = False
@@ -355,7 +357,8 @@ class Settings(object):
             'http_code_status': 'https://git.io/v5vHm',
             'no_files': 'Unknown',
             'logs': 'Unknown',
-            'unified_file': 'Unknown'
+            'unified_file': 'Unknown',
+            'no_whois': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -1525,33 +1528,35 @@ class Referer(object):
         Return the referer aka the WHOIS server of the current domain extension.
         """
 
-        regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
-        referer = None
+        if not Settings.no_whois:
+            regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
+            referer = None
 
-        if not Helpers.Regex(
-                Settings.domain,
-                regex_ipv4,
-                return_data=False).match():
-            if self.domain_extension in self.iana_database():
-                if self.domain_extension in self.list_of_excluded_extension:
-                    Status(Settings.official_down_status)
-                    referer = True
-                elif self.domain_extension in self.manual_server:
-                    referer = self.manual_server[self.domain_extension]
-                else:
-                    referer = self.from_iana()
-
-                    if referer is None:
-                        self.log()
+            if not Helpers.Regex(
+                    Settings.domain,
+                    regex_ipv4,
+                    return_data=False).match():
+                if self.domain_extension in self.iana_database():
+                    if self.domain_extension in self.list_of_excluded_extension:
                         Status(Settings.official_down_status)
-            else:
-                Status(Settings.official_invalid_status)
-                referer = True
-        else:
-            Status(Settings.official_down_status)
-            referer = True
+                        referer = True
+                    elif self.domain_extension in self.manual_server:
+                        referer = self.manual_server[self.domain_extension]
+                    else:
+                        referer = self.from_iana()
 
-        return referer
+                        if referer is None:
+                            self.log()
+                            Status(Settings.official_down_status)
+                else:
+                    Status(Settings.official_invalid_status)
+                    referer = True
+            else:
+                Status(Settings.official_down_status)
+                referer = True
+
+            return referer
+        return None
 
     def log(self):
         """
@@ -2164,6 +2169,12 @@ if __name__ == '__main__':
         action='store_true',
         help='Deactivate the production of result.txt as unified result under the output directory.'
     )
+    PARSER.add_argument(
+        '-nw',
+        '--no-whois',
+        action='store_true',
+        help="Deactivate the usage of whois to test domain's status."
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2201,5 +2212,8 @@ if __name__ == '__main__':
 
     if ARGS.no_unified:
         Settings.unified_file = Settings().switch('unified_file')
+
+    if ARGS.no_whois:
+        Settings.no_whois = Settings().switch('no_whois')
 
     PyFunceble(ARGS.domain, ARGS.file)
