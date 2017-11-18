@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """
 PyFunceble is the litle sister of Funceble (https://github.com/funilrys/PyFunceble).
