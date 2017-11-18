@@ -361,7 +361,8 @@ class Settings(object):
             'no_whois': 'Unknown',
             'percentage': 'https://git.io/v7xtP',
             'plain_list_domain': 'Unknown',
-            'quiet': 'Unknown'
+            'quiet': 'Unknown',
+            'split_files': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2196,6 +2197,11 @@ if __name__ == '__main__':
         action='store_true',
         help='Split outputed files.'
     )
+    PARSER.add_argument(
+        '--split',
+        action='store_true',
+        help='Split output files.'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2245,5 +2251,8 @@ if __name__ == '__main__':
 
     if ARGS.quiet:
         Settings.quiet = Settings().switch('quiet')
+
+    if ARGS.split:
+        Settings.split_files = Settings().switch('split_files')
 
     PyFunceble(ARGS.domain, ARGS.file)
