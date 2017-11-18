@@ -158,6 +158,7 @@ class Install(object):
                 'split_files': 'False',
                 'travis': 'False',
                 'travis_autosave_minutes': '15',
+                'travis_autosave_commit': '"PyFunceble - Autosave"',
                 'unified_file': 'True',
                 'link_to_repo': "'https://github.com/funilrys/PyFunceble'",
                 'iana_server': "'whois.iana.org'",
@@ -206,6 +207,7 @@ class Install(object):
                 'split_files',
                 'travis',
                 'travis_autosave_minutes',
+                'travis_autosave_commit',
                 'unified_file',
                 'link_to_repo',
                 'iana_server',
@@ -331,6 +333,11 @@ if __name__ == '__main__':
         help='Clean all files under output.'
     )
     PARSER.add_argument(
+        '--commit-autosave-message',
+        type=str,
+        help='Replace the default autosave commit message.'
+    )
+    PARSER.add_argument(
         '-i',
         '--installation',
         action='store_false',
@@ -352,6 +359,10 @@ if __name__ == '__main__':
 
     if ARGS.clean:
         Clean()
+
+    if ARGS.commit_autosave_message:
+        DATA['to_install']['travis_autosave_commit'] = '"' + \
+            ARGS.commit_autosave_message + '"'
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
