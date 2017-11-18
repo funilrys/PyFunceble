@@ -596,7 +596,7 @@ class AutoSave(object):
                 Helpers.Command(command %
                                 Settings.travis_autosave_commit).execute()
 
-            Helpers.Command('git push origin master')
+            Helpers.Command('git push origin master').execute()
             exit(0)
 
 
