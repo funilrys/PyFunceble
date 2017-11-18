@@ -352,7 +352,8 @@ class Settings(object):
             'debug': 'https://git.io/v7xmD',
             'show_execution_time': 'Unknown',
             'generate_hosts': 'Unknown',
-            'http_code_status': 'https://git.io/v5vHm'
+            'http_code_status': 'https://git.io/v5vHm',
+            'no_files': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2143,6 +2144,12 @@ if __name__ == '__main__':
         action='store_true',
         help='Output less informations on screen.'
     )
+    PARSER.add_argument(
+        '-n',
+        '--no-files',
+        action='store_true',
+        help='Deactivate the production of output files'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2171,5 +2178,8 @@ if __name__ == '__main__':
 
     if ARGS.ip:
         Settings.custom_ip = ARGS.ip
+
+    if ARGS.no_files:
+        Settings.no_files = Settings().switch('no_files')
 
     PyFunceble(ARGS.domain, ARGS.file)
