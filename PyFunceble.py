@@ -341,6 +341,29 @@ class Settings(object):
     # Output of potentially inactive codes.
     output_http_potentially_down = http_potentially_down + 'inactive_or_potentially'
 
+    @classmethod
+    def switch(cls, variable):
+        """
+        Switch class variables to their opposite.
+        """
+
+        variables = {
+            'auto_continue': 'https://git.io/v7xma'
+        }
+
+        current_state = getattr(Settings, variable)
+
+        if current_state is True:
+            return False
+        elif current_state is False:
+            return True
+
+        to_print = 'Your configuration is not valid.\n'
+        to_print += 'Please use the auto update or post an issue to %s'
+
+        print(to_print % variables[variable])
+        exit(1)
+
 
 class PyFunceble(object):
     """
@@ -2060,6 +2083,13 @@ if __name__ == '__main__':
         help='Pass a command before the results (final) commit of travis mode.'
     )
     PARSER.add_argument(
+        '-c',
+        '--auto-continue',
+        '--continue',
+        action='store_true',
+        help='Switch the default value of the auto continue mode to its opposite.'
+    )
+    PARSER.add_argument(
         '-d',
         '--domain',
         type=str,
@@ -2083,5 +2113,8 @@ if __name__ == '__main__':
 
     if ARGS.cmd_before_end:
         Settings.command_before_end = ARGS.cmd_before_end
+
+    if ARGS.auto_continue:
+        Settings.auto_continue = Settings().switch('auto_continue')
 
     PyFunceble(ARGS.domain, ARGS.file)
