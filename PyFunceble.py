@@ -2134,6 +2134,11 @@ if __name__ == '__main__':
         help='Switch the default value of the usage of HTTP code.'
     )
     PARSER.add_argument(
+        '-ip',
+        type=str,
+        help='Change the ip to print in host file.'
+    )
+    PARSER.add_argument(
         '--less',
         action='store_true',
         help='Output less informations on screen.'
@@ -2163,5 +2168,8 @@ if __name__ == '__main__':
 
     if ARGS.http:
         Settings.http_code_status = Settings().switch('http')
+
+    if ARGS.ip:
+        Settings.custom_ip = ARGS.ip
 
     PyFunceble(ARGS.domain, ARGS.file)
