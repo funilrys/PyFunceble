@@ -2072,7 +2072,8 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
         description=None,
-        epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
+        epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m",
+        add_help=False)
 
     PARSER.add_argument(
         '-a',
@@ -2112,6 +2113,12 @@ if __name__ == '__main__':
         '--execution',
         action='store_true',
         help='Show the execution time.'
+    )
+    PARSER.add_argument(
+        '--help',
+        action='help',
+        default=argparse.SUPPRESS,
+        help='Show this help message and exit.'
     )
     PARSER.add_argument(
         '--less',
