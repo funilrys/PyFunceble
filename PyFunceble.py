@@ -358,7 +358,8 @@ class Settings(object):
             'no_files': 'Unknown',
             'logs': 'Unknown',
             'unified_file': 'Unknown',
-            'no_whois': 'Unknown'
+            'no_whois': 'Unknown',
+            'percentage': 'https://git.io/v7xtP'
         }
 
         current_state = getattr(Settings, variable)
@@ -2175,6 +2176,12 @@ if __name__ == '__main__':
         action='store_true',
         help="Deactivate the usage of whois to test domain's status."
     )
+    PARSER.add_argument(
+        '-p',
+        '--percentage',
+        action='store_true',
+        help='Switch the default value of the percentage output mode to its opposite.'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2215,5 +2222,8 @@ if __name__ == '__main__':
 
     if ARGS.no_whois:
         Settings.no_whois = Settings().switch('no_whois')
+
+    if ARGS.percentage:
+        Settings.show_percentage = Settings().switch('show_percentage')
 
     PyFunceble(ARGS.domain, ARGS.file)
