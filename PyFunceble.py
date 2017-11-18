@@ -362,7 +362,8 @@ class Settings(object):
             'percentage': 'https://git.io/v7xtP',
             'plain_list_domain': 'Unknown',
             'quiet': 'Unknown',
-            'split_files': 'Unknown'
+            'split_files': 'Unknown',
+            'travis': 'Unknown'
         }
 
         current_state = getattr(Settings, variable)
@@ -2202,6 +2203,11 @@ if __name__ == '__main__':
         action='store_true',
         help='Split output files.'
     )
+    PARSER.add_argument(
+        '--travis',
+        action='store_true',
+        help='Activate the travis mode.'
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -2254,5 +2260,8 @@ if __name__ == '__main__':
 
     if ARGS.split:
         Settings.split_files = Settings().switch('split_files')
+
+    if ARGS.travis:
+        Settings.travis = Settings().switch('travis')
 
     PyFunceble(ARGS.domain, ARGS.file)
