@@ -2086,7 +2086,7 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
 
 if __name__ == '__main__':
-    if '%' in Settings.current_dir:
+    if Settings.current_dir == '%%current_dir%%':
         print(
             'Please run the installation script first.\n You can run it with : %s \n' %
             './tool -i\n')
