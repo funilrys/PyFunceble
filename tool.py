@@ -469,7 +469,7 @@ class Update(object):
         else:
             Helpers.Command('git checkout dev').execute()
 
-        Helpers.Command('git pull').execute()
+        print(Helpers.Command('git pull').execute())
         return
 
     def update_permission(self):
