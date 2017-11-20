@@ -243,7 +243,7 @@ class Install(object):
         Execute the installation or production logic.
         """
 
-        from PyFunceble import Helpers as PyFuncebleHelpers
+        from PyFunceble import Helpers
 
         replacement_production = {
             'to_replace': [
@@ -300,7 +300,7 @@ class Install(object):
             if self.data_to_install is not None:
                 replacement_list.update(self.data_to_install)
 
-        script = PyFuncebleHelpers.File(
+        script = Helpers.File(
             self.file_to_install).read()
 
         for to_replace in replacement_list:
@@ -314,7 +314,7 @@ class Install(object):
                         replacement = variable + ' = ' + \
                             self.default_values()[variable]
 
-                    script = PyFuncebleHelpers.Regex(
+                    script = Helpers.Regex(
                         script,
                         variable + ' = .*',
                         replace_with=replacement,
@@ -323,13 +323,13 @@ class Install(object):
                 replacement = to_replace + ' = ' + \
                     self.default_values()[to_replace]
 
-                script = PyFuncebleHelpers.Regex(
+                script = Helpers.Regex(
                     script,
                     replacement_list[to_replace],
                     replace_with=replacement,
                     occurences=1).replace()
 
-        PyFuncebleHelpers.File(
+        Helpers.File(
             self.file_to_install).write(script, True)
 
 
