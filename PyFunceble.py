@@ -217,7 +217,7 @@ class Settings(object):
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '%%current_dir%%'
+    current_dir = '/home/funilrys/Projects/PyFunceble/'
     # Output directory.
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
     output_dir = current_dir + 'output/'
@@ -1351,35 +1351,35 @@ class Generate(object):
                 Prints([Settings.domain, self.domain_status,
                         self.source], 'Less', self.output, True).data()
             else:
-                if self.domain_status in Settings.up_status:
-                    Prints([Settings.domain,
-                            self.domain_status,
-                            self.expiration_date,
-                            self.source,
-                            Settings.http_code,
-                            Settings.current_datetime],
-                           Settings.official_up_status,
-                           self.output,
-                           True).data()
-                elif self.domain_status in Settings.down_status:
-                    Prints([Settings.domain,
-                            Settings.referer,
-                            self.domain_status,
-                            self.source,
-                            Settings.http_code,
-                            Settings.current_datetime],
-                           Settings.official_down_status,
-                           self.output,
-                           True).data()
-                elif self.domain_status in Settings.invalid_status:
-                    Prints([Settings.domain,
-                            self.domain_status,
-                            self.source,
-                            Settings.http_code,
-                            Settings.current_datetime],
-                           Settings.official_invalid_status,
-                           self.output,
-                           True).data()
+                if not Settings.split_files:
+                    if self.domain_status in Settings.up_status:
+                        Prints([Settings.domain,
+                                self.expiration_date,
+                                self.source,
+                                Settings.http_code,
+                                Settings.current_datetime],
+                               Settings.official_up_status,
+                               self.output,
+                               True).data()
+                    elif self.domain_status in Settings.down_status:
+                        Prints([Settings.domain,
+                                Settings.referer,
+                                self.domain_status,
+                                self.source,
+                                Settings.http_code,
+                                Settings.current_datetime],
+                               Settings.official_down_status,
+                               self.output,
+                               True).data()
+                    elif self.domain_status in Settings.invalid_status:
+                        Prints([Settings.domain,
+                                self.source,
+                                Settings.http_code,
+                                Settings.current_datetime],
+                               Settings.official_invalid_status,
+                               self.output,
+                               True).data()
+
         else:
             self.unified_file()
 
@@ -2226,7 +2226,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.1-beta'
+            version='%(prog)s 0.0.2-beta'
         )
 
         ARGS = PARSER.parse_args()
