@@ -551,7 +551,7 @@ class Update(object):
 
             if not download and current_version == copied_version:
                 return False
-            elif current_version != copied_version:
+            elif download and current_version != copied_version:
                 return False
 
         return True
