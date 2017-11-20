@@ -2086,201 +2086,205 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
 
 if __name__ == '__main__':
-    PARSER = argparse.ArgumentParser(
-        description='Python version of Funceble, an awesome script to check \
-            domains or IP accessibility. Also described as "[an] excellent script \
-            for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
-        epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m",
-        add_help=False)
-
-    PARSER.add_argument(
-        '-a',
-        '--all',
-        action='store_false',
-        help='Output all available informations on screen.')
-    PARSER.add_argument(
-        '--cmd-before-end',
-        type=str,
-        help='Pass a command before the results (final) commit of travis mode.'
-    )
-    PARSER.add_argument(
-        '-c',
-        '--auto-continue',
-        '--continue',
-        action='store_true',
-        help='Switch the default value of the auto continue mode to its opposite.'
-    )
-    PARSER.add_argument(
-        '-d',
-        '--domain',
-        type=str,
-        help='Analyze the given domain.')
-    PARSER.add_argument(
-        '--debug',
-        action='store_true',
-        help='Switch the default value of the debug mode to its opposite.'
-    )
-    PARSER.add_argument(
-        "-f",
-        "--file",
-        type=str,
-        help="Test a file with a list of domains"
-    )
-    PARSER.add_argument(
-        '-ex',
-        '--execution',
-        action='store_true',
-        help='Show the execution time.'
-    )
-    PARSER.add_argument(
-        '--help',
-        action='help',
-        default=argparse.SUPPRESS,
-        help='Show this help message and exit.'
-    )
-    PARSER.add_argument(
-        '-h',
-        '--host',
-        action='store_true',
-        help='Activate the generation of hosts file.'
-    )
-    PARSER.add_argument(
-        '--http',
-        action='store_true',
-        help='Switch the default value of the usage of HTTP code.'
-    )
-    PARSER.add_argument(
-        '-ip',
-        type=str,
-        help='Change the ip to print in host file.'
-    )
-    PARSER.add_argument(
-        '--less',
-        action='store_true',
-        help='Output less informations on screen.'
-    )
-    PARSER.add_argument(
-        '-n',
-        '--no-files',
-        action='store_true',
-        help='Deactivate the production of output files.'
-    )
-    PARSER.add_argument(
-        '-nl',
-        '--no-logs',
-        action='store_true',
-        help='Deactivate the production of logs files in case we encounter some errors.'
-    )
-    PARSER.add_argument(
-        '-nu',
-        '--no-unified',
-        action='store_true',
-        help='Deactivate the production of result.txt as unified result under the output directory.'
-    )
-    PARSER.add_argument(
-        '-nw',
-        '--no-whois',
-        action='store_true',
-        help="Deactivate the usage of whois to test domain's status."
-    )
-    PARSER.add_argument(
-        '-p',
-        '--percentage',
-        action='store_true',
-        help='Switch the default value of the percentage output mode to its opposite.'
-    )
-    PARSER.add_argument(
-        '--plain',
-        action='store_true',
-        help='Switch the default value of the generation \
-            of the plain list of domain to its opposite.'
-    )
-    PARSER.add_argument(
-        '-q',
-        '--quiet',
-        action='store_true',
-        help='Split outputed files.'
-    )
-    PARSER.add_argument(
-        '--split',
-        action='store_true',
-        help='Split output files.'
-    )
-    PARSER.add_argument(
-        '-t',
-        '--timeout',
-        type=int,
-        default=1,
-        help='Seconds before timeout.'
-    )
-    PARSER.add_argument(
-        '--travis',
-        action='store_true',
-        help='Activate the travis mode.'
-    )
-    PARSER.add_argument(
-        '-v',
-        '--version',
-        action='version',
-        version='%(prog)s 0.0.1-beta'
-    )
-
-    ARGS = PARSER.parse_args()
-
-    if ARGS.less:
-        Settings.less = ARGS.less
+    if '%' in Settings.current_dir:
+        print(
+            'Please run the installation script first.\n You can run it with : %s \n' %
+            './tool -i\n')
+        exit(1)
     else:
-        Settings.less = ARGS.all
+        PARSER = argparse.ArgumentParser(
+            description='Python version of Funceble, an awesome script to check \
+                domains or IP accessibility. Also described as "[an] excellent script \
+                for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
+            epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m",
+            add_help=False)
 
-    if ARGS.cmd_before_end:
-        Settings.command_before_end = ARGS.cmd_before_end
+        PARSER.add_argument(
+            '-a',
+            '--all',
+            action='store_false',
+            help='Output all available informations on screen.')
+        PARSER.add_argument(
+            '--cmd-before-end',
+            type=str,
+            help='Pass a command before the results (final) commit of travis mode.')
+        PARSER.add_argument(
+            '-c',
+            '--auto-continue',
+            '--continue',
+            action='store_true',
+            help='Switch the default value of the auto continue mode to its opposite.')
+        PARSER.add_argument(
+            '-d',
+            '--domain',
+            type=str,
+            help='Analyze the given domain.')
+        PARSER.add_argument(
+            '--debug',
+            action='store_true',
+            help='Switch the default value of the debug mode to its opposite.'
+        )
+        PARSER.add_argument(
+            "-f",
+            "--file",
+            type=str,
+            help="Test a file with a list of domains"
+        )
+        PARSER.add_argument(
+            '-ex',
+            '--execution',
+            action='store_true',
+            help='Show the execution time.'
+        )
+        PARSER.add_argument(
+            '--help',
+            action='help',
+            default=argparse.SUPPRESS,
+            help='Show this help message and exit.'
+        )
+        PARSER.add_argument(
+            '-h',
+            '--host',
+            action='store_true',
+            help='Activate the generation of hosts file.'
+        )
+        PARSER.add_argument(
+            '--http',
+            action='store_true',
+            help='Switch the default value of the usage of HTTP code.'
+        )
+        PARSER.add_argument(
+            '-ip',
+            type=str,
+            help='Change the ip to print in host file.'
+        )
+        PARSER.add_argument(
+            '--less',
+            action='store_true',
+            help='Output less informations on screen.'
+        )
+        PARSER.add_argument(
+            '-n',
+            '--no-files',
+            action='store_true',
+            help='Deactivate the production of output files.'
+        )
+        PARSER.add_argument(
+            '-nl',
+            '--no-logs',
+            action='store_true',
+            help='Deactivate the production of logs files in case we encounter some errors.'
+        )
+        PARSER.add_argument(
+            '-nu',
+            '--no-unified',
+            action='store_true',
+            help='Deactivate the production of result.txt as unified result under the output directory.'
+        )
+        PARSER.add_argument(
+            '-nw',
+            '--no-whois',
+            action='store_true',
+            help="Deactivate the usage of whois to test domain's status."
+        )
+        PARSER.add_argument(
+            '-p',
+            '--percentage',
+            action='store_true',
+            help='Switch the default value of the percentage output mode to its opposite.'
+        )
+        PARSER.add_argument(
+            '--plain',
+            action='store_true',
+            help='Switch the default value of the generation \
+                of the plain list of domain to its opposite.'
+        )
+        PARSER.add_argument(
+            '-q',
+            '--quiet',
+            action='store_true',
+            help='Split outputed files.'
+        )
+        PARSER.add_argument(
+            '--split',
+            action='store_true',
+            help='Split output files.'
+        )
+        PARSER.add_argument(
+            '-t',
+            '--timeout',
+            type=int,
+            default=1,
+            help='Seconds before timeout.'
+        )
+        PARSER.add_argument(
+            '--travis',
+            action='store_true',
+            help='Activate the travis mode.'
+        )
+        PARSER.add_argument(
+            '-v',
+            '--version',
+            action='version',
+            version='%(prog)s 0.0.1-beta'
+        )
 
-    if ARGS.auto_continue:
-        Settings.auto_continue = Settings().switch('auto_continue')
+        ARGS = PARSER.parse_args()
 
-    if ARGS.debug:
-        Settings.debug = Settings().switch('debug')
+        if ARGS.less:
+            Settings.less = ARGS.less
+        else:
+            Settings.less = ARGS.all
 
-    if ARGS.execution:
-        Settings.show_execution_time = Settings().switch('show_execution_time')
+        if ARGS.cmd_before_end:
+            Settings.command_before_end = ARGS.cmd_before_end
 
-    if ARGS.host:
-        Settings.generate_hosts = Settings().switch('generate_hosts')
+        if ARGS.auto_continue:
+            Settings.auto_continue = Settings().switch('auto_continue')
 
-    if ARGS.http:
-        Settings.http_code_status = Settings().switch('http')
+        if ARGS.debug:
+            Settings.debug = Settings().switch('debug')
 
-    if ARGS.ip:
-        Settings.custom_ip = ARGS.ip
+        if ARGS.execution:
+            Settings.show_execution_time = Settings().switch('show_execution_time')
 
-    if ARGS.no_files:
-        Settings.no_files = Settings().switch('no_files')
+        if ARGS.host:
+            Settings.generate_hosts = Settings().switch('generate_hosts')
 
-    if ARGS.no_logs:
-        Settings.logs = Settings().switch('logs')
+        if ARGS.http:
+            Settings.http_code_status = Settings().switch('http')
 
-    if ARGS.no_unified:
-        Settings.unified_file = Settings().switch('unified_file')
+        if ARGS.ip:
+            Settings.custom_ip = ARGS.ip
 
-    if ARGS.no_whois:
-        Settings.no_whois = Settings().switch('no_whois')
+        if ARGS.no_files:
+            Settings.no_files = Settings().switch('no_files')
 
-    if ARGS.percentage:
-        Settings.show_percentage = Settings().switch('show_percentage')
+        if ARGS.no_logs:
+            Settings.logs = Settings().switch('logs')
 
-    if ARGS.plain:
-        Settings.plain_list_domain = Settings().switch('plain_list_domain')
+        if ARGS.no_unified:
+            Settings.unified_file = Settings().switch('unified_file')
 
-    if ARGS.quiet:
-        Settings.quiet = Settings().switch('quiet')
+        if ARGS.no_whois:
+            Settings.no_whois = Settings().switch('no_whois')
 
-    if ARGS.split:
-        Settings.split_files = Settings().switch('split_files')
+        if ARGS.percentage:
+            Settings.show_percentage = Settings().switch('show_percentage')
 
-    if ARGS.timeout:
-        Settings.seconds_before_http_timeout = ARGS.timeout
+        if ARGS.plain:
+            Settings.plain_list_domain = Settings().switch('plain_list_domain')
 
-    if ARGS.travis:
-        Settings.travis = Settings().switch('travis')
+        if ARGS.quiet:
+            Settings.quiet = Settings().switch('quiet')
 
-    PyFunceble(ARGS.domain, ARGS.file)
+        if ARGS.split:
+            Settings.split_files = Settings().switch('split_files')
+
+        if ARGS.timeout:
+            Settings.seconds_before_http_timeout = ARGS.timeout
+
+        if ARGS.travis:
+            Settings.travis = Settings().switch('travis')
+
+        PyFunceble(ARGS.domain, ARGS.file)
