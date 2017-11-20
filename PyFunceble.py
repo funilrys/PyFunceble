@@ -217,7 +217,7 @@ class Settings(object):
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '/home/funilrys/Projects/PyFunceble/'
+    current_dir = '%%current_dir%%'
     # Output directory.
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
     output_dir = current_dir + 'output/'
