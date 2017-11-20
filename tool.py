@@ -332,6 +332,9 @@ class Install(object):
         Helpers.File(
             self.file_to_install).write(script, True)
 
+        print(Helpers.File(
+            self.file_to_install).read())
+
 
 class Clean(object):
     """
