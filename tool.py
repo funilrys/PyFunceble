@@ -439,6 +439,12 @@ if __name__ == '__main__':
         action='store_false',
         help=" Activate the download of the stable version of PyFunceble."
     )
+    PARSER.add_argument(
+        '-t',
+        '--timeout',
+        type=int,
+        help="Set the default timeout in seconds."
+    )
 
     ARGS = PARSER.parse_args()
 
@@ -457,6 +463,9 @@ if __name__ == '__main__':
     if ARGS.commit_results_message:
         DATA['to_install']['travis_autosave_final_commit'] = '"' + \
             ARGS.commit_results_message + '"'
+
+    if ARGS.timout:
+        DATA['to_install']['seconds_before_http_timeout'] = ARGS.timeout
 
     if ARGS.dev:
         Settings().switch_version(ARGS.dev)
