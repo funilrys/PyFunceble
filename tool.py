@@ -122,7 +122,7 @@ class Check(object):
         from os import getcwd, path
         from os import access, R_OK, X_OK
 
-        location = getcwd() + 'PyFunceble.py'
+        location = getcwd() + '/PyFunceble.py'
 
         if not Settings.quiet:
             print('Script exist', end=' ')
