@@ -420,7 +420,7 @@ if __name__ == '__main__':
     PARSER.add_argument(
         '--dev',
         action='store_true',
-        help='Activate the download of the developement version of Funceble.'
+        help='Activate the download of the developement version of PyFunceble.'
     )
     PARSER.add_argument(
         '-i',
@@ -433,6 +433,11 @@ if __name__ == '__main__':
         '--production',
         action='store_true',
         help="Prepare the repository for production."
+    )
+    PARSER.add_argument(
+        '--stable',
+        action='store_false',
+        help=" Activate the download of the stable version of PyFunceble."
     )
 
     ARGS = PARSER.parse_args()
@@ -455,6 +460,9 @@ if __name__ == '__main__':
 
     if ARGS.dev:
         Settings().switch_version(ARGS.dev)
+
+    if not ARGS.stable:
+        Settings().switch_version(ARGS.stable)
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
