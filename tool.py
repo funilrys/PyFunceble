@@ -25,6 +25,7 @@ reseting PyFunceble to its default states.
 ##############################################################################
 
 import argparse
+import hashlib
 
 
 class Settings(object):
@@ -33,11 +34,25 @@ class Settings(object):
     """
 
     # Activate/Deactivate the download of the developement version of
-    # PyFunceble
+    # PyFunceble.
     dev = True
-
-    # Activate/Deactivate the download of the stable version of PyFunceble
+    # Activate/Deactivate the download of the stable version of PyFunceble.
     stable = False
+    # Funilrys
+    funilrys = 'funilrys'
+    # Script Name.
+    script = 'PyFunceble'
+    # Tool name.
+    tool = 'tool'
+    # GitHub raw.
+    github_raw = 'https://raw.githubusercontent.com/' + \
+        funilrys + '/' + script + '/master/'
+    # Link to the online version of the script.
+    online_script = github_raw + script + '.py'
+    # Link to the online version of the tool.
+    online_tool = github_raw + tool + '.py'
+    # Activate/Deactivate quiet mode.
+    quiet = False
 
     @classmethod
     def switch_version(cls, dev):
@@ -51,6 +66,8 @@ class Settings(object):
 
         if dev:
             Settings.stable = False
+            Settings.online_script.replace('master', 'dev')
+            Settings.online_tool.replace('master', 'dev')
         else:
             Settings.stable = True
 
@@ -83,11 +100,14 @@ class Check(object):
             'requests']
 
         for dependency in list_of_dependencies:
-            print(dependency + ' installed ', end=" ")
+            if not Settings.quiet:
+                print(dependency + ' installed ', end=" ")
 
             try:
                 __import__(dependency)
-                print(self.done.decode('utf-8'))
+
+                if not Settings.quiet:
+                    print(self.done.decode('utf-8'))
             except ImportError:
                 print(self.error.decode('utf-8'))
 
@@ -101,28 +121,36 @@ class Check(object):
 
         location = './PyFunceble.py'
 
-        print('Script exist', end=' ')
-        if path.exists(location):
+        if not Settings.quiet:
+            print('Script exist', end=' ')
+
+        if path.exists(location) and not Settings.quiet:
             print(self.done.decode('utf-8'))
         else:
-            print(self.error.decode('utf-8'))
+            if not Settings.quiet:
+                print(self.error.decode('utf-8'))
             exit(1)
 
-        print('Script readable', end=' ')
-        if access(location, R_OK):
+        if not Settings.quiet:
+            print('Script readable', end=' ')
+        if access(location, R_OK) and not Settings.quiet:
             print(self.done.decode('utf-8'))
         else:
-            print(self.error.decode('utf-8'))
+            if not Settings.quiet:
+                print(self.error.decode('utf-8'))
             exit(1)
 
-        print('Script executable', end=' ')
-        if access(location, X_OK):
+        if not Settings.quiet:
+            print('Script executable', end=' ')
+        if access(location, X_OK) and not Settings.quiet:
             print(self.done.decode('utf-8'))
         else:
-            print(self.error.decode('utf-8'))
+            if not Settings.quiet:
+                print(self.error.decode('utf-8'))
             exit(1)
 
-        print('\n')
+        if not Settings.quiet:
+            print('\n')
 
 
 class Install(object):
@@ -300,7 +328,6 @@ class Install(object):
 
         PyFuncebleHelpers.File(
             self.file_to_install).write(script, True)
-        print('done')
 
 
 class Clean(object):
@@ -384,6 +411,204 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
             exit(0)
 
 
+class Update(object):
+    """
+    Update logic.download_files
+    """
+
+    def __init__(self):
+        from os import getcwd, path, rename
+        from PyFunceble import Helpers
+
+        self.current_path = getcwd()
+
+        self.destination = self.current_path + Settings.funilrys + '.'
+
+        self.files = {
+            'script': 'PyFunceble.py',
+            'tool': 'tool.py',
+        }
+
+        if path.isdir(
+                self.current_path +
+                '/.git') and Settings.script in Helpers.Command('git remote show origin').execute():
+            self.git()
+        else:
+            if not self.check_version(True):
+                for data in self.files:
+                    Helpers.File(self.destination + self.files[data]).delete()
+                    rename(
+                        self.destination +
+                        self.files[data],
+                        self.current_path +
+                        self.files[data])
+
+                Helpers.Command('python tool.py -q -i').execute()
+
+                print('Checking version', end=' ')
+                if self.check_version():
+                    print('✔\n\nThe update was successfully completed!')
+                else:
+                    print('✘\nImpossible to update PyFunceble. Please report issue.')
+            else:
+                print('No need to update.\n')
+
+                for data in self.files:
+                    Helpers.File(self.destination + self.files[data]).delete()
+
+    @classmethod
+    def git(cls):
+        """
+        Update repository if cloned (git).
+        """
+
+        from PyFunceble import Helpers
+
+        if Settings.stable:
+            Helpers.Command('git checkout master').execute()
+        else:
+            Helpers.Command('git checkout dev').execute()
+
+        Helpers.Command('git pull').execute()
+        return
+
+    def update_permission(self):
+        """
+        Update the permissions of the downloaded files in order to be
+        executable.
+        """
+
+        from os import chmod, stat
+        from stat import S_IEXEC
+
+        for data in self.files:
+            stats = stat(self.destination + self.files[data])
+            chmod(self.destination + self.files[data], stats.st_mode | S_IEXEC)
+
+        return
+
+    def download_files(self):
+        """
+        Download the online version of PyFunceble and tool.
+        """
+
+        print('\n Download of the scripts ')
+
+        from shutil import copyfileobj
+        from requests import get
+
+        req = get(Settings.online_script, stream=True)
+        req2 = get(Settings.online_tool, stream=True)
+
+        if req.status_code == 200:
+            with open(self.destination + self.files['script']) as file:
+                copyfileobj(req.raw, file)
+
+            with open(self.destination + self.files['tool']) as file:
+                copyfileobj(req2.raw, file)
+
+            del req
+            del req
+
+            self.update_permission()
+
+            Settings.quiet = True
+
+            return
+
+        print(
+            '✘\nImpossible to update %s.Please report issue.' %
+            Settings.script)
+        exit(1)
+
+    @classmethod
+    def hash(cls, file):
+        """
+        Get/return the sha512sum of the current PyFunceble.py.
+
+        :param file: A string, the file to get the hash.
+        """
+
+        return Hash(file, 'sha512', True).get()
+
+    def check_version(self, download=False):
+        """
+        Compare the current version to the online version.
+        """
+
+        if download:
+            self.download_files()
+
+        for file in self.files:
+            current_version = self.hash(
+                self.current_path + '/' + self.files[file])
+            copied_version = self.hash(self.destination + self.files[file])
+
+            if current_version != copied_version:
+                return False
+
+        return True
+
+
+class Hash(object):
+    """
+    Get and return the hash a file with the given algorithm.
+
+    :param path: A string, the path to the file we have to hash.
+    :param algorithm: A string, the algorithm to use.
+    :param only_hash: A bool, Return only the desired algorithm if algorithm != 'all'.
+
+    :Note: Original version : https://git.io/vFQrK
+    """
+
+    def __init__(self, path, algorithm='sha512', only_hash=False):
+        self.valid_algorithms = ['all', 'md5',
+                                 'sha1', 'sha224', 'sha384', 'sha512']
+
+        self.path = path
+        self.algorithm = algorithm
+        self.only_hash = only_hash
+
+    def hash_data(self, algo):
+        """Get the hash of the given file
+
+        :param algo: A string, the algorithm to use.
+        """
+
+        hash_data = getattr(hashlib, algo)()
+
+        with open(self.path, 'rb') as file:
+            content = file.read()
+
+            hash_data.update(content)
+        return hash_data.hexdigest()
+
+    def get(self):
+        """
+        Return the hash of the given file
+        """
+
+        from os import path
+
+        result = {}
+
+        if path.isfile(self.path) and self.algorithm in self.valid_algorithms:
+            if self.algorithm == 'all':
+                del self.valid_algorithms[0]
+                for algo in self.valid_algorithms:
+                    result[algo] = None
+                    result[algo] = self.hash_data(algo)
+            else:
+                result[self.algorithm] = None
+                result[self.algorithm] = self.hash_data(self.algorithm)
+        else:
+            return None
+
+        if self.algorithm != 'all' and self.only_hash:
+            return result[self.algorithm]
+        return result
+
+
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
         description=None,
@@ -435,6 +660,12 @@ if __name__ == '__main__':
         help="Prepare the repository for production."
     )
     PARSER.add_argument(
+        '-q',
+        '--quiet',
+        action='store_true',
+        help='Split outputed files.'
+    )
+    PARSER.add_argument(
         '--stable',
         action='store_false',
         help=" Activate the download of the stable version of PyFunceble."
@@ -444,6 +675,12 @@ if __name__ == '__main__':
         '--timeout',
         type=int,
         help="Set the default timeout in seconds."
+    )
+    PARSER.add_argument(
+        '-u',
+        '--update',
+        action='store_true',
+        help=" Update the scripts"
     )
     PARSER.add_argument(
         '-v',
@@ -470,7 +707,7 @@ if __name__ == '__main__':
         DATA['to_install']['travis_autosave_final_commit'] = '"' + \
             ARGS.commit_results_message + '"'
 
-    if ARGS.timout:
+    if ARGS.timeout:
         DATA['to_install']['seconds_before_http_timeout'] = ARGS.timeout
 
     if ARGS.dev:
@@ -478,6 +715,12 @@ if __name__ == '__main__':
 
     if not ARGS.stable:
         Settings().switch_version(ARGS.stable)
+
+    if ARGS.quiet:
+        Settings.quiet = False
+
+    if ARGS.update:
+        Update()
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
