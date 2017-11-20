@@ -317,6 +317,43 @@ class Clean(object):
             Helpers.File(file).delete()
 
 
+class Uninstall(object):  # pylint: disable=too-few-public-methods
+    """
+    Uninstallation logic.
+    """
+
+    def __init__(self):
+        from os import chdir, path
+        from shutil import rmtree
+
+        self.done = '✔'
+        self.error = '✘'
+
+        confirmation = input(
+            'Do you really want to uninstall PyFunceble? (yes/no)')
+
+        print('Deletion of funceble ')
+
+        if confirmation == 'yes':
+            current_file = __file__
+            real_path = path.realpath(current_file)
+            directory_path = path.dirname(real_path)
+            directory_path = path.basename(directory_path)
+
+            chdir('..')
+            rmtree(directory_path)
+            print(self.done + '\n\n')
+
+            to_print = 'Thank you for having used PyFunceble!!\n\n'
+            to_print += "Your're not satisfied by PyFuncebl?\n Please let me know there : %s"
+
+            print(to_print % 'Unknown link')
+            exit(0)
+        else:
+            print(self.error + '\n\n\n Thenk you for keeping PyFunceble !!\n\n')
+            exit(0)
+
+
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
         description=None,
@@ -343,6 +380,12 @@ if __name__ == '__main__':
         '--commit-results-message',
         type=str,
         help='Replace the default results (final) commit message.'
+    )
+    PARSER.add_argument(
+        '-del',
+        '--delete',
+        action='store_true',
+        help='Uninstall PyFunceble and all its components.'
     )
     PARSER.add_argument(
         '-i',
@@ -379,3 +422,6 @@ if __name__ == '__main__':
         Install(None, DATA, ARGS.installation)
     elif ARGS.production:
         Install(None, DATA, ARGS.production)
+
+    if ARGS.delete:
+        Uninstall()
