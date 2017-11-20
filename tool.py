@@ -27,6 +27,36 @@ reseting PyFunceble to its default states.
 import argparse
 
 
+class Settings(object):
+    """
+    Scripts settings.
+    """
+
+    # Activate/Deactivate the download of the developement version of
+    # PyFunceble
+    dev = True
+
+    # Activate/Deactivate the download of the stable version of PyFunceble
+    stable = False
+
+    @classmethod
+    def switch_version(cls, dev):
+        """
+        Switch Settings.dev and Settings.stable according to argparse.
+
+        :param dev: A bool, the status to set to dev
+        """
+
+        Settings.dev = dev
+
+        if dev:
+            Settings.stable = False
+        else:
+            Settings.stable = True
+
+        return
+
+
 class Check(object):
     """
     Check if depenndencies are satisfied or not.
@@ -388,6 +418,11 @@ if __name__ == '__main__':
         help='Uninstall PyFunceble and all its components.'
     )
     PARSER.add_argument(
+        '--dev',
+        action='store_true',
+        help='Activate the download of the developement version of Funceble.'
+    )
+    PARSER.add_argument(
         '-i',
         '--installation',
         action='store_false',
@@ -417,6 +452,9 @@ if __name__ == '__main__':
     if ARGS.commit_results_message:
         DATA['to_install']['travis_autosave_final_commit'] = '"' + \
             ARGS.commit_results_message + '"'
+
+    if ARGS.dev:
+        Settings().switch_version(ARGS.dev)
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
