@@ -445,6 +445,12 @@ if __name__ == '__main__':
         type=int,
         help="Set the default timeout in seconds."
     )
+    PARSER.add_argument(
+        '-v',
+        '--version',
+        action='version',
+        version='%(prog)s 0.0.1-beta'
+    )
 
     ARGS = PARSER.parse_args()
 
