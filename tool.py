@@ -66,8 +66,11 @@ class Settings(object):
 
         if dev:
             Settings.stable = False
-            Settings.online_script.replace('master', 'dev')
-            Settings.online_tool.replace('master', 'dev')
+
+            Settings.online_script = Settings.online_script.replace(
+                'master', 'dev')
+            Settings.online_tool = Settings.online_tool.replace(
+                'master', 'dev')
         else:
             Settings.stable = True
 
