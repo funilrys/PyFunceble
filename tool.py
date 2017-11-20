@@ -425,7 +425,7 @@ class Update(object):
 
         self.current_path = getcwd()
 
-        self.destination = self.current_path + Settings.funilrys + '.'
+        self.destination = self.current_path + '/' + Settings.funilrys + '.'
 
         self.files = {
             'script': 'PyFunceble.py',
@@ -439,12 +439,14 @@ class Update(object):
         else:
             if not self.check_version(True):
                 for data in self.files:
-                    Helpers.File(self.destination + self.files[data]).delete()
+                    Helpers.File(
+                        self.current_path +
+                        '/' +
+                        self.files[data]).delete()
                     rename(
                         self.destination +
                         self.files[data],
-                        self.current_path +
-                        self.files[data])
+                        self.current_path + '/' + self.files[data])
 
                 Helpers.Command('python tool.py -q -i').execute()
 
@@ -500,23 +502,23 @@ class Update(object):
         from shutil import copyfileobj
         from requests import get
 
-        req = get(Settings.online_script, stream=True)
-        req2 = get(Settings.online_tool, stream=True)
+        result = []
 
-        if req.status_code == 200:
-            with open(self.destination + self.files['script']) as file:
-                copyfileobj(req.raw, file)
+        for data in self.files:
+            req = get(getattr(Settings, 'online_' + data), stream=True)
 
-            with open(self.destination + self.files['tool']) as file:
-                copyfileobj(req2.raw, file)
+            if req.status_code == 200:
+                with open(self.destination + self.files[data], 'wb') as file:
+                    req.raw.decode_content = True
+                    copyfileobj(req.raw, file)
 
-            del req
-            del req
+                del req
+                result.append(True)
+            else:
+                result.append(False)
 
+        if False not in result:
             self.update_permission()
-
-            Settings.quiet = True
-
             return
 
         print(
@@ -547,7 +549,9 @@ class Update(object):
                 self.current_path + '/' + self.files[file])
             copied_version = self.hash(self.destination + self.files[file])
 
-            if current_version != copied_version:
+            if not download and current_version == copied_version:
+                return False
+            elif current_version != copied_version:
                 return False
 
         return True
