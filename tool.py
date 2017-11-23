@@ -561,17 +561,20 @@ class Update(object):
                 self.current_path + '/' + self.files[file])
             copied_version = self.hash(self.destination + self.files[file])
 
-            if current_version is not None and copied_version is not None:
+
+            if copied_version is not None:
                 if not download and current_version == copied_version:
                     result.append(True)
                 else:
                     result.append(False)
             else:
-                result.append(False)
+                result.append(True)
 
         if True in result:
             return True
         return False
+
+
 
 
 class Hash(object):
@@ -710,7 +713,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.0.3-beta'
+        version='%(prog)s 0.0.4-beta'
     )
 
     ARGS = PARSER.parse_args()
