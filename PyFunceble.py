@@ -648,7 +648,7 @@ class ExecutionTime(object):
     """
 
     def __init__(self, action='start'):
-        if Settings.show_execution_time:
+        if Settings.show_execution_time or Settings.travis:
             if action == 'start':
                 self.starting_time()
             elif action == 'stop':
@@ -2226,7 +2226,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.3-beta'
+            version='%(prog)s 0.0.4-beta'
         )
 
         ARGS = PARSER.parse_args()
