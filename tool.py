@@ -443,7 +443,7 @@ class Update(object):
                 '/.git') and Settings.script in Helpers.Command('git remote show origin').execute():
             self.git()
         else:
-            if not self.check_version(True):
+            if not self.same_version(True):
                 for data in self.files:
                     Helpers.File(
                         self.current_path +
@@ -454,10 +454,10 @@ class Update(object):
                         self.files[data],
                         self.current_path + '/' + self.files[data])
 
-                Helpers.Command('python tool.py -q -i').execute()
+                # Helpers.Command('python tool.py -q -i').execute()
 
                 print('Checking version', end=' ')
-                if self.check_version():
+                if self.same_version():
                     print(
                         Settings.done +
                         '\n\nThe update was successfully completed!')
@@ -546,7 +546,7 @@ class Update(object):
 
         return Hash(file, 'sha512', True).get()
 
-    def check_version(self, download=False):
+    def same_version(self, download=False):
         """
         Compare the current version to the online version.
         """
@@ -561,10 +561,11 @@ class Update(object):
                 self.current_path + '/' + self.files[file])
             copied_version = self.hash(self.destination + self.files[file])
 
-            if not download and current_version == copied_version:
-                result.append(True)
-            elif download and current_version != copied_version:
-                result.append(False)
+            if current_version is not None and copied_version is not None:
+                if not download and current_version == copied_version:
+                    result.append(True)
+                else:
+                    result.append(False)
             else:
                 result.append(False)
 
@@ -709,7 +710,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.0.2-beta'
+        version='%(prog)s 0.0.3-beta'
     )
 
     ARGS = PARSER.parse_args()
