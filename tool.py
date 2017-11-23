@@ -54,6 +54,11 @@ class Settings(object):
     # Activate/Deactivate quiet mode.
     quiet = False
 
+    # Done string
+    done = '✔'
+    # Error string
+    error = '✘'
+
     @classmethod
     def switch_version(cls, dev):
         """
@@ -83,13 +88,11 @@ class Check(object):
     """
 
     def __init__(self):
-        self.done = '✔'.encode('utf-8')
-        self.error = '✘'.encode('utf-8')
-
         self.script()
         self.dependencies()
 
-    def dependencies(self):
+    @classmethod
+    def dependencies(cls):
         """
         Check if all needed modules are installed.
         """
@@ -110,11 +113,12 @@ class Check(object):
                 __import__(dependency)
 
                 if not Settings.quiet:
-                    print(self.done.decode('utf-8'))
+                    print(Settings.done)
             except ImportError:
-                print(self.error.decode('utf-8'))
+                print(Settings.error)
 
-    def script(self):
+    @classmethod
+    def script(cls):
         """
         Check if the script is needed.
         """
@@ -128,28 +132,28 @@ class Check(object):
             print('Script exist', end=' ')
 
         if path.exists(location) and not Settings.quiet:
-            print(self.done.decode('utf-8'))
+            print(Settings.done)
         else:
             if not Settings.quiet:
-                print(self.error.decode('utf-8'))
+                print(Settings.error)
             exit(1)
 
         if not Settings.quiet:
             print('Script readable', end=' ')
         if access(location, R_OK) and not Settings.quiet:
-            print(self.done.decode('utf-8'))
+            print(Settings.done)
         else:
             if not Settings.quiet:
-                print(self.error.decode('utf-8'))
+                print(Settings.error)
             exit(1)
 
         if not Settings.quiet:
             print('Script executable', end=' ')
         if access(location, X_OK) and not Settings.quiet:
-            print(self.done.decode('utf-8'))
+            print(Settings.done)
         else:
             if not Settings.quiet:
-                print(self.error.decode('utf-8'))
+                print(Settings.error)
             exit(1)
 
         if not Settings.quiet:
@@ -389,9 +393,6 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
         from os import chdir, path
         from shutil import rmtree
 
-        self.done = '✔'
-        self.error = '✘'
-
         confirmation = input(
             'Do you really want to uninstall PyFunceble? (yes/no)')
 
@@ -405,7 +406,7 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
 
             chdir('..')
             rmtree(directory_path)
-            print(self.done + '\n\n')
+            print(Settings.done + '\n\n')
 
             to_print = 'Thank you for having used PyFunceble!!\n\n'
             to_print += "Your're not satisfied by PyFuncebl?\n Please let me know there : %s"
@@ -413,7 +414,9 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
             print(to_print % 'Unknown link')
             exit(0)
         else:
-            print(self.error + '\n\n\n Thenk you for keeping PyFunceble !!\n\n')
+            print(
+                Settings.error +
+                '\n\n\n Thenk you for keeping PyFunceble !!\n\n')
             exit(0)
 
 
@@ -455,9 +458,13 @@ class Update(object):
 
                 print('Checking version', end=' ')
                 if self.check_version():
-                    print('✔\n\nThe update was successfully completed!')
+                    print(
+                        Settings.done +
+                        '\n\nThe update was successfully completed!')
                 else:
-                    print('✘\nImpossible to update PyFunceble. Please report issue.')
+                    print(
+                        Settings.error +
+                        '\nImpossible to update PyFunceble. Please report issue.')
             else:
                 print('No need to update.\n')
 
@@ -525,7 +532,7 @@ class Update(object):
             return
 
         print(
-            '✘\nImpossible to update %s.Please report issue.' %
+            Settings.done + '\nImpossible to update %s.Please report issue.' %
             Settings.script)
         exit(1)
 
