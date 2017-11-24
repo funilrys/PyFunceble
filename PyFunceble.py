@@ -437,9 +437,9 @@ class PyFunceble(object):
         """
 
         backup = {}
-        AutoContinue().restore(file_path)
         list_to_test = []
 
+        AutoContinue().restore(file_path)
         self.print_header()
 
         for read in open(file_path):
@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.6-beta'
+            version='%(prog)s 0.0.6.1-beta'
         )
 
         ARGS = PARSER.parse_args()
