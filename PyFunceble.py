@@ -512,13 +512,11 @@ class PyFunceble(object):
             }
 
             AutoContinue().backup(backup)
-
-            if i == len(list_to_test) - 1:
-                AutoSave(True)
-            else:
-                AutoSave()
+            AutoSave()
 
             i += 1
+
+        AutoSave(True)
 
 
 class AutoContinue(object):
@@ -613,7 +611,7 @@ class AutoSave(object):
 
         current_time = int(strftime('%s'))
         time_of_start = int(Settings.start) + \
-            int(Settings.travis_autosave_minutes) * 60
+            (int(Settings.travis_autosave_minutes) * 60)
 
         if current_time >= time_of_start or self.last:
             Percentage().log()
@@ -2224,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.6.3-beta'
+            version='%(prog)s 0.0.7-beta'
         )
 
         ARGS = PARSER.parse_args()
