@@ -31,6 +31,7 @@ from json import decoder, dump, loads
 from os import environ, path, remove
 from re import compile as comp
 from re import sub as substrings
+from re import escape
 from subprocess import PIPE, Popen
 from time import strftime
 
@@ -463,6 +464,10 @@ class PyFunceble(object):
 
         while i < len(list_to_test):
             domain = list_to_test[i]
+
+            if Settings.to_filter != '' and not Helpers.Regex(
+                    domain, Settings.to_filter, return_data=False).match():
+                continue
 
             regex_listing = [
                 r'^#',
@@ -2018,7 +2023,7 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             # We initiate the needed variable in order to be usable all over
             # class
             self.data = data
-            self.regex = regex
+            self.regex = escape(regex)
 
             # We assign the default value of our optional arguments
             optional_arguments = {
@@ -2124,7 +2129,12 @@ if __name__ == '__main__':
             "-f",
             "--file",
             type=str,
-            help="Test a file with a list of domains"
+            help="Test a file with a list of domains."
+        )
+        PARSER.add_argument(
+            '--filter',
+            type=str,
+            help='Domain to filter.'
         )
         PARSER.add_argument(
             '-ex',
@@ -2222,7 +2232,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.2.1-beta'
+            version='%(prog)s 0.3.0-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2243,6 +2253,9 @@ if __name__ == '__main__':
 
         if ARGS.execution:
             Settings.show_execution_time = Settings().switch('show_execution_time')
+
+        if ARGS.filter:
+            Settings.to_filter = ARGS.filter
 
         if ARGS.host:
             Settings.generate_hosts = Settings().switch('generate_hosts')
