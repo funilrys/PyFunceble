@@ -532,8 +532,9 @@ class AutoContinue(object):
                 self.backup_content = Helpers.Dict().from_json(
                     Helpers.File(Settings.autocontinue_log_file).read())
             else:
-                Helpers.File(Settings.autocontinue_log_file).write("{}")
                 self.backup_content = {}
+                Helpers.File(Settings.autocontinue_log_file).write(
+                    str(self.backup_content))
 
     def backup(self, data_to_backup):
         """
@@ -2222,7 +2223,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.6.1-beta'
+            version='%(prog)s 0.0.6.2-beta'
         )
 
         ARGS = PARSER.parse_args()
