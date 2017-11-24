@@ -825,7 +825,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.0.4-beta'
+        version='%(prog)s 0.0.7-beta'
     )
 
     ARGS = PARSER.parse_args()
@@ -834,9 +834,6 @@ if __name__ == '__main__':
 
     if ARGS.autosave_minutes:
         DATA['to_install']['travis_autosave_minutes'] = ARGS.autosave_minutes
-
-    if ARGS.clean:
-        Clean()
 
     if ARGS.commit_autosave_message:
         DATA['to_install']['travis_autosave_commit'] = '"' + \
@@ -856,7 +853,10 @@ if __name__ == '__main__':
         Settings().switch_version(ARGS.stable)
 
     if ARGS.quiet:
-        Settings.quiet = False
+        Settings.quiet = True
+
+    if ARGS.clean:
+        Clean()
 
     if ARGS.update:
         Update()
