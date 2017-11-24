@@ -608,8 +608,9 @@ class AutoSave(object):
 
     def travis(self):
         """
-        Logic behind travis auto save.
+        Logic behind travis autosave.
         """
+
         current_time = int(strftime('%s'))
         time_of_start = int(Settings.start) + \
             int(Settings.travis_autosave_minutes) * 60
@@ -2223,7 +2224,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.6.2-beta'
+            version='%(prog)s 0.0.6.3-beta'
         )
 
         ARGS = PARSER.parse_args()
