@@ -466,7 +466,7 @@ class PyFunceble(object):
             domain = list_to_test[i]
 
             if Settings.to_filter != '' and not Helpers.Regex(
-                    domain, Settings.to_filter, return_data=False).match():
+                    domain, Settings.to_filter, return_data=False, escape=True).match():
                 continue
 
             regex_listing = [
@@ -2023,21 +2023,26 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             # We initiate the needed variable in order to be usable all over
             # class
             self.data = data
-            self.regex = escape(regex)
 
             # We assign the default value of our optional arguments
             optional_arguments = {
-                "return_data": True,
+                "escape": False,
                 "group": 0,
+                "occurences": 0,
                 "rematch": False,
                 "replace_with": None,
-                "occurences": 0
+                "return_data": True
             }
 
             # We initiate our optional_arguments in order to be usable all over the
             # class
             for (arg, default) in optional_arguments.items():
                 setattr(self, arg, args.get(arg, default))
+
+            if self.escape:  # pylint: disable=no-member
+                self.regex = escape(regex)
+            else:
+                self.regex = regex
 
         def match(self):
             """Used to get exploitable result of re.search"""
@@ -2232,7 +2237,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.3.0-beta'
+            version='%(prog)s 0.3.1-beta'
         )
 
         ARGS = PARSER.parse_args()
