@@ -625,7 +625,7 @@ class AutoSave(object):
 
                 message = Settings.travis_autosave_final_commit + ' [ci skip]'
 
-                print(Helpers.Command(command % message).execute())
+                Helpers.Command(command % message).execute()
             else:
                 Helpers.Command(command %
                                 Settings.travis_autosave_commit).execute()
@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.2.0-beta'
+            version='%(prog)s 0.2.1-beta'
         )
 
         ARGS = PARSER.parse_args()
