@@ -59,6 +59,9 @@ class Settings(object):
     # Error string
     error = '✘'
 
+    # IANA DB url
+    iana_url = 'https://www.iana.org/domains/root/db'
+
     @classmethod
     def switch_version(cls, dev):
         """
@@ -190,7 +193,28 @@ class Install(object):
         self.production = production
         self.data_to_install = data_to_install
 
+        if self.production and not Settings.quiet:
+            print('Default timeout: %s seconds' %
+                  self.default_values()['travis_autosave_minutes'])
+            print('\nInstallation of default variables for production', end=" ")
+        else:
+            if not Settings.quiet:
+                print('\n\nInstallation of working directory', end=" ")
+
         self.execute()
+
+        Clean()
+        IANA()
+
+        if self.production and not Settings.quiet:
+            print('\n\nThe production logic was successfully completed!')
+            print('You can now distribute this repository.\n')
+        else:
+            if not Settings.quiet:
+                print('\n\nThe installation was successfully completed!')
+                print(
+                    "You can now use the script with './%s [-OPTIONS]' or learn how to use it with ./%s --help\n" %  # pylint: disable=line-too-long
+                    (Settings.script + '.py', Settings.script + '.py'))
 
     def default_values(self):
         """
@@ -336,8 +360,8 @@ class Install(object):
         Helpers.File(
             self.file_to_install).write(script, True)
 
-        # print(Helpers.File(
-        #     self.file_to_install).read())
+        if not Settings.quiet:
+            print(Settings.done)
 
 
 class Clean(object):
@@ -346,7 +370,9 @@ class Clean(object):
     """
 
     def __init__(self):
+        print('\n\nCleaning generated files', end=" ")
         self.them_all()
+        print(Settings.done)
 
     @classmethod
     def file_to_delete(cls):
@@ -380,7 +406,6 @@ class Clean(object):
         to_delete = self.file_to_delete()
 
         for file in to_delete:
-            print(file)
             Helpers.File(file).delete()
 
 
@@ -406,6 +431,7 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
 
             chdir('..')
             rmtree(directory_path)
+
             print(Settings.done + '\n\n')
 
             to_print = 'Thank you for having used PyFunceble!!\n\n'
@@ -454,19 +480,20 @@ class Update(object):
                         self.files[data],
                         self.current_path + '/' + self.files[data])
 
-                # Helpers.Command('python tool.py -q -i').execute()
-
-                print('Checking version', end=' ')
-                if self.same_version():
+                if not Settings.quiet:
+                    print('Checking version', end=' ')
+                if self.same_version() and not Settings.quiet:
                     print(
                         Settings.done +
                         '\n\nThe update was successfully completed!')
                 else:
-                    print(
-                        Settings.error +
-                        '\nImpossible to update PyFunceble. Please report issue.')
+                    if not Settings.quiet:
+                        print(
+                            Settings.error +
+                            '\nImpossible to update PyFunceble. Please report issue.')
             else:
-                print('No need to update.\n')
+                if not Settings.quiet:
+                    print('No need to update.\n')
 
                 for data in self.files:
                     Helpers.File(self.destination + self.files[data]).delete()
@@ -507,7 +534,8 @@ class Update(object):
         Download the online version of PyFunceble and tool.
         """
 
-        print('\n Download of the scripts ')
+        if not Settings.quiet:
+            print('\n Download of the scripts ')
 
         from shutil import copyfileobj
         from requests import get
@@ -531,10 +559,12 @@ class Update(object):
             self.update_permission()
             return
 
-        print(
-            Settings.done + '\nImpossible to update %s.Please report issue.' %
-            Settings.script)
-        exit(1)
+        if not Settings.quiet:
+            print(
+                Settings.done +
+                '\nImpossible to update %s.Please report issue.' %
+                Settings.script)
+            exit(1)
 
     @classmethod
     def hash(cls, file):
@@ -561,7 +591,6 @@ class Update(object):
                 self.current_path + '/' + self.files[file])
             copied_version = self.hash(self.destination + self.files[file])
 
-
             if copied_version is not None:
                 if not download and current_version == copied_version:
                     result.append(True)
@@ -575,6 +604,84 @@ class Update(object):
         return False
 
 
+class IANA(object):
+    """
+    Logic behind the update of iana-domains-db.json
+    """
+
+    def __init__(self):
+        if not Settings.quiet:
+            print('Update of iana-domains-db', end=" ")
+        self.download_destination = 'iana-db-dump'
+        self.destination = 'iana-domains-db'
+
+        self.update()
+
+    def download(self):
+        """
+        Download the database from IANA website.
+        """
+
+        from shutil import copyfileobj
+        from requests import get
+
+        req = get(Settings.iana_url, stream=True)
+
+        if req.status_code == 200:
+            with open(self.download_destination, 'wb') as file:
+                req.raw.decode_content = True
+                copyfileobj(req.raw, file)
+            del req
+
+            return True
+        return False
+
+    def get_valid_extensions(self):
+        """
+        Get the list of valid extensions based on the result of self.download().
+        """
+
+        from PyFunceble import Helpers
+
+        result = []
+        regex_valid_extension = r'(/domains/root/db/)(.*)(\.html)'
+
+        for readed in open(self.download_destination):
+            readed = readed.rstrip('\n').strip()
+
+            matched = Helpers.Regex(
+                readed,
+                regex_valid_extension,
+                return_data=True,
+                rematch=True).match()
+
+            if not matched:
+                continue
+            else:
+                result.append(matched[1])
+
+        Helpers.File(self.download_destination).delete()
+        Helpers.File(self.destination).delete()
+        return result
+
+    def update(self):
+        """
+        Update the content of the `iana-domains-db` file.
+        """
+
+        from PyFunceble import Helpers
+
+        if self.download():
+            extensions = self.get_valid_extensions()
+
+            for extension in extensions:
+                Helpers.File(self.destination).write(extension + '\n')
+            if not Settings.quiet:
+                print(Settings.done)
+        else:
+            if not Settings.quiet:
+                print(Settings.error)
+            exit(1)
 
 
 class Hash(object):
@@ -681,6 +788,11 @@ if __name__ == '__main__':
         help="Execute the installation script."
     )
     PARSER.add_argument(
+        '--iana',
+        action='store_true',
+        help="Update `iana-domains-db`."
+    )
+    PARSER.add_argument(
         '-p',
         '--production',
         action='store_true',
@@ -748,6 +860,9 @@ if __name__ == '__main__':
 
     if ARGS.update:
         Update()
+
+    if ARGS.iana:
+        IANA()
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
