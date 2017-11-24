@@ -623,16 +623,16 @@ class AutoSave(object):
                 if Settings.command_before_end != '':
                     Helpers.Command(Settings.command_before_end).execute()
 
-                Helpers.Command(
-                    command %
-                    Settings.travis_autosave_final_commit +
-                    ' [ci skip]').execute()
+                message = Settings.travis_autosave_final_commit + ' [ci skip]'
+
+                print(Helpers.Command(command % message).execute())
             else:
                 Helpers.Command(command %
                                 Settings.travis_autosave_commit).execute()
 
             Helpers.Command('git push origin master').execute()
             exit(0)
+        return
 
 
 class ExecutionTime(object):
@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.1.0-beta'
+            version='%(prog)s 0.2.0-beta'
         )
 
         ARGS = PARSER.parse_args()
