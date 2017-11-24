@@ -1860,10 +1860,10 @@ class ExpirationDate(object):
                 Status(Settings.official_down_status)
 
                 return
-            elif string == to_match[-1]:
-                self.whois_log()
-                Status(Settings.official_down_status)
-                return
+
+        self.whois_log()
+        Status(Settings.official_down_status)
+        return
 
 
 class Helpers(object):  # pylint: disable=too-few-public-methods
@@ -2222,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.7-beta'
+            version='%(prog)s 0.1.0-beta'
         )
 
         ARGS = PARSER.parse_args()
