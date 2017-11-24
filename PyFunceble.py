@@ -392,11 +392,16 @@ class PyFunceble(object):
 
     def __init__(self, domain=None, file_path=None):
 
+        ExecutionTime('start')
+
         if domain is not None and domain != '':
             self.domain(domain)
 
         elif file_path is not None and file_path != '':
             self.file(file_path)
+
+        ExecutionTime('stop')
+        Percentage().log()
 
     @classmethod
     def print_header(cls):
@@ -418,14 +423,10 @@ class PyFunceble(object):
         :param domain: A string, a domain or IP to test.
         """
 
-        ExecutionTime('start')
-
         Settings.domain = domain.lower()
 
         self.print_header()
         ExpirationDate()
-
-        ExecutionTime('stop')
 
     def file(self, file_path):
         """
@@ -434,8 +435,6 @@ class PyFunceble(object):
 
         :param file_path: A string, a path to a file to read.
         """
-
-        ExecutionTime('start')
 
         backup = {}
         AutoContinue().restore(file_path)
@@ -520,9 +519,6 @@ class PyFunceble(object):
                 AutoSave()
 
             i += 1
-
-        ExecutionTime('stop')
-        Percentage().log()
 
 
 class AutoContinue(object):
@@ -2226,7 +2222,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.0.5-beta'
+            version='%(prog)s 0.0.6-beta'
         )
 
         ARGS = PARSER.parse_args()
