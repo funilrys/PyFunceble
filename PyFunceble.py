@@ -429,6 +429,21 @@ class PyFunceble(object):
         self.print_header()
         ExpirationDate()
 
+    @classmethod
+    def reset_counters(cls):
+        """
+        Reset the counters when needed.
+        """
+
+        for string in [
+                'number_of_up',
+                'number_of_down',
+                'number_of_invalid',
+                'number_of_tested']:
+            setattr(Settings, string, 0)
+
+        return
+
     def file(self, file_path):
         """
         Manage the case that need to test each domain of a given file path.
@@ -437,7 +452,6 @@ class PyFunceble(object):
         :param file_path: A string, a path to a file to read.
         """
 
-        backup = {}
         list_to_test = []
 
         AutoContinue().restore(file_path)
@@ -451,13 +465,7 @@ class PyFunceble(object):
 
         if Settings.number_of_tested == 0 or list_to_test[
                 Settings.number_of_tested - 1] == list_to_test[-1]:
-
-            for string in [
-                    'number_of_up',
-                    'number_of_down',
-                    'number_of_invalid',
-                    'number_of_tested']:
-                setattr(Settings, string, 0)
+            self.reset_counters()
 
         i = int(Settings.number_of_tested)
 
@@ -507,15 +515,7 @@ class PyFunceble(object):
             Settings.domain = domain.split('#')[0]
 
             ExpirationDate()
-
-            backup[file_path] = {
-                "number_of_tested": Settings.number_of_tested,
-                "number_of_up": Settings.number_of_up,
-                "number_of_down": Settings.number_of_down,
-                "number_of_invalid": Settings.number_of_invalid
-            }
-
-            AutoContinue().backup(backup)
+            AutoContinue().backup(file_path)
             AutoSave()
 
             i += 1
@@ -538,14 +538,22 @@ class AutoContinue(object):
                 Helpers.File(Settings.autocontinue_log_file).write(
                     str(self.backup_content))
 
-    def backup(self, data_to_backup):
+    def backup(self, file_path):
         """
         Backup the current execution state.
 
-        :param data_to_backup: The data to restore.
+        :param file_path: The path of the currently tested file.
         """
 
-        if Settings.auto_continue and data_to_backup is not None:
+        if Settings.auto_continue:
+            data_to_backup = {}
+            data_to_backup[file_path] = {
+                "number_of_tested": Settings.number_of_tested,
+                "number_of_up": Settings.number_of_up,
+                "number_of_down": Settings.number_of_down,
+                "number_of_invalid": Settings.number_of_invalid
+            }
+
             to_save = {}
 
             to_save.update(self.backup_content)
@@ -2262,7 +2270,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.5.2-beta'
+            version='%(prog)s 0.5.3-beta'
         )
 
         ARGS = PARSER.parse_args()
