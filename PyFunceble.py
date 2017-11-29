@@ -835,7 +835,7 @@ class Prints(object):
                 tuple(separator_data)]
         return [header_size % tuple(header_data)]
 
-    def header(self, do_not_print=False):
+    def header(self, do_not_print=False):  # pylint: disable=too-many-branches
         """
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.
@@ -2270,7 +2270,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.5.3-beta'
+            version='%(prog)s 0.5.4-beta'
         )
 
         ARGS = PARSER.parse_args()
