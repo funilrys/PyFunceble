@@ -1041,9 +1041,13 @@ class Lookup(object):
                         data = req.recv(4096)
                     except ConnectionResetError:
                         req.close()
+                        socket.setdefaulttimeout(None)
+
                         return None
                 except socket.timeout:
                     req.close()
+                    socket.setdefaulttimeout(None)
+
                     return None
 
                 response += data
@@ -2256,7 +2260,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.5-beta'
+            version='%(prog)s 0.4.6-beta'
         )
 
         ARGS = PARSER.parse_args()
