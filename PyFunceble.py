@@ -1050,7 +1050,10 @@ class Lookup(object):
 
             req.close()
 
-            return response.decode()
+            try:
+                return response.decode()
+            except UnicodeDecodeError:
+                return response.decode('utf-8', 'replace')
         return None
 
 
@@ -2247,7 +2250,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.3-beta'
+            version='%(prog)s 0.4.4-beta'
         )
 
         ARGS = PARSER.parse_args()
