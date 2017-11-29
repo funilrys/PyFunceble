@@ -1272,89 +1272,109 @@ class Generate(object):
         Prints([Settings.domain, old_status, Settings.http_code,
                 Settings.current_datetime], 'HTTP', output, True).data()
 
+    def up_status_file(self):
+        """
+        Logic behind the up status when generating the status file.
+        """
+
+        if self.expiration_date in [None, '', False]:
+            self.expiration_date = 'Unknown'
+
+        if Settings.http_code_status and Settings.http_code in Settings.down_potentially_codes:
+            self.analytic_file(
+                Settings.official_down_status,
+                self.domain_status)
+
+            regex_to_match = [
+                r'\.doubleclick\.net', r'\.liveadvert\.com']
+
+            for regx in regex_to_match:
+                if Helpers.Regex(
+                        Settings.domain, regx, return_data=False).match():
+                    self.source = 'SPECIAL'
+                    self.domain_status = Settings.official_down_status
+                    self.output = Settings.output_down_result
+
+            regex_blogspot = r'\.blogspot\.'
+            regex_blogger = [r'create-blog.g?', r'87065']
+
+            if Helpers.Regex(
+                    Settings.domain,
+                    regex_blogspot,
+                    return_data=False).match() and Settings.http_code == 302:
+                blogger_content_request = requests.get(
+                    'http://' + Settings.domain + ':80')
+                blogger_content = blogger_content_request.text
+
+                for regx in regex_blogger:
+                    if regx in blogger_content:
+                        self.source = 'SPECIAL'
+                        self.domain_status = Settings.official_down_status
+                        self.output = Settings.output_down_result
+                        break
+
+        if self.source != 'SPECIAL':
+            self.domain_status = Settings.official_up_status
+            self.output = Settings.output_up_result
+
+    def down_status_file(self):
+        """
+        Logic behind the down status when generating the status file.
+        """
+
+        self.refer_status = 'Not Found'
+        self.expiration_date = 'Unknown'
+
+        if Settings.http_code_status:
+            if Settings.http_code in Settings.active_http_codes:
+                self.analytic_file(
+                    Settings.official_up_status, self.domain_status)
+                self.source = 'HTTP Code'
+                self.domain_status = Settings.official_up_status
+                self.output = Settings.output_up_result
+            elif Settings.http_code in Settings.potentially_up_codes:
+                self.analytic_file('potentially_up', self.domain_status)
+
+        if self.source != 'HTTP Code':
+            self.domain_status = Settings.official_down_status
+            self.output = Settings.output_down_result
+
+    def invalid_status_file(self):
+        """
+        Logic behind the invalid status when generating the status file.
+        """
+
+        self.expiration_date = 'Unknown'
+
+        if Settings.http_code_status:
+            if Settings.http_code in Settings.active_http_codes:
+                self.analytic_file(
+                    Settings.official_up_status, self.domain_status)
+                self.source = 'HTTP Code'
+                self.domain_status = Settings.official_up_status
+                self.output = Settings.output_up_result
+            elif Settings.http_code in Settings.potentially_up_codes:
+                self.analytic_file(
+                    'potentially_up', self.domain_status)
+            elif Settings.http_code in Settings.down_potentially_codes:
+                self.analytic_file(
+                    Settings.official_down_status, self.domain_status)
+
+            if self.source != 'HTTP Code':
+                self.domain_status = Settings.official_invalid_status
+                self.output = Settings.output_invalid_result
+
     def status_file(self):
         """
         Generate a file according to the domain status.
         """
 
         if self.domain_status in Settings.up_status:
-            if self.expiration_date in [None, '', False]:
-                self.expiration_date = 'Unknown'
-
-            if Settings.http_code_status and Settings.http_code in Settings.down_potentially_codes:
-                self.analytic_file(
-                    Settings.official_down_status,
-                    self.domain_status)
-
-                regex_to_match = [
-                    r'\.doubleclick\.net', r'\.liveadvert\.com']
-
-                for regx in regex_to_match:
-                    if Helpers.Regex(
-                            Settings.domain, regx, return_data=False).match():
-                        self.source = 'SPECIAL'
-                        self.domain_status = Settings.official_down_status
-                        self.output = Settings.output_down_result
-
-                regex_blogspot = r'\.blogspot\.'
-                regex_blogger = [r'create-blog.g?', r'87065']
-
-                if Helpers.Regex(
-                        Settings.domain,
-                        regex_blogspot,
-                        return_data=False).match() and Settings.http_code == 302:
-                    blogger_content_request = requests.get(
-                        'http://' + Settings.domain + ':80')
-                    blogger_content = blogger_content_request.text
-
-                    for regx in regex_blogger:
-                        if regx in blogger_content:
-                            self.source = 'SPECIAL'
-                            self.domain_status = Settings.official_down_status
-                            self.output = Settings.output_down_result
-                            break
-
-            if self.source != 'SPECIAL':
-                self.domain_status = Settings.official_up_status
-                self.output = Settings.output_up_result
-
+            self.up_status_file()
         elif self.domain_status in Settings.down_status:
-            self.refer_status = 'Not Found'
-            self.expiration_date = 'Unknown'
-
-            if Settings.http_code_status:
-                if Settings.http_code in Settings.active_http_codes:
-                    self.analytic_file(
-                        Settings.official_up_status, self.domain_status)
-                    self.source = 'HTTP Code'
-                    self.domain_status = Settings.official_up_status
-                    self.output = Settings.output_up_result
-                elif Settings.http_code in Settings.potentially_up_codes:
-                    self.analytic_file('potentially_up', self.domain_status)
-
-            if self.source != 'HTTP Code':
-                self.domain_status = Settings.official_down_status
-                self.output = Settings.output_down_result
+            self.down_status_file()
         elif self.domain_status in Settings.invalid_status:
-            self.expiration_date = 'Unknown'
-
-            if Settings.http_code_status:
-                if Settings.http_code in Settings.active_http_codes:
-                    self.analytic_file(
-                        Settings.official_up_status, self.domain_status)
-                    self.source = 'HTTP Code'
-                    self.domain_status = Settings.official_up_status
-                    self.output = Settings.output_up_result
-                elif Settings.http_code in Settings.potentially_up_codes:
-                    self.analytic_file(
-                        'potentially_up', self.domain_status)
-                elif Settings.http_code in Settings.down_potentially_codes:
-                    self.analytic_file(
-                        Settings.official_down_status, self.domain_status)
-
-                if self.source != 'HTTP Code':
-                    self.domain_status = Settings.official_invalid_status
-                    self.output = Settings.output_invalid_result
+            self.invalid_status_file()
 
         Generate(
             self.domain_status,
@@ -2270,7 +2290,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.5.4-beta'
+            version='%(prog)s 0.6.0-beta'
         )
 
         ARGS = PARSER.parse_args()
