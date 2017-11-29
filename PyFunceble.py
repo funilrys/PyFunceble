@@ -1023,6 +1023,8 @@ class Lookup(object):
         """
 
         if whois_server is not None and whois_server != '':
+            socket.setdefaulttimeout(Settings.seconds_before_http_timeout)
+
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             try:
@@ -1802,7 +1804,6 @@ class ExpirationDate(object):
         Extract the expiration date from the whois record.
         """
 
-        # TODO: Review this line before production
         self.whois_record = Lookup().whois(Settings.referer)
 
         to_match = [
@@ -1842,30 +1843,31 @@ class ExpirationDate(object):
             r'Expired:',
             r'Date d\'expiration:']
 
-        for string in to_match:
-            string += r'(.*)'
-            expiration_date = Helpers.Regex(
-                self.whois_record, string, return_data=True).match()
+        if self.whois_record is not None:
+            for string in to_match:
+                string += r'(.*)'
+                expiration_date = Helpers.Regex(
+                    self.whois_record, string, return_data=True).match()
 
-            if expiration_date != '' and expiration_date:
-                self.expiration_date = expiration_date[expiration_date.index(
-                    ':') + 1:].strip()
+                if expiration_date != '' and expiration_date:
+                    self.expiration_date = expiration_date[expiration_date.index(
+                        ':') + 1:].strip()
 
-                regex_rumbers = r'[0-9]'
-                if Helpers.Regex(
-                        self.expiration_date,
-                        regex_rumbers,
-                        return_data=False).match():
+                    regex_rumbers = r'[0-9]'
+                    if Helpers.Regex(
+                            self.expiration_date,
+                            regex_rumbers,
+                            return_data=False).match():
 
-                    self.format()
-                    Generate(Settings.official_up_status, 'WHOIS',
-                             self.expiration_date).status_file()
+                        self.format()
+                        Generate(Settings.official_up_status, 'WHOIS',
+                                 self.expiration_date).status_file()
+                        return
+
+                    self.whois_log()
+                    Status(Settings.official_down_status)
+
                     return
-
-                self.whois_log()
-                Status(Settings.official_down_status)
-
-                return
 
         self.whois_log()
         Status(Settings.official_down_status)
@@ -2238,7 +2240,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.3.3-beta'
+            version='%(prog)s 0.4.0-beta'
         )
 
         ARGS = PARSER.parse_args()
