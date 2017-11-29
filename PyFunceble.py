@@ -1040,8 +1040,10 @@ class Lookup(object):
                     try:
                         data = req.recv(4096)
                     except ConnectionResetError:
+                        req.close()
                         return None
                 except socket.timeout:
+                    req.close()
                     return None
 
                 response += data
@@ -1049,6 +1051,7 @@ class Lookup(object):
                     break
 
             req.close()
+            socket.setdefaulttimeout(None)
 
             try:
                 return response.decode()
@@ -1530,17 +1533,18 @@ class Referer(object):
 
         whois_record = Lookup().whois(Settings.iana_server)
 
-        regex_referer = r'(refer:)\s+(.*)'
+        if whois_record is not None:
+            regex_referer = r'(refer:)\s+(.*)'
 
-        if Helpers.Regex(
-                whois_record,
-                regex_referer,
-                return_data=False).match():
-            return Helpers.Regex(
-                whois_record,
-                regex_referer,
-                return_data=True,
-                group=2).match()
+            if Helpers.Regex(
+                    whois_record,
+                    regex_referer,
+                    return_data=False).match():
+                return Helpers.Regex(
+                    whois_record,
+                    regex_referer,
+                    return_data=True,
+                    group=2).match()
         return None
 
     def get(self):
@@ -2252,7 +2256,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.4-beta'
+            version='%(prog)s 0.4.5-beta'
         )
 
         ARGS = PARSER.parse_args()
