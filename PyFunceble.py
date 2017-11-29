@@ -38,7 +38,7 @@ from time import strftime
 import requests
 
 
-class Settings(object):
+class Settings(object):  # pylint: disable=too-few-public-methods
     """
     Serve as "saver" of all needed settings or parameters.
     """
@@ -451,13 +451,12 @@ class PyFunceble(object):
 
         if Settings.number_of_tested == 0 or list_to_test[
                 Settings.number_of_tested - 1] == list_to_test[-1]:
-            to_initiate = [
-                'number_of_up',
-                'number_of_down',
-                'number_of_invalid',
-                'number_of_tested']
 
-            for string in to_initiate:
+            for string in [
+                    'number_of_up',
+                    'number_of_down',
+                    'number_of_invalid',
+                    'number_of_tested']:
                 setattr(Settings, string, 0)
 
         i = int(Settings.number_of_tested)
@@ -470,7 +469,6 @@ class PyFunceble(object):
                 continue
 
             regex_listing = [
-                r'^#',
                 r'.*localhost.*',
                 r'.*local.*',
                 r'.*broadcasthost.*']
@@ -2264,7 +2262,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.5.1-beta'
+            version='%(prog)s 0.5.2-beta'
         )
 
         ARGS = PARSER.parse_args()
