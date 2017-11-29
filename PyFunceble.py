@@ -497,16 +497,16 @@ class PyFunceble(object):
             elif Helpers.Regex(domain, regex_ip, return_data=False).match() \
                     or Helpers.Regex(domain, regex_ip2, return_data=False).match():
                 if double_space in domain:
-                    splited_domain = domain.split(double_space)[1]
+                    domain = domain.split(double_space)[1]
                 elif space in domain:
-                    splited_domain = domain.split(' ')[1]
+                    domain = domain.split(' ')[1]
             else:
                 if double_space in domain:
-                    splited_domain = domain.split(double_space)[0]
+                    domain = domain.split(double_space)[0]
                 elif space in domain:
-                    splited_domain = domain.split(' ')[0]
+                    domain = domain.split(' ')[0]
 
-            Settings.domain = splited_domain.split('#')[0]
+            Settings.domain = domain.split('#')[0]
 
             ExpirationDate()
 
@@ -2238,7 +2238,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.3.2-beta'
+            version='%(prog)s 0.3.3-beta'
         )
 
         ARGS = PARSER.parse_args()
