@@ -1036,7 +1036,11 @@ class Lookup(object):
             response = b""
 
             while True:
-                data = req.recv(4096)
+                try:
+                    data = req.recv(4096)
+                except socket.timeout:
+                    return None
+
                 response += data
                 if not data:
                     break
@@ -2240,7 +2244,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.0-beta'
+            version='%(prog)s 0.4.1-beta'
         )
 
         ARGS = PARSER.parse_args()
