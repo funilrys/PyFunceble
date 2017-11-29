@@ -2115,7 +2115,8 @@ if __name__ == '__main__':
             description='Python version of Funceble, an awesome script to check \
                 domains or IP accessibility. Also described as "[an] excellent script \
                 for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
-            epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m",
+            epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy \
+                (Funilrys)\033[0m",
             add_help=False)
 
         PARSER.add_argument(
@@ -2203,7 +2204,8 @@ if __name__ == '__main__':
             '-nu',
             '--no-unified',
             action='store_true',
-            help='Deactivate the production of result.txt as unified result under the output directory.'
+            help='Deactivate the production of result.txt as unified result \
+                under the output directory.'
         )
         PARSER.add_argument(
             '-nw',
