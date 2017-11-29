@@ -488,7 +488,8 @@ class PyFunceble(object):
             regex_ip = r'127\.0\.0\.1'
             regex_ip2 = r'0\.0\.0\.0'
 
-            double_space = ' ' * 2
+            space = ' '
+            double_space = space * 2
 
             if domain == '' or True in match_result:
                 i += 1
@@ -497,12 +498,12 @@ class PyFunceble(object):
                     or Helpers.Regex(domain, regex_ip2, return_data=False).match():
                 if double_space in domain:
                     splited_domain = domain.split(double_space)[1]
-                else:
+                elif space in domain:
                     splited_domain = domain.split(' ')[1]
             else:
                 if double_space in domain:
                     splited_domain = domain.split(double_space)[0]
-                else:
+                elif space in domain:
                     splited_domain = domain.split(' ')[0]
 
             Settings.domain = splited_domain.split('#')[0]
@@ -2237,7 +2238,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.3.1-beta'
+            version='%(prog)s 0.3.2-beta'
         )
 
         ARGS = PARSER.parse_args()
