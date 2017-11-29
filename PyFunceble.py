@@ -1825,51 +1825,53 @@ class ExpirationDate(object):
         self.whois_record = Lookup().whois(Settings.referer)
 
         to_match = [
-            r'expire:',
-            r'expire on:',
-            r'Expiry Date:',
-            r'free-date',
-            r'expires:',
-            r'Expiration date:',
-            r'Expiry date:',
-            r'Expire Date:',
-            r'renewal date:',
-            r'Expires:',
-            r'validity:',
-            r'Expiration Date             :',
-            r'Expiry :',
-            r'expires at:',
-            r'domain_datebilleduntil:',
-            r'Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):',
-            r'Fecha de expiración \(Expiration date\):',
-            r'\[Expires on\]',
-            r'Record expires on',
-            r'status:      OK-UNTIL',
-            r'renewal:',
-            r'expires............:',
-            r'expire-date:',
-            r'Exp date:',
-            r'Valid-date',
-            r'Expires On:',
-            r'Fecha de vencimiento:',
-            r'Expiration:.........',
-            r'Fecha de Vencimiento:',
-            r'Registry Expiry Date:',
-            r'Expires on..............:',
-            r'Expiration Time:',
-            r'Expiration Date:',
-            r'Expired:',
-            r'Date d\'expiration:']
+            r'expire:(.*)',
+            r'expire on:(.*)',
+            r'Expiry Date:(.*)',
+            r'free-date(.*)',
+            r'expires:(.*)',
+            r'Expiration date:(.*)',
+            r'Expiry date:(.*)',
+            r'Expire Date:(.*)',
+            r'renewal date:(.*)',
+            r'Expires:(.*)',
+            r'validity:(.*)',
+            r'Expiration Date             :(.*)',
+            r'Expiry :(.*)',
+            r'expires at:(.*)',
+            r'domain_datebilleduntil:(.*)',
+            r'Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)',
+            r'Fecha de expiración \(Expiration date\):(.*)',
+            r'\[Expires on\](.*)',
+            r'Record expires on(.*)(\(YYYY-MM-DD\))',
+            r'status:      OK-UNTIL(.*)',
+            r'renewal:(.*)',
+            r'expires............:(.*)',
+            r'expire-date:(.*)',
+            r'Exp date:(.*)',
+            r'Valid-date(.*)',
+            r'Expires On:(.*)',
+            r'Fecha de vencimiento:(.*)',
+            r'Expiration:.........(.*)',
+            r'Fecha de Vencimiento:(.*)',
+            r'Registry Expiry Date:(.*)',
+            r'Expires on..............:(.*)',
+            r'Expiration Time:(.*)',
+            r'Expiration Date:(.*)',
+            r'Expired:(.*)',
+            r'Date d\'expiration:(.*)']
 
         if self.whois_record is not None:
             for string in to_match:
-                string += r'(.*)'
                 expiration_date = Helpers.Regex(
-                    self.whois_record, string, return_data=True).match()
+                    self.whois_record,
+                    string,
+                    return_data=True,
+                    rematch=True,
+                    group=0).match()
 
-                if expiration_date != '' and expiration_date:
-                    self.expiration_date = expiration_date[expiration_date.index(
-                        ':') + 1:].strip()
+                if expiration_date != []:
+                    self.expiration_date = expiration_date[0].strip()
 
                     regex_rumbers = r'[0-9]'
                     if Helpers.Regex(
@@ -2260,7 +2262,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.6-beta'
+            version='%(prog)s 0.5.0-beta'
         )
 
         ARGS = PARSER.parse_args()
