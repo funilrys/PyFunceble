@@ -1023,7 +1023,10 @@ class Lookup(object):
         """
 
         if whois_server is not None and whois_server != '':
-            socket.setdefaulttimeout(Settings.seconds_before_http_timeout)
+            if Settings.seconds_before_http_timeout % 3 == 0:
+                socket.setdefaulttimeout(Settings.seconds_before_http_timeout)
+            else:
+                socket.setdefaulttimeout(3)
 
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -1693,7 +1696,6 @@ class ExpirationDate(object):
         A little helper of self.format. (Avoiding of nested loops)
         """
 
-        #  Note: 'fourth': [[25],[2,1,0]] ==> To test
         cases = {
             'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
             'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
@@ -2262,7 +2264,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.5.0-beta'
+            version='%(prog)s 0.5.1-beta'
         )
 
         ARGS = PARSER.parse_args()
