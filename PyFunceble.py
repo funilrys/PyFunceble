@@ -1028,10 +1028,7 @@ class Lookup(object):
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             try:
-                try:
-                    req.connect((whois_server, 43))
-                except ConnectionResetError:
-                    return None
+                req.connect((whois_server, 43))
             except socket.error:
                 return None
 
@@ -1040,7 +1037,10 @@ class Lookup(object):
 
             while True:
                 try:
-                    data = req.recv(4096)
+                    try:
+                        data = req.recv(4096)
+                    except ConnectionResetError:
+                        return None
                 except socket.timeout:
                     return None
 
@@ -2247,7 +2247,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.2-beta'
+            version='%(prog)s 0.4.3-beta'
         )
 
         ARGS = PARSER.parse_args()
