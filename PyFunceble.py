@@ -1028,7 +1028,10 @@ class Lookup(object):
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             try:
-                req.connect((whois_server, 43))
+                try:
+                    req.connect((whois_server, 43))
+                except ConnectionResetError:
+                    return None
             except socket.error:
                 return None
 
@@ -2244,7 +2247,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.4.1-beta'
+            version='%(prog)s 0.4.2-beta'
         )
 
         ARGS = PARSER.parse_args()
