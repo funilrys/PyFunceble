@@ -1364,6 +1364,44 @@ class Generate(object):
                 self.domain_status = Settings.official_invalid_status
                 self.output = Settings.output_invalid_result
 
+    def prints_status_file(self):
+        """
+        Logic behind the printing when generating status file.
+        """
+
+        if Settings.less:
+            Prints([Settings.domain, self.domain_status,
+                    self.source], 'Less', self.output, True).data()
+        else:
+            if not Settings.split_files:
+                if self.domain_status in Settings.up_status:
+                    Prints([Settings.domain,
+                            self.expiration_date,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_up_status,
+                           self.output,
+                           True).data()
+                elif self.domain_status in Settings.down_status:
+                    Prints([Settings.domain,
+                            Settings.referer,
+                            self.domain_status,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_down_status,
+                           self.output,
+                           True).data()
+                elif self.domain_status in Settings.invalid_status:
+                    Prints([Settings.domain,
+                            self.source,
+                            Settings.http_code,
+                            Settings.current_datetime],
+                           Settings.official_invalid_status,
+                           self.output,
+                           True).data()
+
     def status_file(self):
         """
         Generate a file according to the domain status.
@@ -1397,39 +1435,7 @@ class Generate(object):
                        'Generic').data()
 
         if not Settings.no_files and Settings.split_files:
-            if Settings.less:
-                Prints([Settings.domain, self.domain_status,
-                        self.source], 'Less', self.output, True).data()
-            else:
-                if not Settings.split_files:
-                    if self.domain_status in Settings.up_status:
-                        Prints([Settings.domain,
-                                self.expiration_date,
-                                self.source,
-                                Settings.http_code,
-                                Settings.current_datetime],
-                               Settings.official_up_status,
-                               self.output,
-                               True).data()
-                    elif self.domain_status in Settings.down_status:
-                        Prints([Settings.domain,
-                                Settings.referer,
-                                self.domain_status,
-                                self.source,
-                                Settings.http_code,
-                                Settings.current_datetime],
-                               Settings.official_down_status,
-                               self.output,
-                               True).data()
-                    elif self.domain_status in Settings.invalid_status:
-                        Prints([Settings.domain,
-                                self.source,
-                                Settings.http_code,
-                                Settings.current_datetime],
-                               Settings.official_invalid_status,
-                               self.output,
-                               True).data()
-
+            self.prints_status_file()
         else:
             self.unified_file()
 
@@ -2290,7 +2296,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.6.0-beta'
+            version='%(prog)s 0.6.1-beta'
         )
 
         ARGS = PARSER.parse_args()
