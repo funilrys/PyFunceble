@@ -1029,12 +1029,13 @@ class Lookup(object):
         """
 
         if whois_server is not None and whois_server != '':
-            if Settings.seconds_before_http_timeout % 3 == 0:
-                socket.setdefaulttimeout(Settings.seconds_before_http_timeout)
-            else:
-                socket.setdefaulttimeout(3)
 
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            if Settings.seconds_before_http_timeout % 3 == 0:
+                req.settimeout(Settings.seconds_before_http_timeout)
+            else:
+                req.settimeout(3)
 
             try:
                 req.connect((whois_server, 43))
@@ -1050,12 +1051,10 @@ class Lookup(object):
                         data = req.recv(4096)
                     except ConnectionResetError:
                         req.close()
-                        socket.setdefaulttimeout(None)
 
                         return None
                 except socket.timeout:
                     req.close()
-                    socket.setdefaulttimeout(None)
 
                     return None
 
@@ -1064,7 +1063,6 @@ class Lookup(object):
                     break
 
             req.close()
-            socket.setdefaulttimeout(None)
 
             try:
                 return response.decode()
@@ -2296,7 +2294,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.6.1-beta'
+            version='%(prog)s 0.6.2-beta'
         )
 
         ARGS = PARSER.parse_args()
