@@ -2282,7 +2282,7 @@ if __name__ == '__main__':
             '-t',
             '--timeout',
             type=int,
-            default=1,
+            default=3,
             help='Seconds before timeout.'
         )
         PARSER.add_argument(
@@ -2353,7 +2353,8 @@ if __name__ == '__main__':
             Settings.split_files = Settings().switch('split_files')
 
         if ARGS.timeout:
-            Settings.seconds_before_http_timeout = ARGS.timeout
+            if ARGS.timeout % 3 == 0:
+                Settings.seconds_before_http_timeout = ARGS.timeout
 
         if ARGS.travis:
             Settings.travis = Settings().switch('travis')
