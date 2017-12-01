@@ -23,12 +23,16 @@ reseting PyFunceble to its default states.
 #
 # - Let's contribute to PyFunceble !
 ##############################################################################
-
 import argparse
 import hashlib
 
+from colorama import init as initiate
+from colorama import Fore, Style
 
-class Settings(object):
+from PyFunceble import Helpers
+
+
+class Settings(object):  # pylint: disable=too-few-public-methods
     """
     Scripts settings.
     """
@@ -55,9 +59,9 @@ class Settings(object):
     quiet = False
 
     # Done string
-    done = '✔'
+    done = Fore.GREEN + '✔'
     # Error string
-    error = '✘'
+    error = Fore.RED + '✘'
 
     # IANA DB url
     iana_url = 'https://www.iana.org/domains/root/db'
@@ -102,37 +106,40 @@ class Check(object):
 
         list_of_dependencies = [
             'argparse',
+            'colorama',
             'os',
-            'socket',
             're',
-            'time',
-            'requests']
+            'requests',
+            'socket',
+            'time']
 
         for dependency in list_of_dependencies:
             if not Settings.quiet:
-                print(dependency + ' installed ', end=" ")
+                print(
+                    Style.BRIGHT +
+                    dependency +
+                    Style.RESET_ALL +
+                    ' installed ',
+                    end=" ")
 
             try:
                 __import__(dependency)
 
                 if not Settings.quiet:
                     print(Settings.done)
-            except ImportError:
+            except ModuleNotFoundError:
                 print(Settings.error)
+                exit(1)
 
     @classmethod
-    def script(cls):
+    def script_exist(cls, location):
         """
-        Check if the script is needed.
+        Check if the given path exist.
+
+        :param location: A string, a path to whatever file you want.
         """
 
-        from os import getcwd, path
-        from os import access, R_OK, X_OK
-
-        location = getcwd() + '/PyFunceble.py'
-
-        if not Settings.quiet:
-            print('Script exist', end=' ')
+        from os import path
 
         if path.exists(location) and not Settings.quiet:
             print(Settings.done)
@@ -141,8 +148,16 @@ class Check(object):
                 print(Settings.error)
             exit(1)
 
-        if not Settings.quiet:
-            print('Script readable', end=' ')
+    @classmethod
+    def script_readable(cls, location):
+        """
+        Check if the given path is readable.
+
+        :param location: A string, a path to whatever file you want.
+        """
+
+        from os import access, R_OK
+
         if access(location, R_OK) and not Settings.quiet:
             print(Settings.done)
         else:
@@ -150,14 +165,46 @@ class Check(object):
                 print(Settings.error)
             exit(1)
 
-        if not Settings.quiet:
-            print('Script executable', end=' ')
+    @classmethod
+    def script_executable(cls, location):
+        """
+        Check if the given path is executable.
+
+        :param location: A string, a path to whatever file you want.
+        """
+
+        from os import access, X_OK
+
         if access(location, X_OK) and not Settings.quiet:
             print(Settings.done)
         else:
             if not Settings.quiet:
                 print(Settings.error)
             exit(1)
+
+    def script(self):
+        """
+        Check if the script is needed.
+        """
+
+        from os import getcwd
+
+        location = getcwd() + '/PyFunceble.py'
+
+        if not Settings.quiet:
+            print('Script exist', end=' ')
+
+        self.script_exist(location)
+
+        if not Settings.quiet:
+            print('Script readable', end=' ')
+
+        self.script_readable(location)
+
+        if not Settings.quiet:
+            print('Script executable', end=' ')
+
+        self.script_executable(location)
 
         if not Settings.quiet:
             print('\n')
@@ -194,9 +241,9 @@ class Install(object):
         self.data_to_install = data_to_install
 
         if self.production and not Settings.quiet:
-            print('Default timeout: %s seconds' %
-                  self.default_values()['travis_autosave_minutes'])
-            print('\nInstallation of default variables for production', end=" ")
+            print('\nDefault timeout: %s seconds' %
+                  self.default_values()['seconds_before_http_timeout'])
+            print('Installation of default variables for production', end=" ")
         else:
             if not Settings.quiet:
                 print('\n\nInstallation of working directory', end=" ")
@@ -207,14 +254,21 @@ class Install(object):
         IANA()
 
         if self.production and not Settings.quiet:
-            print('\n\nThe production logic was successfully completed!')
+            print(
+                Fore.CYAN +
+                Style.BRIGHT +
+                '\n\nThe production logic was successfully completed!')
             print('You can now distribute this repository.\n')
         else:
             if not Settings.quiet:
-                print('\n\nThe installation was successfully completed!')
                 print(
-                    "You can now use the script with './%s [-OPTIONS]' or learn how to use it with ./%s --help\n" %  # pylint: disable=line-too-long
-                    (Settings.script + '.py', Settings.script + '.py'))
+                    Fore.CYAN +
+                    Style.BRIGHT +
+                    '\n\nThe installation was successfully completed!')
+                print(
+                    "You can now use the script with '%s' or learn how to use it with '%s'\n" %  # pylint: disable=line-too-long
+                    (Style.BRIGHT + './' + Settings.script + '.py [-OPTIONS]' + Style.RESET_ALL,
+                     Style.BRIGHT + './' + Settings.script + '.py --help' + Style.RESET_ALL))
 
     def default_values(self):
         """
@@ -241,7 +295,7 @@ class Install(object):
                 'plain_list_domain': 'False',
                 'quiet': 'False',
                 'referer': "''",
-                'seconds_before_http_timeout': '1',
+                'seconds_before_http_timeout': '3',
                 'show_execution_time': 'False',
                 'show_percentage': 'True',
                 'split_files': 'False',
@@ -270,8 +324,6 @@ class Install(object):
         """
         Execute the installation or production logic.
         """
-
-        from PyFunceble import Helpers
 
         replacement_production = {
             'to_replace': [
@@ -401,8 +453,6 @@ class Clean(object):
         Delete all discovered files.
         """
 
-        from PyFunceble import Helpers
-
         to_delete = self.file_to_delete()
 
         for file in to_delete:
@@ -453,7 +503,6 @@ class Update(object):
 
     def __init__(self):
         from os import getcwd, path, rename
-        from PyFunceble import Helpers
 
         self.current_path = getcwd()
 
@@ -503,8 +552,6 @@ class Update(object):
         """
         Update repository if cloned (git).
         """
-
-        from PyFunceble import Helpers
 
         if Settings.stable:
             Helpers.Command('git checkout master').execute()
@@ -641,8 +688,6 @@ class IANA(object):
         Get the list of valid extensions based on the result of self.download().
         """
 
-        from PyFunceble import Helpers
-
         result = []
         regex_valid_extension = r'(/domains/root/db/)(.*)(\.html)'
 
@@ -669,8 +714,6 @@ class IANA(object):
         Update the content of the `iana-domains-db` file.
         """
 
-        from PyFunceble import Helpers
-
         if self.download():
             extensions = self.get_valid_extensions()
 
@@ -682,6 +725,58 @@ class IANA(object):
             if not Settings.quiet:
                 print(Settings.error)
             exit(1)
+
+
+class Directory(object):
+    """
+    Consider this class as a backup/reconstructor of desired directory.
+    (By default, the output direcctory)
+    """
+
+    def __init__(self):
+        from os import getcwd
+
+        self.path = getcwd() + '/output/'
+        self.destination = getcwd() + '/dir_structure.json'
+
+    def backup(self):
+        """
+        Backup the developer state of `output/` in order to make it restorable
+            and portable for user.
+        """
+
+        from os import walk
+
+        result = {'output': {}}
+
+        if not Settings.quiet:
+            print('Generation of dir-structure.json', end=" ")
+
+        for root, _, file in walk(self.path):
+            directories = root.split(self.path)[1].split('/')
+
+            local_result = result['output']
+            for directory in directories:
+                if directory != '':
+                    file_path = root + '/' + file[0]
+                    file_hash = Hash(file_path, 'sha512', True).get()
+
+                    content_in_list = [
+                        line.rstrip('\n') for line in open(file_path)]
+                    formated_content = ''
+
+                    for line in content_in_list:
+                        if line != content_in_list[-1]:
+                            formated_content += line + '@@'
+                        else:
+                            formated_content += line
+
+                    local_result = local_result.setdefault(
+                        directory, {
+                            file[0]: {
+                                "sha512": file_hash, "content": formated_content}})
+
+        Helpers.Dict(result).to_json(self.destination)
 
 
 class Hash(object):
@@ -745,8 +840,13 @@ class Hash(object):
 
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(
-        description=None,
-        epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy (Funilrys)\033[0m")
+        description='This is the tool that comes with the awesome PyFunceble !!"',
+        epilog="Crafted with %s by %s\033[0m " %
+        (Fore.RED +
+         '♥' +
+         Fore.RESET,
+         Style.BRIGHT +
+         'Nissar Chababy (Funilrys)'))
 
     PARSER.add_argument(
         '--autosave-minutes',
@@ -829,6 +929,7 @@ if __name__ == '__main__':
     )
 
     ARGS = PARSER.parse_args()
+    initiate(autoreset=True)
 
     DATA = {'to_install': {}}
 
