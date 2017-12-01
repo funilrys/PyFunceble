@@ -36,6 +36,8 @@ from subprocess import PIPE, Popen
 from time import strftime
 
 import requests
+from colorama import init as initiate
+from colorama import Back, Fore, Style
 
 
 class Settings(object):  # pylint: disable=too-few-public-methods
@@ -127,7 +129,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     referer = ''
     # HTTP Status code timeout.
     # Consider this as the minimum time in seconds that we need before.
-    seconds_before_http_timeout = 1
+    seconds_before_http_timeout = 3
     # Show/hide execution time
     show_execution_time = False
     # Show/hide the percentage.
@@ -915,6 +917,22 @@ class Prints(object):
 
         return result
 
+    def colorify(self, data):
+        """
+        Retun colored string.
+
+        :param data: A string, the string to colorify.
+        """
+
+        if self.template in ['Generic', 'Less']:
+            if self.data_to_print[1] in Settings.up_status:
+                data = Fore.BLACK + Back.GREEN + data
+            elif self.data_to_print[1] in Settings.down_status:
+                data = Fore.BLACK + Back.RED + data
+            else:
+                data = Fore.BLACK + Back.CYAN + data
+        return data
+
     def data(self):
         """
         Management and input of data to the table.
@@ -947,6 +965,7 @@ class Prints(object):
                 if self.template in Settings.generic_status or self.template in [
                         'Less', 'Percentage']:
                     if not self.only_on_file:
+                        data = self.colorify(data)
                         print(data)
                 if self.output is not None and self.output != '':
                     Helpers.File(self.output).write(data + '\n')
@@ -2160,8 +2179,7 @@ if __name__ == '__main__':
             description='Python version of Funceble, an awesome script to check \
                 domains or IP accessibility. Also described as "[an] excellent script \
                 for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
-            epilog="Crafted with \033[1m\033[31m♥\033[0m by \033[1mNissar Chababy \
-                (Funilrys)\033[0m",
+            epilog="Crafted with %s by %s\033[0m " % (Fore.RED + '♥' + Fore.RESET,Style.BRIGHT + 'Nissar Chababy (Funilrys)'),
             add_help=False)
 
         PARSER.add_argument(
@@ -2301,6 +2319,7 @@ if __name__ == '__main__':
         )
 
         ARGS = PARSER.parse_args()
+        initiate(autoreset=True)
 
         if ARGS.less:
             Settings.less = ARGS.less
