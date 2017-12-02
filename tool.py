@@ -23,8 +23,11 @@ reseting PyFunceble to its default states.
 #
 # - Let's contribute to PyFunceble !
 ##############################################################################
+# pylint: disable=too-many-lines
 import argparse
 import hashlib
+from os import (R_OK, X_OK, access, chdir, chmod, getcwd, mkdir, path, rename,
+                stat, walk)
 
 from colorama import init as initiate
 from colorama import Fore, Style
@@ -65,6 +68,10 @@ class Settings(object):  # pylint: disable=too-few-public-methods
 
     # IANA DB url
     iana_url = 'https://www.iana.org/domains/root/db'
+
+    # dir_structure.json url
+    dir_structure_url = 'https://raw.githubusercontent.com/funilrys/PyFunceble/ \
+        dev/dir_structure.json'
 
     @classmethod
     def switch_version(cls, dev):
@@ -139,8 +146,6 @@ class Check(object):
         :param location: A string, a path to whatever file you want.
         """
 
-        from os import path
-
         if path.exists(location) and not Settings.quiet:
             print(Settings.done)
         else:
@@ -155,8 +160,6 @@ class Check(object):
 
         :param location: A string, a path to whatever file you want.
         """
-
-        from os import access, R_OK
 
         if access(location, R_OK) and not Settings.quiet:
             print(Settings.done)
@@ -173,8 +176,6 @@ class Check(object):
         :param location: A string, a path to whatever file you want.
         """
 
-        from os import access, X_OK
-
         if access(location, X_OK) and not Settings.quiet:
             print(Settings.done)
         else:
@@ -186,8 +187,6 @@ class Check(object):
         """
         Check if the script is needed.
         """
-
-        from os import getcwd
 
         location = getcwd() + '/PyFunceble.py'
 
@@ -222,14 +221,12 @@ class Install(object):
             production=False):
         Check()
 
-        from os import getcwd
+        _path = getcwd()
 
-        path = getcwd()
+        if not _path.endswith('/'):
+            _path += '/'
 
-        if not path.endswith('/'):
-            path += '/'
-
-        self.path = path
+        self.path = _path
 
         if file_to_install is None:
             self.file_to_install = 'PyFunceble.py'
@@ -252,6 +249,7 @@ class Install(object):
 
         Clean()
         IANA()
+        Directory(self.production)
 
         if self.production and not Settings.quiet:
             print(
@@ -432,8 +430,6 @@ class Clean(object):
         Return the list of file to delete.
         """
 
-        from os import getcwd, walk
-
         directory = getcwd() + '/output/'
         result = []
 
@@ -465,7 +461,6 @@ class Uninstall(object):  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self):
-        from os import chdir, path
         from shutil import rmtree
 
         confirmation = input(
@@ -502,8 +497,6 @@ class Update(object):
     """
 
     def __init__(self):
-        from os import getcwd, path, rename
-
         self.current_path = getcwd()
 
         self.destination = self.current_path + '/' + Settings.funilrys + '.'
@@ -567,7 +560,6 @@ class Update(object):
         executable.
         """
 
-        from os import chmod, stat
         from stat import S_IEXEC
 
         for data in self.files:
@@ -733,11 +725,26 @@ class Directory(object):
     (By default, the output direcctory)
     """
 
-    def __init__(self):
-        from os import getcwd
+    def __init__(self, production=False):
+        self.base = getcwd() + '/'
 
-        self.path = getcwd() + '/output/'
-        self.destination = getcwd() + '/dir_structure.json'
+        self.path = 'output/'
+        self.structure = self.base + 'dir_structure.json'
+
+        if production:
+            self.backup()
+        else:
+            if not path.isfile(self.structure):
+                self.download()
+
+            self.restore()
+
+        if Settings.dev:
+            Settings.dir_structure_url = Helpers.Regex(
+                Settings.dir_structure_url, 'master', replace_with='dev').replace()
+        else:
+            Settings.dir_structure_url = Helpers.Regex(
+                Settings.dir_structure_url, 'dev', replace_with='master').replace()
 
     def backup(self):
         """
@@ -745,38 +752,108 @@ class Directory(object):
             and portable for user.
         """
 
-        from os import walk
-
         result = {'output': {}}
 
         if not Settings.quiet:
             print('Generation of dir-structure.json', end=" ")
 
-        for root, _, file in walk(self.path):
-            directories = root.split(self.path)[1].split('/')
+        for root, _, files in walk(self.path):
+            directories = root.split(self.path)[1]
 
             local_result = result['output']
-            for directory in directories:
-                if directory != '':
-                    file_path = root + '/' + file[0]
-                    file_hash = Hash(file_path, 'sha512', True).get()
 
-                    content_in_list = [
-                        line.rstrip('\n') for line in open(file_path)]
-                    formated_content = ''
+            for file in files:
+                file_path = root + '/' + file
+                file_hash = Hash(file_path, 'sha512', True).get()
 
-                    for line in content_in_list:
-                        if line != content_in_list[-1]:
-                            formated_content += line + '@@'
-                        else:
-                            formated_content += line
+                lines_in_list = [line.rstrip('\n') for line in open(file_path)]
+                formated_content = ''
 
-                    local_result = local_result.setdefault(
-                        directory, {
-                            file[0]: {
-                                "sha512": file_hash, "content": formated_content}})
+                for line in lines_in_list:
+                    if line != lines_in_list[-1]:
+                        formated_content += line + '@@@'
+                    else:
+                        formated_content += line
+                local_result = local_result.setdefault(
+                    directories, {file: {'sha512': file_hash, 'content': formated_content}})
 
-        Helpers.Dict(result).to_json(self.destination)
+            Helpers.Dict(result).to_json(self.structure)
+
+        if not Settings.quiet:
+            print(Settings.done)
+
+    def download(self):
+        """
+        Download the `dir_structure.json` from the repository upstream.
+        """
+
+        from shutil import copyfileobj
+        from requests import get
+
+        req = get(Settings.dir_structure_url, stream=True)
+
+        if req.status_code == 200:
+            with open(self.structure, 'wb') as file:
+                req.raw.decode_content = True
+                copyfileobj(req.raw, file)
+            del req
+
+            return True
+        return False
+
+    def restore_replace(self):
+        """
+        Check if we need to replace ".gitignore" to ".keep".
+        """
+
+        if path.isdir(self.base + '.git'):
+            if Settings.script not in  \
+                    Helpers.Command('git remote show origin').execute():
+                return True
+            return False
+        return True
+
+    def restore(self):
+        """
+        Restore the 'output/' directory structure based on the `dir_structure.json` file.
+        """
+
+        if not Settings.quiet:
+            print('Creation of non existant files and directories', end=" ")
+
+        structure = Helpers.Dict().from_json(Helpers.File(self.structure).read())
+
+        structure = structure['output']
+        replace = self.restore_replace()
+
+        for directory in structure:
+            if not path.isdir(self.path + directory):
+                mkdir(self.path + directory)
+
+            for file in structure[directory]:
+                file_path = self.path + directory + '/' + file
+
+                if replace:
+                    file_path = Helpers.Regex(
+                        file_path, 'gitignore', replace_with='keep').replace()
+                else:
+                    file_path = Helpers.Regex(
+                        file_path, 'keep', replace_with='gitignore').replace()
+
+                content_to_write = structure[directory][file]['content']
+                content_to_write = Helpers.Regex(
+                    content_to_write, '@@@', escape=True, replace_with='\\n').replace()
+
+                if path.isfile(file_path) and not Hash(
+                        file_path, 'sha512', True).get() == structure[directory][file]['sha512']:
+                    Helpers.File(file_path).write(
+                        content_to_write + '\n', True)
+                else:
+                    Helpers.File(file_path).write(
+                        content_to_write + '\n', True)
+
+        if not Settings.quiet:
+            print(Settings.done)
 
 
 class Hash(object):
@@ -790,7 +867,7 @@ class Hash(object):
     :Note: Original version : https://git.io/vFQrK
     """
 
-    def __init__(self, path, algorithm='sha512', only_hash=False):
+    def __init__(self, path, algorithm='sha512', only_hash=False):  # pylint: disable=redefined-outer-name
         self.valid_algorithms = ['all', 'md5',
                                  'sha1', 'sha224', 'sha384', 'sha512']
 
@@ -816,8 +893,6 @@ class Hash(object):
         """
         Return the hash of the given file
         """
-
-        from os import path
 
         result = {}
 
@@ -882,6 +957,12 @@ if __name__ == '__main__':
         help='Activate the download of the developement version of PyFunceble.'
     )
     PARSER.add_argument(
+        '--directory-structure',
+        action='store_false',
+        help='Generate the directory and files that are needed and which does \
+            not exist in the current directory.'
+    )
+    PARSER.add_argument(
         '-i',
         '--installation',
         action='store_false',
@@ -925,7 +1006,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.0.7-beta'
+        version='%(prog)s 0.1.0-beta'
     )
 
     ARGS = PARSER.parse_args()
@@ -964,6 +1045,9 @@ if __name__ == '__main__':
 
     if ARGS.iana:
         IANA()
+
+    if not ARGS.directory_structure:
+        Directory(ARGS.directory_structure)
 
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
