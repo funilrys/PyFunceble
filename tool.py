@@ -90,8 +90,17 @@ class Settings(object):  # pylint: disable=too-few-public-methods
                 'master', 'dev')
             Settings.online_tool = Settings.online_tool.replace(
                 'master', 'dev')
+            Settings.dir_structure_url = Settings.dir_structure_url.replace(
+                'master', 'dev')
         else:
             Settings.stable = True
+
+            Settings.online_script = Settings.online_script.replace(
+                'dev', 'master')
+            Settings.online_tool = Settings.online_tool.replace(
+                'dev', 'master')
+            Settings.dir_structure_url = Settings.dir_structure_url.replace(
+                'dev', 'master')
 
         return
 
@@ -739,13 +748,6 @@ class Directory(object):
 
             self.restore()
 
-        if Settings.dev:
-            Settings.dir_structure_url = Helpers.Regex(
-                Settings.dir_structure_url, 'master', replace_with='dev').replace()
-        else:
-            Settings.dir_structure_url = Helpers.Regex(
-                Settings.dir_structure_url, 'dev', replace_with='master').replace()
-
     def backup(self):
         """
         Backup the developer state of `output/` in order to make it restorable
@@ -1006,7 +1008,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.1.0-beta'
+        version='%(prog)s 0.1.1-beta'
     )
 
     ARGS = PARSER.parse_args()
