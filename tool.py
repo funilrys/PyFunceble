@@ -70,8 +70,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     iana_url = 'https://www.iana.org/domains/root/db'
 
     # dir_structure.json url
-    dir_structure_url = 'https://raw.githubusercontent.com/funilrys/PyFunceble/ \
-        dev/dir_structure.json'
+    dir_structure_url = 'https://raw.githubusercontent.com/funilrys/PyFunceble/' + \
+        'dev/dir_structure.json'
 
     @classmethod
     def switch_version(cls, dev):
@@ -1008,7 +1008,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.1.1-beta'
+        version='%(prog)s 0.1.2-beta'
     )
 
     ARGS = PARSER.parse_args()
