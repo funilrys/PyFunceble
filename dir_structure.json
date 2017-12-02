@@ -2,8 +2,8 @@
     "output": {
         "": {
             ".gitignore": {
-                "content": "*@@@!.gitignore@@@!/domains/!/hosts/@@@!/HTTP_Analytic/@@@!/logs/@@@!/splited/@@@!/domains/",
-                "sha512": "0bc7e0822e157232defeef56420179c6e90e1fefcd395d0e1811498d0c18175732dd43acfa32bb2cadaf69822197eaf96ea08cdce874ca0bb4ca5a19e15af258"
+                "content": "*@@@!.gitignore@@@@@@!/domains/@@@!/hosts/@@@@@@!/HTTP_Analytic/@@@@@@!/logs/@@@@@@!/splited/@@@@@@!/domains/",
+                "sha512": "1d162da0059c87a000e493ddae493a14e86ce0d58e819258c1707d82bc0ff4452363f2a22b12c4f997aa15d90218e22c8b28affc97e60c18c809c5f69eb53f2d"
             }
         },
         "HTTP_Analytic": {
@@ -115,4 +115,4 @@
             }
         }
     }
-} 
+}
