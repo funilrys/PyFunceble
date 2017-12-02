@@ -2179,7 +2179,12 @@ if __name__ == '__main__':
             description='Python version of Funceble, an awesome script to check \
                 domains or IP accessibility. Also described as "[an] excellent script \
                 for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
-            epilog="Crafted with %s by %s\033[0m " % (Fore.RED + '♥' + Fore.RESET,Style.BRIGHT + 'Nissar Chababy (Funilrys)'),
+            epilog="Crafted with %s by %s\033[0m " %
+            (Fore.RED +
+             '♥' +
+             Fore.RESET,
+             Style.BRIGHT +
+             'Nissar Chababy (Funilrys)'),
             add_help=False)
 
         PARSER.add_argument(
@@ -2315,7 +2320,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.6.3-beta'
+            version='%(prog)s 0.7.0-beta'
         )
 
         ARGS = PARSER.parse_args()
