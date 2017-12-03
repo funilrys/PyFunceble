@@ -835,24 +835,23 @@ class Directory(object):
             for file in structure[directory]:
                 file_path = self.path + directory + '/' + file
 
-                if replace:
-                    file_path = Helpers.Regex(
-                        file_path, 'gitignore', replace_with='keep').replace()
-                else:
-                    file_path = Helpers.Regex(
-                        file_path, 'keep', replace_with='gitignore').replace()
-
                 content_to_write = structure[directory][file]['content']
                 content_to_write = Helpers.Regex(
                     content_to_write, '@@@', escape=True, replace_with='\\n').replace()
 
-                if path.isfile(file_path) and not Hash(
-                        file_path, 'sha512', True).get() == structure[directory][file]['sha512']:
-                    Helpers.File(file_path).write(
-                        content_to_write + '\n', True)
+                if replace:
+                    if 'gitignore' in file_path:
+                        Helpers.File(file_path).delete()
+                    file_path = Helpers.Regex(
+                        file_path, 'gitignore', replace_with='keep').replace()
                 else:
-                    Helpers.File(file_path).write(
-                        content_to_write + '\n', True)
+                    if 'keep' in file_path:
+                        Helpers.File(file_path).delete()
+                    file_path = Helpers.Regex(
+                        file_path, 'keep', replace_with='gitignore').replace()
+
+                Helpers.File(file_path).write(
+                    content_to_write + '\n', True)
 
         if not Settings.quiet:
             print(Settings.done)
@@ -1008,7 +1007,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.1.2-beta'
+        version='%(prog)s 0.1.3-beta'
     )
 
     ARGS = PARSER.parse_args()
