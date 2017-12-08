@@ -256,7 +256,13 @@ class Install(object):
 
         self.execute()
 
-        Clean()
+        regex_skip = r'\[funceble\sskip\]|\[ci\sskip\]'
+        if Helpers.Regex(
+                Helpers.Command('git log -2').execute(),
+                regex_skip,
+                return_data=False).match() or self.production:
+            Clean()
+
         IANA()
         Directory(self.production)
 
@@ -1007,7 +1013,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.1.3-beta'
+        version='%(prog)s 0.2.0-beta'
     )
 
     ARGS = PARSER.parse_args()
