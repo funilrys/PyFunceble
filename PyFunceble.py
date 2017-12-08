@@ -1227,9 +1227,9 @@ class Generate(object):
                 else:
                     output_dir = Settings.http_up
 
-                    hosts_destination = output_dir + Settings.hosts_default_filename
-                    plain_destination = output_dir + Settings.domains_default_filename
-                    splited_destination = output_dir + str(Settings.http_code)
+                hosts_destination = output_dir + Settings.hosts_default_filename
+                plain_destination = output_dir + Settings.domains_default_filename
+                splited_destination = output_dir + str(Settings.http_code)
 
             if Settings.generate_hosts:
                 Prints([Settings.custom_ip, Settings.domain],
@@ -2332,7 +2332,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.8.2-beta'
+            version='%(prog)s 0.8.3-beta'
         )
 
         ARGS = PARSER.parse_args()
