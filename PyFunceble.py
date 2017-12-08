@@ -394,7 +394,7 @@ class PyFunceble(object):
     """
 
     def __init__(self, domain=None, file_path=None):
-
+        self.bypass()
         ExecutionTime('start')
 
         if domain is not None and domain != '':
@@ -405,6 +405,21 @@ class PyFunceble(object):
 
         ExecutionTime('stop')
         Percentage().log()
+
+    @classmethod
+    def bypass(cls):
+        """
+        Exit the script if `[PyFunceble skip]` is matched into the currently treated commit message.
+        """
+
+        regex_bypass = r'\[PyFunceble\sskip\]'
+
+        if Settings.travis and Helpers.Regex(
+                Helpers.Command('git log -1').execute(),
+                regex_bypass,
+                return_data=False).match():
+
+            AutoSave(True)
 
     @classmethod
     def print_header(cls):
@@ -2318,7 +2333,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.7.1-beta'
+            version='%(prog)s 0.8.0-beta'
         )
 
         ARGS = PARSER.parse_args()
