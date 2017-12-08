@@ -1003,7 +1003,7 @@ class HTTPCode(object):
         try:
             try:
                 try:
-                    req = requests.get(
+                    req = requests.head(
                         'http://' + Settings.domain + ':80',
                         timeout=Settings.seconds_before_http_timeout)
                 except socket.timeout:
@@ -2332,7 +2332,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.8.3-beta'
+            version='%(prog)s 0.8.4-beta'
         )
 
         ARGS = PARSER.parse_args()
