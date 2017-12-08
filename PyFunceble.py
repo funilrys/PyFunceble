@@ -1211,12 +1211,10 @@ class Generate(object):
                 elif self.domain_status in Settings.potentially_down_status:
                     output_dir = Settings.output_http_potentially_down
                 else:
-                    output_dir = Settings.output_http_up
+                    output_dir = Settings.http_up
 
-                hosts_destination = output_dir + Settings.hosts_default_filename
-                plain_destination = output_dir + Settings.domains_default_filename
-
-                if Settings.split_files:
+                    hosts_destination = output_dir + Settings.hosts_default_filename
+                    plain_destination = output_dir + Settings.domains_default_filename
                     splited_destination = output_dir + str(Settings.http_code)
 
             if Settings.generate_hosts:
@@ -2320,7 +2318,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.7.0-beta'
+            version='%(prog)s 0.7.1-beta'
         )
 
         ARGS = PARSER.parse_args()
