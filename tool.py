@@ -256,7 +256,7 @@ class Install(object):
 
         self.execute()
 
-        regex_skip = r'\[funceble\sskip\]|\[ci\sskip\]'
+        regex_skip = r'\[PyFunceble\sskip\]|\[ci\sskip\]'
         if Helpers.Regex(
                 Helpers.Command('git log -2').execute(),
                 regex_skip,
@@ -1013,7 +1013,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.2.0-beta'
+        version='%(prog)s 0.2.1-beta'
     )
 
     ARGS = PARSER.parse_args()
