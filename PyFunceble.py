@@ -639,10 +639,9 @@ class AutoSave(object):
         """
 
         current_time = int(strftime('%s'))
-        time_of_start = int(Settings.start) + \
-            (int(Settings.travis_autosave_minutes) * 60)
 
-        if self.last or current_time >= time_of_start:
+        if self.last or current_time >= int(
+                Settings.start) + (int(Settings.travis_autosave_minutes) * 60):
             Percentage().log()
             self.travis_permissions()
 
@@ -2333,7 +2332,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.8.1-beta'
+            version='%(prog)s 0.8.2-beta'
         )
 
         ARGS = PARSER.parse_args()
