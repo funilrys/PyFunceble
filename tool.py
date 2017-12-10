@@ -842,22 +842,35 @@ class Directory(object):
                 file_path = self.path + directory + '/' + file
 
                 content_to_write = structure[directory][file]['content']
+                online_sha = structure[directory][file]['sha512']
                 content_to_write = Helpers.Regex(
                     content_to_write, '@@@', escape=True, replace_with='\\n').replace()
 
-                if replace:
-                    if 'gitignore' in file_path:
-                        Helpers.File(file_path).delete()
-                    file_path = Helpers.Regex(
-                        file_path, 'gitignore', replace_with='keep').replace()
-                else:
-                    if 'keep' in file_path:
-                        Helpers.File(file_path).delete()
-                    file_path = Helpers.Regex(
-                        file_path, 'keep', replace_with='gitignore').replace()
+                git_to_keep = file_path.replace('gitignore', 'keep')
+                keep_to_git = file_path.replace('keep', 'gitignore')
 
-                Helpers.File(file_path).write(
-                    content_to_write + '\n', True)
+                if replace:
+                    if path.isfile(file_path) and Hash(
+                            file_path, 'sha512', True).get() == online_sha:
+                        rename(file_path, git_to_keep)
+                        write = False
+                    else:
+                        Helpers.File(file_path).delete()
+                        file_path = git_to_keep
+                        write = True
+                else:
+                    if path.isfile(keep_to_git) and Hash(
+                            file_path, 'sha512', True).get() == online_sha:
+                        rename(file_path, keep_to_git)
+                        write = False
+                    else:
+                        Helpers.File(keep_to_git).delete()
+                        file_path = keep_to_git
+                        write = True
+
+                if write:
+                    Helpers.File(file_path).write(
+                        content_to_write + '\n', True)
 
         if not Settings.quiet:
             print(Settings.done)
@@ -1013,7 +1026,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.2.1-beta'
+        version='%(prog)s 0.3.0-beta'
     )
 
     ARGS = PARSER.parse_args()
