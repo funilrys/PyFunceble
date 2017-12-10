@@ -2,8 +2,8 @@
     "output": {
         "": {
             ".gitignore": {
-                "content": "*@@@@@@!.gitignore@@@@@@!/domains/@@@!/hosts/@@@@@@!/HTTP_Analytic/@@@@@@!/logs/@@@@@@!/splited/@@@@@@!/domains/",
-                "sha512": "346d82c0450f1e0d75024b38fdf3c1586e10deea321e9e2c08d5507a88c8236426f71810401fd43e2f1adcbfe11fce85fdbd98dc919a6bfd03e87e3093f25f7c"
+                "content": "*@@@!.gitignore@@@# We don't ignore the domains directory@@@!/domains/@@@# We don't ignore the hosts directory@@@!/hosts/@@@# We don't ignore the HTTP_Analytic directory@@@!/HTTP_Analytic/@@@# We don't ignore the logs directory@@@!/logs/@@@# We don't ignore the splited directory@@@!/splited/",
+                "sha512": "de85aedfaa8af45de450f8d7f7c210045191d88eb09b2573cabf7b4181616da91eb10858df1f182405f940b1b4ee63e0bdf5f01494c799a2e26568390806f20b"
             }
         },
         "HTTP_Analytic": {
