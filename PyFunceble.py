@@ -1047,12 +1047,14 @@ class Lookup(object):
 
         try:
             try:
-                socket.gethostbyaddr(Settings.domain)
+                try:
+                    socket.gethostbyaddr(Settings.domain)
+                except OSError:
+                    return False
             except socket.herror:
                 return False
 
             return True
-        # except socket.gaierror or socket.herror:
         except socket.gaierror:
             return False
 
@@ -2332,7 +2334,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.8.4-beta'
+            version='%(prog)s 0.8.5-beta'
         )
 
         ARGS = PARSER.parse_args()
