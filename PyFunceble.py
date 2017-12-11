@@ -1059,19 +1059,27 @@ class Lookup(object):
             return False
 
     @classmethod
-    def whois(cls, whois_server):
+    def whois(cls, whois_server, domain=None, timeout=None):
         """
         Implementation of UNIX whois.
 
-        :param whois_server: The whois server to use to get the record.
+        :param whois_server: A string, The whois server to use to get the record.
+        :param domain: A string, A domain to get whois record.
+        :param timeout: A integer, The timeout to apply to request.
         """
+
+        if domain is None:
+            domain = Settings.domain
+
+        if timeout is None:
+            timeout = Settings.seconds_before_http_timeout
 
         if whois_server is not None and whois_server != '':
 
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             if Settings.seconds_before_http_timeout % 3 == 0:
-                req.settimeout(Settings.seconds_before_http_timeout)
+                req.settimeout(timeout)
             else:
                 req.settimeout(3)
 
@@ -1080,7 +1088,7 @@ class Lookup(object):
             except socket.error:
                 return None
 
-            req.send((Settings.domain + '\r\n').encode())
+            req.send((domain + '\r\n').encode())
             response = b""
 
             while True:
@@ -1515,88 +1523,15 @@ class Referer(object):
         self.domain_extension = Settings.domain[Settings.domain.rindex(
             '.') + 1:]
 
-        self.manual_server = {
-            'bm': 'whois.afilias-srs.net',
-            'bz': 'whois.afilias-grs.net',
-            'cd': 'chois.nic.cd',
-            'cm': 'whois.netcom.cm',
-            'fj': 'whois.usp.ac.fj',
-            'ga': 'whois.my.ga',
-            'lc': 'whois2.afilias-grs.net',
-            'lk': 'whois.nic.lk',
-            'nyc': 'whois.nic.nyc',
-            'ps': 'whois.pnina.ps',
-            'ren': 'whois.nic.ren',
-            'rw': 'whois.ricta.org.rw',
-            'shop': 'whois.nic.shop',
-            'sl': 'whois.nic.sl',
-            'stream': 'whois.nic.stream',
-            'tokyp': 'whois.nic.tokyo',
-            'uno': 'whois.nic.uno',
-            'za': 'whois.registry.net.za'
-        }
-
-        self.list_of_excluded_extension = [
-            'ad',
-            'al',
-            'an',
-            'ao',
-            'arpa',
-            'az',
-            'ba',
-            'bd',
-            'bf',
-            'bh',
-            'bs',
-            'comm',
-            'cu',
-            'dj',
-            'eg',
-            'fm',
-            'ge',
-            'gh',
-            'gm',
-            'gp',
-            'gr',
-            'gt',
-            'jo',
-            'kh',
-            'lb',
-            'mil',
-            'mm',
-            'mt',
-            'mw',
-            'ne',
-            'np',
-            'nr',
-            'pa',
-            'ph',
-            'pn',
-            'pk',
-            'py',
-            'rr',
-            'sd',
-            'sr',
-            'sv',
-            'sz',
-            'tj',
-            'tp',
-            'tt',
-            'vi',
-            'vn',
-            'xx',
-            'z',
-            'zw']
-
     @classmethod
     def iana_database(cls):
         """
-        Convert `iana-domains-db` into a list.
+        Convert `iana-domains-db.json` into a dictionnary.
         """
 
-        file_to_read = Settings.current_dir + 'iana-domains-db'
+        file_to_read = Settings.current_dir + 'iana-domains-db.json'
 
-        return [extension.rstrip('\n') for extension in open(file_to_read)]
+        return Helpers.Dict().from_json(Helpers.File(file_to_read).read())
 
     @classmethod
     def from_iana(cls):
@@ -1633,24 +1568,20 @@ class Referer(object):
                     Settings.domain,
                     regex_ipv4,
                     return_data=False).match():
-                if self.domain_extension in self.iana_database():
-                    if self.domain_extension in self.list_of_excluded_extension:
-                        Status(Settings.official_down_status)
-                        referer = True
-                    elif self.domain_extension in self.manual_server:
-                        referer = self.manual_server[self.domain_extension]
-                    else:
-                        referer = self.from_iana()
+                iana_db = self.iana_database()
+                if self.domain_extension in iana_db:
+                    referer = iana_db[self.domain_extension]
 
-                        if referer is None:
-                            self.log()
-                            Status(Settings.official_down_status)
+                    if referer is None:
+                        self.log()
+                        Status(Settings.official_down_status)
+                        referer = False
                 else:
                     Status(Settings.official_invalid_status)
-                    referer = True
+                    referer = False
             else:
                 Status(Settings.official_down_status)
-                referer = True
+                referer = False
 
             return referer
         return None
@@ -2334,7 +2265,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.8.5-beta'
+            version='%(prog)s 0.9.0-beta'
         )
 
         ARGS = PARSER.parse_args()
