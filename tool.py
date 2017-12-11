@@ -40,17 +40,20 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     Scripts settings.
     """
 
+    ################################# Version ################################
     # Activate/Deactivate the download of the developement version of
     # PyFunceble.
     dev = True
     # Activate/Deactivate the download of the stable version of PyFunceble.
     stable = False
+    ################################## Names #################################
     # Funilrys
     funilrys = 'funilrys'
     # Script Name.
     script = 'PyFunceble'
     # Tool name.
     tool = 'tool'
+    ################################## Links #################################
     # GitHub raw.
     github_raw = 'https://raw.githubusercontent.com/' + \
         funilrys + '/' + script + '/master/'
@@ -60,22 +63,20 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     online_tool = github_raw + tool + '.py'
     # Link to the online version of the iana-domains-db.json.
     online_iana = github_raw + 'iana-domains-db.json'
-    # Activate/Deactivate quiet mode.
-    quiet = False
     # IANA whois Server
     iana_server = 'whois.iana.org'
-
+    # IANA DB url
+    iana_url = 'https://www.iana.org/domains/root/db'
+    # dir_structure.json url
+    online_dir_structure = github_raw + 'dir_structure.json'
+    ################################# Options ################################
+    # Activate/Deactivate quiet mode.
+    quiet = False
+    ################################## Status ################################
     # Done string
     done = Fore.GREEN + '✔'
     # Error string
     error = Fore.RED + '✘'
-
-    # IANA DB url
-    iana_url = 'https://www.iana.org/domains/root/db'
-
-    # dir_structure.json url
-    dir_structure_url = 'https://raw.githubusercontent.com/funilrys/PyFunceble/' + \
-        'dev/dir_structure.json'
 
     @classmethod
     def switch_version(cls, dev):
@@ -90,25 +91,31 @@ class Settings(object):  # pylint: disable=too-few-public-methods
         if dev:
             Settings.stable = False
 
-            Settings.online_script = Settings.online_script.replace(
-                'master', 'dev')
-            Settings.online_tool = Settings.online_tool.replace(
-                'master', 'dev')
-            Settings.online_iana = Settings.online_iana.replace(
-                'master', 'dev')
-            Settings.dir_structure_url = Settings.dir_structure_url.replace(
-                'master', 'dev')
-        else:
-            Settings.stable = True
+        to_replace = [
+            'online_script',
+            'online_tool',
+            'online_iana',
+            'online_dir_structure']
 
-            Settings.online_script = Settings.online_script.replace(
-                'dev', 'master')
-            Settings.online_tool = Settings.online_tool.replace(
-                'dev', 'master')
-            Settings.online_iana = Settings.online_iana.replace(
-                'dev', 'master')
-            Settings.dir_structure_url = Settings.dir_structure_url.replace(
-                'dev', 'master')
+        for var in to_replace:
+            if dev:
+                setattr(
+                    Settings,
+                    var,
+                    getattr(
+                        Settings,
+                        var).replace(
+                            'master',
+                            'dev'))
+            else:
+                setattr(
+                    Settings,
+                    var,
+                    getattr(
+                        Settings,
+                        var).replace(
+                            'dev',
+                            'master'))
 
         return
 
@@ -526,7 +533,8 @@ class Update(object):
         self.files = {
             'script': 'PyFunceble.py',
             'tool': 'tool.py',
-            'iana': 'iana-domains-db.json'
+            'iana': 'iana-domains-db.json',
+            'dir_structure': 'dir_structure.json'
         }
 
         if path.isdir(
@@ -860,7 +868,7 @@ class Directory(object):
         from shutil import copyfileobj
         from requests import get
 
-        req = get(Settings.dir_structure_url, stream=True)
+        req = get(Settings.online_dir_structure, stream=True)
 
         if req.status_code == 200:
             with open(self.structure, 'wb') as file:
@@ -1088,7 +1096,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.5.0-beta'
+        version='%(prog)s 0.5.1-beta'
     )
 
     ARGS = PARSER.parse_args()
