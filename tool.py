@@ -58,6 +58,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     online_script = github_raw + script + '.py'
     # Link to the online version of the tool.
     online_tool = github_raw + tool + '.py'
+    # Link to the online version of the iana-domains-db.json.
+    online_iana = github_raw + 'iana-domains-db.json'
     # Activate/Deactivate quiet mode.
     quiet = False
     # IANA whois Server
@@ -92,6 +94,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
                 'master', 'dev')
             Settings.online_tool = Settings.online_tool.replace(
                 'master', 'dev')
+            Settings.online_iana = Settings.online_iana.replace(
+                'master', 'dev')
             Settings.dir_structure_url = Settings.dir_structure_url.replace(
                 'master', 'dev')
         else:
@@ -100,6 +104,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
             Settings.online_script = Settings.online_script.replace(
                 'dev', 'master')
             Settings.online_tool = Settings.online_tool.replace(
+                'dev', 'master')
+            Settings.online_iana = Settings.online_iana.replace(
                 'dev', 'master')
             Settings.dir_structure_url = Settings.dir_structure_url.replace(
                 'dev', 'master')
@@ -520,6 +526,7 @@ class Update(object):
         self.files = {
             'script': 'PyFunceble.py',
             'tool': 'tool.py',
+            'iana': 'iana-domains-db.json'
         }
 
         if path.isdir(
@@ -579,8 +586,12 @@ class Update(object):
         from stat import S_IEXEC
 
         for data in self.files:
-            stats = stat(self.destination + self.files[data])
-            chmod(self.destination + self.files[data], stats.st_mode | S_IEXEC)
+            if data != 'iana':
+                stats = stat(self.destination + self.files[data])
+                chmod(
+                    self.destination +
+                    self.files[data],
+                    stats.st_mode | S_IEXEC)
 
         return
 
@@ -1077,7 +1088,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.4.0-beta'
+        version='%(prog)s 0.5.0-beta'
     )
 
     ARGS = PARSER.parse_args()
