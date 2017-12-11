@@ -69,6 +69,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     iana_url = 'https://www.iana.org/domains/root/db'
     # dir_structure.json url
     online_dir_structure = github_raw + 'dir_structure.json'
+    # LICENSE url
+    online_license = github_raw + 'LICENSE'
     ################################# Options ################################
     # Activate/Deactivate quiet mode.
     quiet = False
@@ -95,7 +97,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
             'online_script',
             'online_tool',
             'online_iana',
-            'online_dir_structure']
+            'online_dir_structure',
+            'online_license']
 
         for var in to_replace:
             if dev:
@@ -534,7 +537,8 @@ class Update(object):
             'script': 'PyFunceble.py',
             'tool': 'tool.py',
             'iana': 'iana-domains-db.json',
-            'dir_structure': 'dir_structure.json'
+            'dir_structure': 'dir_structure.json',
+            'license': 'LICENSE'
         }
 
         if path.isdir(
@@ -594,7 +598,7 @@ class Update(object):
         from stat import S_IEXEC
 
         for data in self.files:
-            if data != 'iana':
+            if data not in ['iana', 'dir_structure', 'license']:
                 stats = stat(self.destination + self.files[data])
                 chmod(
                     self.destination +
@@ -1096,7 +1100,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.5.1-beta'
+        version='%(prog)s 0.5.2-beta'
     )
 
     ARGS = PARSER.parse_args()
