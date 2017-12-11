@@ -643,27 +643,31 @@ class AutoSave(object):
 
         current_time = int(strftime('%s'))
 
-        if self.last or current_time >= int(
-                Settings.start) + (int(Settings.travis_autosave_minutes) * 60):
-            Percentage().log()
-            self.travis_permissions()
+        try:
+            if self.last or current_time >= int(
+                    Settings.start) + (int(Settings.travis_autosave_minutes) * 60):
+                Percentage().log()
+                self.travis_permissions()
 
-            command = 'git add --all && git commit -a -m "%s"'
+                command = 'git add --all && git commit -a -m "%s"'
 
-            if self.last:
-                if Settings.command_before_end != '':
-                    Helpers.Command(Settings.command_before_end).execute()
+                if self.last:
+                    if Settings.command_before_end != '':
+                        Helpers.Command(Settings.command_before_end).execute()
 
-                message = Settings.travis_autosave_final_commit + ' [ci skip]'
+                    message = Settings.travis_autosave_final_commit + \
+                        ' [ci skip]'
 
-                Helpers.Command(command % message).execute()
-            else:
-                Helpers.Command(command %
-                                Settings.travis_autosave_commit).execute()
+                    Helpers.Command(command % message).execute()
+                else:
+                    Helpers.Command(command %
+                                    Settings.travis_autosave_commit).execute()
 
-            Helpers.Command('git push origin master').execute()
-            exit(0)
-        return
+                Helpers.Command('git push origin master').execute()
+                exit(0)
+            return
+        except AttributeError:
+            return
 
 
 class ExecutionTime(object):
@@ -2268,7 +2272,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.9.1-beta'
+            version='%(prog)s 0.9.2-beta'
         )
 
         ARGS = PARSER.parse_args()
