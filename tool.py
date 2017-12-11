@@ -60,6 +60,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     online_tool = github_raw + tool + '.py'
     # Activate/Deactivate quiet mode.
     quiet = False
+    # IANA whois Server
+    iana_server = 'whois.iana.org'
 
     # Done string
     done = Fore.GREEN + '✔'
@@ -263,7 +265,6 @@ class Install(object):
                 return_data=False).match() or self.production:
             Clean()
 
-        IANA()
         Directory(self.production)
 
         if self.production and not Settings.quiet:
@@ -667,7 +668,7 @@ class IANA(object):
         if not Settings.quiet:
             print('Update of iana-domains-db', end=" ")
         self.download_destination = 'iana-db-dump'
-        self.destination = 'iana-domains-db'
+        self.destination = 'iana-domains-db.json'
 
         self.update()
 
@@ -690,12 +691,62 @@ class IANA(object):
             return True
         return False
 
+    @classmethod
+    def referer(cls, extension):
+        """
+        Return the referer for the given extension.
+
+        :pram extension: A string, a valid domain extension.
+        """
+
+        from PyFunceble import Lookup
+
+        manual_server = {
+            'bm': 'whois.afilias-srs.net',
+            'bz': 'whois.afilias-grs.net',
+            'cd': 'chois.nic.cd',
+            'cm': 'whois.netcom.cm',
+            'fj': 'whois.usp.ac.fj',
+            'ga': 'whois.my.ga',
+            'lc': 'whois2.afilias-grs.net',
+            'lk': 'whois.nic.lk',
+            'nyc': 'whois.nic.nyc',
+            'ps': 'whois.pnina.ps',
+            'ren': 'whois.nic.ren',
+            'rw': 'whois.ricta.org.rw',
+            'shop': 'whois.nic.shop',
+            'sl': 'whois.nic.sl',
+            'stream': 'whois.nic.stream',
+            'tokyp': 'whois.nic.tokyo',
+            'uno': 'whois.nic.uno',
+            'za': 'whois.registry.net.za'
+        }
+
+        if extension in manual_server:
+            return manual_server[extension]
+        else:
+            whois_record = Lookup().whois(Settings.iana_server, 'hello.' + extension, 10)
+
+            if whois_record is not None:
+                regex_referer = r'(refer:)\s+(.*)'
+
+                if Helpers.Regex(
+                        whois_record,
+                        regex_referer,
+                        return_data=False).match():
+                    return Helpers.Regex(
+                        whois_record,
+                        regex_referer,
+                        return_data=True,
+                        group=2).match()
+            return None
+
     def get_valid_extensions(self):
         """
         Get the list of valid extensions based on the result of self.download().
         """
 
-        result = []
+        result = {}
         regex_valid_extension = r'(/domains/root/db/)(.*)(\.html)'
 
         for readed in open(self.download_destination):
@@ -710,7 +761,8 @@ class IANA(object):
             if not matched:
                 continue
             else:
-                result.append(matched[1])
+                ext_with_referer = {matched[1]: self.referer(matched[1])}
+                result.update(ext_with_referer)
 
         Helpers.File(self.download_destination).delete()
         Helpers.File(self.destination).delete()
@@ -722,10 +774,9 @@ class IANA(object):
         """
 
         if self.download():
-            extensions = self.get_valid_extensions()
-
-            for extension in extensions:
-                Helpers.File(self.destination).write(extension + '\n')
+            Helpers.Dict(self.get_valid_extensions()).to_json(self.destination)
+            # for extension in extensions:
+            #     Helpers.File(self.destination).write(extension + '\n')
             if not Settings.quiet:
                 print(Settings.done)
         else:
@@ -1026,7 +1077,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.3.0-beta'
+        version='%(prog)s 0.4.0-beta'
     )
 
     ARGS = PARSER.parse_args()
