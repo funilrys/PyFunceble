@@ -394,6 +394,9 @@ class PyFunceble(object):
     """
 
     def __init__(self, domain=None, file_path=None):
+        if Settings.travis:
+            AutoSave().travis_permissions()
+
         self.bypass()
         ExecutionTime('start')
 
@@ -2265,7 +2268,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.9.0-beta'
+            version='%(prog)s 0.9.1-beta'
         )
 
         ARGS = PARSER.parse_args()
