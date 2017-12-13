@@ -112,9 +112,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     generate_hosts = True
     # Used to check if the header has been already printed on screen.
     header_printed = False
-    # Domain to filter. For example \.blogspot\. will test only blogspot.*
-    # domains.
-    to_filter = ''
+    # IANA iana_database
+    iana_db = {}
     # Activate/Deactive the output of every informations.
     less = False
     # Activate/Deactivate the output of logs.
@@ -137,6 +136,9 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     show_percentage = True
     # If set to true, we generate the files into the 'splited/' directory.
     split_files = False
+    # Domain to filter. For example \.blogspot\. will test only blogspot.*
+    # domains.
+    to_filter = ''
     # Activation/Deactivation of Travis CI autosave system.
     travis = False
     # Minimum of minutes before we start commiting to upstream under Travis CI.
@@ -1579,9 +1581,12 @@ class Referer(object):
                     Settings.domain,
                     regex_ipv4,
                     return_data=False).match():
-                iana_db = self.iana_database()
-                if self.domain_extension in iana_db:
-                    referer = iana_db[self.domain_extension]
+
+                if Settings.iana_db == {}:
+                    Settings.iana_db.update(self.iana_database())
+
+                if self.domain_extension in Settings.iana_db:
+                    referer = Settings.iana_db[self.domain_extension]
 
                     if referer is None:
                         self.log()
@@ -2276,7 +2281,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.10.0-beta'
+            version='%(prog)s 0.11.0-beta'
         )
 
         ARGS = PARSER.parse_args()
