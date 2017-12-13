@@ -254,7 +254,7 @@ class Install(object):
         if not _path.endswith(directory_separator):
             _path += directory_separator
 
-        self.path = repr(_path)
+        self.path = _path
 
         if file_to_install is None:
             self.file_to_install = 'PyFunceble.py'
@@ -348,7 +348,7 @@ class Install(object):
                 'no_files': 'False',
                 'current_dir': "'%%current_dir%%'"}
         return {
-            'current_dir': "'" + self.path + "'"
+            'current_dir': "'" + repr(self.path).strip("'") + "'"
         }
 
     def execute(self):
@@ -1105,7 +1105,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.1-beta'
+        version='%(prog)s 0.6.2-beta'
     )
 
     ARGS = PARSER.parse_args()
