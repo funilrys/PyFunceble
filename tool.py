@@ -26,6 +26,7 @@ reseting PyFunceble to its default states.
 # pylint: disable=too-many-lines
 import argparse
 import hashlib
+from os import sep as directory_separator
 from os import (R_OK, X_OK, access, chdir, chmod, getcwd, mkdir, path, rename,
                 stat, walk)
 
@@ -215,7 +216,7 @@ class Check(object):
         Check if the script is needed.
         """
 
-        location = getcwd() + '/PyFunceble.py'
+        location = getcwd() + directory_separator + 'PyFunceble.py'
 
         if not Settings.quiet:
             print('Script exist', end=' ')
@@ -250,8 +251,8 @@ class Install(object):
 
         _path = getcwd()
 
-        if not _path.endswith('/'):
-            _path += '/'
+        if not _path.endswith(directory_separator):
+            _path += directory_separator
 
         self.path = _path
 
@@ -462,17 +463,17 @@ class Clean(object):
         Return the list of file to delete.
         """
 
-        directory = getcwd() + '/output/'
+        directory = getcwd() + directory_separator + 'output' + directory_separator
         result = []
 
         for root, dirs, files in walk(  # pylint: disable=unused-variable
                 directory):
             for file in files:
                 if file not in ['.gitignore', '.keep']:
-                    if root.endswith('/'):
+                    if root.endswith(directory_separator):
                         result.append(root + file)
                     else:
-                        result.append(root + '/' + file)
+                        result.append(root + directory_separator + file)
 
         return result
 
@@ -531,7 +532,8 @@ class Update(object):
     def __init__(self):
         self.current_path = getcwd()
 
-        self.destination = self.current_path + '/' + Settings.funilrys + '.'
+        self.destination = self.current_path + \
+            directory_separator + Settings.funilrys + '.'
 
         self.files = {
             'script': 'PyFunceble.py',
@@ -543,19 +545,22 @@ class Update(object):
 
         if path.isdir(
                 self.current_path +
-                '/.git') and Settings.script in Helpers.Command('git remote show origin').execute():
+                directory_separator +
+                '.git') and Settings.script in Helpers.Command('git remote show origin').execute():
             self.git()
         else:
             if not self.same_version(True):
                 for data in self.files:
                     Helpers.File(
                         self.current_path +
-                        '/' +
+                        directory_separator +
                         self.files[data]).delete()
                     rename(
                         self.destination +
                         self.files[data],
-                        self.current_path + '/' + self.files[data])
+                        self.current_path +
+                        directory_separator +
+                        self.files[data])
 
                 if not Settings.quiet:
                     print('Checking version', end=' ')
@@ -666,7 +671,7 @@ class Update(object):
 
         for file in self.files:
             current_version = self.hash(
-                self.current_path + '/' + self.files[file])
+                self.current_path + directory_separator + self.files[file])
             copied_version = self.hash(self.destination + self.files[file])
 
             if copied_version is not None:
@@ -815,9 +820,9 @@ class Directory(object):
     """
 
     def __init__(self, production=False):
-        self.base = getcwd() + '/'
+        self.base = getcwd() + directory_separator
 
-        self.path = 'output/'
+        self.path = 'output' + directory_separator
         self.structure = self.base + 'dir_structure.json'
 
         if production:
@@ -845,7 +850,7 @@ class Directory(object):
             local_result = result['output']
 
             for file in files:
-                file_path = root + '/' + file
+                file_path = root + directory_separator + file
                 file_hash = Hash(file_path, 'sha512', True).get()
 
                 lines_in_list = [line.rstrip('\n') for line in open(file_path)]
@@ -913,7 +918,7 @@ class Directory(object):
                 mkdir(self.path + directory)
 
             for file in structure[directory]:
-                file_path = self.path + directory + '/' + file
+                file_path = self.path + directory + directory_separator + file
 
                 content_to_write = structure[directory][file]['content']
                 online_sha = structure[directory][file]['sha512']
@@ -1100,7 +1105,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.5.2-beta'
+        version='%(prog)s 0.6.0-beta'
     )
 
     ARGS = PARSER.parse_args()

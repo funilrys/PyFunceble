@@ -28,6 +28,7 @@ or IP.
 import argparse
 import socket
 from json import decoder, dump, loads
+from os import sep as directory_separator
 from os import environ, path, remove
 from re import compile as comp
 from re import sub as substrings
@@ -221,9 +222,11 @@ class Settings(object):  # pylint: disable=too-few-public-methods
 
     # Current directory.
     current_dir = '%%current_dir%%'
+    # Current directory separator
+    dir_separator = directory_separator
     # Output directory.
     # DO NOT UPDATE THIS UNLESS YOU KNOW WHAT YOU ARE DOING.
-    output_dir = current_dir + 'output/'
+    output_dir = current_dir + 'output' + dir_separator
     # Autocontinue log file.
     # Please note that this file is != from Funceble.
     autocontinue_log_file = output_dir + 'continue.json'
@@ -238,15 +241,15 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # official status.
     ##########################################################################
     # Domains directory.
-    domains_dir = output_dir + 'domains/'
+    domains_dir = output_dir + 'domains' + dir_separator
     # Default filename.
     domains_default_filename = 'list'
     # ACTIVE/Up domains directory.
-    up_domains_dir = domains_dir + official_up_status + '/'
+    up_domains_dir = domains_dir + official_up_status + dir_separator
     # INACTIVE/Down domains directory.
-    down_domains_dir = domains_dir + official_down_status + '/'
+    down_domains_dir = domains_dir + official_down_status + dir_separator
     # INVALID domains directory.
-    invalid_domains_dir = domains_dir + official_invalid_status + '/'
+    invalid_domains_dir = domains_dir + official_invalid_status + dir_separator
     # Output of ACTIVE/Up domains.
     output_up_domain = up_domains_dir + domains_default_filename
     # Output of INACTIVE/Down domains.
@@ -260,15 +263,15 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # official status.
     ##########################################################################
     # hosts directory.
-    hosts_dir = output_dir + 'hosts/'
+    hosts_dir = output_dir + 'hosts' + dir_separator
     # Default filename.
     hosts_default_filename = 'hosts'
     # ACTIVE/Up hosts directory.
-    up_hosts_dir = hosts_dir + official_up_status + '/'
+    up_hosts_dir = hosts_dir + official_up_status + dir_separator
     # INACTIVE/Down hosts directory.
-    down_hosts_dir = hosts_dir + official_down_status + '/'
+    down_hosts_dir = hosts_dir + official_down_status + dir_separator
     # INVALID hosts directory.
-    invalid_hosts_dir = hosts_dir + official_invalid_status + '/'
+    invalid_hosts_dir = hosts_dir + official_invalid_status + dir_separator
     # Output of ACTIVE/Up hosts.
     output_up_host = up_hosts_dir + hosts_default_filename
     # Output of INACTIVE/Down hosts.
@@ -282,19 +285,19 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # if Settings.logs is activated.
     ##########################################################################
     # logs directory.
-    logs_dir = output_dir + 'logs/'
+    logs_dir = output_dir + 'logs' + dir_separator
     # WHOIS logs output.
     # Please note that this directory will keep the whois records according to
     # WHOIS server only if Settings.debug is activated.
-    whois_logs_dir = logs_dir + 'whois/'
+    whois_logs_dir = logs_dir + 'whois' + dir_separator
     # Wrong date format logs output.
     # Please note thet this directory will keep a record of all wrong formated
     # date.
-    date_format_logs_dir = logs_dir + 'date_format/'
+    date_format_logs_dir = logs_dir + 'date_format' + dir_separator
     # Percentages logs.
     # Please note that this directory will keep the percentage of the current
     # session.
-    percentage_logs_dir = logs_dir + 'percentage/'
+    percentage_logs_dir = logs_dir + 'percentage' + dir_separator
     # Output of percentae logs.
     output_percentage_log = percentage_logs_dir + 'percentage.txt'
     # Execution time logs.
@@ -304,7 +307,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # No referer logs.
     # Please note that this directory will keep a record of all domains
     # extensions which don't have any known referer.
-    no_referer_logs_dir = logs_dir + 'no_referer/'
+    no_referer_logs_dir = logs_dir + 'no_referer' + dir_separator
 
     ##########################################################################
     #                               `output/splited/`
@@ -313,7 +316,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Please note that this only works if Settings.split_files is activated.
     ##########################################################################
     # Splited directory.
-    output_splited_results = output_dir + 'splited/'
+    output_splited_results = output_dir + 'splited' + dir_separator
     # Output of ACTIVE/Up results.
     output_up_result = output_splited_results + official_up_status
     # Output of INACTIVE/Down results.
@@ -329,9 +332,9 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # is activated.
     ##########################################################################
     # HTTP analytic directory.
-    output_http_analytic = output_dir + 'HTTP_Analytic/'
+    output_http_analytic = output_dir + 'HTTP_Analytic' + dir_separator
     # Active HTTP codes directory.
-    http_up = output_http_analytic + official_up_status + '/'
+    http_up = output_http_analytic + official_up_status + dir_separator
     # Output of Active codes.
     # Please note that a domain is set into the following file only if
     # the official status is not normally `ACTIVE`.
@@ -339,11 +342,12 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # into all ACTIVE results files.
     output_http_up = http_up + official_up_status
     # Potentially active codes directory.
-    http_potentially_up = output_http_analytic + 'POTENTIALLY_ACTIVE/'
+    http_potentially_up = output_http_analytic + 'POTENTIALLY_ACTIVE' + dir_separator
     # Output of potentially active codes.
     output_http_potentially_up = http_potentially_up + 'potentially_active'
     # Potentially inactive codes directory.
-    http_potentially_down = output_http_analytic + 'POTENTIALLY_INACTIVE/'
+    http_potentially_down = output_http_analytic + \
+        'POTENTIALLY_INACTIVE' + dir_separator
     # Output of potentially inactive codes.
     output_http_potentially_down = http_potentially_down + 'inactive_or_potentially'
 
@@ -624,7 +628,7 @@ class AutoSave(object):
             'chown -R travis:travis ' + build_dir,
             'chgrp -R travis ' + build_dir,
             'chmod -R g+rwX ' + build_dir,
-            'chmod 777 -Rf ' + build_dir + '/.git',
+            'chmod 777 -Rf ' + build_dir + Settings.dir_separator + '.git',
             'find ' + build_dir + " -type d -exec chmod g+x '{}'"
         ]
 
@@ -2272,7 +2276,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.9.2-beta'
+            version='%(prog)s 0.10.0-beta'
         )
 
         ARGS = PARSER.parse_args()
