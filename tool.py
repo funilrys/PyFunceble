@@ -254,7 +254,7 @@ class Install(object):
         if not _path.endswith(directory_separator):
             _path += directory_separator
 
-        self.path = _path
+        self.path = repr(_path)
 
         if file_to_install is None:
             self.file_to_install = 'PyFunceble.py'
@@ -1105,7 +1105,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.0-beta'
+        version='%(prog)s 0.6.1-beta'
     )
 
     ARGS = PARSER.parse_args()
