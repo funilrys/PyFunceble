@@ -457,7 +457,10 @@ class PyFunceble(object):
         """
 
         self.print_header()
-        return ExpirationDate().get()
+        if __name__ == '__main__':
+            print(ExpirationDate().get())
+        else:
+            return ExpirationDate().get()
 
     @classmethod
     def reset_counters(cls):
@@ -474,7 +477,7 @@ class PyFunceble(object):
 
         return
 
-    def file(self, file_path):
+    def file(self, file_path):  # pylint: disable=too-many-branches
         """
         Manage the case that need to test each domain of a given file path.
         Note: 1 domain per line.
@@ -544,7 +547,8 @@ class PyFunceble(object):
 
             Settings.domain = domain.split('#')[0]
 
-            ExpirationDate().get()
+            if __name__ == '__main__':
+                print(ExpirationDate().get())
             AutoContinue().backup(file_path)
             AutoSave()
 
@@ -828,7 +832,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-        and not path.isfile(self.output):
+            and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -1553,28 +1557,6 @@ class Referer(object):
 
         return Helpers.Dict().from_json(Helpers.File(file_to_read).read())
 
-    @classmethod
-    def from_iana(cls):
-        """
-        Return the referer from IANA database.
-        """
-
-        whois_record = Lookup().whois(Settings.iana_server)
-
-        if whois_record is not None:
-            regex_referer = r'(refer:)\s+(.*)'
-
-            if Helpers.Regex(
-                    whois_record,
-                    regex_referer,
-                    return_data=False).match():
-                return Helpers.Regex(
-                    whois_record,
-                    regex_referer,
-                    return_data=True,
-                    group=2).match()
-        return None
-
     def get(self):
         """
         Return the referer aka the WHOIS server of the current domain extension.
@@ -2291,7 +2273,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.12.1-beta'
+            version='%(prog)s 0.12.2-beta'
         )
 
         ARGS = PARSER.parse_args()
