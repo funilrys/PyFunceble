@@ -2290,7 +2290,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.12.3-beta'
+            version='%(prog)s 0.12.5-beta'
         )
 
         ARGS = PARSER.parse_args()
