@@ -29,7 +29,7 @@ import argparse
 import socket
 from json import decoder, dump, loads
 from os import sep as directory_separator
-from os import environ, path, remove
+from os import environ, getcwd, path, remove
 from re import compile as comp
 from re import sub as substrings
 from re import escape
@@ -421,9 +421,23 @@ class PyFunceble(object):
             ExecutionTime('stop')
             Percentage().log()
         else:
+            Settings.current_dir = getcwd() + Settings.dir_separator
             Settings.simple = Settings.quiet = Settings.no_files = True
             if domain is not None and domain != '':
                 Settings.domain = domain.lower()
+
+    @classmethod
+    def test(cls):
+        """
+        This method avoid confusion between self.domain which is called into
+            __main__ and test() which should be called out of PyFunceble's scope.
+        """
+
+        if __name__ == '__main__':
+            raise Exception(
+                'You should not use this method. Please prefer self.domain')
+        else:
+            return ExpirationDate().get()
 
     @classmethod
     def bypass(cls):
@@ -459,10 +473,11 @@ class PyFunceble(object):
         """
 
         self.print_header()
-        if __name__ == '__main__':
+        if __name__ == '__main__' and Settings.simple:
             print(ExpirationDate().get())
         else:
-            return ExpirationDate().get()
+            ExpirationDate().get()
+            return
 
     @classmethod
     def reset_counters(cls):
