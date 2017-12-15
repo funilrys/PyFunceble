@@ -125,15 +125,17 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     plain_list_domain = False
     # Activate/Deactive the quiet mode.
     quiet = False
-    # The following will save the referer
+    # The following will save the referer.
     referer = ''
     # HTTP Status code timeout.
     # Consider this as the minimum time in seconds that we need before.
     seconds_before_http_timeout = 3
-    # Show/hide execution time
+    # Show/hide execution time.
     show_execution_time = False
     # Show/hide the percentage.
     show_percentage = True
+    # Activate/Deactivate the simple output mode.
+    simple = False
     # If set to true, we generate the files into the 'splited/' directory.
     split_files = False
     # Domain to filter. For example \.blogspot\. will test only blogspot.*
@@ -372,6 +374,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
             'percentage': 'https://git.io/v7xtP',
             'plain_list_domain': 'Unknown',
             'quiet': 'Unknown',
+            'simple': 'Unknown',
             'split_files': 'Unknown',
             'travis': 'Unknown'
         }
@@ -397,23 +400,37 @@ class PyFunceble(object):
 
     :param domain: A string, a domain or IP to test.
     :param file_path: A string, a path to a file to read.
+    :param simple: A boolean, Activate/Deactivate the simple output mode.
     """
 
-    def __init__(self, domain=None, file_path=None):
-        if Settings.travis:
-            AutoSave().travis_permissions()
+    def __init__(self, domain=None, file_path=None, **args):
+        optional_arguments = {
+            "simple": False
+        }
 
-        self.bypass()
-        ExecutionTime('start')
+        for (arg, default) in optional_arguments.items():
+            if arg == 'simple' and args.get(arg, default):
+                setattr(Settings, 'quiet', True)
+            setattr(Settings, arg, args.get(arg, default))
 
-        if domain is not None and domain != '':
-            self.domain(domain)
+        if __name__ == '__main__':
+            if Settings.travis:
+                AutoSave().travis_permissions()
 
-        elif file_path is not None and file_path != '':
-            self.file(file_path)
+            self.bypass()
+            ExecutionTime('start')
 
-        ExecutionTime('stop')
-        Percentage().log()
+            if domain is not None and domain != '':
+                Settings.domain = domain.lower()
+                self.domain()
+            elif file_path is not None and file_path != '':
+                self.file(file_path)
+
+            ExecutionTime('stop')
+            Percentage().log()
+        else:
+            if domain is not None and domain != '':
+                Settings.domain = domain.lower()
 
     @classmethod
     def bypass(cls):
@@ -443,17 +460,13 @@ class PyFunceble(object):
             else:
                 Prints(None, 'Generic').header()
 
-    def domain(self, domain):
+    def domain(self):
         """
         Manage the case that we want to test only a domain.
-
-        :param domain: A string, a domain or IP to test.
         """
 
-        Settings.domain = domain.lower()
-
         self.print_header()
-        ExpirationDate()
+        return ExpirationDate().get()
 
     @classmethod
     def reset_counters(cls):
@@ -540,7 +553,7 @@ class PyFunceble(object):
 
             Settings.domain = domain.split('#')[0]
 
-            ExpirationDate()
+            ExpirationDate().get()
             AutoContinue().backup(file_path)
             AutoSave()
 
@@ -1190,22 +1203,26 @@ class Percentage(object):
 
             self.calculate()
 
-            print('\n')
-            Prints(None, 'Percentage', Settings.output_percentage_log).header()
-
-            for to_print in [[Settings.official_up_status,
-                              str(Settings.percentage_of_up) + '%',
-                              Settings.number_of_up],
-                             [Settings.official_down_status,
-                              str(Settings.percentage_of_down) + '%',
-                              Settings.number_of_down],
-                             [Settings.official_invalid_status,
-                              str(Settings.percentage_of_invalid) + '%',
-                              Settings.number_of_invalid]]:
+            if not Settings.quiet:
+                print('\n')
                 Prints(
-                    to_print,
+                    None,
                     'Percentage',
-                    Settings.output_percentage_log).data()
+                    Settings.output_percentage_log).header()
+
+                for to_print in [[Settings.official_up_status,
+                                  str(Settings.percentage_of_up) + '%',
+                                  Settings.number_of_up],
+                                 [Settings.official_down_status,
+                                  str(Settings.percentage_of_down) + '%',
+                                  Settings.number_of_down],
+                                 [Settings.official_invalid_status,
+                                  str(Settings.percentage_of_invalid) + '%',
+                                  Settings.number_of_invalid]]:
+                    Prints(
+                        to_print,
+                        'Percentage',
+                        Settings.output_percentage_log).data()
 
 
 class Generate(object):
@@ -1506,8 +1523,6 @@ class Status(object):  # pylint: disable=too-few-public-methods
     def __init__(self, matched_status):
         self.matched_status = matched_status
 
-        self.handle()
-
     def handle(self):
         """
         Handle the lack of WHOIS. :)
@@ -1518,12 +1533,11 @@ class Status(object):  # pylint: disable=too-few-public-methods
         if self.matched_status not in Settings.invalid_status:
             if Lookup().nslookup():
                 Generate(Settings.official_up_status, source).status_file()
-            else:
-                Generate(Settings.official_down_status, source).status_file()
-        else:
-            Generate(Settings.official_invalid_status, 'IANA').status_file()
-
-        return
+                return Settings.official_up_status
+            Generate(Settings.official_down_status, source).status_file()
+            return Settings.official_down_status
+        Generate(Settings.official_invalid_status, 'IANA').status_file()
+        return Settings.official_invalid_status
 
 
 class Referer(object):
@@ -1590,16 +1604,10 @@ class Referer(object):
 
                     if referer is None:
                         self.log()
-                        Status(Settings.official_down_status)
-                        referer = False
-                else:
-                    Status(Settings.official_invalid_status)
-                    referer = False
-            else:
-                Status(Settings.official_down_status)
-                referer = False
-
-            return referer
+                        return Status(Settings.official_down_status).handle()
+                    return referer
+                return Status(Settings.official_invalid_status).handle()
+            return Status(Settings.official_down_status).handle()
         return None
 
     def log(self):
@@ -1631,17 +1639,23 @@ class ExpirationDate(object):
         self.expiration_date = ''
         self.whois_record = ''
 
+    def get(self):
+        """
+        Execute the logic behind the meaning of ExpirationDate + return the matched status.
+        """
+
         if '.' in Settings.domain:
             Settings.referer = Referer().get()
 
-            if Settings.referer in [True, False]:
-                return
+            if Settings.referer in [
+                    Settings.official_up_status,
+                    Settings.official_down_status,
+                    Settings.official_invalid_status]:
+                return Settings.referer
             elif Settings.referer is not None:
-                self.extract()
-            else:
-                Status(Settings.official_down_status)
-        else:
-            Status(Settings.official_invalid_status)
+                return self.extract()
+            return Status(Settings.official_down_status).handle()
+        return Status(Settings.official_invalid_status).handle()
 
     def whois_log(self):
         """
@@ -1897,16 +1911,13 @@ class ExpirationDate(object):
                         self.format()
                         Generate(Settings.official_up_status, 'WHOIS',
                                  self.expiration_date).status_file()
-                        return
+                        return Settings.official_up_status
 
                     self.whois_log()
-                    Status(Settings.official_down_status)
-
-                    return
+                    return Status(Settings.official_down_status).handle()
 
         self.whois_log()
-        Status(Settings.official_down_status)
-        return
+        return Status(Settings.official_down_status).handle()
 
 
 class Helpers(object):  # pylint: disable=too-few-public-methods
@@ -2261,6 +2272,12 @@ if __name__ == '__main__':
             help='Split outputed files.'
         )
         PARSER.add_argument(
+            '-s',
+            '--simple',
+            action='store_true',
+            help='Switch the default value of the simple output mode.'
+        )
+        PARSER.add_argument(
             '--split',
             action='store_true',
             help='Split output files.'
@@ -2281,7 +2298,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.11.0-beta'
+            version='%(prog)s 0.12.0-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2335,6 +2352,10 @@ if __name__ == '__main__':
             Settings.plain_list_domain = Settings().switch('plain_list_domain')
 
         if ARGS.quiet:
+            Settings.quiet = Settings().switch('quiet')
+
+        if ARGS.simple:
+            Settings.simple = Settings().switch('simple')
             Settings.quiet = Settings().switch('quiet')
 
         if ARGS.split:
