@@ -359,6 +359,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     def switch(cls, variable):
         """
         Switch class variables to their opposite.
+
+        :param variable: A string, the Settings.variable_name to switch.
         """
 
         links = {
@@ -2273,7 +2275,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.12.2-beta'
+            version='%(prog)s 0.12.3-beta'
         )
 
         ARGS = PARSER.parse_args()
