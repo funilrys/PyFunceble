@@ -400,19 +400,9 @@ class PyFunceble(object):
 
     :param domain: A string, a domain or IP to test.
     :param file_path: A string, a path to a file to read.
-    :param simple: A boolean, Activate/Deactivate the simple output mode.
     """
 
-    def __init__(self, domain=None, file_path=None, **args):
-        optional_arguments = {
-            "simple": False
-        }
-
-        for (arg, default) in optional_arguments.items():
-            if arg == 'simple' and args.get(arg, default):
-                setattr(Settings, 'quiet', True)
-            setattr(Settings, arg, args.get(arg, default))
-
+    def __init__(self, domain=None, file_path=None):
         if __name__ == '__main__':
             if Settings.travis:
                 AutoSave().travis_permissions()
@@ -429,6 +419,7 @@ class PyFunceble(object):
             ExecutionTime('stop')
             Percentage().log()
         else:
+            Settings.simple = Settings.quiet = Settings.no_files = True
             if domain is not None and domain != '':
                 Settings.domain = domain.lower()
 
@@ -834,8 +825,10 @@ class Prints(object):
         into a given path, if doesn't exist.
         """
 
-        if self.output is not None and self.output != '' and not path.isfile(
-                self.output):
+        if not Settings.no_files \
+            and self.output is not None \
+                and self.output != '' \
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -1007,7 +1000,7 @@ class Prints(object):
                     if not self.only_on_file:
                         data = self.colorify(data)
                         print(data)
-                if self.output is not None and self.output != '':
+                if not Settings.no_files and self.output is not None and self.output != '':
                     Helpers.File(self.output).write(data + '\n')
         else:
             # This should never happend. If it's happens then there's a big issue
@@ -2298,7 +2291,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.12.0-beta'
+            version='%(prog)s 0.12.1-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2328,7 +2321,7 @@ if __name__ == '__main__':
             Settings.generate_hosts = Settings().switch('generate_hosts')
 
         if ARGS.http:
-            Settings.http_code_status = Settings().switch('http')
+            Settings.http_code_status = Settings().switch('http_code_status')
 
         if ARGS.ip:
             Settings.custom_ip = ARGS.ip
