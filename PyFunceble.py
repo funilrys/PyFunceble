@@ -517,6 +517,8 @@ class PyFunceble(object):
         if Settings.number_of_tested == 0 or list_to_test[
                 Settings.number_of_tested - 1] == list_to_test[-1]:
             self.reset_counters()
+            from tool import Clean
+            Clean(True)
 
         i = int(Settings.number_of_tested)
 
@@ -2298,7 +2300,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.14.0-beta'
+            version='%(prog)s 0.15.0-beta'
         )
 
         ARGS = PARSER.parse_args()

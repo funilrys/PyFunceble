@@ -451,12 +451,18 @@ class Install(object):
 class Clean(object):
     """
     Directory cleaning logic.
+
+    :param quiet: A boolean, True: run in quiet mode.
     """
 
-    def __init__(self):
-        print('\n\nCleaning generated files', end=" ")
+    def __init__(self, quiet=False):
+        if quiet:
+            Settings.quiet = True
+        if not Settings.quiet:
+            print('\n\nCleaning generated files', end=" ")
         self.them_all()
-        print(Settings.done)
+        if not Settings.quiet:
+            print(Settings.done)
 
     @classmethod
     def file_to_delete(cls):
@@ -1106,7 +1112,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.3-beta'
+        version='%(prog)s 0.6.4-beta'
     )
 
     ARGS = PARSER.parse_args()
