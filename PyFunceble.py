@@ -565,8 +565,7 @@ class PyFunceble(object):
 
             Settings.domain = domain.split('#')[0]
 
-            if __name__ == '__main__':
-                print(ExpirationDate().get())
+            ExpirationDate().get()
             AutoContinue().backup(file_path)
             AutoSave()
 
@@ -1266,11 +1265,14 @@ class Generate(object):
             splited_destination = ''
 
             if self.domain_status in Settings.up_status:
-                hosts_destination = plain_destination = Settings.output_up_host
+                hosts_destination = Settings.output_up_host
+                plain_destination = Settings.output_up_domain
             elif self.domain_status in Settings.down_status:
-                hosts_destination = plain_destination = Settings.output_down_host
+                hosts_destination = Settings.output_down_host
+                plain_destination = Settings.output_down_domain
             elif self.domain_status in Settings.invalid_status:
-                hosts_destination = plain_destination = Settings.output_invalid_host
+                hosts_destination = Settings.output_invalid_host
+                plain_destination = Settings.output_invalid_domain
             elif self.domain_status in Settings.potentialy_up_status \
                 or self.domain_status in Settings.potentially_down_status \
                     or self.domain_status in Settings.http_active_status:
@@ -2296,7 +2298,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.13.0-beta'
+            version='%(prog)s 0.14.0-beta'
         )
 
         ARGS = PARSER.parse_args()
