@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -34,6 +34,7 @@ from re import compile as comp
 from re import sub as substrings
 from re import escape
 from subprocess import PIPE, Popen
+from sys import version_info
 from time import strftime
 
 import requests
@@ -2133,7 +2134,12 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
 
 if __name__ == '__main__':
-    if Settings.current_dir == '%%current_dir%%':
+    initiate(autoreset=True)
+    if version_info[0] < 3:
+        print('%sPlease run this script with %s' %
+              (Fore.RED, Fore.GREEN + Style.BRIGHT + 'Python 3.x'))
+        exit(1)
+    elif Settings.current_dir == '%%current_dir%%':
         print(
             'Please run the installation script first.\n You can run it with : %s \n' %
             './tool -i\n')
@@ -2290,11 +2296,10 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.12.6-beta'
+            version='%(prog)s 0.13.0-beta'
         )
 
         ARGS = PARSER.parse_args()
-        initiate(autoreset=True)
 
         if ARGS.less:
             Settings.less = ARGS.less
