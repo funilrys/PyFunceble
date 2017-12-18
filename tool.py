@@ -146,6 +146,7 @@ class Check(object):
             're',
             'requests',
             'socket',
+            'sys',
             'time']
 
         for dependency in list_of_dependencies:
@@ -1105,7 +1106,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.2-beta'
+        version='%(prog)s 0.6.3-beta'
     )
 
     ARGS = PARSER.parse_args()
