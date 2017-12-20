@@ -115,6 +115,10 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     header_printed = False
     # IANA iana_database
     iana_db = {}
+    # Activate/Deactivate the usage of a database to save the inactive domains
+    inactive_database = True
+    # This variable will sabe the database for easy usage under the script.
+    inactive_db = {}
     # Activate/Deactive the output of every informations.
     less = False
     # Activate/Deactivate the output of logs.
@@ -239,7 +243,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Please note that this the default output unless Settings.split_files is
     # activated.
     output_unified_results = output_dir + 'results.txt'
-
+    # Inactive database path.
+    inactive_db_path = current_dir + 'inactive-db.json'
     ##########################################################################
     #                               `output/domains/`
     # This directory will keep the plain list of domain to their
@@ -370,6 +375,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
             'show_execution_time': 'Unknown',
             'generate_hosts': 'Unknown',
             'http_code_status': 'https://git.io/v5vHm',
+            'inactive_database': 'Unknown',
             'no_files': 'Unknown',
             'logs': 'Unknown',
             'unified_file': 'Unknown',
@@ -495,6 +501,29 @@ class PyFunceble(object):
 
         return
 
+    def clean(self, list_to_test):
+        """
+        Check if we have to clean the environnement.
+
+        :param list_to_test: A list, the current list we are going to test.
+        """
+
+        try:
+            if Settings.number_of_tested == 0 \
+                or list_to_test[Settings.number_of_tested - 1] == list_to_test[-1] \
+                    or Settings.number_of_tested == len(list_to_test):
+                self.reset_counters()
+
+                from tool import Clean
+                Clean(True)
+        except IndexError:
+            self.reset_counters()
+
+            from tool import Clean
+            Clean(True)
+
+        return
+
     def file(self, file_path):  # pylint: disable=too-many-branches
         """
         Manage the case that need to test each domain of a given file path.
@@ -514,11 +543,16 @@ class PyFunceble(object):
             if not read.startswith('#'):
                 list_to_test.append(read)
 
-        if Settings.number_of_tested == 0 or list_to_test[
-                Settings.number_of_tested - 1] == list_to_test[-1]:
-            self.reset_counters()
-            from tool import Clean
-            Clean(True)
+        self.clean(list_to_test)
+
+        if Settings.inactive_database:
+            Database(file_path).to_test()
+
+            if file_path in Settings.inactive_db and 'to_test' in Settings.inactive_db[
+                    file_path] and Settings.inactive_db[file_path]['to_test'] != []:
+                list_to_test.extend(Settings.inactive_db[file_path]['to_test'])
+
+        list_to_test = Helpers.List(list_to_test).format()
 
         i = int(Settings.number_of_tested)
 
@@ -567,7 +601,14 @@ class PyFunceble(object):
 
             Settings.domain = domain.split('#')[0]
 
-            ExpirationDate().get()
+            status = ExpirationDate().get()
+
+            if Settings.inactive_database:
+                if status == 'ACTIVE':
+                    Database(file_path).remove()
+                else:
+                    Database(file_path).add()
+
             AutoContinue().backup(file_path)
             AutoSave()
 
@@ -703,6 +744,156 @@ class AutoSave(object):
             return
 
 
+class Database(object):
+    """
+    Logic behind the generation and the usage of a database system.
+    The main idea behind this is to provide an inactive-db.json and test all
+        inactive domain which are into to it regularly
+
+    :param file_path: A string, the file path we are working with.
+    """
+
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.current_time = int(strftime('%s'))
+        self.day_in_seconds = 24 * 3600
+
+    @classmethod
+    def retrieve(cls):
+        """
+        Return the current content of the inactive-db.json file.
+        """
+
+        if path.isfile(Settings.inactive_db_path):
+            Settings.inactive_db = Helpers.Dict().from_json(
+                Helpers.File(Settings.inactive_db_path).read())
+        else:
+            Settings.inactive_db = {}
+
+        return
+
+    @classmethod
+    def backup(cls):
+        """
+        Save the current database into the inactive-db.json file.
+        """
+
+        if Settings.inactive_database:
+            Helpers.Dict(
+                Settings.inactive_db).to_json(
+                    Settings.inactive_db_path)
+
+    def add_to_test(self, to_add):
+        """
+        Add an element or a list of element into Settings.inactive_db[self.file_path]['to_test'].
+        """
+
+        if not isinstance(to_add, list):
+            to_add = [to_add]
+
+        if self.file_path in Settings.inactive_db:
+            if 'to_test' in Settings.inactive_db[self.file_path]:
+                Settings.inactive_db[self.file_path]['to_test'].extend(to_add)
+            else:
+                Settings.inactive_db[self.file_path]['to_test'] = to_add
+        else:
+            Settings.inactive_db.update({self.file_path: {'to_test': to_add}})
+
+        self.backup()
+
+    def to_test(self):
+        """
+        Get the list to test for the next session.
+        """
+
+        result = []
+        to_delete = []
+
+        self.retrieve()
+
+        if self.file_path in Settings.inactive_db:
+            for data in Settings.inactive_db[self.file_path]:
+                if data != 'to_test':
+                    if self.current_time > int(data) + self.day_in_seconds:
+                        result.extend(
+                            Settings.inactive_db[self.file_path][data])
+                        to_delete.append(data)
+
+            Helpers.Dict(Settings.inactive_db[self.file_path]).remove_key(
+                to_delete)
+
+            self.add_to_test(result)
+        else:
+            Settings.inactive_db.update({self.file_path: {}})
+
+        self.backup()
+
+    def timestamp(self):
+        """
+        Return the timestamp where we are going to save our current list.
+        """
+
+        result = 0
+        to_delete = []
+
+        if self.file_path in Settings.inactive_db \
+                and Settings.inactive_db[self.file_path] != {}:
+            for data in Settings.inactive_db[self.file_path]:
+                if data != 'to_test':
+                    if self.current_time < int(data) + self.day_in_seconds:
+                        result = int(data)
+                    else:
+                        result = self.current_time
+                        self.add_to_test(
+                            Settings.inactive_db[self.file_path][data])
+                        to_delete.append(data)
+
+            Helpers.Dict(Settings.inactive_db[self.file_path]).remove_key(
+                to_delete)
+
+            return result
+        return self.current_time
+
+    def add(self):
+        """
+        Save the current Settings.domain into the current timestamp.
+        """
+
+        timestamp = str(self.timestamp())
+
+        if self.file_path in Settings.inactive_db:
+            if timestamp in Settings.inactive_db[self.file_path]:
+                if Settings.domain not in Settings.inactive_db[self.file_path][timestamp]:
+                    Settings.inactive_db[self.file_path][timestamp].append(
+                        Settings.domain)
+            else:
+                Settings.inactive_db[self.file_path].update(
+                    {timestamp: [Settings.domain]})
+
+            if 'to_test' in Settings.inactive_db[self.file_path] \
+                    and Settings.domain in Settings.inactive_db[self.file_path]['to_test']:
+                Settings.inactive_db[self.file_path]['to_test'].remove(
+                    Settings.domain)
+        else:
+            Settings.inactive_db[self.file_path] = {
+                timestamp: [Settings.domain]}
+
+        self.backup()
+
+    def remove(self):
+        """
+        Remove all occurence of Settings.domain into the database.
+        """
+
+        if self.file_path in Settings.inactive_db:
+            for data in Settings.inactive_db[self.file_path]:
+                if Settings.domain in Settings.inactive_db[self.file_path][data]:
+                    Settings.inactive_db[self.file_path][data].remove(
+                        Settings.domain)
+
+        self.backup()
+
+
 class ExecutionTime(object):
     """
     Set and return the exection time of the program.
@@ -718,8 +909,11 @@ class ExecutionTime(object):
             elif action == 'stop':
                 self.stoping_time()
 
-                print('\nExecution Time:')
-                print(self.format_execution_time())
+                print(
+                    Fore.MAGENTA +
+                    Style.BRIGHT +
+                    '\nExecution Time: ' +
+                    self.format_execution_time())
 
     @classmethod
     def starting_time(cls):
@@ -851,7 +1045,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-            and not path.isfile(self.output):
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2050,6 +2244,27 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             except OSError:
                 pass
 
+    class List(object):  # pylint: disable=too-few-public-methods
+        """
+        List manipulation.
+        """
+
+        def __init__(self, main_list=None):
+            if main_list is None:
+                self.main_list = []
+            else:
+                self.main_list = main_list
+
+        def format(self):
+            """
+            Return a well formated list. Basicaly, it's sort a list and remove duplicate.
+            """
+
+            try:
+                return sorted(list(set(self.main_list)), key=str.lower)
+            except TypeError:
+                return self.main_list
+
     class Regex(object):  # pylint: disable=too-few-public-methods
 
         """A simple implementation ot the python.re package
@@ -2145,7 +2360,7 @@ if __name__ == '__main__':
         exit(1)
     elif Settings.current_dir == '%%current_dir%%':
         print(
-            'Please run the installation script first.\n You can run it with : %s \n' %
+            'Please run the installation script first. You can run it with : %s \n' %
             './tool -i\n')
         exit(1)
     else:
@@ -2181,6 +2396,13 @@ if __name__ == '__main__':
             '--domain',
             type=str,
             help='Analyze the given domain.')
+        PARSER.add_argument(
+            '-db',
+            '--database',
+            action='store_true',
+            help='Switch the default value of the usage of a database to store \
+                inactive domains of the currently tested list.'
+        )
         PARSER.add_argument(
             '--debug',
             action='store_true',
@@ -2300,7 +2522,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.15.0-beta'
+            version='%(prog)s 0.16.0-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2315,7 +2537,9 @@ if __name__ == '__main__':
 
         if ARGS.auto_continue:
             Settings.auto_continue = Settings().switch('auto_continue')
-
+        if ARGS.database:
+            Settings.auto_continue = Settings().switch('inactive_database')
+            
         if ARGS.debug:
             Settings.debug = Settings().switch('debug')
 
