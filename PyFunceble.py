@@ -2360,8 +2360,8 @@ if __name__ == '__main__':
         exit(1)
     elif Settings.current_dir == '%%current_dir%%':
         print(
-            'Please run the installation script first. You can run it with : %s \n' %
-            './tool -i\n')
+            Fore.RED + Style.BRIGHT + 'Please run the installation script first.\nYou can run it with: %s' %
+            Fore.CYAN + Style.BRIGHT + getcwd() + Settings.dir_separator + 'tool.py -i\n')
         exit(1)
     else:
         PARSER = argparse.ArgumentParser(
@@ -2522,7 +2522,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.16.0-beta'
+            version='%(prog)s 0.16.1-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2539,7 +2539,7 @@ if __name__ == '__main__':
             Settings.auto_continue = Settings().switch('auto_continue')
         if ARGS.database:
             Settings.auto_continue = Settings().switch('inactive_database')
-            
+
         if ARGS.debug:
             Settings.debug = Settings().switch('debug')
 
