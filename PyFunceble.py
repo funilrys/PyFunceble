@@ -24,7 +24,7 @@ or IP.
 #
 # - Let's contribute to PyFunceble !
 ##########################################################################
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,invalid-name
 import argparse
 import socket
 from json import decoder, dump, loads
@@ -230,7 +230,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '%%current_dir%%'
+    current_dir = '/home/funilrys/Projects/PyFunceble/'
     # Current directory separator
     dir_separator = directory_separator
     # Output directory.
@@ -362,7 +362,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     output_http_potentially_down = http_potentially_down + 'inactive_or_potentially'
 
     @classmethod
-    def switch(cls, variable):
+    def switch(cls, variable):  # pylint: disable=inconsistent-return-statements
         """
         Switch class variables to their opposite.
 
@@ -390,9 +390,9 @@ class Settings(object):  # pylint: disable=too-few-public-methods
 
         current_state = getattr(Settings, variable)
 
-        if current_state is True:
-            return False
-        elif current_state is False:
+        if current_state in [True, False]:
+            if current_state is True:
+                return False
             return True
 
         to_print = 'Your configuration is not valid.\n'
@@ -524,7 +524,7 @@ class PyFunceble(object):
 
         return
 
-    def file(self, file_path):  # pylint: disable=too-many-branches
+    def file(self, file_path):  # pylint: disable=too-many-branches,too-many-statements
         """
         Manage the case that need to test each domain of a given file path.
         Note: 1 domain per line.
@@ -548,8 +548,9 @@ class PyFunceble(object):
         if Settings.inactive_database:
             Database(file_path).to_test()
 
-            if file_path in Settings.inactive_db and 'to_test' in Settings.inactive_db[
-                    file_path] and Settings.inactive_db[file_path]['to_test'] != []:
+            if file_path in Settings.inactive_db \
+                and 'to_test' in Settings.inactive_db[file_path] \
+                    and Settings.inactive_db[file_path]['to_test'] != []:
                 list_to_test.extend(Settings.inactive_db[file_path]['to_test'])
 
         list_to_test = Helpers.List(list_to_test).format()
@@ -561,7 +562,14 @@ class PyFunceble(object):
 
             if Settings.to_filter != '' and not Helpers.Regex(
                     domain, Settings.to_filter, return_data=False, escape=True).match():
+
+                print(
+                    '\rSearching the next occurrence of "%s" ...' %
+                    Settings.to_filter, end='', flush=True)
+                i += 1
                 continue
+            else:
+                print('\r', end='')
 
             regex_listing = [
                 r'.*localhost.*',
@@ -1243,13 +1251,13 @@ class HTTPCode(object):
                         'http://' + Settings.domain + ':80',
                         timeout=Settings.seconds_before_http_timeout)
                 except socket.timeout:
-                    return
+                    return None
             except requests.exceptions.Timeout:
-                return
+                return None
 
             return req.status_code
         except requests.ConnectionError:
-            return
+            return None
 
     def get(self):
         """
@@ -2360,8 +2368,14 @@ if __name__ == '__main__':
         exit(1)
     elif Settings.current_dir == '%%current_dir%%':
         print(
-            Fore.RED + Style.BRIGHT + 'Please run the installation script first.\nYou can run it with: %s' %
-            Fore.CYAN + Style.BRIGHT + getcwd() + Settings.dir_separator + 'tool.py -i\n')
+            Fore.RED +
+            Style.BRIGHT +
+            'Please run the installation script first.\nYou can run it with: %s' %
+            Fore.CYAN +
+            Style.BRIGHT +
+            getcwd() +
+            Settings.dir_separator +
+            'tool.py -i\n')
         exit(1)
     else:
         PARSER = argparse.ArgumentParser(
@@ -2522,7 +2536,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.16.1-beta'
+            version='%(prog)s 0.17.0-beta'
         )
 
         ARGS = PARSER.parse_args()
