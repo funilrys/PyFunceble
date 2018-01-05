@@ -230,7 +230,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '/home/funilrys/Projects/PyFunceble/'
+    current_dir = '%%current_dir%%'
     # Current directory separator
     dir_separator = directory_separator
     # Output directory.
@@ -2536,7 +2536,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.17.0-beta'
+            version='%(prog)s 0.17.1-beta'
         )
 
         ARGS = PARSER.parse_args()
