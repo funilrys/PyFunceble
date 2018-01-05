@@ -34,7 +34,7 @@ from re import compile as comp
 from re import sub as substrings
 from re import escape
 from subprocess import PIPE, Popen
-from sys import version_info
+from sys import stdout, version_info
 from time import strftime
 
 import requests
@@ -565,7 +565,9 @@ class PyFunceble(object):
 
                 print(
                     '\rSearching the next occurrence of "%s" ...' %
-                    Settings.to_filter, end='', flush=True)
+                    Settings.to_filter, end='')
+                stdout.flush()
+
                 i += 1
                 continue
             else:
@@ -2536,7 +2538,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.17.1-beta'
+            version='%(prog)s 0.17.2-beta'
         )
 
         ARGS = PARSER.parse_args()
