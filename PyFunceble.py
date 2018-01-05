@@ -1485,11 +1485,14 @@ class Generate(object):
                     or self.domain_status in Settings.http_active_status:
 
                 if self.domain_status in Settings.potentialy_up_status:
-                    output_dir = Settings.output_http_potentially_up
+                    output_dir = Settings.http_potentially_up
                 elif self.domain_status in Settings.potentially_down_status:
-                    output_dir = Settings.output_http_potentially_down
+                    output_dir = Settings.http_potentially_down
                 else:
                     output_dir = Settings.http_up
+
+                if not output_dir.endswith(Settings.dir_separator):
+                    output_dir += Settings.dir_separator
 
                 hosts_destination = output_dir + Settings.hosts_default_filename
                 plain_destination = output_dir + Settings.domains_default_filename
@@ -2557,7 +2560,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.18.0-beta'
+            version='%(prog)s 0.19.0-beta'
         )
 
         ARGS = PARSER.parse_args()
