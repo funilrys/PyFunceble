@@ -1271,6 +1271,7 @@ class HTTPCode(object):
 
         for codes in [
                 Settings.active_http_codes,
+                Settings.down_potentially_codes,
                 Settings.potentially_up_codes,
                 Settings.potentially_down_status]:
             list_of_valid_http_code.extend(codes)
@@ -1567,6 +1568,30 @@ class Generate(object):
         Prints([Settings.domain, old_status, Settings.http_code,
                 Settings.current_datetime], 'HTTP', output, True).data()
 
+    def special_blogspot(self):
+        """
+        Handle the blogspot SPECIAL case.
+        """
+
+        regex_blogspot = '.blogspot.'
+        regex_blogger = ['create-blog.g?', '87065', 'doesn&#8217;t&nbsp;exist']
+
+        if Helpers.Regex(
+                Settings.domain,
+                regex_blogspot,
+                return_data=False, escape=True).match():
+            blogger_content_request = requests.get(
+                'http://' + Settings.domain + ':80')
+            blogger_content = blogger_content_request.text
+
+            for regx in regex_blogger:
+                if regx in blogger_content or Helpers.Regex(
+                        blogger_content, regx, return_data=False, escape=False).match():
+                    self.source = 'SPECIAL'
+                    self.domain_status = Settings.official_down_status
+                    self.output = Settings.output_down_result
+                    break
+
     def up_status_file(self):
         """
         Logic behind the up status when generating the status file.
@@ -1581,32 +1606,26 @@ class Generate(object):
                 self.domain_status)
 
             regex_to_match = [
-                r'\.doubleclick\.net', r'\.liveadvert\.com']
+                '.canalblog.com',
+                '.doubleclick.net',
+                '.liveadvert.com',
+                '.skyrock.com',
+                '.tumblr.com'
+            ]
 
             for regx in regex_to_match:
                 if Helpers.Regex(
-                        Settings.domain, regx, return_data=False).match():
+                        Settings.domain,
+                        regx,
+                        return_data=False,
+                        escape=True).match():
                     self.source = 'SPECIAL'
                     self.domain_status = Settings.official_down_status
                     self.output = Settings.output_down_result
 
-            regex_blogspot = r'\.blogspot\.'
-            regex_blogger = [r'create-blog.g?', r'87065']
-
-            if Helpers.Regex(
-                    Settings.domain,
-                    regex_blogspot,
-                    return_data=False).match() and Settings.http_code == 302:
-                blogger_content_request = requests.get(
-                    'http://' + Settings.domain + ':80')
-                blogger_content = blogger_content_request.text
-
-                for regx in regex_blogger:
-                    if regx in blogger_content:
-                        self.source = 'SPECIAL'
-                        self.domain_status = Settings.official_down_status
-                        self.output = Settings.output_down_result
-                        break
+            self.special_blogspot()
+        elif Settings.http_code_status and Settings.http_code in Settings.potentially_up_codes:
+            self.special_blogspot()
 
         if self.source != 'SPECIAL':
             self.domain_status = Settings.official_up_status
@@ -2538,7 +2557,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.17.2-beta'
+            version='%(prog)s 0.18.0-beta'
         )
 
         ARGS = PARSER.parse_args()
