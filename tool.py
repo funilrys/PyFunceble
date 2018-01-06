@@ -907,6 +907,20 @@ class Directory(object):
             return False
         return True
 
+    @classmethod
+    def _travis_permission(cls):
+        """
+        Set travis permission around the directory creation.
+        """
+
+        from PyFunceble import AutoSave
+        from os import environ
+
+        if 'TRAVIS_BUILD_DIR' in environ:
+            AutoSave().travis_permissions()
+
+        return
+
     def restore(self):
         """
         Restore the 'output/' directory structure based on the `dir_structure.json` file.
@@ -922,7 +936,9 @@ class Directory(object):
 
         for directory in structure:
             if not path.isdir(self.path + directory):
+                self._travis_permission()
                 mkdir(self.path + directory)
+                self._travis_permission()
 
             for file in structure[directory]:
                 file_path = self.path + directory + directory_separator + file
@@ -1112,7 +1128,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.4-beta'
+        version='%(prog)s 0.6.5-beta'
     )
 
     ARGS = PARSER.parse_args()
