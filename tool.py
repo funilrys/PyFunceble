@@ -937,7 +937,7 @@ class Directory(object):
         for directory in structure:
             if not path.isdir(self.base + self.path + directory):
                 self._travis_permission()
-                mkdir(self.path + directory)
+                mkdir(self.base + self.path + directory)
                 self._travis_permission()
 
             for file in structure[directory]:
@@ -1128,7 +1128,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.6-beta'
+        version='%(prog)s 0.6.7-beta'
     )
 
     ARGS = PARSER.parse_args()
