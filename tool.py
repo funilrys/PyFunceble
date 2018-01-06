@@ -935,7 +935,7 @@ class Directory(object):
         replace = self.restore_replace()
 
         for directory in structure:
-            if not path.isdir(self.path + directory):
+            if not path.isdir(self.base + self.path + directory):
                 self._travis_permission()
                 mkdir(self.path + directory)
                 self._travis_permission()
@@ -1128,7 +1128,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.5-beta'
+        version='%(prog)s 0.6.6-beta'
     )
 
     ARGS = PARSER.parse_args()
