@@ -737,6 +737,7 @@ class IANA(object):
         from PyFunceble import Lookup
 
         manual_server = {
+            'aaa': 'whois.nic.aaa',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'cd': 'chois.nic.cd',
@@ -1128,7 +1129,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.6.7-beta'
+        version='%(prog)s 0.7.0-beta'
     )
 
     ARGS = PARSER.parse_args()
