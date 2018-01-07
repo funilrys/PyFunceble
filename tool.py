@@ -923,16 +923,30 @@ class Directory(object):
         return True
 
     @classmethod
-    def _travis_permission(cls):
+    def travis_permissions(cls):
         """
-        Set travis permission around the directory creation.
+        Set permissions in order to avoid issues before commiting.
         """
 
-        from PyFunceble import AutoSave
-        from os import environ
+        try:
+            build_dir = environ['TRAVIS_BUILD_DIR']
+            commands = [
+                'chown -R travis:travis ' + build_dir,
+                'chgrp -R travis ' + build_dir,
+                'chmod -R g+rwX ' + build_dir,
+                'chmod 777 -Rf ' + build_dir + directory_separator + '.git',
+                'find ' + build_dir + " -type d -exec chmod g+x '{}'"
+            ]
 
-        if 'TRAVIS_BUILD_DIR' in environ:
-            AutoSave().travis_permissions()
+            for command in commands:
+                Helpers.Command(command).execute()
+
+            if Helpers.Command(
+                    'git config core.sharedRepository').execute() == '':
+                Helpers.Command(
+                    'git config core.sharedRepository group').execute()
+        except NameError:
+            pass
 
         return
 
@@ -951,9 +965,9 @@ class Directory(object):
 
         for directory in structure:
             if not path.isdir(self.base + self.path + directory):
-                self._travis_permission()
+                self.travis_permissions()
                 mkdir(self.base + self.path + directory)
-                self._travis_permission()
+                self.travis_permissions()
 
             for file in structure[directory]:
                 file_path = self.path + directory + directory_separator + file
@@ -1143,7 +1157,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.7.15-beta'
+        version='%(prog)s 0.7.16-beta'
     )
 
     ARGS = PARSER.parse_args()
