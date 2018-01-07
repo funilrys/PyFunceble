@@ -739,6 +739,7 @@ class IANA(object):
         manual_server = {
             'aaa': 'whois.nic.aaa',
             'abb': 'whois.nic.abb',
+            'able': 'whois.nic.able',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'cd': 'chois.nic.cd',
@@ -1130,7 +1131,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.7.1-beta'
+        version='%(prog)s 0.7.2-beta'
     )
 
     ARGS = PARSER.parse_args()
