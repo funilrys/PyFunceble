@@ -230,7 +230,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Note: DO NOT FORGET `/` AT THE END.
 
     # Current directory.
-    current_dir = '%%current_dir%%'
+    current_dir = '/home/funilrys/Projects/PyFunceble/'
     # Current directory separator
     dir_separator = directory_separator
     # Output directory.
@@ -705,11 +705,11 @@ class AutoSave(object):
 
         build_dir = environ['TRAVIS_BUILD_DIR']
         commands = [
-            'chown -R travis:travis ' + build_dir,
-            'chgrp -R travis ' + build_dir,
-            'chmod -R g+rwX ' + build_dir,
-            'chmod 777 -Rf ' + build_dir + Settings.dir_separator + '.git',
-            'find ' + build_dir + " -type d -exec chmod g+x '{}'"
+            'chown -R travis:travis %s' % (build_dir),
+            'chgrp -R travis %s' % (build_dir),
+            'chmod -R g+rwX %s' % (build_dir),
+            'chmod 777 -Rf %s.git' % (build_dir + Settings.dir_separator),
+            r"find %s -type d -exec chmod g+x '{}' \;" % (build_dir)
         ]
 
         for command in commands:
@@ -2560,7 +2560,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.19.0-beta'
+            version='%(prog)s 0.19.1-beta'
         )
 
         ARGS = PARSER.parse_args()
