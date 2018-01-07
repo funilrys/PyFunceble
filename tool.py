@@ -745,6 +745,7 @@ class IANA(object):
             'aig': 'whois.nic.aig',
             'americanexpress': 'whois.nic.americanexpress',
             'amex': 'whois.nic.amex',
+            'amica': 'whois.nic.amica',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'cd': 'chois.nic.cd',
@@ -1136,7 +1137,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.7.7-beta'
+        version='%(prog)s 0.7.9-beta'
     )
 
     ARGS = PARSER.parse_args()
