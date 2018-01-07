@@ -742,6 +742,7 @@ class IANA(object):
             'able': 'whois.nic.able',
             'accenture': 'whois.nic.accenture',
             'aetna': 'whois.nic.aetna',
+            'aig': 'whois.nic.aig',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'cd': 'chois.nic.cd',
@@ -1133,7 +1134,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.7.4-beta'
+        version='%(prog)s 0.7.5-beta'
     )
 
     ARGS = PARSER.parse_args()
