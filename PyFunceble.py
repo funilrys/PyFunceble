@@ -705,11 +705,11 @@ class AutoSave(object):
 
         build_dir = environ['TRAVIS_BUILD_DIR']
         commands = [
-            'chown -R travis:travis %s' % (build_dir),
-            'chgrp -R travis %s' % (build_dir),
-            'chmod -R g+rwX %s' % (build_dir),
-            'chmod 777 -Rf %s.git' % (build_dir + Settings.dir_separator),
-            r"find %s -type d -exec chmod g+x '{}' \;" % (build_dir)
+            'sudo chown -R travis:travis %s' % (build_dir),
+            'sudo chgrp -R travis %s' % (build_dir),
+            'sudo chmod -R g+rwX %s' % (build_dir),
+            'sudo chmod 777 -Rf %s.git' % (build_dir + Settings.dir_separator),
+            r"sudo find %s -type d -exec chmod g+x '{}' \;" % (build_dir)
         ]
 
         for command in commands:
@@ -2560,7 +2560,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.19.1-beta'
+            version='%(prog)s 0.19.2-beta'
         )
 
         ARGS = PARSER.parse_args()
