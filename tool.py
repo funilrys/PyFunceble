@@ -140,10 +140,12 @@ class Check(object):
         list_of_dependencies = [
             'argparse',
             'colorama',
+            'json',
             'os',
             're',
             'requests',
             'socket',
+            'subprocess',
             'sys',
             'time']
 
@@ -1159,7 +1161,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.8.0-beta'
+        version='%(prog)s 0.8.1-beta'
     )
 
     ARGS = PARSER.parse_args()
