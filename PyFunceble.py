@@ -1295,7 +1295,8 @@ class Lookup(object):
         try:
             try:
                 try:
-                    socket.gethostbyaddr(Settings.domain)
+                    socket.getaddrinfo(
+                        Settings.domain, 80, 0, 0, socket.IPPROTO_TCP)
                 except OSError:
                     return False
             except socket.herror:
@@ -2560,7 +2561,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.19.4-beta'
+            version='%(prog)s 0.19.5-beta'
         )
 
         ARGS = PARSER.parse_args()
