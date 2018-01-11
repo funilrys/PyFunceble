@@ -1165,7 +1165,7 @@ class Prints(object):
                 result_index.reverse()
                 result_data.reverse()
 
-            result = dict(zip(result_index, result_data))
+                result = dict(zip(result_index, result_data))
 
         return result
 
@@ -2568,7 +2568,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.1-beta'
+            version='%(prog)s 0.20.2-beta'
         )
 
         ARGS = PARSER.parse_args()
