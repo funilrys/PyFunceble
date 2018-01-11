@@ -1157,6 +1157,16 @@ class Prints(object):
                 '; Size: ' +
                 str(len(size)))
 
+        if self.template == 'FullHosts':
+            result_index = list(result.keys())
+            result_data = list(result.values())
+
+            if result_index[-1] != Settings.domain:
+                result_index.reverse()
+                result_data.reverse()
+
+            result = dict(zip(result_index, result_data))
+
         return result
 
     @classmethod
@@ -2558,7 +2568,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.0-beta'
+            version='%(prog)s 0.20.1-beta'
         )
 
         ARGS = PARSER.parse_args()
