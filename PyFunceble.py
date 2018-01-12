@@ -27,6 +27,7 @@ or IP.
 # pylint: disable=too-many-lines,invalid-name
 import argparse
 import socket
+from collections import OrderedDict
 from json import decoder, dump, loads
 from os import sep as directory_separator
 from os import environ, getcwd, path, remove
@@ -1144,7 +1145,7 @@ class Prints(object):
         :param size: A list, The maximal length of each string in the table.
         """
 
-        result = {}
+        result = OrderedDict()
         if len(self.data_to_print) == len(size):
             for i in range(len(self.data_to_print)):
                 result[self.data_to_print[i]] = size[i]
@@ -1156,16 +1157,6 @@ class Prints(object):
                 str(len(self.data_to_print)) +
                 '; Size: ' +
                 str(len(size)))
-
-        if self.template == 'FullHosts':
-            result_index = list(result.keys())
-            result_data = list(result.values())
-
-            if result_index[-1] != Settings.domain:
-                result_index.reverse()
-                result_data.reverse()
-
-                result = dict(zip(result_index, result_data))
 
         return result
 
@@ -2568,7 +2559,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.2-beta'
+            version='%(prog)s 0.20.3-beta'
         )
 
         ARGS = PARSER.parse_args()
