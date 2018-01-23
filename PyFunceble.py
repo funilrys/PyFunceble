@@ -1803,6 +1803,7 @@ class Referer(object):
             'fm',
             'ge',
             'gr',
+            'mil',
             'np',
             'pa',
             'tt',
@@ -2576,7 +2577,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.15-beta'
+            version='%(prog)s 0.20.16-beta'
         )
 
         ARGS = PARSER.parse_args()
