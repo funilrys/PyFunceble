@@ -767,7 +767,7 @@ class IANA(object):
             'shop': 'whois.nic.shop',
             'sl': 'whois.nic.sl',
             'stream': 'whois.nic.stream',
-            'tokyp': 'whois.nic.tokyo',
+            'tokyo': 'whois.nic.tokyo',
             'uno': 'whois.nic.uno',
             'za': 'whois.registry.net.za'
         }
@@ -1162,7 +1162,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.8.2-beta'
+        version='%(prog)s 0.8.3-beta'
     )
 
     ARGS = PARSER.parse_args()
