@@ -1797,6 +1797,7 @@ class Referer(object):
         self.ignored_extension = [
             'gr',
             'np',
+            'pa',
             'vn'
         ]
 
@@ -2567,7 +2568,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.5-beta'
+            version='%(prog)s 0.20.7-beta'
         )
 
         ARGS = PARSER.parse_args()
