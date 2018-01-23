@@ -1795,8 +1795,9 @@ class Referer(object):
             '.') + 1:]
 
         self.ignored_extension = [
-            'vn',
-            'gr'
+            'gr',
+            'np',
+            'vn'
         ]
 
     @classmethod
