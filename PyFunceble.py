@@ -1970,7 +1970,7 @@ class ExpirationDate(object):
         """
 
         cases = {
-            'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
+            'first': [[1, 2, 3, 10, 11, 22, 26, 27, 28, 29, 32, 34], [0, 1, 2]],
             'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
             'third': [[4, 5, 6, 7, 8, 9, 12, 13,
                        16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]
@@ -2583,7 +2583,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.22-beta'
+            version='%(prog)s 0.20.23-beta'
         )
 
         ARGS = PARSER.parse_args()
