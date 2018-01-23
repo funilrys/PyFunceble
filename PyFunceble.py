@@ -1798,6 +1798,7 @@ class Referer(object):
             'al',
             'ao',
             'az',
+            'bd',
             'gr',
             'np',
             'pa',
@@ -2572,7 +2573,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.11-beta'
+            version='%(prog)s 0.20.12-beta'
         )
 
         ARGS = PARSER.parse_args()
