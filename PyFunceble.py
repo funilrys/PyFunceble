@@ -525,6 +525,23 @@ class PyFunceble(object):
 
         return
 
+    @classmethod
+    def format_domain(cls, extracted_domain):
+        """
+        Format the extracted domain before passing it to the system.
+
+        :param extracted_domain: A string, the extracted domain from the file.
+        """
+
+        separation = [' ', '\t']
+
+        for string in separation:
+            if string in extracted_domain:
+                result = extracted_domain.split('#')[0]
+                return result.split(string)[-1]
+
+        return extracted_domain
+
     def file(self, file_path):  # pylint: disable=too-many-branches,too-many-statements
         """
         Manage the case that need to test each domain of a given file path.
@@ -589,29 +606,11 @@ class PyFunceble(object):
 
             domain = domain.rstrip('\n')
 
-            regex_ip = r'127\.0\.0\.1'
-            regex_ip2 = r'0\.0\.0\.0'
-
-            space = ' '
-            double_space = space * 2
-
             if domain == '' or True in match_result:
                 i += 1
                 continue
-            elif Helpers.Regex(domain, regex_ip, return_data=False).match() \
-                    or Helpers.Regex(domain, regex_ip2, return_data=False).match():
-                if double_space in domain:
-                    domain = domain.split(double_space)[1]
-                elif space in domain:
-                    domain = domain.split(' ')[1]
-            else:
-                if double_space in domain:
-                    domain = domain.split(double_space)[0]
-                elif space in domain:
-                    domain = domain.split(' ')[0]
 
-            Settings.domain = domain.split('#')[0]
-
+            Settings.domain = self.format_domain(domain)
             status = ExpirationDate().get()
 
             if Settings.inactive_database:
@@ -1056,7 +1055,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-        and not path.isfile(self.output):
+            and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2592,7 +2591,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.20.32-beta'
+            version='%(prog)s 0.21.0-beta'
         )
 
         ARGS = PARSER.parse_args()
