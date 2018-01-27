@@ -530,6 +530,23 @@ class PyFunceble(object):
 
         return
 
+    @classmethod
+    def format_domain(cls, extracted_domain):
+        """
+        Format the extracted domain before passing it to the system.
+
+        :param extracted_domain: A string, the extracted domain from the file.
+        """
+
+        separation = [' ', '\t']
+
+        for string in separation:
+            if string in extracted_domain:
+                result = extracted_domain.split('#')[0]
+                return result.split(string)[-1]
+
+        return extracted_domain
+
     def file(self, file_path):  # pylint: disable=too-many-branches,too-many-statements
         """
         Manage the case that need to test each domain of a given file path.
@@ -594,29 +611,11 @@ class PyFunceble(object):
 
             domain = domain.rstrip('\n')
 
-            regex_ip = r'127\.0\.0\.1'
-            regex_ip2 = r'0\.0\.0\.0'
-
-            space = ' '
-            double_space = space * 2
-
             if domain == '' or True in match_result:
                 i += 1
                 continue
-            elif Helpers.Regex(domain, regex_ip, return_data=False).match() \
-                    or Helpers.Regex(domain, regex_ip2, return_data=False).match():
-                if double_space in domain:
-                    domain = domain.split(double_space)[1]
-                elif space in domain:
-                    domain = domain.split(' ')[1]
-            else:
-                if double_space in domain:
-                    domain = domain.split(double_space)[0]
-                elif space in domain:
-                    domain = domain.split(' ')[0]
 
-            Settings.domain = domain.split('#')[0]
-
+            Settings.domain = self.format_domain(domain)
             status = ExpirationDate().get()
 
             if Settings.inactive_database:
@@ -1799,6 +1798,37 @@ class Referer(object):
         self.domain_extension = Settings.domain[Settings.domain.rindex(
             '.') + 1:]
 
+        self.ignored_extension = [
+            'ad',
+            'al',
+            'ao',
+            'az',
+            'ba',
+            'bb',
+            'bd',
+            'eg',
+            'fm',
+            'ge',
+            'gm',
+            'gr',
+            'gt',
+            'jo',
+            'lb',
+            'mil',
+            'mt',
+            'ni',
+            'np',
+            'nr',
+            'pa',
+            'ph',
+            'pk',
+            'py',
+            'tj',
+            'tt',
+            'vn',
+            'zw'
+        ]
+
     @classmethod
     def iana_database(cls):
         """
@@ -1815,25 +1845,27 @@ class Referer(object):
         """
 
         if not Settings.no_whois:
-            regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
-            referer = None
+            if self.domain_extension not in self.ignored_extension:
+                regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
+                referer = None
 
-            if not Helpers.Regex(
-                    Settings.domain,
-                    regex_ipv4,
-                    return_data=False).match():
+                if not Helpers.Regex(
+                        Settings.domain,
+                        regex_ipv4,
+                        return_data=False).match():
 
-                if Settings.iana_db == {}:
-                    Settings.iana_db.update(self.iana_database())
+                    if Settings.iana_db == {}:
+                        Settings.iana_db.update(self.iana_database())
 
-                if self.domain_extension in Settings.iana_db:
-                    referer = Settings.iana_db[self.domain_extension]
+                    if self.domain_extension in Settings.iana_db:
+                        referer = Settings.iana_db[self.domain_extension]
 
-                    if referer is None:
-                        self.log()
-                        return Status(Settings.official_down_status).handle()
-                    return referer
-                return Status(Settings.official_invalid_status).handle()
+                        if referer is None:
+                            self.log()
+                            return Status(
+                                Settings.official_down_status).handle()
+                        return referer
+                    return Status(Settings.official_invalid_status).handle()
             return Status(Settings.official_down_status).handle()
         return None
 
@@ -1969,7 +2001,7 @@ class ExpirationDate(object):
         """
 
         cases = {
-            'first': [[1, 2, 3, 10, 11, 26, 27, 28, 29, 32], [0, 1, 2]],
+            'first': [[1, 2, 3, 10, 11, 22, 26, 27, 28, 29, 32, 34], [0, 1, 2]],
             'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
             'third': [[4, 5, 6, 7, 8, 9, 12, 13,
                        16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]

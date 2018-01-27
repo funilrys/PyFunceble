@@ -756,6 +756,7 @@ class IANA(object):
             'author': 'whois.nic.author',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
+            'buzz': 'whois.nic.buzz',
             'cd': 'chois.nic.cd',
             'cm': 'whois.netcom.cm',
             'fj': 'whois.usp.ac.fj',
@@ -769,7 +770,7 @@ class IANA(object):
             'shop': 'whois.nic.shop',
             'sl': 'whois.nic.sl',
             'stream': 'whois.nic.stream',
-            'tokyp': 'whois.nic.tokyo',
+            'tokyo': 'whois.nic.tokyo',
             'uno': 'whois.nic.uno',
             'za': 'whois.registry.net.za'
         }
