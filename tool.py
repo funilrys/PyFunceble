@@ -329,6 +329,7 @@ class Install(object):
                 'quiet': 'False',
                 'referer': "''",
                 'seconds_before_http_timeout': '3',
+                'share_logs': 'False',
                 'show_execution_time': 'False',
                 'show_percentage': 'True',
                 'split_files': 'False',
@@ -377,6 +378,7 @@ class Install(object):
                 'quiet',
                 'referer',
                 'seconds_before_http_timeout',
+                'share_logs',
                 'show_execution_time',
                 'show_percentage',
                 'split_files',
@@ -1142,9 +1144,16 @@ if __name__ == '__main__':
         help='Split outputed files.'
     )
     PARSER.add_argument(
+        '--share-logs',
+        '-sl',
+        action='store_true',
+        help="Activate the sharing of logs to an API which helps manage logs in \
+            order to make PyFunceble a beter script."
+    )
+    PARSER.add_argument(
         '--stable',
         action='store_false',
-        help=" Activate the download of the stable version of PyFunceble."
+        help="Activate the download of the stable version of PyFunceble."
     )
     PARSER.add_argument(
         '-t',
@@ -1162,7 +1171,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.8.2-beta'
+        version='%(prog)s 0.9.0-beta'
     )
 
     ARGS = PARSER.parse_args()
@@ -1183,6 +1192,9 @@ if __name__ == '__main__':
 
     if ARGS.timeout:
         DATA['to_install']['seconds_before_http_timeout'] = ARGS.timeout
+
+    if ARGS.share_logs:
+        DATA['to_install']['share_logs'] = ARGS.share_logs
 
     if ARGS.dev:
         Settings().switch_version(ARGS.dev)
@@ -1208,7 +1220,7 @@ if __name__ == '__main__':
     if not ARGS.installation:
         Install(None, DATA, ARGS.installation)
     elif ARGS.production:
-        Install(None, DATA, ARGS.production)
+        Install(None, None, ARGS.production)
 
     if ARGS.delete:
         Uninstall()
