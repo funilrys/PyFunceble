@@ -1060,7 +1060,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-        and not path.isfile(self.output):
+            and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2465,7 +2465,11 @@ if __name__ == '__main__':
              '♥' +
              Fore.RESET,
              Style.BRIGHT +
-             'Nissar Chababy (Funilrys)'),
+             'Nissar Chababy (Funilrys) ' +
+             Style.RESET_ALL +
+             'with the help of ' +
+             Style.BRIGHT +
+             'https://git.io/vND4m'),
             add_help=False)
 
         CURRENT_VALUE_FORMAT = Fore.YELLOW + Style.BRIGHT + "Current value: " \
