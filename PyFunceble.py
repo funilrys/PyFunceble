@@ -1060,7 +1060,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-            and not path.isfile(self.output):
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2462,14 +2462,18 @@ if __name__ == '__main__':
             script for checking ACTIVE and INACTIVE domain names"',
             epilog="Crafted with %s by %s" %
             (Fore.RED +
-             '♥' +
+             '♥ ' +
              Fore.RESET,
-             Style.BRIGHT +
+             Style.BRIGHT + Fore.LIGHTCYAN_EX +
              'Nissar Chababy (Funilrys) ' +
              Style.RESET_ALL +
              'with the help of ' +
-             Style.BRIGHT +
-             'https://git.io/vND4m'),
+             Style.BRIGHT + Fore.LIGHTGREEN_EX +
+             'https://git.io/vND4m ' +
+             Style.RESET_ALL +
+             '&& ' +
+             Style.BRIGHT + Fore.LIGHTGREEN_EX +
+             'https://git.io/vND4a'),
             add_help=False)
 
         CURRENT_VALUE_FORMAT = Fore.YELLOW + Style.BRIGHT + "Current value: " \
