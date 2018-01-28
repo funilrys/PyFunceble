@@ -1060,7 +1060,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-            and not path.isfile(self.output):
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2457,10 +2457,10 @@ if __name__ == '__main__':
         exit(1)
     else:
         PARSER = argparse.ArgumentParser(
-            description='Python version of Funceble, an awesome script to check \
-                domains or IP accessibility. Also described as "[an] excellent script \
-                for checking ACTIVE, INACTIVE and EXPIRED Domain Names."',
-            epilog="Crafted with %s by %s\033[0m " %
+            description='A tool to check domains or IP availability \
+            (ACTIVE, INACTIVE, INVALID). Also described as "[an] excellent \
+            script for checking ACTIVE and INACTIVE domain names"',
+            epilog="Crafted with %s by %s" %
             (Fore.RED +
              '♥' +
              Fore.RESET,
@@ -2468,38 +2468,47 @@ if __name__ == '__main__':
              'Nissar Chababy (Funilrys)'),
             add_help=False)
 
+        CURRENT_VALUE_FORMAT = Fore.YELLOW + Style.BRIGHT + "Current value: " \
+            + Fore.BLUE
+
         PARSER.add_argument(
             '-a',
             '--all',
             action='store_false',
-            help='Output all available informations on screen.')
+            help='Output all available informations on screen. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.less) + Style.RESET_ALL))
         PARSER.add_argument(
             '--cmd-before-end',
             type=str,
-            help='Pass a command before the results (final) commit of travis mode.')
+            help='Pass a command before the results (final) commit of travis \
+            mode. %s' % (CURRENT_VALUE_FORMAT + repr(Settings.command_before_end) +
+                         Style.RESET_ALL))
         PARSER.add_argument(
             '-c',
             '--auto-continue',
             '--continue',
             action='store_true',
-            help='Switch the default value of the auto continue mode to its opposite.')
+            help='Switch the value of the auto continue mode. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.auto_continue) + Style.RESET_ALL))
         PARSER.add_argument(
             '-d',
             '--domain',
             type=str,
-            help='Analyze the given domain.')
+            help='Analyze the given domain.'
+        )
         PARSER.add_argument(
             '-db',
             '--database',
             action='store_true',
-            help='Switch the default value of the usage of a database to store \
-                inactive domains of the currently tested list.'
+            help='Switch the value of the usage of a database to store \
+                inactive domains of the currently tested list. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.inactive_database) + Style.RESET_ALL)
         )
         PARSER.add_argument(
             '--debug',
             action='store_true',
-            help='Switch the default value of the debug mode to its opposite.'
-        )
+            help='Switch the value of the debug mode. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.debug) + Style.RESET_ALL))
         PARSER.add_argument(
             "-f",
             "--file",
@@ -2515,8 +2524,8 @@ if __name__ == '__main__':
             '-ex',
             '--execution',
             action='store_true',
-            help='Show the execution time.'
-        )
+            help='Switch the dafault value of the execution time showing. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.show_execution_time) + Style.RESET_ALL))
         PARSER.add_argument(
             '--help',
             action='help',
@@ -2527,94 +2536,124 @@ if __name__ == '__main__':
             '-h',
             '--host',
             action='store_true',
-            help='Activate the generation of hosts file.'
-        )
+            help='Switch the value of the generation of hosts file. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.generate_hosts) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '--http',
             action='store_true',
-            help='Switch the default value of the usage of HTTP code.'
-        )
+            help='Switch the value of the usage of HTTP code. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.http_code_status) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-ip',
             type=str,
-            help='Change the ip to print in host file.'
-        )
+            help='Change the ip to print in host file. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.custom_ip) + Style.RESET_ALL))
         PARSER.add_argument(
             '--less',
             action='store_true',
-            help='Output less informations on screen.'
-        )
+            help='Output less informations on screen. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.switch('less')) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-n',
             '--no-files',
             action='store_true',
-            help='Deactivate the production of output files.'
-        )
+            help='Switch the value the production of output files. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.no_files) + Style.RESET_ALL))
         PARSER.add_argument(
             '-nl',
             '--no-logs',
             action='store_true',
-            help='Deactivate the production of logs files in case we encounter some errors.'
-        )
+            help='Switch the value of the production of logs files in case we \
+            encounter some errors. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.logs) + Style.RESET_ALL))
         PARSER.add_argument(
             '-nu',
             '--no-unified',
             action='store_true',
-            help='Deactivate the production of result.txt as unified result \
-                under the output directory.'
-        )
+            help='Switch the value of the production of result.txt as unified result \
+                under the output directory. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.unified_file) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-nw',
             '--no-whois',
             action='store_true',
-            help="Deactivate the usage of whois to test domain's status."
-        )
+            help="Switch the value the usage of whois to test domain's status. %s" %
+            (CURRENT_VALUE_FORMAT + repr(Settings.no_whois) + Style.RESET_ALL))
         PARSER.add_argument(
             '-p',
             '--percentage',
             action='store_true',
-            help='Switch the default value of the percentage output mode to its opposite.'
-        )
+            help='Switch the value of the percentage output mode. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.show_percentage) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '--plain',
             action='store_true',
-            help='Switch the default value of the generation \
-                of the plain list of domain to its opposite.'
-        )
+            help='Switch the value of the generation \
+                of the plain list of domain. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.plain_list_domain) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-q',
             '--quiet',
             action='store_true',
-            help='Split outputed files.'
-        )
+            help='Run the script in quiet mode. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.quiet) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-s',
             '--simple',
             action='store_true',
-            help='Switch the default value of the simple output mode.'
-        )
+            help='Switch the value of the simple output mode. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.simple) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '--split',
             action='store_true',
-            help='Split output files.'
-        )
+            help='Switch the valur of the split of the generated output files. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.inactive_database) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-t',
             '--timeout',
             type=int,
             default=3,
-            help='Seconds before timeout.'
-        )
+            help='Switch the value of the timeout. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.seconds_before_http_timeout) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '--travis',
             action='store_true',
-            help='Activate the travis mode.'
-        )
+            help='Activate the travis mode. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.travis) +
+             Style.RESET_ALL))
         PARSER.add_argument(
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.21.0-beta'
+            version='%(prog)s 0.22.0-beta'
         )
 
         ARGS = PARSER.parse_args()
