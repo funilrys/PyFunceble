@@ -1149,7 +1149,7 @@ if __name__ == '__main__':
         '-sl',
         action='store_true',
         help="Activate the sharing of logs to an API which helps manage logs in \
-            order to make PyFunceble a beter script."
+            order to make PyFunceble a better script."
     )
     PARSER.add_argument(
         '--stable',
@@ -1172,7 +1172,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.0-beta'
+        version='%(prog)s 0.9.1-beta'
     )
 
     ARGS = PARSER.parse_args()
