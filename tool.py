@@ -23,7 +23,7 @@ reseting PyFunceble to its default states.
 #
 # - Let's contribute to PyFunceble !
 ##############################################################################
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines,cyclic-import
 import argparse
 import hashlib
 from os import sep as directory_separator
