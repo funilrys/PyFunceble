@@ -542,7 +542,7 @@ class PyFunceble(object):
 
         for string in separation:
             if string in extracted_domain:
-                result = extracted_domain.split('#')[0]
+                result = extracted_domain.split('#')[0].strip()
                 return result.split(string)[-1]
 
         return extracted_domain
@@ -2666,7 +2666,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.22.6-beta'
+            version='%(prog)s 0.22.7-beta'
         )
 
         ARGS = PARSER.parse_args()
