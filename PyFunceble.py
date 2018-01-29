@@ -2469,15 +2469,15 @@ if __name__ == '__main__':
             (Fore.RED +
              '♥ ' +
              Fore.RESET,
-             Style.BRIGHT + Fore.LIGHTCYAN_EX +
+             Style.BRIGHT + Fore.CYAN +
              'Nissar Chababy (Funilrys) ' +
              Style.RESET_ALL +
              'with the help of ' +
-             Style.BRIGHT + Fore.LIGHTGREEN_EX +
+             Style.BRIGHT + Fore.GREEN +
              'https://git.io/vND4m ' +
              Style.RESET_ALL +
              '&& ' +
-             Style.BRIGHT + Fore.LIGHTGREEN_EX +
+             Style.BRIGHT + Fore.GREEN +
              'https://git.io/vND4a'),
             add_help=False)
 
@@ -2666,7 +2666,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.22.5-beta'
+            version='%(prog)s 0.22.6-beta'
         )
 
         ARGS = PARSER.parse_args()
