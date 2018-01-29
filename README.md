@@ -2,11 +2,11 @@
 
 > A tool to check domains or IP availability (ACTIVE, INACTIVE, INVALID). Also described as "[an] excellent script for checking ACTIVE and INACTIVE domain names"
 
-[![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/funceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest)
+[![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest)
 
 [![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)]() [![GitHub closed issues](https://img.shields.io/github/issues-closed/funilrys/PyFunceble.svg)](https://github.com/funilrys/)
 
-[![Github file size](https://img.shields.io/github/size/funilrys/PyFunceble/PyFunceble.py.svg)](https://github.com/funilrys/funceble/blob/master/funceble)
+[![Github file size](https://img.shields.io/github/size/funilrys/PyFunceble/PyFunceble.py.svg)](https://github.com/funilrys/Pyfunceble/blob/master/PyFunceble)
 
 The main idea behind this repository is to rewrite [Funceble](https://github.com/funilrys/funceble) into a more clean and portable format.
 
@@ -14,7 +14,7 @@ In other word the main idea behind this repository is to create a script the ava
 
 ## :book: Wiki as place to be :star2::star2::star2:
 
-Want to know more about **PyFunceble**? All information to know are under the [wiki](https://github.com/funilrys/funceble/wiki)! You can also contribute there if you think that it's uncomplete!
+Want to know more about **PyFunceble**? All information to know are under the [wiki](https://github.com/funilrys/PyFunceble/wiki)! You can also contribute there if you think that it's uncomplete!
 
 You can get a copy of the wiki with the following:
 
