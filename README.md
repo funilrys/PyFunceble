@@ -111,7 +111,7 @@ A hosts file like this causes any lookups to any of the listed domains to resolv
 
 ## Recommendations
 
-I'd personally recommend using [Steven's hosts](https://github.com/StevenBlack/hosts) or [Pi-Hole](https://github.com/pi-hole/pi-hole) which are in my opinion the best out there.
+I'd personally recommend using [Steven's hosts](https://github.com/StevenBlack/hosts), [Ultimate.Hosts.Blacklist](https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist) and/or [Pi-Hole](https://github.com/pi-hole/pi-hole) which are in my opinion the best out there.
 
 
 --------------------------------------------------------------------------------
