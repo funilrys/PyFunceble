@@ -1001,53 +1001,35 @@ class Prints(object):
         self.data_to_print = to_print
         self.only_on_file = only_on_file
 
-        self.headers = {
-            'Generic': {
-                'Domain': 100,
-                'Status': 11,
-                'Expiration Date': 17,
-                'Source': 10,
-                'HTTP Code': 10,
-                'Analyze Date': 20
-            },
-            Settings.official_up_status: {
-                'Domain': 100,
-                'Expiration Date': 17,
-                'Source': 10,
-                'HTTP Code': 10,
-                'Analyze Date': 20
-            },
-            Settings.official_down_status: {
-                'Domain': 100,
-                'WHOIS Server': 35,
-                'Status': 11,
-                'Source': 10,
-                'HTTP Code': 10,
-                'Analyze Date': 20
-            },
-            Settings.official_invalid_status: {
-                'Domain': 100,
-                'Source': 10,
-                'HTTP Code': 10,
-                'Analyze Date': 20
-            },
-            'Less': {
-                'Domain': 100,
-                'Status': 11,
-                'HTTP Code': 10
-            },
-            'Percentage': {
-                'Status': 11,
-                'Percentage': 12,
-                'Numbers': 12
-            },
-            'HTTP': {
-                'Domain': 100,
-                'Status': 11,
-                'HTTP Code': 10,
-                'Analyze Date': 20
-            }
-        }
+        self.headers = OrderedDict()
+
+        self.headers['Generic'] = OrderedDict(zip(
+            ['Domain', 'Status', 'Expiration Date', 'Source', 'HTTP Code', 'Analyze Date'],
+            [100, 11, 17, 10, 10, 20]))
+
+        self.headers[Settings.official_up_status] = OrderedDict(zip(
+            ['Domain', 'Expiration Date', 'Source', 'HTTP Code', 'Analyze Date'],
+            [100, 17, 10, 10, 20]))
+
+        self.headers[Settings.official_down_status] = OrderedDict(zip(
+            ['Domain', 'WHOIS Server', 'Status', 'Source', 'HTTP Code', 'Analyze Date'],
+            [100, 35, 11, 10, 10, 20]))
+
+        self.headers[Settings.official_invalid_status] = OrderedDict(zip(
+            ['Domain', 'Source', 'HTTP Code', 'Analyze Date'],
+            [100, 10, 10, 20]))
+
+        self.headers['Less'] = OrderedDict(zip(
+            ['Domain', 'Status', 'HTTP Code'],
+            [100, 11, 10]))
+
+        self.headers['Percentage'] = OrderedDict(zip(
+            ['Status', 'Percentage', 'Numbers'],
+            [11, 12, 12]))
+
+        self.headers['HTTP'] = OrderedDict(zip(
+            ['Domain', 'Status', 'HTTP Code', 'Analyze Date'],
+            [100, 11, 10, 20]))
 
         self.currently_used_header = {}
 
@@ -2668,7 +2650,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.22.9-beta'
+            version='%(prog)s 0.23.0-beta'
         )
 
         ARGS = PARSER.parse_args()
