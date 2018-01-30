@@ -1043,7 +1043,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-        and not path.isfile(self.output):
+            and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2466,8 +2466,8 @@ if __name__ == '__main__':
              'https://git.io/vND4a'),
             add_help=False)
 
-        CURRENT_VALUE_FORMAT = Fore.YELLOW + Style.BRIGHT + "Current value: " \
-            + Fore.BLUE
+        CURRENT_VALUE_FORMAT = Fore.YELLOW + \
+            Style.BRIGHT + "Installed value: " + Fore.BLUE
 
         PARSER.add_argument(
             '-a',
@@ -2660,7 +2660,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.23.1-beta'
+            version='%(prog)s 0.23.2-beta'
         )
 
         ARGS = PARSER.parse_args()
