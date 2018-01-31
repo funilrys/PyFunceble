@@ -781,6 +781,7 @@ class IANA(object):
             'circle': 'whois.nic.circle',
             'cisco': 'whois.nic.cisco',
             'citadel': 'whois.nic.citadel',
+            'citi': 'whois.nic.citi',
             'cm': 'whois.netcom.cm',
             'fj': 'whois.usp.ac.fj',
             'ga': 'whois.my.ga',
@@ -1195,7 +1196,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.24-beta'
+        version='%(prog)s 0.9.25-beta'
     )
 
     ARGS = PARSER.parse_args()
