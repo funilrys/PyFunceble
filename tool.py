@@ -786,6 +786,7 @@ class IANA(object):
             'cm': 'whois.netcom.cm',
             'coupon': 'whois.nic.coupon',
             'crown': 'whois.nic.crown',
+            'crs': 'whois.nic.crs',
             'fj': 'whois.usp.ac.fj',
             'ga': 'whois.my.ga',
             'lc': 'whois2.afilias-grs.net',
@@ -1199,7 +1200,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.28-beta'
+        version='%(prog)s 0.9.29-beta'
     )
 
     ARGS = PARSER.parse_args()
