@@ -755,6 +755,7 @@ class IANA(object):
             'audible': 'whois.nic.audible',
             'author': 'whois.nic.author',
             'aws': 'whois.nic.aws',
+            'axa': 'whois.nic.axa',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'buzz': 'whois.nic.buzz',
@@ -1173,7 +1174,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.2-beta'
+        version='%(prog)s 0.9.3-beta'
     )
 
     ARGS = PARSER.parse_args()
