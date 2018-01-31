@@ -761,6 +761,7 @@ class IANA(object):
             'banamex': 'whois.nic.banamex',
             'bananarepublic': 'whois.nic.bananarepublic',
             'baseball': 'whois.nic.baseball',
+            'bharti': 'whois.nic.bharti',
             'bm': 'whois.afilias-srs.net',
             'bz': 'whois.afilias-grs.net',
             'buzz': 'whois.nic.buzz',
@@ -1179,7 +1180,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.8-beta'
+        version='%(prog)s 0.9.9-beta'
     )
 
     ARGS = PARSER.parse_args()
