@@ -773,6 +773,7 @@ class IANA(object):
             'call': 'whois.nic.call',
             'calvinklein': 'whois.nic.calvinklein',
             'caravan': 'whois.nic.caravan',
+            'cartier': 'whois.nic.cartier',
             'cd': 'chois.nic.cd',
             'cm': 'whois.netcom.cm',
             'fj': 'whois.usp.ac.fj',
@@ -1188,7 +1189,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.17-beta'
+        version='%(prog)s 0.9.18-beta'
     )
 
     ARGS = PARSER.parse_args()
