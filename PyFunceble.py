@@ -151,6 +151,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     to_filter = ''
     # Activation/Deactivation of Travis CI autosave system.
     travis = False
+    # This tell us in which branch we have to push
+    travis_branch = 'master'
     # Minimum of minutes before we start commiting to upstream under Travis CI.
     travis_autosave_minutes = 15
     # Default travis final commit message
@@ -753,7 +755,9 @@ class AutoSave(object):
                     Helpers.Command(command %
                                     Settings.travis_autosave_commit).execute()
 
-                Helpers.Command('git push origin master').execute()
+                Helpers.Command(
+                    'git push origin %s' %
+                    Settings.travis_branch).execute()
                 exit(0)
             return
         except AttributeError:
@@ -2671,10 +2675,19 @@ if __name__ == '__main__':
                  Settings.travis) +
              Style.RESET_ALL))
         PARSER.add_argument(
+            '--travis-branch',
+            type=str,
+            default='master',
+            help='Switch the branch name where we are going to push. %s' %
+            (CURRENT_VALUE_FORMAT +
+             repr(
+                 Settings.travis_branch) +
+             Style.RESET_ALL))
+        PARSER.add_argument(
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.23.16-beta'
+            version='%(prog)s 0.24.0-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2747,5 +2760,8 @@ if __name__ == '__main__':
 
         if ARGS.travis:
             Settings.travis = Settings().switch('travis')
+
+        if ARGS.travis_branch:
+            Settings.travis_branch = ARGS.travis_branch
 
         PyFunceble(ARGS.domain, ARGS.file)
