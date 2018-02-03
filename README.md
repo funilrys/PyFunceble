@@ -10,7 +10,7 @@
 
 The main idea behind this repository is to rewrite [Funceble](https://github.com/funilrys/funceble) into a more clean and portable format.
 
-In other word the main idea behind this repository is to create a script the availability of a given domain, a hosts file or a list of domains by returning `ACTIVE`, `INACTIVE` or `INVALID`.
+In other word the main idea behind this repository is to create a script which check the availability of a given domain, a hosts file or a list of domains by returning `ACTIVE`, `INACTIVE` or `INVALID`.
 
 ## :book: Wiki as place to be :star2::star2::star2:
 
@@ -40,7 +40,7 @@ git clone https://github.com/funilrys/PyFunceble.wiki.git
 
 [PyFunceble](https://github.com/funilrys/PyFunceble), [Dead-Hosts](https://github.com/dead-hosts), [Funceble](https://github.com/funilrys/funceble) and all other analog projects are powered by :coffee:!
 
-This project helps you and or you like it? [![Buy me a cup of coffee](https://img.shields.io/badge/Buy%20-me%20a%20cup%20of%20%E2%98%95-blue.svg)](https://www.paypal.me/funilrys/) :wink:
+This project helps you and or you like it? [![Help me with a cup of coffee](https://img.shields.io/badge/Buy%20-me%20a%20cup%20of%20%E2%98%95-blue.svg)](https://www.paypal.me/funilrys/)
 
 --------------------------------------------------------------------------------
 
