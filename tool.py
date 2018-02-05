@@ -318,6 +318,7 @@ class Install(object):
                 'auto_continue': 'True',
                 'command_before_end': "''",
                 'custom_ip': "'0.0.0.0'",
+                'days_between_db_retest': '1',
                 'debug': 'False',
                 'domain': "''",
                 'generate_hosts': 'True',
@@ -367,6 +368,7 @@ class Install(object):
                 'auto_continue',
                 'command_before_end',
                 'custom_ip',
+                'days_between_db_retest',
                 'debug',
                 'domain',
                 'generate_hosts',
@@ -1135,6 +1137,13 @@ if __name__ == '__main__':
         help='Replace the default results (final) commit message.'
     )
     PARSER.add_argument(
+        '-dbr',
+        '--days-between-db-retest',
+        type=int,
+        help="Set the numbers of day(s) between each retest of domains present \
+        into inactive-db.json"
+    )
+    PARSER.add_argument(
         '-del',
         '--delete',
         action='store_true',
@@ -1202,7 +1211,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.9.31-beta'
+        version='%(prog)s 0.10.0-beta'
     )
 
     ARGS = PARSER.parse_args()
@@ -1220,6 +1229,9 @@ if __name__ == '__main__':
     if ARGS.commit_results_message:
         DATA['to_install']['travis_autosave_final_commit'] = '"' + \
             ARGS.commit_results_message + '"'
+
+    if ARGS.days_between_db_retest:
+        DATA['to_install']['days_between_db_retest'] = ARGS.days_between_db_retest
 
     if ARGS.timeout:
         DATA['to_install']['seconds_before_http_timeout'] = ARGS.timeout

@@ -106,6 +106,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
     # Set the custom IP in case we need to generate hosts files according to our
     # results.
     custom_ip = '0.0.0.0'
+    # This variable set the number of the day between inactive-db retest
+    days_between_db_retest = 1
     # Generate debug file if logs are activated.
     debug = False
     # This will save the domain that is currently under test.
@@ -776,7 +778,7 @@ class Database(object):
     def __init__(self, file_path):
         self.file_path = file_path
         self.current_time = int(strftime('%s'))
-        self.day_in_seconds = 24 * 3600
+        self.day_in_seconds = Settings.days_between_db_retest * 24 * 3600
 
     @classmethod
     def retrieve(cls):
@@ -2702,7 +2704,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.25.0-beta'
+            version='%(prog)s 0.26.0-beta'
         )
 
         ARGS = PARSER.parse_args()
