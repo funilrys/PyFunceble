@@ -2013,11 +2013,16 @@ class ExpirationDate(object):
     def cases_management(cls, regex_number, matched_result):
         """
         A little helper of self.format. (Avoiding of nested loops)
+
+        Note:
+            Please note that the second value of the case represent the groups
+            in order [day,month,year]. This means that a [2,1,0] will be for
+            example for a date in format `2017-01-02` where `01` is the month.
         """
 
         cases = {
             'first': [[1, 2, 3, 10, 11, 22, 26, 27, 28, 29, 32, 34], [0, 1, 2]],
-            'second': [[14, 15, 31, 33, 36], [1, 0, 2]],
+            'second': [[14, 15, 31, 33, 36, 37], [1, 0, 2]],
             'third': [[4, 5, 6, 7, 8, 9, 12, 13,
                        16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35], [2, 1, 0]]
         }
@@ -2111,7 +2116,9 @@ class ExpirationDate(object):
             # Date in format: 20170102000000 // Month: jan
             '35': r'([0-9]{4})([0-9]{2})([0-9]{2})[0-9]+',
             # Date in format: 01/02/2017 // Month: jan
-            '36': r'(0[1-9]|1[012])\/([0-3][0-9])\/([0-9]{4})'
+            '36': r'(0[1-9]|1[012])\/([0-3][0-9])\/([0-9]{4})',
+            # Date in format: January  1 2017
+            '37': r'([A-Z]{1}[a-z].*)\s\s([0-9]{1,2})\s([0-9]{4})'
         }
 
         for regx in regex_dates:
@@ -2695,7 +2702,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.24.8-beta'
+            version='%(prog)s 0.25.0-beta'
         )
 
         ARGS = PARSER.parse_args()
