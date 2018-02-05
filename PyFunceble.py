@@ -2137,6 +2137,7 @@ class ExpirationDate(object):
                 r'[0-9]{2}\-[a-z]{3}\-2[0-9]{3}',
                 return_data=False).match() != True:
             self.log()
+            self.whois_log()
 
     def extract(self):
         """
@@ -2694,7 +2695,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.24.7-beta'
+            version='%(prog)s 0.24.8-beta'
         )
 
         ARGS = PARSER.parse_args()
