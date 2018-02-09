@@ -632,6 +632,7 @@ class PyFunceble(object):
             AutoContinue().backup(file_path)
             AutoSave()
 
+            Settings.http_code = ''
             i += 1
 
         AutoSave(True)
@@ -1866,26 +1867,20 @@ class Referer(object):
 
         if not Settings.no_whois:
             if self.domain_extension not in self.ignored_extension:
-                regex_ipv4 = r'(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
                 referer = None
 
-                if not Helpers.Regex(
-                        Settings.domain,
-                        regex_ipv4,
-                        return_data=False).match():
+                if Settings.iana_db == {}:
+                    Settings.iana_db.update(self.iana_database())
 
-                    if Settings.iana_db == {}:
-                        Settings.iana_db.update(self.iana_database())
+                if self.domain_extension in Settings.iana_db:
+                    referer = Settings.iana_db[self.domain_extension]
 
-                    if self.domain_extension in Settings.iana_db:
-                        referer = Settings.iana_db[self.domain_extension]
-
-                        if referer is None:
-                            self.log()
-                            return Status(
-                                Settings.official_down_status).handle()
-                        return referer
-                    return Status(Settings.official_invalid_status).handle()
+                    if referer is None:
+                        self.log()
+                        return Status(
+                            Settings.official_down_status).handle()
+                    return referer
+                return Status(Settings.official_invalid_status).handle()
             return Status(Settings.official_down_status).handle()
         return None
 
@@ -1918,19 +1913,50 @@ class ExpirationDate(object):
     """
 
     def __init__(self):
-        Settings.http_code = HTTPCode().get()
-
         self.log_separator = '=' * 100 + ' \n'
 
         self.expiration_date = ''
         self.whois_record = ''
+
+    @classmethod
+    def is_domain_valid(cls):
+        """
+        Check if Settings.domain is a valid domain.
+        """
+
+        regex_valid_domains = r'^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$'  # pylint: disable=line-too-long
+
+        return Helpers.Regex(
+            Settings.domain,
+            regex_valid_domains,
+            return_data=False).match()
+
+    @classmethod
+    def is_valid_ip(cls):
+        """
+        Check if Settings.domain is a valid IPv4.
+
+        Note:
+            We only test IPv4 because for now we only support domain and IPv4.
+        """
+
+        regex_ipv4 = r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'  # pylint: disable=line-too-long
+
+        return Helpers.Regex(
+            Settings.domain,
+            regex_ipv4,
+            return_data=False).match()
 
     def get(self):
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
         """
 
-        if '.' in Settings.domain:
+        domain_validation = self.is_domain_valid()
+        ip_validation = self.is_valid_ip()
+
+        if domain_validation and not ip_validation:
+            Settings.http_code = HTTPCode().get()
             Settings.referer = Referer().get()
 
             if Settings.referer in [
@@ -1940,7 +1966,12 @@ class ExpirationDate(object):
                 return Settings.referer
             elif Settings.referer is not None:
                 return self.extract()
+
             return Status(Settings.official_down_status).handle()
+        elif ip_validation and not domain_validation:
+            Settings.http_code = HTTPCode().get()
+            return Status(Settings.official_down_status).handle()
+
         return Status(Settings.official_invalid_status).handle()
 
     def whois_log(self):
@@ -2707,7 +2738,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.26.3-beta'
+            version='%(prog)s 0.27.0-beta'
         )
 
         ARGS = PARSER.parse_args()
