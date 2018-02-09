@@ -60,6 +60,7 @@ Thanks to those awesome people for your awesome and crazy idea and or contributi
 ```
 
 - Mitchell Krog - [@mitchellkrogza](https://github.com/mitchellkrogza)
+- Odyseus - [@Odyseus](https://github.com/Odyseus)
 - WaLLy3K - [@WaLLy3K](https://github.com/WaLLy3K)
 - xxcriticxx - [@xxcriticxx](https://github.com/xxcriticxx)
 
