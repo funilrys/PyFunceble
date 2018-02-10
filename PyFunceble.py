@@ -1955,7 +1955,7 @@ class ExpirationDate(object):
         domain_validation = self.is_domain_valid()
         ip_validation = self.is_valid_ip()
 
-        if domain_validation and not ip_validation:
+        if domain_validation and not ip_validation or domain_validation:
             Settings.http_code = HTTPCode().get()
             Settings.referer = Referer().get()
 
@@ -1968,7 +1968,7 @@ class ExpirationDate(object):
                 return self.extract()
 
             return Status(Settings.official_down_status).handle()
-        elif ip_validation and not domain_validation:
+        elif ip_validation and not domain_validation or ip_validation:
             Settings.http_code = HTTPCode().get()
             return Status(Settings.official_down_status).handle()
 
@@ -2738,7 +2738,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.27.0-beta'
+            version='%(prog)s 0.27.1-beta'
         )
 
         ARGS = PARSER.parse_args()
