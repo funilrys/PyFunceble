@@ -633,6 +633,7 @@ class PyFunceble(object):
             AutoSave()
 
             Settings.http_code = ''
+            Settings.referer = ''
             i += 1
 
         AutoSave(True)
@@ -2740,7 +2741,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.27.3-beta'
+            version='%(prog)s 0.27.4-beta'
         )
 
         ARGS = PARSER.parse_args()
