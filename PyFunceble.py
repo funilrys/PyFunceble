@@ -98,6 +98,8 @@ class Settings(object):  # pylint: disable=too-few-public-methods
         'HTTP_Active']
     ##########################################################################
     ################################ Defaults ################################
+    # Activation/Deactivation of the adblock format decoding.
+    adblock = False
     # Activation/Deactivation of the autocontinue system.
     auto_continue = True
     # We use are going to use this variable is order to pass some command before
@@ -380,6 +382,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
         """
 
         links = {
+            'adblock': 'Unknown',
             'auto_continue': 'https://git.io/v7xma',
             'debug': 'https://git.io/v7xmD',
             'show_execution_time': 'Unknown',
@@ -552,6 +555,41 @@ class PyFunceble(object):
 
         return extracted_domain
 
+    @classmethod
+    def adblock_decode(cls, list_to_test):
+        """
+        Convert the adblock format into a readable format which is understood
+        by the system.
+
+        Arguments:
+            - list_to_test: A list, the read content of the given file.
+        """
+
+        result = []
+        regex = r'^\|\|(.*)\^$'
+
+        for line in list_to_test:
+            rematch = Helpers.Regex(
+                line,
+                regex,
+                return_data=True,
+                rematch=True,
+                group=0).match()
+
+            if rematch != []:
+                filtered = Helpers.Regex(
+                    rematch[0],
+                    r'(.*)\/',
+                    return_data=True,
+                    rematch=True).match()
+
+                if filtered == []:
+                    result.extend(rematch)
+                else:
+                    result.extend(filtered)
+
+        return result
+
     def file(self, file_path):  # pylint: disable=too-many-branches,too-many-statements
         """
         Manage the case that need to test each domain of a given file path.
@@ -570,6 +608,9 @@ class PyFunceble(object):
 
             if not read.startswith('#'):
                 list_to_test.append(read)
+
+        if Settings.adblock:
+            list_to_test = self.adblock_decode(list_to_test)
 
         self.clean(list_to_test)
 
@@ -1051,7 +1092,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-            and not path.isfile(self.output):
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2524,7 +2565,7 @@ if __name__ == '__main__':
             script for checking ACTIVE and INACTIVE domain names"',
             epilog="Crafted with %s by %s" %
             (Fore.RED +
-             '♥ ' +
+             '♥' +
              Fore.RESET,
              Style.BRIGHT + Fore.CYAN +
              'Nissar Chababy (Funilrys) ' +
@@ -2541,6 +2582,12 @@ if __name__ == '__main__':
         CURRENT_VALUE_FORMAT = Fore.YELLOW + \
             Style.BRIGHT + "Installed value: " + Fore.BLUE
 
+        PARSER.add_argument(
+            '-ad',
+            '--adblock',
+            action='store_true',
+            help='Switch the decoding of the adblock format. %s' %
+            (CURRENT_VALUE_FORMAT + repr(Settings.adblock) + Style.RESET_ALL))
         PARSER.add_argument(
             '-a',
             '--all',
@@ -2741,7 +2788,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.27.4-beta'
+            version='%(prog)s 0.28.0-beta'
         )
 
         ARGS = PARSER.parse_args()
@@ -2751,11 +2798,15 @@ if __name__ == '__main__':
         else:
             Settings.less = ARGS.all
 
-        if ARGS.cmd_before_end:
-            Settings.command_before_end = ARGS.cmd_before_end
+        if ARGS.adblock:
+            Settings.adblock = Settings().switch('adblock')
 
         if ARGS.auto_continue:
             Settings.auto_continue = Settings().switch('auto_continue')
+
+        if ARGS.cmd_before_end:
+            Settings.command_before_end = ARGS.cmd_before_end
+
         if ARGS.database:
             Settings.auto_continue = Settings().switch('inactive_database')
 

@@ -315,6 +315,7 @@ class Install(object):
                 'official_down_status': 'down_status[official_status_index]',
                 'official_up_status': 'up_status[official_status_index]',
                 'official_invalid_status': 'invalid_status[official_status_index]',
+                'adblock': 'False',
                 'auto_continue': 'True',
                 'command_before_end': "''",
                 'custom_ip': "'0.0.0.0'",
@@ -365,6 +366,7 @@ class Install(object):
                 'official_status_index',
                 'official_down_status',
                 'official_up_status',
+                'adblock',
                 'auto_continue',
                 'command_before_end',
                 'custom_ip',
@@ -1115,6 +1117,11 @@ if __name__ == '__main__':
          'Nissar Chababy (Funilrys)'))
 
     PARSER.add_argument(
+        '-ad',
+        '--adblock',
+        action='store_true',
+        help='Activate the systematic decoding of the adblock format.')
+    PARSER.add_argument(
         '--autosave-minutes',
         type=int,
         help="Replace the  minimum of minutes before we start commiting \
@@ -1211,13 +1218,16 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.10.0-beta'
+        version='%(prog)s 0.11.0-beta'
     )
 
     ARGS = PARSER.parse_args()
     initiate(autoreset=True)
 
     DATA = {'to_install': {}}
+
+    if ARGS.adblock:
+        DATA['to_install']['adblock'] = ARGS.adblock
 
     if ARGS.autosave_minutes:
         DATA['to_install']['travis_autosave_minutes'] = ARGS.autosave_minutes
