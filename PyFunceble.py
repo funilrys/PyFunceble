@@ -418,7 +418,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
 
 class PyFunceble(object):
     """
-    Main entry to Funceble. Brain of the program. Also known as "put everything
+    Main entry to PYFunceble. Brain of the program. Also known as "put everything
     together to make the system works".
 
     :param domain: A string, a domain or IP to test.
@@ -2823,7 +2823,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.29.0-beta'
+            version='%(prog)s 0.29.1-beta'
         )
 
         ARGS = PARSER.parse_args()
