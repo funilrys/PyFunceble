@@ -546,14 +546,36 @@ class PyFunceble(object):
         :param extracted_domain: A string, the extracted domain from the file.
         """
 
-        separation = [' ', '\t']
+        tabs = '\t'
+        space = ' '
 
-        for string in separation:
-            if string in extracted_domain:
-                result = extracted_domain.split('#')[0].strip()
-                return result.split(string)[-1]
+        tabs_position, space_position = (
+            extracted_domain.find(tabs), extracted_domain.find(space))
 
-        return extracted_domain
+        if tabs_position > -1 and space_position > -1:
+            if space_position < tabs_position:
+                separator = space
+            else:
+                separator = tabs
+        elif tabs_position > -1:
+            separator = tabs
+        elif space_position > -1:
+            separator = space
+        else:
+            separator = ''
+
+        if separator:
+            splited_line = extracted_domain.split(separator)
+
+            index = 1
+            while index < len(splited_line):
+                if splited_line[index]:
+                    break
+                index += 1
+
+            return splited_line[index]
+
+        raise Exception('Separator not found.')
 
     @classmethod
     def format_adblock_decoded(cls, to_format, result=None):
@@ -2825,7 +2847,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.29.3-beta'
+            version='%(prog)s 0.30.0-beta'
         )
 
         ARGS = PARSER.parse_args()
