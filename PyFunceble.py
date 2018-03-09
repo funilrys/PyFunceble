@@ -574,8 +574,7 @@ class PyFunceble(object):
                 index += 1
 
             return splited_line[index]
-
-        raise Exception('Separator not found.')
+        return extracted_domain
 
     @classmethod
     def format_adblock_decoded(cls, to_format, result=None):
@@ -2847,7 +2846,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.30.0-beta'
+            version='%(prog)s 0.30.1-beta'
         )
 
         ARGS = PARSER.parse_args()
