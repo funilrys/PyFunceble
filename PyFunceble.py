@@ -1743,7 +1743,15 @@ class Generate(object):
             elif Settings.http_code in Settings.potentially_up_codes:
                 self.analytic_file('potentially_up', self.domain_status)
 
-        if self.source != 'HTTP Code':
+        if Helpers.Regex(
+                Settings.domain,
+                r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$',  # pylint: disable=line-too-long
+                return_data=False).match():
+            self.source = 'SPECIAL'
+            self.domain_status = Settings.official_up_status
+            self.output = Settings.output_up_result
+
+        if self.source != 'HTTP Code' and self.source != 'SPECIAL':
             self.domain_status = Settings.official_down_status
             self.output = Settings.output_down_result
 
@@ -2846,7 +2854,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.30.1-beta'
+            version='%(prog)s 0.31.0-beta'
         )
 
         ARGS = PARSER.parse_args()
