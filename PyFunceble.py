@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-PyFunceble is the litle sister of Funceble (https://github.com/funilrys/PyFunceble).
+PyFunceble is the litle sister of Funceble (https://github.com/funilrys/funceble).
+Which is archived since March 13th 2018.
 Consider PyFunceble as a tool to check the status of a given domain name
 or IP.
 """
