@@ -1674,12 +1674,14 @@ class Generate(object):
                 regex_blogspot,
                 return_data=False, escape=True).match():
             blogger_content_request = requests.get(
-                'http://' + Settings.domain + ':80')
-            blogger_content = blogger_content_request.text
+                'http://%s:80' % Settings.domain)
 
             for regx in regex_blogger:
-                if regx in blogger_content or Helpers.Regex(
-                        blogger_content, regx, return_data=False, escape=False).match():
+                if regx in blogger_content_request.text or Helpers.Regex(
+                        blogger_content_request.text,
+                        regx,
+                        return_data=False,
+                        escape=False).match():
                     self.source = 'SPECIAL'
                     self.domain_status = Settings.official_down_status
                     self.output = Settings.output_down_result
@@ -2870,7 +2872,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.32.0-beta'
+            version='%(prog)s 0.33.0-beta'
         )
 
         ARGS = PARSER.parse_args()
