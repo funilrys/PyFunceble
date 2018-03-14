@@ -1147,7 +1147,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-        and not path.isfile(self.output):
+            and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -1685,6 +1685,22 @@ class Generate(object):
                     self.output = Settings.output_down_result
                     break
 
+    def special_wordpress_com(self):
+        """
+        Handle the wordpress.com special case.
+        """
+        wordpress_com = '.wordpress.com'
+        does_not_exist = 'doesn&#8217;t&nbsp;exist'
+
+        if Settings.domain.endswith(wordpress_com):
+            wordpress_com_content = requests.get(
+                'http://%s:80' % Settings.domain)
+
+            if does_not_exist in wordpress_com_content.text:
+                self.source = 'SPECIAL'
+                self.domain_status = Settings.official_down_status
+                self.output = Settings.output_down_result
+
     def up_status_file(self):
         """
         Logic behind the up status when generating the status file.
@@ -1719,6 +1735,7 @@ class Generate(object):
             self.special_blogspot()
         elif Settings.http_code_status and Settings.http_code in Settings.potentially_up_codes:
             self.special_blogspot()
+            self.special_wordpress_com()
 
         if self.source != 'SPECIAL':
             self.domain_status = Settings.official_up_status
@@ -2853,7 +2870,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.31.1-beta'
+            version='%(prog)s 0.32.0-beta'
         )
 
         ARGS = PARSER.parse_args()
