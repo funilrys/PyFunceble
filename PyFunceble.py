@@ -412,8 +412,7 @@ class Settings(object):  # pylint: disable=too-few-public-methods
         to_print = 'Your configuration is not valid.\n'
         to_print += 'Please use the auto update or post an issue to %s'
 
-        print(to_print % links[variable])
-        exit(1)
+        raise Exception(to_print % links[variable])
 
 
 class PyFunceble(object):
@@ -2854,7 +2853,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.31.0-beta'
+            version='%(prog)s 0.31.1-beta'
         )
 
         ARGS = PARSER.parse_args()
