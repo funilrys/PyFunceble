@@ -587,24 +587,16 @@ class PyFunceble(object):
         if not result:
             result = []
 
-        for data in to_format:
+        for data in Helpers.List(to_format).format():
             if data:
                 if '#' in data:
-                    result.extend(
-                        cls.format_adblock_decoded(
-                            data.split('#'), result))
+                    return cls.format_adblock_decoded(data.split('#'), result)
                 elif ',' in data:
-                    result.extend(
-                        cls.format_adblock_decoded(
-                            data.split(','), result))
+                    return cls.format_adblock_decoded(data.split(','), result)
                 elif '~' in data:
-                    result.extend(
-                        cls.format_adblock_decoded(
-                            data.split('~'), result))
+                    return cls.format_adblock_decoded(data.split('~'), result)
                 elif '!' in data:
-                    result.extend(
-                        cls.format_adblock_decoded(
-                            data.split('!'), result))
+                    return cls.format_adblock_decoded(data.split('!'), result)
                 elif data and \
                     (ExpirationDate.is_domain_valid(data) or
                      ExpirationDate.is_valid_ip(data)):
@@ -2896,7 +2888,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.35.0-beta'
+            version='%(prog)s 0.36.0-beta'
         )
 
         ARGS = PARSER.parse_args()
