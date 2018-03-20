@@ -36,7 +36,7 @@ from re import compile as comp
 from re import sub as substrings
 from re import escape
 from subprocess import PIPE, Popen
-from sys import stdout, version_info
+from sys import version_info
 from time import strftime
 
 import requests
@@ -427,17 +427,21 @@ class PyFunceble(object):
 
     def __init__(self, domain=None, file_path=None):
         if __name__ == '__main__':
+            self.header_printed = False
+            self.file_path = None
+
             if Settings.travis:
                 AutoSave().travis_permissions()
 
             self.bypass()
             ExecutionTime('start')
 
-            if domain is not None and domain != '':
+            if domain:
                 Settings.domain = domain.lower()
                 self.domain()
-            elif file_path is not None and file_path != '':
-                self.file(file_path)
+            elif file_path:
+                self.file_path = file_path
+                self.file()
 
             ExecutionTime('stop')
             Percentage().log()
@@ -475,27 +479,49 @@ class PyFunceble(object):
 
             AutoSave(True)
 
-    @classmethod
-    def print_header(cls):
+    def print_header(self):
         """
         Decide if we print or not the header.
         """
 
-        if not Settings.quiet:
+        if not Settings.quiet and not self.header_printed:
             print('\n')
             if Settings.less:
                 Prints(None, 'Less').header()
             else:
                 Prints(None, 'Generic').header()
 
-    def domain(self):
+            self.header_printed = True
+
+    def domain(self, domain=None):
         """
         Manage the case that we want to test only a domain.
+
+        :param domain: A string, the domain to test.
         """
 
+        if domain:
+            Settings.domain = self.format_domain(domain)
         self.print_header()
-        if __name__ == '__main__' and Settings.simple:
-            print(ExpirationDate().get())
+
+        if __name__ == '__main__':
+            if Settings.simple:
+                print(ExpirationDate().get())
+            else:
+                status = ExpirationDate().get()
+
+            if not Settings.simple and self.file_path:
+                if Settings.inactive_database:
+                    if status == 'ACTIVE':
+                        Database(self.file_path).remove()
+                    else:
+                        Database(self.file_path).add()
+
+                AutoContinue().backup(self.file_path)
+                AutoSave()
+
+            Settings.http_code = ''
+            Settings.referer = ''
         else:
             ExpirationDate().get()
             return
@@ -644,24 +670,32 @@ class PyFunceble(object):
 
         return result
 
-    def file(self, file_path):  # pylint: disable=too-many-branches,too-many-statements
+    def _extract_domain_from_file(self):
+        """
+        This method extract all non commented lines.
+        """
+
+        result = []
+
+        if path.isfile(self.file_path):
+            with open(self.file_path) as file:
+                for line in file:
+                    if not line.startswith('#'):
+                        result.append(line.rstrip('\n').strip())
+        else:
+            raise FileNotFoundError(self.file_path)
+
+        return result
+
+    def file(self):  # pylint: disable=too-many-branches,too-many-statements
         """
         Manage the case that need to test each domain of a given file path.
         Note: 1 domain per line.
-
-        :param file_path: A string, a path to a file to read.
         """
 
-        list_to_test = []
+        list_to_test = self._extract_domain_from_file()
 
-        AutoContinue().restore(file_path)
-        self.print_header()
-
-        for read in open(file_path):
-            read = read.rstrip('\n').strip()
-
-            if not read.startswith('#'):
-                list_to_test.append(read)
+        AutoContinue().restore(self.file_path)
 
         if Settings.adblock:
             list_to_test = self.adblock_decode(list_to_test)
@@ -669,67 +703,29 @@ class PyFunceble(object):
         self.clean(list_to_test)
 
         if Settings.inactive_database:
-            Database(file_path).to_test()
+            Database(self.file_path).to_test()
 
-            if file_path in Settings.inactive_db \
-                and 'to_test' in Settings.inactive_db[file_path] \
-                    and Settings.inactive_db[file_path]['to_test'] != []:
-                list_to_test.extend(Settings.inactive_db[file_path]['to_test'])
+            if self.file_path in Settings.inactive_db \
+                and 'to_test' in Settings.inactive_db[self.file_path] \
+                    and Settings.inactive_db[self.file_path]['to_test'] != []:
+                list_to_test.extend(
+                    Settings.inactive_db[self.file_path]['to_test'])
 
-        list_to_test = Helpers.List(list_to_test).format()
+        regex_delete = r'localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$'
 
-        i = int(Settings.number_of_tested)
+        list_to_test = Helpers.List(
+            Helpers.Regex(
+                list_to_test,
+                regex_delete).not_matching_list()).format()
 
-        while i < len(list_to_test):
-            domain = list_to_test[i]
+        if Settings.to_filter != '':
+            list_to_test = Helpers.List(
+                Helpers.Regex(
+                    list_to_test,
+                    Settings.to_filter,
+                    escape=True).matching_list()).format()
 
-            if Settings.to_filter != '' and not Helpers.Regex(
-                    domain, Settings.to_filter, return_data=False, escape=True).match():
-
-                print(
-                    '\rSearching the next occurrence of "%s" ...' %
-                    Settings.to_filter, end='')
-                stdout.flush()
-
-                i += 1
-                continue
-            else:
-                print('\r', end='')
-
-            regex_listing = [
-                r'.*localhost.*',
-                r'.*local.*',
-                r'.*broadcasthost.*']
-            match_result = []
-
-            for regx in regex_listing:
-                match_result.append(
-                    Helpers.Regex(
-                        domain,
-                        regx,
-                        return_data=False).match())
-
-            domain = domain.rstrip('\n')
-
-            if domain == '' or True in match_result:
-                i += 1
-                continue
-
-            Settings.domain = self.format_domain(domain)
-            status = ExpirationDate().get()
-
-            if Settings.inactive_database:
-                if status == 'ACTIVE':
-                    Database(file_path).remove()
-                else:
-                    Database(file_path).add()
-
-            AutoContinue().backup(file_path)
-            AutoSave()
-
-            Settings.http_code = ''
-            Settings.referer = ''
-            i += 1
+        list(map(self.domain, list_to_test))
 
         AutoSave(True)
 
@@ -1146,7 +1142,7 @@ class Prints(object):
         if not Settings.no_files \
             and self.output is not None \
                 and self.output != '' \
-            and not path.isfile(self.output):
+        and not path.isfile(self.output):
             link = ("# File generated with %s\n" % Settings.link_to_repo)
             date_of_generation = (
                 "# Date of generation: %s \n\n" %
@@ -2597,6 +2593,32 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             else:
                 self.regex = regex
 
+        def not_matching_list(self):
+            """
+            This method return a list of string which don't match the
+            given regex.
+            """
+
+            pre_result = comp(self.regex)
+
+            return list(
+                filter(
+                    lambda element: not pre_result.search(str(element)),
+                    self.data))
+
+        def matching_list(self):
+            """
+            This method return a list of the string which match the given
+            regex.
+            """
+
+            pre_result = comp(self.regex)
+
+            return list(
+                filter(
+                    lambda element: pre_result.search(str(element)),
+                    self.data))
+
         def match(self):
             """Used to get exploitable result of re.search"""
 
@@ -2891,7 +2913,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.37.1-beta'
+            version='%(prog)s 0.38.0-beta'
         )
 
         ARGS = PARSER.parse_args()
