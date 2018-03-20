@@ -799,6 +799,7 @@ class IANA(object):
             'lc': 'whois2.afilias-grs.net',
             'lk': 'whois.nic.lk',
             'microsoft': 'whois.nic.microsoft',
+            'nagoya': 'whois.nic.nagoya',
             'nyc': 'whois.nic.nyc',
             'ps': 'whois.pnina.ps',
             'ren': 'whois.nic.ren',
@@ -1220,7 +1221,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.11.2-beta'
+        version='%(prog)s 0.11.3-beta'
     )
 
     ARGS = PARSER.parse_args()
