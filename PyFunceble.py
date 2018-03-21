@@ -379,7 +379,16 @@ class Settings(object):  # pylint: disable=too-few-public-methods
         """
         Switch class variables to their opposite.
 
-        :param variable: A string, the Settings.variable_name to switch.
+        Argument:
+            - variable: str
+                The Settings.variable_name to switch.
+
+        Returns: bool
+            The opposite of the installed value of Settings.variable_name.
+
+        Raise:
+            - Exception: When the configuration is not valid. In other words,
+                if the Settings.variable_name is not a bool.
         """
 
         links = {
@@ -421,8 +430,11 @@ class PyFunceble(object):
     Main entry to PYFunceble. Brain of the program. Also known as "put everything
     together to make the system works".
 
-    :param domain: A string, a domain or IP to test.
-    :param file_path: A string, a path to a file to read.
+    Arguments:
+        - domain: str
+            A domain or IP to test.
+        - file_path: str
+            A path to a file to read.
     """
 
     def __init__(self, domain=None, file_path=None):
@@ -455,7 +467,13 @@ class PyFunceble(object):
     def test(cls):
         """
         This method avoid confusion between self.domain which is called into
-            __main__ and test() which should be called out of PyFunceble's scope.
+        __main__ and test() which should be called out of PyFunceble's scope.
+
+        Returns: str
+            ACTIVE, INACTIVE or INVALID.
+
+        Raise:
+            - Exception: when this method is called under __name___
         """
 
         if __name__ == '__main__':
@@ -467,7 +485,8 @@ class PyFunceble(object):
     @classmethod
     def bypass(cls):
         """
-        Exit the script if `[PyFunceble skip]` is matched into the currently treated commit message.
+        Exit the script if `[PyFunceble skip]` is matched into the latest
+        commit message.
         """
 
         regex_bypass = r'\[PyFunceble\sskip\]'
@@ -497,7 +516,9 @@ class PyFunceble(object):
         """
         Manage the case that we want to test only a domain.
 
-        :param domain: A string, the domain to test.
+        Argument:
+            - domain: str
+                The domain or IP to test.
         """
 
         if domain:
@@ -545,7 +566,9 @@ class PyFunceble(object):
         """
         Check if we have to clean the environnement.
 
-        :param list_to_test: A list, the current list we are going to test.
+        Argument:
+            - list_to_test: list
+                The current list we are going to test.
         """
 
         try:
@@ -569,7 +592,12 @@ class PyFunceble(object):
         """
         Format the extracted domain before passing it to the system.
 
-        :param extracted_domain: A string, the extracted domain from the file.
+        Argument:
+            extracted_domain: str
+                The extracted domain from the file.
+
+        Returns: str
+            The domain to test.
         """
 
         tabs = '\t'
@@ -607,7 +635,14 @@ class PyFunceble(object):
         """
         Format the exctracted adblock line before passing it to the system.
 
-        :param to_format: A string, the extracted line.
+        Arguments:
+            - to_format: str
+                The extracted line from the file.
+            - result: None or list
+                The list of extracted domain.
+
+        Returns: list
+            The list of extracted domains.
         """
 
         if not result:
@@ -637,8 +672,11 @@ class PyFunceble(object):
         Convert the adblock format into a readable format which is understood
         by the system.
 
-        Arguments:
+        Argument:
             - list_to_test: A list, the read content of the given file.
+
+        Returns: list
+            The list of domain to test.
         """
 
         result = []
@@ -673,6 +711,9 @@ class PyFunceble(object):
     def _extract_domain_from_file(self):
         """
         This method extract all non commented lines.
+
+        Returns: lis
+            Each line of the file == an element of the list.
         """
 
         result = []
@@ -749,7 +790,9 @@ class AutoContinue(object):
         """
         Backup the current execution state.
 
-        :param file_path: The path of the currently tested file.
+        Argument:
+            - file_path: str
+                The path of the currently tested file.
         """
 
         if Settings.auto_continue:
@@ -772,7 +815,9 @@ class AutoContinue(object):
         """
         Restore data from the given path.
 
-        :param file_to_restore: A string, a path to file to test.
+        Argument:
+            - file_to_restore: str
+                The path to the file we are going to test.
         """
 
         if Settings.auto_continue and self.backup_content != {}:
@@ -863,9 +908,11 @@ class Database(object):
     """
     Logic behind the generation and the usage of a database system.
     The main idea behind this is to provide an inactive-db.json and test all
-        inactive domain which are into to it regularly
+    inactive domain which are into to it regularly
 
-    :param file_path: A string, the file path we are working with.
+    Argument:
+        - file_path: str
+            The path to the file we are working with.
     """
 
     def __init__(self, file_path):
@@ -900,7 +947,12 @@ class Database(object):
 
     def _add_to_test(self, to_add):
         """
-        Add an element or a list of element into Settings.inactive_db[self.file_path]['to_test'].
+        Add an element or a list of element into
+        Settings.inactive_db[self.file_path]['to_test'].
+
+        Argument:
+            - to_add: str
+                The domain or ip to add.
         """
 
         if not isinstance(to_add, list):
@@ -946,6 +998,9 @@ class Database(object):
     def _timestamp(self):
         """
         Return the timestamp where we are going to save our current list.
+
+        Returns: int or str
+            The timestamp to append with the currently tested domains.
         """
 
         result = 0
@@ -1013,8 +1068,11 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
     """
     Set and return the exection time of the program.
 
-    :param action: A string, 'start' or 'stop'.
-    :param return_result: A boolean, if true, we return the executionn time.
+    Arguments:
+        - action: 'start' or 'stop'
+        - return_result: bool
+            True: we return the execution time.
+            False: we return nothing.
     """
 
     def __init__(self, action='start'):
@@ -1050,6 +1108,9 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
     def _calculate(cls):
         """
         calculate the difference between starting and ending time.
+
+        Returns: dict
+            A dics with `days`,`hours`,`minutes` and `seconds`.
         """
 
         time_difference = Settings.end - Settings.start
@@ -1064,6 +1125,9 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
     def format_execution_time(self):
         """
         Format the calculated time into a human readable format.
+
+        Returns: str
+            A human readable date.
         """
 
         result = ''
@@ -1084,10 +1148,16 @@ class Prints(object):
     Print data on screen and into a file if needed.
     Template Possibilities: Percentage, Less, HTTP and any status you want.
 
-    :param to_print: A list, the list of data to print.
-    :param template: A string, the template to use.
-    :param output_file: A string, the file to write.
-    :param only_on_file: A boolean, if true, we don't print data on screen.
+    Arguments:
+        - to_print: list
+            The list of data to print.
+        - template: str
+            The template to use.
+        - output_file: str
+            The path to the file to write.
+        - only_on_file: bool
+            True: We don't print data on screen.
+            False: We print data on screen.
     """
 
     def __init__(
@@ -1155,8 +1225,14 @@ class Prints(object):
         """
         Construct header of the table according to template.
 
-        :param data_to_print: A list, the list of data to print into the header.
-        :param separator: A string, the separator to use forr the table generation.
+        Arguments:
+            - data_to_print: list
+                The list of data to print into the header.
+            - separator: str
+                The separator to use for the table header generation.
+
+        Returns: list
+            The data to print in list format.
         """
 
         header_data = []
@@ -1228,7 +1304,16 @@ class Prints(object):
         """
         Construct the table of data according to given size.
 
-        :param size: A list, The maximal length of each string in the table.
+        Argument:
+            - size: list
+                The maximal length of each string in the table.
+
+        Returns: OrderedDict
+            An dict with all information about the data and how to which what
+            maximal size to print it.
+
+        Raise:
+            - Exception: if the data and the size does not have the same length.
         """
 
         result = OrderedDict()
@@ -1251,7 +1336,12 @@ class Prints(object):
         """
         Get the size of each columns from the header.
 
-        :param header_type: The header we have to get.
+        Argument:
+            - header_type: dict
+                The header we have to get the size from.
+
+        Returns: list
+            The maximal size of the each data to print.
         """
 
         result = []
@@ -1265,7 +1355,12 @@ class Prints(object):
         """
         Retun colored string.
 
-        :param data: A string, the string to colorify.
+        Argument:
+            - data: str
+                The string to colorify.
+
+        Returns: str
+            A colored string.
         """
 
         if self.template in ['Generic', 'Less']:
@@ -1280,7 +1375,9 @@ class Prints(object):
     def data(self):
         """
         Management and input of data to the table.
-        Please consider as "
+
+        Raise:
+            - Exception: When self.data_to_print is not a list.
         """
 
         if isinstance(self.data_to_print, list):
@@ -1328,6 +1425,10 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
     def _access(cls):
         """
         Get the HTTP code status.
+
+        Returns: int or None
+            int: The catched HTTP status_code.
+            None: Nothing catched.
         """
 
         try:
@@ -1348,6 +1449,10 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
     def get(self):
         """
         Return the HTTP code status.
+
+        Returns: str or int
+            str: if no status_code is catched.
+            int: the status_code.
         """
 
         http_code = self._access()
@@ -1395,9 +1500,17 @@ class Lookup(object):
         """
         Implementation of UNIX whois.
 
-        :param whois_server: A string, The whois server to use to get the record.
-        :param domain: A string, A domain to get whois record.
-        :param timeout: A integer, The timeout to apply to request.
+        Arguments:
+            - whois_server: str
+                The whois server to use to get the record.
+            - domain: str
+                The domain to get the whois record from.
+            - timeout: int
+                The timeout to apply to the request.
+
+        Returns: None or str
+            None: No whois record catched.
+            str: The whois record.
         """
 
         if domain is None:
@@ -1453,8 +1566,12 @@ class Percentage(object):
     """
     Calculation of the percentage of each status.
 
-    :param domain_status: A string, the status to increment.
-    :param init: A dict, Dictionary of data to initiate.
+    Arguments:
+        - domain_status: str
+            The status to increment.
+        - init: None or dict
+            None: we start from 0.
+            dict: we start from the passed data.
     """
 
     def __init__(self, domain_status=None, init=None):
@@ -1535,9 +1652,13 @@ class Generate(object):
     """
     Generate different sort of files.
 
-    :param domain_status: A string, the domain status.
-    :param source: A string, the source of the given status.
-    :param expiration_date: A string, the expiration date of the domain.
+    Arguments:
+        - domain_status: str
+            The domain status.
+        - source: str
+            The source of the given status.
+        - expiration_date: str
+            The expiration date of the domain if catched.
     """
 
     def __init__(self, domain_status, source=None, expiration_date=None):
@@ -1640,8 +1761,11 @@ class Generate(object):
         """
         Generate HTTP_Analytic/* files.
 
-        :param new_status: A string, the new status of the domain.
-        :param old_status: A strinf, the old status of the domain.
+        Arguments:
+            - new_status: str
+                The new status of the domain.
+            - old_status: str
+                The old status of the domain.
         """
 
         if new_status in Settings.up_status:
@@ -1686,6 +1810,7 @@ class Generate(object):
         """
         Handle the wordpress.com special case.
         """
+
         wordpress_com = '.wordpress.com'
         does_not_exist = 'doesn&#8217;t&nbsp;exist'
 
@@ -1874,7 +1999,9 @@ class Status(object):  # pylint: disable=too-few-public-methods
     Return the domain status in case we don't use WHOIS or in case that WHOIS
     record is not readable.
 
-    :param matched_status: A string, the previously catched status.
+    Argument:
+        - matched_result: str
+            The previously catched status.
     """
 
     def __init__(self, matched_status):
@@ -1883,6 +2010,9 @@ class Status(object):  # pylint: disable=too-few-public-methods
     def handle(self):
         """
         Handle the lack of WHOIS. :)
+
+        Returns: str
+            The status of the domains after generating the files.
         """
 
         source = 'NSLOOKUP'
@@ -2140,7 +2270,12 @@ class ExpirationDate(object):
         """
         Convert a given month into our unified format.
 
-        :param data: A string, The month to convert or shorten.
+        Argument:
+            - data: str
+                The month to convert or shorten.
+
+        Returns: str
+            The unified month name.
         """
 
         short_month = {
@@ -2197,6 +2332,10 @@ class ExpirationDate(object):
             Please note that the second value of the case represent the groups
             in order [day,month,year]. This means that a [2,1,0] will be for
             example for a date in format `2017-01-02` where `01` is the month.
+
+        Retuns: list or None
+            - None: the case is unknown.
+            - list: the list representing the date [day, month, year]
         """
 
         cases = {
@@ -2405,22 +2544,35 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
     """
 
     class Command(object):
-        """Shell command execution."""
+        """
+        Shell command execution.
+        """
 
         def __init__(self, command):
             self.decode_type = 'utf-8'
             self.command = command
 
         def decode_output(self, to_decode):
-            """Decode the output of a shell command in order to be readable.
+            """
+            Decode the output of a shell command in order to be readable.
 
-            :param to_decode: byte(s), Output of a command to decode.
+            Argument:
+                - to_decode: byte
+                    Output of a command to decode.
+
+            Retunes: str
+                The decoded output.
             """
 
             return to_decode.decode(self.decode_type)
 
         def execute(self):
-            """Execute the given command."""
+            """
+            Execute the given command.
+
+            Returns: byte
+                The output in byte format.
+            """
 
             process = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=True)
             (output, error) = process.communicate()
@@ -2445,7 +2597,13 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             """
             Remove a given key from a given dictionary.
 
-            :param key_to_remove: A string or a list, the key(s) to delete.
+            Argument:
+                - key_to_remove: str or list
+                    The key(s) to delete.
+
+            Returns: None or dict
+                - None: no dict passed to the class.
+                - dict: The dict without the removed key(s).
             """
 
             if isinstance(self.main_dictionnary, dict):
@@ -2461,8 +2619,10 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             """
             Save a dictionnary into a JSON file.
 
-            :param destination: A string, A path to a file where we're going to
-            write the converted dict into a JSON format.
+            Argument:
+                - destination: str
+                    A path to a file where we're going to
+                    write the converted dict into a JSON format.
             """
 
             with open(destination, 'w') as file:
@@ -2478,7 +2638,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             """
             Convert a JSON formated string into a dictionary.
 
-            :param data: A string, a JSON formeted string to convert to dict format.
+            Argument:
+                - data: str
+                    A JSON formated string to convert to dict format.
             """
 
             try:
@@ -2490,7 +2652,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         """
         File treatment/manipulations.
 
-        :param file: A string, a path to the file to manipulate.
+        Argument:
+            file: str
+                A path to the file to manipulate.
         """
 
         def __init__(self, file):
@@ -2500,7 +2664,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             """
             Write or append data into the given file path.
 
-            :param data_to_write: A string, the data to write.
+            Argument:
+                - data_to_write: str
+                    The data to write.
             """
 
             if data_to_write is not None and isinstance(
@@ -2515,6 +2681,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         def read(self):
             """
             Read a given file path and return its content.
+
+            Returns: str
+                The content of the given file path.
             """
 
             with open(self.file, 'r', encoding="utf-8") as file:
@@ -2535,6 +2704,10 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
     class List(object):  # pylint: disable=too-few-public-methods
         """
         List manipulation.
+
+        Argument:
+            - main_list: list
+                The list to manipulate.
         """
 
         def __init__(self, main_list=None):
@@ -2546,6 +2719,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
         def format(self):
             """
             Return a well formated list. Basicaly, it's sort a list and remove duplicate.
+
+            Returns: list
+                A sorted, without duplicate, list.
             """
 
             try:
@@ -2557,15 +2733,20 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
         """A simple implementation ot the python.re package
 
-
-        :param data: A string, the data to regex check
-        :param regex: A string, the regex to match
-        :param return_data: A boolean, if True, return the matched string
-        :param group: A integer, the group to return
-        :param rematch: A boolean, if True, return the matched groups into a
-            formated list. (implementation of Bash ${BASH_REMATCH})
-        :param replace_with: A string, the value to replace the matched regex with.
-        :param occurences: A int, the number of occurence to replace.
+        Arguments:
+            - data: str
+                The data to regex check.
+            - regex: str
+                The regex to match.
+            - group: int
+                The group to return
+            - rematch: bool
+                True: return the matched groups into a formated list.
+                    (implementation of Bash ${BASH_REMATCH})
+            - replace_with: str
+                The value to replace the matched regex with.
+            - occurences: int
+                The number of occurence(s) to replace.
         """
 
         def __init__(self, data, regex, **args):
@@ -2620,7 +2801,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
                     self.data))
 
         def match(self):
-            """Used to get exploitable result of re.search"""
+            """
+            Used to get exploitable result of re.search
+            """
 
             # We initate this variable which gonna contain the returned data
             result = []
@@ -2655,7 +2838,9 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
             return False
 
         def replace(self):
-            """Used to replace a matched string with another."""
+            """
+            Used to replace a matched string with another.
+            """
 
             if self.replace_with is not None:  # pylint: disable=no-member
                 return substrings(
@@ -2913,7 +3098,7 @@ if __name__ == '__main__':
             '-v',
             '--version',
             action='version',
-            version='%(prog)s 0.40.0-beta'
+            version='%(prog)s 0.41.0-beta'
         )
 
         ARGS = PARSER.parse_args()
