@@ -2736,7 +2736,7 @@ class Update(object):
         result = []
 
         for data in self.files:
-            if CONFIGURATION['stable']:
+            if 'stable' in CONFIGURATION and CONFIGURATION['stable']:
                 link_to_get = LINKS[data]
             else:
                 link_to_get = LINKS[data].replace('master', 'dev')
@@ -3604,7 +3604,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.2-beta'
+        version='%(prog)s 0.50.3-beta'
     )
 
     ARGS = PARSER.parse_args()
