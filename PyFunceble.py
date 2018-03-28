@@ -3604,7 +3604,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.0-beta'
+        version='%(prog)s 0.50.1-beta'
     )
 
     ARGS = PARSER.parse_args()
@@ -3612,10 +3612,6 @@ if __name__ == '__main__':
     if ARGS.less:
         CONFIGURATION.update({
             'less': ARGS.less
-        })
-    else:
-        CONFIGURATION.update({
-            'less': ARGS.all
         })
 
     if ARGS.adblock:
