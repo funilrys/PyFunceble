@@ -575,8 +575,8 @@ class AutoSave(object):  # pylint: disable=too-few-public-methods
         current_time = int(strftime('%s'))
 
         try:
-            if self.last or current_time >= int(
-                    CONFIGURATION['start']) + (int(CONFIGURATION['travis_autosave_minutes']) * 60):
+            if self.last or ('start' in CONFIGURATION and current_time >= int(
+                    CONFIGURATION['start']) + (int(CONFIGURATION['travis_autosave_minutes']) * 60)):
                 Percentage().log()
                 self.travis_permissions()
 
@@ -3604,7 +3604,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.1-beta'
+        version='%(prog)s 0.50.2-beta'
     )
 
     ARGS = PARSER.parse_args()
