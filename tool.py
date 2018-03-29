@@ -100,7 +100,9 @@ class Settings(object):  # pylint: disable=too-few-public-methods
             'online_script',
             'online_tool',
             'online_iana',
-            'online_dir_structure'
+            'online_dir_structure',
+            'online_requirements',
+            'online_config'
         ]
 
         for var in to_replace:
@@ -638,7 +640,7 @@ class Update(object):
         """
 
         if not Settings.quiet:
-            print('\n Download of the scripts ')
+            print('\nDownload of the scripts', end=' ')
 
         from shutil import copyfileobj
         from requests import get
@@ -663,9 +665,10 @@ class Update(object):
             return
 
         if not Settings.quiet:
+            print(Settings.error)
+
             print(
-                Settings.done +
-                '\nImpossible to update %s.Please report issue.' %
+                '\nImpossible to update %s. Please report issue.' %
                 Settings.script)
             exit(1)
 
@@ -1227,7 +1230,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.12.0-beta'
+        version='%(prog)s 0.13.0-beta'
     )
 
     ARGS = PARSER.parse_args()
