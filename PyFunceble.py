@@ -296,10 +296,10 @@ class PyFunceble(object):
                 rematch=True,
                 group=0).match()
 
-            if rematch != []:
+            if rematch:
                 result.extend(rematch)
 
-            if rematch_v2 != []:
+            if rematch_v2:
                 result.extend(
                     Helpers.List(
                         self._format_adblock_decoded(rematch_v2)).format())
@@ -3625,7 +3625,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.7-beta'
+        version='%(prog)s 0.50.8-beta'
     )
 
     ARGS = PARSER.parse_args()
