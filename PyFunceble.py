@@ -2736,7 +2736,7 @@ class Update(object):
         """
 
         for data in self.files:
-            if data not in ['iana', 'dir_structure', 'config']:
+            if data not in ['iana', 'dir_structure', 'config', 'requirements']:
                 try:
                     stats = stat(CURRENT_DIRECTORY + self.files[data])
                     chmod(
@@ -3625,7 +3625,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.9-beta'
+        version='%(prog)s 0.50.10-beta'
     )
 
     ARGS = PARSER.parse_args()
