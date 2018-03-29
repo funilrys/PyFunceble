@@ -346,7 +346,7 @@ class PyFunceble(object):
 
             if self.file_path in CONFIGURATION['inactive_db'] \
                 and 'to_test' in CONFIGURATION['inactive_db'][self.file_path] \
-                    and CONFIGURATION['inactive_db'][self.file_path]['to_test'] != []:
+                    and CONFIGURATION['inactive_db'][self.file_path]['to_test']:
                 list_to_test.extend(
                     CONFIGURATION['inactive_db'][self.file_path]['to_test'])
 
@@ -357,7 +357,7 @@ class PyFunceble(object):
                 list_to_test,
                 regex_delete).not_matching_list()).format()
 
-        if CONFIGURATION['filter'] != '':
+        if CONFIGURATION['filter']:
             list_to_test = Helpers.List(
                 Helpers.Regex(
                     list_to_test,
@@ -513,7 +513,7 @@ class AutoContinue(object):
                 The path to the file we are going to test.
         """
 
-        if CONFIGURATION['auto_continue'] and self.backup_content != {}:
+        if CONFIGURATION['auto_continue'] and self.backup_content:
             if file_to_restore in self.backup_content:
                 to_initiate = [
                     'up',
@@ -604,7 +604,7 @@ class AutoSave(object):  # pylint: disable=too-few-public-methods
             command = 'git add --all && git commit -a -m "%s"'
 
             if self.last:
-                if CONFIGURATION['command_before_end'] != '':
+                if CONFIGURATION['command_before_end']:
                     Helpers.Command(
                         CONFIGURATION['command_before_end']).execute()
 
@@ -728,7 +728,7 @@ class Database(object):
         to_delete = []
 
         if self.file_path in CONFIGURATION['inactive_db'] \
-                and CONFIGURATION['inactive_db'][self.file_path] != {}:
+                and CONFIGURATION['inactive_db'][self.file_path]:
             for data in CONFIGURATION['inactive_db'][self.file_path]:
                 if data != 'to_test':
                     if self.current_time < int(data) + self.day_in_seconds:
@@ -1459,7 +1459,7 @@ class Generate(object):
                 Prints([CONFIGURATION['domain']], 'PlainDomain',
                        plain_destination).data()
 
-            if CONFIGURATION['split'] and splited_destination != '':
+            if CONFIGURATION['split'] and splited_destination:
                 Prints([CONFIGURATION['domain']], 'PlainDomain',
                        splited_destination).data()
 
@@ -2243,10 +2243,10 @@ class ExpirationDate(object):
                     self.expiration_date = day + '-' + month + '-' + year
                 break
 
-        if self.expiration_date != '' and Helpers.Regex(
+        if self.expiration_date and not Helpers.Regex(
                 self.expiration_date,
                 r'[0-9]{2}\-[a-z]{3}\-2[0-9]{3}',
-                return_data=False).match() != True:
+                return_data=False).match():
             self.log()
             self._whois_log()
 
@@ -3625,7 +3625,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.8-beta'
+        version='%(prog)s 0.50.9-beta'
     )
 
     ARGS = PARSER.parse_args()
