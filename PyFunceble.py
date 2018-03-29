@@ -573,36 +573,41 @@ class AutoSave(object):  # pylint: disable=too-few-public-methods
         """
 
         current_time = int(strftime('%s'))
+        time_autorisation = False
 
         try:
-            if self.last or ('start' in CONFIGURATION and current_time >= int(
-                    CONFIGURATION['start']) + (int(CONFIGURATION['travis_autosave_minutes']) * 60)):
-                Percentage().log()
-                self.travis_permissions()
+            time_autorisation = current_time >= int(
+                CONFIGURATION['start']) + (int(CONFIGURATION['travis_autosave_minutes']) * 60)
+        except KeyError:
+            if not self.last:
+                return
+            else:
+                pass
 
-                command = 'git add --all && git commit -a -m "%s"'
+        if self.last or time_autorisation:
+            Percentage().log()
+            self.travis_permissions()
 
-                if self.last:
-                    if CONFIGURATION['command_before_end'] != '':
-                        Helpers.Command(
-                            CONFIGURATION['command_before_end']).execute()
+            command = 'git add --all && git commit -a -m "%s"'
 
-                    message = CONFIGURATION['travis_autosave_final_commit'] + \
-                        ' [ci skip]'
-
-                    Helpers.Command(command % message).execute()
-                else:
+            if self.last:
+                if CONFIGURATION['command_before_end'] != '':
                     Helpers.Command(
-                        command %
-                        CONFIGURATION['travis_autosave_commit']).execute()
+                        CONFIGURATION['command_before_end']).execute()
 
+                message = CONFIGURATION['travis_autosave_final_commit'] + \
+                    ' [ci skip]'
+
+                Helpers.Command(command % message).execute()
+            else:
                 Helpers.Command(
-                    'git push origin %s' %
-                    CONFIGURATION['travis_branch']).execute()
-                exit(0)
-            return
-        except AttributeError:
-            return
+                    command %
+                    CONFIGURATION['travis_autosave_commit']).execute()
+
+            Helpers.Command(
+                'git push origin %s' %
+                CONFIGURATION['travis_branch']).execute()
+            exit(0)
 
 
 class Database(object):
@@ -3604,7 +3609,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.3-beta'
+        version='%(prog)s 0.50.4-beta'
     )
 
     ARGS = PARSER.parse_args()
