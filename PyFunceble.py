@@ -2737,11 +2737,14 @@ class Update(object):
 
         for data in self.files:
             if data not in ['iana', 'dir_structure', 'config']:
-                stats = stat(CURRENT_DIRECTORY + self.files[data])
-                chmod(
-                    CURRENT_DIRECTORY +
-                    self.files[data],
-                    stats.st_mode | S_IEXEC)
+                try:
+                    stats = stat(CURRENT_DIRECTORY + self.files[data])
+                    chmod(
+                        CURRENT_DIRECTORY +
+                        self.files[data],
+                        stats.st_mode | S_IEXEC)
+                except FileNotFoundError:
+                    pass
 
     def download_files(self):
         """
@@ -3622,7 +3625,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.6-beta'
+        version='%(prog)s 0.50.7-beta'
     )
 
     ARGS = PARSER.parse_args()
