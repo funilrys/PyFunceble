@@ -1739,6 +1739,11 @@ class Generate(object):
         Generate a file according to the domain status.
         """
 
+        try:
+            CONFIGURATION['http_code']
+        except KeyError:
+            CONFIGURATION['http_code'] = '*' * 3
+
         if self.domain_status.lower() in STATUS['list']['up']:
             self.up_status_file()
         elif self.domain_status.lower() in STATUS['list']['down']:
@@ -1751,11 +1756,6 @@ class Generate(object):
             self.source,
             self.expiration_date).hosts_file()
         Percentage(self.domain_status).count()
-
-        try:
-            CONFIGURATION['http_code']
-        except KeyError:
-            CONFIGURATION['http_code'] = '*' * 3
 
         if not CONFIGURATION['quiet']:
             if CONFIGURATION['less']:
@@ -3632,7 +3632,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.12-beta'
+        version='%(prog)s 0.50.13-beta'
     )
 
     ARGS = PARSER.parse_args()
