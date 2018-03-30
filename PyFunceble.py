@@ -31,10 +31,11 @@ import hashlib
 import socket
 from collections import OrderedDict
 from inspect import getsourcefile
+from itertools import repeat
 from json import decoder, dump, loads
-from os import environ, mkdir, path, remove, rename, chmod, stat
+from os import chmod, environ, mkdir, path, remove, rename
 from os import sep as directory_separator
-from os import walk
+from os import stat, walk
 from re import compile as comp
 from re import escape
 from re import sub as substrings
@@ -134,13 +135,15 @@ class PyFunceble(object):
 
             CONFIGURATION['header_printed'] = True
 
-    def domain(self, domain=None):
+    def domain(self, domain=None, last_domain=None):
         """
         Manage the case that we want to test only a domain.
 
         Argument:
             - domain: str
                 The domain or IP to test.
+            - last_domain: str
+                The last domain of the file we are testing.
         """
 
         if domain:
@@ -161,7 +164,11 @@ class PyFunceble(object):
                         Database(self.file_path).add()
 
                 AutoContinue().backup(self.file_path)
-                AutoSave()
+
+                if domain != last_domain:
+                    AutoSave()
+                else:
+                    AutoSave(True)
 
             CONFIGURATION['http_code'] = ''
             CONFIGURATION['referer'] = ''
@@ -365,9 +372,8 @@ class PyFunceble(object):
                     escape=True).matching_list()).format()
 
         list(map(self.domain,
-                 list_to_test[CONFIGURATION['counter']['number']['tested']:]))
-
-        AutoSave(True)
+                 list_to_test[CONFIGURATION['counter']['number']['tested']:],
+                 repeat(list_to_test[-1])))
 
     @classmethod
     def switch(cls, variable):  # pylint: disable=inconsistent-return-statements
@@ -3626,7 +3632,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.11-beta'
+        version='%(prog)s 0.50.12-beta'
     )
 
     ARGS = PARSER.parse_args()
