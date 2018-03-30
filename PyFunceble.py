@@ -418,9 +418,9 @@ class PyFunceble(object):
                 try:
                     number_of_tested = CONFIGURATION['counter']['number']['tested']
 
-                    if number_of_tested >= len(list_to_test) \
-                            or number_of_tested == 0 \
-                            or list_to_test[number_of_tested - 1] == list_to_test[-1]:
+                    if number_of_tested == 0 \
+                            or list_to_test[number_of_tested - 1] == list_to_test[-1] \
+                            or number_of_tested == len(list_to_test):
                         PyFunceble.reset_counters()
 
                         self.all()
@@ -428,7 +428,8 @@ class PyFunceble(object):
                     PyFunceble.reset_counters()
 
                     self.all()
-            self.all()
+            else:
+                self.all()
 
         @classmethod
         def file_to_delete(cls):
@@ -3632,7 +3633,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.13-beta'
+        version='%(prog)s 0.51.0-beta'
     )
 
     ARGS = PARSER.parse_args()
