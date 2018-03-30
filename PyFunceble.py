@@ -2095,6 +2095,7 @@ class ExpirationDate(object):
             Helpers.File(
                 CURRENT_DIRECTORY +
                 OUTPUTS['parent_directory'] +
+                OUTPUTS['logs']['directories']['parent'] +
                 OUTPUTS['logs']['directories']['date_format'] +
                 CONFIGURATION['referer']).write(log)
 
@@ -2106,7 +2107,7 @@ class ExpirationDate(object):
                 }
 
                 requests.post(
-                    LINKS['link_api_date_format'],
+                    LINKS['api_date_format'],
                     data=date_to_share)
 
     @classmethod
@@ -3625,7 +3626,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.50.10-beta'
+        version='%(prog)s 0.50.11-beta'
     )
 
     ARGS = PARSER.parse_args()
