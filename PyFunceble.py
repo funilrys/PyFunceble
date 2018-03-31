@@ -118,7 +118,7 @@ class PyFunceble(object):
                 regex_bypass,
                 return_data=False).match():
 
-            AutoSave(True)
+            AutoSave(True, is_bypass=True)
 
     @classmethod
     def print_header(cls):
@@ -549,11 +549,18 @@ class AutoContinue(object):
 class AutoSave(object):  # pylint: disable=too-few-public-methods
     """
     Logic behind autosave.
+
+    Arguments:
+        - is_last_domain: bool
+            Tell the autosave logic if we are at the end.
+        - is_bypass: bool
+            Tell the autosave logic if we are in bypass mode.
     """
 
-    def __init__(self, last_domain=False):
+    def __init__(self, is_last_domain=False, is_bypass=False):
         if CONFIGURATION['travis']:
-            self.last = last_domain
+            self.last = is_last_domain
+            self.bypass = is_bypass
             self._travis()
 
     @classmethod
@@ -598,19 +605,17 @@ class AutoSave(object):  # pylint: disable=too-few-public-methods
             time_autorisation = current_time >= int(
                 CONFIGURATION['start']) + (int(CONFIGURATION['travis_autosave_minutes']) * 60)
         except KeyError:
-            if self.last:
+            if self.last and not self.bypass:
                 raise Exception(
                     'Please review the way `ExecutionTime()` is called.')
-            else:
-                return
 
-        if self.last or time_autorisation:
+        if self.last or time_autorisation or self.bypass:
             Percentage().log()
             self.travis_permissions()
 
             command = 'git add --all && git commit -a -m "%s"'
 
-            if self.last:
+            if self.last or self.bypass:
                 if CONFIGURATION['command_before_end']:
                     Helpers.Command(
                         CONFIGURATION['command_before_end']).execute()
@@ -3633,7 +3638,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.51.0-beta'
+        version='%(prog)s 0.51.1-beta'
     )
 
     ARGS = PARSER.parse_args()
