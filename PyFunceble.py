@@ -63,7 +63,8 @@ class PyFunceble(object):
 
     def __init__(self, domain=None, file_path=None):
         if __name__ == '__main__':
-            self.file_path = None
+
+            CONFIGURATION['file_to_test'] = file_path
 
             if CONFIGURATION['travis']:
                 AutoSave().travis_permissions()
@@ -75,7 +76,6 @@ class PyFunceble(object):
                 CONFIGURATION['domain'] = domain.lower()
                 self.domain()
             elif file_path:
-                self.file_path = file_path
                 self.file()
 
             ExecutionTime('stop')
@@ -156,14 +156,14 @@ class PyFunceble(object):
             else:
                 status = ExpirationDate().get()
 
-            if not CONFIGURATION['simple'] and self.file_path:
+            if not CONFIGURATION['simple'] and CONFIGURATION['file_to_test']:
                 if CONFIGURATION['inactive_database']:
                     if status == 'ACTIVE':
-                        Database(self.file_path).remove()
+                        Database().remove()
                     else:
-                        Database(self.file_path).add()
+                        Database().add()
 
-                AutoContinue().backup(self.file_path)
+                AutoContinue().backup()
 
                 if domain != last_domain:
                     AutoSave()
@@ -313,7 +313,8 @@ class PyFunceble(object):
 
         return result
 
-    def _extract_domain_from_file(self):
+    @classmethod
+    def _extract_domain_from_file(cls):
         """
         This method extract all non commented lines.
 
@@ -323,13 +324,13 @@ class PyFunceble(object):
 
         result = []
 
-        if path.isfile(self.file_path):
-            with open(self.file_path) as file:
+        if path.isfile(CONFIGURATION['file_to_test']):
+            with open(CONFIGURATION['file_to_test']) as file:
                 for line in file:
                     if not line.startswith('#'):
                         result.append(line.rstrip('\n').strip())
         else:
-            raise FileNotFoundError(self.file_path)
+            raise FileNotFoundError(CONFIGURATION['file_to_test'])
 
         return result
 
@@ -341,7 +342,7 @@ class PyFunceble(object):
 
         list_to_test = self._extract_domain_from_file()
 
-        AutoContinue().restore(self.file_path)
+        AutoContinue().restore()
 
         if CONFIGURATION['adblock']:
             list_to_test = self.adblock_decode(list_to_test)
@@ -349,13 +350,13 @@ class PyFunceble(object):
         PyFunceble.Clean(list_to_test)
 
         if CONFIGURATION['inactive_database']:
-            Database(self.file_path).to_test()
+            Database().to_test()
 
-            if self.file_path in CONFIGURATION['inactive_db'] \
-                and 'to_test' in CONFIGURATION['inactive_db'][self.file_path] \
-                    and CONFIGURATION['inactive_db'][self.file_path]['to_test']:
+            if CONFIGURATION['file_to_test'] in CONFIGURATION['inactive_db'] \
+                and 'to_test' in CONFIGURATION['inactive_db'][CONFIGURATION['file_to_test']] \
+                    and CONFIGURATION['inactive_db'][CONFIGURATION['file_to_test']]['to_test']:
                 list_to_test.extend(
-                    CONFIGURATION['inactive_db'][self.file_path]['to_test'])
+                    CONFIGURATION['inactive_db'][CONFIGURATION['file_to_test']]['to_test'])
 
         regex_delete = r'localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$'
 
@@ -484,20 +485,16 @@ class AutoContinue(object):
                 Helpers.File(self.autocontinue_log_file).write(
                     str(self.backup_content))
 
-    def backup(self, file_path):
+    def backup(self):
         """
         Backup the current execution state.
-
-        Argument:
-            - file_path: str
-                The path of the currently tested file.
         """
 
         if CONFIGURATION['auto_continue']:
             data_to_backup = {}
             configuration_counter = CONFIGURATION['counter']['number']
 
-            data_to_backup[file_path] = {
+            data_to_backup[CONFIGURATION['file_to_test']] = {
                 "tested": configuration_counter['tested'],
                 "up": configuration_counter['up'],
                 "down": configuration_counter['down'],
@@ -511,14 +508,12 @@ class AutoContinue(object):
 
             Helpers.Dict(to_save).to_json(self.autocontinue_log_file)
 
-    def restore(self, file_to_restore):
+    def restore(self):
         """
         Restore data from the given path.
-
-        Argument:
-            - file_to_restore: str
-                The path to the file we are going to test.
         """
+
+        file_to_restore = CONFIGURATION['file_to_test']
 
         if CONFIGURATION['auto_continue'] and self.backup_content:
             if file_to_restore in self.backup_content:
@@ -640,14 +635,10 @@ class Database(object):
     Logic behind the generation and the usage of a database system.
     The main idea behind this is to provide an inactive-db.json and test all
     inactive domain which are into to it regularly
-
-    Argument:
-        - file_path: str
-            The path to the file we are working with.
     """
 
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self):
+        self.file_path = CONFIGURATION['file_to_test']
         self.current_time = int(strftime('%s'))
         self.day_in_seconds = CONFIGURATION['days_between_db_retest'] * 24 * 3600
         self.inactive_db_path = CURRENT_DIRECTORY + \
@@ -3638,7 +3629,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.51.1-beta'
+        version='%(prog)s 0.52.0-beta'
     )
 
     ARGS = PARSER.parse_args()
