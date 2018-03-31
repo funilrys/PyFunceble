@@ -168,6 +168,8 @@ class PyFunceble(object):
                 if domain != last_domain:
                     AutoSave()
                 else:
+                    self.reset_counters()
+                    AutoContinue().backup()
                     AutoSave(True)
 
             CONFIGURATION['http_code'] = ''
@@ -3629,7 +3631,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.52.0-beta'
+        version='%(prog)s 0.52.1-beta'
     )
 
     ARGS = PARSER.parse_args()
