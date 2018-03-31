@@ -1933,6 +1933,7 @@ class Referer(object):
 
             Helpers.File(
                 CURRENT_DIRECTORY +
+                OUTPUTS['parent_directory'] +
                 OUTPUTS['logs']['directories']['parent'] +
                 OUTPUTS['logs']['directories']['no_referer'] +
                 self.domain_extension).write(logs)
@@ -3631,7 +3632,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.52.1-beta'
+        version='%(prog)s 0.52.2-beta'
     )
 
     ARGS = PARSER.parse_args()
