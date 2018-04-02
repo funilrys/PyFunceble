@@ -284,35 +284,37 @@ class PyFunceble(object):
             The domain to test.
         """
 
-        tabs = '\t'
-        space = ' '
+        if not extracted_domain.startswith('#'):
+            tabs = '\t'
+            space = ' '
 
-        tabs_position, space_position = (
-            extracted_domain.find(tabs), extracted_domain.find(space))
+            tabs_position, space_position = (
+                extracted_domain.find(tabs), extracted_domain.find(space))
 
-        if tabs_position > -1 and space_position > -1:
-            if space_position < tabs_position:
+            if tabs_position > -1 and space_position > -1:
+                if space_position < tabs_position:
+                    separator = space
+                else:
+                    separator = tabs
+            elif tabs_position > -1:
+                separator = tabs
+            elif space_position > -1:
                 separator = space
             else:
-                separator = tabs
-        elif tabs_position > -1:
-            separator = tabs
-        elif space_position > -1:
-            separator = space
-        else:
-            separator = ''
+                separator = ''
 
-        if separator:
-            splited_line = extracted_domain.split(separator)
+            if separator:
+                splited_line = extracted_domain.split(separator)
 
-            index = 1
-            while index < len(splited_line):
-                if splited_line[index]:
-                    break
-                index += 1
+                index = 1
+                while index < len(splited_line):
+                    if splited_line[index]:
+                        break
+                    index += 1
 
-            return splited_line[index]
-        return extracted_domain
+                return splited_line[index]
+            return extracted_domain
+        return ""
 
     @classmethod
     def _format_adblock_decoded(cls, to_format, result=None):
@@ -3796,7 +3798,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.58.0-beta'
+        version='%(prog)s 0.58.1-beta'
     )
 
     ARGS = PARSER.parse_args()
