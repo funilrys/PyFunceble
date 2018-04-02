@@ -285,6 +285,11 @@ class PyFunceble(object):
         """
 
         if not extracted_domain.startswith('#'):
+
+            if '#' in extracted_domain:
+                extracted_domain = extracted_domain[:extracted_domain.find(
+                    '#')].strip()
+
             tabs = '\t'
             space = ' '
 
@@ -3798,7 +3803,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.58.1-beta'
+        version='%(prog)s 0.58.2-beta'
     )
 
     ARGS = PARSER.parse_args()
