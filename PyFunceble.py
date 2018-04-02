@@ -2793,7 +2793,6 @@ class Update(object):
         self.destination = CURRENT_DIRECTORY + 'funilrys.'
         self.files = {
             'script': 'PyFunceble.py',
-            'tool': 'tool.py',
             'iana': OUTPUTS['default_files']['iana'],
             'dir_structure': 'dir_structure_production.json',
             'config': 'config_production.yaml',
@@ -2804,7 +2803,7 @@ class Update(object):
 
         if self.path_update:
             self.files = Helpers.Dict(self.files).remove_key(
-                ['script', 'tool', 'requirements'])
+                ['script', 'requirements'])
 
         if path.isdir(
                 CURRENT_DIRECTORY +
@@ -3797,7 +3796,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.55.0-beta'
+        version='%(prog)s 0.56.0-beta'
     )
 
     ARGS = PARSER.parse_args()

@@ -228,7 +228,6 @@ links:
   repo:                       "https://github.com/funilrys/PyFunceble"
   requirements:               "https://raw.githubusercontent.com/funilrys/PyFunceble/master/requirements.txt"
   script:                     "https://raw.githubusercontent.com/funilrys/PyFunceble/master/PyFunceble.py"
-  tool:                       "https://raw.githubusercontent.com/funilrys/PyFunceble/master/tool.py"
 
 # NOTE: DO NOT CHANGE THIS SECTION UNLESS YOU KNOW WHAT IT IMPLIES.
 counter:
