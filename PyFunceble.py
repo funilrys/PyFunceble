@@ -414,7 +414,9 @@ class PyFunceble(object):
             with open(CONFIGURATION['file_to_test']) as file:
                 for line in file:
                     if not line.startswith('#'):
-                        result.append(line.rstrip('\n').strip())
+                        result.append(
+                            cls._format_domain(
+                                line.rstrip('\n').strip()))
         else:
             raise FileNotFoundError(CONFIGURATION['file_to_test'])
 
@@ -3803,7 +3805,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.58.2-beta'
+        version='%(prog)s 0.58.3-beta'
     )
 
     ARGS = PARSER.parse_args()
