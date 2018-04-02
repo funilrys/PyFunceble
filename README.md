@@ -1,6 +1,6 @@
 # PyFunceble
 
-> A tool to check domains or IP availability (ACTIVE, INACTIVE, INVALID). Also described as "[an] excellent script for checking ACTIVE and INACTIVE domain names"
+## The tool to check domains or IP availability.
 
 [![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest)
 
@@ -8,13 +8,30 @@
 
 [![Github file size](https://img.shields.io/github/size/funilrys/PyFunceble/PyFunceble.py.svg)](https://github.com/funilrys/Pyfunceble/blob/master/PyFunceble)
 
-The main idea behind this repository is to rewrite [Funceble](https://github.com/funilrys/funceble) into a more clean and portable format.
+PyFunceble is the little sister of Funceble (https://github.com/funilrys/funceble)
+which was archived on March 13th, 2018.
 
-In other word the main idea behind this repository is to create a script which check the availability of a given domain, a hosts file or a list of domains by returning `ACTIVE`, `INACTIVE` or `INVALID`.
+Its main objective is to test domains and IP availability
+by generating an accurate result based on results from WHOIS, NSLOOKUP and
+HTTP status codes.
+As result, PyFunceble returns 3 status: `ACTIVE`, `INACTIVE` and `INVALID`.
+The denomination of those statuses can be changed under your personal
+`config.yaml`.
+
+At the time we write this, PyFunceble is running actively and daily under 50+
+Travis CI repository or process to test the availability of domains which are
+present into hosts files, AdBlock filter lists, list of IP, list of domains or
+blocklists.
+
+An up to date explanation of all status can be found at https://git.io/vxieo.
+You can also find a simple representation of the logic behind PyFunceble at
+https://git.io/vxifw.
+
+:star::tada: Thank you for using **PyFunceble** :tada::star:
 
 ## :book: Wiki as place to be :star2::star2::star2:
 
-Want to know more about **PyFunceble**? All information to know are under the [wiki](https://github.com/funilrys/PyFunceble/wiki)! You can also contribute there if you think that it's uncomplete!
+Want to know more about **PyFunceble**? All information to know can be found on the [wiki](https://github.com/funilrys/PyFunceble/wiki)! You can also contribute there if you think that it's incomplete!
 
 You can get a copy of the wiki with the following:
 
@@ -32,7 +49,7 @@ git clone https://github.com/funilrys/PyFunceble.wiki.git
 
 - Save results on file(s)
 
-- ... and a lot more !
+- ... and a lot more!
 
 --------------------------------------------------------------------------------
 
@@ -40,7 +57,9 @@ git clone https://github.com/funilrys/PyFunceble.wiki.git
 
 [PyFunceble](https://github.com/funilrys/PyFunceble), [Dead-Hosts](https://github.com/dead-hosts), [Funceble](https://github.com/funilrys/funceble) and all other analog projects are powered by :coffee:!
 
-This project helps you and or you like it? [![Help me with a cup of coffee](https://img.shields.io/badge/Buy%20-me%20a%20cup%20of%20%E2%98%95-blue.svg)](https://www.paypal.me/funilrys/)
+This project helps you and or you like it?
+
+[![Help me with a cup of coffee](https://img.shields.io/badge/Help%20me%20out-with%20a%20cup%20of%20%E2%98%95%20-blue.svg)](https://www.paypal.me/funilrys/)
 
 --------------------------------------------------------------------------------
 
@@ -73,7 +92,7 @@ I would like to thank those awesome organization and people for
 - Their current work
 - Their awesome repository
 - Their support
-- Their promotion
+- Their promotion of Funceble and (or indirectly) PyFunceble
 - Their testings reports
 - Their breaking reports
 - Their contributions
