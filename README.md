@@ -2,11 +2,7 @@
 
 ## The tool to check domains or IP availability.
 
-[![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest)
-
-[![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)]() [![GitHub closed issues](https://img.shields.io/github/issues-closed/funilrys/PyFunceble.svg)](https://github.com/funilrys/)
-
-[![Github file size](https://img.shields.io/github/size/funilrys/PyFunceble/PyFunceble.py.svg)](https://github.com/funilrys/Pyfunceble/blob/master/PyFunceble)
+[![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest) [![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)]() [![GitHub closed issues](https://img.shields.io/github/issues-closed/funilrys/PyFunceble.svg)](https://github.com/funilrys/) [![Github file size](https://img.shields.io/github/size/funilrys/PyFunceble/PyFunceble.py.svg)](https://github.com/funilrys/Pyfunceble/blob/master/PyFunceble)
 
 PyFunceble is the little sister of Funceble (https://github.com/funilrys/funceble)
 which was archived on March 13th, 2018.
