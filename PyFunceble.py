@@ -2030,11 +2030,15 @@ class ExpirationDate(object):
             elif CONFIGURATION['referer']:
                 return self._extract()
 
+            self._whois_log()
             return Status(STATUS['official']['down']).handle()
         elif ip_validation and not domain_validation or ip_validation:
             CONFIGURATION['http_code'] = HTTPCode().get()
+
+            self._whois_log()
             return Status(STATUS['official']['down']).handle()
 
+        self._whois_log()
         return Status(STATUS['official']['invalid']).handle()
 
     def _whois_log(self):
@@ -2043,11 +2047,14 @@ class ExpirationDate(object):
         """
 
         if CONFIGURATION['debug'] and CONFIGURATION['logs']:
-            log = self.log_separator + self.whois_record + '\n' + self.log_separator
+            log = self.log_separator + \
+                str(self.whois_record) + '\n' + self.log_separator
 
             Helpers.File(
                 CURRENT_DIRECTORY +
-                CONFIGURATION['logs']['directories']['whois'] +
+                OUTPUTS['parent_directory'] +
+                OUTPUTS['logs']['directories']['parent'] +
+                OUTPUTS['logs']['directories']['whois'] +
                 CONFIGURATION['referer']).write(log)
 
     @classmethod
@@ -2325,6 +2332,8 @@ class ExpirationDate(object):
                         self._format()
                         Generate(STATUS['official']['up'], 'WHOIS',
                                  self.expiration_date).status_file()
+
+                        self._whois_log()
                         return STATUS['official']['up']
 
                     self._whois_log()
@@ -3704,7 +3713,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.53.2-beta'
+        version='%(prog)s 0.54.0-beta'
     )
 
     ARGS = PARSER.parse_args()
