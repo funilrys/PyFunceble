@@ -437,7 +437,7 @@ class PyFunceble(object):
                 list_to_test.extend(
                     CONFIGURATION['inactive_db'][CONFIGURATION['file_to_test']]['to_test'])
 
-        regex_delete = r'localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$'
+        regex_delete = r'localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$'  # pylint: disable=line-too-long
 
         list_to_test = Helpers.List(
             Helpers.Regex(
@@ -3796,7 +3796,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.56.0-beta'
+        version='%(prog)s 0.57.0-beta'
     )
 
     ARGS = PARSER.parse_args()
