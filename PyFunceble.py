@@ -414,9 +414,7 @@ class PyFunceble(object):
             with open(CONFIGURATION['file_to_test']) as file:
                 for line in file:
                     if not line.startswith('#'):
-                        result.append(
-                            cls._format_domain(
-                                line.rstrip('\n').strip()))
+                        result.append(line.rstrip('\n').strip())
         else:
             raise FileNotFoundError(CONFIGURATION['file_to_test'])
 
@@ -434,6 +432,8 @@ class PyFunceble(object):
 
         if CONFIGURATION['adblock']:
             list_to_test = self.adblock_decode(list_to_test)
+        else:
+            list_to_test = list(map(self._format_domain, list_to_test))
 
         PyFunceble.Clean(list_to_test)
 
@@ -3805,7 +3805,7 @@ if __name__ == '__main__':
         '-v',
         '--version',
         action='version',
-        version='%(prog)s 0.58.3-beta'
+        version='%(prog)s 0.59.0-beta'
     )
 
     ARGS = PARSER.parse_args()
