@@ -488,9 +488,9 @@ class PyFunceble(object):
                 return False
             return True
 
-        to_print = 'Please use the auto update or post an issue to %s'
+        to_print = 'Please use the updater or post an issue to %s'
 
-        raise Exception(to_print % LINKS['repo'] + '/issues')
+        raise Exception(to_print % LINKS['repo'] + '/issues.')
 
     class Clean(object):
         """
