@@ -2069,11 +2069,9 @@ class Referer(object):
             "cy",
             "dj",
             "eg",
-            "er",
             "et",
             "fk",
             "fm",
-            "ge",
             "gm",
             "gn",
             "gp",
@@ -3995,7 +3993,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.11-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.12-beta"
     )
 
     ARGS = PARSER.parse_args()
