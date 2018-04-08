@@ -2081,6 +2081,7 @@ class Referer(object):
             "kh",
             "lb",
             "mc",
+            "mh",
             "mil",
             "mm",
             "mt",
@@ -3985,7 +3986,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.0-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.1-beta"
     )
 
     ARGS = PARSER.parse_args()
