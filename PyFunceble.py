@@ -2704,6 +2704,7 @@ class IANA(object):
             "homesense": "whois.nic.homesense",
             "honeywell": "whois.nic.honeywell",
             "hoteles": "whois.nic.hoteles",
+            "hotels": "whois.nic.hotels",
             "hot": "whois.nic.hot",
             "int": "whois.iana.org",
             "kw": "whois.nic.kw",
@@ -4035,7 +4036,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.55-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.56-beta"
     )
 
     ARGS = PARSER.parse_args()
