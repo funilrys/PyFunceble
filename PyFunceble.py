@@ -2910,7 +2910,7 @@ class DirectoryStructure(object):
     @classmethod
     def _create_directory(cls, directory):
         """
-        This function create the given directory if it does not exists.
+        This method create the given directory if it does not exists.
         """
 
         if not path.isdir(directory):
@@ -3365,7 +3365,7 @@ class Helpers(object):  # pylint: disable=too-few-public-methods
 
         def fix_path(self):
             """
-            This function fix the path of the given path.
+            This method fix the path of the given path.
             """
 
             split_path = []
@@ -3995,7 +3995,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.10-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.11-beta"
     )
 
     ARGS = PARSER.parse_args()
