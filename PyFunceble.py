@@ -2669,6 +2669,7 @@ class IANA(object):
             "dnp": "whois.nic.dnp",
             "duns": "whois.nic.duns",
             "dupont": "whois.nic.dupont",
+            "earth": "whois.nic.earth",
             "fj": "whois.usp.ac.fj",
             "ga": "whois.my.ga",
             "gh": "whois.nic.gh",
@@ -4002,7 +4003,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.22-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.23-beta"
     )
 
     ARGS = PARSER.parse_args()
