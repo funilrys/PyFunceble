@@ -2080,6 +2080,7 @@ class Referer(object):
             "gr",
             "gt",
             "gu",
+            "gw",
             "jm",
             "jo",
             "kh",
@@ -3993,7 +3994,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.8-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.60.9-beta"
     )
 
     ARGS = PARSER.parse_args()
