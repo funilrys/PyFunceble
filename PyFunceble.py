@@ -106,7 +106,7 @@ from colorama import init as initiate
 from yaml import load as load_yaml
 
 
-class PyFunceble(object):
+class PyFunceble(object):  # pragma: no cover
     """
     Main entry to PYFunceble. Brain of the program. Also known as "put everything
     together to make the system works".
@@ -656,7 +656,7 @@ class AutoContinue(object):
                         )
 
 
-class AutoSave(object):  # pylint: disable=too-few-public-methods
+class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-methods
     """
     Logic behind autosave.
 
@@ -847,11 +847,10 @@ class Database(object):
                         result = int(data)
                     else:
                         result = self.current_time
-                        self._add_to_test(
-                            CONFIGURATION["inactive_db"][self.file_path][data]
-                        )
                         to_delete.append(data)
 
+            for element in to_delete:
+                self._add_to_test(CONFIGURATION["inactive_db"][self.file_path][element])
             Helpers.Dict(CONFIGURATION["inactive_db"][self.file_path]).remove_key(
                 to_delete
             )
@@ -4064,7 +4063,7 @@ if __name__ == "__main__":
         help=" Get the latest version of PyFunceble.",
     )
     PARSER.add_argument(
-        "-v", "--version", action="version", version="%(prog)s 0.60.84-beta"
+        "-v", "--version", action="version", version="%(prog)s 0.61.0-beta"
     )
 
     ARGS = PARSER.parse_args()
