@@ -147,7 +147,7 @@ class ExpirationDate(object):
 
         return Regex(to_test, regex_ipv4, return_data=False).match()
 
-    def get(self):
+    def get(self): # pragma: no cover
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
         """
@@ -182,7 +182,7 @@ class ExpirationDate(object):
         self._whois_log()
         return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
 
-    def _whois_log(self):
+    def _whois_log(self): # pragma: no cover
         """
         Log the whois record into a file
         """
@@ -244,7 +244,7 @@ class ExpirationDate(object):
 
         return data
 
-    def log(self):
+    def log(self): # pragma: no cover
         """
         Log the extracted expiration date and domain into a file.
         """
@@ -272,8 +272,7 @@ class ExpirationDate(object):
 
                 requests.post(PyFunceble.LINKS["api_date_format"], data=date_to_share)
 
-    @classmethod
-    def _cases_management(cls, regex_number, matched_result):
+    def _cases_management(self, regex_number, matched_result):
         """
         A little helper of self.format. (Avoiding of nested loops)
 
@@ -293,28 +292,31 @@ class ExpirationDate(object):
             "third": [
                 [4, 5, 6, 7, 8, 9, 12, 13, 16, 17, 18, 19, 20, 21, 23, 24, 25, 30, 35],
                 [2, 1, 0],
-            ],
+            ]
         }
 
         for case in cases:
             case_data = cases[case]
 
             if int(regex_number) in case_data[0]:
+
                 return [
-                    matched_result[case_data[1][0]],
-                    matched_result[case_data[1][1]],
-                    matched_result[case_data[1][2]],
+                    self._convert_1_to_2_digits(matched_result[case_data[1][0]]),
+                    self._convert_or_shorten_month(matched_result[case_data[1][1]]),
+                    str(matched_result[case_data[1][2]]),
                 ]
 
-            else:
-                continue
-
-        return None
-
-    def _format(self):
+    def _format(self, date_to_convert=None):
         """
         Format the expiration date into an unified format (01-jan-1970).
+
+        Argument:
+            - date_to_convert: str
+                The date to convert.
         """
+
+        if not date_to_convert: # pragma: no cover
+            date_to_convert = self.expiration_date
 
         regex_dates = {
             # Date in format: 02-jan-2017
@@ -396,27 +398,18 @@ class ExpirationDate(object):
 
         for regx in regex_dates:
             matched_result = Regex(
-                self.expiration_date, regex_dates[regx], return_data=True, rematch=True
+                date_to_convert, regex_dates[regx], return_data=True, rematch=True
             ).match()
 
             if matched_result:
                 date = self._cases_management(regx, matched_result)
 
                 if date:
-                    day = self._convert_1_to_2_digits(date[0])
-                    month = self._convert_or_shorten_month(date[1])
-                    year = str(date[2])
+                    return '-'.join(date)
 
-                    self.expiration_date = day + "-" + month + "-" + year
-                break
+        return ""
 
-        if self.expiration_date and not Regex(
-            self.expiration_date, r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}", return_data=False
-        ).match():
-            self.log()
-            self._whois_log()
-
-    def _extract(self):
+    def _extract(self): # pragma: no cover
         """
         Extract the expiration date from the whois record.
         """
@@ -475,7 +468,14 @@ class ExpirationDate(object):
                         self.expiration_date, regex_rumbers, return_data=False
                     ).match():
 
-                        self._format()
+                        self.expiration_date = self._format()
+
+                        if self.expiration_date and not Regex(
+                            self.expiration_date, r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}", return_data=False
+                        ).match():
+                            self.log()
+                            self._whois_log()
+
                         Generate(
                             PyFunceble.STATUS["official"]["up"],
                             "WHOIS",
