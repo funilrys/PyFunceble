@@ -108,16 +108,16 @@ class Lookup(object):
                 except OSError:
                     return False
 
-            except socket.herror:
+            except socket.herror: # pragma: no cover
                 return False
 
             return True
 
-        except socket.gaierror:
+        except socket.gaierror: # pragma: no cover
             return False
 
     @classmethod
-    def whois(cls, whois_server, domain=None, timeout=None):
+    def whois(cls, whois_server, domain=None, timeout=None): # pragma: no cover
         """
         Implementation of UNIX whois.
 

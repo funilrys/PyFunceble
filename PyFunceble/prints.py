@@ -222,7 +222,7 @@ class Prints(object):
 
         return [header_size % tuple(header_data)]
 
-    def header(self, do_not_print=False):  # pylint: disable=too-many-branches
+    def header(self, do_not_print=False): # pragma: no cover # pylint: disable=too-many-branches
         """
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.
@@ -333,7 +333,7 @@ class Prints(object):
                 data = Fore.BLACK + Back.CYAN + data
         return data
 
-    def data(self):
+    def data(self): # pragma: no cover
         """
         Management and input of data to the table.
 
