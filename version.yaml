@@ -1,0 +1,9 @@
+# This is the current version
+current_version: "0.70.0.dev-beta"
+# If we want to force update because of critical fixed issue we set the following
+# to True.
+force_update:    False
+# If we want to inform that the current version is deprecated we put it in the
+# following list.
+deprecated:
+  - False
