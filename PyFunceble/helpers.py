@@ -113,7 +113,9 @@ class Hash(object):
         Original version : https://git.io/vFQrK
     """
 
-    def __init__(self, file_path, algorithm="sha512", only_hash=False):
+    def __init__(
+        self, file_path, algorithm="sha512", only_hash=False
+    ):  # pragma: no cover
         self.valid_algorithms = ["all", "md5", "sha1", "sha224", "sha384", "sha512"]
 
         self.path = file_path
@@ -164,7 +166,7 @@ class Command(object):
     Shell command execution.
     """
 
-    def __init__(self, command):
+    def __init__(self, command):  # pragma: no cover
         self.decode_type = "utf-8"
         self.command = command
 
@@ -193,7 +195,7 @@ class Command(object):
         process = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=True)
         (output, error) = process.communicate()
 
-        if process.returncode != 0:
+        if process.returncode != 0:  # pragma: no cover
             return self.decode_output(error)
 
         return self.decode_output(output)
@@ -204,7 +206,7 @@ class Dict(object):
     Dictionary manipulations.
     """
 
-    def __init__(self, main_dictionnary=None):
+    def __init__(self, main_dictionnary=None):  # pragma: no cover
 
         if main_dictionnary is None:
             self.main_dictionnary = {}
@@ -295,7 +297,7 @@ class Dict(object):
         try:
             return loads(data)
 
-        except decoder.JSONDecodeError:
+        except decoder.JSONDecodeError:  # pragma: no cover
             return {}
 
     @classmethod
@@ -320,29 +322,33 @@ class Directory(object):  # pylint: disable=too-few-public-methods
             A path to the directory to manipulate.
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory):  # pragma: no cover
         self.directory = directory
 
-    def fix_path(self):
+    def fix_path(self, splited_path=None):
         """
         This method fix the path of the given path.
+
+        Argument:
+            - splited_path: list
+                A list to convert to the right path
         """
 
-        split_path = []
-        if self.directory:
-            if self.directory.startswith("/") or self.directory.startswith("\\"):
+        if not splited_path:
+            split_path = []
+
+            if self.directory:
                 if "/" in self.directory:
-                    split_path = self.directory[1:].split("/")
+                    split_path = self.directory.split("/")
                 elif "\\" in self.directory:
-                    split_path = self.directory[1:].split("\\")
+                    split_path = self.directory.split("\\")
 
-                if split_path:
-                    return directory_separator.join(split_path)
+                if not split_path[0]:
+                    split_path = split_path[1:]
 
-            if not self.directory.endswith(directory_separator):
-                return self.directory + directory_separator
-
-        return self.directory
+                return self.fix_path(splited_path=split_path)
+            return self.directory
+        return directory_separator.join(splited_path) + directory_separator
 
 
 class File(object):
@@ -407,7 +413,7 @@ class List(object):  # pylint: disable=too-few-public-methods
             The list to manipulate.
     """
 
-    def __init__(self, main_list=None):
+    def __init__(self, main_list=None): # pragma: no cover
         if main_list is None:
             self.main_list = []
         else:
@@ -424,7 +430,7 @@ class List(object):  # pylint: disable=too-few-public-methods
         try:
             return sorted(list(set(self.main_list)), key=str.lower)
 
-        except TypeError:
+        except TypeError: # pragma: no cover
             return self.main_list
 
 
