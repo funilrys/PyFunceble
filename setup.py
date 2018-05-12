@@ -86,17 +86,29 @@ from setuptools import setup
 
 def _test_suite():
     """
-    This method will discover and run all the tests.
+    This function will discover and run all the tests.
     """
 
     test_loader = TestLoader()
     test_suite = test_loader.discover("tests", pattern="test_*.py")
     return test_suite
 
+def _get_requirements():
+    """
+    This function extract all requirements from requirements.txt.
+    """
+
+    with open('requirements.txt') as file:
+        requirements = file.read().splitlines()
+
+    return requirements
+
+
 
 setup(
     name="PyFunceble",
-    version="0.62.0.dev-beta",
+    version="0.64.0.dev-beta",
+    install_requires=_get_requirements(),
     description="The tool to check domains or IP availability.",
     long_description=open("README.md").read(),
     author="funilrys",

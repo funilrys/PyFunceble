@@ -105,7 +105,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.62.0.dev-beta"
+VERSION = "0.64.0.dev-beta"
 AUTO_CONFIGURATION = False
 
 CONFIGURATION = {}
