@@ -105,7 +105,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.65.0.dev-beta"
+VERSION = "0.65.1.dev-beta"
 AUTO_CONFIGURATION = False
 
 CONFIGURATION = {}
@@ -604,6 +604,6 @@ def command_line(): #pragma: no cover  # pylint: disable=too-many-branches,too-m
             CONFIGURATION.update({"travis_branch": ARGS.travis_branch})
 
         if not CONFIGURATION["quiet"]:
-            print(Fore.YELLOW + ASCII_PYFUNCEBLE)
+            print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
 
         Core(ARGS.domain, ARGS.file)
