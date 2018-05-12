@@ -254,10 +254,9 @@ class DirectoryStructure(object): # pragma: no cover
         elif path.isfile(self.base + "dir_structure_production.json"):
             structure_file = self.base + "dir_structure_production.json"
         else:
-            try:
-                if "dev" not in PyFunceble.VERSION:
-                    req = requests.get(PyFunceble.LINKS["dir_structure"])
-            except KeyError:
+            if "dev" not in PyFunceble.VERSION:
+                req = requests.get(PyFunceble.LINKS["dir_structure"])
+            else:
                 req = requests.get(
                     PyFunceble.LINKS["dir_structure"].replace("master", "dev")
                 )
