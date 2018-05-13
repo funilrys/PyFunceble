@@ -1,0 +1,14 @@
+env:
+  global:
+    - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
+
+language:       python
+
+python:
+  - "3.6"
+
+matrix:
+  fast_finish:  true
+
+script:
+  - python3 setup.py test && python3 setup.py install && PyFunceble -d google.com
