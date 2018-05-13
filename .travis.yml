@@ -10,5 +10,8 @@ python:
 matrix:
   fast_finish:  true
 
+before_script:
+  - apt-get install python3-virtualenv
+
 script:
   - virtualenv3 file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
