@@ -218,7 +218,7 @@ class TestExpirationDate(TestCase):
             "2.1.2017",
             "20170102000000",
             "January  2 2017",
-            "2nd January 2017"
+            "2nd January 2017",
         ]
 
         for date in to_test:

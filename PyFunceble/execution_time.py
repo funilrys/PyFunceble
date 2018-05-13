@@ -116,7 +116,7 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
                 )
 
     @classmethod
-    def _starting_time(cls): # pragma: no cover
+    def _starting_time(cls):  # pragma: no cover
         """
         Set the starting time.
         """
@@ -124,7 +124,7 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
         PyFunceble.CONFIGURATION["start"] = int(strftime("%s"))
 
     @classmethod
-    def _stoping_time(cls): # pragma: no cover
+    def _stoping_time(cls):  # pragma: no cover
         """
         Set the ending time.
         """

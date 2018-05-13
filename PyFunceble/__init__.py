@@ -125,7 +125,7 @@ ASCII_PYFUNCEBLE = """
 """
 
 
-def test(domain): # pragma: no cover
+def test(domain):  # pragma: no cover
     """
     This function provide an access to the core while use PyFunceble as an imported module.
     """
@@ -134,7 +134,7 @@ def test(domain): # pragma: no cover
     return Core(domain=domain, modulo_test=True).test()
 
 
-def load_config(): # pragma: no cover
+def load_config():  # pragma: no cover
     """
     This function will load the configuration.
     """
@@ -154,11 +154,10 @@ def load_config(): # pragma: no cover
     if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
         DirectoryStructure()
 
-
     compare_version()
 
 
-def command_line(): #pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
+def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
     """
     This function provide the command line arguments of PyFunceble.
     """

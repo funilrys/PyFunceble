@@ -83,13 +83,11 @@ License: MIT
 """
 # pylint: disable=import-error
 from unittest import TestCase
-import unittest.mock as mock
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.clean import Clean
-from PyFunceble.config import load_configuration
 from PyFunceble.helpers import Hash, File, Dict, Command, Directory
+
 
 class TestHash(TestCase):
     """
@@ -101,18 +99,15 @@ class TestHash(TestCase):
         This method will initiate everything needed for the tests.
         """
 
-        self.file = 'this_file_should_be_deleted'
-        self.data_to_write = [
-            "Hello World!",
-            "Thanks for using PyFunceble"
-        ]
+        self.file = "this_file_should_be_deleted"
+        self.data_to_write = ["Hello World!", "Thanks for using PyFunceble"]
 
         self.expected_hashed = {
-            'md5': "ba2e0e1774c2e60e2327f263402facd4",
+            "md5": "ba2e0e1774c2e60e2327f263402facd4",
             "sha1": "b5c8520cd2c422019997dc6fdbc9cb9d7002356e",
             "sha224": "863c46d5ed52b439da8f62a791e77c0cbbfb7d92af7c5549279f580d",
-            "sha384": "6492f4b5732e0af4b9edf2c29ee4622c62ee418e5d6e0f34b13cb80560a28256c6e21e949119872d26d2327fc112a63b",
-            "sha512": "f193ad6ee2cfbecd580225d8e6bfb9df1910e5ca6135b21b03ae208a007f71e9b57b55e299d27157551a18ef4dfdde23c96aaea796064846edc6cd25ac7eaf7f"
+            "sha384": "6492f4b5732e0af4b9edf2c29ee4622c62ee418e5d6e0f34b13cb80560a28256c6e21e949119872d26d2327fc112a63b",  # pylint: disable=line-too-long
+            "sha512": "f193ad6ee2cfbecd580225d8e6bfb9df1910e5ca6135b21b03ae208a007f71e9b57b55e299d27157551a18ef4dfdde23c96aaea796064846edc6cd25ac7eaf7f",  # pylint: disable=line-too-long
         }
 
     def test_hash_data(self):
@@ -124,15 +119,18 @@ class TestHash(TestCase):
         actual = PyFunceble.path.isfile(self.file)
         self.assertEqual(expected, actual)
 
-        File(self.file).write('\n'.join(self.data_to_write))
+        File(self.file).write("\n".join(self.data_to_write))
         expected = True
         actual = PyFunceble.path.isfile(self.file)
 
         self.assertEqual(expected, actual)
 
         for algo, result in self.expected_hashed.items():
-            self.assertEqual(result, Hash(self.file).hash_data(algo), msg="%s did not passed the test" % repr(algo))
-
+            self.assertEqual(
+                result,
+                Hash(self.file).hash_data(algo),
+                msg="%s did not passed the test" % repr(algo),
+            )
 
         File(self.file).delete()
 
@@ -164,7 +162,7 @@ class TestHash(TestCase):
         actual = PyFunceble.path.isfile(self.file)
         self.assertEqual(expected, actual)
 
-        File(self.file).write('\n'.join(self.data_to_write))
+        File(self.file).write("\n".join(self.data_to_write))
         expected = True
         actual = PyFunceble.path.isfile(self.file)
 
@@ -190,7 +188,7 @@ class TestHash(TestCase):
         actual = PyFunceble.path.isfile(self.file)
         self.assertEqual(expected, actual)
 
-        File(self.file).write('\n'.join(self.data_to_write))
+        File(self.file).write("\n".join(self.data_to_write))
         expected = True
         actual = PyFunceble.path.isfile(self.file)
 
@@ -206,6 +204,7 @@ class TestHash(TestCase):
         actual = PyFunceble.path.isfile(self.file)
         self.assertEqual(expected, actual)
 
+
 class TestCommand(TestCase):
     """
     This class will test PyFunceble.helpers.Command().
@@ -219,7 +218,8 @@ class TestCommand(TestCase):
         expected = "PyFunceble has been written by Fun Ilrys."
         actual = Command("echo '%s'" % expected).execute()
 
-        self.assertEqual(expected + '\n', actual)
+        self.assertEqual(expected + "\n", actual)
+
 
 class TestDict(TestCase):
     """
@@ -233,12 +233,10 @@ class TestDict(TestCase):
 
         self.to_test = {
             "Hello": "world",
-            "World": {
-                "world", "hello"
-            },
+            "World": {"world", "hello"},
             "funilrys": ["Fun", "Ilrys"],
             "Py": "Funceble",
-            "pyfunceble": ['funilrys']
+            "pyfunceble": ["funilrys"],
         }
 
     def test_remove_key(self):
@@ -248,11 +246,9 @@ class TestDict(TestCase):
 
         expected = {
             "Hello": "world",
-            "World": {
-                "world", "hello"
-            },
+            "World": {"world", "hello"},
             "funilrys": ["Fun", "Ilrys"],
-            "pyfunceble": ['funilrys']
+            "pyfunceble": ["funilrys"],
         }
 
         actual = Dict(self.to_test).remove_key("Py")
@@ -261,7 +257,7 @@ class TestDict(TestCase):
 
         # Test of the case that a dict is not given
         expected = None
-        actual = Dict(['Hello','World!']).remove_key("Py")
+        actual = Dict(["Hello", "World!"]).remove_key("Py")
 
         self.assertEqual(expected, actual)
 
@@ -272,7 +268,7 @@ class TestDict(TestCase):
         """
 
         expected = None
-        actual = Dict(self.to_test).rename_key(['Fun','Ilrys'])
+        actual = Dict(self.to_test).rename_key(["Fun", "Ilrys"])
 
         self.assertEqual(expected, actual)
 
@@ -285,30 +281,27 @@ class TestDict(TestCase):
         # Test of the strict case
         expected = {
             "Hello": "world",
-            "World": {
-                "world", "hello"
-            },
+            "World": {"world", "hello"},
             "funilrys": ["Fun", "Ilrys"],
             "PyFunceble": "Funceble",
-            "pyfunceble": ['funilrys']
+            "pyfunceble": ["funilrys"],
         }
 
-        actual = Dict(self.to_test).rename_key({"Py":"PyFunceble"})
+        actual = Dict(self.to_test).rename_key({"Py": "PyFunceble"})
 
         self.assertEqual(expected, actual)
 
         # Test of the non-strict case
         expected = {
             "Hello": "world",
-            "World": {
-                "world", "hello"
-            },
+            "World": {"world", "hello"},
             "funilrys": ["Fun", "Ilrys"],
             "PyFunceble": "Funceble",
-            "pyfunceble": ['funilrys']
+            "pyfunceble": ["funilrys"],
         }
 
-        actual = Dict(self.to_test).rename_key({"fun":"nuf"}, strict=False)
+        actual = Dict(self.to_test).rename_key({"fun": "nuf"}, strict=False)
+
 
 class TestDirectory(TestCase):
     """
@@ -320,19 +313,20 @@ class TestDirectory(TestCase):
         This method will test Directory.fix_path().
         """
 
-        expected = 'hello' + PyFunceble.directory_separator + 'world' + PyFunceble.directory_separator
-        actual = Directory('/hello/world').fix_path()
+        expected = "hello" + PyFunceble.directory_separator + "world" + PyFunceble.directory_separator  # pylint: disable=line-too-long
+        actual = Directory("/hello/world").fix_path()
 
         self.assertEqual(expected, actual)
 
-        actual = Directory('\\hello\\world').fix_path()
+        actual = Directory("\\hello\\world").fix_path()
         self.assertEqual(expected, actual)
 
-        actual = Directory('hello\\world').fix_path()
+        actual = Directory("hello\\world").fix_path()
         self.assertEqual(expected, actual)
 
-        actual = Directory('hello\world').fix_path()
+        actual = Directory(r"hello\world").fix_path()
         self.assertEqual(expected, actual)
+
 
 class TestFile(TestCase):
     """
@@ -402,6 +396,7 @@ class TestFile(TestCase):
         actual = PyFunceble.path.isfile("hi")
 
         self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     launch_tests()

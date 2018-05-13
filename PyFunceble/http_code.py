@@ -94,7 +94,7 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
     """
 
     @classmethod
-    def _access(cls): # pragma: no cover
+    def _access(cls):  # pragma: no cover
         """
         Get the HTTP code status.
 

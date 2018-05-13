@@ -83,7 +83,7 @@ License: MIT
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-
+# pylint: disable=bad-continuation
 import hashlib
 from json import decoder, dump, loads
 from os import remove
@@ -347,7 +347,9 @@ class Directory(object):  # pylint: disable=too-few-public-methods
                     split_path = split_path[1:]
 
                 return self.fix_path(splited_path=split_path)
+
             return self.directory
+
         return directory_separator.join(splited_path) + directory_separator
 
 
@@ -413,7 +415,7 @@ class List(object):  # pylint: disable=too-few-public-methods
             The list to manipulate.
     """
 
-    def __init__(self, main_list=None): # pragma: no cover
+    def __init__(self, main_list=None):  # pragma: no cover
         if main_list is None:
             self.main_list = []
         else:
@@ -430,7 +432,7 @@ class List(object):  # pylint: disable=too-few-public-methods
         try:
             return sorted(list(set(self.main_list)), key=str.lower)
 
-        except TypeError: # pragma: no cover
+        except TypeError:  # pragma: no cover
             return self.main_list
 
 

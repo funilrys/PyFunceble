@@ -91,7 +91,7 @@ from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
 
-class Generate(object): # pragma: no cover
+class Generate(object):  # pragma: no cover
     """
     Generate different sort of files.
 

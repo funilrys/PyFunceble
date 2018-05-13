@@ -90,7 +90,7 @@ from PyFunceble.helpers import Dict, File
 from PyFunceble.status import Status
 
 
-class Referer(object): # pragma: no cover
+class Referer(object):  # pragma: no cover
     """
     Get the WHOIS server (referer) of the current domain extension according to
         the IANA database.

@@ -88,7 +88,7 @@ from PyFunceble.helpers import Dict, Download, Regex
 from PyFunceble.lookup import Lookup
 
 
-class IANA(object): # pragma: no cover
+class IANA(object):  # pragma: no cover
     """
     Logic behind the update of `iana-domains-db.json`
     """

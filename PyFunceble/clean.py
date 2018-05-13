@@ -134,7 +134,7 @@ class Clean(object):
             "parent_directory"
         ]
 
-        if not directory.endswith(directory_separator): # pragma: no cover
+        if not directory.endswith(directory_separator):  # pragma: no cover
             directory += directory_separator
 
         result = []
