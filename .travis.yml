@@ -13,7 +13,7 @@ matrix:
 sudo: required
 
 before_script:
-  - sudo apt-get install python3-venv
+  - pip3 install virtualenv
 
 script:
-  - python3 -m venv file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
+  - python3 -m virtualenv file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
