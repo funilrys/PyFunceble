@@ -12,4 +12,4 @@ matrix:
 
 script:
   # Everything is into one line because we want the test to fail if one of those command fails.
-  - pip3 install git+https://github.com/funilrys/PyFunceble.git@modulo-dev#egg=PyFunceble && PyFunceble -d github.com && pip uninstall -y PyFunceble && python3 setup.py test && python3 setup.py install && PyFunceble -d github.com  && PyFunceble -f .travis/list_to_test && PyFunceble --adblock -f .travis/adblock_to_test
+  - pip3 install pylint && pylint PyFunceble && pylint tests/*.py && pip3 install git+https://github.com/funilrys/PyFunceble.git@modulo-dev#egg=PyFunceble && PyFunceble -d github.com && pip uninstall -y PyFunceble && python3 setup.py test && python3 setup.py install && PyFunceble -d github.com  && PyFunceble -f .travis/list_to_test && PyFunceble --adblock -f .travis/adblock_to_test
