@@ -16,4 +16,6 @@ before_script:
   - pip3 install virtualenv
 
 script:
-  - python3 -m virtualenv file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
+  - python3 -m virtualenv domain_test && source domain_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -d github.com && deactivate
+  - python3 -m virtualenv list_test && source list_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
+  - python3 -m virtualenv adblock_test && source adblock_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble --adblock -f .travis/adblock_to_test && deactivate
