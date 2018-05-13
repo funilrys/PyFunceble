@@ -11,5 +11,5 @@ matrix:
   fast_finish:  true
 
 script:
-  - pip3 install git+https://github.com/funilrys/PyFunceble.git@modulo-dev#egg=PyFunceble && PyFunceble -d github.com && pip uninstall PyFunceble
+  - pip3 install git+https://github.com/funilrys/PyFunceble.git@modulo-dev#egg=PyFunceble && PyFunceble -d github.com && pip uninstall -y PyFunceble
   - python3 setup.py test && python3 setup.py install && PyFunceble -d github.com  && PyFunceble -f .travis/list_to_test && PyFunceble --adblock -f .travis/adblock_to_test
