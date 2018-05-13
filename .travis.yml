@@ -11,4 +11,4 @@ matrix:
   fast_finish:  true
 
 script:
-  - virtualenv file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
+  - virtualenv3 file_test && source file_test/bin/activate && python --version && pip --version && python3 setup.py test && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
