@@ -18,5 +18,5 @@ before_script:
 script:
   - python3 setup.py test
   - python3 -m virtualenv domain_test && source domain_test/bin/activate && python3 setup.py install && PyFunceble -d github.com && deactivate && echo "Let's move"
-  - python3 -m virtualenv list_test && source list_test/bin/activate && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
+  - which PyFunceble && python3 -m virtualenv list_test && source list_test/bin/activate && python3 setup.py install && PyFunceble -f .travis/list_to_test && deactivate
   - python3 -m virtualenv adblock_test && source adblock_test/bin/activate && python3 setup.py install && PyFunceble --adblock -f .travis/adblock_to_test && deactivate
