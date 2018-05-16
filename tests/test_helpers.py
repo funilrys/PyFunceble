@@ -86,7 +86,7 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import Hash, File, Dict, Command, Directory
+from PyFunceble.helpers import Hash, File, Dict, Command, Directory, Regex
 
 
 class TestHash(TestCase):
@@ -397,6 +397,82 @@ class TestFile(TestCase):
         expected = False
         File("hi").delete()
         actual = PyFunceble.path.isfile("hi")
+
+        self.assertEqual(expected, actual)
+
+
+class TestRegex(TestCase):
+    """
+    This class will test Regex().
+    """
+
+    def setUp(self):
+        """
+        This method will setup everything needed for the tests.
+        """
+
+        self.data_list = [
+            "hello", "world", "funilrys", "funceble", "PyFunceble", "pyfunceble"
+        ]
+        self.data = "Hello, this is Fun Ilrys. I just wanted to know how things goes around the tests."  # pylint: disable=line-too-long
+
+    def test_not_matching_list(self):
+        """
+        This method will test Regex.not_matching_list().
+        """
+
+        regex = "fun"
+        expected = ["hello", "world", "PyFunceble"]
+        actual = Regex(self.data_list, regex).not_matching_list()
+
+        self.assertEqual(expected, actual)
+
+    def test_matching_list(self):
+        """
+        This method will test Regex.match_list().
+        """
+
+        regex = "fun"
+        expected = ["funilrys", "funceble", "pyfunceble"]
+        actual = Regex(self.data_list, regex).matching_list()
+
+        self.assertEqual(expected, actual)
+
+    def test_match(self):
+        """
+        This method will test Regex.match() for the case that we want a specific
+        group.
+        """
+
+        # Test of the rematch case.
+        regex = r"([a-z]{1,})\s([a-z]{1,})\s"
+        expected = "is"
+        actual = Regex(self.data, regex, rematch=True, group=1).match()
+
+        self.assertEqual(expected, actual)
+
+        # Test of the group case
+        regex = "e"
+        expected = "e"
+        actual = Regex(self.data, regex, group=0).match()
+
+        self.assertEqual(expected, actual)
+
+    def test_replace(self):
+        """
+        This method will test Regex.replace().
+        """
+
+        regex = "th"
+        expected = "Hello, htis is Fun Ilrys. I just wanted to know how htings goes around hte tests."  # pylint: disable=line-too-long
+        actual = Regex(self.data, regex, replace_with="ht").replace()
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that there is not replace_with
+        regex = "th"
+        expected = self.data
+        actual = Regex(self.data, regex).replace()
 
         self.assertEqual(expected, actual)
 

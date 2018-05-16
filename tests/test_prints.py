@@ -83,6 +83,7 @@ License: MIT
 """
 # pylint: disable=bad-continuation,protected-access,ungrouped-imports
 
+import unittest.mock as mock
 from unittest import main as launch_tests
 
 import PyFunceble
@@ -115,7 +116,8 @@ class TestPrints(BaseStdout):
             "basic_string": "Hello, World!",
         }
 
-    def test_before_header(self):
+    @mock.patch("PyFunceble.prints.Prints._header_constructor")
+    def test_before_header(self, header_constructor_patch):
         """
         This method test the functionability of Prints().before_header()
         """
@@ -135,6 +137,30 @@ class TestPrints(BaseStdout):
         )
 
         Prints(None, None, output_file=self.file, only_on_file=False).before_header()
+
+        self.assertEqual(expected, File(self.file).read())
+
+        # Test of the case that we have a Generic_File template
+
+        File(self.file).delete()
+
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
+
+        self.assertEqual(expected, actual)
+
+        expected = """# File generated with %s
+# Date of generation: %s
+
+Hello World!
+""" % (
+            PyFunceble.LINKS["repo"], PyFunceble.CURRENT_TIME + " "
+        )
+
+        header_constructor_patch.return_value = ["Hello World!"]
+        Prints(
+            None, "Generic_File", output_file=self.file, only_on_file=False
+        ).before_header()
 
         self.assertEqual(expected, File(self.file).read())
 

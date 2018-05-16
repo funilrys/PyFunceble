@@ -453,7 +453,7 @@ class Regex(object):  # pylint: disable=too-few-public-methods
             The number of occurence(s) to replace.
     """
 
-    def __init__(self, data, regex, **args):
+    def __init__(self, data, regex, **args):  # pragma: no cover
         # We initiate the needed variable in order to be usable all over
         # class
         self.data = data
@@ -557,7 +557,7 @@ class Regex(object):  # pylint: disable=too-few-public-methods
         return self.data
 
 
-class Download(object):  # pylint:disable=too-few-public-methods
+class Download(object):  # pragma: no cover # pylint:disable=too-few-public-methods
     """
     This class will download all given file.
 

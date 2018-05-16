@@ -306,7 +306,7 @@ class ExpirationDate(object):
                     str(matched_result[case_data[1][2]]),
                 ]
 
-        return matched_result
+        return matched_result  # pragma: no cover
 
     def _format(self, date_to_convert=None):
         """
