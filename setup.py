@@ -93,21 +93,21 @@ def _test_suite():
     test_suite = test_loader.discover("tests", pattern="test_*.py")
     return test_suite
 
+
 def _get_requirements():
     """
     This function extract all requirements from requirements.txt.
     """
 
-    with open('requirements.txt') as file:
+    with open("requirements.txt") as file:
         requirements = file.read().splitlines()
 
     return requirements
 
 
-
 setup(
     name="PyFunceble",
-    version="0.65.1",
+    version="0.65.2",
     install_requires=_get_requirements(),
     description="The tool to check domains or IP availability.",
     long_description=open("README.md").read(),

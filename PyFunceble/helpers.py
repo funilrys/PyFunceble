@@ -343,10 +343,7 @@ class Directory(object):  # pylint: disable=too-few-public-methods
                 elif "\\" in self.directory:
                     split_path = self.directory.split("\\")
 
-                if not split_path[0]:
-                    split_path = split_path[1:]
-
-                return self.fix_path(splited_path=split_path)
+                return self.fix_path(splited_path=filter(lambda dir: dir, split_path))
 
             return self.directory
 

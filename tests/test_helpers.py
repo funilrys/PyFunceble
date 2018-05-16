@@ -327,6 +327,9 @@ class TestDirectory(TestCase):
         actual = Directory(r"hello\world").fix_path()
         self.assertEqual(expected, actual)
 
+        actual = Directory(r"hello/world/").fix_path()
+        self.assertEqual(expected, actual)
+
 
 class TestFile(TestCase):
     """
