@@ -523,47 +523,46 @@ class Generate(object):  # pragma: no cover
                 self.output,
                 True,
             ).data()
-        else:
-            if not PyFunceble.CONFIGURATION["split"]:
-                if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
-                    Prints(
-                        [
-                            PyFunceble.CONFIGURATION["domain"],
-                            self.expiration_date,
-                            self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
-                            PyFunceble.CURRENT_TIME,
-                        ],
-                        PyFunceble.STATUS["official"]["up"],
-                        self.output,
-                        True,
-                    ).data()
-                elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
-                    Prints(
-                        [
-                            PyFunceble.CONFIGURATION["domain"],
-                            PyFunceble.CONFIGURATION["referer"],
-                            self.domain_status,
-                            self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
-                            PyFunceble.CURRENT_TIME,
-                        ],
-                        PyFunceble.STATUS["official"]["down"],
-                        self.output,
-                        True,
-                    ).data()
-                elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-                    Prints(
-                        [
-                            PyFunceble.CONFIGURATION["domain"],
-                            self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
-                            PyFunceble.CURRENT_TIME,
-                        ],
-                        PyFunceble.STATUS["official"]["invalid"],
-                        self.output,
-                        True,
-                    ).data()
+        elif PyFunceble.CONFIGURATION["split"]:
+            if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
+                Prints(
+                    [
+                        PyFunceble.CONFIGURATION["domain"],
+                        self.expiration_date,
+                        self.source,
+                        PyFunceble.CONFIGURATION["http_code"],
+                        PyFunceble.CURRENT_TIME,
+                    ],
+                    PyFunceble.STATUS["official"]["up"],
+                    self.output,
+                    True,
+                ).data()
+            elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
+                Prints(
+                    [
+                        PyFunceble.CONFIGURATION["domain"],
+                        PyFunceble.CONFIGURATION["referer"],
+                        self.domain_status,
+                        self.source,
+                        PyFunceble.CONFIGURATION["http_code"],
+                        PyFunceble.CURRENT_TIME,
+                    ],
+                    PyFunceble.STATUS["official"]["down"],
+                    self.output,
+                    True,
+                ).data()
+            elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
+                Prints(
+                    [
+                        PyFunceble.CONFIGURATION["domain"],
+                        self.source,
+                        PyFunceble.CONFIGURATION["http_code"],
+                        PyFunceble.CURRENT_TIME,
+                    ],
+                    PyFunceble.STATUS["official"]["invalid"],
+                    self.output,
+                    True,
+                ).data()
 
     def status_file(self):
         """

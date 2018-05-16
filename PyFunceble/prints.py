@@ -181,7 +181,21 @@ class Prints(object):
                 "# Date of generation: %s \n\n" % PyFunceble.CURRENT_TIME
             )
 
-            File(self.output).write(link + date_of_generation)
+            if self.template in [
+                "Generic_File",
+                PyFunceble.STATUS["official"]["up"],
+                PyFunceble.STATUS["official"]["down"],
+                PyFunceble.STATUS["official"]["invalid"],
+                "Less",
+            ]:
+                header = self._header_constructor(self.currently_used_header, None)[
+                    0
+                ] + "\n"
+
+            try:
+                File(self.output).write(link + date_of_generation + header)
+            except UnboundLocalError:
+                File(self.output).write(link + date_of_generation)
 
     @classmethod
     def _header_constructor(cls, data_to_print, separator="-"):
