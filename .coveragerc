@@ -4,6 +4,7 @@ branch = False
 omit =
     # omit the following directory
     */pbr/*
+    */site-packages/*
 
     # omit the following file
     PyFunceble/config.py
