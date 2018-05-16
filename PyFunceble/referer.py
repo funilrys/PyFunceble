@@ -129,6 +129,7 @@ class Referer(object):  # pragma: no cover
             "doosan",
             "eg",
             "eh",
+            "er",
             "et",
             "fk",
             "flsmidth",
