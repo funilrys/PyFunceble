@@ -48,7 +48,7 @@ referer:                      ""
 seconds_before_http_timeout:  3
 # Activate/Deactivate the logs sharing.
 # This allow you to share logs which are used to write PyFunceble updates.
-share_logs:                   False
+share_logs:                   True
 # Show/hide execution time.
 show_execution_time:          False
 # Show/hide the percentage.
@@ -57,7 +57,7 @@ show_percentage:              True
 # In this mode we only return the status of the tested domain.
 simple:                       False
 # Activate/Deactivate the split of results fils.
-split:                        False
+split:                        True
 # Activation/Deactivation of Travis CI autosave system.
 travis:                       False
 # Default commit message we use for the commit at the end of
@@ -70,7 +70,7 @@ travis_autosave_minutes:      15
 # This tell us in which branch we have to push
 travis_branch:                master
 # Activate/Deactivate the generation of unified files for the results logs.
-unified:                      True
+unified:                      False
 
 # The following are the configurations related to the output/ directory.
 # NOTE:                       If you change the following section please delete the current output and
