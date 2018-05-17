@@ -91,8 +91,6 @@ Thanks to those awesome organization(s) and people(s) for
 
 which helped and/or still help me build and or test **[Funceble](https://github.com/funilrys/funceble)** and (or indirectly) **[PyFunceble](https://github.com/funilrys/PyFunceble)**.
 
-* * *
-
      _______ _                 _          _                              _
     |__   __| |               | |        | |                            | |
        | |  | |__   __ _ _ __ | | _____  | |_ ___    _   _  ___  _   _  | |
