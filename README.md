@@ -1,31 +1,31 @@
-# PyFunceble
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 ## The tool to check domains or IP availability.
 
 [![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest) [![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)](<>) [![Code style | Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-PyFunceble is the little sister of [Funceble](https://github.com/funilrys/funceble)
-which was archived on March 13th, 2018.
-
-Its main objective is to test domains and IP availability
-by generating an accurate result based on results from WHOIS, NSLOOKUP and
-HTTP status codes.
-As result, PyFunceble returns 3 status: `ACTIVE`, `INACTIVE` and `INVALID`.
-The denomination of those statuses can be changed under your personal
-`config.yaml`.
-
-At the time we write this, PyFunceble is running actively and daily under 50+
-Travis CI repository or process to test the availability of domains which are
-present into hosts files, AdBlock filter lists, list of IP, list of domains or
-blocklists.
-
-An up to date explanation of all status can be found at <https://git.io/vxieo>.
-You can also find a simple representation of the logic behind PyFunceble at
-<https://git.io/vxifw>.
-
 :star::tada: Thank you for using **PyFunceble** :tada::star:
 
-## :star2::book: Wiki as place to be :book::star2:
+* * *
+
+PyFunceble is the little sister of [Funceble](https://github.com/funilrys/funceble)
+which was archived on 13<sup>th</sup> March, 2018.
+
+Its main objective is to get and the return domains and IPs availability
+by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
+
+In its daily usage, PyFunceble is mostly used to clean `hosts` files or blocklist. Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domains or IPs but in the same time, it creates by default a database of the `INACTIVE` domains or IPs so we can retest them overtime automatically at the next execution.
+
+PyFunceble is running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, blocklists or even AdBlock filter lists.
+
+* * *
+
+## :star2::book: Wiki as place to be! :book::star2:
 
 Want to know more about **PyFunceble**? All information to know can be found on the [wiki](https://github.com/funilrys/PyFunceble/wiki)!
 
@@ -40,7 +40,7 @@ $ git clone https://github.com/funilrys/PyFunceble.wiki.git
 -   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
 -   Read an existing file and check every domain present into it.
 -   Generate a `hosts` file according to the domains statuses.
--   Generate a list of domain according to their discovered statuses.
+-   Generate a list of the domain according to their discovered statuses.
 -   Show results on screen
 -   Save results on file(s)
 -   ... and a lot more!
@@ -91,6 +91,8 @@ Thanks to those awesome organization(s) and people(s) for
 
 which helped and/or still help me build and or test **[Funceble](https://github.com/funilrys/funceble)** and (or indirectly) **[PyFunceble](https://github.com/funilrys/PyFunceble)**.
 
+* * *
+
      _______ _                 _          _                              _
     |__   __| |               | |        | |                            | |
        | |  | |__   __ _ _ __ | | _____  | |_ ___    _   _  ___  _   _  | |
@@ -104,24 +106,6 @@ which helped and/or still help me build and or test **[Funceble](https://github.
 -   Mitchell Krog - [@mitchellkrogza](https://github.com/mitchellkrogza)
 -   Pi-Hole - [@pi-hole](https://github.com/pi-hole/pi-hole)
 -   SMed79 - [@SMed79](https://github.com/SMed79)
-
-* * *
-
-# `hosts` files
-
-## What is a hosts file?
-
-A hosts file, named `hosts` (with no file extension), is a plain-text file used by all operating systems to map hostnames to IP addresses.
-
-In most operating systems, the `hosts` file is preferential to `DNS`. Therefore if a domain is resolved by the `hosts` file, the request never leaves your computer.
-
-Having a smart `hosts` file goes a long way towards blocking malware, adware, ransomware, porn and other nuisance websites.
-
-A hosts file like this causes any lookups to any of the listed domains to resolve back to your localhost so it prevents any outgoing connections to the listed domains.
-
-## Recommendations
-
-I'd personally recommend using [Steven's hosts](https://github.com/StevenBlack/hosts), [Ultimate.Hosts.Blacklist](https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist) and/or [Pi-Hole](https://github.com/pi-hole/pi-hole) which are in my opinion the best out there.
 
 * * *
 
