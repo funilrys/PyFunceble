@@ -222,7 +222,7 @@ http_codes:
 links:
   api_date_format:            "http://pyfunceble.funilrys.com/api/date-format"
   api_no_referer:             "http://pyfunceble.funilrys.com/api/no-referer"
-  config:                     "https://raw.githubusercontent.com/funilrys/PyFunceble/master/config_production.yaml"
+  config:                     "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"
   dir_structure:              "https://raw.githubusercontent.com/funilrys/PyFunceble/master/dir_structure_production.json"
   iana:                       "https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json"
   repo:                       "https://github.com/funilrys/PyFunceble"

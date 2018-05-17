@@ -100,7 +100,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.65.7.dev-beta"
+VERSION = "0.65.8.dev-beta"
 AUTO_CONFIGURATION = False
 
 CONFIGURATION = {}
@@ -143,7 +143,7 @@ def load_config():  # pragma: no cover
         if not CURRENT_DIRECTORY.endswith(directory_separator):
             CURRENT_DIRECTORY += directory_separator
 
-        if path.isfile(CURRENT_DIRECTORY + "config.yaml"):
+        if path.isfile(CURRENT_DIRECTORY + ".PyFunceble.yaml"):
             load_configuration(CURRENT_DIRECTORY)
 
     if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):

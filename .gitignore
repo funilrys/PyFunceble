@@ -105,5 +105,5 @@ venv.bak/
 
 # Project related
 inactive_db.json
-config.yaml
+.PyFunceble.yaml
 dir_structure.json

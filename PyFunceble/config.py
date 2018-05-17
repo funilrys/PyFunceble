@@ -86,7 +86,7 @@ from PyFunceble.helpers import Dict, Directory, Download, File
 
 def load_config_file(path_to_config):
     """
-    This function will load config.yaml.
+    This function will load .PyFunceble.yaml.
     """
 
     PyFunceble.CONFIGURATION.update(Dict.from_yaml(File(path_to_config).read()))
@@ -102,7 +102,7 @@ def install_production_config(path_to_config):
             The path were we have to install the configuration file.
     """
 
-    production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/config_production.yaml"  # pylint: disable=line-too-long
+    production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
     if "dev" in PyFunceble.VERSION:
         production_config_link = production_config_link.replace("master", "dev")
@@ -133,18 +133,18 @@ def install_iana_config():
 
 def load_configuration(path_to_config):
     """
-    This function will load and adjust config.yaml before parsing CONFIGURATION
+    This function will load and adjust .PyFunceble.yaml before parsing CONFIGURATION
     to CONFIGURATION.
 
     Argument:
         - path_to_config: str
-            The path to the config.yaml to read.
+            The path to the .PyFunceble.yaml to read.
     """
 
     if not path_to_config.endswith(directory_separator):
         path_to_config += directory_separator
 
-    path_to_config += "config.yaml"
+    path_to_config += ".PyFunceble.yaml"
 
     try:
         load_config_file(path_to_config)
