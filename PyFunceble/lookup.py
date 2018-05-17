@@ -15,25 +15,20 @@ This submodule will provide the lookup interface.
 
 
 PyFunceble is the little sister of Funceble (https://github.com/funilrys/funceble)
-which was archived on March 13th, 2018.
-At the end of 2017, PyFunceble was described by one of its most active user as:
-"[an] excellent script for checking ACTIVE and INACTIVE domain names."
+which was archived on 13th March, 2018.
 
-Our main objective is to test domains and IP availability
-by generating an accurate result based on results from WHOIS, NSLOOKUP and
-HTTP status codes.
-As result, PyFunceble returns 3 status: ACTIVE, INACTIVE and INVALID.
-The denomination of those statuses can be changed under your personal
-`config.yaml`.
+Its main objective is to get and the return domains and IPs availability by
+generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
 
-At the time we write this, PyFunceble is running actively and daily under 50+
-Travis CI repository or process to test the availability of domains which are
-present into hosts files, AdBlock filter lists, list of IP, list of domains or
-blocklists.
+In its daily usage, PyFunceble is mostly used to clean `hosts` files or blocklist.
+Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domains
+or IPs but in the same time, it creates by default a database of the `INACTIVE`
+domains or IPs so we can retest them overtime automatically at the next execution.
 
-An up to date explanation of all status can be found at https://git.io/vxieo.
-You can also find a simple representation of the logic behind PyFunceble at
-https://git.io/vxifw.
+PyFunceble is running actively and daily with the help of Travis CI under 60+
+repositories. It is used to clean or test the availability of data which are
+present in hosts files, list of IP, list of domains, blocklists or even AdBlock
+filter lists.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
