@@ -151,7 +151,7 @@ def load_configuration(path_to_config):
         install_iana_config()
     except FileNotFoundError:
 
-        if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
+        if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ or not PyFunceble.AUTO_CONFIGURATION:
             while True:
                 response = input(
                     "%s was not found.\n\
