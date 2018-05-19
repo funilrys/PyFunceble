@@ -78,6 +78,8 @@ License: MIT
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+import urllib3.exceptions as urllib3_exceptions
+
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import requests, socket
@@ -99,27 +101,20 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
         """
 
         try:
-            try:
-                try:
-                    try:
-                        req = requests.head(
-                            "http://%s:80" % PyFunceble.CONFIGURATION["domain"],
-                            timeout=PyFunceble.CONFIGURATION[
-                                "seconds_before_http_timeout"
-                            ],
-                        )
-                    except requests.exceptions.InvalidURL:
-                        return None
-
-                except socket.timeout:
-                    return None
-
-            except requests.exceptions.Timeout:
-                return None
+            req = requests.head(
+                "http://%s:80" % PyFunceble.CONFIGURATION["domain"],
+                timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+            )
 
             return req.status_code
 
-        except requests.ConnectionError:
+        except (
+            requests.exceptions.InvalidURL,
+            socket.timeout,
+            requests.exceptions.Timeout,
+            requests.ConnectionError,
+            urllib3_exceptions.InvalidHeader,
+        ):
             return None
 
     def get(self):
