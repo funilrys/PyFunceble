@@ -478,7 +478,7 @@ class TestSwitch(TestCase):
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
-        self.exception_message = "Please use the updater or post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
+        self.exception_message = "Impossible to switch %s. Please post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
 
     def test_index_not_exist(self):
         """
@@ -486,8 +486,12 @@ class TestSwitch(TestCase):
         the system.
         """
 
+        to_switch = "helloworld"
+
         self.assertRaisesRegex(
-            Exception, self.exception_message, lambda: Core.switch("helloworld")
+            Exception,
+            self.exception_message % repr(to_switch),
+            lambda: Core.switch(to_switch),
         )
 
     def test_switch_true(self):
@@ -527,8 +531,12 @@ class TestSwitch(TestCase):
         """
         PyFunceble.CONFIGURATION["helloworld"] = "Hello, World!"
 
+        to_switch = "helloworld"
+
         self.assertRaisesRegex(
-            Exception, self.exception_message, lambda: Core.switch("helloworld")
+            Exception,
+            self.exception_message % repr(to_switch),
+            lambda: Core.switch(to_switch),
         )
 
         del PyFunceble.CONFIGURATION["helloworld"]

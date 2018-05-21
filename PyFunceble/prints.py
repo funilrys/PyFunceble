@@ -247,7 +247,11 @@ class Prints(object):
             ] or self.template == "Generic_File":
                 to_print = self.headers["Generic"]
 
-                if self.template.lower() in PyFunceble.STATUS["list"]["generic"]:
+                if self.template.lower() in PyFunceble.STATUS["list"][
+                    "generic"
+                ] and PyFunceble.HTTP_CODE[
+                    "active"
+                ]:
                     to_print = Dict(to_print).remove_key("Analyze Date")
             if self.template.lower() in PyFunceble.STATUS["list"]["up"]:
                 to_print = self.headers[PyFunceble.STATUS["official"]["up"]]

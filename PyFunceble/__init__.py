@@ -100,7 +100,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.67.1.dev-beta"
+VERSION = "0.68.0.dev-beta"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -539,7 +539,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             CONFIGURATION.update({"generate_hosts": Core.switch("generate_hosts")})
 
         if ARGS.http:
-            CONFIGURATION.update({"http_code_status": Core.switch("http_code_status")})
+            HTTP_CODE.update({"active": Core.switch(HTTP_CODE["active"], True)})
 
         if ARGS.iana:
             IANA()

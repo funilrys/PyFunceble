@@ -299,14 +299,16 @@ class Version(object):
                 self.local_splited, self.split_versions(version)
             )
 
-            if not PyFunceble.CONFIGURATION["quiet"] and checked:
+            if not PyFunceble.CONFIGURATION[
+                "quiet"
+            ] and checked or checked != False and not checked:
                 message = Style.BRIGHT + Fore.RED + "Your current version is considered as deprecated.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
                 message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
 
                 print(message)
                 return
 
-            elif checked:
+            elif checked or checked != False and not checked:
                 print("Version deprecated.")
                 return
 

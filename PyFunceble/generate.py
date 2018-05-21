@@ -520,40 +520,70 @@ class Generate(object):  # pragma: no cover
             ).data()
         elif PyFunceble.CONFIGURATION["split"]:
             if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
-                Prints(
-                    [
+                if PyFunceble.HTTP_CODE["active"]:
+                    data_to_print = [
                         PyFunceble.CONFIGURATION["domain"],
                         self.expiration_date,
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
                         PyFunceble.CURRENT_TIME,
-                    ],
+                    ]
+                else:
+                    data_to_print = [
+                        PyFunceble.CONFIGURATION["domain"],
+                        self.expiration_date,
+                        self.source,
+                        PyFunceble.CURRENT_TIME,
+                    ]
+
+                Prints(
+                    data_to_print,
                     PyFunceble.STATUS["official"]["up"],
                     self.output,
                     True,
                 ).data()
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
-                Prints(
-                    [
+                if PyFunceble.HTTP_CODE["active"]:
+                    data_to_print = [
                         PyFunceble.CONFIGURATION["domain"],
                         PyFunceble.CONFIGURATION["referer"],
                         self.domain_status,
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
                         PyFunceble.CURRENT_TIME,
-                    ],
+                    ]
+                else:
+                    data_to_print = [
+                        PyFunceble.CONFIGURATION["domain"],
+                        PyFunceble.CONFIGURATION["referer"],
+                        self.domain_status,
+                        self.source,
+                        PyFunceble.CURRENT_TIME,
+                    ]
+
+                Prints(
+                    data_to_print,
                     PyFunceble.STATUS["official"]["down"],
                     self.output,
                     True,
                 ).data()
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-                Prints(
-                    [
+                if PyFunceble.HTTP_CODE["active"]:
+                    data_to_print = [
                         PyFunceble.CONFIGURATION["domain"],
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
                         PyFunceble.CURRENT_TIME,
-                    ],
+                    ]
+                else:
+                    data_to_print = [
+                        PyFunceble.CONFIGURATION["domain"],
+                        self.source,
+                        PyFunceble.CURRENT_TIME,
+                    ]
+
+                Prints(
+                    data_to_print,
                     PyFunceble.STATUS["official"]["invalid"],
                     self.output,
                     True,
@@ -590,16 +620,24 @@ class Generate(object):  # pragma: no cover
                     "Less",
                 ).data()
             else:
-                Prints(
-                    [
+                if PyFunceble.HTTP_CODE["active"]:
+                    data_to_print = [
                         PyFunceble.CONFIGURATION["domain"],
                         self.domain_status,
                         self.expiration_date,
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
-                    ],
-                    "Generic",
-                ).data()
+                    ]
+                else:
+                    data_to_print = [
+                        PyFunceble.CONFIGURATION["domain"],
+                        self.domain_status,
+                        self.expiration_date,
+                        self.source,
+                        PyFunceble.CURRENT_TIME,
+                    ]
+
+                Prints(data_to_print, "Generic").data()
 
         if not PyFunceble.CONFIGURATION["no_files"] and PyFunceble.CONFIGURATION[
             "split"

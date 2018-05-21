@@ -473,13 +473,18 @@ class Core(object):  # pragma: no cover
         )
 
     @classmethod
-    def switch(cls, variable):  # pylint: disable=inconsistent-return-statements
+    def switch(
+        cls, variable, custom=False
+    ):  # pylint: disable=inconsistent-return-statements
         """
         Switch PyFunceble.CONFIGURATION variables to their opposite.
 
         Argument:
             - variable: str
                 The PyFunceble.CONFIGURATION[variable_name] to switch.
+            - custom: bool
+                Tell the system if we want to switch a specific variable different
+                from PyFunceble.CONFIGURATION
 
         Returns: bool
             The opposite of the installed value of Settings.variable_name.
@@ -489,7 +494,10 @@ class Core(object):  # pragma: no cover
                 if the PyFunceble.CONFIGURATION[variable_name] is not a bool.
         """
 
-        current_state = dict.get(PyFunceble.CONFIGURATION, variable)
+        if not custom:
+            current_state = dict.get(PyFunceble.CONFIGURATION, variable)
+        else:
+            current_state = variable
 
         if isinstance(current_state, bool):
             if current_state:
@@ -497,6 +505,8 @@ class Core(object):  # pragma: no cover
 
             return True
 
-        to_print = "Please use the updater or post an issue to %s"
+        to_print = "Impossible to switch %s. Please post an issue to %s"
 
-        raise Exception(to_print % PyFunceble.LINKS["repo"] + "/issues.")
+        raise Exception(
+            to_print % (repr(variable), PyFunceble.LINKS["repo"] + "/issues.")
+        )

@@ -125,18 +125,20 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
             str: if no status_code is catched.
             int: the status_code.
         """
+        if PyFunceble.HTTP_CODE["active"]:
+            http_code = self._access()
+            list_of_valid_http_code = []
 
-        http_code = self._access()
-        list_of_valid_http_code = []
+            for codes in [
+                PyFunceble.HTTP_CODE["list"]["up"],
+                PyFunceble.HTTP_CODE["list"]["potentially_down"],
+                PyFunceble.HTTP_CODE["list"]["potentially_up"],
+            ]:
+                list_of_valid_http_code.extend(codes)
 
-        for codes in [
-            PyFunceble.HTTP_CODE["list"]["up"],
-            PyFunceble.HTTP_CODE["list"]["potentially_down"],
-            PyFunceble.HTTP_CODE["list"]["potentially_up"],
-        ]:
-            list_of_valid_http_code.extend(codes)
+            if http_code not in list_of_valid_http_code or http_code is None:
+                return "*" * 3
 
-        if http_code not in list_of_valid_http_code or http_code is None:
-            return "*" * 3
+            return http_code
 
-        return http_code
+        return None
