@@ -1,9 +1,18 @@
 # This is the current version
-current_version: "0.70.0.dev-beta"
-# If we want to force update because of critical fixed issue we set the following
-# to True.
-force_update:    False
+current_version:   "0.70.0.dev-beta"
+
+# We use the following to force user to update in case that current user version
+# is < one of the listed minimal_version.
+force_update:
+  status:          True
+  minimal_version:
+    - "0.0.1"
+
+
 # If we want to inform that the current version is deprecated we put it in the
 # following list.
+#
+# Please not that the versions listed here should not have any chars other than `0123456789.`
 deprecated:
-  - False
+  - "0.0.1"
+  - "0.66.0"
