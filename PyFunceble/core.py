@@ -117,6 +117,7 @@ class Core(object):  # pragma: no cover
             ExecutionTime("start")
 
             if domain:
+                PyFunceble.CONFIGURATION["show_percentage"] = False
                 PyFunceble.CONFIGURATION["domain"] = domain.lower()
                 self.domain()
             elif file_path:
