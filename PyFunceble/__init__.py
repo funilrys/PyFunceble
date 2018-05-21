@@ -94,13 +94,13 @@ from colorama import Back, Fore, Style
 from colorama import init as initiate
 
 from PyFunceble.clean import Clean
-from PyFunceble.config import load_configuration, compare_version
+from PyFunceble.config import Load, Version
 from PyFunceble.core import Core
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.66.0.dev-beta"
+VERSION = "0.67.0.dev-beta"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -134,7 +134,7 @@ def load_config():  # pragma: no cover
     """
 
     global CURRENT_DIRECTORY  # pylint:disable=global-statement
-    load_configuration(CURRENT_DIRECTORY)
+    Load(CURRENT_DIRECTORY)
 
     if OUTPUTS["main"]:
         CURRENT_DIRECTORY = OUTPUTS["main"]
@@ -143,12 +143,10 @@ def load_config():  # pragma: no cover
             CURRENT_DIRECTORY += directory_separator
 
         if path.isfile(CURRENT_DIRECTORY + ".PyFunceble.yaml"):
-            load_configuration(CURRENT_DIRECTORY)
+            Load(CURRENT_DIRECTORY)
 
     if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
         DirectoryStructure()
-
-    compare_version()
 
 
 def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
@@ -599,4 +597,5 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         if not CONFIGURATION["quiet"]:
             print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
 
+        Version().compare()
         Core(ARGS.domain, ARGS.file)

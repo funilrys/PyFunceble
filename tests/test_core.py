@@ -86,7 +86,7 @@ from unittest import main as launch_tests
 import PyFunceble
 from helpers import BaseStdout, sys
 from PyFunceble import Fore, initiate
-from PyFunceble.config import load_configuration
+from PyFunceble.config import Load
 from PyFunceble.core import Core
 
 
@@ -100,7 +100,7 @@ class TestsResetCounters(TestCase):
         This method setup everything that is needed for the test.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.types = ["up", "down", "invalid", "tested"]
 
     def set_counter(self):
@@ -147,7 +147,7 @@ class TestsColoredLogo(BaseStdout):
         """
 
         initiate(True)
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
 
         BaseStdout.setUp(self)
         logo = """
@@ -220,7 +220,7 @@ class TestsFormatDomain(TestCase):
         This method setup everything that is needed for the tests.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.domains = [
             "google.com",
             "twitter.com",
@@ -370,7 +370,7 @@ class TestAdblockDecode(TestCase):
         This method setup everything needed for the test.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.lines = [
             "||google.com$script,image",
             "||twitter.com^",
@@ -428,7 +428,7 @@ class TestExtractDomain(TestCase):
         This method setup everything that is needed for the test.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
 
     def test_file_does_not_exist(self):
         """
@@ -477,7 +477,7 @@ class TestSwitch(TestCase):
         This method setup everything that is needed.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.exception_message = "Please use the updater or post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
 
     def test_index_not_exist(self):

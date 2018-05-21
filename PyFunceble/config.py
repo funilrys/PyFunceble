@@ -84,157 +84,255 @@ from PyFunceble import Fore, Style, directory_separator, environ, path
 from PyFunceble.helpers import Dict, Directory, Download, File
 
 
-def load_config_file(path_to_config):
+class Load(object):
     """
-    This function will load .PyFunceble.yaml.
-    """
-
-    PyFunceble.CONFIGURATION.update(Dict.from_yaml(File(path_to_config).read()))
-
-
-def install_production_config(path_to_config):
-    """
-    This function download the production configuration and install it in the
-    current directory.
+    This class will help to load the configurations.
 
     Argument:
         - path_to_config: str
-            The path were we have to install the configuration file.
+            The path to the config to load.
     """
 
-    production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+    def __init__(self, path_to_config):
+        self.path_to_config = path_to_config
 
-    if "dev" in PyFunceble.VERSION:
-        production_config_link = production_config_link.replace("master", "dev")
-    else:
-        production_config_link = production_config_link.replace("dev", "master")
+        if path_to_config.endswith(directory_separator):
+            self.path_to_config += directory_separator
 
-    return Download(production_config_link, path_to_config).text()
+        self.path_to_config += ".PyFunceble.yaml"
 
+        try:
+            self.load_config_file()
+            self.install_iana_config()
+        except FileNotFoundError:
 
-def install_iana_config():
-    """
-    This function download `iana-domains-db.json` if not present.
-    """
-
-    iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json"
-    destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
-
-    if "dev" in PyFunceble.VERSION:
-        iana_link = iana_link.replace("master", "dev")
-    else:
-        iana_link = iana_link.replace("dev", "master")
-
-    if not path.isfile(destination):
-        return Download(iana_link, destination).text()
-
-    return True
-
-
-def load_configuration(path_to_config):
-    """
-    This function will load and adjust .PyFunceble.yaml before parsing CONFIGURATION
-    to CONFIGURATION.
-
-    Argument:
-        - path_to_config: str
-            The path to the .PyFunceble.yaml to read.
-    """
-
-    if not path_to_config.endswith(directory_separator):
-        path_to_config += directory_separator
-
-    path_to_config += ".PyFunceble.yaml"
-
-    try:
-        load_config_file(path_to_config)
-        install_iana_config()
-    except FileNotFoundError:
-
-        if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
-            while True:
-                response = input(
-                    "%s was not found.\n\
+            if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
+                while True:
+                    response = input(
+                        "%s was not found.\n\
 Install the default configuration in the current directory ? [y/n] "
-                    % (Style.BRIGHT + path_to_config + Style.RESET_ALL)
-                )
+                        % (Style.BRIGHT + path_to_config + Style.RESET_ALL)
+                    )
 
-                if isinstance(response, str):
-                    if response.lower() == "y":
-                        install_production_config(path_to_config)
-                        load_config_file(path_to_config)
-                        install_iana_config()
-                        break
+                    if isinstance(response, str):
+                        if response.lower() == "y":
+                            self.install_production_config()
+                            self.load_config_file()
+                            self.install_iana_config()
+                            break
 
-                    elif response.lower() == "n":
-                        raise Exception("Unable to find the configuration file.")
+                        elif response.lower() == "n":
+                            raise Exception("Unable to find the configuration file.")
 
-        else:
-            install_production_config(path_to_config)
-            load_config_file(path_to_config)
-            install_iana_config()
+            else:
+                self.install_production_config()
+                self.load_config_file()
+                self.install_iana_config()
 
-    for main_key in ["domains", "hosts", "splited"]:
-        PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
-            PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
-        ).fix_path()
-
-    for main_key in ["http_analytic", "logs"]:
-        for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
-            "directories"
-        ].items():
-            PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
-                key
-            ] = Directory(
-                value
+        for main_key in ["domains", "hosts", "splited"]:
+            PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
+                PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
             ).fix_path()
 
-    PyFunceble.CONFIGURATION["outputs"]["main"] = Directory(
-        PyFunceble.CONFIGURATION["outputs"]["main"]
-    ).fix_path()
+        for main_key in ["http_analytic", "logs"]:
+            for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
+                "directories"
+            ].items():
+                PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
+                    key
+                ] = Directory(
+                    value
+                ).fix_path()
 
-    PyFunceble.STATUS.update(PyFunceble.CONFIGURATION["status"])
-    PyFunceble.OUTPUTS.update(PyFunceble.CONFIGURATION["outputs"])
-    PyFunceble.HTTP_CODE.update(PyFunceble.CONFIGURATION["http_codes"])
-    PyFunceble.LINKS.update(PyFunceble.CONFIGURATION["links"])
+        PyFunceble.CONFIGURATION["outputs"]["main"] = Directory(
+            PyFunceble.CONFIGURATION["outputs"]["main"]
+        ).fix_path()
 
-    PyFunceble.CONFIGURATION.update({"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"})
+        PyFunceble.STATUS.update(PyFunceble.CONFIGURATION["status"])
+        PyFunceble.OUTPUTS.update(PyFunceble.CONFIGURATION["outputs"])
+        PyFunceble.HTTP_CODE.update(PyFunceble.CONFIGURATION["http_codes"])
+        PyFunceble.LINKS.update(PyFunceble.CONFIGURATION["links"])
 
-    return True
+        PyFunceble.CONFIGURATION.update(
+            {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
+        )
+
+    def load_config_file(self):
+        """
+        This method will load .PyFunceble.yaml.
+        """
+
+        PyFunceble.CONFIGURATION.update(
+            Dict.from_yaml(File(self.path_to_config).read())
+        )
+
+    def install_production_config(self):
+        """
+        This method download the production configuration and install it in the
+        current directory.
+
+        Argument:
+            - path_to_config: str
+                The path were we have to install the configuration file.
+        """
+
+        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+
+        if "dev" in PyFunceble.VERSION:
+            production_config_link = production_config_link.replace("master", "dev")
+        else:
+            production_config_link = production_config_link.replace("dev", "master")
+
+        return Download(production_config_link, self.path_to_config).text()
+
+    @classmethod
+    def install_iana_config(cls):
+        """
+        This method download `iana-domains-db.json` if not present.
+        """
+
+        iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json"  # pylint: disable=line-too-long
+        destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
+
+        if "dev" in PyFunceble.VERSION:
+            iana_link = iana_link.replace("master", "dev")
+        else:
+            iana_link = iana_link.replace("dev", "master")
+
+        if not path.isfile(destination):
+            return Download(iana_link, destination).text()
+
+        return True
 
 
-def compare_version():
+class Version(object):
     """
-    This function will compare the current version with the upstream saved version.
+    This class will compare the local with the upstream version.
     """
 
-    upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
+    def __init__(self):
+        self.local_splited = self.split_versions(PyFunceble.VERSION)
 
-    if "dev" in PyFunceble.VERSION:
-        upstream_link = upstream_link.replace("master", "dev")
-    else:
-        upstream_link = upstream_link.replace("dev", "master")
+        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
 
-    data = Dict().from_yaml(Download(upstream_link, return_data=True).text())
+        if "dev" in PyFunceble.VERSION:
+            upstream_link = upstream_link.replace("master", "dev")
+        else:
+            upstream_link = upstream_link.replace("dev", "master")
 
-    if data["force_update"] and data["current_version"] != PyFunceble.VERSION:
-        message = Style.BRIGHT + Fore.RED + "A critical issue has been fixed.\n" + Style.RESET_ALL
-        message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+        self.upstream_data = Dict().from_yaml(
+            Download(upstream_link, return_data=True).text()
+        )
 
-        print(message)
-        exit(1)
+    @classmethod
+    def split_versions(cls, version):
+        """
+        This method will convert the versions to a shorter one.
 
-    if PyFunceble.VERSION in data["deprecated"]:
-        message = Style.BRIGHT + Fore.RED + "Your current version is considered as deprecated.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-        message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+        Argument:
+            - version: str
+                The version to split
 
-        print(message)
+        Returns: list
+        """
 
-    elif data["current_version"] != PyFunceble.VERSION:
-        message = Style.BRIGHT + Fore.YELLOW + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-        message += Style.BRIGHT + "Your version: " + Style.RESET_ALL + PyFunceble.VERSION + "\n"
-        message += Style.BRIGHT + "Upstream version: " + Style.RESET_ALL + data[
-            "current_version"
-        ] + "\n"
+        return list(filter(lambda x: x.isdigit(), version.split(".")))
 
-        print(message)
+    @classmethod
+    def check_versions(cls, local, upstream):
+        """
+        This method will compare the given versions.
+
+        Arguments:
+            - local: list
+                The local version converted by split_versions().
+            - upstream: list
+                The upstream version converted by split_versions().
+
+        Returns:
+            - True: local < upstream
+            - None: local == upstream
+            - False: local > upstream
+        """
+
+        status = [None, None, None]
+
+        for index, version_number in enumerate(local):
+            if int(version_number) < int(upstream[index]):
+                status[index] = True
+            elif int(version_number) > int(upstream[index]):
+                status[index] = False
+
+        if False in status:
+            return False
+
+        elif True in status:
+            return True
+
+        return None
+
+    def compare(self):
+        """
+        This method will compare the current version with the upstream saved version.
+        """
+
+        if self.upstream_data["force_update"]["status"]:
+            for minimal in self.upstream_data["force_update"]["minimal_version"]:
+                checked = self.check_versions(
+                    self.local_splited, self.split_versions(minimal)
+                )
+
+                if not PyFunceble.CONFIGURATION["quiet"]:
+                    if checked or checked != False and not checked:
+                        message = Style.BRIGHT + Fore.RED + "A critical issue has been fixed.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+                        message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+
+                        print(message)
+                        exit(1)
+                elif checked or checked != False and not checked:
+                    raise Exception(
+                        "A critical issue has been fixed. Please take the time to update PyFunceble!"  # pylint:disable=line-too-long
+                    )
+
+        for version in self.upstream_data["deprecated"]:
+            checked = self.check_versions(
+                self.local_splited, self.split_versions(version)
+            )
+
+            if not PyFunceble.CONFIGURATION["quiet"] and checked:
+                message = Style.BRIGHT + Fore.RED + "Your current version is considered as deprecated.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+                message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+
+                print(message)
+                return
+
+            elif checked:
+                print("Version deprecated.")
+                return
+
+        status = self.check_versions(
+            self.local_splited,
+            self.split_versions(self.upstream_data["current_version"]),
+        )
+
+        if status != None and not status and not PyFunceble.CONFIGURATION["quiet"]:
+            message = Style.BRIGHT + Fore.CYAN + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+            message += Style.BRIGHT + "Your version: " + Style.RESET_ALL + PyFunceble.VERSION + "\n"
+            message += Style.BRIGHT + "Upstream version: " + Style.RESET_ALL + self.upstream_data[
+                "current_version"
+            ] + "\n"
+
+            print(message)
+        elif status:
+            if not PyFunceble.CONFIGURATION["quiet"]:
+                message = Style.BRIGHT + Fore.YELLOW + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+                message += Style.BRIGHT + "Your version: " + Style.RESET_ALL + PyFunceble.VERSION + "\n"  # pylint:disable=line-too-long
+                message += Style.BRIGHT + "Upstream version: " + Style.RESET_ALL + self.upstream_data[  # pylint:disable=line-too-long
+                    "current_version"
+                ] + "\n"
+
+                print(message)
+            else:
+                print("New version available.")
+
+        return

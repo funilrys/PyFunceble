@@ -82,7 +82,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.auto_continue import AutoContinue
-from PyFunceble.config import load_configuration
+from PyFunceble.config import Load
 from PyFunceble.helpers import Dict, File
 
 
@@ -96,7 +96,7 @@ class TestsAutoContinue(TestCase):
         This method setup the needed variables.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.file = PyFunceble.OUTPUTS["parent_directory"] + PyFunceble.OUTPUTS["logs"][
             "filenames"
         ][

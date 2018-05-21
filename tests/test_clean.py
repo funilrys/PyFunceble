@@ -82,7 +82,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.clean import Clean
-from PyFunceble.config import load_configuration
+from PyFunceble.config import Load
 from PyFunceble.helpers import File
 
 
@@ -96,7 +96,7 @@ class TestClean(TestCase):
         This method setup everything that is needed.
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         self.file = PyFunceble.OUTPUTS["parent_directory"] + "hello_world"
         self.types = ["up", "down", "invalid", "tested"]
 

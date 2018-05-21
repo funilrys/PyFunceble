@@ -82,7 +82,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout
-from PyFunceble.config import load_configuration
+from PyFunceble.config import Load
 from PyFunceble.execution_time import ExecutionTime
 
 
@@ -96,7 +96,7 @@ class TestExecutionTime(BaseStdout):
         This method will load everything needed for the tests
         """
 
-        load_configuration(PyFunceble.CURRENT_DIRECTORY)
+        Load(PyFunceble.CURRENT_DIRECTORY)
         BaseStdout.setUp(self)
         PyFunceble.CONFIGURATION["show_execution_time"] = True
         PyFunceble.CONFIGURATION["start"] = int(PyFunceble.strftime("%s"))
