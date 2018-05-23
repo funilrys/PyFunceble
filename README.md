@@ -5,7 +5,7 @@
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-![logo](https://raw.githubusercontent.com/ybreza/PyFunceble/patch-3/logo/250x150.png)
+![logo](https://raw.githubusercontent.com/ybreza/PyFunceble/dev/.assets/logo/250x150.png)
 
 ## The tool to check domains or IP availability.
 
