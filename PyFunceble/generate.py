@@ -120,6 +120,10 @@ class Generate(object):  # pragma: no cover
             "plain_list_domain"
         ]:
             splited_destination = ""
+            http_list = []
+            http_list.extend(PyFunceble.STATUS["list"]["potentially_up"])
+            http_list.extend(PyFunceble.STATUS["list"]["potentially_down"])
+            http_list.extend(PyFunceble.STATUS["list"]["http_active"])
 
             output_hosts = self.output_parent_dir + PyFunceble.OUTPUTS["hosts"][
                 "directory"
@@ -152,17 +156,7 @@ class Generate(object):  # pragma: no cover
                 plain_destination = output_domains % PyFunceble.STATUS["official"][
                     "invalid"
                 ]
-            elif self.domain_status.lower() in PyFunceble.STATUS["list"][
-                "potentially_up"
-            ] or self.domain_status.lower() in PyFunceble.STATUS[
-                "list"
-            ][
-                "potentially_down"
-            ] or self.domain_status.lower() in PyFunceble.STATUS[
-                "list"
-            ][
-                "http_active"
-            ]:
+            elif self.domain_status.lower() in http_list:
 
                 output_dir = self.output_parent_dir + PyFunceble.OUTPUTS[
                     "http_analytic"
@@ -294,6 +288,7 @@ class Generate(object):  # pragma: no cover
                 PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_down"],
                 PyFunceble.OUTPUTS["http_analytic"]["filenames"]["potentially_down"],
             )
+            Generate("potentially_down").hosts_file()
 
         Prints(
             [
@@ -373,9 +368,7 @@ class Generate(object):  # pragma: no cover
         ][
             "potentially_down"
         ]:
-            self._analytic_file(
-                PyFunceble.STATUS["official"]["down"], self.domain_status
-            )
+            self._analytic_file("potentially_down", self.domain_status)
 
             regex_to_match = [
                 ".canalblog.com",
@@ -494,9 +487,7 @@ class Generate(object):  # pragma: no cover
                 ][
                     "potentially_down"
                 ]:
-                    self._analytic_file(
-                        PyFunceble.STATUS["official"]["down"], self.domain_status
-                    )
+                    self._analytic_file("potentially_down", self.domain_status)
             except KeyError:
                 pass
 
