@@ -1,0 +1,22 @@
+# This is the current version
+current_version:   "0.69.0.dev-beta"
+
+# We use the following to force user to update in case that current user version
+# is < one of the listed minimal_version.
+force_update:
+  status:          True
+  minimal_version:
+    - "0.0.0"
+    - "0.0.1"
+
+
+# If we want to inform that the current version is deprecated we put it in the
+# following list.
+#
+# Please not that the versions listed here should not have any chars other than `0123456789.`
+deprecated:
+  - "0.0.0"
+  - "0.0.1"
+  - "0.65.0"
+  - "0.67.1"
+  - "0.68.0"

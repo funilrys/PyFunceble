@@ -1,0 +1,22 @@
+env:
+  global:
+    - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
+
+language:       python
+
+python:
+  - "3.6"
+
+matrix:
+  fast_finish:  true
+
+script:
+  # Everything is into one line because we want the test to fail if one of those command fails.
+  - pip3 install pylint coverage coveralls && echo "Lint PyFunceble" && pylint PyFunceble && echo "Lint tests" && pylint tests/*.py && pip3 install git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble && PyFunceble -ex -d github.com && pip uninstall -y PyFunceble && coverage run setup.py test && python3 setup.py install && PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
+
+after_success:
+- coveralls
+
+notifications:
+  on_success:   change
+  on_failure:   always
