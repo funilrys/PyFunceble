@@ -278,27 +278,8 @@ class Core(object):  # pragma: no cover
             if "#" in extracted_domain:
                 extracted_domain = extracted_domain[:extracted_domain.find("#")].strip()
 
-            tabs = "\t"
-            space = " "
-
-            tabs_position, space_position = (
-                extracted_domain.find(tabs), extracted_domain.find(space)
-            )
-
-            if tabs_position > -1 and space_position > -1:
-                if space_position < tabs_position:
-                    separator = space
-                else:
-                    separator = tabs
-            elif tabs_position > -1:
-                separator = tabs
-            elif space_position > -1:
-                separator = space
-            else:
-                separator = ""
-
-            if separator:
-                splited_line = extracted_domain.split(separator)
+            if " " in extracted_domain or "\t" in extracted_domain:
+                splited_line = extracted_domain.split()
 
                 index = 1
                 while index < len(splited_line):
