@@ -208,5 +208,5 @@ class Percentage(object):
                     ],
                 ]:
                     Prints(to_print, "Percentage", output).data()
-        else:
+        elif PyFunceble.CONFIGURATION["counter"]["number"]["tested"] > 0:
             self._calculate()

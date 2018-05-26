@@ -1,5 +1,5 @@
 # This is the current version
-current_version:   "0.69.4.dev-beta"
+current_version:   "0.69.5.dev-beta"
 
 # We use the following to force user to update in case that current user version
 # is < one of the listed minimal_version.
@@ -20,3 +20,4 @@ deprecated:
   - "0.65.0"
   - "0.67.1"
   - "0.68.0"
+  - "0.69.3"
