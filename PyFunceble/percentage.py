@@ -208,3 +208,5 @@ class Percentage(object):
                     ],
                 ]:
                     Prints(to_print, "Percentage", output).data()
+        else:
+            self._calculate()
