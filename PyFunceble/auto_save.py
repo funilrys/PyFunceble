@@ -151,7 +151,11 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
 
             if self.last or self.bypass:
                 if PyFunceble.CONFIGURATION["command_before_end"]:
-                    Command(PyFunceble.CONFIGURATION["command_before_end"]).execute()
+                    print(
+                        Command(
+                            PyFunceble.CONFIGURATION["command_before_end"]
+                        ).execute()
+                    )
 
                 message = PyFunceble.CONFIGURATION[
                     "travis_autosave_final_commit"

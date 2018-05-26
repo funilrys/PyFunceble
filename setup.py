@@ -102,7 +102,7 @@ def _get_requirements():
 
 setup(
     name="PyFunceble",
-    version="0.69.1",
+    version="0.69.2",
     install_requires=_get_requirements(),
     description="The tool to check domains or IP availability.",
     long_description=open("README.md").read(),
