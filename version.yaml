@@ -1,5 +1,5 @@
 # This is the current version
-current_version:   "0.69.2.dev-beta"
+current_version:   "0.69.3.dev-beta"
 
 # We use the following to force user to update in case that current user version
 # is < one of the listed minimal_version.

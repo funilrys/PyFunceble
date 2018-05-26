@@ -157,6 +157,8 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
                         ).execute()
                     )
 
+                    self.travis_permissions()
+
                 message = PyFunceble.CONFIGURATION[
                     "travis_autosave_final_commit"
                 ] + " [ci skip]"
