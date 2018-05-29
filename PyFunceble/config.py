@@ -208,35 +208,50 @@ Install the default configuration in the current directory ? [y/n] "
 class Version(object):
     """
     This class will compare the local with the upstream version.
+
+    Argument:
+        - used: bool
+            True: Version is configured for simple usage.
+            False: Version compare local with upstream.
     """
 
-    def __init__(self):
-        self.local_splited = self.split_versions(PyFunceble.VERSION)
+    def __init__(self, used=False):
+        if not used:
+            self.local_splited = self.split_versions(PyFunceble.VERSION)
 
-        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
+            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"  # pylint: disable=line-too-long
 
-        if "dev" in PyFunceble.VERSION:
-            upstream_link = upstream_link.replace("master", "dev")
-        else:
-            upstream_link = upstream_link.replace("dev", "master")
+            if "dev" in PyFunceble.VERSION:
+                upstream_link = upstream_link.replace("master", "dev")
+            else:
+                upstream_link = upstream_link.replace("dev", "master")
 
-        self.upstream_data = Dict().from_yaml(
-            Download(upstream_link, return_data=True).text()
-        )
+            self.upstream_data = Dict().from_yaml(
+                Download(upstream_link, return_data=True).text()
+            )
 
     @classmethod
-    def split_versions(cls, version):
+    def split_versions(cls, version, return_non_digits=False):
         """
         This method will convert the versions to a shorter one.
 
-        Argument:
+        Arguments:
             - version: str
-                The version to split
+                The version to split.
+            - return_non_digits: bool
+                Return the non digit part of the splited version.
 
         Returns: list
         """
 
-        return list(filter(lambda x: x.isdigit(), version.split(".")))
+        digits = list(filter(lambda x: x.isdigit(), version.split(".")))
+
+        if not return_non_digits:
+            return digits
+
+        non_digits = list(filter(lambda x: not x.isdigit(), version.split(".")))
+
+        return (digits, non_digits[0])
 
     @classmethod
     def check_versions(cls, local, upstream):

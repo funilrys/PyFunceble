@@ -9,6 +9,7 @@ omit =
 
     # omit the following file
     PyFunceble/config.py
+    PyFunceble/production.py
 
 [report]
 # This should be False one we move into production

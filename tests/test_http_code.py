@@ -97,6 +97,14 @@ class TestHTTPCode(TestCase):
 
         PyFunceble.CONFIGURATION["domain"] = "google.com"
 
+        # Test of the case that it returns None
+        PyFunceble.HTTP_CODE["active"] = False
+        expected = None
+        actual = HTTPCode().get()
+
+        self.assertEqual(expected, actual)
+        PyFunceble.HTTP_CODE["active"] = True
+
         # Test of the case that it returns a code which is in our list
         access.return_value = 200
         expected = 200

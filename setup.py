@@ -74,6 +74,7 @@ License: MIT
     SOFTWARE.
 """
 
+from re import compile as comp
 from unittest import TestLoader
 
 from setuptools import setup
@@ -100,28 +101,40 @@ def _get_requirements():
     return requirements
 
 
-setup(
-    name="PyFunceble",
-    version="0.69.5",
-    install_requires=_get_requirements(),
-    description="The tool to check domains or IP availability.",
-    long_description=open("README.md").read(),
-    author="funilrys",
-    author_email="contact@funilrys.com",
-    license="MIT https://raw.githubusercontent.com/funilrys/PyFunceble/master/LICENSE",
-    url="https://github.com/funilrys/PyFunceble",
-    platforms=["any"],
-    packages=["PyFunceble"],
-    keywords=["Python", "domain", "IP", "availability", "PyFunceble"],
-    classifiers=[
-        "Environment :: Console",
-        "Topic :: Internet",
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-    ],
-    test_suite="setup._test_suite",
-    entry_points={"console_scripts": ["PyFunceble=PyFunceble:command_line"]},
-)
+def _get_version():
+    """
+    This function will extract the version from PyFunceble/__init__.py
+    """
+
+    to_match = comp(r'VERSION\s=\s"(.*)"\n')
+    extracted = to_match.findall(open("PyFunceble/__init__.py").read())[0]
+
+    return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
+
+
+if __name__ == "__main__":
+    setup(
+        name="PyFunceble",
+        version=_get_version(),
+        install_requires=_get_requirements(),
+        description="The tool to check domains or IP availability.",
+        long_description=open("README.md", encoding="utf-8").read(),
+        author="funilrys",
+        author_email="contact@funilrys.com",
+        license="MIT https://raw.githubusercontent.com/funilrys/PyFunceble/master/LICENSE",
+        url="https://github.com/funilrys/PyFunceble",
+        platforms=["any"],
+        packages=["PyFunceble"],
+        keywords=["Python", "domain", "IP", "availability", "PyFunceble"],
+        classifiers=[
+            "Environment :: Console",
+            "Topic :: Internet",
+            "Development Status :: 5 - Production/Stable",
+            "Intended Audience :: Developers",
+            "Programming Language :: Python",
+            "Programming Language :: Python :: 3",
+            "License :: OSI Approved :: MIT License",
+        ],
+        test_suite="setup._test_suite",
+        entry_points={"console_scripts": ["PyFunceble=PyFunceble:command_line"]},
+    )

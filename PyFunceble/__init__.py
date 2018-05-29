@@ -98,9 +98,10 @@ from PyFunceble.config import Load, Version
 from PyFunceble.core import Core
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
+from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.69.5.dev-beta"
+VERSION = "1.70.4.dev-beta"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -568,7 +569,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             )
 
         if ARGS.production:
-            DirectoryStructure(production=True)
+            Production()
 
         if ARGS.quiet:
             CONFIGURATION.update({"quiet": Core.switch("quiet")})

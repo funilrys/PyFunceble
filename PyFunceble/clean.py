@@ -140,7 +140,9 @@ class Clean(object):
                     if root.endswith(directory_separator):
                         result.append(root + file)
                     else:
-                        result.append(root + directory_separator + file)
+                        result.append(
+                            root + directory_separator + file
+                        )  # pragma: no cover
 
         return result
 

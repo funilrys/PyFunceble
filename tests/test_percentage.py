@@ -174,6 +174,18 @@ INVALID     1%%           2%s
 
         self.assertEqual(expected, actual)
 
+        # Test for the case that we do not show_percentage
+        PyFunceble.CONFIGURATION["show_percentage"] = False
+        PyFunceble.CONFIGURATION["counter"]["number"].update(
+            {"up": 45, "down": 78, "invalid": 2, "tested": 125}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+
+        actual = PyFunceble.CONFIGURATION["counter"]["percentage"]
+        expected = {"up": 36, "down": 62, "invalid": 1}
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     launch_tests()
