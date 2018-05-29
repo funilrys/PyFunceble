@@ -88,6 +88,7 @@ from re import sub as substrings
 from subprocess import PIPE, Popen
 
 from yaml import load as load_yaml
+from yaml import dump as dump_yaml
 
 from PyFunceble import directory_separator, path, requests
 
@@ -268,6 +269,24 @@ class Dict(object):
             - destination: str
                 A path to a file where we're going to
                 write the converted dict into a JSON format.
+        """
+
+        with open(destination, "w") as file:
+            dump(
+                self.main_dictionnary,
+                file,
+                ensure_ascii=False,
+                indent=4,
+                sort_keys=True,
+            )
+    
+    def to_yaml(self, destination):
+        """
+        Save a dictionnary into a YAML file.
+
+        Argument:
+            - destination: str
+                A path to a file where we're going to write the converted dict into a JSON format.
         """
 
         with open(destination, "w") as file:
