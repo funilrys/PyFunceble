@@ -1,3 +1,5 @@
-requests==2.18.4
 colorama==0.3.9
+urllib3==1.22
+setuptools==39.1.0
+requests==2.18.4
 PyYAML==3.12
