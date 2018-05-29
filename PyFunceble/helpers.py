@@ -279,7 +279,7 @@ class Dict(object):
                 indent=4,
                 sort_keys=True,
             )
-    
+
     def to_yaml(self, destination):
         """
         Save a dictionnary into a YAML file.
@@ -290,11 +290,7 @@ class Dict(object):
         """
 
         with open(destination, "w") as file:
-            dump_yaml(
-                self.main_dictionnary,
-                file,
-                indent=4,
-            )
+            dump_yaml(self.main_dictionnary, file, indent=4)
 
     @classmethod
     def from_json(cls, data):

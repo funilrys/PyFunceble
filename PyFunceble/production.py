@@ -122,7 +122,9 @@ class Production(object):  # pylint: disable=too-few-public-methods
                 self.current_version[0]
             )
 
-            Dict(self.data_version_yaml).to_yaml(PyFunceble.CURRENT_DIRECTORY + "version.yaml")
+            Dict(self.data_version_yaml).to_yaml(
+                PyFunceble.CURRENT_DIRECTORY + "version.yaml"
+            )
 
             message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
             message += Fore.CYAN + "Please do not touch version.yaml nor setup.py (version update)"
