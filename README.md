@@ -1,6 +1,6 @@
 ![logo](https://raw.githubusercontent.com/ybreza/PyFunceble/dev/.assets/logo/RM.png)
 
-<h2 align="center">The tool to check domains or IP availability.</h2>
+<h2 align="center">The tool to check domains or IP availability</h2>
 
 
 <p align="center"><a href="https://travis-ci.com/funilrys/PyFunceble"><img src="https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev" alt="Build Status"></a> <a href="https://coveralls.io/github/funilrys/PyFunceble?branch=dev"><img src="https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/funilrys/PyFunceble.svg" alt="license"></a> <a href="https://github.com/funilrys/PyFunceble/releases/latest"><img src="https://img.shields.io/github/release/funilrys/PyFunceble.svg" alt="GitHub release"></a> <a href=""><img src="https://img.shields.io/github/issues/funilrys/PyFunceble.svg" alt="GitHub issues open"></a> <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style | Black"></a></p>
@@ -30,7 +30,7 @@ $ git clone https://github.com/funilrys/PyFunceble.wiki.git
 ## Main Features
 
 -   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
--   Read an existing file and check every domain present into it.
+-   Read an existing file and check every domain and IPv5 present into it.
 -   Generate a `hosts` file according to the domains statuses.
 -   Generate a list of the domain according to their discovered statuses.
 -   Show results on screen
