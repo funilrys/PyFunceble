@@ -235,6 +235,7 @@ class IANA(object):  # pragma: no cover
             "like": "whois.nic.like",
             "lilly": "whois.nic.lilly",
             "lincoln": "whois.nic.lincoln",
+            "living": "whois.nic.living",
             "lc": "whois2.afilias-grs.net",
             "lk": "whois.nic.lk",
             "microsoft": "whois.nic.microsoft",
