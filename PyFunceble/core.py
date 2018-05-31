@@ -120,9 +120,11 @@ class Core(object):  # pragma: no cover
             PyFunceble.CONFIGURATION[
                 "file_to_test"
             ] = file_path  # pylint: disable=no-member
-            PyFunceble.CONFIGURATION[
-                "file_to_test"
-            ] = self.file_urls  # pylint: disable=no-member
+
+            if self.file_urls:  # pylint: disable=no-member
+                PyFunceble.CONFIGURATION[
+                    "file_to_test"
+                ] = self.file_urls  # pylint: disable=no-member
 
             if PyFunceble.CONFIGURATION["travis"]:
                 AutoSave().travis_permissions()

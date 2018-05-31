@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.71.1.dev-beta"
+VERSION = "0.71.2.dev-beta"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
