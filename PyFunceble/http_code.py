@@ -88,10 +88,23 @@ from PyFunceble import requests, socket
 class HTTPCode(object):  # pylint: disable=too-few-public-methods
     """
     Get and return the HTTP code status of a given domain.
+
+    Argument:
+        - full_url: bool
+            - False: We check only in a domain mode environnment.
+            - True: We check in a www environnment.
+
     """
 
-    @classmethod
-    def _access(cls):  # pragma: no cover
+    def __init__(self, full_url=False):  # pragma: no cover
+        self.full_url = full_url
+
+        if full_url:
+            self.to_get = PyFunceble.CONFIGURATION["URL"]
+        else:
+            self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
+
+    def _access(self):  # pragma: no cover
         """
         Get the HTTP code status.
 
@@ -102,7 +115,7 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
 
         try:
             req = requests.head(
-                "http://%s:80" % PyFunceble.CONFIGURATION["domain"],
+                self.to_get,
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
             )
 

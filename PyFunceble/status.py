@@ -116,3 +116,30 @@ class Status(object):  # pragma: no cover  # pylint: disable=too-few-public-meth
 
         Generate(PyFunceble.STATUS["official"]["invalid"], "IANA").status_file()
         return PyFunceble.STATUS["official"]["invalid"]
+
+
+class URLStatus(object):  # pragma: no cover  # pylint: disable=too-few-public-methods
+    """
+    Generate everything around the catched status.
+
+    Argument:
+        - catched_status: str
+            The catched status.
+    """
+
+    def __init__(self, catched_status):
+        self.catched = catched_status
+
+    def handle(self):
+        """
+        Handle the backend of the given status.
+        """
+
+        source = "URL"
+
+        if self.catched.lower() not in PyFunceble.STATUS["list"]["invalid"]:
+            Generate(self.catched, source).status_file()
+        else:
+            Generate(self.catched, "IANA").status_file()
+
+        return self.catched

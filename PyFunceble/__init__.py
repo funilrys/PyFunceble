@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.70.4.dev-beta"
+VERSION = "0.71.0.dev-beta"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -478,6 +478,13 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
+        PARSER.add_argument("-u", "--url", type=str, help="Analyze the given url.")
+
+        PARSER.add_argument(
+            "-uf", "--url-file", type=str, help="Test a file with a list of URL."
+        )
+
         PARSER.add_argument(
             "-v", "--version", action="version", version="%(prog)s " + VERSION
         )
@@ -599,4 +606,9 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
 
         Version().compare()
-        Core(ARGS.domain, ARGS.file)
+        Core(
+            domain=ARGS.domain,
+            file_path=ARGS.file,
+            url_to_test=ARGS.url,
+            url_file=ARGS.url_file,
+        )

@@ -89,6 +89,7 @@ from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.helpers import Command, List, Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
+from PyFunceble.url import URL
 
 
 class Core(object):  # pragma: no cover
@@ -103,12 +104,25 @@ class Core(object):  # pragma: no cover
             A path to a file to read.
     """
 
-    def __init__(self, domain=None, file_path=None, modulo_test=False):
-        self.modulo_test = modulo_test
+    def __init__(self, domain=None, file_path=None, **args):
 
-        if not self.modulo_test:
+        optional_arguments = {
+            "url_to_test": None, "file_urls": None, "modulo_test": False
+        }
 
-            PyFunceble.CONFIGURATION["file_to_test"] = file_path
+        # We initiate our optional_arguments in order to be usable all over the
+        # class
+        for (arg, default) in optional_arguments.items():
+            setattr(self, arg, args.get(arg, default))
+
+        if not self.modulo_test:  # pylint: disable=no-member
+
+            PyFunceble.CONFIGURATION[
+                "file_to_test"
+            ] = file_path  # pylint: disable=no-member
+            PyFunceble.CONFIGURATION[
+                "file_to_test"
+            ] = self.file_urls  # pylint: disable=no-member
 
             if PyFunceble.CONFIGURATION["travis"]:
                 AutoSave().travis_permissions()
@@ -120,6 +134,21 @@ class Core(object):  # pragma: no cover
                 PyFunceble.CONFIGURATION["show_percentage"] = False
                 PyFunceble.CONFIGURATION["domain"] = domain.lower()
                 self.domain()
+            elif self.url_to_test and not file_path:  # pylint: disable=no-member
+                PyFunceble.CONFIGURATION["show_percentage"] = False
+                PyFunceble.CONFIGURATION[
+                    "URL"
+                ] = self.url_to_test  # pylint: disable=no-member
+                self.url()
+            elif self.file_urls:  # pylint: disable=no-member
+                PyFunceble.CONFIGURATION["no_whois"] = PyFunceble.CONFIGURATION[
+                    "plain_list_domain"
+                ] = PyFunceble.CONFIGURATION[
+                    "split"
+                ] = True
+                PyFunceble.CONFIGURATION["generate_hosts"] = False
+
+                self.url_file()
             elif file_path:
                 self.file()
 
@@ -148,7 +177,7 @@ class Core(object):  # pragma: no cover
             - Exception: when this method is called under __name___
         """
 
-        if not self.modulo_test:
+        if not self.modulo_test:  # pylint: disable=no-member
             raise Exception(
                 "You should not use this method. Please prefer self.domain()"
             )
@@ -188,6 +217,48 @@ class Core(object):  # pragma: no cover
 
             PyFunceble.CONFIGURATION["header_printed"] = True
 
+    def _file_decision(self, current, last, status=None):
+        """
+        Manage the database, autosave and autocontinue systems for the case that we are reading
+        a file.
+
+        Arguments:
+            - status: str
+                The current status of current.
+            - current: str
+                The current domain or URL we are testing.
+            - last: str
+                The last domain or URL of the file we are testing.
+        """
+
+        if status:
+            if not PyFunceble.CONFIGURATION["simple"] and PyFunceble.CONFIGURATION[
+                "file_to_test"
+            ]:
+                if PyFunceble.CONFIGURATION["inactive_database"]:
+                    if status.lower() in PyFunceble.STATUS["list"]["up"]:
+                        Database().remove()
+                    else:
+                        Database().add()
+
+                AutoContinue().backup()
+
+                if current != last:
+                    AutoSave()
+                else:
+                    ExecutionTime("stop")
+                    Percentage().log()
+                    self.reset_counters()
+                    AutoContinue().backup()
+
+                    self.colored_logo()
+
+                    AutoSave(True)
+
+        for index in ["http_code", "referer"]:
+            if index in PyFunceble.CONFIGURATION:
+                PyFunceble.CONFIGURATION[index] = ""
+
     def domain(self, domain=None, last_domain=None):
         """
         Manage the case that we want to test only a domain.
@@ -209,31 +280,7 @@ class Core(object):  # pragma: no cover
             else:
                 status = ExpirationDate().get()
 
-            if not PyFunceble.CONFIGURATION["simple"] and PyFunceble.CONFIGURATION[
-                "file_to_test"
-            ]:
-                if PyFunceble.CONFIGURATION["inactive_database"]:
-                    if status == "ACTIVE":
-                        Database().remove()
-                    else:
-                        Database().add()
-
-                AutoContinue().backup()
-
-                if domain != last_domain:
-                    AutoSave()
-                else:
-                    ExecutionTime("stop")
-                    Percentage().log()
-                    self.reset_counters()
-                    AutoContinue().backup()
-
-                    self.colored_logo()
-
-                    AutoSave(True)
-
-            PyFunceble.CONFIGURATION["http_code"] = ""
-            PyFunceble.CONFIGURATION["referer"] = ""
+            self._file_decision(domain, last_domain, status)
         else:
             ExpirationDate().get()
             return
@@ -448,6 +495,83 @@ class Core(object):  # pragma: no cover
         list(
             map(
                 self.domain,
+                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"]:],
+                repeat(list_to_test[-1]),
+            )
+        )
+
+    def url(self, url_to_test=None, last_url=None):
+        """
+        Manage the case that we want to test only a given url.
+
+        Arguments:
+            - url_to_test: str
+                The url to test.
+            - last_url: str
+                The last url of the file we are testing.
+        """
+
+        if url_to_test:
+            PyFunceble.CONFIGURATION["URL"] = url_to_test
+        self.print_header()
+
+        if __name__ == "PyFunceble.core":
+            if PyFunceble.CONFIGURATION["simple"]:
+                print(URL().get())
+            else:
+                status = URL().get()
+
+            self._file_decision(url_to_test, last_url, status)
+        else:
+            URL().get()
+            return
+
+    def url_file(self):
+        """
+        Manage the case that we have to test a file
+        Note: 1 URL per line.
+        """
+
+        list_to_test = self._extract_domain_from_file()
+
+        AutoContinue().restore()
+
+        PyFunceble.Clean(list_to_test)
+
+        if PyFunceble.CONFIGURATION["inactive_database"]:
+            Database().to_test()
+
+            if PyFunceble.CONFIGURATION["file_to_test"] in PyFunceble.CONFIGURATION[
+                "inactive_db"
+            ] and "to_test" in PyFunceble.CONFIGURATION[
+                "inactive_db"
+            ][
+                PyFunceble.CONFIGURATION["file_to_test"]
+            ] and PyFunceble.CONFIGURATION[
+                "inactive_db"
+            ][
+                PyFunceble.CONFIGURATION["file_to_test"]
+            ][
+                "to_test"
+            ]:
+                list_to_test.extend(
+                    PyFunceble.CONFIGURATION["inactive_db"][
+                        PyFunceble.CONFIGURATION["file_to_test"]
+                    ][
+                        "to_test"
+                    ]
+                )
+
+        if PyFunceble.CONFIGURATION["filter"]:
+            list_to_test = List(
+                Regex(
+                    list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
+                ).matching_list()
+            ).format()
+
+        list(
+            map(
+                self.url,
                 list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"]:],
                 repeat(list_to_test[-1]),
             )

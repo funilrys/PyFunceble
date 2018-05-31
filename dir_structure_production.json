@@ -97,9 +97,15 @@
             }
         },
         "logs/percentage": {
-            ".gitignore": {
-                "content": "*@@@!.gitignore",
-                "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+            "logs/percentage": {
+                ".gitignore": {
+                    "content": "*@@@!.gitignore",
+                    "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+                }
+            },
+            "percentage.txt": {
+                "content": "# File generated with https://github.com/funilrys/PyFunceble@@@# Date of generation: Thu 31 May 13:05:26 CEST 2018 @@@@@@Status      Percentage   Numbers      @@@----------- ------------ ------------ @@@ACTIVE      36%          45           @@@INACTIVE    62%          78           @@@INVALID     1%           2            ",
+                "sha512": "292f7a7ed071ee72708b743b1ec9b4a56a67efc44c90b6b2b9a965cf98c060d781cf97903ced095d3fce3b2fd6b9310ef0e4aba19c8801a9bd3eb92487589868"
             }
         },
         "logs/whois": {

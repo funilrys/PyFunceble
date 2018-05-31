@@ -297,6 +297,35 @@ class TestDict(TestCase):
 
         actual = Dict(self.to_test).rename_key({"fun": "nuf"}, strict=False)
 
+    def test_to_yaml(self):
+        """
+        This method will test Dict().to_yaml.
+        """
+        file_to_read = "this_yaml_is_a_ghost.yaml"
+
+        expected = False
+        actual = PyFunceble.path.isfile(file_to_read)
+
+        self.assertEqual(expected, actual)
+
+        to_write = {"hello": ["This is PyFunceble!", "Uhh!"], "world": "Fun Ilrys"}
+
+        expected = """hello: [This is PyFunceble!, Uhh!]
+world: Fun Ilrys
+"""
+
+        Dict(to_write).to_yaml(file_to_read)
+
+        actual = File(file_to_read).read()
+        self.assertEqual(expected, actual)
+
+        File(file_to_read).delete()
+
+        expected = False
+        actual = PyFunceble.path.isfile(file_to_read)
+
+        self.assertEqual(expected, actual)
+
 
 class TestDirectory(TestCase):
     """

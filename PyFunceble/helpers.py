@@ -87,8 +87,8 @@ from re import escape
 from re import sub as substrings
 from subprocess import PIPE, Popen
 
-from yaml import load as load_yaml
 from yaml import dump as dump_yaml
+from yaml import load as load_yaml
 
 from PyFunceble import directory_separator, path, requests
 

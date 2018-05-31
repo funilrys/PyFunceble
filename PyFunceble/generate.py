@@ -111,6 +111,11 @@ class Generate(object):  # pragma: no cover
         self.refer_status = ""
         self.output = ""
 
+        if PyFunceble.CONFIGURATION["domain"]:
+            self.tested = PyFunceble.CONFIGURATION["domain"]
+        elif PyFunceble.CONFIGURATION["URL"]:
+            self.tested = PyFunceble.CONFIGURATION["URL"]
+
     def hosts_file(self):
         """
         Generate a hosts file.
@@ -195,27 +200,16 @@ class Generate(object):  # pragma: no cover
 
             if PyFunceble.CONFIGURATION["generate_hosts"]:
                 Prints(
-                    [
-                        PyFunceble.CONFIGURATION["custom_ip"],
-                        PyFunceble.CONFIGURATION["domain"],
-                    ],
+                    [PyFunceble.CONFIGURATION["custom_ip"], self.tested],
                     "FullHosts",
                     hosts_destination,
                 ).data()
 
             if PyFunceble.CONFIGURATION["plain_list_domain"]:
-                Prints(
-                    [PyFunceble.CONFIGURATION["domain"]],
-                    "PlainDomain",
-                    plain_destination,
-                ).data()
+                Prints([self.tested], "PlainDomain", plain_destination).data()
 
             if PyFunceble.CONFIGURATION["split"] and splited_destination:
-                Prints(
-                    [PyFunceble.CONFIGURATION["domain"]],
-                    "PlainDomain",
-                    splited_destination,
-                ).data()
+                Prints([self.tested], "PlainDomain", splited_destination).data()
 
     def unified_file(self):
         """
@@ -231,21 +225,17 @@ class Generate(object):  # pragma: no cover
             if PyFunceble.CONFIGURATION["less"]:
                 if PyFunceble.HTTP_CODE["active"]:
                     to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.domain_status,
                         PyFunceble.CONFIGURATION["http_code"],
                     ]
                 else:
-                    to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
-                        self.domain_status,
-                        self.source,
-                    ]
+                    to_print = [self.tested, self.domain_status, self.source]
 
                 Prints(to_print, "Less", output, True).data()
             else:
                 to_print = [
-                    PyFunceble.CONFIGURATION["domain"],
+                    self.tested,
                     self.domain_status,
                     self.expiration_date,
                     self.source,
@@ -292,7 +282,7 @@ class Generate(object):  # pragma: no cover
 
         Prints(
             [
-                PyFunceble.CONFIGURATION["domain"],
+                self.tested,
                 old_status,
                 PyFunceble.CONFIGURATION["http_code"],
                 PyFunceble.CURRENT_TIME,
@@ -310,15 +300,8 @@ class Generate(object):  # pragma: no cover
         regex_blogspot = ".blogspot."
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
-        if Regex(
-            PyFunceble.CONFIGURATION["domain"],
-            regex_blogspot,
-            return_data=False,
-            escape=True,
-        ).match():
-            blogger_content_request = requests.get(
-                "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
-            )
+        if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
+            blogger_content_request = requests.get("http://%s:80" % self.tested)
 
             for regx in regex_blogger:
                 if regx in blogger_content_request.text or Regex(
@@ -341,10 +324,8 @@ class Generate(object):  # pragma: no cover
         wordpress_com = ".wordpress.com"
         does_not_exist = "doesn&#8217;t&nbsp;exist"
 
-        if PyFunceble.CONFIGURATION["domain"].endswith(wordpress_com):
-            wordpress_com_content = requests.get(
-                "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
-            )
+        if self.tested.endswith(wordpress_com):
+            wordpress_com_content = requests.get("http://%s:80" % self.tested)
 
             if does_not_exist in wordpress_com_content.text:
                 self.source = "SPECIAL"
@@ -379,12 +360,7 @@ class Generate(object):  # pragma: no cover
             ]
 
             for regx in regex_to_match:
-                if Regex(
-                    PyFunceble.CONFIGURATION["domain"],
-                    regx,
-                    return_data=False,
-                    escape=True,
-                ).match():
+                if Regex(self.tested, regx, return_data=False, escape=True).match():
                     self.source = "SPECIAL"
                     self.domain_status = PyFunceble.STATUS["official"]["down"]
                     self.output = self.output_parent_dir + PyFunceble.OUTPUTS[
@@ -436,7 +412,7 @@ class Generate(object):  # pragma: no cover
                 self._analytic_file("potentially_up", self.domain_status)
 
         if Regex(
-            PyFunceble.CONFIGURATION["domain"],
+            self.tested,
             r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$",  # pylint: disable=line-too-long
             return_data=False,
         ).match():
@@ -504,7 +480,7 @@ class Generate(object):  # pragma: no cover
 
         if PyFunceble.CONFIGURATION["less"]:
             Prints(
-                [PyFunceble.CONFIGURATION["domain"], self.domain_status, self.source],
+                [self.tested, self.domain_status, self.source],
                 "Less",
                 self.output,
                 True,
@@ -513,7 +489,7 @@ class Generate(object):  # pragma: no cover
             if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
                 if PyFunceble.HTTP_CODE["active"]:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.expiration_date,
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
@@ -521,7 +497,7 @@ class Generate(object):  # pragma: no cover
                     ]
                 else:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.expiration_date,
                         self.source,
                         PyFunceble.CURRENT_TIME,
@@ -536,7 +512,7 @@ class Generate(object):  # pragma: no cover
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
                 if PyFunceble.HTTP_CODE["active"]:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         PyFunceble.CONFIGURATION["referer"],
                         self.domain_status,
                         self.source,
@@ -545,7 +521,7 @@ class Generate(object):  # pragma: no cover
                     ]
                 else:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         PyFunceble.CONFIGURATION["referer"],
                         self.domain_status,
                         self.source,
@@ -561,17 +537,13 @@ class Generate(object):  # pragma: no cover
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
                 if PyFunceble.HTTP_CODE["active"]:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.source,
                         PyFunceble.CONFIGURATION["http_code"],
                         PyFunceble.CURRENT_TIME,
                     ]
                 else:
-                    data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
-                        self.source,
-                        PyFunceble.CURRENT_TIME,
-                    ]
+                    data_to_print = [self.tested, self.source, PyFunceble.CURRENT_TIME]
 
                 Prints(
                     data_to_print,
@@ -590,6 +562,9 @@ class Generate(object):  # pragma: no cover
         except KeyError:
             PyFunceble.CONFIGURATION["http_code"] = "*" * 3
 
+        if not PyFunceble.CONFIGURATION["http_code"]:
+            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+
         if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
             self.up_status_file()
         elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
@@ -604,7 +579,7 @@ class Generate(object):  # pragma: no cover
             if PyFunceble.CONFIGURATION["less"]:
                 Prints(
                     [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.domain_status,
                         PyFunceble.CONFIGURATION["http_code"],
                     ],
@@ -613,7 +588,7 @@ class Generate(object):  # pragma: no cover
             else:
                 if PyFunceble.HTTP_CODE["active"]:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.domain_status,
                         self.expiration_date,
                         self.source,
@@ -621,7 +596,7 @@ class Generate(object):  # pragma: no cover
                     ]
                 else:
                     data_to_print = [
-                        PyFunceble.CONFIGURATION["domain"],
+                        self.tested,
                         self.domain_status,
                         self.expiration_date,
                         self.source,
