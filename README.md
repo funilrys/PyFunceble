@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/ybreza/PyFunceble/master/.assets/logo/RM.png)
+![logo](https://raw.githubusercontent.com/funilrys/PyFunceble/master/.assets/logo/RM.png)
 
 <h2 align="center">The tool to check domains or IP availability</h2>
 
