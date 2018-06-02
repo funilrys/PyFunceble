@@ -111,9 +111,9 @@ class Generate(object):  # pragma: no cover
         self.refer_status = ""
         self.output = ""
 
-        if PyFunceble.CONFIGURATION["domain"]:
+        if "domain" in PyFunceble.CONFIGURATION:
             self.tested = PyFunceble.CONFIGURATION["domain"]
-        elif PyFunceble.CONFIGURATION["URL"]:
+        elif "URL" in PyFunceble.CONFIGURATION:
             self.tested = PyFunceble.CONFIGURATION["URL"]
 
     def hosts_file(self):
