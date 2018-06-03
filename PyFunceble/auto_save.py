@@ -107,6 +107,7 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
         """
         Set permissions in order to avoid issues before commiting.
         """
+
         try:
             build_dir = PyFunceble.environ["TRAVIS_BUILD_DIR"]
             commands = [
@@ -130,46 +131,52 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
         Logic behind travis autosave.
         """
 
-        current_time = int(strftime("%s"))
-        time_autorisation = False
-
         try:
-            time_autorisation = current_time >= int(
-                PyFunceble.CONFIGURATION["start"]
-            ) + (
-                int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
-            )
-        except KeyError:
-            if self.last and not self.bypass:
-                raise Exception("Please review the way `ExecutionTime()` is called.")
+            _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
+            current_time = int(strftime("%s"))
+            time_autorisation = False
 
-        if self.last or time_autorisation or self.bypass:
-            Percentage().log()
-            self.travis_permissions()
-
-            command = 'git add --all && git commit -a -m "%s"'
-
-            if self.last or self.bypass:
-                if PyFunceble.CONFIGURATION["command_before_end"]:
-                    print(
-                        Command(
-                            PyFunceble.CONFIGURATION["command_before_end"]
-                        ).execute()
+            try:
+                time_autorisation = current_time >= int(
+                    PyFunceble.CONFIGURATION["start"]
+                ) + (
+                    int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
+                )
+            except KeyError:
+                if self.last and not self.bypass:
+                    raise Exception(
+                        "Please review the way `ExecutionTime()` is called."
                     )
 
-                    self.travis_permissions()
+            if self.last or time_autorisation or self.bypass:
+                Percentage().log()
+                self.travis_permissions()
 
-                message = PyFunceble.CONFIGURATION[
-                    "travis_autosave_final_commit"
-                ] + " [ci skip]"
+                command = 'git add --all && git commit -a -m "%s"'
 
-                Command(command % message).execute()
-            else:
+                if self.last or self.bypass:
+                    if PyFunceble.CONFIGURATION["command_before_end"]:
+                        print(
+                            Command(
+                                PyFunceble.CONFIGURATION["command_before_end"]
+                            ).execute()
+                        )
+
+                        self.travis_permissions()
+
+                    message = PyFunceble.CONFIGURATION[
+                        "travis_autosave_final_commit"
+                    ] + " [ci skip]"
+
+                    Command(command % message).execute()
+                else:
+                    Command(
+                        command % PyFunceble.CONFIGURATION["travis_autosave_commit"]
+                    ).execute()
+
                 Command(
-                    command % PyFunceble.CONFIGURATION["travis_autosave_commit"]
+                    "git push origin %s" % PyFunceble.CONFIGURATION["travis_branch"]
                 ).execute()
-
-            Command(
-                "git push origin %s" % PyFunceble.CONFIGURATION["travis_branch"]
-            ).execute()
-            exit(0)
+                exit(0)
+        except KeyError:
+            pass
