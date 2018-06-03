@@ -99,7 +99,7 @@ class Load(object):
         if path_to_config.endswith(directory_separator):
             self.path_to_config += directory_separator
 
-        self.path_to_config += ".PyFunceble.yaml"
+        self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
 
         try:
             self.load_config_file()

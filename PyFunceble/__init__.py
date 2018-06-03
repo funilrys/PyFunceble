@@ -101,7 +101,9 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.72.1.beta"
+VERSION = "0.72.2.beta"
+
+CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
 CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -143,7 +145,7 @@ def load_config():  # pragma: no cover
         if not CURRENT_DIRECTORY.endswith(directory_separator):
             CURRENT_DIRECTORY += directory_separator
 
-        if path.isfile(CURRENT_DIRECTORY + ".PyFunceble.yaml"):
+        if path.isfile(CURRENT_DIRECTORY + CONFIGURATION_FILENAME):
             Load(CURRENT_DIRECTORY)
 
     if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
