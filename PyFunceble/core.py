@@ -392,7 +392,8 @@ class Core(object):  # pragma: no cover
         by the system.
 
         Argument:
-            - list_to_test: A list, the read content of the given file.
+            - list_to_test: list
+                The read content of the given file.
 
         Returns: list
             The list of domain to test.
@@ -424,7 +425,7 @@ class Core(object):  # pragma: no cover
         """
         This method extract all non commented lines.
 
-        Returns: lis
+        Returns: list
             Each line of the file == an element of the list.
         """
 
@@ -586,7 +587,7 @@ class Core(object):  # pragma: no cover
         """
         Switch PyFunceble.CONFIGURATION variables to their opposite.
 
-        Argument:
+        Arguments:
             - variable: str
                 The PyFunceble.CONFIGURATION[variable_name] to switch.
             - custom: bool
