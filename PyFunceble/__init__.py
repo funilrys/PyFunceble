@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.72.2.beta"
+VERSION = "0.72.3.beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -195,6 +195,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             help="Switch the decoding of the adblock format. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["adblock"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "-a",
             "--all",
@@ -202,6 +203,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             help="Output all available informations on screen. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["less"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "--cmd-before-end",
             type=str,
@@ -213,6 +215,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-c",
             "--auto-continue",
@@ -225,6 +228,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--autosave-minutes",
             type=int,
@@ -236,9 +240,11 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--clean", action="store_true", help="Clean all files under output."
         )
+
         PARSER.add_argument(
             "--commit-autosave-message",
             type=str,
@@ -249,6 +255,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--commit-results-message",
             type=str,
@@ -259,9 +266,11 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-d", "--domain", type=str, help="Analyze the given domain."
         )
+
         PARSER.add_argument(
             "-db",
             "--database",
@@ -274,6 +283,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-dbr",
             "--days-between-db-retest",
@@ -286,22 +296,27 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--debug",
             action="store_true",
             help="Switch the value of the debug mode. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["debug"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "--directory-structure",
             action="store_true",
             help="Generate the directory and files that are needed and which does \
                 not exist in the current directory.",
         )
+
         PARSER.add_argument(
             "-f", "--file", type=str, help="Test a file with a list of domains."
         )
-        PARSER.add_argument("--filter", type=str, help="Domain to filter.")
+
+        PARSER.add_argument("--filter", type=str, help="Domain to filter (regex).")
+
         PARSER.add_argument(
             "-ex",
             "--execution",
@@ -313,12 +328,14 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--help",
             action="help",
             default=argparse.SUPPRESS,
             help="Show this help message and exit.",
         )
+
         PARSER.add_argument(
             "-h",
             "--host",
@@ -330,15 +347,20 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--http",
             action="store_true",
             help="Switch the value of the usage of HTTP code. %s"
             % (CURRENT_VALUE_FORMAT + repr(HTTP_CODE["active"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
-            "--iana", action="store_true", help="Update `iana-domains-db.json`."
+            "--iana",
+            action="store_true",
+            help="Update/Generate `iana-domains-db.json`.",
         )
+
         PARSER.add_argument(
             "-ip",
             type=str,
@@ -349,12 +371,14 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--less",
             action="store_true",
             help="Output less informations on screen. %s"
             % (CURRENT_VALUE_FORMAT + repr(Core.switch("less")) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "-n",
             "--no-files",
@@ -364,6 +388,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 CURRENT_VALUE_FORMAT + repr(CONFIGURATION["no_files"]) + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-nl",
             "--no-logs",
@@ -372,14 +397,16 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             encounter some errors. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["logs"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "-nu",
             "--no-unified",
             action="store_true",
-            help="Switch the value of the production of result.txt as unified result \
+            help="Switch the value of the production unified logs \
                 under the output directory. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["unified"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "-nw",
             "--no-whois",
@@ -389,6 +416,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 CURRENT_VALUE_FORMAT + repr(CONFIGURATION["no_whois"]) + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-p",
             "--percentage",
@@ -400,6 +428,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--plain",
             action="store_true",
@@ -411,11 +440,13 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--production",
             action="store_true",
             help="Prepare the repository for production.",
         )
+
         PARSER.add_argument(
             "-q",
             "--quiet",
@@ -423,17 +454,18 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             help="Run the script in quiet mode. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["quiet"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "--share-logs",
             action="store_true",
-            help="Activate the sharing of logs to an API which helps manage logs in \
-                order to make PyFunceble a better script. %s"
+            help="Switch the value of the sharing of logs. %s"
             % (
                 CURRENT_VALUE_FORMAT
                 + repr(CONFIGURATION["share_logs"])
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-s",
             "--simple",
@@ -441,6 +473,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             help="Switch the value of the simple output mode. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["simple"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "--split",
             action="store_true",
@@ -451,6 +484,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "-t",
             "--timeout",
@@ -463,12 +497,14 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
                 + Style.RESET_ALL
             ),
         )
+
         PARSER.add_argument(
             "--travis",
             action="store_true",
             help="Activate the travis mode. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["travis"]) + Style.RESET_ALL),
         )
+
         PARSER.add_argument(
             "--travis-branch",
             type=str,
