@@ -1,0 +1,15 @@
+{
+    "name": "PyFunceble",
+    "short_name": "PyFunceble",
+    "icons": [
+        {
+            "src": "/images/favicon/android-chrome-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "start_url": "https://funilrys.github.io/PyFunceble/",
+    "display": "standalone"
+}

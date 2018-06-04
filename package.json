@@ -1,0 +1,23 @@
+{
+  "name": "PyFunceble",
+  "version": "1.0.0",
+  "description": "Pages of PyFunceble",
+  "main": "index.js",
+  "dependencies": {
+    "semantic-ui": "^2.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funilrys/PyFunceble.git"
+  },
+  "author": "Nissar Chababy (Fun Ilrys)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/funilrys/PyFunceble/issues"
+  },
+  "homepage": "https://funilrys.github.io/PyFunceble/"
+}

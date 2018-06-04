@@ -1,0 +1,28 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.footer.segment {
+    padding: 5em 0em;
+}
+
+.masthead.segment {
+    min-height: 350px;
+    padding: 1em 0em;
+}
+
+.quote.stripe.segment {
+    padding: 0em;
+}
+
+.quote.stripe.segment .grid .column {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .masthead.segment {
+        min-height: 175px;
+    }
+}
