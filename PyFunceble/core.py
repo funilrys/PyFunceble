@@ -294,16 +294,17 @@ class Core(object):  # pragma: no cover
             PyFunceble.CONFIGURATION["domain"] = self._format_domain(domain)
         self.print_header()
 
-        if __name__ == "PyFunceble.core":
-            if PyFunceble.CONFIGURATION["simple"]:
-                print(ExpirationDate().get())
-            else:
-                status = ExpirationDate().get()
+        if PyFunceble.CONFIGURATION["domain"]:
+            if __name__ == "PyFunceble.core":
+                if PyFunceble.CONFIGURATION["simple"]:
+                    print(ExpirationDate().get())
+                else:
+                    status = ExpirationDate().get()
 
-            self._file_decision(domain, last_domain, status)
-        else:
-            ExpirationDate().get()
-            return
+                self._file_decision(domain, last_domain, status)
+            else:
+                ExpirationDate().get()
+                return
 
     @classmethod
     def reset_counters(cls):
@@ -536,16 +537,17 @@ class Core(object):  # pragma: no cover
             PyFunceble.CONFIGURATION["URL"] = url_to_test
         self.print_header()
 
-        if __name__ == "PyFunceble.core":
-            if PyFunceble.CONFIGURATION["simple"]:
-                print(URL().get())
-            else:
-                status = URL().get()
+        if PyFunceble.CONFIGURATION["URL"]:
+            if __name__ == "PyFunceble.core":
+                if PyFunceble.CONFIGURATION["simple"]:
+                    print(URL().get())
+                else:
+                    status = URL().get()
 
-            self._file_decision(url_to_test, last_url, status)
-        else:
-            URL().get()
-            return
+                self._file_decision(url_to_test, last_url, status)
+            else:
+                URL().get()
+                return
 
     def url_file(self):
         """
