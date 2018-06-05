@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.72.7.dev-beta"
+VERSION = "0.73.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -630,9 +630,8 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         if ARGS.split:
             CONFIGURATION.update({"split": Core.switch("split")})
 
-        if ARGS.timeout:
-            if ARGS.timeout % 3 == 0:
-                CONFIGURATION.update({"seconds_before_http_timeout": ARGS.timeout})
+        if ARGS.timeout and ARGS.timeout % 3 == 0:
+            CONFIGURATION.update({"seconds_before_http_timeout": ARGS.timeout})
 
         if ARGS.travis:
             CONFIGURATION.update({"travis": Core.switch("travis")})

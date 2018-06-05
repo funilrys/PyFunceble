@@ -95,20 +95,13 @@ class Lookup(object):
         """
 
         try:
-            try:
-                try:
-                    socket.getaddrinfo(
-                        PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
-                    )
-                except OSError:
-                    return False
-
-            except socket.herror:  # pragma: no cover
-                return False
+            socket.getaddrinfo(
+                PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
+            )
 
             return True
 
-        except socket.gaierror:  # pragma: no cover
+        except (OSError, socket.herror, socket.gaierror):
             return False
 
     @classmethod

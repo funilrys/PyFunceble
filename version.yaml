@@ -1,5 +1,6 @@
-current_version: 0.72.7.dev-beta
-deprecated: [0.0.0, 0.0.1, 0.65.0, 0.67.1, 0.68.0, 0.69.3, 0.69.5, 0.70.4, 0.71.2]
+current_version: 0.73.0.dev-beta
+deprecated: [0.0.0, 0.0.1, 0.65.0, 0.67.1, 0.68.0, 0.69.3, 0.69.5, 0.70.4, 0.71.2,
+    0.72.7]
 force_update:
     minimal_version: [0.0.0, 0.0.1]
     status: true
