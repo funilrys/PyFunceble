@@ -184,8 +184,3 @@ class Production(object):  # pylint: disable=too-few-public-methods
             return True
 
         return False
-
-    def _update_version(self):
-        """
-        This method update version.yaml.
-        """
