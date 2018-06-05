@@ -86,7 +86,7 @@ from PyFunceble.auto_save import AutoSave
 from PyFunceble.database import Database
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
-from PyFunceble.helpers import Command, List, Regex
+from PyFunceble.helpers import Command, Download, List, Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 from PyFunceble.url import URL
@@ -107,7 +107,10 @@ class Core(object):  # pragma: no cover
     def __init__(self, domain=None, file_path=None, **args):
 
         optional_arguments = {
-            "url_to_test": None, "file_urls": None, "modulo_test": False
+            "url_to_test": None,
+            "file_urls": None,
+            "modulo_test": False,
+            "link_to_test": None,
         }
 
         # We initiate our optional_arguments in order to be usable all over the
@@ -152,6 +155,21 @@ class Core(object):  # pragma: no cover
 
                 self.url_file()
             elif file_path:
+                self.file()
+            elif self.link_to_test and self.link_to_test.startswith(  # pylint: disable=no-member
+                "http"
+            ):
+                file_to_test = self.link_to_test.split(  # pylint: disable=no-member
+                    "/"
+                )[
+                    -1
+                ]
+                Download(
+                    self.link_to_test, file_to_test  # pylint: disable=no-member
+                ).text()
+
+                PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
+
                 self.file()
 
             ExecutionTime("stop")

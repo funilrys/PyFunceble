@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.73.1.dev-beta"
+VERSION = "0.74.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -390,6 +390,10 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         )
 
         PARSER.add_argument(
+            "--link", type=str, help="Download and test the given file."
+        )
+
+        PARSER.add_argument(
             "-nl",
             "--no-logs",
             action="store_true",
@@ -648,4 +652,5 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
             file_path=ARGS.file,
             url_to_test=ARGS.url,
             url_file=ARGS.url_file,
+            link_to_test=ARGS.link,
         )
