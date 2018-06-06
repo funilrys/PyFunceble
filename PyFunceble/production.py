@@ -84,7 +84,7 @@ import PyFunceble
 from PyFunceble import Fore, Style
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
-from PyFunceble.helpers import Dict, File
+from PyFunceble.helpers import Dict, File, Regex
 
 
 class Production(object):  # pylint: disable=too-few-public-methods
@@ -125,6 +125,8 @@ class Production(object):  # pylint: disable=too-few-public-methods
             Dict(self.data_version_yaml).to_yaml(
                 PyFunceble.CURRENT_DIRECTORY + "version.yaml"
             )
+
+            self.updateReadmeMD()
 
             message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
             message += Fore.CYAN + "Please do not touch version.yaml nor setup.py (version update)"
@@ -184,3 +186,29 @@ class Production(object):  # pylint: disable=too-few-public-methods
             return True
 
         return False
+
+    def updateReadmeMD(self):
+        """
+        This method update README.md so that it's always giving branch related bases.
+        Note: This only apply to dev and master
+        """
+
+        readme_path = PyFunceble.CURRENT_DIRECTORY + "README.md"
+
+        if "dev" in PyFunceble.VERSION:
+            regexes = {
+                    "/dev/":"\/master\/",
+                    "=dev" : "=master"
+            }
+        else:
+            regexes = {
+                    "/master/":"\/dev\/",
+                    "=master" : "=dev"
+            }
+
+        to_update = File(readme_path).read()
+
+        for replacement, regex in regexes.items():
+            to_update = Regex(to_update, regex, replace_with=replacement).replace()
+
+        File(readme_path).write(to_update, overwrite=True)
