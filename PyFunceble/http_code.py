@@ -127,6 +127,7 @@ class HTTPCode(object):  # pylint: disable=too-few-public-methods
             requests.exceptions.Timeout,
             requests.ConnectionError,
             urllib3_exceptions.InvalidHeader,
+            UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
             return None
 
