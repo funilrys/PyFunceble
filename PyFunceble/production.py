@@ -126,7 +126,7 @@ class Production(object):  # pylint: disable=too-few-public-methods
                 PyFunceble.CURRENT_DIRECTORY + "version.yaml"
             )
 
-            self.updateReadmeMD()
+            self._update_readme_md()
 
             message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
             message += Fore.CYAN + "Please do not touch version.yaml nor setup.py (version update)"
@@ -187,7 +187,8 @@ class Production(object):  # pylint: disable=too-few-public-methods
 
         return False
 
-    def updateReadmeMD(self):
+    @classmethod
+    def _update_readme_md(cls):
         """
         This method update README.md so that it's always giving branch related bases.
         Note: This only apply to dev and master
@@ -196,15 +197,9 @@ class Production(object):  # pylint: disable=too-few-public-methods
         readme_path = PyFunceble.CURRENT_DIRECTORY + "README.md"
 
         if "dev" in PyFunceble.VERSION:
-            regexes = {
-                    "/dev/":"\/master\/",
-                    "=dev" : "=master"
-            }
+            regexes = {"/dev/": r"\/master\/", "=dev": "=master"}
         else:
-            regexes = {
-                    "/master/":"\/dev\/",
-                    "=master" : "=dev"
-            }
+            regexes = {"/master/": r"\/dev\/", "=master": "=dev"}
 
         to_update = File(readme_path).read()
 
