@@ -6,6 +6,7 @@ omit =
     */pbr/*
     */site-packages/*
     /home/travis/virtualenv/*
+    *.eggs/*
 
     # omit the following file
     PyFunceble/config.py

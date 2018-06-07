@@ -101,7 +101,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.75.1.dev-beta"
+VERSION = "0.76.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -312,7 +312,10 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         )
 
         PARSER.add_argument(
-            "-f", "--file", type=str, help="Test a file with a list of domains."
+            "-f",
+            "--file",
+            type=str,
+            help="Test a file with a list of domains. If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
         )
 
         PARSER.add_argument("--filter", type=str, help="Domain to filter (regex).")
@@ -524,7 +527,10 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         PARSER.add_argument("-u", "--url", type=str, help="Analyze the given url.")
 
         PARSER.add_argument(
-            "-uf", "--url-file", type=str, help="Test a file with a list of URL."
+            "-uf",
+            "--url-file",
+            type=str,
+            help="Test a file with a list of URL.  If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
         )
 
         PARSER.add_argument(

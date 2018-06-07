@@ -80,7 +80,7 @@ License: MIT
 # pylint: disable=bad-continuation
 
 import PyFunceble
-from PyFunceble import Fore, path, repeat
+from PyFunceble import Fore, Style, path, repeat
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.database import Database
@@ -108,7 +108,7 @@ class Core(object):  # pragma: no cover
 
         optional_arguments = {
             "url_to_test": None,
-            "file_urls": None,
+            "url_file": None,
             "modulo_test": False,
             "link_to_test": None,
         }
@@ -118,16 +118,53 @@ class Core(object):  # pragma: no cover
         for (arg, default) in optional_arguments.items():
             setattr(self, arg, args.get(arg, default))
 
+        self._entry_management(domain, file_path)
+
+    @classmethod
+    def _entry_management_url_download(cls, passed):
+        """
+        This method will check if the given information is a URL.
+        If it is the case, it download and change the file to test.
+
+        Argument:
+            - passed: str
+                The argument passed to the system.
+        """
+
+        if passed and passed.startswith("http"):
+            file_to_test = passed.split("/")[-1]
+            Download(passed, file_to_test).text()
+
+            PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
+
+            return True
+
+        return False
+
+    def _entry_management_url(self):
+        """
+        This method will manage the loading of the url system.
+        """
+
+        if self.url_file and not self._entry_management_url_download(  # pylint: disable=no-member
+            self.url_file  # pylint: disable=no-member
+        ):  # pylint: disable=no-member
+            PyFunceble.CONFIGURATION[
+                "file_to_test"
+            ] = self.url_file  # pylint: disable=no-member
+
+    def _entry_management(self, domain, file_path):
+        """
+        This method avoid to have 1 millions line into self.__ini__()
+        """
+
         if not self.modulo_test:  # pylint: disable=no-member
 
             PyFunceble.CONFIGURATION[
                 "file_to_test"
             ] = file_path  # pylint: disable=no-member
 
-            if self.file_urls:  # pylint: disable=no-member
-                PyFunceble.CONFIGURATION[
-                    "file_to_test"
-                ] = self.file_urls  # pylint: disable=no-member
+            self._entry_management_url()
 
             if PyFunceble.CONFIGURATION["travis"]:
                 AutoSave().travis_permissions()
@@ -137,15 +174,13 @@ class Core(object):  # pragma: no cover
 
             if domain:
                 PyFunceble.CONFIGURATION["show_percentage"] = False
-                PyFunceble.CONFIGURATION["domain"] = domain.lower()
-                self.domain()
+                self.domain(domain.lower())
             elif self.url_to_test and not file_path:  # pylint: disable=no-member
                 PyFunceble.CONFIGURATION["show_percentage"] = False
-                PyFunceble.CONFIGURATION[
-                    "URL"
-                ] = self.url_to_test  # pylint: disable=no-member
-                self.url()
-            elif self.file_urls:  # pylint: disable=no-member
+                self.url(self.url_to_test)  # pylint: disable=no-member
+            elif self._entry_management_url_download(
+                self.url_file  # pylint: disable=no-member
+            ) or self.url_file:  # pylint: disable=no-member
                 PyFunceble.CONFIGURATION["no_whois"] = PyFunceble.CONFIGURATION[
                     "plain_list_domain"
                 ] = PyFunceble.CONFIGURATION[
@@ -153,24 +188,16 @@ class Core(object):  # pragma: no cover
                 ] = True
                 PyFunceble.CONFIGURATION["generate_hosts"] = False
 
-                self.url_file()
-            elif file_path:
+                self.file_url()
+            elif self._entry_management_url_download(
+                self.link_to_test  # pylint: disable=no-member
+            ) or self._entry_management_url_download(
+                file_path
+            ) or file_path:
                 self.file()
-            elif self.link_to_test and self.link_to_test.startswith(  # pylint: disable=no-member
-                "http"
-            ):
-                file_to_test = self.link_to_test.split(  # pylint: disable=no-member
-                    "/"
-                )[
-                    -1
-                ]
-                Download(
-                    self.link_to_test, file_to_test  # pylint: disable=no-member
-                ).text()
-
-                PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
-
-                self.file()
+            else:
+                print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
+                exit(1)
 
             ExecutionTime("stop")
             Percentage().log()
@@ -290,9 +317,12 @@ class Core(object):  # pragma: no cover
                 The last domain of the file we are testing.
         """
 
+        self.print_header()
+
         if domain:
             PyFunceble.CONFIGURATION["domain"] = self._format_domain(domain)
-        self.print_header()
+        else:
+            PyFunceble.CONFIGURATION["domain"] = None
 
         if PyFunceble.CONFIGURATION["domain"]:
             if __name__ == "PyFunceble.core":
@@ -533,9 +563,12 @@ class Core(object):  # pragma: no cover
                 The last url of the file we are testing.
         """
 
+        self.print_header()
+
         if url_to_test:
             PyFunceble.CONFIGURATION["URL"] = url_to_test
-        self.print_header()
+        else:
+            PyFunceble.CONFIGURATION["URL"] = None
 
         if PyFunceble.CONFIGURATION["URL"]:
             if __name__ == "PyFunceble.core":
@@ -549,7 +582,7 @@ class Core(object):  # pragma: no cover
                 URL().get()
                 return
 
-    def url_file(self):
+    def file_url(self):
         """
         Manage the case that we have to test a file
         Note: 1 URL per line.
