@@ -82,6 +82,7 @@ License: MIT
 
 import PyFunceble
 from PyFunceble import Fore, Style
+from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Dict, File, Regex
@@ -101,6 +102,7 @@ class Production(object):  # pylint: disable=too-few-public-methods
         self.current_version = Version(True).split_versions(PyFunceble.VERSION, True)
 
         if self._is_version_greater():
+            Clean(None)
             DirectoryStructure(production=True)
 
             if self._does_require_deprecation():
