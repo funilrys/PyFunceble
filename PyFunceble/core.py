@@ -133,7 +133,13 @@ class Core(object):  # pragma: no cover
 
         if passed and passed.startswith("http"):
             file_to_test = passed.split("/")[-1]
-            Download(passed, file_to_test).text()
+
+            if not path.isfile(file_to_test) or PyFunceble.CONFIGURATION["counter"][
+                "number"
+            ][
+                "tested"
+            ] == 0:
+                Download(passed, file_to_test).text()
 
             PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
 
@@ -197,7 +203,6 @@ class Core(object):  # pragma: no cover
                 self.file()
             else:
                 print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
-                exit(1)
 
             ExecutionTime("stop")
             Percentage().log()
