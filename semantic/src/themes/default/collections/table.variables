@@ -203,7 +203,7 @@
 @coloredBorderRadius: 0em 0em @borderRadius @borderRadius;
 
 /* Inverted */
-@invertedBackground: #333333;
+@invertedBackground: #021e3e;
 @invertedBorder: none;
 @invertedCellBorderColor: @whiteBorderColor;
 @invertedCellColor: @invertedTextColor;
