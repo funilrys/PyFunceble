@@ -300,8 +300,13 @@ class Generate(object):  # pragma: no cover
         regex_blogspot = ".blogspot."
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
+        if self.tested == PyFunceble.CONFIGURATION["domain"]:
+            url_to_get = "http://%s" & self.tested
+        else:
+            url_to_get = self.tested
+
         if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
-            blogger_content_request = requests.get("http://%s" % self.tested)
+            blogger_content_request = requests.get(url_to_get)
 
             for regx in regex_blogger:
                 if regx in blogger_content_request.text or Regex(
