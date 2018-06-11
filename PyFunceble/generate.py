@@ -301,7 +301,7 @@ class Generate(object):  # pragma: no cover
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
         if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
-            blogger_content_request = requests.get("http://%s:80" % self.tested)
+            blogger_content_request = requests.get("http://%s" % self.tested)
 
             for regx in regex_blogger:
                 if regx in blogger_content_request.text or Regex(
