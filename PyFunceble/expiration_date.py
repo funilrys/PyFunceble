@@ -187,15 +187,17 @@ class ExpirationDate(object):
                 self.whois_record
             ) + "\n" + self.log_separator
 
-            File(
-                PyFunceble.CURRENT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["whois"]
-                + PyFunceble.CONFIGURATION["referer"]
-            ).write(
-                log
-            )
+            output = PyFunceble.CURRENT_DIRECTORY
+            output += PyFunceble.OUTPUTS["parent_directory"]
+            output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+            output += PyFunceble.OUTPUTS["logs"]["directories"]["whois"]
+
+            if PyFunceble.CONFIGURATION["referer"]:
+                output += PyFunceble.CONFIGURATION["referer"]
+            else:
+                output += PyFunceble.STATUS["official"]["invalid"]
+
+            File(output).write(log)
 
     @classmethod
     def _convert_1_to_2_digits(cls, number):
