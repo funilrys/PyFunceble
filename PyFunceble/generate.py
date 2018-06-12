@@ -301,7 +301,7 @@ class Generate(object):  # pragma: no cover
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
         if self.tested == PyFunceble.CONFIGURATION["domain"]:
-            url_to_get = "http://%s" & self.tested
+            url_to_get = "http://%s" % self.tested
         else:
             url_to_get = self.tested
 
