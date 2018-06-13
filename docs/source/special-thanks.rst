@@ -24,12 +24,17 @@ which helped and/or still help me build and or test `Funceble`_ and (or indirect
                                                       __/ |
                                                      |___/
 
-*   Adam Warner - [@PromoFaux](https://github.com/PromoFaux)
-*   Mitchell Krog - [@mitchellkrogza](https://github.com/mitchellkrogza)
-*   Pi-Hole - [@pi-hole](https://github.com/pi-hole/pi-hole)
-*   Reza Rizqullah - [@ybreza](https://github.com/ybreza)
-*   SMed79 - [@SMed79](https://github.com/SMed79)
+*   Adam Warner - `@PromoFaux`_
+*   Mitchell Krog - `@mitchellkrogza`_
+*   Pi-Hole - `@pi-hole`_
+*   Reza Rizqullah - `@ybreza`_
+*   SMed79 - `@SMed79`_
 
 
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _@PromoFaux: https://github.com/PromoFaux
+.. _@mitchellkrogza: https://github.com/mitchellkrogza
+.. _@pi-hole: https://github.com/pi-hole/pi-hole
+.. _@ybreza: https://github.com/ybreza
+.. _@SMed79: https://github.com/SMed79
