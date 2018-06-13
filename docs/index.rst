@@ -29,11 +29,9 @@ Main Features
 -   Save results on file(s)
 -   ... and a lot more!
 
-Contents
-=================
-
 .. toctree::
    :maxdepth: 2
+   :caption: Contents
    
    installation
    colomns
