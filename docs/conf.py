@@ -29,7 +29,7 @@ def _get_version(full=False):
     """
 
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
-    extracted = to_match.findall(open("../../PyFunceble/__init__.py").read())[0]
+    extracted = to_match.findall(open("../PyFunceble/__init__.py").read())[0]
 
     if not full:
         return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
