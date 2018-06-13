@@ -136,5 +136,5 @@ if __name__ == "__main__":
             "License :: OSI Approved :: MIT License",
         ],
         test_suite="setup._test_suite",
-        entry_points={"console_scripts": ["PyFunceble=PyFunceble:command_line"]},
+        entry_points={"console_scripts": ["PyFunceble=PyFunceble:command_line","pyfunceble=PyFunceble:command_line" ]},
     )
