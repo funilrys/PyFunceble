@@ -11,20 +11,27 @@ PyFunceble is the little sister of [Funceble](https://github.com/funilrys/funceb
 
 Its main objective is to get and the return domains and IPs availability by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
 
-In its daily usage, PyFunceble is mostly used to clean `hosts` files or blocklist. Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domains or IPs but in the same time, it creates by default a database of the `INACTIVE` domains or IPs so we can retest them overtime automatically at the next execution.
+PyFunceble is running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, blocklists or even AdBlock filter lists. 
 
-PyFunceble is running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, blocklists or even AdBlock filter lists.
+Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domains or IPs but in the same time, it creates by default a database of the `INACTIVE` domains or IPs so it can retest them overtime automatically at the next execution.
 
 * * *
 
-## :star2::book: Wiki as place to be! :book::star2:
+## :star2::book: Documentation as place to be! :book::star2:
 
-Want to know more about **PyFunceble**? All information to know can be found on the [wiki](https://github.com/funilrys/PyFunceble/wiki)!
+Want to know more about **PyFunceble**? 
+We invite you to read the documenation at https://pyfunceble.readthedocs.io!
 
-You can get a copy of the wiki with the following:
+### Local copy of the documentation
+
+Want a local copy ? We get you covered!
+
+Simply run the following and enjoy the documentation!
 
 ```shell
-$ git clone https://github.com/funilrys/PyFunceble.wiki.git
+$ cd docs/
+$ make html
+$ chromium _build/html/index.html # Chromium or whatever browser you use.
 ```
 
 ## Main Features
