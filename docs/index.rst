@@ -2,7 +2,7 @@
     :alt: PyFunceble Logic representation
 
 The tool to check domain or IP availability
-###########################################
+===========================================
 
 .. raw:: html
    
@@ -19,7 +19,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 .. _Funceble: https://github.com/funilrys/funceble
 
 Main Features
-=============
+-------------
 
 -   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
 -   Read an existing file and check every domain and IPv5 present into it.
