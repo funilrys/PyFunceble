@@ -7,7 +7,7 @@
 }
 
 .masthead.segment {
-    min-height: 350px;
+    min-height: @masterHeadminHeight;
     padding: 1em 0em;
 }
 
@@ -23,6 +23,6 @@
 
 @media only screen and (max-width: 700px) {
     .masthead.segment {
-        min-height: 175px;
+        min-height: @masterHeadminHeightSmallScreen;
     }
 }

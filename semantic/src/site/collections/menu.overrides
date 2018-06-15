@@ -28,3 +28,9 @@
         display: block;
     }
 }
+
+.ui.huge.buttons .button,
+.ui.huge.buttons .or,
+.ui.huge.button {
+   margin-bottom: 2px;
+}

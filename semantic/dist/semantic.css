@@ -25472,6 +25472,12 @@ Floated Menu / Item
     display: block;
   }
 }
+
+.ui.huge.buttons .button,
+.ui.huge.buttons .or,
+.ui.huge.button {
+  margin-bottom: 2px;
+}
 /*!
  * # Semantic UI 2.3.1 - Message
  * http://github.com/semantic-org/semantic-ui/
