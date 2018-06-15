@@ -107,9 +107,26 @@ def _get_version():
     """
 
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
-    extracted = to_match.findall(open("PyFunceble/__init__.py", encoding="utf-8").read())[0]
+    extracted = to_match.findall(
+        open("PyFunceble/__init__.py", encoding="utf-8").read()
+    )[
+        0
+    ]
 
     return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
+
+
+def _get_long_description():
+    """
+    This function return the long description.
+    """
+    
+    try:
+        import pypandoc
+        return pypandoc.convert("README.md", "rst")
+
+    except (IOError, ImportError):
+        return open("README.md", encoding="utf-8").read()
 
 
 if __name__ == "__main__":
@@ -118,15 +135,16 @@ if __name__ == "__main__":
         version=_get_version(),
         install_requires=_get_requirements(),
         description="The tool to check domains or IP availability.",
-        long_description=open("README.md", encoding="utf-8").read(),
-        long_description_content_type='text/markdown',
+        long_description=_get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
         license="https://git.io/vh1mP",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
         packages=["PyFunceble"],
-        keywords=["Python", "domain", "IP", "availability", "PyFunceble", "WHOIS", "nslookup"],
+        keywords=[
+            "Python", "domain", "IP", "availability", "PyFunceble", "WHOIS", "nslookup"
+        ],
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
@@ -137,5 +155,10 @@ if __name__ == "__main__":
             "License :: OSI Approved :: MIT License",
         ],
         test_suite="setup._test_suite",
-        entry_points={"console_scripts": ["PyFunceble=PyFunceble:command_line","pyfunceble=PyFunceble:command_line" ]},
+        entry_points={
+            "console_scripts": [
+                "PyFunceble=PyFunceble:command_line",
+                "pyfunceble=PyFunceble:command_line",
+            ]
+        },
     )
