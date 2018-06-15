@@ -1,8 +1,8 @@
 Logs Sharing
-############
+============
 
 What do we share / collect?
-===========================
+---------------------------
 
 We only collect when the following actions/events are encountered:
 
@@ -25,7 +25,7 @@ We only collect when the following actions/events are encountered:
     *   Shared/posted to :code:`http://pyfunceble.funilrys.com/api/date-format`
 
 How to share logs?
-==================
+------------------
 
 ::
     
