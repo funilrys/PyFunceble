@@ -1,9 +1,9 @@
-![logo](https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.assets/logo/RM.png)
+![](https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.assets/logo/RM.png)
 
-<h2 align="center">The tool to check domains or IP availability</h2>
+The tool to check domains or IP availability
 
 
-<p align="center"><a href="https://travis-ci.com/funilrys/PyFunceble"><img src="https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev" alt="Build Status"></a> <a href="https://coveralls.io/github/funilrys/PyFunceble?branch=dev"><img src="https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev" alt="Coverage Status"></a> <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/funilrys/PyFunceble.svg" alt="license"></a> <a href="https://github.com/funilrys/PyFunceble/releases/latest"><img src="https://img.shields.io/github/release/funilrys/PyFunceble.svg" alt="GitHub release"></a> <a href=""><img src="https://img.shields.io/github/issues/funilrys/PyFunceble.svg" alt="GitHub issues open"></a> <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style | Black"></a></p>
+<a href="https://travis-ci.com/funilrys/PyFunceble"><img src="https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev" alt="Build Status"></a> <a href="https://coveralls.io/github/funilrys/PyFunceble?branch=dev"><img src="https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev" alt="Coverage Status"></a> <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/funilrys/PyFunceble.svg" alt="license"></a> <a href="https://github.com/funilrys/PyFunceble/releases/latest"><img src="https://img.shields.io/github/release/funilrys/PyFunceble.svg" alt="GitHub release"></a> <a href=""><img src="https://img.shields.io/github/issues/funilrys/PyFunceble.svg" alt="GitHub issues open"></a> <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style | Black"></a>
 
 * * *
 
@@ -17,7 +17,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 
 * * *
 
-## :star2::book: Documentation as place to be! :book::star2:
+## Documentation as place to be!
 
 Want to know more about **PyFunceble**? 
 We invite you to read the documenation at https://pyfunceble.readthedocs.io!
@@ -46,7 +46,7 @@ $ chromium _build/html/index.html # Chromium or whatever browser you use.
 
 * * *
 
-# Supporting the project
+## Supporting the project
 
 [PyFunceble](https://github.com/funilrys/PyFunceble), [Dead-Hosts](https://github.com/dead-hosts), [Funceble](https://github.com/funilrys/funceble) and all other analog projects are powered by :coffee:!
 
@@ -56,7 +56,7 @@ This project helps you and or you like it?
 
 * * *
 
-# Contributors
+## Contributors
 
 Thanks to those awesome peoples for their awesome and crazy idea(s) and or contribution(s) which made or make **[Funceble](https://github.com/funilrys/funceble)** and (or indirectly) **[PyFunceble](https://github.com/funilrys/PyFunceble)** better.
 
@@ -77,7 +77,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s) and or contr
 
 * * *
 
-# Special Thanks
+## Special Thanks
 
 Thanks to those awesome organization(s) and people(s) for
 
@@ -108,7 +108,7 @@ which helped and/or still help me build and or test **[Funceble](https://github.
 
 * * *
 
-# License
+## License
 
     MIT License
 
