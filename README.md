@@ -5,8 +5,6 @@
 
 <a href="https://travis-ci.com/funilrys/PyFunceble"><img src="https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev" alt="Build Status"></a> <a href="https://coveralls.io/github/funilrys/PyFunceble?branch=dev"><img src="https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev" alt="Coverage Status"></a> <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/funilrys/PyFunceble.svg" alt="license"></a> <a href="https://github.com/funilrys/PyFunceble/releases/latest"><img src="https://img.shields.io/github/release/funilrys/PyFunceble.svg" alt="GitHub release"></a> <a href=""><img src="https://img.shields.io/github/issues/funilrys/PyFunceble.svg" alt="GitHub issues open"></a> <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style | Black"></a>
 
-* * *
-
 PyFunceble is the little sister of [Funceble](https://github.com/funilrys/funceble) which was archived on 13<sup>th</sup> March, 2018.
 
 Its main objective is to get and the return domains and IPs availability by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
