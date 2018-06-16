@@ -1,4 +1,4 @@
-.. image:: https://github.com/funilrys/PyFunceble/raw/master/.assets/logo/RM.png
+.. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/logo/RM.png
     :alt: PyFunceble Logic representation
 
 The tool to check domain or IP availability

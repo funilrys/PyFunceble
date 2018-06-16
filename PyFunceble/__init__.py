@@ -74,7 +74,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.81.5.dev-beta"
+VERSION = "0.81.6.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -136,7 +136,7 @@ def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too
         initiate(autoreset=True)
 
         PARSER = argparse.ArgumentParser(
-            description='The tool to check domain or IP availability.',
+            description="The tool to check domain or IP availability.",
             epilog="Crafted with %s by %s"
             % (
                 Fore.RED + "♥" + Fore.RESET,

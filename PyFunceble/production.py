@@ -65,7 +65,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble import Fore, Style
+from PyFunceble import Fore, Style, directory_separator
 from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
@@ -123,7 +123,14 @@ class Production(object):  # pylint: disable=too-few-public-methods
                     PyFunceble.CURRENT_DIRECTORY + "version.yaml"
                 )
 
-                self._update_readme_md()
+                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.md")
+                self._update_docs(
+                    PyFunceble.CURRENT_DIRECTORY
+                    + directory_separator
+                    + "docs"
+                    + directory_separator
+                    + "index.rst"
+                )
                 self._update_setup_py()
 
                 message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
@@ -215,13 +222,15 @@ class Production(object):  # pylint: disable=too-few-public-methods
 
         return False
 
-    def _update_readme_md(self):
+    def _update_docs(self, file_to_update):
         """
         This method update README.md so that it's always giving branch related bases.
-        Note: This only apply to dev and master
-        """
+        Note: This only apply to `dev` and `master` branch.
 
-        readme_path = PyFunceble.CURRENT_DIRECTORY + "README.md"
+        Argument:
+            - file_to_update: str
+                The file to update.
+        """
 
         if self._is_dev_version():
             regexes = {"/dev/": r"\/master\/", "=dev": "=master"}
@@ -230,12 +239,12 @@ class Production(object):  # pylint: disable=too-few-public-methods
         else:
             raise Exception("Please switch to `dev` or `master` branch.")
 
-        to_update = File(readme_path).read()
+        to_update = File(file_to_update).read()
 
         for replacement, regex in regexes.items():
             to_update = Regex(to_update, regex, replace_with=replacement).replace()
 
-        File(readme_path).write(to_update, overwrite=True)
+        File(file_to_update).write(to_update, overwrite=True)
 
     def _update_setup_py(self):
         """
