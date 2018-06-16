@@ -46,8 +46,17 @@ Stable version
 Using :code:`pip`
 ^^^^^^^^^^^^^^^^^
 
-Execute the following and enjoy PyFunceble!
+Choose your repository, install and enjoy PyFunceble!
 
+From PyPi
+"""""""""
+
+::
+ 
+   $ pip3 install PyFunceble
+
+From GitHub
+"""""""""""
 
 ::
 
@@ -93,7 +102,15 @@ For usage
 Using :code:`pip`
 """""""""""""""""
 
-Execute the following and enjoy PyFunceble!
+Execute one of the following and enjoy PyFunceble!
+
+**From PyPi**
+
+::
+
+   $ pip3 install PyFunceble-dev
+
+**From GitHub**
 
 ::
 
