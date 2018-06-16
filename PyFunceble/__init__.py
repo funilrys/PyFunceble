@@ -74,7 +74,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.81.4.beta"
+VERSION = "0.81.5.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
