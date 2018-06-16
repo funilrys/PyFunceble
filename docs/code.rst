@@ -2,7 +2,7 @@ Code documentation
 ==================
 
 .. automodule:: PyFunceble
-   :members: test, command_line
+   :members: test
 
 Helpers
 -------

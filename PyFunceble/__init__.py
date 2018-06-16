@@ -74,7 +74,7 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.81.8.dev-beta"
+VERSION = "0.82.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -125,7 +125,7 @@ def load_config():  # pragma: no cover
         DirectoryStructure()
 
 
-def command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
+def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
     """
     This function provide the command line arguments of PyFunceble.
     """

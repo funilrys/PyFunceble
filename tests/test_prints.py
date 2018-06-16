@@ -115,7 +115,7 @@ class TestPrints(BaseStdout):
             PyFunceble.LINKS["repo"], PyFunceble.CURRENT_TIME + " "
         )
 
-        Prints(None, None, output_file=self.file, only_on_file=False).before_header()
+        Prints(None, None, output_file=self.file, only_on_file=False)._before_header()
 
         self.assertEqual(expected, File(self.file).read())
 
@@ -139,7 +139,7 @@ Hello World!
         header_constructor_patch.return_value = ["Hello World!"]
         Prints(
             None, "Generic_File", output_file=self.file, only_on_file=False
-        ).before_header()
+        )._before_header()
 
         self.assertEqual(expected, File(self.file).read())
 

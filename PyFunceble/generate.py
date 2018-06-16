@@ -276,7 +276,7 @@ class Generate(object):  # pragma: no cover
             True,
         ).data()
 
-    def special_blogspot(self):
+    def _special_blogspot(self):
         """
         Handle the blogspot SPECIAL case.
         """
@@ -305,7 +305,7 @@ class Generate(object):  # pragma: no cover
                     ] + self.domain_status
                     break
 
-    def special_wordpress_com(self):
+    def _special_wordpress_com(self):
         """
         Handle the wordpress.com special case.
         """
@@ -358,7 +358,7 @@ class Generate(object):  # pragma: no cover
                         "directory"
                     ] + self.domain_status
 
-            self.special_blogspot()
+            self._special_blogspot()
         elif PyFunceble.HTTP_CODE["active"] and PyFunceble.CONFIGURATION[
             "http_code"
         ] in PyFunceble.HTTP_CODE[
@@ -366,8 +366,8 @@ class Generate(object):  # pragma: no cover
         ][
             "potentially_up"
         ]:
-            self.special_blogspot()
-            self.special_wordpress_com()
+            self._special_blogspot()
+            self._special_wordpress_com()
 
         if self.source != "SPECIAL":
             self.domain_status = PyFunceble.STATUS["official"]["up"]

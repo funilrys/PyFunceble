@@ -77,7 +77,7 @@ from yaml import load as load_yaml
 from PyFunceble import directory_separator, path, requests
 
 
-class Hash(object):
+class Hash(object):  # pylint: disable=too-few-public-methods
     """
     Get and return the hash a file with the given algorithm.
 
@@ -141,7 +141,7 @@ class Hash(object):
         return result
 
 
-class Command(object):
+class Command(object):  # pylint: disable=too-few-public-methods
     """
     Shell command execution.
     """
@@ -150,7 +150,7 @@ class Command(object):
         self.decode_type = "utf-8"
         self.command = command
 
-    def decode_output(self, to_decode):
+    def _decode_output(self, to_decode):
         """
         Decode the output of a shell command in order to be readable.
 
@@ -176,9 +176,9 @@ class Command(object):
         (output, error) = process.communicate()
 
         if process.returncode != 0:  # pragma: no cover
-            return self.decode_output(error)
+            return self._decode_output(error)
 
-        return self.decode_output(output)
+        return self._decode_output(output)
 
 
 class Dict(object):

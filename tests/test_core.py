@@ -395,7 +395,7 @@ class TestAdblockDecode(TestCase):
         This method test that the adblock decoding system is working proprely
         """
 
-        actual = Core.adblock_decode(Core, self.lines)
+        actual = Core._adblock_decode(Core, self.lines)
 
         self.assertEqual(self.expected, actual)
 

@@ -89,7 +89,7 @@ class TestHash(TestCase):
             "sha512": "f193ad6ee2cfbecd580225d8e6bfb9df1910e5ca6135b21b03ae208a007f71e9b57b55e299d27157551a18ef4dfdde23c96aaea796064846edc6cd25ac7eaf7f",  # pylint: disable=line-too-long
         }
 
-    def test_hash_data(self):
+    def testhash_data(self):
         """
         This method will test Hash.hash_data().
         """

@@ -68,7 +68,7 @@ from PyFunceble import Fore, Style, directory_separator, environ, path
 from PyFunceble.helpers import Dict, Directory, Download, File
 
 
-class Load(object):
+class Load(object):  # pylint: disable=too-few-public-methods
     """
     This class will help to load the configurations.
 
@@ -86,8 +86,8 @@ class Load(object):
         self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
 
         try:
-            self.load_config_file()
-            self.install_iana_config()
+            self._load_config_file()
+            self._install_iana_config()
         except FileNotFoundError:
 
             if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
@@ -100,18 +100,18 @@ Install the default configuration in the current directory ? [y/n] "
 
                     if isinstance(response, str):
                         if response.lower() == "y":
-                            self.install_production_config()
-                            self.load_config_file()
-                            self.install_iana_config()
+                            self._install_production_config()
+                            self._load_config_file()
+                            self._install_iana_config()
                             break
 
                         elif response.lower() == "n":
                             raise Exception("Unable to find the configuration file.")
 
             else:
-                self.install_production_config()
-                self.load_config_file()
-                self.install_iana_config()
+                self._install_production_config()
+                self._load_config_file()
+                self._install_iana_config()
 
         for main_key in ["domains", "hosts", "splited"]:
             PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
@@ -141,7 +141,7 @@ Install the default configuration in the current directory ? [y/n] "
             {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
         )
 
-    def load_config_file(self):
+    def _load_config_file(self):
         """
         This method will load .PyFunceble.yaml.
         """
@@ -150,7 +150,7 @@ Install the default configuration in the current directory ? [y/n] "
             Dict.from_yaml(File(self.path_to_config).read())
         )
 
-    def install_production_config(self):
+    def _install_production_config(self):
         """
         This method download the production configuration and install it in the
         current directory.
@@ -170,7 +170,7 @@ Install the default configuration in the current directory ? [y/n] "
         return Download(production_config_link, self.path_to_config).text()
 
     @classmethod
-    def install_iana_config(cls):
+    def _install_iana_config(cls):
         """
         This method download `iana-domains-db.json` if not present.
         """

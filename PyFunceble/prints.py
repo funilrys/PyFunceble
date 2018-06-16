@@ -146,7 +146,7 @@ class Prints(object):
 
         self.currently_used_header = {}
 
-    def before_header(self):
+    def _before_header(self):
         """
         Print informations about PyFunceble and the date of generation of a file
         into a given path, if doesn't exist.
@@ -255,7 +255,7 @@ class Prints(object):
             self.currently_used_header = to_print
 
             if not do_not_print:
-                self.before_header()
+                self._before_header()
                 for formated_template in self._header_constructor(to_print):
                     if not self.only_on_file:
                         print(formated_template)
@@ -358,7 +358,7 @@ class Prints(object):
 
             to_print = self._data_constructor(to_print_size)
 
-            self.before_header()
+            self._before_header()
 
             for data in self._header_constructor(to_print, False):
                 if self.template.lower() in PyFunceble.STATUS["list"][

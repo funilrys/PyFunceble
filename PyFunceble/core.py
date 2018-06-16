@@ -238,7 +238,7 @@ class Core(object):  # pragma: no cover
             AutoSave(True, is_bypass=True)
 
     @classmethod
-    def print_header(cls):
+    def _print_header(cls):
         """
         Decide if we print or not the header.
         """
@@ -307,7 +307,7 @@ class Core(object):  # pragma: no cover
                 The last domain of the file we are testing.
         """
 
-        self.print_header()
+        self._print_header()
 
         if domain:
             PyFunceble.CONFIGURATION["domain"] = self._format_domain(domain)
@@ -425,7 +425,7 @@ class Core(object):  # pragma: no cover
 
         return result
 
-    def adblock_decode(self, list_to_test):
+    def _adblock_decode(self, list_to_test):
         """
         Convert the adblock format into a readable format which is understood
         by the system.
@@ -491,7 +491,7 @@ class Core(object):  # pragma: no cover
         AutoContinue().restore()
 
         if PyFunceble.CONFIGURATION["adblock"]:
-            list_to_test = self.adblock_decode(list_to_test)
+            list_to_test = self._adblock_decode(list_to_test)
         else:
             list_to_test = list(map(self._format_domain, list_to_test))
 
@@ -553,7 +553,7 @@ class Core(object):  # pragma: no cover
                 The last url of the file we are testing.
         """
 
-        self.print_header()
+        self._print_header()
 
         if url_to_test:
             PyFunceble.CONFIGURATION["URL"] = url_to_test

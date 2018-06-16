@@ -67,7 +67,7 @@ from PyFunceble.helpers import Dict, Download, Regex
 from PyFunceble.lookup import Lookup
 
 
-class IANA(object):  # pragma: no cover
+class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
     """
     Logic behind the update of `iana-domains-db.json`
     """
@@ -82,7 +82,7 @@ class IANA(object):  # pragma: no cover
         self.update()
 
     @classmethod
-    def data(cls):
+    def _data(cls):
         """
         Get the database from IANA website.
         """
@@ -91,7 +91,7 @@ class IANA(object):  # pragma: no cover
         return Download(iana_url, return_data=True).text()
 
     @classmethod
-    def referer(cls, extension):
+    def _referer(cls, extension):
         """
         Return the referer for the given extension.
 
@@ -277,14 +277,14 @@ class IANA(object):  # pragma: no cover
             ]
 
             if matched:
-                self.iana_db.update({matched: self.referer(matched)})
+                self.iana_db.update({matched: self._referer(matched)})
 
     def update(self):
         """
         Update the content of the `iana-domains-db` file.
         """
 
-        list(map(self._extensions, self.data().split("\n")))
+        list(map(self._extensions, self._data().split("\n")))
         Dict(self.iana_db).to_json(self.destination)
 
         if not PyFunceble.CONFIGURATION["quiet"]:
