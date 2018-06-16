@@ -148,7 +148,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 4 - Beta,
+            "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",

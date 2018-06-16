@@ -247,12 +247,12 @@ class Production(object):  # pylint: disable=too-few-public-methods
         if self._is_dev_version():
             regexes = {
                 'name="PyFunceble-dev"': r'name=".*"',
-                "Development Status :: 4 - Beta": r'Development\sStatus\s::.*"',
+                '"Development Status :: 4 - Beta"': r'"Development\sStatus\s::.*"',
             }
         elif self._is_master_version():
             regexes = {
                 'name="PyFunceble"': r'name=".*"',
-                "Development Status :: 5 - Production/Stable": r'Development\sStatus\s::.*"',
+                '"Development Status :: 5 - Production/Stable"': r'"Development\sStatus\s::.*"',
             }
         else:
             raise Exception("Please switch to `dev` or `master` branch.")
