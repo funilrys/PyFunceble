@@ -69,7 +69,7 @@ from PyFunceble import Fore, Style, directory_separator
 from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
-from PyFunceble.helpers import Dict, File, Regex, Command
+from PyFunceble.helpers import Command, Dict, File, Regex
 
 
 class Production(object):  # pylint: disable=too-few-public-methods
