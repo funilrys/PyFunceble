@@ -119,10 +119,6 @@ class Production(object):  # pylint: disable=too-few-public-methods
                     self.current_version[0]
                 )
 
-                Dict(self.data_version_yaml).to_yaml(
-                    PyFunceble.CURRENT_DIRECTORY + "version.yaml"
-                )
-
                 self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.md")
                 self._update_docs(
                     PyFunceble.CURRENT_DIRECTORY
@@ -132,6 +128,11 @@ class Production(object):  # pylint: disable=too-few-public-methods
                     + "index.rst"
                 )
                 self._update_setup_py()
+                self._update_travis_yml()
+
+                Dict(self.data_version_yaml).to_yaml(
+                    PyFunceble.CURRENT_DIRECTORY + "version.yaml"
+                )
 
                 message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
                 message += Fore.CYAN + "Please do not touch version.yaml nor setup.py (version update)"  # pylint: disable=line-too-long
@@ -272,3 +273,30 @@ class Production(object):  # pylint: disable=too-few-public-methods
             to_update = Regex(to_update, regex, replace_with=replacement).replace()
 
         File(setup_py_path).write(to_update, overwrite=True)
+
+    def _update_travis_yml(self):
+        """
+        This method will update .travis.yml according to current branch.
+        """
+
+        travis_yml_path = PyFunceble.CURRENT_DIRECTORY + ".travis.yml"
+
+        if self._is_dev_version():
+            regexes = {
+                "pip3 install pyfunceble-dev": r"pip3\sinstall\spyfunceble.*",
+                "pip-autoremove pyfunceble-dev ": r"pip-autoremove\spyfunceble[a-z-_]+\s",
+            }
+        elif self._is_master_version():
+            regexes = {
+                "pip3 install pyfunceble": r"pip3\sinstall\spyfunceble.*",
+                "pip-autoremove pyfunceble ": r"pip-autoremove\spyfunceble[a-z-_]+\s",
+            }
+        else:
+            raise Exception("Please switch to `dev` or `master` branch.")
+
+        to_update = File(travis_yml_path).read()
+
+        for replacement, regex in regexes.items():
+            to_update = Regex(to_update, regex, replace_with=replacement).replace()
+
+        File(travis_yml_path).write(to_update, overwrite=True)
