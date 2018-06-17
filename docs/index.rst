@@ -34,6 +34,7 @@ Main Features
    :caption: Contents
    
    installation
+   update
    usage
    colomns
    logs-sharing
