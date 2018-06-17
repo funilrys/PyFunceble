@@ -111,6 +111,8 @@ class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
             "amsterdam": "whois.nic.amsterdam",
             "analytics": "whois.nic.analytics",
             "aramco": "whois.nic.aramco",
+            "arte": "whois.nic.arte",
+            "as": "whois.nic.as",
             "athleta": "whois.nic.athleta",
             "audible": "whois.nic.audible",
             "author": "whois.nic.author",
@@ -134,6 +136,7 @@ class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
             "calvinklein": "whois.nic.calvinklein",
             "caravan": "whois.nic.caravan",
             "cartier": "whois.nic.cartier",
+            "caseih": "whois.nic.caseih",
             "cbn": "whois.nic.cbn",
             "cbre": "whois.nic.cbre",
             "cd": "chois.nic.cd",
@@ -156,6 +159,7 @@ class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
             "duns": "whois.nic.duns",
             "dupont": "whois.nic.dupont",
             "earth": "whois.nic.earth",
+            "energy": "whois.nic.energy",
             "epost": "whois.nic.epost",
             "everbank": "whois.nic.everbank",
             "farmers": "whois.nic.farmers",
@@ -229,33 +233,36 @@ class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
             "ps": "whois.pnina.ps",
             "ren": "whois.nic.ren",
             "rw": "whois.ricta.org.rw",
+            "shaw": "whois.afilias-srs.net",
             "shop": "whois.nic.shop",
             "sl": "whois.nic.sl",
             "stream": "whois.nic.stream",
             "tokyo": "whois.nic.tokyo",
+            "tvs": "whois.nic.tvs",
             "uno": "whois.nic.uno",
             "za": "whois.registry.net.za",
+            "xn--e1a4c": "whois.eu",
+            "xn--ses554g": "whois.registry.knet.cn",
         }
+
+        whois_record = Lookup().whois(
+            PyFunceble.CONFIGURATION["iana_whois_server"], "hello." + extension
+        )
+
+        if whois_record:
+            regex_referer = r"(refer:)\s+(.*)"
+
+            matched = Regex(
+                whois_record, regex_referer, return_data=True, rematch=True
+            ).match()
+
+            if matched:
+                return matched[1]
 
         if extension in manual_server:
             return manual_server[extension]
 
-        else:
-            whois_record = Lookup().whois(
-                PyFunceble.CONFIGURATION["iana_whois_server"], "hello." + extension, 10
-            )
-
-            if whois_record:
-                regex_referer = r"(refer:)\s+(.*)"
-
-                matched = Regex(
-                    whois_record, regex_referer, return_data=True, rematch=True
-                ).match()
-
-                if matched:
-                    return matched[1]
-
-            return None
+        return None
 
     def _extensions(self, line):
         """
