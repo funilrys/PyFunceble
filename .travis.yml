@@ -17,7 +17,8 @@ matrix:
 
 install:
   - pip3 install --upgrade pip
-  - pip3 install pylint coverage coveralls pip-autoremove pyfunceble-dev
+  - pip3 install pyfunceble-dev
+  - pip3 install pylint coverage coveralls pip-autoremove
 
 script:
   # Everything is into one line because we want the test to fail if one of those command fails.
