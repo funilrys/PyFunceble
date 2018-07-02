@@ -316,12 +316,12 @@ class Core(object):  # pragma: no cover
 
         if PyFunceble.CONFIGURATION["domain"]:
             if __name__ == "PyFunceble.core":
-                if PyFunceble.CONFIGURATION["simple"]:
-                    print(ExpirationDate().get())
-                else:
-                    status = ExpirationDate().get()
+                status = ExpirationDate().get()
 
                 self._file_decision(domain, last_domain, status)
+
+                if PyFunceble.CONFIGURATION["simple"]:
+                    print(status)
             else:
                 ExpirationDate().get()
                 return
