@@ -16,7 +16,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.helpers
-   :members:
+   :members: 
 
 :code:`Download()`
 """"""""""""""""""
@@ -76,7 +76,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_continue
-   :members:
+   :members: 
 
 .. autoclass:: PyFunceble.auto_continue.AutoContinue
     :members:
@@ -84,8 +84,8 @@ Code documentation
 Autosave
 --------
 
-This subsystem provide several logic around the autosaving.
-Actually only Travis CI is supported.
+This subsystem provide several logic around the autosaving. 
+Actually only Travis CI is supported 
 
 
 Travis CI problematic
@@ -97,7 +97,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_save
-   :members:
+   :members: 
 
 .. autoclass:: PyFunceble.auto_save.AutoSave
     :members:
@@ -114,7 +114,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.clean
-   :members:
+   :members: 
 
 .. autoclass:: PyFunceble.clean.Clean
     :members:
@@ -133,7 +133,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.config
-   :members:
+   :members: 
 
 :code:`Load()`
 """"""""""""""
@@ -155,7 +155,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.core
-   :members:
+   :members: 
 
 .. autoclass:: PyFunceble.core.Core
     :members:
@@ -172,7 +172,7 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.database
-   :members:
+   :members: 
 
 .. autoclass:: PyFunceble.database.Database
     :members:

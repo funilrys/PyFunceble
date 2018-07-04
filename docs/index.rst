@@ -29,122 +29,25 @@ Main Features
 -   Save results on file(s)
 -   ... and a lot more!
 
-
-Installation
-------------
 .. toctree::
-   :maxdepth: 3
-   :caption: Installation
+   :maxdepth: 2
+   :caption: Contents
    
    installation
-
-Update
-------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Update
-   
    update
-
-Usage
------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Usage
-   
    usage
-
-Columns
--------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Columns
-   
    colomns
-
-Logs Sharing
-------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Logs Sharing
-   
    logs-sharing
-
-Contributing
-------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contributing
-   
    contributing
-
-Logic representation
---------------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Logic representation
-   
    logic-representation
-
-Code documentation
-------------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Code documentation
-
    code
-
-Contributors
-------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contributors
-
    contributors
-
-Special Thanks
---------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Special Thanks
-
    special-thanks
-
-License
--------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: License
-
    license
-
-Code of Conduct
----------------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Code of Conduct
-   
    code-of-conduct
-
-Contact
--------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contact
-   
    contact
+
+
 
 Indices and tables
 ==================
