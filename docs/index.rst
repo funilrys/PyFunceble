@@ -22,7 +22,7 @@ Main Features
 -------------
 
 -   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
--   Read an existing file and check every domain and IPv5 present into it.
+-   Read an existing file and check every domain and IPv4 present into it.
 -   Generate a `hosts` file according to the domains statuses.
 -   Generate a list of the domain according to their discovered statuses.
 -   Show results on screen
