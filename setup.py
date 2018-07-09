@@ -120,7 +120,7 @@ def _get_long_description():
     """
     This function return the long description.
     """
-    
+
     try:
         import pypandoc
         return pypandoc.convert("README.md", "rst")
