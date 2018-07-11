@@ -18,8 +18,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 
 .. _Funceble: https://github.com/funilrys/funceble
 
-Main Features
--------------
+**Main features:**
 
 -   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
 -   Read an existing file and check every domain and IPv4 present into it.
@@ -30,9 +29,9 @@ Main Features
 -   ... and a lot more!
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents
-   
+
    installation
    update
    usage
