@@ -66,7 +66,7 @@ License:
 import PyFunceble
 from PyFunceble import requests
 from PyFunceble.generate import Generate
-from PyFunceble.helpers import File, Regex
+from PyFunceble.helpers import Dict, File, Regex
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.lookup import Lookup
 from PyFunceble.referer import Referer
@@ -85,6 +85,20 @@ class ExpirationDate(object):
         self.whois_record = ""
 
     @classmethod
+    def _psl_db(cls):
+        """
+        Convert `public_suffix.json` to a dictionnary.
+        """
+
+        file_to_read = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
+            "default_files"
+        ][
+            "public_suffix"
+        ]
+
+        return Dict().from_json(File(file_to_read).read())
+
+    @classmethod
     def is_domain_valid(cls, domain=None):
         """
         Check if PyFunceble.CONFIGURATION['domain'] is a valid domain.
@@ -95,14 +109,49 @@ class ExpirationDate(object):
 
         """
 
+        if PyFunceble.CONFIGURATION["psl_db"] == {}:
+            PyFunceble.CONFIGURATION["psl_db"].update(cls._psl_db())
+
         regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
+        regex_valid_subdomains = r"^(?=.{0,253}$)(([a-z0-9_][a-z0-9-_]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
 
         if domain:
             to_test = domain
         else:
             to_test = PyFunceble.CONFIGURATION["domain"]
 
-        return Regex(to_test, regex_valid_domains, return_data=False).match()
+        if Regex(to_test, regex_valid_domains, return_data=False).match():
+            return True
+
+        try:
+            last_point_index = to_test.rindex(".")
+            extension = to_test[last_point_index + 1:]
+
+            if extension in PyFunceble.CONFIGURATION["psl_db"]:
+                for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
+                    try:
+                        suffix_index = to_test.rindex("." + suffix)
+                        to_check = to_test[:suffix_index]
+
+                        if "." in to_check:
+                            return Regex(
+                                to_check, regex_valid_subdomains, return_data=False
+                            ).match()
+
+                    except ValueError:
+                        pass
+
+            to_check = to_test[:last_point_index]
+
+            if "." in to_check:
+                return Regex(
+                    to_check, regex_valid_subdomains, return_data=False
+                ).match()
+
+        except (ValueError, AttributeError):
+            pass
+
+        return False
 
     @classmethod
     def is_ip_valid(cls, ip_to_check=None):

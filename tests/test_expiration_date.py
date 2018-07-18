@@ -66,6 +66,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.expiration_date import ExpirationDate
+from PyFunceble import load_config
 
 
 class TestExpirationDate(TestCase):
@@ -73,25 +74,78 @@ class TestExpirationDate(TestCase):
     This class will test PyFunceble.expiration_date.
     """
 
+    def setUp(self):
+        """
+        This method will setup everything needed for the tests.
+        """
+
+        load_config()
+
     def test_is_domains_valid(self):
         """
         This method test ExpirationDate().is_domain_valid().
         """
 
-        # Test of the case that the domains is valid
+        # Test of the case that the domains are valid
+        valid = [
+            "hello-world.com",
+            "hello.world.com",
+            "hello_world.world.com",
+            "hello_world.world.hello.com",
+            "hello.world_hello.world.com",
+            "hello---world.com",
+            "hello.world.hello.com",
+            "hello_.world.eu.com",
+            "_world.hello.eu.com",
+            "_world_.hello.eu.com",
+            "_hello-beautiful-world_.wold.eu.com",
+            "_hello_world_.hello.eu.com",
+            "xn--bittr-fsa6124c.com",
+            "xn--bllogram-g80d.com",
+            "xn--coinbse-30c.com",
+            "xn--cryptopi-ux0d.com",
+            "xn--cyptopia-4e0d.com",
+            "_hello.abuse.co.za",
+            "_hello_.abuse.co.za",
+            "_hello._world.abuse.co.za",
+            "_hello-world.abuse.co.za",
+            "_hello_world_.abuse.co.za",
+            "hello_world.abuse.co.za",
+            "hello-.abuse.co.za",
+        ]
         expected = True
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
-        actual = ExpirationDate().is_domain_valid()
+
+        for domain in valid:
+            PyFunceble.CONFIGURATION["domain"] = domain
+            actual = ExpirationDate().is_domain_valid()
+
+            self.assertEqual(expected, actual, msg="%s is invalid." % domain)
 
         self.assertEqual(expected, actual)
 
-        # Test of the case that the domains is not valid
+        # Test of the case that the domains are not valid
         not_valid = [
             "hello-world",
             "-hello.world",
             "hello-.world",
             "hello@world.com",
             "hello_world.com",
+            "hello_world_.com",
+            "hello.com:443",
+            "world.hello:80",
+            "_world._hello.eu.com",
+            "_world.hello_.eu.com",
+            "bittréẋ.com",
+            "bịllogram.com",
+            "coinbȧse.com",
+            "cryptopiạ.com",
+            "cṙyptopia.com",
+            "-hello-world_all-mine_.hello.eu.com",
+            "test.-hello-world_all-mine_.abuse.co.za",
+            "-hello-world_.abuse.co.za",
+            "hello.-hello-world_.abuse.co.za",
+            "-hello.abuse.co.za",
+            "-hello-.abuse.co.za",
         ]
         expected = False
 

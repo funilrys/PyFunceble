@@ -125,7 +125,7 @@ def _get_long_description():
         import pypandoc
         return pypandoc.convert("README.md", "rst")
 
-    except (IOError, ImportError):
+    except (IOError, ImportError): # pragma: no cover
         return open("README.md", encoding="utf-8").read()
 
 

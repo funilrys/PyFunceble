@@ -38,6 +38,8 @@ no_files:                     False
 no_whois:                     False
 # Activate/Deactivate the generation of plain list of domains.
 plain_list_domain:            False
+# This will save the content of public-suffix.json
+psl_db:                       {}
 # Activate/Deactivate the quiet mode.
 quiet:                        False
 # The following will save the referer.
@@ -87,6 +89,8 @@ outputs:
     inactive_db:              inactive_db.json
     # The following is the default name of results.txt.
     results:                  results.txt
+    # The following is the default name of the file which will save our copy of the public suffix.
+    public_suffix:            public-suffix.json
 
   # This section is related to the location of all list of domain without
   # decorator. In other words, it is the location of all plain list of domains.

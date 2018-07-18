@@ -88,6 +88,7 @@ class Load(object):  # pylint: disable=too-few-public-methods
         try:
             self._load_config_file()
             self._install_iana_config()
+            self._install_psl_config()
         except FileNotFoundError:
 
             if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
@@ -103,6 +104,7 @@ Install the default configuration in the current directory ? [y/n] "
                             self._install_production_config()
                             self._load_config_file()
                             self._install_iana_config()
+                            self._install_psl_config()
                             break
 
                         elif response.lower() == "n":
@@ -112,6 +114,7 @@ Install the default configuration in the current directory ? [y/n] "
                 self._install_production_config()
                 self._load_config_file()
                 self._install_iana_config()
+                self._install_psl_config()
 
         for main_key in ["domains", "hosts", "splited"]:
             PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
@@ -187,6 +190,31 @@ Install the default configuration in the current directory ? [y/n] "
             return Download(iana_link, destination).text()
 
         return True
+
+    @classmethod
+    def _install_psl_config(cls):
+        """
+        This method download `public-suffix.json` if not present.
+        """
+
+        psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/public-suffix.json"
+        destination = PyFunceble.CURRENT_DIRECTORY + PyFunceble.CONFIGURATION[
+            "outputs"
+        ][
+            "default_files"
+        ][
+            "public_suffix"
+        ]
+
+        if "dev" in PyFunceble.VERSION:
+            psl_link = psl_link.replace("master", "dev")
+        else:
+            psl_link = psl_link.replace("dev", "master")
+
+        if not path.isfile(destination):
+            return Download(psl_link, destination).text()
+
+        return False
 
 
 class Version(object):

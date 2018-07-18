@@ -72,9 +72,10 @@ from PyFunceble.core import Core
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 from PyFunceble.production import Production
+from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.83.2.dev-beta"
+VERSION = "0.84.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -426,6 +427,13 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         )
 
         PARSER.add_argument(
+            "-psl",
+            "--public-suffix",
+            action="store_true",
+            help="Update/Generate `public-suffix.json`.",
+        )
+
+        PARSER.add_argument(
             "-q",
             "--quiet",
             action="store_true",
@@ -596,6 +604,9 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
 
         if ARGS.production:
             Production()
+
+        if ARGS.public_suffix:
+            PublicSuffix()
 
         if ARGS.quiet:
             CONFIGURATION.update({"quiet": Core.switch("quiet")})
