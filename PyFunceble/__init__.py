@@ -75,7 +75,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.84.1.dev-beta"
+VERSION = "0.84.2.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -204,7 +204,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         PARSER.add_argument(
             "--autosave-minutes",
             type=int,
-            help="Update the minimum of minutes before we start commiting \
+            help="Update the minimum of minutes before we start committing \
                 to upstream under Travis CI. %s"
             % (
                 CURRENT_VALUE_FORMAT
@@ -372,7 +372,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
             "-nl",
             "--no-logs",
             action="store_true",
-            help="Switch the value of the production of logs files in case we \
+            help="Switch the value of the production of logs files in the case we \
             encounter some errors. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["logs"]) + Style.RESET_ALL),
         )
@@ -520,6 +520,8 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
 
         if ARGS.less:
             CONFIGURATION.update({"less": ARGS.less})
+        elif not ARGS.all:
+            CONFIGURATION.update({"less": ARGS.all})
 
         if ARGS.adblock:
             CONFIGURATION.update({"adblock": Core.switch("adblock")})

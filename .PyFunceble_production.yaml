@@ -29,7 +29,7 @@ inactive_database:            True
 # This will dave the database.
 inactive_db:                  {}
 # Activate/Deactivate the output of every informations.
-less:                         False
+less:                         True
 # Activate/Deactivate the output of logs.
 logs:                         True
 # Deactivate the generation of files.
