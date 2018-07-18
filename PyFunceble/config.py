@@ -80,7 +80,7 @@ class Load(object):  # pylint: disable=too-few-public-methods
     def __init__(self, path_to_config):
         self.path_to_config = path_to_config
 
-        if path_to_config.endswith(directory_separator):
+        if not path_to_config.endswith(directory_separator):
             self.path_to_config += directory_separator
 
         self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
