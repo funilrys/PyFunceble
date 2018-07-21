@@ -75,7 +75,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.84.2.dev-beta"
+VERSION = "0.84.3.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -179,7 +179,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         PARSER.add_argument(
             "--cmd-before-end",
             type=str,
-            help="Pass a command before the results (final) commit of travis \
+            help="Pass a command before the results (final) commit under the travis \
             mode. %s"
             % (
                 CURRENT_VALUE_FORMAT
@@ -240,7 +240,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         )
 
         PARSER.add_argument(
-            "-d", "--domain", type=str, help="Analyze the given domain."
+            "-d", "--domain", type=str, help="Set and test the given domain."
         )
 
         PARSER.add_argument(
@@ -284,15 +284,6 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         )
 
         PARSER.add_argument(
-            "-f",
-            "--file",
-            type=str,
-            help="Test a file with a list of domains. If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
-        )
-
-        PARSER.add_argument("--filter", type=str, help="Domain to filter (regex).")
-
-        PARSER.add_argument(
             "-ex",
             "--execution",
             action="store_true",
@@ -303,6 +294,15 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
                 + Style.RESET_ALL
             ),
         )
+
+        PARSER.add_argument(
+            "-f",
+            "--file",
+            type=str,
+            help="Read the given file and test all domains inside it. If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
+        )
+
+        PARSER.add_argument("--filter", type=str, help="Domain to filter (regex).")
 
         PARSER.add_argument(
             "--help",
@@ -339,7 +339,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         PARSER.add_argument(
             "-ip",
             type=str,
-            help="Change the ip to print in host file. %s"
+            help="Change the ip to print in the hosts files. %s"
             % (
                 CURRENT_VALUE_FORMAT
                 + repr(CONFIGURATION["custom_ip"])
@@ -374,7 +374,9 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
             action="store_true",
             help="Switch the value of the production of logs files in the case we \
             encounter some errors. %s"
-            % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["logs"]) + Style.RESET_ALL),
+            % (
+                CURRENT_VALUE_FORMAT + repr(not CONFIGURATION["logs"]) + Style.RESET_ALL
+            ),
         )
 
         PARSER.add_argument(
@@ -383,7 +385,11 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
             action="store_true",
             help="Switch the value of the production unified logs \
                 under the output directory. %s"
-            % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["unified"]) + Style.RESET_ALL),
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(not CONFIGURATION["unified"])
+                + Style.RESET_ALL
+            ),
         )
 
         PARSER.add_argument(
@@ -463,7 +469,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         PARSER.add_argument(
             "--split",
             action="store_true",
-            help="Switch the valur of the split of the generated output files. %s"
+            help="Switch the value of the split of the generated output files. %s"
             % (
                 CURRENT_VALUE_FORMAT
                 + repr(CONFIGURATION["inactive_database"])
@@ -487,7 +493,7 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
         PARSER.add_argument(
             "--travis",
             action="store_true",
-            help="Activate the travis mode. %s"
+            help="Switch the value of the travis mode. %s"
             % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["travis"]) + Style.RESET_ALL),
         )
 
@@ -503,17 +509,21 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
             ),
         )
 
-        PARSER.add_argument("-u", "--url", type=str, help="Analyze the given url.")
+        PARSER.add_argument("-u", "--url", type=str, help="Analyze the given URL.")
 
         PARSER.add_argument(
             "-uf",
             "--url-file",
             type=str,
-            help="Test a file with a list of URL.  If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
+            help="Read and test the list of URL of the given file.  If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
         )
 
         PARSER.add_argument(
-            "-v", "--version", action="version", version="%(prog)s " + VERSION
+            "-v",
+            "--version",
+            help="Show the version of PyFunceble and exit.",
+            action="version",
+            version="%(prog)s " + VERSION,
         )
 
         ARGS = PARSER.parse_args()
