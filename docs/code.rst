@@ -348,6 +348,23 @@ Code documentation
 .. autoclass:: PyFunceble.production.Production
     :members:
 
+Public Suffix
+-------------
+
+Problematic
+^^^^^^^^^^^
+
+How can we get the list of all possible or at least most used domain suffix ?
+
+Code documentation
+^^^^^^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.publicsuffix
+   :members: 
+
+.. autoclass:: PyFunceble.publicsuffix.PublicSuffix
+    :members:
+
 Referer
 -------
 
@@ -407,3 +424,4 @@ Code documentation
 
 .. autoclass:: PyFunceble.url.URL
     :members:
+
