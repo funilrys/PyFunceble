@@ -79,14 +79,13 @@ class Database(object):
     def __init__(self):
         self.file_path = PyFunceble.CONFIGURATION["file_to_test"]
         self.current_time = int(strftime("%s"))
-        self.day_in_seconds = PyFunceble.CONFIGURATION[
-            "days_between_db_retest"
-        ] * 24 * 3600
-        self.inactive_db_path = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "default_files"
-        ][
-            "inactive_db"
-        ]
+        self.day_in_seconds = (
+            PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
+        )
+        self.inactive_db_path = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
+        )
 
     def _retrieve(self):
         """
@@ -127,9 +126,7 @@ class Database(object):
             if "to_test" in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                     "to_test"
-                ].extend(
-                    to_add
-                )
+                ].extend(to_add)
             else:
                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                     "to_test"
@@ -183,13 +180,10 @@ class Database(object):
         result = 0
         to_delete = []
 
-        if self.file_path in PyFunceble.CONFIGURATION[
-            "inactive_db"
-        ] and PyFunceble.CONFIGURATION[
-            "inactive_db"
-        ][
-            self.file_path
-        ]:
+        if (
+            self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
+            and PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
+        ):
             for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                 if data != "to_test":
                     if self.current_time < int(data) + self.day_in_seconds:
@@ -219,39 +213,28 @@ class Database(object):
 
         if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
             if timestamp in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
-                if PyFunceble.CONFIGURATION["domain"] not in PyFunceble.CONFIGURATION[
-                    "inactive_db"
-                ][
-                    self.file_path
-                ][
-                    timestamp
-                ]:
+                if (
+                    PyFunceble.CONFIGURATION["domain"]
+                    not in PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
+                        timestamp
+                    ]
+                ):
                     PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                         timestamp
-                    ].append(
-                        PyFunceble.CONFIGURATION["domain"]
-                    )
+                    ].append(PyFunceble.CONFIGURATION["domain"])
             else:
                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path].update(
                     {timestamp: [PyFunceble.CONFIGURATION["domain"]]}
                 )
 
-            if "to_test" in PyFunceble.CONFIGURATION["inactive_db"][
-                self.file_path
-            ] and PyFunceble.CONFIGURATION[
-                "domain"
-            ] in PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ][
-                self.file_path
-            ][
-                "to_test"
-            ]:
+            if (
+                "to_test" in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
+                and PyFunceble.CONFIGURATION["domain"]
+                in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]["to_test"]
+            ):
                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                     "to_test"
-                ].remove(
-                    PyFunceble.CONFIGURATION["domain"]
-                )
+                ].remove(PyFunceble.CONFIGURATION["domain"])
         else:
             PyFunceble.CONFIGURATION["inactive_db"][self.file_path] = {
                 timestamp: [PyFunceble.CONFIGURATION["domain"]]
@@ -266,17 +249,12 @@ class Database(object):
 
         if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
             for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
-                if PyFunceble.CONFIGURATION["domain"] in PyFunceble.CONFIGURATION[
-                    "inactive_db"
-                ][
-                    self.file_path
-                ][
-                    data
-                ]:
+                if (
+                    PyFunceble.CONFIGURATION["domain"]
+                    in PyFunceble.CONFIGURATION["inactive_db"][self.file_path][data]
+                ):
                     PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                         data
-                    ].remove(
-                        PyFunceble.CONFIGURATION["domain"]
-                    )
+                    ].remove(PyFunceble.CONFIGURATION["domain"])
 
         self._backup()

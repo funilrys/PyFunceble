@@ -79,9 +79,10 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, action="start"):
-        if PyFunceble.CONFIGURATION["show_execution_time"] or PyFunceble.CONFIGURATION[
-            "travis"
-        ]:
+        if (
+            PyFunceble.CONFIGURATION["show_execution_time"]
+            or PyFunceble.CONFIGURATION["travis"]
+        ):
             if action == "start":
                 self._starting_time()
             elif action == "stop":
@@ -119,9 +120,9 @@ class ExecutionTime(object):  # pylint: disable=too-few-public-methods
             A dics with `days`,`hours`,`minutes` and `seconds`.
         """
 
-        time_difference = PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION[
-            "start"
-        ]
+        time_difference = (
+            PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION["start"]
+        )
 
         data = OrderedDict()
 

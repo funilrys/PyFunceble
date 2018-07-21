@@ -119,11 +119,10 @@ class Core(object):  # pragma: no cover
         if passed and passed.startswith("http"):
             file_to_test = passed.split("/")[-1]
 
-            if not path.isfile(file_to_test) or PyFunceble.CONFIGURATION["counter"][
-                "number"
-            ][
-                "tested"
-            ] == 0:
+            if (
+                not path.isfile(file_to_test)
+                or PyFunceble.CONFIGURATION["counter"]["number"]["tested"] == 0
+            ):
                 Download(passed, file_to_test).text()
 
             PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
@@ -137,8 +136,11 @@ class Core(object):  # pragma: no cover
         This method will manage the loading of the url system.
         """
 
-        if self.url_file and not self._entry_management_url_download(  # pylint: disable=no-member
+        if (
             self.url_file  # pylint: disable=no-member
+            and not self._entry_management_url_download(
+                self.url_file  # pylint: disable=no-member
+            )
         ):  # pylint: disable=no-member
             PyFunceble.CONFIGURATION[
                 "file_to_test"
@@ -169,22 +171,25 @@ class Core(object):  # pragma: no cover
             elif self.url_to_test and not file_path:  # pylint: disable=no-member
                 PyFunceble.CONFIGURATION["show_percentage"] = False
                 self.url(self.url_to_test)  # pylint: disable=no-member
-            elif self._entry_management_url_download(
-                self.url_file  # pylint: disable=no-member
-            ) or self.url_file:  # pylint: disable=no-member
+            elif (
+                self._entry_management_url_download(
+                    self.url_file  # pylint: disable=no-member
+                )
+                or self.url_file  # pylint: disable=no-member
+            ):
                 PyFunceble.CONFIGURATION["no_whois"] = PyFunceble.CONFIGURATION[
                     "plain_list_domain"
-                ] = PyFunceble.CONFIGURATION[
-                    "split"
-                ] = True
+                ] = PyFunceble.CONFIGURATION["split"] = True
                 PyFunceble.CONFIGURATION["generate_hosts"] = False
 
                 self.file_url()
-            elif self._entry_management_url_download(
-                self.link_to_test  # pylint: disable=no-member
-            ) or self._entry_management_url_download(
-                file_path
-            ) or file_path:
+            elif (
+                self._entry_management_url_download(
+                    self.link_to_test  # pylint: disable=no-member
+                )
+                or self._entry_management_url_download(file_path)
+                or file_path
+            ):
                 self.file()
             else:
                 print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
@@ -231,9 +236,12 @@ class Core(object):  # pragma: no cover
 
         regex_bypass = r"\[PyFunceble\sskip\]"
 
-        if PyFunceble.CONFIGURATION["travis"] and Regex(
-            Command("git log -1").execute(), regex_bypass, return_data=False
-        ).match():
+        if (
+            PyFunceble.CONFIGURATION["travis"]
+            and Regex(
+                Command("git log -1").execute(), regex_bypass, return_data=False
+            ).match()
+        ):
 
             AutoSave(True, is_bypass=True)
 
@@ -243,9 +251,10 @@ class Core(object):  # pragma: no cover
         Decide if we print or not the header.
         """
 
-        if not PyFunceble.CONFIGURATION["quiet"] and not PyFunceble.CONFIGURATION[
-            "header_printed"
-        ]:
+        if (
+            not PyFunceble.CONFIGURATION["quiet"]
+            and not PyFunceble.CONFIGURATION["header_printed"]
+        ):
             print("\n")
             if PyFunceble.CONFIGURATION["less"]:
                 Prints(None, "Less").header()
@@ -269,9 +278,10 @@ class Core(object):  # pragma: no cover
         """
 
         if status:
-            if not PyFunceble.CONFIGURATION["simple"] and PyFunceble.CONFIGURATION[
-                "file_to_test"
-            ]:
+            if (
+                not PyFunceble.CONFIGURATION["simple"]
+                and PyFunceble.CONFIGURATION["file_to_test"]
+            ):
                 if PyFunceble.CONFIGURATION["inactive_database"]:
                     if status.lower() in PyFunceble.STATUS["list"]["up"]:
                         Database().remove()
@@ -364,7 +374,9 @@ class Core(object):  # pragma: no cover
         if not extracted_domain.startswith("#"):
 
             if "#" in extracted_domain:
-                extracted_domain = extracted_domain[:extracted_domain.find("#")].strip()
+                extracted_domain = extracted_domain[
+                    : extracted_domain.find("#")
+                ].strip()
 
             if " " in extracted_domain or "\t" in extracted_domain:
                 splited_line = extracted_domain.split()
@@ -500,25 +512,21 @@ class Core(object):  # pragma: no cover
         if PyFunceble.CONFIGURATION["inactive_database"]:
             Database().to_test()
 
-            if PyFunceble.CONFIGURATION["file_to_test"] in PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ] and "to_test" in PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ][
+            if (
                 PyFunceble.CONFIGURATION["file_to_test"]
-            ] and PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ][
-                PyFunceble.CONFIGURATION["file_to_test"]
-            ][
-                "to_test"
-            ]:
+                in PyFunceble.CONFIGURATION["inactive_db"]
+                and "to_test"
+                in PyFunceble.CONFIGURATION["inactive_db"][
+                    PyFunceble.CONFIGURATION["file_to_test"]
+                ]
+                and PyFunceble.CONFIGURATION["inactive_db"][
+                    PyFunceble.CONFIGURATION["file_to_test"]
+                ]["to_test"]
+            ):
                 list_to_test.extend(
                     PyFunceble.CONFIGURATION["inactive_db"][
                         PyFunceble.CONFIGURATION["file_to_test"]
-                    ][
-                        "to_test"
-                    ]
+                    ]["to_test"]
                 )
 
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$"  # pylint: disable=line-too-long
@@ -537,7 +545,7 @@ class Core(object):  # pragma: no cover
         list(
             map(
                 self.domain,
-                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"]:],
+                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
                 repeat(list_to_test[-1]),
             )
         )
@@ -587,25 +595,21 @@ class Core(object):  # pragma: no cover
         if PyFunceble.CONFIGURATION["inactive_database"]:
             Database().to_test()
 
-            if PyFunceble.CONFIGURATION["file_to_test"] in PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ] and "to_test" in PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ][
+            if (
                 PyFunceble.CONFIGURATION["file_to_test"]
-            ] and PyFunceble.CONFIGURATION[
-                "inactive_db"
-            ][
-                PyFunceble.CONFIGURATION["file_to_test"]
-            ][
-                "to_test"
-            ]:
+                in PyFunceble.CONFIGURATION["inactive_db"]
+                and "to_test"
+                in PyFunceble.CONFIGURATION["inactive_db"][
+                    PyFunceble.CONFIGURATION["file_to_test"]
+                ]
+                and PyFunceble.CONFIGURATION["inactive_db"][
+                    PyFunceble.CONFIGURATION["file_to_test"]
+                ]["to_test"]
+            ):
                 list_to_test.extend(
                     PyFunceble.CONFIGURATION["inactive_db"][
                         PyFunceble.CONFIGURATION["file_to_test"]
-                    ][
-                        "to_test"
-                    ]
+                    ]["to_test"]
                 )
 
         if PyFunceble.CONFIGURATION["filter"]:
@@ -618,7 +622,7 @@ class Core(object):  # pragma: no cover
         list(
             map(
                 self.url,
-                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"]:],
+                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
                 repeat(list_to_test[-1]),
             )
         )

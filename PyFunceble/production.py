@@ -139,7 +139,10 @@ class Production(object):  # pylint: disable=too-few-public-methods
                 )
 
                 message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
-                message += Fore.CYAN + "Please do not touch version.yaml nor setup.py (version update)"  # pylint: disable=line-too-long
+                message += (
+                    Fore.CYAN
+                    + "Please do not touch version.yaml nor setup.py (version update)"
+                )  # pylint: disable=line-too-long
 
                 print(message)
                 exit(0)
@@ -163,9 +166,11 @@ class Production(object):  # pylint: disable=too-few-public-methods
             + directory_separator
         ):
             for file in files:
-                if file not in [
-                    ".gitignore", ".keep", "production.py", "publicsuffix.py"
-                ] and "__pycache__" not in root:
+                if (
+                    file
+                    not in [".gitignore", ".keep", "production.py", "publicsuffix.py"]
+                    and "__pycache__" not in root
+                ):
                     if root.endswith(directory_separator):
 
                         self._update_docs(root + file)

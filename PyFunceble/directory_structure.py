@@ -84,9 +84,9 @@ class DirectoryStructure(object):  # pragma: no cover
         if not self.base.endswith(directory_separator):
             self.base += directory_separator
 
-        self.structure = self.base + PyFunceble.OUTPUTS["default_files"][
-            "dir_structure"
-        ]
+        self.structure = (
+            self.base + PyFunceble.OUTPUTS["default_files"]["dir_structure"]
+        )
 
         if production:
             self.backup()
@@ -100,9 +100,9 @@ class DirectoryStructure(object):  # pragma: no cover
             and portable for user.
         """
 
-        output_path = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "parent_directory"
-        ]
+        output_path = (
+            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+        )
         result = {PyFunceble.OUTPUTS["parent_directory"]: {}}
 
         for root, _, files in walk(output_path):
@@ -161,15 +161,11 @@ class DirectoryStructure(object):  # pragma: no cover
             + PyFunceble.OUTPUTS["http_analytic"]["directories"]["up"],
             "HTTP_Analytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["http_analytic"][
                 "directories"
-            ][
-                "parent"
-            ]
+            ]["parent"]
             + PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_up"],
             "HTTP_Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["http_analytic"][
                 "directories"
-            ][
-                "parent"
-            ]
+            ]["parent"]
             + PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_down"],
             "domains": PyFunceble.OUTPUTS["domains"]["directory"],
             "domains/ACTIVE": PyFunceble.OUTPUTS["domains"]["directory"]
@@ -206,9 +202,7 @@ class DirectoryStructure(object):  # pragma: no cover
         structure = Dict(structure).rename_key(to_replace_base)
         structure[PyFunceble.OUTPUTS["parent_directory"]] = Dict(
             structure[PyFunceble.OUTPUTS["parent_directory"]]
-        ).rename_key(
-            to_replace
-        )
+        ).rename_key(to_replace)
 
         try:
             Dict(structure).to_json(self.structure)
@@ -291,9 +285,10 @@ class DirectoryStructure(object):  # pragma: no cover
                 keep_to_git = file_path.replace("keep", "gitignore")
 
                 if self._restore_replace():
-                    if path.isfile(file_path) and Hash(
-                        file_path, "sha512", True
-                    ).get() == online_sha:
+                    if (
+                        path.isfile(file_path)
+                        and Hash(file_path, "sha512", True).get() == online_sha
+                    ):
                         rename(file_path, git_to_keep)
                         write = False
                     else:
@@ -301,9 +296,10 @@ class DirectoryStructure(object):  # pragma: no cover
                         file_path = git_to_keep
                         write = True
                 else:
-                    if path.isfile(keep_to_git) and Hash(
-                        file_path, "sha512", True
-                    ).get() == online_sha:
+                    if (
+                        path.isfile(keep_to_git)
+                        and Hash(file_path, "sha512", True).get() == online_sha
+                    ):
                         rename(file_path, keep_to_git)
                         write = False
                     else:

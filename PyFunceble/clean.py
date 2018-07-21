@@ -86,12 +86,10 @@ class Clean(object):
                     "tested"
                 ]
 
-                if number_of_tested == 0 or list_to_test[
-                    number_of_tested - 1
-                ] == list_to_test[
-                    -1
-                ] or number_of_tested == len(
-                    list_to_test
+                if (
+                    number_of_tested == 0
+                    or list_to_test[number_of_tested - 1] == list_to_test[-1]
+                    or number_of_tested == len(list_to_test)
                 ):
                     Core.reset_counters()
 
@@ -109,9 +107,9 @@ class Clean(object):
         Return the list of file to delete.
         """
 
-        directory = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "parent_directory"
-        ]
+        directory = (
+            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+        )
 
         if not directory.endswith(directory_separator):  # pragma: no cover
             directory += directory_separator

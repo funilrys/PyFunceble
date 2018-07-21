@@ -152,10 +152,12 @@ class Prints(object):
         into a given path, if doesn't exist.
         """
 
-        if not PyFunceble.CONFIGURATION["no_files"] and self.output and not path.isfile(
-            self.output
+        if (
+            not PyFunceble.CONFIGURATION["no_files"]
+            and self.output
+            and not path.isfile(self.output)
         ):
-            link = ("# File generated with %s\n" % PyFunceble.LINKS["repo"])
+            link = "# File generated with %s\n" % PyFunceble.LINKS["repo"]
             date_of_generation = (
                 "# Date of generation: %s \n\n" % PyFunceble.CURRENT_TIME
             )
@@ -167,9 +169,9 @@ class Prints(object):
                 PyFunceble.STATUS["official"]["invalid"],
                 "Less",
             ]:
-                header = self._header_constructor(self.currently_used_header, None)[
-                    0
-                ] + "\n"
+                header = (
+                    self._header_constructor(self.currently_used_header, None)[0] + "\n"
+                )
 
             try:
                 File(self.output).write(link + date_of_generation + header)
@@ -210,7 +212,8 @@ class Prints(object):
 
         if separator:
             return [
-                header_size % tuple(header_data), header_size % tuple(separator_data)
+                header_size % tuple(header_data),
+                header_size % tuple(separator_data),
             ]
 
         return [header_size % tuple(header_data)]
@@ -223,19 +226,21 @@ class Prints(object):
         Please consider as "header" the title of each columns.
         """
 
-        if not PyFunceble.CONFIGURATION[
-            "header_printed"
-        ] or self.template == "Percentage" or do_not_print:
-            if self.template.lower() in PyFunceble.STATUS["list"][
-                "generic"
-            ] or self.template == "Generic_File":
+        if (
+            not PyFunceble.CONFIGURATION["header_printed"]
+            or self.template == "Percentage"
+            or do_not_print
+        ):
+            if (
+                self.template.lower() in PyFunceble.STATUS["list"]["generic"]
+                or self.template == "Generic_File"
+            ):
                 to_print = self.headers["Generic"]
 
-                if self.template.lower() in PyFunceble.STATUS["list"][
-                    "generic"
-                ] and PyFunceble.HTTP_CODE[
-                    "active"
-                ]:
+                if (
+                    self.template.lower() in PyFunceble.STATUS["list"]["generic"]
+                    and PyFunceble.HTTP_CODE["active"]
+                ):
                     to_print = Dict(to_print).remove_key("Analyze Date")
             if self.template.lower() in PyFunceble.STATUS["list"]["up"]:
                 to_print = self.headers[PyFunceble.STATUS["official"]["up"]]
@@ -243,7 +248,11 @@ class Prints(object):
                 to_print = self.headers[PyFunceble.STATUS["official"]["down"]]
             elif self.template.lower() in PyFunceble.STATUS["list"]["invalid"]:
                 to_print = self.headers[PyFunceble.STATUS["official"]["invalid"]]
-            elif self.template == "Less" or self.template == "Percentage" or self.template == "HTTP":  # pylint: disable=line-too-long
+            elif (
+                self.template == "Less"
+                or self.template == "Percentage"
+                or self.template == "HTTP"
+            ):  # pylint: disable=line-too-long
                 to_print = self.headers[self.template]
 
                 if self.template == "Less" and not PyFunceble.HTTP_CODE["active"]:
@@ -363,9 +372,7 @@ class Prints(object):
             for data in self._header_constructor(to_print, False):
                 if self.template.lower() in PyFunceble.STATUS["list"][
                     "generic"
-                ] or self.template in [
-                    "Less", "Percentage"
-                ]:
+                ] or self.template in ["Less", "Percentage"]:
                     if not self.only_on_file:
                         data = self._colorify(data)
                         print(data)

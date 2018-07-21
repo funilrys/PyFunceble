@@ -90,11 +90,10 @@ class ExpirationDate(object):
         Convert `public_suffix.json` to a dictionnary.
         """
 
-        file_to_read = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "default_files"
-        ][
-            "public_suffix"
-        ]
+        file_to_read = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
+        )
 
         return Dict().from_json(File(file_to_read).read())
 
@@ -125,7 +124,7 @@ class ExpirationDate(object):
 
         try:
             last_point_index = to_test.rindex(".")
-            extension = to_test[last_point_index + 1:]
+            extension = to_test[last_point_index + 1 :]
 
             if extension in PyFunceble.CONFIGURATION["psl_db"]:
                 for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
@@ -216,9 +215,9 @@ class ExpirationDate(object):
         """
 
         if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
-            log = self.log_separator + str(
-                self.whois_record
-            ) + "\n" + self.log_separator
+            log = (
+                self.log_separator + str(self.whois_record) + "\n" + self.log_separator
+            )
 
             output = PyFunceble.CURRENT_DIRECTORY
             output += PyFunceble.OUTPUTS["parent_directory"]
@@ -289,9 +288,7 @@ class ExpirationDate(object):
                 + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["date_format"]
                 + PyFunceble.CONFIGURATION["referer"]
-            ).write(
-                log
-            )
+            ).write(log)
 
             if PyFunceble.CONFIGURATION["share_logs"]:
                 date_to_share = {
@@ -504,11 +501,14 @@ class ExpirationDate(object):
 
                         self.expiration_date = self._format()
 
-                        if self.expiration_date and not Regex(
-                            self.expiration_date,
-                            r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
-                            return_data=False,
-                        ).match():
+                        if (
+                            self.expiration_date
+                            and not Regex(
+                                self.expiration_date,
+                                r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
+                                return_data=False,
+                            ).match()
+                        ):
                             self.log()
                             self._whois_log()
 

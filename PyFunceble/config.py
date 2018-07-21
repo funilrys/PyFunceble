@@ -127,9 +127,7 @@ Install the default configuration in the current directory ? [y/n] "
             ].items():
                 PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
                     key
-                ] = Directory(
-                    value
-                ).fix_path()
+                ] = Directory(value).fix_path()
 
         PyFunceble.CONFIGURATION["outputs"]["main"] = Directory(
             PyFunceble.CONFIGURATION["outputs"]["main"]
@@ -198,13 +196,10 @@ Install the default configuration in the current directory ? [y/n] "
         """
 
         psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
-        destination = PyFunceble.CURRENT_DIRECTORY + PyFunceble.CONFIGURATION[
-            "outputs"
-        ][
-            "default_files"
-        ][
-            "public_suffix"
-        ]
+        destination = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
+        )
 
         if "dev" in PyFunceble.VERSION:
             psl_link = psl_link.replace("master", "dev")
@@ -231,7 +226,9 @@ class Version(object):
         if not used:
             self.local_splited = self.split_versions(PyFunceble.VERSION)
 
-            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"  # pylint: disable=line-too-long
+            upstream_link = (
+                "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+            )  # pylint: disable=line-too-long
 
             if "dev" in PyFunceble.VERSION:
                 upstream_link = upstream_link.replace("master", "dev")
@@ -311,8 +308,18 @@ class Version(object):
 
                 if not PyFunceble.CONFIGURATION["quiet"]:
                     if checked or checked != False and not checked:
-                        message = Style.BRIGHT + Fore.RED + "A critical issue has been fixed.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-                        message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+                        message = (
+                            Style.BRIGHT
+                            + Fore.RED
+                            + "A critical issue has been fixed.\n"
+                            + Style.RESET_ALL
+                        )  # pylint:disable=line-too-long
+                        message += (
+                            Style.BRIGHT
+                            + Fore.GREEN
+                            + "Please take the time to update PyFunceble!\n"
+                            + Style.RESET_ALL
+                        )  # pylint:disable=line-too-long
 
                         print(message)
                         exit(1)
@@ -326,11 +333,24 @@ class Version(object):
                 self.local_splited, self.split_versions(version)
             )
 
-            if not PyFunceble.CONFIGURATION[
-                "quiet"
-            ] and checked or checked != False and not checked:
-                message = Style.BRIGHT + Fore.RED + "Your current version is considered as deprecated.\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-                message += Style.BRIGHT + Fore.GREEN + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
+            if (
+                not PyFunceble.CONFIGURATION["quiet"]
+                and checked
+                or checked != False
+                and not checked
+            ):
+                message = (
+                    Style.BRIGHT
+                    + Fore.RED
+                    + "Your current version is considered as deprecated.\n"
+                    + Style.RESET_ALL
+                )  # pylint:disable=line-too-long
+                message += (
+                    Style.BRIGHT
+                    + Fore.GREEN
+                    + "Please take the time to update PyFunceble!\n"
+                    + Style.RESET_ALL
+                )  # pylint:disable=line-too-long
 
                 print(message)
                 return
@@ -345,20 +365,52 @@ class Version(object):
         )
 
         if status != None and not status and not PyFunceble.CONFIGURATION["quiet"]:
-            message = Style.BRIGHT + Fore.CYAN + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-            message += Style.BRIGHT + "Your version: " + Style.RESET_ALL + PyFunceble.VERSION + "\n"
-            message += Style.BRIGHT + "Upstream version: " + Style.RESET_ALL + self.upstream_data[
-                "current_version"
-            ] + "\n"
+            message = (
+                Style.BRIGHT
+                + Fore.CYAN
+                + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n"  # pylint:disable=line-too-long
+                + Style.RESET_ALL
+            )
+            message += (
+                Style.BRIGHT
+                + "Your version: "
+                + Style.RESET_ALL
+                + PyFunceble.VERSION
+                + "\n"
+            )
+            message += (
+                Style.BRIGHT
+                + "Upstream version: "
+                + Style.RESET_ALL
+                + self.upstream_data["current_version"]
+                + "\n"
+            )
 
             print(message)
         elif status:
             if not PyFunceble.CONFIGURATION["quiet"]:
-                message = Style.BRIGHT + Fore.YELLOW + "Please take the time to update PyFunceble!\n" + Style.RESET_ALL  # pylint:disable=line-too-long
-                message += Style.BRIGHT + "Your version: " + Style.RESET_ALL + PyFunceble.VERSION + "\n"  # pylint:disable=line-too-long
-                message += Style.BRIGHT + "Upstream version: " + Style.RESET_ALL + self.upstream_data[  # pylint:disable=line-too-long
-                    "current_version"
-                ] + "\n"
+                message = (
+                    Style.BRIGHT
+                    + Fore.YELLOW
+                    + "Please take the time to update PyFunceble!\n"
+                    + Style.RESET_ALL
+                )  # pylint:disable=line-too-long
+                message += (
+                    Style.BRIGHT
+                    + "Your version: "
+                    + Style.RESET_ALL
+                    + PyFunceble.VERSION
+                    + "\n"
+                )  # pylint:disable=line-too-long
+                message += (
+                    Style.BRIGHT
+                    + "Upstream version: "
+                    + Style.RESET_ALL
+                    + self.upstream_data[  # pylint:disable=line-too-long
+                        "current_version"
+                    ]
+                    + "\n"
+                )
 
                 print(message)
             else:

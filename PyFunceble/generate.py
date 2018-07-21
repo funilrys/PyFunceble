@@ -88,9 +88,9 @@ class Generate(object):  # pragma: no cover
         self.source = source
         self.expiration_date = expiration_date
 
-        self.output_parent_dir = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "parent_directory"
-        ]
+        self.output_parent_dir = (
+            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+        )
 
         self.refer_status = ""
         self.output = ""
@@ -105,64 +105,64 @@ class Generate(object):  # pragma: no cover
         Generate a hosts file.
         """
 
-        if PyFunceble.CONFIGURATION["generate_hosts"] or PyFunceble.CONFIGURATION[
-            "plain_list_domain"
-        ]:
+        if (
+            PyFunceble.CONFIGURATION["generate_hosts"]
+            or PyFunceble.CONFIGURATION["plain_list_domain"]
+        ):
             splited_destination = ""
             http_list = []
             http_list.extend(PyFunceble.STATUS["list"]["potentially_up"])
             http_list.extend(PyFunceble.STATUS["list"]["potentially_down"])
             http_list.extend(PyFunceble.STATUS["list"]["http_active"])
 
-            output_hosts = self.output_parent_dir + PyFunceble.OUTPUTS["hosts"][
-                "directory"
-            ] + "%s" + directory_separator + PyFunceble.OUTPUTS[
-                "hosts"
-            ][
-                "filename"
-            ]
+            output_hosts = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["hosts"]["directory"]
+                + "%s"
+                + directory_separator
+                + PyFunceble.OUTPUTS["hosts"]["filename"]
+            )
 
-            output_domains = self.output_parent_dir + PyFunceble.OUTPUTS["domains"][
-                "directory"
-            ] + "%s" + directory_separator + PyFunceble.OUTPUTS[
-                "domains"
-            ][
-                "filename"
-            ]
+            output_domains = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["domains"]["directory"]
+                + "%s"
+                + directory_separator
+                + PyFunceble.OUTPUTS["domains"]["filename"]
+            )
 
             if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
                 hosts_destination = output_hosts % PyFunceble.STATUS["official"]["up"]
                 plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
                 hosts_destination = output_hosts % PyFunceble.STATUS["official"]["down"]
-                plain_destination = output_domains % PyFunceble.STATUS["official"][
-                    "down"
-                ]
+                plain_destination = (
+                    output_domains % PyFunceble.STATUS["official"]["down"]
+                )
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-                hosts_destination = output_hosts % PyFunceble.STATUS["official"][
-                    "invalid"
-                ]
-                plain_destination = output_domains % PyFunceble.STATUS["official"][
-                    "invalid"
-                ]
+                hosts_destination = (
+                    output_hosts % PyFunceble.STATUS["official"]["invalid"]
+                )
+                plain_destination = (
+                    output_domains % PyFunceble.STATUS["official"]["invalid"]
+                )
             elif self.domain_status.lower() in http_list:
 
-                output_dir = self.output_parent_dir + PyFunceble.OUTPUTS[
-                    "http_analytic"
-                ][
-                    "directories"
-                ][
-                    "parent"
-                ]
-                if self.domain_status.lower() in PyFunceble.STATUS["list"][
-                    "potentially_up"
-                ]:
+                output_dir = (
+                    self.output_parent_dir
+                    + PyFunceble.OUTPUTS["http_analytic"]["directories"]["parent"]
+                )
+                if (
+                    self.domain_status.lower()
+                    in PyFunceble.STATUS["list"]["potentially_up"]
+                ):
                     output_dir += PyFunceble.OUTPUTS["http_analytic"]["directories"][
                         "potentially_up"
                     ]
-                elif self.domain_status.lower() in PyFunceble.STATUS["list"][
-                    "potentially_down"
-                ]:
+                elif (
+                    self.domain_status.lower()
+                    in PyFunceble.STATUS["list"]["potentially_down"]
+                ):
                     output_dir += PyFunceble.OUTPUTS["http_analytic"]["directories"][
                         "potentially_down"
                     ]
@@ -175,9 +175,9 @@ class Generate(object):  # pragma: no cover
                     output_dir += directory_separator
 
                 hosts_destination = output_dir + PyFunceble.OUTPUTS["hosts"]["filename"]
-                plain_destination = output_dir + PyFunceble.OUTPUTS["domains"][
-                    "filename"
-                ]
+                plain_destination = (
+                    output_dir + PyFunceble.OUTPUTS["domains"]["filename"]
+                )
                 splited_destination = output_dir + str(
                     PyFunceble.CONFIGURATION["http_code"]
                 )
@@ -203,9 +203,9 @@ class Generate(object):  # pragma: no cover
         """
 
         if PyFunceble.CONFIGURATION["unified"]:
-            output = self.output_parent_dir + PyFunceble.OUTPUTS["default_files"][
-                "results"
-            ]
+            output = (
+                self.output_parent_dir + PyFunceble.OUTPUTS["default_files"]["results"]
+            )
             if PyFunceble.CONFIGURATION["less"]:
                 if PyFunceble.HTTP_CODE["active"]:
                     to_print = [
@@ -240,11 +240,11 @@ class Generate(object):  # pragma: no cover
                 The old status of the domain.
         """
 
-        output = self.output_parent_dir + PyFunceble.OUTPUTS["http_analytic"][
-            "directories"
-        ][
-            "parent"
-        ] + "%s%s"
+        output = (
+            self.output_parent_dir
+            + PyFunceble.OUTPUTS["http_analytic"]["directories"]["parent"]
+            + "%s%s"
+        )
         if new_status.lower() in PyFunceble.STATUS["list"]["up"]:
             output = output % (
                 PyFunceble.OUTPUTS["http_analytic"]["directories"]["up"],
@@ -293,16 +293,22 @@ class Generate(object):  # pragma: no cover
             blogger_content_request = requests.get(url_to_get)
 
             for regx in regex_blogger:
-                if regx in blogger_content_request.text or Regex(
-                    blogger_content_request.text, regx, return_data=False, escape=False
-                ).match():
+                if (
+                    regx in blogger_content_request.text
+                    or Regex(
+                        blogger_content_request.text,
+                        regx,
+                        return_data=False,
+                        escape=False,
+                    ).match()
+                ):
                     self.source = "SPECIAL"
                     self.domain_status = PyFunceble.STATUS["official"]["down"]
-                    self.output = self.output_parent_dir + PyFunceble.OUTPUTS[
-                        "splited"
-                    ][
-                        "directory"
-                    ] + self.domain_status
+                    self.output = (
+                        self.output_parent_dir
+                        + PyFunceble.OUTPUTS["splited"]["directory"]
+                        + self.domain_status
+                    )
                     break
 
     def _special_wordpress_com(self):
@@ -319,9 +325,11 @@ class Generate(object):  # pragma: no cover
             if does_not_exist in wordpress_com_content.text:
                 self.source = "SPECIAL"
                 self.domain_status = PyFunceble.STATUS["official"]["down"]
-                self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                    "directory"
-                ] + self.domain_status
+                self.output = (
+                    self.output_parent_dir
+                    + PyFunceble.OUTPUTS["splited"]["directory"]
+                    + self.domain_status
+                )
 
     def up_status_file(self):
         """
@@ -331,13 +339,11 @@ class Generate(object):  # pragma: no cover
         if not self.expiration_date:
             self.expiration_date = "Unknown"
 
-        if PyFunceble.HTTP_CODE["active"] and PyFunceble.CONFIGURATION[
-            "http_code"
-        ] in PyFunceble.HTTP_CODE[
-            "list"
-        ][
-            "potentially_down"
-        ]:
+        if (
+            PyFunceble.HTTP_CODE["active"]
+            and PyFunceble.CONFIGURATION["http_code"]
+            in PyFunceble.HTTP_CODE["list"]["potentially_down"]
+        ):
             self._analytic_file("potentially_down", self.domain_status)
 
             regex_to_match = [
@@ -352,28 +358,28 @@ class Generate(object):  # pragma: no cover
                 if Regex(self.tested, regx, return_data=False, escape=True).match():
                     self.source = "SPECIAL"
                     self.domain_status = PyFunceble.STATUS["official"]["down"]
-                    self.output = self.output_parent_dir + PyFunceble.OUTPUTS[
-                        "splited"
-                    ][
-                        "directory"
-                    ] + self.domain_status
+                    self.output = (
+                        self.output_parent_dir
+                        + PyFunceble.OUTPUTS["splited"]["directory"]
+                        + self.domain_status
+                    )
 
             self._special_blogspot()
-        elif PyFunceble.HTTP_CODE["active"] and PyFunceble.CONFIGURATION[
-            "http_code"
-        ] in PyFunceble.HTTP_CODE[
-            "list"
-        ][
-            "potentially_up"
-        ]:
+        elif (
+            PyFunceble.HTTP_CODE["active"]
+            and PyFunceble.CONFIGURATION["http_code"]
+            in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+        ):
             self._special_blogspot()
             self._special_wordpress_com()
 
         if self.source != "SPECIAL":
             self.domain_status = PyFunceble.STATUS["official"]["up"]
-            self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                "directory"
-            ] + self.domain_status
+            self.output = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["splited"]["directory"]
+                + self.domain_status
+            )
 
     def down_status_file(self):
         """
@@ -384,20 +390,24 @@ class Generate(object):  # pragma: no cover
         self.expiration_date = "Unknown"
 
         if PyFunceble.HTTP_CODE["active"]:
-            if PyFunceble.CONFIGURATION["http_code"] in PyFunceble.HTTP_CODE["list"][
-                "up"
-            ]:
+            if (
+                PyFunceble.CONFIGURATION["http_code"]
+                in PyFunceble.HTTP_CODE["list"]["up"]
+            ):
                 self._analytic_file(
                     PyFunceble.STATUS["official"]["up"], self.domain_status
                 )
                 self.source = "HTTP Code"
                 self.domain_status = PyFunceble.STATUS["official"]["up"]
-                self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                    "directory"
-                ] + self.domain_status
-            elif PyFunceble.CONFIGURATION["http_code"] in PyFunceble.HTTP_CODE["list"][
-                "potentially_up"
-            ]:
+                self.output = (
+                    self.output_parent_dir
+                    + PyFunceble.OUTPUTS["splited"]["directory"]
+                    + self.domain_status
+                )
+            elif (
+                PyFunceble.CONFIGURATION["http_code"]
+                in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+            ):
                 self._analytic_file("potentially_up", self.domain_status)
 
         if Regex(
@@ -407,15 +417,19 @@ class Generate(object):  # pragma: no cover
         ).match():
             self.source = "SPECIAL"
             self.domain_status = PyFunceble.STATUS["official"]["up"]
-            self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                "directory"
-            ] + self.domain_status
+            self.output = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["splited"]["directory"]
+                + self.domain_status
+            )
 
         if self.source != "HTTP Code" and self.source != "SPECIAL":
             self.domain_status = PyFunceble.STATUS["official"]["down"]
-            self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                "directory"
-            ] + self.domain_status
+            self.output = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["splited"]["directory"]
+                + self.domain_status
+            )
 
     def invalid_status_file(self):
         """
@@ -426,41 +440,40 @@ class Generate(object):  # pragma: no cover
 
         if PyFunceble.HTTP_CODE["active"]:
             try:
-                if PyFunceble.CONFIGURATION["http_code"] in PyFunceble.HTTP_CODE[
-                    "list"
-                ][
-                    "up"
-                ]:
+                if (
+                    PyFunceble.CONFIGURATION["http_code"]
+                    in PyFunceble.HTTP_CODE["list"]["up"]
+                ):
                     self._analytic_file(
                         PyFunceble.STATUS["official"]["up"], self.domain_status
                     )
                     self.source = "HTTP Code"
                     self.domain_status = PyFunceble.STATUS["official"]["up"]
-                    self.output = self.output_parent_dir + PyFunceble.OUTPUTS[
-                        "splited"
-                    ][
-                        "directory"
-                    ] + self.domain_status
-                elif PyFunceble.CONFIGURATION["http_code"] in PyFunceble.HTTP_CODE[
-                    "list"
-                ][
-                    "potentially_up"
-                ]:
+                    self.output = (
+                        self.output_parent_dir
+                        + PyFunceble.OUTPUTS["splited"]["directory"]
+                        + self.domain_status
+                    )
+                elif (
+                    PyFunceble.CONFIGURATION["http_code"]
+                    in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+                ):
                     self._analytic_file("potentially_up", self.domain_status)
-                elif PyFunceble.CONFIGURATION["http_code"] in PyFunceble.HTTP_CODE[
-                    "list"
-                ][
-                    "potentially_down"
-                ]:
+                elif (
+                    PyFunceble.CONFIGURATION["http_code"]
+                    in PyFunceble.HTTP_CODE["list"]["potentially_down"]
+                ):
                     self._analytic_file("potentially_down", self.domain_status)
             except KeyError:
                 pass
 
             if self.source != "HTTP Code":
                 self.domain_status = PyFunceble.STATUS["official"]["invalid"]
-                self.output = self.output_parent_dir + PyFunceble.OUTPUTS["splited"][
-                    "directory"
-                ] + self.domain_status
+                self.output = (
+                    self.output_parent_dir
+                    + PyFunceble.OUTPUTS["splited"]["directory"]
+                    + self.domain_status
+                )
 
     def _prints_status_file(self):
         """
@@ -594,9 +607,10 @@ class Generate(object):  # pragma: no cover
 
                 Prints(data_to_print, "Generic").data()
 
-        if not PyFunceble.CONFIGURATION["no_files"] and PyFunceble.CONFIGURATION[
-            "split"
-        ]:
+        if (
+            not PyFunceble.CONFIGURATION["no_files"]
+            and PyFunceble.CONFIGURATION["split"]
+        ):
             self._prints_status_file()
         else:
             self.unified_file()

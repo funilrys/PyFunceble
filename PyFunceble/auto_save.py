@@ -123,9 +123,7 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
             try:
                 time_autorisation = current_time >= int(
                     PyFunceble.CONFIGURATION["start"]
-                ) + (
-                    int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
-                )
+                ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
             except KeyError:
                 if self.last and not self.bypass:
                     raise Exception(
@@ -148,9 +146,10 @@ class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-me
 
                         self.travis_permissions()
 
-                    message = PyFunceble.CONFIGURATION[
-                        "travis_autosave_final_commit"
-                    ] + " [ci skip]"
+                    message = (
+                        PyFunceble.CONFIGURATION["travis_autosave_final_commit"]
+                        + " [ci skip]"
+                    )
 
                     Command(command % message).execute()
                 else:

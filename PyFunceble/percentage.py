@@ -117,13 +117,11 @@ class Percentage(object):
         }
 
         for percentage in percentages:
-            calculation = percentages[percentage] * 100 // PyFunceble.CONFIGURATION[
-                "counter"
-            ][
-                "number"
-            ][
-                "tested"
-            ]
+            calculation = (
+                percentages[percentage]
+                * 100
+                // PyFunceble.CONFIGURATION["counter"]["number"]["tested"]
+            )
             PyFunceble.CONFIGURATION["counter"]["percentage"].update(
                 {percentage: calculation}
             )
@@ -133,34 +131,17 @@ class Percentage(object):
         Print on screen and on file the percentages for each status.
         """
 
-        if PyFunceble.CONFIGURATION["show_percentage"] and PyFunceble.CONFIGURATION[
-            "counter"
-        ][
-            "number"
-        ][
-            "tested"
-        ] > 0:
-            output = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-                "parent_directory"
-            ] + PyFunceble.OUTPUTS[
-                "logs"
-            ][
-                "directories"
-            ][
-                "parent"
-            ] + PyFunceble.OUTPUTS[
-                "logs"
-            ][
-                "directories"
-            ][
-                "percentage"
-            ] + PyFunceble.OUTPUTS[
-                "logs"
-            ][
-                "filenames"
-            ][
-                "percentage"
-            ]
+        if (
+            PyFunceble.CONFIGURATION["show_percentage"]
+            and PyFunceble.CONFIGURATION["counter"]["number"]["tested"] > 0
+        ):
+            output = (
+                PyFunceble.CURRENT_DIRECTORY
+                + PyFunceble.OUTPUTS["parent_directory"]
+                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+                + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]
+                + PyFunceble.OUTPUTS["logs"]["filenames"]["percentage"]
+            )
             File(output).delete()
 
             self._calculate()

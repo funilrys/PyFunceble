@@ -279,9 +279,7 @@ class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
         if "/domains/root/db/" in line:
             matched = Regex(
                 line, regex_valid_extension, return_data=True, rematch=True
-            ).match()[
-                1
-            ]
+            ).match()[1]
 
             if matched:
                 self.iana_db.update({matched: self._referer(matched)})

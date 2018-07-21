@@ -77,7 +77,7 @@ class Referer(object):  # pragma: no cover
 
     def __init__(self):
         self.domain_extension = PyFunceble.CONFIGURATION["domain"][
-            PyFunceble.CONFIGURATION["domain"].rindex(".") + 1:
+            PyFunceble.CONFIGURATION["domain"].rindex(".") + 1 :
         ]
 
         self.ignored_extension = [
@@ -168,11 +168,9 @@ class Referer(object):  # pragma: no cover
         Convert `iana-domains-db.json` into a dictionnary.
         """
 
-        file_to_read = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS[
-            "default_files"
-        ][
-            "iana"
-        ]
+        file_to_read = (
+            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
+        )
 
         return Dict().from_json(File(file_to_read).read())
 
@@ -220,9 +218,7 @@ class Referer(object):  # pragma: no cover
                 + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["no_referer"]
                 + self.domain_extension
-            ).write(
-                logs
-            )
+            ).write(logs)
 
             if PyFunceble.CONFIGURATION["share_logs"]:
                 data_to_share = {"extension": self.domain_extension}

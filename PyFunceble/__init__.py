@@ -75,7 +75,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.84.5.dev-beta"
+VERSION = "0.85.0.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -158,7 +158,9 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
             add_help=False,
         )
 
-        CURRENT_VALUE_FORMAT = Fore.YELLOW + Style.BRIGHT + "Installed value: " + Fore.BLUE
+        CURRENT_VALUE_FORMAT = (
+            Fore.YELLOW + Style.BRIGHT + "Installed value: " + Fore.BLUE
+        )
 
         PARSER.add_argument(
             "-ad",
