@@ -63,9 +63,10 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
+# pylint: disable=bad-continuation
 
 import PyFunceble
-from PyFunceble import Fore, Style, directory_separator
+from PyFunceble import Fore, Style, directory_separator, walk
 from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
@@ -127,6 +128,9 @@ class Production(object):  # pylint: disable=too-few-public-methods
                     + directory_separator
                     + "index.rst"
                 )
+
+                self._update_code_urls()
+
                 self._update_setup_py()
                 self._update_travis_yml()
 
@@ -146,6 +150,27 @@ class Production(object):  # pylint: disable=too-few-public-methods
                     + "Are you sure that you did some changes ? Please update PyFunceble.VERSION if it is the case."  # pylint: disable=line-too-long
                 )
                 exit(1)
+
+    def _update_code_urls(self):
+        """
+        This method will read the code and update all links.
+        """
+
+        for root, _, files in walk(
+            PyFunceble.CURRENT_DIRECTORY
+            + directory_separator
+            + "PyFunceble"
+            + directory_separator
+        ):
+            for file in files:
+                if file not in [
+                    ".gitignore", ".keep", "production.py", "publicsuffix.py"
+                ] and "__pycache__" not in root:
+                    if root.endswith(directory_separator):
+
+                        self._update_docs(root + file)
+                    else:
+                        self._update_docs(root + directory_separator + file)
 
     @classmethod
     def _get_current_version_yaml(cls):

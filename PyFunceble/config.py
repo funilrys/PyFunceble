@@ -163,7 +163,7 @@ Install the default configuration in the current directory ? [y/n] "
                 The path were we have to install the configuration file.
         """
 
-        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         if "dev" in PyFunceble.VERSION:
             production_config_link = production_config_link.replace("master", "dev")
@@ -178,7 +178,7 @@ Install the default configuration in the current directory ? [y/n] "
         This method download `iana-domains-db.json` if not present.
         """
 
-        iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json"  # pylint: disable=line-too-long
+        iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"  # pylint: disable=line-too-long
         destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
 
         if "dev" in PyFunceble.VERSION:
@@ -197,7 +197,7 @@ Install the default configuration in the current directory ? [y/n] "
         This method download `public-suffix.json` if not present.
         """
 
-        psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/public-suffix.json"
+        psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
         destination = PyFunceble.CURRENT_DIRECTORY + PyFunceble.CONFIGURATION[
             "outputs"
         ][
@@ -231,7 +231,7 @@ class Version(object):
         if not used:
             self.local_splited = self.split_versions(PyFunceble.VERSION)
 
-            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"  # pylint: disable=line-too-long
+            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"  # pylint: disable=line-too-long
 
             if "dev" in PyFunceble.VERSION:
                 upstream_link = upstream_link.replace("master", "dev")
