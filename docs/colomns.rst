@@ -103,9 +103,9 @@ This source is always returned when the taken decision of the status of the doma
 SPECIAL
 ^^^^^^^
 
-As _PyFunceble_ grows, I thought that a bit of filtering for special cases would be great no I introduced SPECIAL into the sources.
+As :code:`PyFunceble` grows, I thought that a bit of filtering for special cases would be great no I introduced SPECIAL into the sources.
 
-Please consider all 3 digits number that are listed in this section as the HTTP status code catched by `HTTPCode().get()`.
+Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :code:`HTTPCode().get()`.
 
 :code:`*.blogspot.*`
 """"""""""""""""""""
