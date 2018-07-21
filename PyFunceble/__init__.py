@@ -75,7 +75,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.84.3.dev-beta"
+VERSION = "0.84.4.dev-beta"
 
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
@@ -148,12 +148,12 @@ def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,to
                 + "with the help of "
                 + Style.BRIGHT
                 + Fore.GREEN
-                + "https://git.io/vND4m "
+                + "https://git.io/fNWb9"
                 + Style.RESET_ALL
                 + "&& "
                 + Style.BRIGHT
                 + Fore.GREEN
-                + "https://git.io/vND4a",
+                + "https://git.io/fNWbH",
             ),
             add_help=False,
         )
