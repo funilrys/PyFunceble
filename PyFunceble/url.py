@@ -94,14 +94,19 @@ class URL(object):
             to_test = PyFunceble.CONFIGURATION["URL"]
 
         if to_test.startswith("http"):
-            regex = r"((http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
-            domain = Regex(to_test, regex, return_data=True, rematch=True).match()[2]
+            try:
+                regex = r"((http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
+                domain = Regex(to_test, regex, return_data=True, rematch=True).match()[
+                    2
+                ]
 
-            domain_status = ExpirationDate().is_domain_valid(domain)
-            ip_status = ExpirationDate().is_ip_valid(domain)
+                domain_status = ExpirationDate().is_domain_valid(domain)
+                ip_status = ExpirationDate().is_ip_valid(domain)
 
-            if domain_status or ip_status:
-                return True
+                if domain_status or ip_status:
+                    return True
+            except TypeError:
+                pass
 
         return False
 
