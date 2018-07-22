@@ -74,7 +74,7 @@ from subprocess import PIPE, Popen
 from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
-from PyFunceble import directory_separator, path, requests
+from PyFunceble import directory_separator, path, requests, copy as shutil_copy
 
 
 class Hash(object):  # pylint: disable=too-few-public-methods
@@ -393,6 +393,17 @@ class File(object):
             remove(self.file)
         except OSError:
             pass
+
+    def copy(self, destination):
+        """
+        Copy the givven file to the destination.
+
+        Argument:
+            - destination: str
+                The destination of the copy
+        """
+
+        shutil_copy(self.file, destination)
 
 
 class List(object):  # pylint: disable=too-few-public-methods

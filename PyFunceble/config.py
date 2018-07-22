@@ -74,21 +74,16 @@ class Load(object):  # pylint: disable=too-few-public-methods
 
     Argument:
         - path_to_config: str
-            The path to the config to load.
+            The possible path to the config to load.
     """
 
     def __init__(self, path_to_config):
-        self.path_to_config = path_to_config
-
-        if not path_to_config.endswith(directory_separator):
-            self.path_to_config += directory_separator
-
-        self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
+        self.path_to_config, self.path_to_default_config = self._set_path_to_configs(
+            path_to_config
+        )
 
         try:
             self._load_config_file()
-            self._install_iana_config()
-            self._install_psl_config()
         except FileNotFoundError:
 
             if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
@@ -96,15 +91,13 @@ class Load(object):  # pylint: disable=too-few-public-methods
                     response = input(
                         "%s was not found.\n\
 Install the default configuration in the current directory ? [y/n] "
-                        % (Style.BRIGHT + path_to_config + Style.RESET_ALL)
+                        % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
                     )
 
                     if isinstance(response, str):
                         if response.lower() == "y":
                             self._install_production_config()
                             self._load_config_file()
-                            self._install_iana_config()
-                            self._install_psl_config()
                             break
 
                         elif response.lower() == "n":
@@ -113,8 +106,6 @@ Install the default configuration in the current directory ? [y/n] "
             else:
                 self._install_production_config()
                 self._load_config_file()
-                self._install_iana_config()
-                self._install_psl_config()
 
         for main_key in ["domains", "hosts", "splited"]:
             PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
@@ -142,14 +133,47 @@ Install the default configuration in the current directory ? [y/n] "
             {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
         )
 
+    @classmethod
+    def _set_path_to_configs(cls, path_to_config):
+        """
+        This method will set the paths to the configuration files.
+
+        Argument:
+            - path_to_config: str
+                The possible path to the config to load.
+
+        Returns: tuple
+            (The path to the config to read, the path to the default configuration to read.)
+        """
+
+        if not path_to_config.endswith(directory_separator):
+            default = parsed = path_to_config + directory_separator
+        else:
+            default = parsed = path_to_config
+
+        parsed += PyFunceble.CONFIGURATION_FILENAME
+        default += PyFunceble.DEFAULT_CONFIGURATION_FILENAME
+
+        return (parsed, default)
+
     def _load_config_file(self):
         """
         This method will load .PyFunceble.yaml.
         """
 
-        PyFunceble.CONFIGURATION.update(
-            Dict.from_yaml(File(self.path_to_config).read())
-        )
+        try:
+            PyFunceble.CONFIGURATION.update(
+                Dict.from_yaml(File(self.path_to_config).read())
+            )
+
+            self._install_iana_config()
+            self._install_psl_config()
+        except FileNotFoundError:
+            if path.isfile(self.path_to_default_config):
+                File(self.path_to_default_config).copy(self.path_to_config)
+                self._load_config_file()
+            else:
+                raise FileNotFoundError
 
     def _install_production_config(self):
         """

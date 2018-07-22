@@ -391,6 +391,57 @@ class TestFile(TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_copy(self):
+        """
+        This method test File.copy().
+        """
+
+        file_to_write = 'hello_world'
+        copy_destination = 'world_hello'
+
+        expected = False
+        actual = PyFunceble.path.isfile(file_to_write)
+
+        self.assertEqual(expected,actual)
+
+        expected = "Hello, World! Python is great, you should consider learning it!"
+        File(file_to_write).write(expected)
+
+        with open(file_to_write) as file:
+            actual = file.read()
+
+        self.assertEqual(expected, actual)
+
+        expected = False
+        actual = PyFunceble.path.isfile(copy_destination)
+
+        self.assertEqual(expected,actual)
+
+        File(file_to_write).copy(copy_destination)
+
+        expected = True
+        actual = PyFunceble.path.isfile(copy_destination)
+
+        self.assertEqual(expected, actual)
+
+        expected = "Hello, World! Python is great, you should consider learning it!"
+
+        with open(copy_destination) as file:
+            actual = file.read()
+
+        self.assertEqual(expected, actual)
+
+        File(copy_destination).delete()
+        File(file_to_write).delete()
+        expected = False
+        actual = PyFunceble.path.isfile(copy_destination)
+
+        self.assertEqual(expected, actual)
+
+        actual = PyFunceble.path.isfile(file_to_write)
+
+        self.assertEqual(expected, actual)
+
     def test_read_delete(self):
         """
         This method test File.read() along with helpers.File.delete.

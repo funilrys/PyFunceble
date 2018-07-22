@@ -60,6 +60,7 @@ from itertools import repeat
 from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
+from shutil import copy
 from time import strftime
 
 import requests
@@ -75,8 +76,9 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.85.0.dev-beta"
+VERSION = "0.86.0.dev-beta"
 
+DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
 CONFIGURATION = {}
