@@ -318,7 +318,7 @@ class Production:  # pylint: disable=too-few-public-methods
         if self._is_dev_version():
             regexes = {
                 "pip3 install pyfunceble-dev": r"pip3\sinstall\spyfunceble.*",
-                "pip-autoremove pyfunceble-dev ": r"pip-autoremove\spyfunceble[a-z-_]+\s",
+                "pip-autoremove pyfunceble-dev ": r"pip-autoremove\spyfunceble\s",
             }
         elif self._is_master_version():
             regexes = {
