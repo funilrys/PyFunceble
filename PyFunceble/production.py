@@ -122,6 +122,10 @@ class Production(object):  # pylint: disable=too-few-public-methods
 
                 self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.md")
                 self._update_docs(
+                    PyFunceble.CURRENT_DIRECTORY + ".PyFunceble_production.yaml"
+                )
+
+                self._update_docs(
                     PyFunceble.CURRENT_DIRECTORY
                     + directory_separator
                     + "docs"
