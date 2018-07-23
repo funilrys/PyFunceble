@@ -321,7 +321,12 @@ class TestDirectory(TestCase):
         This method will test Directory.fix_path().
         """
 
-        expected = "hello" + PyFunceble.directory_separator + "world" + PyFunceble.directory_separator  # pylint: disable=line-too-long
+        expected = (
+            "hello"
+            + PyFunceble.directory_separator
+            + "world"
+            + PyFunceble.directory_separator
+        )  # pylint: disable=line-too-long
         actual = Directory("/hello/world").fix_path()
 
         self.assertEqual(expected, actual)
@@ -396,13 +401,13 @@ class TestFile(TestCase):
         This method test File.copy().
         """
 
-        file_to_write = 'hello_world'
-        copy_destination = 'world_hello'
+        file_to_write = "hello_world"
+        copy_destination = "world_hello"
 
         expected = False
         actual = PyFunceble.path.isfile(file_to_write)
 
-        self.assertEqual(expected,actual)
+        self.assertEqual(expected, actual)
 
         expected = "Hello, World! Python is great, you should consider learning it!"
         File(file_to_write).write(expected)
@@ -415,7 +420,7 @@ class TestFile(TestCase):
         expected = False
         actual = PyFunceble.path.isfile(copy_destination)
 
-        self.assertEqual(expected,actual)
+        self.assertEqual(expected, actual)
 
         File(file_to_write).copy(copy_destination)
 
@@ -471,7 +476,12 @@ class TestRegex(TestCase):
         """
 
         self.data_list = [
-            "hello", "world", "funilrys", "funceble", "PyFunceble", "pyfunceble"
+            "hello",
+            "world",
+            "funilrys",
+            "funceble",
+            "PyFunceble",
+            "pyfunceble",
         ]
         self.data = "Hello, this is Fun Ilrys. I just wanted to know how things goes around the tests."  # pylint: disable=line-too-long
 

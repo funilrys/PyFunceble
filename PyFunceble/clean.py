@@ -69,7 +69,7 @@ from PyFunceble.core import Core
 from PyFunceble.helpers import File
 
 
-class Clean(object):
+class Clean:
     """
     Directory cleaning logic.
     This class clean the output/ directory.

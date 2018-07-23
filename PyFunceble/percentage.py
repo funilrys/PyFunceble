@@ -68,7 +68,7 @@ from PyFunceble.helpers import File
 from PyFunceble.prints import Prints
 
 
-class Percentage(object):
+class Percentage:
     """
     Calculation of the percentage of each status.
 

@@ -69,7 +69,7 @@ from PyFunceble.http_code import HTTPCode
 from PyFunceble.status import URLStatus
 
 
-class URL(object):
+class URL:
     """
     This method will manage everything aroud the tests of urls.
     """
@@ -131,7 +131,7 @@ class URL(object):
             if PyFunceble.CONFIGURATION["http_code"] in active_list:
                 return URLStatus(PyFunceble.STATUS["official"]["up"]).handle()
 
-            elif PyFunceble.CONFIGURATION["http_code"] in inactive_list:
+            if PyFunceble.CONFIGURATION["http_code"] in inactive_list:
                 return URLStatus(PyFunceble.STATUS["official"]["down"]).handle()
 
         return URLStatus(PyFunceble.STATUS["official"]["invalid"]).handle()

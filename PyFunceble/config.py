@@ -68,7 +68,7 @@ from PyFunceble import Fore, Style, directory_separator, environ, path
 from PyFunceble.helpers import Dict, Directory, Download, File
 
 
-class Load(object):  # pylint: disable=too-few-public-methods
+class Load:  # pylint: disable=too-few-public-methods
     """
     This class will help to load the configurations.
 
@@ -236,7 +236,7 @@ Install the default configuration in the current directory ? [y/n] "
         return False
 
 
-class Version(object):
+class Version:
     """
     This class will compare the local with the upstream version.
 
@@ -314,7 +314,7 @@ class Version(object):
         if False in status:
             return False
 
-        elif True in status:
+        if True in status:
             return True
 
         return None
@@ -331,7 +331,7 @@ class Version(object):
                 )
 
                 if not PyFunceble.CONFIGURATION["quiet"]:
-                    if checked or checked != False and not checked:
+                    if checked or checked is not False and not checked:
                         message = (
                             Style.BRIGHT
                             + Fore.RED
@@ -347,7 +347,7 @@ class Version(object):
 
                         print(message)
                         exit(1)
-                elif checked or checked != False and not checked:
+                elif checked or checked is not False and not checked:
                     raise Exception(
                         "A critical issue has been fixed. Please take the time to update PyFunceble!"  # pylint:disable=line-too-long
                     )
@@ -360,7 +360,7 @@ class Version(object):
             if (
                 not PyFunceble.CONFIGURATION["quiet"]
                 and checked
-                or checked != False
+                or checked is not False
                 and not checked
             ):
                 message = (
@@ -379,7 +379,7 @@ class Version(object):
                 print(message)
                 return
 
-            elif checked or checked != False and not checked:
+            if checked or checked is not False and not checked:
                 print("Version deprecated.")
                 return
 
@@ -388,7 +388,7 @@ class Version(object):
             self.split_versions(self.upstream_data["current_version"]),
         )
 
-        if status != None and not status and not PyFunceble.CONFIGURATION["quiet"]:
+        if status is not None and not status and not PyFunceble.CONFIGURATION["quiet"]:
             message = (
                 Style.BRIGHT
                 + Fore.CYAN

@@ -69,7 +69,7 @@ from PyFunceble.helpers import Command
 from PyFunceble.percentage import Percentage
 
 
-class AutoSave(object):  # pragma: no cover  # pylint: disable=too-few-public-methods
+class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     """
     Logic behind autosave.
 

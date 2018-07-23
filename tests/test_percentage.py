@@ -147,7 +147,11 @@ ACTIVE      36%%          45%s
 INACTIVE    62%%          78%s
 INVALID     1%%           2%s
 """ % (
-            " " * 6, " " * 1, " " * 11, " " * 11, " " * 12
+            " " * 6,
+            " " * 1,
+            " " * 11,
+            " " * 11,
+            " " * 12,
         )
         PyFunceble.CONFIGURATION["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}

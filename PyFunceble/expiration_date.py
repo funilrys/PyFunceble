@@ -73,7 +73,7 @@ from PyFunceble.referer import Referer
 from PyFunceble.status import Status
 
 
-class ExpirationDate(object):
+class ExpirationDate:
     """
     Get, format and return the epiration date of a domain if exist.
     """
@@ -194,13 +194,13 @@ class ExpirationDate(object):
             ]:
                 return PyFunceble.CONFIGURATION["referer"]
 
-            elif PyFunceble.CONFIGURATION["referer"]:
+            if PyFunceble.CONFIGURATION["referer"]:
                 return self._extract()
 
             self._whois_log()
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
-        elif ip_validation and not domain_validation or ip_validation:
+        if ip_validation and not domain_validation or ip_validation:
             PyFunceble.CONFIGURATION["http_code"] = HTTPCode().get()
 
             self._whois_log()

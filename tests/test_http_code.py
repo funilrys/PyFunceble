@@ -60,7 +60,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-import unittest.mock as mock
+import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import TestCase
 from unittest import main as launch_tests
 

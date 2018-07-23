@@ -62,7 +62,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation,protected-access,ungrouped-imports
 
-import unittest.mock as mock
+import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import main as launch_tests
 
 import PyFunceble
@@ -112,7 +112,8 @@ class TestPrints(BaseStdout):
 # Date of generation: %s
 
 """ % (
-            PyFunceble.LINKS["repo"], PyFunceble.CURRENT_TIME + " "
+            PyFunceble.LINKS["repo"],
+            PyFunceble.CURRENT_TIME + " ",
         )
 
         Prints(None, None, output_file=self.file, only_on_file=False)._before_header()
@@ -133,7 +134,8 @@ class TestPrints(BaseStdout):
 
 Hello World!
 """ % (
-            PyFunceble.LINKS["repo"], PyFunceble.CURRENT_TIME + " "
+            PyFunceble.LINKS["repo"],
+            PyFunceble.CURRENT_TIME + " ",
         )
 
         header_constructor_patch.return_value = ["Hello World!"]
@@ -160,9 +162,7 @@ Hello World!
         ]
         actual = Prints(
             None, None, output_file=None, only_on_file=False
-        )._header_constructor(
-            self.to_print["basic"]
-        )
+        )._header_constructor(self.to_print["basic"])
 
         self.assertEqual(expected, actual)
 
@@ -180,9 +180,7 @@ Hello World!
         expected = ["hello world  here    is       PyFunceble "]
         actual = Prints(
             None, None, output_file=None, only_on_file=False
-        )._header_constructor(
-            self.to_print["basic"], None
-        )
+        )._header_constructor(self.to_print["basic"], None)
 
         self.assertEqual(expected, actual)
 
@@ -208,9 +206,7 @@ Hello World!
 
         actual = Prints(
             to_print, None, output_file=None, only_on_file=False
-        )._data_constructor(
-            self.to_print["size_constructor"]
-        )
+        )._data_constructor(self.to_print["size_constructor"])
 
         self.assertEqual(expected, actual)
 
@@ -236,9 +232,7 @@ Hello World!
             ),
             lambda: Prints(
                 to_print, None, output_file=None, only_on_file=False
-            )._data_constructor(
-                self.to_print["size_constructor"]
-            ),
+            )._data_constructor(self.to_print["size_constructor"]),
         )
 
     def test_size_from_header(self):
@@ -256,9 +250,7 @@ Hello World!
 
         actual = Prints(
             None, None, output_file=None, only_on_file=False
-        )._size_from_header(
-            self.to_print["basic"]
-        )
+        )._size_from_header(self.to_print["basic"])
 
         self.assertEqual(expected, actual)
 
@@ -282,48 +274,44 @@ Hello World!
         self.assertEqual(expected, actual)
 
         # Test with a template that is designed for colorify + Status is UP
-        expected = PyFunceble.Fore.BLACK + PyFunceble.Back.GREEN + self.to_print[
-            "basic_string"
-        ]
+        expected = (
+            PyFunceble.Fore.BLACK
+            + PyFunceble.Back.GREEN
+            + self.to_print["basic_string"]
+        )
         actual = Prints(
             ["This is a test", PyFunceble.STATUS["official"]["up"]],
             "Generic",
             output_file=None,
             only_on_file=False,
-        )._colorify(
-            self.to_print["basic_string"]
-        )
+        )._colorify(self.to_print["basic_string"])
 
         self.assertEqual(expected, actual)
 
         # Test with a template that is designed for colorify + Status is DOWN
-        expected = PyFunceble.Fore.BLACK + PyFunceble.Back.RED + self.to_print[
-            "basic_string"
-        ]
+        expected = (
+            PyFunceble.Fore.BLACK + PyFunceble.Back.RED + self.to_print["basic_string"]
+        )
         actual = Prints(
             ["This is a test", PyFunceble.STATUS["official"]["down"]],
             "Generic",
             output_file=None,
             only_on_file=False,
-        )._colorify(
-            self.to_print["basic_string"]
-        )
+        )._colorify(self.to_print["basic_string"])
 
         self.assertEqual(expected, actual)
 
         # Test with a template that is designed for colorify + Status is
         # UNKNOWN or INVALID
-        expected = PyFunceble.Fore.BLACK + PyFunceble.Back.CYAN + self.to_print[
-            "basic_string"
-        ]
+        expected = (
+            PyFunceble.Fore.BLACK + PyFunceble.Back.CYAN + self.to_print["basic_string"]
+        )
         actual = Prints(
             ["This is a test", PyFunceble.STATUS["official"]["invalid"]],
             "Generic",
             output_file=None,
             only_on_file=False,
-        )._colorify(
-            self.to_print["basic_string"]
-        )
+        )._colorify(self.to_print["basic_string"])
 
         self.assertEqual(expected, actual)
 

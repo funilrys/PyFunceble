@@ -77,7 +77,7 @@ from PyFunceble.prints import Prints
 from PyFunceble.url import URL
 
 
-class Core(object):  # pragma: no cover
+class Core:  # pragma: no cover
     """
     Main entry to PYFunceble. Brain of the program. Also known as "put everything
     together to make the system works".
@@ -344,7 +344,6 @@ class Core(object):  # pragma: no cover
 
         for string in ["up", "down", "invalid", "tested"]:
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: 0})
-        return
 
     @classmethod
     def colored_logo(cls):
@@ -417,19 +416,19 @@ class Core(object):  # pragma: no cover
                 if "#" in data:
                     return cls._format_adblock_decoded(data.split("#"), result)
 
-                elif "," in data:
+                if "," in data:
                     return cls._format_adblock_decoded(data.split(","), result)
 
-                elif "~" in data:
+                if "~" in data:
                     return cls._format_adblock_decoded(data.split("~"), result)
 
-                elif "!" in data:
+                if "!" in data:
                     return cls._format_adblock_decoded(data.split("!"), result)
 
-                elif "|" in data:
+                if "|" in data:
                     return cls._format_adblock_decoded(data.split("|"), result)
 
-                elif data and (
+                if data and (
                     ExpirationDate.is_domain_valid(data)
                     or ExpirationDate.is_ip_valid(data)
                 ):

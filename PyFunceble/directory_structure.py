@@ -69,7 +69,7 @@ from PyFunceble.auto_save import AutoSave
 from PyFunceble.helpers import Command, Dict, File, Hash, Regex
 
 
-class DirectoryStructure(object):  # pragma: no cover
+class DirectoryStructure:  # pragma: no cover
     """
     Consider this class as a backup/reconstructor of desired directory.
     (By default, the output direcctory)
@@ -239,7 +239,7 @@ class DirectoryStructure(object):  # pragma: no cover
 
             return self._update_structure_from_config(structure)
 
-        elif structure_file.endswith(".json"):
+        if structure_file.endswith(".json"):
             return Dict().from_json(File(structure_file).read())
 
         return self._update_structure_from_config(Dict().from_json(req.text))

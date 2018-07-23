@@ -77,7 +77,7 @@ from yaml import load as load_yaml
 from PyFunceble import directory_separator, path, requests, copy as shutil_copy
 
 
-class Hash(object):  # pylint: disable=too-few-public-methods
+class Hash:  # pylint: disable=too-few-public-methods
     """
     Get and return the hash a file with the given algorithm.
 
@@ -141,7 +141,7 @@ class Hash(object):  # pylint: disable=too-few-public-methods
         return result
 
 
-class Command(object):  # pylint: disable=too-few-public-methods
+class Command:  # pylint: disable=too-few-public-methods
     """
     Shell command execution.
     """
@@ -181,7 +181,7 @@ class Command(object):  # pylint: disable=too-few-public-methods
         return self._decode_output(output)
 
 
-class Dict(object):
+class Dict:
     """
     Dictionary manipulations.
     """
@@ -305,7 +305,7 @@ class Dict(object):
         return load_yaml(data)
 
 
-class Directory(object):  # pylint: disable=too-few-public-methods
+class Directory:  # pylint: disable=too-few-public-methods
     """
     Directory manipulation.
 
@@ -342,7 +342,7 @@ class Directory(object):  # pylint: disable=too-few-public-methods
         return directory_separator.join(splited_path) + directory_separator
 
 
-class File(object):
+class File:
     """
     File treatment/manipulations.
 
@@ -406,7 +406,7 @@ class File(object):
         shutil_copy(self.file, destination)
 
 
-class List(object):  # pylint: disable=too-few-public-methods
+class List:  # pylint: disable=too-few-public-methods
     """
     List manipulation.
 
@@ -436,7 +436,7 @@ class List(object):  # pylint: disable=too-few-public-methods
             return self.main_list
 
 
-class Regex(object):  # pylint: disable=too-few-public-methods
+class Regex:  # pylint: disable=too-few-public-methods
 
     """A simple implementation ot the python.re package
 
@@ -560,7 +560,7 @@ class Regex(object):  # pylint: disable=too-few-public-methods
         return self.data
 
 
-class Download(object):  # pragma: no cover # pylint:disable=too-few-public-methods
+class Download:  # pragma: no cover pylint:disable=too-few-public-methods
     """
     This class will download all given file.
 

@@ -67,7 +67,7 @@ from PyFunceble import path
 from PyFunceble.helpers import Dict, File
 
 
-class AutoContinue(object):
+class AutoContinue:
     """
     Autocontinue logic/subsystem.
     """

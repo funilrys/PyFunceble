@@ -67,7 +67,7 @@ import PyFunceble
 from PyFunceble import Fore, OrderedDict, Style, strftime
 
 
-class ExecutionTime(object):  # pylint: disable=too-few-public-methods
+class ExecutionTime:  # pylint: disable=too-few-public-methods
     """
     Set and return the exection time of the program.
 

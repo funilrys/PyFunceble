@@ -66,7 +66,7 @@ import PyFunceble
 from PyFunceble.helpers import Dict, Download, List
 
 
-class PublicSuffix(object):  # pragma: no cover # pylint: disable=too-few-public-methods
+class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     This class will help us interract with the public suffix database.
     """

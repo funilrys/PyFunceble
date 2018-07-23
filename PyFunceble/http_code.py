@@ -69,7 +69,7 @@ import PyFunceble
 from PyFunceble import requests, socket
 
 
-class HTTPCode(object):  # pylint: disable=too-few-public-methods
+class HTTPCode:  # pylint: disable=too-few-public-methods
     """
     Get and return the HTTP code status of a given domain.
 

@@ -67,7 +67,7 @@ from PyFunceble.helpers import Dict, Download, Regex
 from PyFunceble.lookup import Lookup
 
 
-class IANA(object):  # pragma: no cover # pylint: disable=too-few-public-methods
+class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Logic behind the update of `iana-domains-db.json`
     """

@@ -81,11 +81,10 @@ class TestsAutoContinue(TestCase):
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
-        self.file = PyFunceble.OUTPUTS["parent_directory"] + PyFunceble.OUTPUTS["logs"][
-            "filenames"
-        ][
-            "auto_continue"
-        ]
+        self.file = (
+            PyFunceble.OUTPUTS["parent_directory"]
+            + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
+        )
         PyFunceble.CONFIGURATION["file_to_test"] = "hello.world"
         self.types = ["up", "down", "invalid", "tested"]
 
@@ -125,7 +124,10 @@ class TestsAutoContinue(TestCase):
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "up": 25, "down": 25, "invalid": 25, "tested": 25
+                "up": 25,
+                "down": 25,
+                "invalid": 25,
+                "tested": 25,
             }
         }
         actual = Dict().from_json(File(self.file).read())
@@ -166,7 +168,10 @@ class TestsAutoContinue(TestCase):
 
         saved = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "up": 17, "down": 12, "invalid": 8, "tested": 37
+                "up": 17,
+                "down": 12,
+                "invalid": 8,
+                "tested": 37,
             }
         }
 

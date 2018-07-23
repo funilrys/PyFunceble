@@ -80,9 +80,10 @@ class TestDatabase(TestCase):
         """
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
-        self.file = PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"][
-            "inactive_db"
-        ]
+        self.file = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
+        )
 
         self.expected_content = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -310,7 +311,8 @@ class TestDatabase(TestCase):
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                self.time_future: ["hello.world", "world.hello"], "to_test": []
+                self.time_future: ["hello.world", "world.hello"],
+                "to_test": [],
             }
         }
 
@@ -481,7 +483,8 @@ class TestDatabase(TestCase):
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "to_test": ["world.hello"], timestamp: ["hello.world"]
+                "to_test": ["world.hello"],
+                timestamp: ["hello.world"],
             }
         }
 
@@ -492,13 +495,15 @@ class TestDatabase(TestCase):
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "0": ["world.hello"], "to_test": ["hello.world"]
+                "0": ["world.hello"],
+                "to_test": ["hello.world"],
             }
         }
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "to_test": ["world.hello"], timestamp: ["hello.world"]
+                "to_test": ["world.hello"],
+                timestamp: ["hello.world"],
             }
         }
 
@@ -523,14 +528,16 @@ class TestDatabase(TestCase):
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                timestamp: ["hello.world"], "to_test": ["hello.world", "world.hello"]
+                timestamp: ["hello.world"],
+                "to_test": ["hello.world", "world.hello"],
             }
         }
         PyFunceble.CONFIGURATION["domain"] = "hello.world"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                timestamp: [], "to_test": ["world.hello"]
+                timestamp: [],
+                "to_test": ["world.hello"],
             }
         }
 

@@ -67,7 +67,7 @@ import PyFunceble
 from PyFunceble import socket
 
 
-class Lookup(object):
+class Lookup:
     """
     This class can be used to NSLOOKUP or WHOIS lookup.
     """

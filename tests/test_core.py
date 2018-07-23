@@ -61,7 +61,7 @@ License:
 """
 # pylint: enable=line-too-long
 # pylint: disable=protected-access, import-error, ungrouped-imports
-import unittest.mock as mock
+import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import TestCase
 from unittest import main as launch_tests
 

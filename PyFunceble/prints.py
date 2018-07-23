@@ -68,7 +68,7 @@ from PyFunceble import Back, Fore, OrderedDict, path
 from PyFunceble.helpers import Dict, File
 
 
-class Prints(object):
+class Prints:
     """
     Print data on screen and into a file if needed.
     Template Possibilities: Percentage, Less, HTTP and any status you want.
@@ -220,7 +220,7 @@ class Prints(object):
 
     def header(
         self, do_not_print=False
-    ):  # pragma: no cover # pylint: disable=too-many-branches
+    ):  # pragma: no cover pylint: disable=too-many-branches
         """
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.

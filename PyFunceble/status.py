@@ -67,7 +67,7 @@ from PyFunceble.generate import Generate
 from PyFunceble.lookup import Lookup
 
 
-class Status(object):  # pragma: no cover  # pylint: disable=too-few-public-methods
+class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Return the domain status in case we don't use WHOIS or in case that WHOIS
     record is not readable.
@@ -102,7 +102,7 @@ class Status(object):  # pragma: no cover  # pylint: disable=too-few-public-meth
         return PyFunceble.STATUS["official"]["invalid"]
 
 
-class URLStatus(object):  # pragma: no cover  # pylint: disable=too-few-public-methods
+class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Generate everything around the catched status.
 

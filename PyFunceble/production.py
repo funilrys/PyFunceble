@@ -73,7 +73,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Command, Dict, File, Regex
 
 
-class Production(object):  # pylint: disable=too-few-public-methods
+class Production:  # pylint: disable=too-few-public-methods
     """
     This class will manage and provide the production logic.
 
@@ -200,7 +200,7 @@ class Production(object):  # pylint: disable=too-few-public-methods
             self.current_version[0], self.version_yaml
         )
 
-        if checked != None and not checked:
+        if checked is not None and not checked:
             return True
 
         return False

@@ -69,7 +69,7 @@ from PyFunceble import path, strftime
 from PyFunceble.helpers import Dict, File
 
 
-class Database(object):
+class Database:
     """
     Logic behind the generation and the usage of a database system.
     The main idea behind this is to provide an inactive-db.json and test all
@@ -98,8 +98,6 @@ class Database(object):
             )
         else:
             PyFunceble.CONFIGURATION["inactive_db"] = {}
-
-        return
 
     def _backup(self):
         """

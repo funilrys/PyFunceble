@@ -76,7 +76,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.87.1.dev-beta"
+VERSION = "0.88.0.dev-beta"
 
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
@@ -128,7 +128,7 @@ def load_config():  # pragma: no cover
         DirectoryStructure()
 
 
-def _command_line():  # pragma: no cover  # pylint: disable=too-many-branches,too-many-statements
+def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
     """
     This function provide the command line arguments of PyFunceble.
     """
