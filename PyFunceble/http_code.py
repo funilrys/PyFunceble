@@ -88,6 +88,11 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         else:
             self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
 
+        if PyFunceble.CONFIGURATION["user_agent"]:
+            self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+        else:
+            self.headers = {}
+
     def _access(self):  # pragma: no cover
         """
         Get the HTTP code status.
@@ -101,6 +106,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             req = requests.head(
                 self.to_get,
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+                headers=self.headers,
             )
 
             return req.status_code

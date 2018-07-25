@@ -70,7 +70,7 @@ from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
 
-class Generate:  # pragma: no cover
+class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
     """
     Generate different sort of files.
 
@@ -99,6 +99,11 @@ class Generate:  # pragma: no cover
             self.tested = PyFunceble.CONFIGURATION["domain"]
         elif "URL" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["URL"]:
             self.tested = PyFunceble.CONFIGURATION["URL"]
+
+        if PyFunceble.CONFIGURATION["user_agent"]:
+            self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+        else:
+            self.headers = {}
 
     def hosts_file(self):
         """
@@ -290,7 +295,7 @@ class Generate:  # pragma: no cover
             url_to_get = self.tested
 
         if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
-            blogger_content_request = requests.get(url_to_get)
+            blogger_content_request = requests.get(url_to_get, headers=self.headers)
 
             for regx in regex_blogger:
                 if (
@@ -320,7 +325,9 @@ class Generate:  # pragma: no cover
         does_not_exist = "doesn&#8217;t&nbsp;exist"
 
         if self.tested.endswith(wordpress_com):
-            wordpress_com_content = requests.get("http://%s:80" % self.tested)
+            wordpress_com_content = requests.get(
+                "http://%s:80" % self.tested, headers=self.headers
+            )
 
             if does_not_exist in wordpress_com_content.text:
                 self.source = "SPECIAL"

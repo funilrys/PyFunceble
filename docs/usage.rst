@@ -380,6 +380,11 @@ Want to test the availability or an URL ? Enjoy this argument!
 .. note::
     You can give a raw link and the system will download and test its content.
 
+:code:`-ua "something"` | :code:`--user-agent "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Set the user-agent to use and set everytime we interact with everything which is not our logs sharing system.
+
 :code:`-v` | :code:`--version`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -496,6 +501,10 @@ Global overview
     -uf URL_FILE, --url-file URL_FILE
                             Test a file with a list of URL. If a URL is given we
                             download and test the content of the given URL.
+    -ua USER_AGENT, --user-agent USER_AGENT
+                            Set the user-agent to use and set everytime we
+                            interact with everything which is not our logs sharing
+                            system.
     -v, --version         show program's version number and exit
 
     Crafted with ♥ by Nissar Chababy (Funilrys) with the

@@ -76,7 +76,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.88.3.dev-beta"
+VERSION = "0.89.0.dev-beta"
 
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
@@ -523,6 +523,13 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "-ua",
+            "--user-agent",
+            type=str,
+            help="Set the user-agent to use and set everytime we interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
+        )
+
+        PARSER.add_argument(
             "-v",
             "--version",
             help="Show the version of PyFunceble and exit.",
@@ -646,6 +653,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.travis_branch:
             CONFIGURATION.update({"travis_branch": ARGS.travis_branch})
+
+        if ARGS.user_agent:
+            CONFIGURATION.update({"user_agent": ARGS.user_agent})
 
         if not CONFIGURATION["quiet"]:
             print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
