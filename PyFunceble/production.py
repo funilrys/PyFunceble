@@ -181,6 +181,20 @@ class Production:  # pylint: disable=too-few-public-methods
                     else:
                         self._update_docs(root + directory_separator + file)
 
+        for root, _, files in walk(
+            PyFunceble.CURRENT_DIRECTORY
+            + directory_separator
+            + "tests"
+            + directory_separator
+        ):
+            for file in files:
+                if file not in [".gitignore", ".keep"] and "__pycache__" not in root:
+                    if root.endswith(directory_separator):
+
+                        self._update_docs(root + file)
+                    else:
+                        self._update_docs(root + directory_separator + file)
+
     @classmethod
     def _get_current_version_yaml(cls):
         """

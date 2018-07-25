@@ -32,4 +32,3 @@ after_success:
 notifications:
   on_success:   change
   on_failure:   always
- 
