@@ -116,7 +116,7 @@ def _get_version():
     return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
 
 
-def _get_long_description():
+def _get_long_description(): # pragma: no cover
     """
     This function return the long description.
     """
@@ -125,7 +125,7 @@ def _get_long_description():
         import pypandoc
         return pypandoc.convert("README.md", "rst")
 
-    except (IOError, ImportError): # pragma: no cover
+    except (IOError, ImportError):
         return open("README.md", encoding="utf-8").read()
 
 
