@@ -76,7 +76,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.89.0.dev-beta"
+VERSION = "0.89.1.dev-beta"
 
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"

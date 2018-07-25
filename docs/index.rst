@@ -34,6 +34,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 
    installation
    update
+   configuration
    usage
    colomns
    logs-sharing

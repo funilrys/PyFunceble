@@ -1,0 +1,875 @@
+Configuration
+=============
+
+This page will try to detail each configuration available into :code:`.PyFunceble.yaml`.
+
+:code:`adblock`
+---------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / disable the adblock format decoding.
+
+.. note::
+
+    If this index is set to :code:`True`, everytime we read a given file, we try to extract the elements that are present.
+    
+    We basically only decode the adblock format.
+
+.. note::
+
+    If this index is set to :code:`False`, everytime we read a given file, we will consider one line as an element to test.
+
+:code:`auto_continue`
+---------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`Trus`
+    
+    **Description:** Enable / disable the auto continue system.
+
+:code:`command_before_end`
+--------------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`""`
+    
+    **Description:** Set the command to run before the final commit.
+
+.. note::
+    The parsed command is called only if :code:`auto_continue` and :code:`travis` are set to :code:`True`.
+
+.. note::
+    Understand by final commit the commit which will deliver the last element we have to test.
+
+:code:`custom_ip`
+-----------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`"0.0.0.0"`
+    
+    **Description:** Set the custom IP to use when we generate a line in the hosts file format.
+
+.. note::
+    This index has no effect if :code:`generate_hosts` is set to :code:`False`.
+
+:code:`days_between_db_retest`
+------------------------------
+
+    **Type:** :code:`integer`
+    
+    **Default value:** :code:`1`
+    
+    **Description:** Set the number of day(s) between each retest of the :code:`INACTIVE` and :code:`INVALID` elements which are present into :code:`inactive_db.json`.
+
+.. note::
+    This index has no effect if :code:`inactive_database` is set to :code:`False`.
+
+:code:`debug`
+-------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / disable the generation of debug file(s).
+
+.. note::
+    This index has not effect if :code:`logs` is set to :code:`False`
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+.. warning::
+    Do not touch this index unless you have been invited to.
+
+:code:`domain`
+--------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`""`
+    
+    **Description:** Set the element that have to be tested.
+
+.. note::
+    If empty, we use this index as saver of the element we are currently testing.
+
+:code:`filter`
+--------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`""`
+    
+    **Description:** Set the element to filter.
+
+.. note::
+    This index should be initiated with a regular expression.
+
+:code:`generate_hosts`
+----------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / disable the generation of the hosts file(s).
+
+:code:`header_printed`
+----------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Say to the system if the header has been already printed or not.
+
+.. warning::
+    Do not touch this index unless you have a good reason to.
+
+:code:`iana_db`
+---------------
+
+    **Type:** :code:`dict`
+    
+    **Default value:** :code:`{}`
+    
+    **Description:** Save the content of :code:`iana-domains-db.json` for the different system or subsystems.
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+:code:`iana_whois_server`
+-------------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`whois.iana.org`
+    
+    **Description:** Set the server to call to get the :code:`whois` referer of a given element.
+
+.. note::
+    This index is only used when generating the :code:`iana-domains-db.json` file.
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+:code:`inactive_database`
+-------------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / Disable the usage of a database to store the :code:`INACTIVE` and :code:`INVALID` element to retest overtime.
+
+:code:`inactive_db`
+-------------------
+
+    **Type:** :code:`dict`
+    
+    **Default value:** :code:`{}`
+    
+    **Description:** Save the content of :code:`inactive-db.json` for the different system or subsystems.
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+:code:`less`
+------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / Disable the output of every information of screen.
+
+:code:`logs`
+------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / Disable the output of every logs.
+
+:code:`no_files`
+----------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the generation of any file(s).
+
+:code:`no_whois`
+----------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the usage of :code:`whois` in the tests.
+
+:code:`plain_list_domain`
+-------------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the generation of the plain list of element sorted by statuses.
+
+:code:`psl_db`
+--------------
+
+    **Type:** :code:`dict`
+    
+    **Default value:** :code:`{}`
+    
+    **Description:** Save the content of :code:`public-suffix.json` for the different system or subsystems.
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+:code:`quiet`
+-------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the generation of output on screen.
+
+:code:`referer`
+---------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`""`
+    
+    **Description:** Set the referer of the element that is currently under tested.
+
+.. warning::
+    Do not touch this index unless you a have good reason to.
+
+:code:`seconds_before_http_timeout`
+-----------------------------------
+
+    **Type:** :code:`integer`
+    
+    **Default value:** :code:`3`
+    
+    **Description:** Set the timeout to apply to every HTTP status code requests.
+
+.. note::
+    This index must be a multiple of :code:`3`.
+
+:code:`share_logs`
+------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / disable the logs sharing.
+
+
+.. note::
+    This index has no effect if :code:`logs` is set to :code:`False`.
+
+:code:`show_execution_time`
+---------------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / disable the output of the execution time.
+
+:code:`show_percentage`
+-----------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / disable the output of the percentage of each statuses.
+
+:code:`simple`
+--------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / disable the simple output mode.
+
+.. note::
+    If this index is set to :code:`True`, the system will only return the result inf format: :code:`tested.element STATUS`. 
+
+:code:`split`
+-------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / disable the split of the results files.
+
+.. note::
+    Understand with "results files" the mirror of what is shown on screen.
+
+:code:`travis`
+--------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / disable the Travis CI autosave system.
+
+.. warning::
+    Do not activate this index unless you are using PyFunceble under Travis CI.
+
+:code:`travis_autosave_commit`
+------------------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`"PyFunceble - AutoSave"`
+    
+    **Description:** Set the default commit message we have to usve when have to save but we did not finished the test.
+
+:code:`travis_autosave_final_commit`
+------------------------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`"PyFunceble - Results"`
+    
+    **Description:** Set the default final commit message we have to usve when have to save and we finished the test.
+
+:code:`travis_autosave_minutes`
+-------------------------------
+
+    **Type:** :code:`integer`
+    
+    **Default value:** :code:`15`
+    
+    **Description:** Set the minimum of minutes we have to run before to automatically save our test results.
+
+.. note::
+    As many services are settings a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes. 
+
+:code:`travis_branch`
+---------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`master`
+    
+    **Description:** Set the git branch where we are going to push our results.
+
+:code:`unified`
+---------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the generation of the unified results.
+
+.. note::
+    This index has no effect if :code:`split` is set to :code:`True`.
+
+:code:`user_agent`
+------------------
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"`
+    
+    **Description:** Set the User-Agent to set and use everytime we are requesting something from a web server other than our API.
+
+:code:`outputs`
+---------------
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the needed output tree/names.
+
+.. warning::
+    If you choose to change anything please consider deleting our :code:`output/` directory and the :code:`dir_structure*.json` files.
+
+:code:`outputs[default_files]`
+""""""""""""""""""""""""""""""
+    
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files.
+
+:code:`outputs[default_files][dir_structure]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`dir_structure.json`
+    
+    **Description:** Set the default filename of the file which have the structure to re-construct.
+
+.. note::
+    This index has no influence with :code:`dir_structure_production.json`
+
+:code:`outputs[default_files][iana]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`iana-domains-db.json`
+    
+    **Description:** Set the default filename of the file which have the formated copy of the IANA root zone database.
+
+:code:`outputs[default_files][inactive_db]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`inactive_db.json`
+    
+    **Description:** Set the default filename of the file which will save the list of element to retest overtime.
+
+
+:code:`outputs[default_files][results]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`results.txt`
+    
+    **Description:** Set the default filename of the file which will save the formated copy of the public suffix database.
+
+:code:`outputs[default_files][public_suffix]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`public-suffix.json`
+    
+    **Description:** Set the default filename of the file which will save the mirror of what is shown on screen.
+
+:code:`outputs[domains]`
+""""""""""""""""""""""""
+    
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files related to the :code:`plain_list_domain` index.
+
+:code:`outputs[domains][directory]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`domains/`
+    
+    **Description:** Set the default directory where we have to save the plain list of element for each status.
+
+:code:`outputs[domains][filename]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`list`
+    
+    **Description:** Set the default filename of the file which will save the plain list of element.
+
+:code:`outputs[hosts]`
+""""""""""""""""""""""""
+    
+     **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files related to the :code:`generate_hosts` index.
+
+:code:`outputs[hosts][directory]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`hosts/`
+    
+    **Description:** Set the default directory where we have to save the hosts files of the elements for each status.
+
+:code:`outputs[hosts][filename]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`hosts`
+    
+    **Description:** Set the default filename of the file which will save the hosts files of the elements.
+
+:code:`outputs[http_analytic]`
+""""""""""""""""""""""""""""""
+    
+     **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files and directories related to the :code:`generate_hosts` index.
+
+:code:`outputs[http_analytic][directories]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important directories related to the :code:`http_codes[active]` index.
+
+:code:`outputs[http_analytic][directories][parent]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`HTTP_Analytic/`
+    
+    **Description:** Set the default directory where we are going to put everything related to the http analytic.
+
+:code:`outputs[http_analytic][directories][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`POTENTIALLY_INACTIVE/`
+    
+    **Description:** Set the default directory where we are going to put every potentially inactive data.
+
+
+:code:`outputs[http_analytic][directories][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`POTENTIALLY_INACTIVE/`
+    
+    **Description:** Set the default directory where we are going to put every potentially active data.
+
+:code:`outputs[http_analytic][directories][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`POTENTIALLY_INACTIVE/`
+    
+    **Description:** Set the default directory where we are going to put every active data.
+
+
+:code:`outputs[http_analytic][filenames]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files related to the :code:`http_codes[active]` index and the http analytic subsystem.
+
+:code:`outputs[http_analytic][filenames][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`down_or_potentially_down`
+    
+    **Description:** Set the default filename where we are going to put every potentially inactive data.
+
+
+:code:`outputs[http_analytic][filenames][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`potentially_up`
+    
+    **Description:** Set the default filename where we are going to put every potentially active data.
+
+:code:`outputs[http_analytic][filenames][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`active_and_merged_in_results`
+    
+    **Description:** Set the default filename where we are going to put every active data.
+
+
+:code:`outputs[logs]`
+"""""""""""""""""""""
+    
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files and directory related to the :code:`logs` index.
+
+
+:code:`outputs[logs][directories]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+     **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important directories related to the :code:`logs` index.
+
+
+:code:`outputs[logs][directories][date_format]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`date_format/`
+    
+    **Description:** Set the default directory where we are going to put everything related to the data when the dates are in wrong format.
+
+:code:`outputs[logs][directories][no_referer]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`no_referer/`
+    
+    **Description:** Set the default directory where we are going to put everything related to the data when no referer is found.
+
+:code:`outputs[logs][directories][parent]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`no_referer/`
+    
+    **Description:** Set the default directory where we are going to put everything related to the data when no referer is found.
+
+:code:`outputs[logs][directories][percentage]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`percentage/`
+    
+    **Description:** Set the default directory where we are going to put everything related to percentages.
+
+:code:`outputs[logs][directories][whois]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`whois/`
+    
+    **Description:** Set the default directory where we are going to put everything related to whois data.
+
+.. note::
+    This is the location of all files when the :code:`debug` index is set to :code:`True`.
+
+:code:`outputs[logs][filenames]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+    **Type:** :code:`dict`
+    
+    **Description:** Set the default filenames of some important files related to the :code:`logs` index.
+
+:code:`outputs[logs][filenames][auto_continue]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`continue.json`
+    
+    **Description:** Set the default filename where we are going to put the data related to the auto continue subsystem.
+
+.. note::
+    This file is allocated if the :code:`auto_continue` is set to :code:`True`.
+
+:code:`outputs[logs][filenames][execution_time]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`execution.log`
+    
+    **Description:** Set the default filename where we are going to put the data related to the execution time.
+
+.. note::
+    This file is allocated if the :code:`show_execution_time` is set to :code:`True`.
+
+:code:`outputs[logs][filenames][percentage]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`percentage.txt`
+    
+    **Description:** Set the default filename where we are going to put the data related to the percentage.
+
+.. note::
+    This file is allocated if the :code:`show_percentage` is set to :code:`True`.
+
+:code:`outputs[main]`
+"""""""""""""""""""""
+    
+    **Type:** :code:`string`
+
+    **Default value:** :code:`""`
+    
+    **Description:** Set the default location where we have to generate the :code:`parent_directory` directory and its dependencies.
+
+:code:`outputs[parent_directory]`
+"""""""""""""""""""""""""""""""""
+    
+    **Type:** :code:`string`
+
+    **Default value:** :code:`output/`
+    
+    **Description:** Set the directory name of the parent directory which will contains every previously nouned directories.
+
+
+:code:`outputs[splited]`
+""""""""""""""""""""""""
+    
+    **Type:** :code:`dict`
+
+    **Description:** Set the default name of some important files and directory related to the :code:`split` index.
+
+:code:`outputs[splited][directory]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`splited/`
+    
+    **Description:** Set the default directory name where we are going to put the splited data.
+
+:code:`status`
+---------------
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the needed, accepted and status name.
+
+
+:code:`status[list]`
+""""""""""""""""""""
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the needed and accepted status name.
+
+.. warning::
+    All status should be in lowercase.
+
+:code:`status[list][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["up","active", "valid"]`
+    
+    **Description:** Set the accepted :code:`ACTIVE` status.
+
+:code:`status[list][generic]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["generic"]`
+    
+    **Description:** Set the accepted :code:`generic` status.
+
+.. note::
+    This status is the one used to say the system that we have to print the complete information on screen.
+
+:code:`status[list][http_active]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["http_active"]`
+    
+    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][up]` index.
+
+
+:code:`status[list][down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["down","inactive", "error"]`
+    
+    **Description:** Set the accepted status :code:`INACTIVE` index.
+
+
+:code:`status[list][invalid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["ouch","invalid"]`
+    
+    **Description:** Set the accepted status :code:`INVALID` index.
+
+:code:`status[list][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["potentially_down", "potentially_inactive"]`
+    
+    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][potentially_down]` index.
+
+:code:`status[list][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["potentially_up", "potentially_active"]`
+    
+    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][potentially_up]` index.
+
+:code:`status[official]`
+""""""""""""""""""""""""
+
+    **Type:** :code:`dict`
+    
+    **Description:** Set the official status name.
+
+.. note::
+    Those status are the one that are printed on screen.
+
+.. warning::
+    After any changes here please delete :code:`dir_structure.json` and the :code:`output/` directory.
+
+:code:`status[official][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`ACTIVE`
+    
+    **Description:** Set the returned status for the :code:`ACTIVE` case.
+
+:code:`status[official][down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`INACTIVE`
+    
+    **Description:** Set the returned status for the :code:`INACTIVE` case.
+
+:code:`status[official][invalid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`INVALID`
+    
+    **Description:** Set the returned status for the :code:`INVALID` case.
+
+
+.. todo::
+    Complete the documentation...
