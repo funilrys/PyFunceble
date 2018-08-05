@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.90.1.dev-beta"
+VERSION = "0.90.2.dev-beta"
 
 if (
     path.isfile(".coveragerc")
@@ -156,7 +156,7 @@ def test(domain):  # pragma: no cover
     This function provide an access to the core while use PyFunceble as an imported module.
     """
 
-    load_config()
+    load_config(True)
     return Core(domain=domain, modulo_test=True).test()
 
 
