@@ -4169,7 +4169,13 @@
         "edu.krd"
     ],
     "kw": [
-        "kw"
+        "com.kw",
+        "edu.kw",
+        "emb.kw",
+        "gov.kw",
+        "ind.kw",
+        "net.kw",
+        "org.kw"
     ],
     "ky": [
         "com.ky",
@@ -6825,7 +6831,6 @@
     ],
     "space": [
         "linkitools.space",
-        "stackspace.space",
         "uber.space",
         "xs4all.space"
     ],

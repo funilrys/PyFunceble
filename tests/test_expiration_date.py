@@ -79,7 +79,7 @@ class TestExpirationDate(TestCase):
         This method will setup everything needed for the tests.
         """
 
-        load_config()
+        load_config(True)
 
     def test_is_domains_valid(self):
         """

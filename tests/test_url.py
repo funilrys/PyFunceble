@@ -92,7 +92,7 @@ class TestURL(TestCase):
             "world-.hello",
             "world@hello.com",
             "world_hello.com",
-            "httpWd"
+            "httpWd",
         ]
 
         for domain in not_valid:

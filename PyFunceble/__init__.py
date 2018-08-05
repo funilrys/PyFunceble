@@ -51,7 +51,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=invalid-name,cyclic-import
+# pylint: disable=invalid-name,cyclic-import, bad-continuation
 import argparse
 import socket
 from collections import OrderedDict
@@ -60,6 +60,7 @@ from itertools import repeat
 from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
+from platform import system
 from shutil import copy
 from time import strftime
 
@@ -75,8 +76,60 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
-CURRENT_DIRECTORY = getcwd() + directory_separator
-VERSION = "0.89.3.dev-beta"
+NAME = "PyFunceble"
+VERSION = "0.90.0.dev-beta"
+
+if (
+    path.isfile(".coveragerc")
+    and path.isfile(".coveralls.yml")
+    and path.isfile("CODE_OF_CONDUCT.md")
+    and path.isfile("CONTRIBUTING.md")
+    and path.isfile("version.yaml")
+):  # pragma: no cover
+    CURRENT_DIRECTORY = getcwd() + directory_separator
+elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
+    CURRENT_DIRECTORY = environ["TRAVIS_BUILD_DIR"]
+
+    if not CURRENT_DIRECTORY.endswith(directory_separator):
+        CURRENT_DIRECTORY += directory_separator
+else:  # pragma: no cover
+    if system().lower() == "linux":
+        config_dir_path = (
+            path.expanduser("~" + directory_separator + ".config") + directory_separator
+        )
+
+        if path.isdir(config_dir_path):
+            CURRENT_DIRECTORY = config_dir_path
+        elif path.isdir(path.expanduser("~")):
+            CURRENT_DIRECTORY = (
+                path.expanduser("~") + directory_separator + "."
+            )  # pylint: disable=line-too-long
+        else:
+            CURRENT_DIRECTORY = getcwd() + directory_separator
+    elif system().lower() == "darwin":
+        from AppKit import (  # pylint: disable=import-error
+            NSSearchPathForDirectoriesInDomains,
+            NSApplicationSupportDirectory,
+            NSUserDomainMask,
+        )
+
+        CURRENT_DIRECTORY = NSSearchPathForDirectoriesInDomains(
+            NSApplicationSupportDirectory, NSUserDomainMask, True
+        )[0]
+    elif system().lower() == "windows":
+        if "APPDATA" in environ:
+            CURRENT_DIRECTORY = environ["APPDATA"]
+        else:
+            CURRENT_DIRECTORY = getcwd() + directory_separator
+
+    if not CURRENT_DIRECTORY.endswith(directory_separator):
+        CURRENT_DIRECTORY += directory_separator
+    CURRENT_DIRECTORY += NAME + directory_separator
+
+    if not path.isdir(CURRENT_DIRECTORY):
+        mkdir(CURRENT_DIRECTORY)
+
+OUTPUT_DIRECTORY = getcwd() + directory_separator
 
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
@@ -107,25 +160,35 @@ def test(domain):  # pragma: no cover
     return Core(domain=domain, modulo_test=True).test()
 
 
-def load_config():  # pragma: no cover
+def load_config(under_test=False):  # pragma: no cover
     """
     This function will load the configuration.
+
+    Argument:
+        - under_test: bool
+            Tell us if we only have to load the configuration file (True)
+            or load the configuration file and initate the output directory
+            if it does not exist (False).
     """
 
-    global CURRENT_DIRECTORY  # pylint:disable=global-statement
+    global CURRENT_DIRECTORY  # pylint: disable=global-statement
+
     Load(CURRENT_DIRECTORY)
 
-    if OUTPUTS["main"]:
-        CURRENT_DIRECTORY = OUTPUTS["main"]
+    if not under_test:
+        global OUTPUT_DIRECTORY  # pylint: disable=global-statement
 
-        if not CURRENT_DIRECTORY.endswith(directory_separator):
-            CURRENT_DIRECTORY += directory_separator
+        if OUTPUTS["main"]:
+            CURRENT_DIRECTORY = OUTPUTS["main"]
 
-        if path.isfile(CURRENT_DIRECTORY + CONFIGURATION_FILENAME):
-            Load(CURRENT_DIRECTORY)
+            if not CURRENT_DIRECTORY.endswith(directory_separator):
+                CURRENT_DIRECTORY += directory_separator
 
-    if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
-        DirectoryStructure()
+            if path.isfile(CURRENT_DIRECTORY + CONFIGURATION_FILENAME):
+                Load(CURRENT_DIRECTORY)
+
+        if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
+            DirectoryStructure()
 
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements

@@ -75,7 +75,7 @@ class AutoContinue:
     def __init__(self):
         if PyFunceble.CONFIGURATION["auto_continue"]:
             self.autocontinue_log_file = (
-                PyFunceble.CURRENT_DIRECTORY
+                PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
                 + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
             )

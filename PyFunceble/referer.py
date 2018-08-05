@@ -213,7 +213,7 @@ class Referer:  # pragma: no cover
             logs += "\n"
 
             File(
-                PyFunceble.CURRENT_DIRECTORY
+                PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["no_referer"]

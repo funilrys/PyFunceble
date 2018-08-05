@@ -89,7 +89,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         self.expiration_date = expiration_date
 
         self.output_parent_dir = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+            PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
         )
 
         self.refer_status = ""

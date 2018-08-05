@@ -81,8 +81,9 @@ class TestsAutoContinue(TestCase):
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
-        self.file = (
-            PyFunceble.OUTPUTS["parent_directory"]
+        self.file_to_work_with = (
+            PyFunceble.OUTPUT_DIRECTORY
+            + PyFunceble.OUTPUTS["parent_directory"]
             + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
         )
         PyFunceble.CONFIGURATION["file_to_test"] = "hello.world"
@@ -107,10 +108,10 @@ class TestsAutoContinue(TestCase):
 
         PyFunceble.CONFIGURATION["auto_continue"] = True
 
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
         expected = False
-        actual = PyFunceble.path.isfile(self.file)
+        actual = PyFunceble.path.isfile(self.file_to_work_with)
 
         self.assertEqual(expected, actual)
         self.set_counter(to_set=25)
@@ -118,7 +119,7 @@ class TestsAutoContinue(TestCase):
         AutoContinue().backup()
 
         expected = True
-        actual = PyFunceble.path.isfile(self.file)
+        actual = PyFunceble.path.isfile(self.file_to_work_with)
 
         self.assertEqual(expected, actual)
 
@@ -130,11 +131,11 @@ class TestsAutoContinue(TestCase):
                 "tested": 25,
             }
         }
-        actual = Dict().from_json(File(self.file).read())
+        actual = Dict().from_json(File(self.file_to_work_with).read())
 
         self.assertEqual(expected, actual)
         PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
     def test_backup_not_activated(self):
         """
@@ -147,7 +148,7 @@ class TestsAutoContinue(TestCase):
         AutoContinue().backup()
 
         expected = False
-        actual = PyFunceble.path.isfile(self.file)
+        actual = PyFunceble.path.isfile(self.file_to_work_with)
 
         self.assertEqual(expected, actual)
 
@@ -157,7 +158,7 @@ class TestsAutoContinue(TestCase):
         """
 
         PyFunceble.CONFIGURATION["auto_continue"] = True
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
         self.set_counter(12)
 
@@ -175,7 +176,7 @@ class TestsAutoContinue(TestCase):
             }
         }
 
-        Dict(saved).to_json(self.file)
+        Dict(saved).to_json(self.file_to_work_with)
         AutoContinue().restore()
 
         expected = saved[PyFunceble.CONFIGURATION["file_to_test"]]
@@ -190,7 +191,7 @@ class TestsAutoContinue(TestCase):
 
         self.assertEqual(expected, actual)
         PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
     def test_restore_old_system(self):
         """
@@ -199,7 +200,7 @@ class TestsAutoContinue(TestCase):
         """
 
         PyFunceble.CONFIGURATION["auto_continue"] = True
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
         old_system = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -210,7 +211,7 @@ class TestsAutoContinue(TestCase):
             }
         }
 
-        Dict(old_system).to_json(self.file)
+        Dict(old_system).to_json(self.file_to_work_with)
         AutoContinue().restore()
 
         expected = {"up": 15, "down": 18, "invalid": 5, "tested": 38}
@@ -225,7 +226,7 @@ class TestsAutoContinue(TestCase):
 
         self.assertEqual(expected, actual)
         PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file).delete()
+        File(self.file_to_work_with).delete()
 
 
 if __name__ == "__main__":

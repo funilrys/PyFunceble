@@ -81,7 +81,11 @@ class TestClean(TestCase):
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
-        self.file = PyFunceble.OUTPUTS["parent_directory"] + "hello_world"
+        self.file = (
+            PyFunceble.OUTPUT_DIRECTORY
+            + PyFunceble.OUTPUTS["parent_directory"]
+            + "hello_world"
+        )
         self.types = ["up", "down", "invalid", "tested"]
 
     def set_counter(self, to_set=15):

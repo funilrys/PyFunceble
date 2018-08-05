@@ -136,7 +136,7 @@ class Percentage:
             and PyFunceble.CONFIGURATION["counter"]["number"]["tested"] > 0
         ):
             output = (
-                PyFunceble.CURRENT_DIRECTORY
+                PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]

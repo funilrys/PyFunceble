@@ -219,7 +219,7 @@ class ExpirationDate:
                 self.log_separator + str(self.whois_record) + "\n" + self.log_separator
             )
 
-            output = PyFunceble.CURRENT_DIRECTORY
+            output = PyFunceble.OUTPUT_DIRECTORY
             output += PyFunceble.OUTPUTS["parent_directory"]
             output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
             output += PyFunceble.OUTPUTS["logs"]["directories"]["whois"]
@@ -283,7 +283,7 @@ class ExpirationDate:
             log += "Tested domain: %s \n" % PyFunceble.CONFIGURATION["domain"]
 
             File(
-                PyFunceble.CURRENT_DIRECTORY
+                PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
                 + PyFunceble.OUTPUTS["logs"]["directories"]["date_format"]

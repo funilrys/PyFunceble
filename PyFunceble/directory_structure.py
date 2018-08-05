@@ -93,16 +93,13 @@ class DirectoryStructure:  # pragma: no cover
         else:
             self.restore()
 
-    @classmethod
-    def backup(cls):
+    def backup(self):
         """
         Backup the developer state of `output/` in order to make it restorable
             and portable for user.
         """
 
-        output_path = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
-        )
+        output_path = self.base + PyFunceble.OUTPUTS["parent_directory"]
         result = {PyFunceble.OUTPUTS["parent_directory"]: {}}
 
         for root, _, files in walk(output_path):
@@ -123,9 +120,7 @@ class DirectoryStructure:  # pragma: no cover
                     {file: {"sha512": file_hash, "content": formated_content}},
                 )
 
-        Dict(result).to_json(
-            PyFunceble.CURRENT_DIRECTORY + "dir_structure_production.json"
-        )
+        Dict(result).to_json(self.base + "dir_structure_production.json")
 
     def _restore_replace(self):
         """
@@ -266,6 +261,8 @@ class DirectoryStructure:  # pragma: no cover
         structure = structure[list_of_key[0]]
         parent_path = list_of_key[0] + directory_separator
 
+        replacement_status = self._restore_replace()
+
         for directory in structure:
             base = self.base + parent_path + directory + directory_separator
 
@@ -284,7 +281,7 @@ class DirectoryStructure:  # pragma: no cover
                 git_to_keep = file_path.replace("gitignore", "keep")
                 keep_to_git = file_path.replace("keep", "gitignore")
 
-                if self._restore_replace():
+                if replacement_status:
                     if (
                         path.isfile(file_path)
                         and Hash(file_path, "sha512", True).get() == online_sha

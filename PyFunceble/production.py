@@ -85,7 +85,7 @@ class Production:  # pylint: disable=too-few-public-methods
     def __init__(self, extern=False):
         if not extern:
 
-            if not self._is_dev_version() and not self._is_master_version():
+            if not self.is_dev_version() and not self.is_master_version():
                 raise Exception("Please switch to `dev` or `master` branch.")
 
             self.data_version_yaml = self._get_current_version_yaml()
@@ -220,7 +220,7 @@ class Production:  # pylint: disable=too-few-public-methods
         return False
 
     @classmethod
-    def _is_dev_version(cls):
+    def is_dev_version(cls):
         """
         This method check if the current branch is `dev`.
         """
@@ -235,7 +235,7 @@ class Production:  # pylint: disable=too-few-public-methods
         return False
 
     @classmethod
-    def _is_master_version(cls):
+    def is_master_version(cls):
         """
         This method check if the current branch is `master`.
         """
@@ -281,9 +281,9 @@ class Production:  # pylint: disable=too-few-public-methods
                 The file to update.
         """
 
-        if self._is_dev_version():
+        if self.is_dev_version():
             regexes = {"/dev/": r"\/master\/", "=dev": "=master"}
-        elif self._is_master_version():
+        elif self.is_master_version():
             regexes = {"/master/": r"\/dev\/", "=master": "=dev"}
         else:
             raise Exception("Please switch to `dev` or `master` branch.")
@@ -302,12 +302,12 @@ class Production:  # pylint: disable=too-few-public-methods
 
         setup_py_path = PyFunceble.CURRENT_DIRECTORY + "setup.py"
 
-        if self._is_dev_version():
+        if self.is_dev_version():
             regexes = {
                 'name="PyFunceble-dev"': r'name=".*"',
                 '"Development Status :: 4 - Beta"': r'"Development\sStatus\s::.*"',
             }
-        elif self._is_master_version():
+        elif self.is_master_version():
             regexes = {
                 'name="PyFunceble"': r'name=".*"',
                 '"Development Status :: 5 - Production/Stable"': r'"Development\sStatus\s::.*"',
@@ -329,12 +329,12 @@ class Production:  # pylint: disable=too-few-public-methods
 
         travis_yml_path = PyFunceble.CURRENT_DIRECTORY + ".travis.yml"
 
-        if self._is_dev_version():
+        if self.is_dev_version():
             regexes = {
                 "pip3 install pyfunceble-dev": r"pip3\sinstall\spyfunceble.*",
                 "pip-autoremove pyfunceble-dev ": r"pip-autoremove\spyfunceble\s",
             }
-        elif self._is_master_version():
+        elif self.is_master_version():
             regexes = {
                 "pip3 install pyfunceble": r"pip3\sinstall\spyfunceble.*",
                 "pip-autoremove pyfunceble ": r"pip-autoremove\spyfunceble[a-z-_]+\s",

@@ -107,9 +107,7 @@ class Clean:
         Return the list of file to delete.
         """
 
-        directory = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
-        )
+        directory = PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
 
         if not directory.endswith(directory_separator):  # pragma: no cover
             directory += directory_separator
