@@ -94,7 +94,7 @@ Under Windows we look for the following directory in their order. If any configu
 .. note::
     If the parent directory does not exist, we move to the next possible location in the given order.
 
-    This means that under most Windows version, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData`- as the configuration location.
+    This means that under most Windows version, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\PyFunceble`- as the configuration location.
     But if the :code:`%APPDATA%` directory does not exist, we fallback to current directory as the configuration location.
 
 -----------------------------------
