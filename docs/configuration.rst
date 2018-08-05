@@ -97,6 +97,13 @@ Under Windows we look for the following directory in their order. If any configu
     This means that under most Windows version, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\PyFunceble`- as the configuration location.
     But if the :code:`%APPDATA%` directory does not exist, we fallback to current directory as the configuration location.
 
+Auto configuration
+------------------
+
+Sometimes, we may find yourself in a position that you do not or you can't answer the question which ask you if you would like to install the default configuration file. 
+
+For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environnement variable with what you want as assignement, we do not ask that question. We simply do what we have to do whithout asking anything.
+
 -----------------------------------
 
 :code:`adblock`
