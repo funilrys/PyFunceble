@@ -302,7 +302,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`True`
     
-    **Description:** Enable / Disable the output of every logs.
+    **Description:** Enable / Disable the output of all logs.
 
 :code:`no_files`
 ----------------
@@ -329,7 +329,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`False`
     
-    **Description:** Enable / Disable the generation of the plain list of element sorted by statuses.
+    **Description:** Enable / Disable the generation of the plain list of elements sorted by statuses.
 
 :code:`psl_db`
 --------------
@@ -338,7 +338,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`{}`
     
-    **Description:** Save the content of :code:`public-suffix.json` for the different system or subsystems.
+    **Description:** Save the content of :code:`public-suffix.json` for the different systems or subsystems.
 
 .. warning::
     Do not touch this index unless you a have good reason to.
@@ -371,7 +371,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`3`
     
-    **Description:** Set the timeout to apply to every HTTP status code requests.
+    **Description:** Set the timeout to apply to every HTTP status code request.
 
 .. note::
     This index must be a multiple of :code:`3`.
@@ -450,7 +450,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`"PyFunceble - AutoSave"`
     
-    **Description:** Set the default commit message we have to usve when have to save but we did not finished the test.
+    **Description:** Set the default commit message we want to use when have to commit (save) but our tests are not yet completed.
 
 :code:`travis_autosave_final_commit`
 ------------------------------------
@@ -459,7 +459,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`"PyFunceble - Results"`
     
-    **Description:** Set the default final commit message we have to usve when have to save and we finished the test.
+    **Description:** Set the default final commit message we have to use when have to save and all tests are finished.
 
 :code:`travis_autosave_minutes`
 -------------------------------
@@ -471,7 +471,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Description:** Set the minimum of minutes we have to run before to automatically save our test results.
 
 .. note::
-    As many services are settings a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes. 
+    As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes. 
 
 :code:`travis_branch`
 ---------------------
@@ -501,7 +501,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"`
     
-    **Description:** Set the User-Agent to set and use everytime we are requesting something from a web server other than our API.
+    **Description:** Set the User-Agent to use everytime we are requesting something from a web server other than our API.
 
 :code:`outputs`
 ---------------
@@ -539,7 +539,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`iana-domains-db.json`
     
-    **Description:** Set the default filename of the file which have the formated copy of the IANA root zone database.
+    **Description:** Set the default filename of the file which has the formatted copy of the IANA root zone database.
 
 :code:`outputs[default_files][inactive_db]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -548,7 +548,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`inactive_db.json`
     
-    **Description:** Set the default filename of the file which will save the list of element to retest overtime.
+    **Description:** Set the default filename of the file which will save the list of elements to retest overtime.
 
 
 :code:`outputs[default_files][results]`
@@ -558,7 +558,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`results.txt`
     
-    **Description:** Set the default filename of the file which will save the formated copy of the public suffix database.
+    **Description:** Set the default filename of the file which will save the formatted copy of the public suffix database.
 
 :code:`outputs[default_files][public_suffix]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -583,7 +583,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`domains/`
     
-    **Description:** Set the default directory where we have to save the plain list of element for each status.
+    **Description:** Set the default directory where we have to save the plain list of elements for each status.
 
 :code:`outputs[domains][filename]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -592,7 +592,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`list`
     
-    **Description:** Set the default filename of the file which will save the plain list of element.
+    **Description:** Set the default filename of the file which will save the plain list of elements.
 
 :code:`outputs[hosts]`
 """"""""""""""""""""""""
@@ -649,7 +649,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`POTENTIALLY_INACTIVE/`
     
-    **Description:** Set the default directory where we are going to put every potentially inactive data.
+    **Description:** Set the default directory where we are going to put all potentially inactive data.
 
 
 :code:`outputs[http_analytic][directories][potentially_up]`
@@ -659,7 +659,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`POTENTIALLY_INACTIVE/`
     
-    **Description:** Set the default directory where we are going to put every potentially active data.
+    **Description:** Set the default directory where we are going to put all potentially active data.
 
 :code:`outputs[http_analytic][directories][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -668,7 +668,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`POTENTIALLY_INACTIVE/`
     
-    **Description:** Set the default directory where we are going to put every active data.
+    **Description:** Set the default directory where we are going to put all active data.
 
 
 :code:`outputs[http_analytic][filenames]`
@@ -685,7 +685,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`down_or_potentially_down`
     
-    **Description:** Set the default filename where we are going to put every potentially inactive data.
+    **Description:** Set the default filename where we are going to put all potentially inactive data.
 
 
 :code:`outputs[http_analytic][filenames][potentially_up]`
@@ -695,7 +695,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`potentially_up`
     
-    **Description:** Set the default filename where we are going to put every potentially active data.
+    **Description:** Set the default filename where we are going to put all potentially active data.
 
 :code:`outputs[http_analytic][filenames][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -704,7 +704,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`active_and_merged_in_results`
     
-    **Description:** Set the default filename where we are going to put every active data.
+    **Description:** Set the default filename where we are going to put all active data.
 
 
 :code:`outputs[logs]`
@@ -712,7 +712,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Type:** :code:`dict`
     
-    **Description:** Set the default name of some important files and directory related to the :code:`logs` index.
+    **Description:** Set the default name of some important files and directories related to the :code:`logs` index.
 
 
 :code:`outputs[logs][directories]`
@@ -830,7 +830,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     **Default value:** :code:`output/`
     
-    **Description:** Set the directory name of the parent directory which will contains every previously nouned directories.
+    **Description:** Set the directory name of the parent directory which will contains all previously nouned directories.
 
 
 :code:`outputs[splited]`
@@ -943,7 +943,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Description:** Set the official status name.
 
 .. note::
-    Those status are the one that are printed on screen.
+    Those status are the ones that are printed on screen.
 
 .. warning::
     After any changes here please delete :code:`dir_structure.json` and the :code:`output/` directory.
