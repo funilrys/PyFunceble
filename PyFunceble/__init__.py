@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.91.0.dev-beta"
+VERSION = "0.91.1.dev-beta"
 
 if (
     path.isfile(".coveragerc")

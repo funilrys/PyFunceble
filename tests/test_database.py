@@ -419,6 +419,22 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
+        PyFunceble.CONFIGURATION["domain"] = ""
+
+        PyFunceble.CONFIGURATION["URL"] = "http://hello.world"
+
+        expected = {
+            PyFunceble.CONFIGURATION["file_to_test"]: {
+                str(Database()._timestamp()): ["http://hello.world"]
+            }
+        }
+
+        Database().add()
+        self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
+        PyFunceble.CONFIGURATION["domain"] = ""
+        PyFunceble.CONFIGURATION["URL"] = ""
 
     def test_add_file_path_not_present(self):  # pylint: disable=invalid-name
         """
