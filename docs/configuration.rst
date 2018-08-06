@@ -24,7 +24,7 @@ If you cloned the repository and you're trying to test from cloned directory (th
 Travis CI
 """"""""""
 
-Under `Travis CI`, we search or initiate the configuration at the directory we are currently located.
+Under `Travis CI`_, we search or initiate the configuration at the directory we are currently located.
 
 .. warning::
     We don't care about the distribution, as long as the :code:`TRAVIS_BUILD_DIR` environment variable is set, we search or initiate the configuration in the current directory.
