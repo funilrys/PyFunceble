@@ -11,7 +11,7 @@ Problematics
 * How can we create a more efficient way to work with configuration ?
 * How can we make the configuration file(s) available globally so that PyFunceble can be run everywhere in the user workspace ?
 
-To answer those problematics, we moved the configuration location elsewhere in the place where most user expect to have their configuration file(s).
+To answer those problematics, we moved the configuration location elsewhere in the place where most users expect to have their configuration file(s).
 
 Clone
 """""
