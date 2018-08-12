@@ -88,11 +88,13 @@ class TestPrints(BaseStdout):
         This method setup everything needed for the tests.
         """
 
+        PyFunceble.load_config()
         self.file = "this_file_is_a_ghost"
         self.to_print = {
             "basic": {"hello": 5, "world": 6, "here": 7, "is": 8, "PyFunceble": 10},
             "size_constructor": [5, 6, 7, 8, 9, 10],
             "basic_string": "Hello, World!",
+            "hosts": {"0.0.0.0": 7, "hello.world": 11},
         }
 
     @mock.patch("PyFunceble.prints.Prints._header_constructor")
@@ -157,8 +159,8 @@ Hello World!
         actual = PyFunceble.path.isfile(self.file)
 
         expected = [
-            "hello world  here    is       PyFunceble ",
-            "----- ------ ------- -------- ---------- ",
+            "hello world  here    is       PyFunceble",
+            "----- ------ ------- -------- ----------",
         ]
         actual = Prints(
             None, None, output_file=None, only_on_file=False
@@ -177,10 +179,19 @@ Hello World!
         expected = False
         actual = PyFunceble.path.isfile(self.file)
 
-        expected = ["hello world  here    is       PyFunceble "]
+        expected = ["hello world  here    is       PyFunceble"]
         actual = Prints(
             None, None, output_file=None, only_on_file=False
         )._header_constructor(self.to_print["basic"], None)
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that we want to print the hosts file format.
+        expected = [" ".join(self.to_print["hosts"].keys())]
+
+        actual = Prints(
+            None, None, output_file=None, only_on_file=False
+        )._header_constructor(self.to_print["hosts"], None)
 
         self.assertEqual(expected, actual)
 

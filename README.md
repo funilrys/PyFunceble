@@ -20,8 +20,6 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 Want to know more about **PyFunceble**? 
 We invite you to read the documenation at https://pyfunceble.readthedocs.io!
 
-### Local copy of the documentation
-
 Want a local copy ? We get you covered!
 
 Simply run the following and enjoy the documentation!
@@ -56,7 +54,7 @@ This project helps you and or you like it?
 
 ## Contributors
 
-Thanks to those awesome peoples for their awesome and crazy idea(s) and or contribution(s) which made or make **[Funceble](https://github.com/funilrys/funceble)** and (or indirectly) **[PyFunceble](https://github.com/funilrys/PyFunceble)** better.
+Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make **[PyFunceble](https://github.com/funilrys/PyFunceble)** a better tool.
 
      _______ _                 _          _                              _
     |__   __| |               | |        | |                            | |
@@ -67,6 +65,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s) and or contr
                                                       __/ |
                                                      |___/
 
+-   dnmTX - [@dnmTX](https://github.com/dnmTX)
 -   Mitchell Krog - [@mitchellkrogza](https://github.com/mitchellkrogza)
 -   Odyseus - [@Odyseus](https://github.com/Odyseus)
 -   Reza Rizqullah - [@ybreza](https://github.com/ybreza)
@@ -87,7 +86,7 @@ Thanks to those awesome organization(s) and people(s) for
 -   Their support
 -   Their testings reports
 
-which helped and/or still help me build and or test **[Funceble](https://github.com/funilrys/funceble)** and (or indirectly) **[PyFunceble](https://github.com/funilrys/PyFunceble)**.
+which helped and/or still help me build, test and or make **[PyFunceble](https://github.com/funilrys/PyFunceble)** a better tool.
 
      _______ _                 _          _                              _
     |__   __| |               | |        | |                            | |

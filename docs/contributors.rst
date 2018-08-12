@@ -1,7 +1,7 @@
 Contributors
 ============
 
-Thanks to those awesome peoples for their awesome and crazy idea(s) and or contribution(s) which made or make `Funceble`_ and (or indirectly) `PyFunceble`_ better.
+Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
 ::
 
     _______ _                 _          _                              _
@@ -13,6 +13,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s) and or contr
                                                      __/ |
                                                     |___/
 
+-   dnmTX - `@dnmTX`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
@@ -21,6 +22,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s) and or contr
 
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _@dnmTX: https://github.com/dnmTX
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@ybreza: https://github.com/ybreza

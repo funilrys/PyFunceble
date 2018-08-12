@@ -11,7 +11,7 @@ Thanks to those awesome organization(s) and people(s) for
 *   Their support
 *   Their testings reports
 
-which helped and/or still help me build and or test `Funceble`_ and (or indirectly) `PyFunceble`_.
+which helped and/or still help me build, test and or make `PyFunceble`_ a better tool.
 
 ::
 
@@ -24,11 +24,11 @@ which helped and/or still help me build and or test `Funceble`_ and (or indirect
                                                       __/ |
                                                      |___/
 
-*   Adam Warner - `@PromoFaux`_
-*   Mitchell Krog - `@mitchellkrogza`_
-*   Pi-Hole - `@pi-hole`_
-*   Reza Rizqullah - `@ybreza`_
-*   SMed79 - `@SMed79`_
+-   Adam Warner - `@PromoFaux`_
+-   Mitchell Krog - `@mitchellkrogza`_
+-   Pi-Hole - `@pi-hole`_
+-   Reza Rizqullah - `@ybreza`_
+-   SMed79 - `@SMed79`_
 
 
 .. _Funceble: https://github.com/funilrys/funceble

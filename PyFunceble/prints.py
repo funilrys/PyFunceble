@@ -179,15 +179,19 @@ class Prints:
                 File(self.output).write(link + date_of_generation)
 
     @classmethod
-    def _header_constructor(cls, data_to_print, separator="-"):
+    def _header_constructor(
+        cls, data_to_print, header_separator="-", column_separator=" "
+    ):
         """
         Construct header of the table according to template.
 
         Arguments:
             - data_to_print: list
                 The list of data to print into the header.
-            - separator: str
+            - header_separator: str
                 The separator to use for the table header generation.
+            - colomn_separator: str
+                The separator to use between each colomns.
 
         Returns: list
             The data to print in list format.
@@ -196,10 +200,13 @@ class Prints:
         header_data = []
         header_size = ""
         before_size = "%-"
-        after_size = "s "
+        after_size = "s"
 
-        if separator:
-            separator_data = []
+        if header_separator:
+            header_separator_data = []
+
+        length_data_to_print = len(data_to_print) - 1
+        i = 0
 
         for data in data_to_print:
             size = data_to_print[data]
@@ -207,13 +214,18 @@ class Prints:
 
             header_size += before_size + str(size) + after_size
 
-            if separator:
-                separator_data.append(separator * size)
+            if i < length_data_to_print:
+                header_size += column_separator
 
-        if separator:
+            if header_separator:
+                header_separator_data.append(header_separator * size)
+
+            i += 1
+
+        if header_separator:
             return [
                 header_size % tuple(header_data),
-                header_size % tuple(separator_data),
+                header_size % tuple(header_separator_data),
             ]
 
         return [header_size % tuple(header_data)]
