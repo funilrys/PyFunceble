@@ -282,11 +282,10 @@ class Core:  # pragma: no cover
                 not PyFunceble.CONFIGURATION["simple"]
                 and PyFunceble.CONFIGURATION["file_to_test"]
             ):
-                if PyFunceble.CONFIGURATION["inactive_database"]:
-                    if status.lower() in PyFunceble.STATUS["list"]["up"]:
-                        Database().remove()
-                    else:
-                        Database().add()
+                if status.lower() in PyFunceble.STATUS["list"]["up"]:
+                    Database().remove()
+                else:
+                    Database().add()
 
                 AutoContinue().backup()
 
@@ -491,10 +490,9 @@ class Core:  # pragma: no cover
 
         return result
 
-    def file(self):
+    def _file_list_to_test_filtering(self):
         """
-        Manage the case that need to test each domain of a given file path.
-        Note: 1 domain per line.
+        This method will unify the way we work before testing file contents.
         """
 
         list_to_test = self._extract_domain_from_file()
@@ -508,27 +506,34 @@ class Core:  # pragma: no cover
 
         PyFunceble.Clean(list_to_test)
 
-        if PyFunceble.CONFIGURATION["inactive_database"]:
-            Database().to_test()
+        Database().to_test()
 
-            if (
+        if (
+            PyFunceble.CONFIGURATION["file_to_test"]
+            in PyFunceble.CONFIGURATION["inactive_db"]
+            and "to_test"
+            in PyFunceble.CONFIGURATION["inactive_db"][
                 PyFunceble.CONFIGURATION["file_to_test"]
-                in PyFunceble.CONFIGURATION["inactive_db"]
-                and "to_test"
-                in PyFunceble.CONFIGURATION["inactive_db"][
-                    PyFunceble.CONFIGURATION["file_to_test"]
-                ]
-                and PyFunceble.CONFIGURATION["inactive_db"][
+            ]
+            and PyFunceble.CONFIGURATION["inactive_db"][
+                PyFunceble.CONFIGURATION["file_to_test"]
+            ]["to_test"]
+        ):
+            list_to_test.extend(
+                PyFunceble.CONFIGURATION["inactive_db"][
                     PyFunceble.CONFIGURATION["file_to_test"]
                 ]["to_test"]
-            ):
-                list_to_test.extend(
-                    PyFunceble.CONFIGURATION["inactive_db"][
-                        PyFunceble.CONFIGURATION["file_to_test"]
-                    ]["to_test"]
-                )
+            )
 
-        regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$"  # pylint: disable=line-too-long
+        regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
+
+        if PyFunceble.CONFIGURATION["inactive_db"]:
+            in_database = Database().escaped_content()
+
+            if in_database:
+                # We remove the already tested elements.
+                # We remove the list of INVALID and INACTIVE which were tested previously.
+                regex_delete += "$|".join(in_database) + "$"
 
         list_to_test = List(
             Regex(list_to_test, regex_delete).not_matching_list()
@@ -540,6 +545,16 @@ class Core:  # pragma: no cover
                     list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
                 ).matching_list()
             ).format()
+
+        return list_to_test
+
+    def file(self):
+        """
+        Manage the case that need to test each domain of a given file path.
+        Note: 1 domain per line.
+        """
+
+        list_to_test = self._file_list_to_test_filtering()
 
         list(
             map(
@@ -585,38 +600,7 @@ class Core:  # pragma: no cover
         Note: 1 URL per line.
         """
 
-        list_to_test = self._extract_domain_from_file()
-
-        AutoContinue().restore()
-
-        PyFunceble.Clean(list_to_test)
-
-        if PyFunceble.CONFIGURATION["inactive_database"]:
-            Database().to_test()
-
-            if (
-                PyFunceble.CONFIGURATION["file_to_test"]
-                in PyFunceble.CONFIGURATION["inactive_db"]
-                and "to_test"
-                in PyFunceble.CONFIGURATION["inactive_db"][
-                    PyFunceble.CONFIGURATION["file_to_test"]
-                ]
-                and PyFunceble.CONFIGURATION["inactive_db"][
-                    PyFunceble.CONFIGURATION["file_to_test"]
-                ]["to_test"]
-            ):
-                list_to_test.extend(
-                    PyFunceble.CONFIGURATION["inactive_db"][
-                        PyFunceble.CONFIGURATION["file_to_test"]
-                    ]["to_test"]
-                )
-
-        if PyFunceble.CONFIGURATION["filter"]:
-            list_to_test = List(
-                Regex(
-                    list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
-                ).matching_list()
-            ).format()
+        list_to_test = self._file_list_to_test_filtering()
 
         list(
             map(

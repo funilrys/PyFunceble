@@ -172,7 +172,6 @@ class TestDatabase(TestCase):
         }
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -202,7 +201,6 @@ class TestDatabase(TestCase):
         Database()._add_to_test("world.hello")
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -230,7 +228,6 @@ class TestDatabase(TestCase):
         Database()._add_to_test("hello.world")
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -252,7 +249,6 @@ class TestDatabase(TestCase):
         Database().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -286,7 +282,6 @@ class TestDatabase(TestCase):
         Database().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -320,7 +315,6 @@ class TestDatabase(TestCase):
         Database().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -561,8 +555,59 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        self.assertEqual(expected, Dict().from_json(File(self.file).read()))
         PyFunceble.CONFIGURATION["inactive_db"] = {}
+
+    def test_escaped_content(self):
+        """
+        This method will test Database().escaped_content().
+        """
+
+        File(self.file).delete()
+
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that everything goes right !
+        timestamp = str(Database()._timestamp())
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {
+            PyFunceble.CONFIGURATION["file_to_test"]: {
+                timestamp: ["hello.world", "world.hello", "hello-world.com"],
+                "to_test": ["hello.world", "world.hello"],
+            }
+        }
+        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+
+        expected = [r"hello\.world", r"world\.hello", r"hello\-world\.com"]
+
+        actual = Database().escaped_content()
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that the database is not activated
+        PyFunceble.CONFIGURATION["inactive_database"] = False
+
+        expected = None
+        actual = Database().escaped_content()
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that there is nothing in the database.
+        PyFunceble.CONFIGURATION["inactive_db"] = {
+            PyFunceble.CONFIGURATION["file_to_test"]: {
+                "to_test": ["hello.world", "world.hello"]
+            }
+        }
+
+        actual = Database().escaped_content()
+
+        self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
+        PyFunceble.CONFIGURATION["domain"] = ""
+        PyFunceble.CONFIGURATION["inactive_database"] = True
 
 
 if __name__ == "__main__":
