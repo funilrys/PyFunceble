@@ -256,7 +256,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 whois_record, regex_referer, return_data=True, rematch=True
             ).match()
 
-            if matched:
+            if matched and "domain: " not in matched[1]:
                 return matched[1]
 
         if extension in manual_server:
