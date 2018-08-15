@@ -77,15 +77,9 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.93.0.dev-beta"
+VERSION = "0.94.0.dev-beta"
 
-if (
-    path.isfile(".coveragerc")
-    and path.isfile(".coveralls.yml")
-    and path.isfile("CODE_OF_CONDUCT.md")
-    and path.isfile("CONTRIBUTING.md")
-    and path.isfile("version.yaml")
-):  # pragma: no cover
+if Version(True).is_cloned():  # pragma: no cover
     CURRENT_DIRECTORY = getcwd() + directory_separator
 elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["TRAVIS_BUILD_DIR"]

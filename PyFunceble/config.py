@@ -186,11 +186,9 @@ Install the default configuration in the current directory ? [y/n] "
         """
 
         production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
-
-        if "dev" in PyFunceble.VERSION:
-            production_config_link = production_config_link.replace("master", "dev")
-        else:
-            production_config_link = production_config_link.replace("dev", "master")
+        production_config_link = Version(True).right_url_from_version(
+            production_config_link
+        )
 
         return Download(production_config_link, self.path_to_config).text()
 
@@ -203,15 +201,12 @@ Install the default configuration in the current directory ? [y/n] "
         iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"  # pylint: disable=line-too-long
         destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
 
-        if "dev" in PyFunceble.VERSION:
-            iana_link = iana_link.replace("master", "dev")
-        else:
-            iana_link = iana_link.replace("dev", "master")
+        iana_link = Version(True).right_url_from_version(iana_link)
 
-        if not path.isfile(destination):
+        if not Version(True).is_cloned():
             return Download(iana_link, destination).text()
 
-        return True
+        return None
 
     @classmethod
     def _install_psl_config(cls):
@@ -225,15 +220,12 @@ Install the default configuration in the current directory ? [y/n] "
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
         )
 
-        if "dev" in PyFunceble.VERSION:
-            psl_link = psl_link.replace("master", "dev")
-        else:
-            psl_link = psl_link.replace("dev", "master")
+        psl_link = Version(True).right_url_from_version(psl_link)
 
-        if not path.isfile(destination):
+        if not Version(True).is_cloned():
             return Download(psl_link, destination).text()
 
-        return False
+        return None
 
 
 class Version:
@@ -254,10 +246,7 @@ class Version:
                 "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
             )  # pylint: disable=line-too-long
 
-            if "dev" in PyFunceble.VERSION:
-                upstream_link = upstream_link.replace("master", "dev")
-            else:
-                upstream_link = upstream_link.replace("dev", "master")
+            upstream_link = Version(True).right_url_from_version(upstream_link)
 
             self.upstream_data = Dict().from_yaml(
                 Download(upstream_link, return_data=True).text()
@@ -441,3 +430,39 @@ class Version:
                 print("New version available.")
 
         return
+
+    @classmethod
+    def is_cloned(cls):
+        """
+        This method will let us know if we are currently in the cloned version of
+        PyFunceble which implicitly mean that we are in developpement mode.
+        """
+
+        list_of_file = [
+            ".coveragerc",
+            ".coveralls.yml",
+            "CODE_OF_CONDUCT.md",
+            "CONTRIBUTING.md",
+            "version.yaml",
+        ]
+
+        for file in list_of_file:
+            if not path.isfile(file):
+                return False
+
+        return True
+
+    @classmethod
+    def right_url_from_version(cls, url):
+        """
+        This method will convert the GitHub URL to the right one depending of the
+        branch or version we are working with.
+
+        Argument:
+            - url: str
+                The url to convert.
+        """
+
+        if "dev" in PyFunceble.VERSION:
+            return url.replace("master", "dev")
+        return url.replace("dev", "master")
