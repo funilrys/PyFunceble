@@ -29,7 +29,7 @@ Coding conventions
   - Exception granted for regular expressions or long string assignment.
 - We use `Black`_, *The uncompromising Python code formatter* , to format our code.
 - Our code should pass :code:`pylint PyFunceble && pylint tests/*.py` with at least a score of 10.00/10.00
-- We do not forget to run :code:`black PyFunceble && black tests/*.py && PyFunceble --production` before any commits.
+- We do not forget to run :code:`black PyFunceble && black tests/*.py && pylint PyFunceble && pylint tests/*.py && PyFunceble --production` before any commits.
 
 .. _GitHub documentation: https://github.com/blog/2144-gpg-signature-verification
 .. _Black: https://github.com/ambv/black
