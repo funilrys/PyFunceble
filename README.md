@@ -1,9 +1,9 @@
-![](https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.assets/logo/RM.png)
+![](https://raw.githubusercontent.com/funilrys/PyFunceble/master/.assets/logo/RM.png)
 
 ## The tool to check domains or IP availability
 
 
-[![Build Status](https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev)](https://travis-ci.com/funilrys/PyFunceble) [![Coverage Status](https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev)](https://coveralls.io/github/funilrys/PyFunceble?branch=dev) [![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/dev/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest) [![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/issues) [![Code style | Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Build Status](https://travis-ci.com/funilrys/PyFunceble.svg?branch=master)](https://travis-ci.com/funilrys/PyFunceble) [![Coverage Status](https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=master)](https://coveralls.io/github/funilrys/PyFunceble?branch=master) [![license](https://img.shields.io/github/license/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/releases/latest) [![GitHub issues open](https://img.shields.io/github/issues/funilrys/PyFunceble.svg)](https://github.com/funilrys/PyFunceble/issues) [![Code style | Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 PyFunceble is the little sister of [Funceble](https://github.com/funilrys/funceble) which was archived on 13<sup>th</sup> March, 2018.
 

@@ -131,7 +131,7 @@ def _get_long_description(): # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble-dev",
+        name="PyFunceble",
         version=_get_version(),
         install_requires=_get_requirements(),
         description="The tool to check domains or IP availability.",
@@ -148,7 +148,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 4 - Beta",
+            "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
