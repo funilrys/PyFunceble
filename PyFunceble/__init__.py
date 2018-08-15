@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.94.1.dev-beta"
+VERSION = "0.94.2.dev-beta"
 
 if Version(True).is_cloned():  # pragma: no cover
     CURRENT_DIRECTORY = getcwd() + directory_separator

@@ -39,8 +39,8 @@ Execute the following and enjoy PyFunceble!
 Developement version
 --------------------
 
-For developpement
-^^^^^^^^^^^^^^^^^
+For developement
+^^^^^^^^^^^^^^^^
 
 ::
 

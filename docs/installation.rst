@@ -83,8 +83,8 @@ It's intended for the developement of next features but is always at a usable st
 
 Indeed, We should not push to the :code:`dev` branch until we are sure that the new commit does not break or introduce critical issue under PyFunceble.
 
-For developpement
-^^^^^^^^^^^^^^^^^
+For developement
+^^^^^^^^^^^^^^^^
 
 Execute the following and let's hack PyFunceble!
 

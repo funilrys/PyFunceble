@@ -435,7 +435,7 @@ class Version:
     def is_cloned(cls):
         """
         This method will let us know if we are currently in the cloned version of
-        PyFunceble which implicitly mean that we are in developpement mode.
+        PyFunceble which implicitly mean that we are in developement mode.
         """
 
         list_of_file = [
