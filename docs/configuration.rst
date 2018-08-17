@@ -29,6 +29,9 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
 .. warning::
     We don't care about the distribution, as long as the :code:`TRAVIS_BUILD_DIR` environment variable is set, we search or initiate the configuration in the current directory.
 
+.. note::
+    If you want to force the directory where we should work, you can initiate the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable with the path where we should work.
+
 .. _Travis CI: https://travis-ci.org/
 
 Linux
@@ -99,10 +102,17 @@ Under Windows we look for the following directories in their order. If any confi
     This means that under most Windows versions, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\PyFunceble`- as the configuration location.
     But if the :code:`%APPDATA%` directory does not exist, we fallback to current directory as the configuration location.
 
+Custom configuration location
+-----------------------------
+
+Sometimes, you may find yourself in a position where you absolutly do not want PyFunceble to use its default configuration location. 
+
+For that reason, if you set your desired configuration location along with the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable, we take that location as the (default) configuration location.
+
 Auto configuration
 ------------------
 
-Sometimes, we may find yourself in a position that you do not or you can't answer the question which ask you if you would like to install the default configuration file. 
+Sometimes, you may find yourself in a position that you do not or you can't answer the question which ask you if you would like to install the default configuration file. 
 
 For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environnement variable with what you want as assignement, we do not ask that question. We simply do what we have to do whithout asking anything.
 
