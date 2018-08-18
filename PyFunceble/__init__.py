@@ -77,20 +77,14 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.95.0.dev-Sarcoline_Puku-beta"
+VERSION = "0.95.1.dev-Sarcoline_Puku-beta"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
-
-    if not CURRENT_DIRECTORY.endswith(directory_separator):
-        CURRENT_DIRECTORY += directory_separator
 elif Version(True).is_cloned():  # pragma: no cover
     CURRENT_DIRECTORY = getcwd() + directory_separator
 elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = getcwd() + directory_separator
-
-    if not CURRENT_DIRECTORY.endswith(directory_separator):
-        CURRENT_DIRECTORY += directory_separator
 else:  # pragma: no cover
     if system().lower() == "linux":
         config_dir_path = (
@@ -123,10 +117,14 @@ else:  # pragma: no cover
 
     if not CURRENT_DIRECTORY.endswith(directory_separator):
         CURRENT_DIRECTORY += directory_separator
+
     CURRENT_DIRECTORY += NAME + directory_separator
 
     if not path.isdir(CURRENT_DIRECTORY):
         mkdir(CURRENT_DIRECTORY)
+
+if not CURRENT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
+    CURRENT_DIRECTORY += directory_separator
 
 OUTPUT_DIRECTORY = getcwd() + directory_separator
 
