@@ -66,7 +66,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import path, strftime
-from PyFunceble.helpers import Dict, File, escape
+from PyFunceble.helpers import Dict, File
 
 
 class Database:
@@ -270,28 +270,23 @@ class Database:
 
             self._backup()
 
-    def escaped_content(self):
+    def content(self):
         """
-        Return the list of element which are already in the database.
+        This method will return the content of the database.
         """
 
-        if PyFunceble.CONFIGURATION["inactive_database"]:
-            result = []
+        result = []
 
+        if (
+            PyFunceble.CONFIGURATION["inactive_database"]
+            and PyFunceble.CONFIGURATION["inactive_db"]
+        ):
             for key in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                 if key == "to_test":
                     continue
 
                 result.extend(
-                    list(
-                        map(
-                            escape,
-                            PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
-                                key
-                            ],
-                        )
-                    )
+                    PyFunceble.CONFIGURATION["inactive_db"][self.file_path][key]
                 )
 
-            return result
-        return None
+        return result

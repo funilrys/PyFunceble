@@ -557,9 +557,9 @@ class TestDatabase(TestCase):
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
-    def test_escaped_content(self):
+    def test_content(self):
         """
-        This method will test Database().escaped_content().
+        This method will test Database().content().
         """
 
         File(self.file).delete()
@@ -580,17 +580,17 @@ class TestDatabase(TestCase):
         }
         PyFunceble.CONFIGURATION["domain"] = "hello.world"
 
-        expected = [r"hello\.world", r"world\.hello", r"hello\-world\.com"]
+        expected = ["hello.world", "world.hello", "hello-world.com"]
 
-        actual = Database().escaped_content()
+        actual = Database().content()
 
         self.assertEqual(expected, actual)
 
         # Test of the case that the database is not activated
         PyFunceble.CONFIGURATION["inactive_database"] = False
 
-        expected = None
-        actual = Database().escaped_content()
+        expected = []
+        actual = Database().content()
 
         self.assertEqual(expected, actual)
 
@@ -601,7 +601,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        actual = Database().escaped_content()
+        actual = Database().content()
 
         self.assertEqual(expected, actual)
 

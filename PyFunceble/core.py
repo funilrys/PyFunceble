@@ -526,17 +526,13 @@ class Core:  # pragma: no cover
             )
 
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
-
-        if PyFunceble.CONFIGURATION["inactive_db"]:
-            in_database = Database().escaped_content()
-
-            if in_database:
-                # We remove the already tested elements.
-                # We remove the list of INVALID and INACTIVE which were tested previously.
-                regex_delete += "$|".join(in_database) + "$"
+        database_content = Database().content()
 
         list_to_test = List(
-            Regex(list_to_test, regex_delete).not_matching_list()
+            list(
+                set(Regex(list_to_test, regex_delete).not_matching_list())
+                - set(database_content)
+            )
         ).format()
 
         if PyFunceble.CONFIGURATION["filter"]:
