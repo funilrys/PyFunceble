@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.95.1.dev-Sarcoline_Puku-beta"
+VERSION = "0.96.0.dev-Sarcoline_Puku-beta"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
@@ -172,20 +172,10 @@ def load_config(under_test=False):  # pragma: no cover
 
     Load(CURRENT_DIRECTORY)
 
-    if not under_test:
-        global OUTPUT_DIRECTORY  # pylint: disable=global-statement
-
-        if OUTPUTS["main"]:
-            CURRENT_DIRECTORY = OUTPUTS["main"]
-
-            if not CURRENT_DIRECTORY.endswith(directory_separator):
-                CURRENT_DIRECTORY += directory_separator
-
-            if path.isfile(CURRENT_DIRECTORY + CONFIGURATION_FILENAME):
-                Load(CURRENT_DIRECTORY)
-
-        if not path.isdir(CURRENT_DIRECTORY + OUTPUTS["parent_directory"]):
-            DirectoryStructure()
+    if not under_test and not path.isdir(
+        CURRENT_DIRECTORY + OUTPUTS["parent_directory"]
+    ):
+        DirectoryStructure()
 
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
