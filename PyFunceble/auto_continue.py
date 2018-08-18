@@ -116,9 +116,9 @@ class AutoContinue:
         Restore data from the given path.
         """
 
-        file_to_restore = PyFunceble.CONFIGURATION["file_to_test"]
-
         if PyFunceble.CONFIGURATION["auto_continue"] and self.backup_content:
+            file_to_restore = PyFunceble.CONFIGURATION["file_to_test"]
+
             if file_to_restore in self.backup_content:
                 to_initiate = ["up", "down", "invalid", "tested"]
 
