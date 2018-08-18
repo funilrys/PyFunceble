@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.96.0.dev-Sarcoline_Puku-beta"
+VERSION = "0.96.1.dev-Sarcoline_Puku-beta"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
@@ -167,8 +167,6 @@ def load_config(under_test=False):  # pragma: no cover
             or load the configuration file and initate the output directory
             if it does not exist (False).
     """
-
-    global CURRENT_DIRECTORY  # pylint: disable=global-statement
 
     Load(CURRENT_DIRECTORY)
 
