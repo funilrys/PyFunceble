@@ -64,7 +64,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Fore, OrderedDict, Style
+from PyFunceble import Fore, OrderedDict, Style, time
 
 
 class ExecutionTime:  # pylint: disable=too-few-public-methods
@@ -101,7 +101,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the starting time.
         """
 
-        PyFunceble.CONFIGURATION["start"] = PyFunceble.CURRENT_TIME_EPOCH
+        PyFunceble.CONFIGURATION["start"] = int(time())
 
     @classmethod
     def _stoping_time(cls):  # pragma: no cover
@@ -109,7 +109,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the ending time.
         """
 
-        PyFunceble.CONFIGURATION["end"] = PyFunceble.CURRENT_TIME_EPOCH
+        PyFunceble.CONFIGURATION["end"] = int(time())
 
     @classmethod
     def _calculate(cls):
@@ -126,7 +126,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
         data = OrderedDict()
 
-        data["days"] = str((time_difference // 24) % 24).zfill(2)
+        data["days"] = str(time_difference // (24 * 3600)).zfill(2)
         data["hours"] = str(time_difference // 3600).zfill(2)
         data["minutes"] = str((time_difference % 3600) // 60).zfill(2)
         data["seconds"] = str(time_difference % 60).zfill(2)
@@ -141,14 +141,4 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             A human readable date.
         """
 
-        result = ""
-        calculated_time = self._calculate()
-        times = list(calculated_time.keys())
-
-        for time in times:
-            result += calculated_time[time]
-
-            if time != times[-1]:
-                result += ":"
-
-        return result
+        return ":".join(list(self._calculate().values()))

@@ -92,8 +92,8 @@ class TestDatabase(TestCase):
             }
         }
 
-        self.time_past = str(PyFunceble.CURRENT_TIME_EPOCH - (365 * 24 * 3600))
-        self.time_future = str(PyFunceble.CURRENT_TIME_EPOCH + (365 * 24 * 3600))
+        self.time_past = str(int(PyFunceble.time()) - (365 * 24 * 3600))
+        self.time_future = str(int(PyFunceble.time()) + (365 * 24 * 3600))
 
     def test_retrieve_file_not_exist(self):
         """

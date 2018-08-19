@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.97.1.dev-Sarcoline_Puku-beta"
+VERSION = "0.98.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
@@ -132,7 +132,6 @@ DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
-CURRENT_TIME_EPOCH = int(time())
 
 CONFIGURATION = {}
 STATUS = {}

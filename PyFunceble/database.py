@@ -65,7 +65,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import path
+from PyFunceble import path, time
 from PyFunceble.helpers import Dict, File
 
 
@@ -156,10 +156,7 @@ class Database:
             if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
                 for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     if data != "to_test":
-                        if (
-                            PyFunceble.CURRENT_TIME_EPOCH
-                            > int(data) + self.day_in_seconds
-                        ):
+                        if int(time()) > int(data) + self.day_in_seconds:
                             result.extend(
                                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                                     data
@@ -195,13 +192,10 @@ class Database:
             ):
                 for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     if data != "to_test":
-                        if (
-                            PyFunceble.CURRENT_TIME_EPOCH
-                            < int(data) + self.day_in_seconds
-                        ):
+                        if int(time()) < int(data) + self.day_in_seconds:
                             result = int(data)
                         else:
-                            result = PyFunceble.CURRENT_TIME_EPOCH
+                            result = int(time())
                             to_delete.append(data)
 
                 for element in to_delete:
@@ -214,7 +208,7 @@ class Database:
 
                 return result
 
-        return PyFunceble.CURRENT_TIME_EPOCH
+        return int(time())
 
     def add(self):
         """

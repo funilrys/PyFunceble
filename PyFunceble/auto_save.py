@@ -64,7 +64,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble import directory_separator
+from PyFunceble import directory_separator, time
 from PyFunceble.helpers import Command
 from PyFunceble.percentage import Percentage
 
@@ -120,7 +120,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
             time_autorisation = False
 
             try:
-                time_autorisation = PyFunceble.CURRENT_TIME_EPOCH >= int(
+                time_autorisation = int(time()) >= int(
                     PyFunceble.CONFIGURATION["start"]
                 ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
             except KeyError:
