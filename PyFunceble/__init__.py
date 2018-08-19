@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.99.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.99.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
