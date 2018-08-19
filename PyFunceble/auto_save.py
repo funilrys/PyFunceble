@@ -117,11 +117,10 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
         try:
             _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
-            current_time = PyFunceble.CURRENT_TIME_EPOCH
             time_autorisation = False
 
             try:
-                time_autorisation = current_time >= int(
+                time_autorisation = PyFunceble.CURRENT_TIME_EPOCH >= int(
                     PyFunceble.CONFIGURATION["start"]
                 ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
             except KeyError:
