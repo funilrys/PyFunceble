@@ -343,6 +343,12 @@ class TestDirectory(TestCase):
         actual = Directory(r"hello/world/").fix_path()
         self.assertEqual(expected, actual)
 
+        to_test = ["", None, []]
+
+        for element in to_test:
+            actual = Directory(element).fix_path()
+            self.assertEqual(element, actual)
+
 
 class TestFile(TestCase):
     """

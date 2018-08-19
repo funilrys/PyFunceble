@@ -120,10 +120,6 @@ Install the default configuration in the current directory ? [y/n] "
                     key
                 ] = Directory(value).fix_path()
 
-        PyFunceble.CONFIGURATION["outputs"]["main"] = Directory(
-            PyFunceble.CONFIGURATION["outputs"]["main"]
-        ).fix_path()
-
         PyFunceble.STATUS.update(PyFunceble.CONFIGURATION["status"])
         PyFunceble.OUTPUTS.update(PyFunceble.CONFIGURATION["outputs"])
         PyFunceble.HTTP_CODE.update(PyFunceble.CONFIGURATION["http_codes"])

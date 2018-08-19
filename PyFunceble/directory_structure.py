@@ -76,10 +76,8 @@ class DirectoryStructure:  # pragma: no cover
     """
 
     def __init__(self, production=False):
-        if PyFunceble.OUTPUTS["main"]:
-            self.base = PyFunceble.OUTPUTS["main"]
-        else:
-            self.base = PyFunceble.CURRENT_DIRECTORY
+        
+        self.base = PyFunceble.CURRENT_DIRECTORY
 
         if not self.base.endswith(directory_separator):
             self.base += directory_separator
