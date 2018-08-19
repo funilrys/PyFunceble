@@ -92,8 +92,8 @@ class TestDatabase(TestCase):
             }
         }
 
-        self.time_past = str(int(PyFunceble.strftime("%s")) - (365 * 24 * 3600))
-        self.time_future = str(int(PyFunceble.strftime("%s")) + (365 * 24 * 3600))
+        self.time_past = str(PyFunceble.CURRENT_TIME_EPOCH - (365 * 24 * 3600))
+        self.time_future = str(PyFunceble.CURRENT_TIME_EPOCH + (365 * 24 * 3600))
 
     def test_retrieve_file_not_exist(self):
         """
@@ -333,10 +333,10 @@ class TestDatabase(TestCase):
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
-        expected = int(PyFunceble.strftime("%s"))
+        expected = int(PyFunceble.time())
         actual = Database()._timestamp()
 
-        self.assertEqual(expected, actual)
+        self.assertGreaterEqual(expected, actual)
 
     def test_timestamp_path_exist_time_past(self):  # pylint: disable=invalid-name
         """
@@ -357,9 +357,9 @@ class TestDatabase(TestCase):
             }
         }
 
-        expected = int(PyFunceble.strftime("%s"))
+        expected = int(PyFunceble.time())
         actual = Database()._timestamp()
-        self.assertEqual(expected, actual)
+        self.assertGreaterEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 

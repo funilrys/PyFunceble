@@ -74,7 +74,8 @@ from subprocess import PIPE, Popen
 from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
-from PyFunceble import directory_separator, path, requests, copy as shutil_copy
+from PyFunceble import copy as shutil_copy
+from PyFunceble import directory_separator, path, requests
 
 
 class Hash:  # pylint: disable=too-few-public-methods

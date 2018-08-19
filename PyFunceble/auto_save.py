@@ -64,7 +64,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble import directory_separator, strftime
+from PyFunceble import directory_separator
 from PyFunceble.helpers import Command
 from PyFunceble.percentage import Percentage
 
@@ -117,7 +117,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
         try:
             _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
-            current_time = int(strftime("%s"))
+            current_time = PyFunceble.CURRENT_TIME_EPOCH
             time_autorisation = False
 
             try:

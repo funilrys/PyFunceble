@@ -65,7 +65,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import path, strftime
+from PyFunceble import path
 from PyFunceble.helpers import Dict, File
 
 
@@ -78,7 +78,6 @@ class Database:
 
     def __init__(self):
         self.file_path = PyFunceble.CONFIGURATION["file_to_test"]
-        self.current_time = int(strftime("%s"))
         self.day_in_seconds = (
             PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
         )
@@ -157,7 +156,10 @@ class Database:
             if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
                 for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     if data != "to_test":
-                        if self.current_time > int(data) + self.day_in_seconds:
+                        if (
+                            PyFunceble.CURRENT_TIME_EPOCH
+                            > int(data) + self.day_in_seconds
+                        ):
                             result.extend(
                                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                                     data
@@ -193,10 +195,13 @@ class Database:
             ):
                 for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     if data != "to_test":
-                        if self.current_time < int(data) + self.day_in_seconds:
+                        if (
+                            PyFunceble.CURRENT_TIME_EPOCH
+                            < int(data) + self.day_in_seconds
+                        ):
                             result = int(data)
                         else:
-                            result = self.current_time
+                            result = PyFunceble.CURRENT_TIME_EPOCH
                             to_delete.append(data)
 
                 for element in to_delete:
@@ -209,7 +214,7 @@ class Database:
 
                 return result
 
-        return self.current_time
+        return PyFunceble.CURRENT_TIME_EPOCH
 
     def add(self):
         """

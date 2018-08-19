@@ -62,7 +62,7 @@ from os import sep as directory_separator
 from os import walk
 from platform import system
 from shutil import copy
-from time import strftime
+from time import strftime, time
 
 import requests
 from colorama import Back, Fore, Style
@@ -77,7 +77,7 @@ from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
 NAME = "PyFunceble"
-VERSION = "0.96.2.dev-Sarcoline_Puku-beta"
+VERSION = "0.97.0.dev-Sarcoline_Puku-beta"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
@@ -131,8 +131,10 @@ OUTPUT_DIRECTORY = getcwd() + directory_separator
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
-CONFIGURATION = {}
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
+CURRENT_TIME_EPOCH = int(time())
+
+CONFIGURATION = {}
 STATUS = {}
 OUTPUTS = {}
 HTTP_CODE = {}

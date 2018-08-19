@@ -64,7 +64,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Fore, OrderedDict, Style, strftime
+from PyFunceble import Fore, OrderedDict, Style
 
 
 class ExecutionTime:  # pylint: disable=too-few-public-methods
@@ -101,7 +101,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the starting time.
         """
 
-        PyFunceble.CONFIGURATION["start"] = int(strftime("%s"))
+        PyFunceble.CONFIGURATION["start"] = PyFunceble.CURRENT_TIME_EPOCH
 
     @classmethod
     def _stoping_time(cls):  # pragma: no cover
@@ -109,7 +109,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the ending time.
         """
 
-        PyFunceble.CONFIGURATION["end"] = int(strftime("%s"))
+        PyFunceble.CONFIGURATION["end"] = PyFunceble.CURRENT_TIME_EPOCH
 
     @classmethod
     def _calculate(cls):

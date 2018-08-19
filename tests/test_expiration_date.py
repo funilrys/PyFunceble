@@ -65,8 +65,8 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble import load_config
+from PyFunceble.expiration_date import ExpirationDate
 
 
 class TestExpirationDate(TestCase):
