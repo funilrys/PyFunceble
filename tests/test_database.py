@@ -488,12 +488,14 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {"0": ["world.hello"]}
+            PyFunceble.CONFIGURATION["file_to_test"]: {
+                str(int(timestamp) - (5 * 24 * 3600)): ["world.hello"]
+            }
         }
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "to_test": ["world.hello"],
+                str(int(timestamp) - (5 * 24 * 3600)): ["world.hello"],
                 timestamp: ["hello.world"],
             }
         }
@@ -505,15 +507,16 @@ class TestDatabase(TestCase):
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "0": ["world.hello"],
-                "to_test": ["hello.world"],
+                str(int(timestamp) - (5 * 24 * 3600)): ["world.hello"],
+                "to_test": [PyFunceble.CONFIGURATION["domain"]],
             }
         }
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                "to_test": ["world.hello"],
+                str(int(timestamp) - (5 * 24 * 3600)): ["world.hello"],
                 timestamp: ["hello.world"],
+                "to_test": [],
             }
         }
 

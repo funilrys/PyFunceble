@@ -78,9 +78,12 @@ class Database:
 
     def __init__(self):
         self.file_path = PyFunceble.CONFIGURATION["file_to_test"]
-        self.day_in_seconds = (
+
+        self.one_day_in_seconds = 1 * 24 * 3600
+        self.days_in_seconds = (
             PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
         )
+
         self.inactive_db_path = (
             PyFunceble.CURRENT_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
@@ -156,7 +159,7 @@ class Database:
             if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
                 for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     if data != "to_test":
-                        if int(time()) > int(data) + self.day_in_seconds:
+                        if int(time()) > int(data) + self.days_in_seconds:
                             result.extend(
                                 PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                                     data
@@ -183,30 +186,26 @@ class Database:
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
-            result = 0
-            to_delete = []
-
             if (
                 self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
                 and PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
             ):
-                for data in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
-                    if data != "to_test":
-                        if int(time()) < int(data) + self.day_in_seconds:
-                            result = int(data)
-                        else:
-                            result = int(time())
-                            to_delete.append(data)
-
-                for element in to_delete:
-                    self._add_to_test(
-                        PyFunceble.CONFIGURATION["inactive_db"][self.file_path][element]
+                recent_date = max(
+                    list(
+                        filter(
+                            lambda x: x.isdigit(),
+                            PyFunceble.CONFIGURATION["inactive_db"][
+                                self.file_path
+                            ].keys(),
+                        )
                     )
-                Dict(
-                    PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
-                ).remove_key(to_delete)
+                )
 
-                return result
+                if int(time()) > int(recent_date) + self.one_day_in_seconds:
+                    return int(time())
+
+                if int(time()) < int(recent_date) + self.days_in_seconds:
+                    return int(recent_date)
 
         return int(time())
 
