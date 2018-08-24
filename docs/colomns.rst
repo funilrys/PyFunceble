@@ -154,11 +154,13 @@ IP with range
 HTTP Code
 ---------
 
-*Consider the following as not fixed and open to modifications.*
+.. note::
+  This section reflect exactly what the code do. So any changes made here should also be reported to the code or at least the configuration file.
 
-This section represents how each HTTP codes are considered into PyFunceble's code.
+.. note::
+  A :code:`***` in this colomn means that it was impossible to catch the HTTP status code from the webserver.
 
-We have categorized them into 3 parts.
+We have categorized the HTTP Code into 3 parts.
 
 - Active
 
