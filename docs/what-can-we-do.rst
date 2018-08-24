@@ -1,4 +1,4 @@
-What PyFunceble can do?
+What can PyFunceble do?
 =======================
 
 * Test of the availability of a domain.
@@ -8,7 +8,7 @@ What PyFunceble can do?
 * Test from a given raw link.
 * Save test result(s) on file(s) (in several format).
 * Show test result(s) on screen.
-* Show percentage of each status (`ACTIVE`,`INACTIVE`,`INVALID`)
+* Show percentage of each status (:code:`ACTIVE`,:code:`INACTIVE`,:code:`INVALID`)
 * Auto-continuation of tests in case of system crash or script stop.
 * Filtering of a file content. This feature will let us for example test all Blogspot domain of the given file no matter the content of the file.
 * Customisation of the different option via command-line arguments or configuration file.
