@@ -4,9 +4,20 @@
 The tool to check domain or IP availability
 ===========================================
 
-.. raw:: html
-   
-   <p align="center"><a href="https://travis-ci.com/funilrys/PyFunceble"><img src="https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev" alt="Build Status"></a> <a href="https://coveralls.io/github/funilrys/PyFunceble?branch=dev"><img src="https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev" alt="Coverage Status"></a> <a href="https://github.com/funilrys/PyFunceble/blob/dev/LICENSE"><img src="https://img.shields.io/github/license/funilrys/PyFunceble.svg" alt="license"></a> <a href="https://github.com/funilrys/PyFunceble/releases/latest"><img src="https://img.shields.io/github/release/funilrys/PyFunceble.svg" alt="GitHub release"></a> <a href=""><img src="https://img.shields.io/github/issues/funilrys/PyFunceble.svg" alt="GitHub issues open"></a> <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style | Black"></a></p>
+.. image:: https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev
+    :target: https://travis-ci.com/funilrys/PyFunceble
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
+.. image:: https://img.shields.io/github/license/funilrys/PyFunceble.svg
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
+.. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.svg
+    :target: https://github.com/funilrys/PyFunceble/releases/latest
+.. image:: https://img.shields.io/github/release/funilrys/PyFunceble.svg
+    :target: https://github.com/funilrys/PyFunceble/releases/latest
+.. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.svg
+    :target: https://github.com/funilrys/PyFunceble/issues
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March, 2018.
 
@@ -18,20 +29,11 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
 
 .. _Funceble: https://github.com/funilrys/funceble
 
-**Main features:**
-
--   Get the status (`ACTIVE`, `INACTIVE`, `INVALID`) of a given domain or IPv4.
--   Read an existing file and check every domain and IPv4 present into it.
--   Generate a `hosts` file according to the domains statuses.
--   Generate a list of the domain according to their discovered statuses.
--   Show results on screen
--   Save results on file(s)
--   ... and a lot more!
-
 .. toctree::
    :maxdepth: 3
    :caption: Contents
 
+   what-can-we-do
    installation
    update
    configuration

@@ -120,7 +120,7 @@ class Production:  # pylint: disable=too-few-public-methods
                     self.current_version[0]
                 )
 
-                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.md")
+                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.rst")
                 self._update_docs(
                     PyFunceble.CURRENT_DIRECTORY + ".PyFunceble_production.yaml"
                 )

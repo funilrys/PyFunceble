@@ -109,24 +109,17 @@ def _get_version():
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
     extracted = to_match.findall(
         open("PyFunceble/__init__.py", encoding="utf-8").read()
-    )[
-        0
-    ]
+    )[0]
 
     return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
 
 
-def _get_long_description(): # pragma: no cover
+def _get_long_description():  # pragma: no cover
     """
     This function return the long description.
     """
 
-    try:
-        import pypandoc
-        return pypandoc.convert_file("README.md", "rst")
-
-    except (IOError, ImportError):
-        return open("README.md", encoding="utf-8").read()
+    return open("README.rst", encoding="utf-8").read()
 
 
 if __name__ == "__main__":
@@ -143,7 +136,13 @@ if __name__ == "__main__":
         platforms=["any"],
         packages=["PyFunceble"],
         keywords=[
-            "Python", "domain", "IP", "availability", "PyFunceble", "WHOIS", "nslookup"
+            "Python",
+            "domain",
+            "IP",
+            "availability",
+            "PyFunceble",
+            "WHOIS",
+            "nslookup",
         ],
         classifiers=[
             "Environment :: Console",
