@@ -4,6 +4,7 @@ env:
 
 language:       python
 dist: xenial
+sudo: required
 
 python:
   - "3.6"
