@@ -46,7 +46,7 @@ Simply run the following and enjoy the documentation!
 
 ___________________________________________
 
-What PyFunceble can do?
+What can PyFunceble do?
 -----------------------
 
 * Test of the availability of a domain.
