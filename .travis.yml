@@ -3,6 +3,7 @@ env:
     - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
 
 language:       python
+dist: xenial
 
 python:
   - "3.6"
