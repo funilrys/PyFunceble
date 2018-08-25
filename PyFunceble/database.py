@@ -66,7 +66,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import path, time
-from PyFunceble.helpers import Dict, File
+from PyFunceble.helpers import Dict, File, List
 
 
 class Database:
@@ -94,16 +94,88 @@ class Database:
         elif "URL" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["URL"]:
             self.element = PyFunceble.CONFIGURATION["URL"]
 
+    def _reformat_historical_formating_error(self):  # pragma: no cover
+        """
+        This method will format the old format so it can be merge into the newer format.
+        """
+
+        historical_formating_error = PyFunceble.CURRENT_DIRECTORY + "inactive-db.json"
+
+        if path.isfile(historical_formating_error):
+            data = Dict().from_json(File(historical_formating_error).read())
+
+            data_to_parse = {}
+            top_keys = data.keys()
+
+            for top_key in top_keys:
+                low_keys = data[top_key].keys()
+                data_to_parse[top_key] = {}
+
+                for low_key in low_keys:
+                    if low_key.isdigit():
+                        data_to_parse[top_key][
+                            int(low_key) - (self.one_day_in_seconds * 30)
+                        ] = data[top_key][low_key]
+                    else:
+                        data_to_parse[top_key][
+                            int(time()) - (self.one_day_in_seconds * 30)
+                        ] = data[top_key][low_key]
+
+            if PyFunceble.CONFIGURATION["inactive_db"]:
+                PyFunceble.CONFIGURATION["inactive_db"].update(data_to_parse)
+            else:
+                PyFunceble.CONFIGURATION["inactive_db"] = data_to_parse
+
+            File(historical_formating_error).delete()
+
+    def _merge_new_into_old(self):
+        """
+        This method will merge the real database with the older one which
+        has already been set into PyFunceble.CONFIGURATION["inactive_db"]
+        """
+
+        database_content = Dict().from_json(File(self.inactive_db_path).read())
+
+        database_top_keys = database_content.keys()
+
+        for database_top_key in database_top_keys:
+            if database_top_key not in PyFunceble.CONFIGURATION["inactive_db"]:
+                PyFunceble.CONFIGURATION["inactive_db"][
+                    database_top_key
+                ] = database_content[database_top_key]
+            else:
+                database_low_keys = database_content[database_top_key].keys()
+
+                for database_low_key in database_low_keys:
+                    if (
+                        database_low_key
+                        not in PyFunceble.CONFIGURATION["inactive_db"][database_top_key]
+                    ):  # pragma: no cover
+                        PyFunceble.CONFIGURATION["inactive_db"][database_top_key][
+                            database_low_key
+                        ] = database_content[database_top_key][database_low_key]
+                    else:
+                        PyFunceble.CONFIGURATION["inactive_db"][database_top_key][
+                            database_low_key
+                        ].extend(database_content[database_top_key][database_low_key])
+                        PyFunceble.CONFIGURATION["inactive_db"][database_top_key][
+                            database_low_key
+                        ] = List(
+                            PyFunceble.CONFIGURATION["inactive_db"][database_top_key][
+                                database_low_key
+                            ]
+                        ).format()
+
     def _retrieve(self):
         """
         Return the current content of the inactive-db.json file.
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
+            self._reformat_historical_formating_error()
+
             if path.isfile(self.inactive_db_path):
-                PyFunceble.CONFIGURATION["inactive_db"] = Dict().from_json(
-                    File(self.inactive_db_path).read()
-                )
+                self._merge_new_into_old()
             else:
                 PyFunceble.CONFIGURATION["inactive_db"] = {}
 
@@ -142,6 +214,10 @@ class Database:
                 PyFunceble.CONFIGURATION["inactive_db"].update(
                     {self.file_path: {"to_test": to_add}}
                 )
+
+            PyFunceble.CONFIGURATION["inactive_db"][self.file_path]["to_test"] = List(
+                PyFunceble.CONFIGURATION["inactive_db"][self.file_path]["to_test"]
+            ).format()
 
             self._backup()
 
@@ -190,16 +266,17 @@ class Database:
                 self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
                 and PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
             ):
-                recent_date = max(
-                    list(
-                        filter(
-                            lambda x: x.isdigit(),
-                            PyFunceble.CONFIGURATION["inactive_db"][
-                                self.file_path
-                            ].keys(),
-                        )
+                database_keys = list(
+                    filter(
+                        lambda x: x.isdigit(),
+                        PyFunceble.CONFIGURATION["inactive_db"][self.file_path].keys(),
                     )
                 )
+
+                if database_keys:
+                    recent_date = max(database_keys)
+                else:  # pragma: no cover
+                    return int(time())
 
                 if int(time()) > int(recent_date) + self.one_day_in_seconds:
                     return int(time())
