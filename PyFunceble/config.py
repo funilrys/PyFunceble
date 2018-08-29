@@ -78,53 +78,100 @@ class Load:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, path_to_config):
+        # We initiate 2 variables:
+        #   * One with the path to the config file
+        #   * The second one is the path to the default configuration file which is
+        #   used only if the first one is not found.
         self.path_to_config, self.path_to_default_config = self._set_path_to_configs(
             path_to_config
         )
 
         try:
+            # We try to load the configuration.
             self._load_config_file()
         except FileNotFoundError:
+            # We got a FileNotFoundError
 
             if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
+                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
+
                 while True:
+                    # We infinitly loop until we get a reponse which is `y|Y` or `n|N`.
+
+                    # We ask the user if we should install and load the default configuration.
                     response = input(
                         "%s was not found.\n\
-Install the default configuration in the current directory ? [y/n] "
+Install and load the default configuration in the current directory ? [y/n] "
                         % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
                     )
 
                     if isinstance(response, str):
+                        # The response is a string
+
                         if response.lower() == "y":
+                            # The response is a `y` or `Y`.
+
+                            # We install the production configuration.
                             self._install_production_config()
+
+                            # We load the installed configuration.
                             self._load_config_file()
+
+                            # And we break the loop as we got a satisfied response.
                             break
 
                         elif response.lower() == "n":
+                            # The response is a `n` or `N`.
+
+                            # We inform the user that something went wrong.
                             raise Exception("Unable to find the configuration file.")
 
             else:
+                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
+
+                # We install the production configuration.
                 self._install_production_config()
+
+                # We load the installed configuration.
                 self._load_config_file()
 
         for main_key in ["domains", "hosts", "splited"]:
+            # We loop through the key which contain paths under the `outputs` index.
+
+            # And we fix the path.
+            # Which means: If they do not end with the directory separator, we append
+            # it to the end.
             PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
                 PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
             ).fix_path()
 
         for main_key in ["http_analytic", "logs"]:
+            # We loop through the key which are more deeper under the `outputs` index.
+
             for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
                 "directories"
             ].items():
+                # We loop through the more deeper indexes.
+
+                # And we fix the path.
+                # Which means: If they do not end with the directory separator, we append
+                # it to the end.
                 PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
                     key
                 ] = Directory(value).fix_path()
 
+        # We update the STATUS variable with the status from the configuration.
         PyFunceble.STATUS.update(PyFunceble.CONFIGURATION["status"])
+        # We update the OUTPUTS variable with the outputs from the configuration.
         PyFunceble.OUTPUTS.update(PyFunceble.CONFIGURATION["outputs"])
+        # We update the HTTP_CODE variable with the http_codes from the configuration.
         PyFunceble.HTTP_CODE.update(PyFunceble.CONFIGURATION["http_codes"])
+        # We update the LINKS variable with the links from the configuration.
         PyFunceble.LINKS.update(PyFunceble.CONFIGURATION["links"])
 
+        # And we finaly append two string to the configuration.
+        # Those 2 strings are used to say if something like the cleaning went right (done)
+        # or wrong (error).s
         PyFunceble.CONFIGURATION.update(
             {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
         )
@@ -143,13 +190,22 @@ Install the default configuration in the current directory ? [y/n] "
         """
 
         if not path_to_config.endswith(directory_separator):
+            # The path to the config does not ends with the directory separator.
+
+            # We initiate the default and the parsed variable with the directory separator.
             default = parsed = path_to_config + directory_separator
         else:
+            # The path to the config does ends with the directory separator.
+
+            # We initiate the default and the parsed variable.
             default = parsed = path_to_config
 
+        # We append the `CONFIGURATION_FILENAME` to the parsed variable.
         parsed += PyFunceble.CONFIGURATION_FILENAME
+        # And we append the `DEFAULT_CONFIGURATION_FILENAME` to the default variable.
         default += PyFunceble.DEFAULT_CONFIGURATION_FILENAME
 
+        # We finaly return a tuple which contain both informations.
         return (parsed, default)
 
     def _load_config_file(self):
@@ -158,17 +214,32 @@ Install the default configuration in the current directory ? [y/n] "
         """
 
         try:
+            # We try to load the configuration file.
+
             PyFunceble.CONFIGURATION.update(
                 Dict.from_yaml(File(self.path_to_config).read())
             )
 
+            # We install the iana configuration file.
             self._install_iana_config()
+
+            # We install the public suffix configuration file.
             self._install_psl_config()
         except FileNotFoundError:
+            # But if the configuration file is not found.
+
             if path.isfile(self.path_to_default_config):
+                # The `DEFAULT_CONFIGURATION_FILENAME` file exists.
+
+                # We copy it as the configuration file.
                 File(self.path_to_default_config).copy(self.path_to_config)
+
+                # And we load the configuration file as it does exist (yet).
                 self._load_config_file()
             else:
+                # The `DEFAULT_CONFIGURATION_FILENAME` file does not exists.
+
+                # We raile the exception we were handling.
                 raise FileNotFoundError
 
     def _install_production_config(self):
@@ -181,11 +252,17 @@ Install the default configuration in the current directory ? [y/n] "
                 The path were we have to install the configuration file.
         """
 
+        # We initiate the link to the production configuration.
+        # It is hard coded because we may not have the chance to have the
+        # configuration file everytime we need it.
         production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+
+        # We update the link according to our current version.
         production_config_link = Version(True).right_url_from_version(
             production_config_link
         )
 
+        # And we download the link content and return the download status.
         return Download(production_config_link, self.path_to_config).text()
 
     @classmethod
@@ -194,14 +271,26 @@ Install the default configuration in the current directory ? [y/n] "
         This method download `iana-domains-db.json` if not present.
         """
 
+        # We initiate the link to the iana configuration.
+        # It is hard coded because we may not have the chance to have the
+        # configuration file everytime we need it.
         iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"  # pylint: disable=line-too-long
-        destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
 
+        # We update the link according to our current version.
         iana_link = Version(True).right_url_from_version(iana_link)
 
+        # We set the destination of the downloaded file.
+        destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
+
         if not Version(True).is_cloned():
+            # The current version is not the cloned version.
+
+            # We Download the link content and return the download status.
             return Download(iana_link, destination).text()
 
+        # We are in the cloned version.
+
+        # We do not need to download the file, so we are returning None.
         return None
 
     @classmethod
@@ -210,17 +299,29 @@ Install the default configuration in the current directory ? [y/n] "
         This method download `public-suffix.json` if not present.
         """
 
+        # We initiate the link to the public suffix configuration.
+        # It is hard coded because we may not have the chance to have the
+        # configuration file everytime we need it.
         psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
+
+        # We update the link according to our current version.
+        psl_link = Version(True).right_url_from_version(psl_link)
+
+        # We set the destination of the downloaded file.
         destination = (
             PyFunceble.CURRENT_DIRECTORY
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
         )
 
-        psl_link = Version(True).right_url_from_version(psl_link)
-
         if not Version(True).is_cloned():
+            # The current version is not the cloned version.
+
+            # We Download the link content and return the download status.
             return Download(psl_link, destination).text()
 
+        # We are in the cloned version.
+
+        # We do not need to download the file, so we are returning None.
         return None
 
 
@@ -236,14 +337,23 @@ class Version:
 
     def __init__(self, used=False):
         if not used:
+            # A method of this class is not called directly.
+
+            # We split the local version.
             self.local_splited = self.split_versions(PyFunceble.VERSION)
 
+            # We initiate the link to the upstream version file.
+            # It is hard coded because we may not have the chance to have the
+            # configuration file everytime we need it.
             upstream_link = (
                 "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
             )  # pylint: disable=line-too-long
 
+            # We update the link according to our current version.
             upstream_link = Version(True).right_url_from_version(upstream_link)
 
+            # We get the link content and convert it to a dict which is more
+            # usable.
             self.upstream_data = Dict().from_yaml(
                 Download(upstream_link, return_data=True).text()
             )
@@ -262,13 +372,21 @@ class Version:
         Returns: list
         """
 
+        # We split the parsed version and keep the digits.
         digits = list(filter(lambda x: x.isdigit(), version.split(".")))
 
         if not return_non_digits:
+            # We do not have to return the non digits part of the version.
+
+            # We return the digits part of the version.
             return digits
 
+        # We have to return the non digit parts of the version.
+
+        # We split the parsed version and keep the non digits.
         non_digits = list(filter(lambda x: not x.isdigit(), version.split(".")))
 
+        # We return a tuple with first the digits part and finally the non digit parts.
         return (digits, non_digits[0])
 
     @classmethod
@@ -288,20 +406,45 @@ class Version:
             - False: local > upstream
         """
 
+        # A version should be in format [1,2,3] which is actually the version `1.2.3`
+        # So as we only have 3 elements in the versioning,
+        # we initiate the following variable in order to get the status of each parts.
         status = [None, None, None]
 
         for index, version_number in enumerate(local):
+            # We loop through the local version.
+
             if int(version_number) < int(upstream[index]):
+                # The local version is less than the upstream version.
+
+                # We initiate its status to True which means that we are in
+                # an old version (for the current version part).
                 status[index] = True
             elif int(version_number) > int(upstream[index]):
+                # The local version is greater then the upstream version.
+
+                # We initiate its status to False which means that we are in
+                # a more recent version (for the current version part).
                 status[index] = False
 
+            # Otherwise the status stay None which means that there is no change
+            # between both local and upstream.
+
         if False in status:
+            # There is a False in the status.
+
+            # We return False which means that we are in a more recent version.
             return False
 
         if True in status:
+            # There is a True in the status.
+
+            # We return True which means that we are in a older version.
             return True
 
+        # There is no True or False in the status.
+
+        # We return None which means that we are in the same version as upstream.
         return None
 
     def compare(self):
@@ -310,13 +453,26 @@ class Version:
         """
 
         if self.upstream_data["force_update"]["status"]:
+            # The force_update status is set to True.
+
             for minimal in self.upstream_data["force_update"]["minimal_version"]:
+                # We loop through the list of minimal version which trigger the
+                # the force update message.
+
+                # We compare the local with the currently read minimal version.
                 checked = self.check_versions(
                     self.local_splited, self.split_versions(minimal)
                 )
 
                 if not PyFunceble.CONFIGURATION["quiet"]:
+                    # The quiet mode is not activated.
+
                     if checked or checked is not False and not checked:
+                        # The current version is less or equal to
+                        # the minimal version.
+
+                        # We initiate the message we are going to return to
+                        # the user.
                         message = (
                             Style.BRIGHT
                             + Fore.RED
@@ -330,14 +486,25 @@ class Version:
                             + Style.RESET_ALL
                         )  # pylint:disable=line-too-long
 
+                        # We print the message on screen.
                         print(message)
+
+                        # We exit PyFunceble with the code 1.
                         exit(1)
                 elif checked or checked is not False and not checked:
+                    # The quiet mode is activated and the current version
+                    # is less or equal to the minimal version.
+
+                    # We raise an exception telling the user to update their
+                    # instance of PyFunceble.
                     raise Exception(
                         "A critical issue has been fixed. Please take the time to update PyFunceble!"  # pylint:disable=line-too-long
                     )
 
         for version in self.upstream_data["deprecated"]:
+            # We loop through the list of deprecated versions.
+
+            # We compare the local with the currently read deprecated version.
             checked = self.check_versions(
                 self.local_splited, self.split_versions(version)
             )
@@ -348,6 +515,10 @@ class Version:
                 or checked is not False
                 and not checked
             ):
+                # The quiet mode is not activated and the local version is
+                # less or equal to the currently read deprecated version.
+
+                # We initiate the message we are going to return to the user.
                 message = (
                     Style.BRIGHT
                     + Fore.RED
@@ -361,19 +532,35 @@ class Version:
                     + Style.RESET_ALL
                 )  # pylint:disable=line-too-long
 
+                # We print the message.
                 print(message)
+
+                # And we continue to the next logic. There is no need to
+                # shutdown PyFunceble as it's just for information.
                 return
+
+            # The quiet mode is activated.
 
             if checked or checked is not False and not checked:
+                # The local version is  less or equal to the currently
+                # read deprecated version.
                 print("Version deprecated.")
+
+                # And we continue to the next logic. There is no need to
+                # shutdown PyFunceble as it's just for information.
                 return
 
+        # We compare the local version with the upstream version.
         status = self.check_versions(
             self.local_splited,
             self.split_versions(self.upstream_data["current_version"]),
         )
 
         if status is not None and not status and not PyFunceble.CONFIGURATION["quiet"]:
+            # The quiet mode is not activate and the current version is greater than
+            # the upstream version.
+
+            # We initiate the message we are going to return to the user.
             message = (
                 Style.BRIGHT
                 + Fore.CYAN
@@ -395,9 +582,15 @@ class Version:
                 + "\n"
             )
 
+            # We print the message.
             print(message)
         elif status:
+            # The current version is less that the upstream version.
+
             if not PyFunceble.CONFIGURATION["quiet"]:
+                # The quiet mode is not activated.
+
+                # We initiate the message we are going to return to the user.
                 message = (
                     Style.BRIGHT
                     + Fore.YELLOW
@@ -421,10 +614,16 @@ class Version:
                     + "\n"
                 )
 
+                # We print the message.
                 print(message)
             else:
+                # The quiet mode is activated.
+
+                # We print the message.
                 print("New version available.")
 
+        # And we continue to the next app logic. There is no need to
+        # shutdown PyFunceble as it's just for information.
         return
 
     @classmethod
@@ -434,6 +633,7 @@ class Version:
         PyFunceble which implicitly mean that we are in developement mode.
         """
 
+        # We list the list of file which can be found only in a cloned version.
         list_of_file = [
             ".coveragerc",
             ".coveralls.yml",
@@ -443,9 +643,17 @@ class Version:
         ]
 
         for file in list_of_file:
+            # We loop through the list of file.
+
             if not path.isfile(file):
+                # The file does not exist in the current directory.
+
+                # We return False, the current version is not the cloned version.
                 return False
 
+        # All files does exist in the current directory.
+
+        # We return True, the current version is a cloned version.
         return True
 
     @classmethod
@@ -460,5 +668,12 @@ class Version:
         """
 
         if "dev" in PyFunceble.VERSION:
+            # `dev` is in the current version.
+
+            # We update and return the url in order to point to the dev branch.
             return url.replace("master", "dev")
+
+        # `dev` is not in the current version.
+
+        # We update and return the url in order to point to the master branch.
         return url.replace("dev", "master")
