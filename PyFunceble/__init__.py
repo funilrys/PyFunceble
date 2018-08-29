@@ -76,69 +76,129 @@ from PyFunceble.iana import IANA
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
+# We set our project name.
 NAME = "PyFunceble"
-VERSION = "0.101.2.dev-beta (Sarcoline Puku / Mosquito)"
+# We set out project version.
+VERSION = "0.101.3.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
+    # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
     CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
 elif Version(True).is_cloned():  # pragma: no cover
+    # We handle the case that we are in a cloned.
     CURRENT_DIRECTORY = getcwd() + directory_separator
 elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
+    # We handle the case that we are under Travis CI.
     CURRENT_DIRECTORY = getcwd() + directory_separator
 else:  # pragma: no cover
+    # We handle all other case and distributions specific cases.
+
     if system().lower() == "linux":
+        # We are under a Linux distribution.
+
+        # We set the default configuration location path.
         config_dir_path = (
             path.expanduser("~" + directory_separator + ".config") + directory_separator
         )
 
         if path.isdir(config_dir_path):
+            # Everything went right:
+            #   * `~/.config` exists.
+            # We set our configuration location path as the directory we are working with.
             CURRENT_DIRECTORY = config_dir_path
         elif path.isdir(path.expanduser("~")):
+            # Something went wrong:
+            #   * `~/.config` does not exists.
+            #   * `~` exists.
+            # We set `~/` as the directory we are working with.
+            #
+            # Note: The `.` at the end is because we want to hide the directory we are
+            # going to create.
             CURRENT_DIRECTORY = (
                 path.expanduser("~") + directory_separator + "."
             )  # pylint: disable=line-too-long
         else:
+            # Everything went wrong:
+            #   * `~/.config` does not exists.
+            #   * `~` soes not exists.
+            # We set the current directory as the directory we are working with.
             CURRENT_DIRECTORY = getcwd() + directory_separator
     elif system().lower() == "darwin":
+        # We are under a Darwin Kernel (probably MacOS)
+
         from AppKit import (  # pylint: disable=import-error
             NSSearchPathForDirectoriesInDomains,
             NSApplicationSupportDirectory,
             NSUserDomainMask,
         )
 
+        # We follow the directive we described in the documentation.
+        # But for those who want it in code...
+        #
+        # From Mac documentation:
+        #   To get the path to this directory use the NSApplicationSupportDirectory
+        #   search path key with the NSLocalDomainMask domain.
+        #
+        # We set the found path as the directory we are working with.
         CURRENT_DIRECTORY = NSSearchPathForDirectoriesInDomains(
             NSApplicationSupportDirectory, NSUserDomainMask, True
         )[0]
     elif system().lower() == "windows":
+        # We are under Windows.
+
         if "APPDATA" in environ:
+            # Everything went right:
+            #   * `APPDATA` is into the environnement variables.
+            # We set it as the directory we are working with.
             CURRENT_DIRECTORY = environ["APPDATA"]
         else:
+            # Everything went wrong:
+            #   * `APPDATA` is not into the environnement variables.
+            # We set the current directory as the directory we are working with.
             CURRENT_DIRECTORY = getcwd() + directory_separator
 
     if not CURRENT_DIRECTORY.endswith(directory_separator):
+        # If the directory we are working with does not ends with the directory
+        # separator, we append it to the end.
         CURRENT_DIRECTORY += directory_separator
 
+    # We append the name of the project to the directory we are working with.
     CURRENT_DIRECTORY += NAME + directory_separator
 
     if not path.isdir(CURRENT_DIRECTORY):
+        # If the directory does not exist we create it.
         mkdir(CURRENT_DIRECTORY)
 
 if not CURRENT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
+    # Again for safety, if the directory we are working with does not ends with
+    # the directory separator, we append it to the end.
     CURRENT_DIRECTORY += directory_separator
 
+# We set the location of the `output` directory which should always be in the current
+# directory.
 OUTPUT_DIRECTORY = getcwd() + directory_separator
 
+# We set the filename of the default configuration file.
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
+# We set the filename of the configuration file we are actually using.
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
 
+# We set the current time (return the current time) in a specific format.
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
 
+# We initiate the location where we are going to save our whole configuration content.
 CONFIGURATION = {}
+# We initiate the location where we are going to get all statuses.
 STATUS = {}
+# We initiate the location where we are going to get all outputs.
 OUTPUTS = {}
+# We initiate the location where we are going to get the map of the classification
+# of each status codes for the analytic part.
 HTTP_CODE = {}
+# We initiate the location where we are going to get all links.
 LINKS = {}
 
+# We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """
 ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
 ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
@@ -154,7 +214,10 @@ def test(domain):  # pragma: no cover
     This function provide an access to the core while use PyFunceble as an imported module.
     """
 
+    # We silently load the configuration.
     load_config(True)
+
+    # And we return the status of the given domain.
     return Core(domain=domain, modulo_test=True).test()
 
 
@@ -169,11 +232,15 @@ def load_config(under_test=False):  # pragma: no cover
             if it does not exist (False).
     """
 
+    # We load and download the different configuration file if they are non
+    # existant.
     Load(CURRENT_DIRECTORY)
 
     if not under_test and not path.isdir(
         CURRENT_DIRECTORY + OUTPUTS["parent_directory"]
     ):
+        # If we are not under test which means that we want to save informations,
+        # we initiate the directory structure.
         DirectoryStructure()
 
 
@@ -183,9 +250,13 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
     """
 
     if __name__ == "PyFunceble":
+        # We load the configuration and the directory structure.
         load_config()
 
+        # We initiate the end of the coloration at the end of each line.
         initiate(autoreset=True)
+
+        # The following handle the command line argument.
 
         PARSER = argparse.ArgumentParser(
             description="The tool to check domain or IP availability.",
@@ -709,7 +780,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         if not CONFIGURATION["quiet"]:
             print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
 
+        # We compare the versions (upstream and local) and in between.
         Version().compare()
+
+        # We call our Core which will handle all case depending of the configuration or
+        # the used command line arguments.
         Core(
             domain=ARGS.domain,
             file_path=ARGS.file,

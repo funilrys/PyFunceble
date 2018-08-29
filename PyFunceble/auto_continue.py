@@ -74,6 +74,9 @@ class AutoContinue:
 
     def __init__(self):
         if PyFunceble.CONFIGURATION["auto_continue"]:
+            # The auto_continue subsystem is activated.
+
+            # We set the log file location.
             self.autocontinue_log_file = (
                 PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
@@ -81,11 +84,18 @@ class AutoContinue:
             )
 
             if path.isfile(self.autocontinue_log_file):
+                # The log file already exist.
+
+                # We get its content and save it inside backup_content.
                 self.backup_content = Dict().from_json(
                     File(self.autocontinue_log_file).read()
                 )
             else:
+                # The log file does not exist.
+
+                # We initiate the backup content.
                 self.backup_content = {}
+                # And we save our empty backup_content to the log file.
                 File(self.autocontinue_log_file).write(str(self.backup_content))
 
     def backup(self):
@@ -94,16 +104,26 @@ class AutoContinue:
         """
 
         if PyFunceble.CONFIGURATION["auto_continue"]:
+            # The auto_continue subsystem is activated.
+
+            # We initiate the location where we are going to save the data to backup.
             data_to_backup = {}
+            # We get the current counter states.
             configuration_counter = PyFunceble.CONFIGURATION["counter"]["number"]
 
+            # We initiate the data we have to backup.
             data_to_backup[PyFunceble.CONFIGURATION["file_to_test"]] = {
+                # We backup the number of tested.
                 "tested": configuration_counter["tested"],
+                # We backup the number of up.
                 "up": configuration_counter["up"],
+                # We backup the number of down.
                 "down": configuration_counter["down"],
+                # We backup the number of invalid.
                 "invalid": configuration_counter["invalid"],
             }
 
+            # We initiate the final data we have to save
             to_save = {}
 
             to_save.update(self.backup_content)
