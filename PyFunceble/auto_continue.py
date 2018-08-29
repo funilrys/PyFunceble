@@ -123,12 +123,17 @@ class AutoContinue:
                 "invalid": configuration_counter["invalid"],
             }
 
-            # We initiate the final data we have to save
+            # We initiate the final data we have to save.
+            # We initiate this variable instead of updating backup_content because
+            # we do not want to touch the backup_content.
             to_save = {}
 
+            # We add the backup_content into to_save.
             to_save.update(self.backup_content)
+            # And we overwrite with the newly data to backup.
             to_save.update(data_to_backup)
 
+            # Finaly, we save our informations into the log file.
             Dict(to_save).to_json(self.autocontinue_log_file)
 
     def restore(self):
@@ -137,11 +142,21 @@ class AutoContinue:
         """
 
         if PyFunceble.CONFIGURATION["auto_continue"] and self.backup_content:
+            # The auto_continue subsystem is activated and the backup_content
+            # is not empty.
+
+            # We get the file we have to restore.
             file_to_restore = PyFunceble.CONFIGURATION["file_to_test"]
 
             if file_to_restore in self.backup_content:
+                # The file we are working with is already into the backup content.
+
+                # We initiate the different status to set.
                 to_initiate = ["up", "down", "invalid", "tested"]
 
+                # Because at some time it was not the current status, we have to map
+                # the new with the old. This way, if someone is running the latest
+                # version but with old data, we still continue like nothing happend.
                 alternatives = {
                     "up": "number_of_up",
                     "down": "number_of_down",
@@ -150,11 +165,16 @@ class AutoContinue:
                 }
 
                 for string in to_initiate:
+                    # We loop over the status we have to initiate.
+
                     try:
+                        # We try to update the counters by using the currently read status.
                         PyFunceble.CONFIGURATION["counter"]["number"].update(
                             {string: self.backup_content[file_to_restore][string]}
                         )
                     except KeyError:
+                        # But if the status is not present, we try with the older index
+                        # we mapped previously.
                         PyFunceble.CONFIGURATION["counter"]["number"].update(
                             {
                                 string: self.backup_content[file_to_restore][
