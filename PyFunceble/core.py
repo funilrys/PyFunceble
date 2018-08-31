@@ -90,7 +90,7 @@ class Core:  # pragma: no cover
     """
 
     def __init__(self, domain=None, file_path=None, **args):
-
+        # We initiate our list of optional arguments with their default values.
         optional_arguments = {
             "url_to_test": None,
             "url_file": None,
@@ -99,10 +99,11 @@ class Core:  # pragma: no cover
         }
 
         # We initiate our optional_arguments in order to be usable all over the
-        # class
+        # class.
         for (arg, default) in optional_arguments.items():
             setattr(self, arg, args.get(arg, default))
 
+        # We manage the entries.
         self._entry_management(domain, file_path)
 
     @classmethod
@@ -117,18 +118,34 @@ class Core:  # pragma: no cover
         """
 
         if passed and passed.startswith("http"):
+            # The passed string is an URL.
+
+            # We get the file name based on the URL.
+            # We actually just get the  string after the last `/` in the URL.
             file_to_test = passed.split("/")[-1]
 
             if (
                 not path.isfile(file_to_test)
                 or PyFunceble.CONFIGURATION["counter"]["number"]["tested"] == 0
             ):
+                # The filename does not exist in the current directory
+                # or the currently number of tested is equal to 0.
+
+                # We download the content of the link.
                 Download(passed, file_to_test).text()
 
+            # The files does exist or the currently number of tested is greater than
+            # 0.
+
+            # We initiate the file we have to test.
             PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
 
+            # We return true to say that everything goes right.
             return True
 
+        # The passed string is not an URL.
+
+        # We do not need to do anything else.
         return False
 
     def _entry_management_url(self):
@@ -142,34 +159,66 @@ class Core:  # pragma: no cover
                 self.url_file  # pylint: disable=no-member
             )
         ):  # pylint: disable=no-member
+            # The current url_file is not a URL.
+
+            # We initiate the filename as the file we have to test.
             PyFunceble.CONFIGURATION[
                 "file_to_test"
             ] = self.url_file  # pylint: disable=no-member
 
     def _entry_management(self, domain, file_path):
         """
-        This method avoid to have 1 millions line into self.__ini__()
+        This method avoid to have 1 millions line into self.__init__()
+
+        Arguments:
+            - domain: string
+                The domain parsed to Core().
+            - file_path: string
+                The file_path parsed to Core().
         """
 
         if not self.modulo_test:  # pylint: disable=no-member
+            # We are not in a module usage.
 
+            # We set the file_path as the file we have to test.
             PyFunceble.CONFIGURATION[
                 "file_to_test"
             ] = file_path  # pylint: disable=no-member
 
+            # We check if the given file_path is an url.
+            # If it is an URL we update the file to test and download
+            # the given URL.
             self._entry_management_url()
 
             if PyFunceble.CONFIGURATION["travis"]:
+                # The Travis CI mode is activated.
+
+                # We fix the environnement permissions.
                 AutoSave().travis_permissions()
 
+            # We check if we need to bypass the execution of PyFunceble.
             self.bypass()
+
+            # We set the start time.
             ExecutionTime("start")
 
             if domain:
+                # The given domain is not empty or None.
+
+                # We deactivate the showing of percentage as we are in a single
+                # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
+
+                # We test the domain after converting it to lower case.
                 self.domain(domain.lower())
             elif self.url_to_test and not file_path:  # pylint: disable=no-member
+                # An url to test is given and the file path is empty.
+
+                # We deactivate the showing of percentage as we are in a single
+                # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
+
+                # We test the url to test.
                 self.url(self.url_to_test)  # pylint: disable=no-member
             elif (
                 self._entry_management_url_download(
@@ -177,11 +226,22 @@ class Core:  # pragma: no cover
                 )
                 or self.url_file  # pylint: disable=no-member
             ):
+                # * A file full of URL is given.
+                # or
+                # * the given file full of URL is a URL.
+
+                # * We deactivate the whois subsystem as it is not needed for url testing.
+                # * We activate the generation of plain list element.
+                # * We activate the generation of splited data instead of unified data.
                 PyFunceble.CONFIGURATION["no_whois"] = PyFunceble.CONFIGURATION[
                     "plain_list_domain"
                 ] = PyFunceble.CONFIGURATION["split"] = True
+
+                # We deactivate the generation of hosts file as it is not relevant for
+                # url testing.
                 PyFunceble.CONFIGURATION["generate_hosts"] = False
 
+                # And we test the given or the downloaded file.
                 self.file_url()
             elif (
                 self._entry_management_url_download(
@@ -190,21 +250,48 @@ class Core:  # pragma: no cover
                 or self._entry_management_url_download(file_path)
                 or file_path
             ):
+                # * A file path is given.
+                # or
+                # * The given file path is an URL.
+                # or
+                # * A link to test is given.
+
+                # We test the given or the downloaded file.
                 self.file()
             else:
+                # No file, domain, single url or file or url is given.
+
+                # We print a message on screen.
                 print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
 
+            # We stop and log the execution time.
             ExecutionTime("stop")
+
+            # We log the current percentage state.
             Percentage().log()
 
             if domain:
+                # We are testing a domain.
+
+                # We show the colored logo.
                 self.colored_logo()
         else:
+            # We are used as an imported module.
+
+            # We activate the simple mode as the table or any full
+            # details on screen are irrelevant.
             PyFunceble.CONFIGURATION["simple"] = True
+
+            # We activate the quiet mode.
             PyFunceble.CONFIGURATION["quiet"] = True
+
+            # And we deactivate the generation of files.
             PyFunceble.CONFIGURATION["no_files"] = True
 
             if domain:
+                # A domain is given.
+
+                # We set the domain to test.
                 PyFunceble.CONFIGURATION["domain"] = domain.lower()
 
     def test(self):
@@ -220,11 +307,17 @@ class Core:  # pragma: no cover
         """
 
         if not self.modulo_test:  # pylint: disable=no-member
+            # We are not used as an imported module.
+
+            # We inform the user that they should not use this method.
             raise Exception(
                 "You should not use this method. Please prefer self.domain()"
             )
 
         else:
+            # We are used as an imported module.
+
+            # We return the status of the parsed domain.
             return ExpirationDate().get()
 
     @classmethod
@@ -234,6 +327,8 @@ class Core:  # pragma: no cover
         commit message.
         """
 
+        # We set the regex to match in order to bypass the execution of
+        # PyFunceble.
         regex_bypass = r"\[PyFunceble\sskip\]"
 
         if (
@@ -242,7 +337,11 @@ class Core:  # pragma: no cover
                 Command("git log -1").execute(), regex_bypass, return_data=False
             ).match()
         ):
+            # * We are under Travis CI.
+            # and
+            # * The bypass marker is matched into the latest commit.
 
+            # We save everything and stop PyFunceble.
             AutoSave(True, is_bypass=True)
 
     @classmethod
@@ -255,12 +354,27 @@ class Core:  # pragma: no cover
             not PyFunceble.CONFIGURATION["quiet"]
             and not PyFunceble.CONFIGURATION["header_printed"]
         ):
+            # * The quiet mode is not activated.
+            # and
+            # * The header has not been already printed.
+
+            # We print a new line.
             print("\n")
+
             if PyFunceble.CONFIGURATION["less"]:
+                # We have to show less informations on screen.
+
+                # We print the `Less` header.
                 Prints(None, "Less").header()
             else:
+                # We have to show every informations on screen.
+
+                # We print the `Generic` header.
                 Prints(None, "Generic").header()
 
+            # The header was printed.
+
+            # We initiate the variable which say that the header has been printed to True.
             PyFunceble.CONFIGURATION["header_printed"] = True
 
     def _file_decision(self, current, last, status=None):
@@ -278,31 +392,68 @@ class Core:  # pragma: no cover
         """
 
         if status:
+            # The status is given.
+
             if (
                 not PyFunceble.CONFIGURATION["simple"]
                 and PyFunceble.CONFIGURATION["file_to_test"]
             ):
+                # * The simple mode is deactivated.
+                # and
+                # * A file to test is set.
+
                 if status.lower() in PyFunceble.STATUS["list"]["up"]:
+                    # The status is in the list of up status.
+
+                    # We remove the currently tested element from the
+                    # database.
                     Database().remove()
                 else:
+                    # The status is not in the list of up status.
+
+                    # We add the currently tested element to the
+                    # database.
                     Database().add()
 
+                # We backup the current state of the file reading
+                # for the case that we need to continue later.
                 AutoContinue().backup()
 
                 if current != last:
+                    # The current element is not the last one.
+
+                    # We run the autosave logic.
                     AutoSave()
                 else:
+                    # The current element is the last one.
+
+                    # We stop and log the execution time.
                     ExecutionTime("stop")
+
+                    # We show/log the percentage.
                     Percentage().log()
+
+                    # We reset the counters as we end the process.
                     self.reset_counters()
+
+                    # We backup the current state of the file reading
+                    # for the case that we need to continue later.
                     AutoContinue().backup()
 
+                    # We show the colored logo.
                     self.colored_logo()
 
+                    # We save and stop the script if we are under
+                    # Travis CI.
                     AutoSave(True)
 
         for index in ["http_code", "referer"]:
+            # We loop through some configuration index we have to empty.
+
             if index in PyFunceble.CONFIGURATION:
+                # The index is in in the configuration.
+
+                # We empty the configuration index.
                 PyFunceble.CONFIGURATION[index] = ""
 
     def domain(self, domain=None, last_domain=None):
@@ -316,24 +467,34 @@ class Core:  # pragma: no cover
                 The last domain of the file we are testing.
         """
 
+        # We print the header.
         self._print_header()
 
         if domain:
+            # A domain is given.
+
+            # We format and set the domain we are testing and treating.
             PyFunceble.CONFIGURATION["domain"] = self._format_domain(domain)
         else:
+            # A domain is not given.
+
+            # We set the domain we are testing and treating to None.
             PyFunceble.CONFIGURATION["domain"] = None
 
         if PyFunceble.CONFIGURATION["domain"]:
-            if __name__ == "PyFunceble.core":
-                status = ExpirationDate().get()
+            # The domain is given (Not None).
 
-                self._file_decision(domain, last_domain, status)
+            # We test and get the status of the domain.
+            status = ExpirationDate().get()
 
-                if PyFunceble.CONFIGURATION["simple"]:
-                    print(domain, status)
-            else:
-                ExpirationDate().get()
-                return
+            # We run the file decision logic.
+            self._file_decision(domain, last_domain, status)
+
+            if PyFunceble.CONFIGURATION["simple"]:
+                # The simple mode is activated.
+
+                # We print the domain and the status.
+                print(domain, status)
 
     @classmethod
     def reset_counters(cls):
@@ -342,6 +503,9 @@ class Core:  # pragma: no cover
         """
 
         for string in ["up", "down", "invalid", "tested"]:
+            # We loop through to the index of the autoContinue subsystem.
+
+            # And we set their counter to 0.
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: 0})
 
     @classmethod
@@ -351,9 +515,17 @@ class Core:  # pragma: no cover
         """
 
         if not PyFunceble.CONFIGURATION["quiet"]:
+            # The quiet mode is not activated.
+
             if PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] >= 50:
+                # The percentage of up is greater or equal to 50%.
+
+                # We print the CLI logo in green.
                 print(Fore.GREEN + PyFunceble.ASCII_PYFUNCEBLE)
             else:
+                # The percentage of up is less than 50%.
+
+                # We print the CLI logo in red.
                 print(Fore.RED + PyFunceble.ASCII_PYFUNCEBLE)
 
     @classmethod
@@ -370,26 +542,52 @@ class Core:  # pragma: no cover
         """
 
         if not extracted_domain.startswith("#"):
+            # The line is not a commented line.
 
             if "#" in extracted_domain:
+                # There is a comment at the end of the line.
+
+                # We delete the comment from the line.
                 extracted_domain = extracted_domain[
                     : extracted_domain.find("#")
                 ].strip()
 
             if " " in extracted_domain or "\t" in extracted_domain:
+                # A space or a tabs is in the line.
+
+                # We remove all whitestring from the extracted line.
                 splited_line = extracted_domain.split()
 
+                # As there was a space or a tab in the string, we consider
+                # that we are working with the hosts file format which means
+                # that the domain we have to test is after the first string.
+                # So we set the index to 1.
                 index = 1
+
                 while index < len(splited_line):
+                    # We loop until the index is greater than the length of
+                    #  the splited line.
+
                     if splited_line[index]:
+                        # The element at the current index is not an empty string.
+
+                        # We break the loop.
                         break
 
+                    # The element at the current index is an empty string.
+
+                    # We increase the index number.
                     index += 1
 
+                # We return the last read element.
                 return splited_line[index]
 
+            # We return the extracted line.
             return extracted_domain
 
+        # The extracted line is a comment line.
+
+        # We return an empty string as we do not want to work with commented line.
         return ""
 
     @classmethod
@@ -408,31 +606,66 @@ class Core:  # pragma: no cover
         """
 
         if not result:
+            # The result is not given.
+
+            # We set the result as an empty list.
             result = []
 
         for data in List(to_format).format():
+            # We loop through the different lines to format.
+
             if data:
+                # The currently read line is not empty.
+
                 if "#" in data:
+                    # There is a dash in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
                     return cls._format_adblock_decoded(data.split("#"), result)
 
                 if "," in data:
+                    # There is a comma in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
                     return cls._format_adblock_decoded(data.split(","), result)
 
                 if "~" in data:
+                    # There is a tilde in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
                     return cls._format_adblock_decoded(data.split("~"), result)
 
                 if "!" in data:
+                    # There is an exclamation mark in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
                     return cls._format_adblock_decoded(data.split("!"), result)
 
                 if "|" in data:
+                    # There is a vertival bar in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
                     return cls._format_adblock_decoded(data.split("|"), result)
 
                 if data and (
                     ExpirationDate.is_domain_valid(data)
                     or ExpirationDate.is_ip_valid(data)
                 ):
+                    # * The currently read line is not empty.
+                    # and
+                    # * The currently read line is a valid domain.
+                    # or
+                    # * The currently read line is a valid IP.
+
+                    # We append the currently read line to the result.
                     result.append(data)
 
+        # We return the result element.
         return result
 
     def _adblock_decode(self, list_to_test):
@@ -448,25 +681,43 @@ class Core:  # pragma: no cover
             The list of domain to test.
         """
 
+        # We initiate a variable which will save what we are going to return.
         result = []
+
+        # We initiate the first regex we are going to use to get
+        # the element to to format.
         regex = r"^(?:.*\|\|)([^\/\$\^]{1,}).*$"
+
+        # We initiate the second regex we are going to use to get
+        # the element to to format.
         regex_v2 = r"(.*\..*)(?:#{1,}.*)"
 
         for line in list_to_test:
+            # We loop through the different line.
+
+            # We extract the different group from our first regex.
             rematch = Regex(
                 line, regex, return_data=True, rematch=True, group=0
             ).match()
 
+            # We extract the different group from our first regex.
             rematch_v2 = Regex(
                 line, regex_v2, return_data=True, rematch=True, group=0
             ).match()
 
             if rematch:
+                # The first extraction was successfull.
+
+                # We extend the result with the extracted elements.
                 result.extend(rematch)
 
             if rematch_v2:
+                # The second extraction was successfull.
+
+                # We extend the formated elements from the extracted elements.
                 result.extend(List(self._format_adblock_decoded(rematch_v2)).format())
 
+        # We return the result.
         return result
 
     @classmethod
@@ -478,16 +729,30 @@ class Core:  # pragma: no cover
             Each line of the file == an element of the list.
         """
 
+        # We initiate the variable which will save what we are going to return.
         result = []
 
         if path.isfile(PyFunceble.CONFIGURATION["file_to_test"]):
+            # The give file to test exist.
+
             with open(PyFunceble.CONFIGURATION["file_to_test"]) as file:
+                # We open and read the file.
+
                 for line in file:
+                    # We loop through each lines.
+
                     if not line.startswith("#"):
+                        # The currently read line is not a commented line.
+
+                        # We append the current read line to the result.
                         result.append(line.rstrip("\n").strip())
         else:
+            # The given file to test does not exist.
+
+            # We raise a FileNotFoundError exception.
             raise FileNotFoundError(PyFunceble.CONFIGURATION["file_to_test"])
 
+        # We return the result.
         return result
 
     def _file_list_to_test_filtering(self):
@@ -495,17 +760,27 @@ class Core:  # pragma: no cover
         This method will unify the way we work before testing file contents.
         """
 
+        # We get the list to test from the file we have to test.
         list_to_test = self._extract_domain_from_file()
 
+        # We restore the data from the last session if it does exist.
         AutoContinue().restore()
 
         if PyFunceble.CONFIGURATION["adblock"]:
+            # The adblock decoder is activated.
+
+            # We get the list of domain to test (decoded).
             list_to_test = self._adblock_decode(list_to_test)
         else:
+            # The adblock decoder is not activated.
+
+            # We get the formated list of domain to test.
             list_to_test = list(map(self._format_domain, list_to_test))
 
+        # We clean the output directory if it is needed.
         PyFunceble.Clean(list_to_test)
 
+        # We get the list we have to test in the current session (from the database).
         Database().to_test()
 
         if (
@@ -519,15 +794,30 @@ class Core:  # pragma: no cover
                 PyFunceble.CONFIGURATION["file_to_test"]
             ]["to_test"]
         ):
+            # * The current file to test in into the database.
+            # and
+            # * The `to_test` index is present into the database
+            #   related to the file we are testing.
+            # and
+            # * The `to_test` index content is not empty.
+
+            # We extend our list to test with the content of the `to_test` index
+            # of the current file database.
             list_to_test.extend(
                 PyFunceble.CONFIGURATION["inactive_db"][
                     PyFunceble.CONFIGURATION["file_to_test"]
                 ]["to_test"]
             )
 
+        # We set a regex of element to delete.
+        # Understand with this variable that we don't want to test those.
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
+
+        # We get the database content.
         database_content = Database().content()
 
+        # We remove the element which are in the database from the
+        # current list to test.
         list_to_test = List(
             list(
                 set(Regex(list_to_test, regex_delete).not_matching_list())
@@ -536,12 +826,17 @@ class Core:  # pragma: no cover
         ).format()
 
         if PyFunceble.CONFIGURATION["filter"]:
+            # The filter is not empty.
+
+            # We get update our list to test. Indeed we only keep the elements which
+            # matches the given filter.
             list_to_test = List(
                 Regex(
                     list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
                 ).matching_list()
             ).format()
 
+        # We return the final list to test.
         return list_to_test
 
     def file(self):
@@ -550,8 +845,10 @@ class Core:  # pragma: no cover
         Note: 1 domain per line.
         """
 
+        # We get, format, filter, clean the list to test.
         list_to_test = self._file_list_to_test_filtering()
 
+        # We test each element of the list to test.
         list(
             map(
                 self.domain,
@@ -571,24 +868,36 @@ class Core:  # pragma: no cover
                 The last url of the file we are testing.
         """
 
+        # We print the header.
         self._print_header()
 
         if url_to_test:
+            # An url to test is given.
+
+            # We set the url we are going to test.
             PyFunceble.CONFIGURATION["URL"] = url_to_test
         else:
+            # An URL to test is not given.
+
+            # We set the url we are going to test to None.
             PyFunceble.CONFIGURATION["URL"] = None
 
         if PyFunceble.CONFIGURATION["URL"]:
-            if __name__ == "PyFunceble.core":
-                if PyFunceble.CONFIGURATION["simple"]:
-                    print(URL().get())
-                else:
-                    status = URL().get()
+            # An URL to test is given.
 
-                self._file_decision(url_to_test, last_url, status)
+            if PyFunceble.CONFIGURATION["simple"]:
+                # The simple mode is activated.
+
+                # We print the URL informations.
+                print(PyFunceble.CONFIGURATION["URL"], URL().get())
             else:
-                URL().get()
-                return
+                # The simple mode is not activated.
+
+                # We get the status of the URL.
+                status = URL().get()
+
+            # We run the file decision logic.
+            self._file_decision(url_to_test, last_url, status)
 
     def file_url(self):
         """
@@ -596,8 +905,10 @@ class Core:  # pragma: no cover
         Note: 1 URL per line.
         """
 
+        # We get, format, clean the list of URL to test.
         list_to_test = self._file_list_to_test_filtering()
 
+        # We test each URL from the list to test.
         list(
             map(
                 self.url,
@@ -629,18 +940,36 @@ class Core:  # pragma: no cover
         """
 
         if not custom:
+            # We are not working with custom variable which is not into
+            # the configuration.
+
+            # We get the current state.
             current_state = dict.get(PyFunceble.CONFIGURATION, variable)
         else:
+            # We are working with a custom variable which is not into the
+            # configuration
             current_state = variable
 
         if isinstance(current_state, bool):
+            # The current state is a boolean.
+
             if current_state:
+                # The current state is equal to True.
+
+                # We return False.
                 return False
 
+            # The current state is equal to False.
+
+            # We return True.
             return True
 
+        # The current state is not a boolean.
+
+        # We set the message to raise.
         to_print = "Impossible to switch %s. Please post an issue to %s"
 
+        # We raise an exception inviting the user to report an issue.
         raise Exception(
             to_print % (repr(variable), PyFunceble.LINKS["repo"] + "/issues.")
         )
