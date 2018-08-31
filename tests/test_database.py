@@ -112,6 +112,8 @@ class TestDatabase(TestCase):
         expected = {}
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
+
     def test_retrieve_file_exist(self):
         """
         This method test the case that we want to retrieve a file that exist.
@@ -128,6 +130,8 @@ class TestDatabase(TestCase):
         Database()._retrieve()
 
         self.assertEqual(self.expected_content, PyFunceble.CONFIGURATION["inactive_db"])
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
 
     def test_backup(self):
         """
@@ -150,6 +154,8 @@ class TestDatabase(TestCase):
         self.assertEqual(
             self.expected_content, Dict().from_json(File(self.file).read())
         )
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
 
     def test_add_to_test__path_not_exist(self):  # pylint: disable=invalid-name
         """
@@ -338,6 +344,8 @@ class TestDatabase(TestCase):
 
         self.assertGreaterEqual(expected, actual)
 
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
+
     def test_timestamp_path_exist_time_past(self):  # pylint: disable=invalid-name
         """
         This method test Database.timestamp() for the case that the path exist but
@@ -455,6 +463,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         del PyFunceble.CONFIGURATION["domain"]
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
 
     def test_add_file_path_present(self):  # pylint: disable=invalid-name
         """
@@ -524,6 +533,8 @@ class TestDatabase(TestCase):
         actual = Dict().from_json(File(self.file).read())
 
         self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {}
 
     def test_remove(self):
         """
