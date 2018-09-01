@@ -83,11 +83,24 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             PyFunceble.CONFIGURATION["show_execution_time"]
             or PyFunceble.CONFIGURATION["travis"]
         ):
+            # * The execution time disaply is activated.
+            # or
+            # * The Travis CI mode is activated.
+
             if action == "start":
+                # The action is equal to `start`.
+
+                # We set the starting time.
                 self._starting_time()
             elif action == "stop":
+                # * The action is not equal to `start`.
+                # and
+                # * The action is equal to `stop`
+
+                # We set the ending time.
                 self._stoping_time()
 
+                # And we print the execution time.
                 print(
                     Fore.MAGENTA
                     + Style.BRIGHT
@@ -101,6 +114,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the starting time.
         """
 
+        # We set the starting time as the current time.
         PyFunceble.CONFIGURATION["start"] = int(time())
 
     @classmethod
@@ -109,6 +123,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Set the ending time.
         """
 
+        # We set the ending time as the current time.
         PyFunceble.CONFIGURATION["end"] = int(time())
 
     @classmethod
@@ -120,17 +135,31 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             A dics with `days`,`hours`,`minutes` and `seconds`.
         """
 
+        # We get the difference between the ending and the starting time.
         time_difference = (
             PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION["start"]
         )
 
+        # We initiate an OrderedDict.
+        # Indeed, we use an ordered dict because we want the structuration and the
+        # order to stay always the same.
+        # As a dictionnary is always unordered, we can use it. Otherwise the time will
+        # not be shown correctly.
         data = OrderedDict()
 
+        # We calculate and append the day to our data.
         data["days"] = str(time_difference // (24 * 3600)).zfill(2)
+
+        # We calculate and append the hours to our data.
         data["hours"] = str(time_difference // 3600).zfill(2)
+
+        # We calculate and append the minutes to our data.
         data["minutes"] = str((time_difference % 3600) // 60).zfill(2)
+
+        # We calculate and append the minutes to our data.
         data["seconds"] = str(time_difference % 60).zfill(2)
 
+        # We finaly return our data.
         return data
 
     def format_execution_time(self):
@@ -141,4 +170,5 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             A human readable date.
         """
 
+        # We return the formated execution time.
         return ":".join(list(self._calculate().values()))
