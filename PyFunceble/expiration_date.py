@@ -79,9 +79,13 @@ class ExpirationDate:
     """
 
     def __init__(self):
+        # We set the log separator.
         self.log_separator = "=" * 100 + " \n"
 
+        # We initiate a variable which will save the extracted expiration date.
         self.expiration_date = ""
+
+        # We initate a variable which will save our WHOIS record.s
         self.whois_record = ""
 
     @classmethod
@@ -90,11 +94,13 @@ class ExpirationDate:
         Convert `public_suffix.json` to a dictionnary.
         """
 
+        # We construct the file path to read.
         file_to_read = (
             PyFunceble.CURRENT_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
         )
 
+        # We read, convert to dict and return the file content.
         return Dict().from_json(File(file_to_read).read())
 
     @classmethod
@@ -109,47 +115,96 @@ class ExpirationDate:
         """
 
         if PyFunceble.CONFIGURATION["psl_db"] == {}:
+            # The psl database is empty.
+
+            # We fill it.
             PyFunceble.CONFIGURATION["psl_db"].update(cls._psl_db())
 
+        # We initate our regex which will match for valid domains.
         regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
+
+        # We initiate our regex which will match for valid subdomains.
         regex_valid_subdomains = r"^(?=.{0,253}$)(([a-z0-9_][a-z0-9-_]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
 
         if domain:
+            # A domain is given.
+
+            # We set the element to test as the parsed domain.
             to_test = domain
         else:
+            # A domain is not given.
+
+            # We set the element to test as the currently tested element.
             to_test = PyFunceble.CONFIGURATION["domain"]
 
         if Regex(to_test, regex_valid_domains, return_data=False).match():
+            # The element pass the domain validation.
+
+            # We return True. The domain is valid.
             return True
 
+        # The element did not pass the domain validation. That means that it has invalid character
+        # or the position of - or _ are not right.
+
         try:
+            # We get the position of the last point.
             last_point_index = to_test.rindex(".")
+            # And with the help of the position of the last point, we get the domain extension.
             extension = to_test[last_point_index + 1 :]
 
             if extension in PyFunceble.CONFIGURATION["psl_db"]:
+                # The extension is into the psl database.
+
                 for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
+                    # We loop through the element of the extension into the psl database.
+
                     try:
+                        # We try to get the position of the currently read suffix
+                        # in the element ot test.
                         suffix_index = to_test.rindex("." + suffix)
+
+                        # We get the element to check.
+                        # The idea here is to delete the suffix, then retest with our
+                        # subdomains regex.
                         to_check = to_test[:suffix_index]
 
                         if "." in to_check:
+                            # There is a point into the new element to check.
+
+                            # We check if it passes our subdomain regex.
+                            # * True: It's a valid domain.
+                            # * False: It's an invalid domain.
                             return Regex(
                                 to_check, regex_valid_subdomains, return_data=False
                             ).match()
 
                     except ValueError:
+                        # In case of a value error because the position is not found,
+                        # we continue to the next element.
                         pass
 
+            # * The extension is not into the psl database.
+            # or
+            # * there was no point into the suffix checking.
+
+            # We get the element before the last point.
             to_check = to_test[:last_point_index]
 
             if "." in to_check:
+                # There is a point in to_check
+
+                # We check if it passes our subdomain regex.
+                # * True: It's a valid domain.
+                # * False: It's an invalid domain.
                 return Regex(
                     to_check, regex_valid_subdomains, return_data=False
                 ).match()
 
         except (ValueError, AttributeError):
+            # In case of a value or attribute error we ignore them.
             pass
 
+        # And we return False, the domain is not valid.
         return False
 
     @classmethod
@@ -165,13 +220,23 @@ class ExpirationDate:
             We only test IPv4 because for now we only support domain and IPv4.
         """
 
+        # We initate our regex which will match for valid IPv4.
         regex_ipv4 = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
 
         if ip_to_check:
+            # An element is localy given.
+
+            # We consider it as the element to test.
             to_test = ip_to_check
         else:
+            # An element is not localy given.
+
+            # We consider the global element to test as the element to test.
             to_test = PyFunceble.CONFIGURATION["domain"]
 
+        # We check if it passes our IPv4 regex.
+        # * True: It's a valid IPv4.
+        # * False: It's an invalid IPv4.
         return Regex(to_test, regex_ipv4, return_data=False).match()
 
     def get(self):  # pragma: no cover
@@ -179,10 +244,21 @@ class ExpirationDate:
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
         """
 
+        # We get the status of the domain validation.
         domain_validation = self.is_domain_valid()
+        # We get the status of the IPv4 validation.
         ip_validation = self.is_ip_valid()
 
         if domain_validation and not ip_validation or domain_validation:
+            # * The element is a valid domain.
+            # and
+            # * The element is not ahe valid IPv4.
+            # or
+            # * The element is a valid domain.
+
+            # * We get the HTTP status code of the currently tested element.
+            # and
+            # * We try to get the element status from the IANA database.
             PyFunceble.CONFIGURATION.update(
                 {"http_code": HTTPCode().get(), "referer": Referer().get()}
             )
@@ -192,21 +268,50 @@ class ExpirationDate:
                 PyFunceble.STATUS["official"]["down"],
                 PyFunceble.STATUS["official"]["invalid"],
             ]:
+                # The WHOIS record status is into our list of official status.
+
+                # We consider that status as the status of the tested element.
                 return PyFunceble.CONFIGURATION["referer"]
 
+            # The WHOIS record status is not into our list of official status.
+
             if PyFunceble.CONFIGURATION["referer"]:
+                # The iana database comparison status is not None.
+
+                # We try to extract the expiration date from the WHOIS record.
+                # And we return the matched status.
                 return self._extract()
 
+            # The iana database comparison status is None.
+
+            # We log our whois record if the debug mode is activated.
             self._whois_log()
+
+            # And we return and handle the official down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
         if ip_validation and not domain_validation or ip_validation:
+            # * The element is a valid IPv4.
+            # and
+            # * The element is not a valid domain.
+            # or
+            # * The element is a valid IPv4.
+
+            # We get the HTTP status code.
             PyFunceble.CONFIGURATION["http_code"] = HTTPCode().get()
 
+            # We log our whois record if the debug mode is activated.
             self._whois_log()
+
+            # And we return and handle the official down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
+        # The validation was not passed.
+
+        # We log our whois record if the debug mode is activated.
         self._whois_log()
+
+        # And we return and handle the official invalid status.
         return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
 
     def _whois_log(self):  # pragma: no cover
@@ -215,20 +320,31 @@ class ExpirationDate:
         """
 
         if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
+            # The debug and the logs subsystem are activated.
+
+            # We construct the log format
             log = (
                 self.log_separator + str(self.whois_record) + "\n" + self.log_separator
             )
 
+            # We construct the path to the file we have to create/write.
             output = PyFunceble.OUTPUT_DIRECTORY
             output += PyFunceble.OUTPUTS["parent_directory"]
             output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
             output += PyFunceble.OUTPUTS["logs"]["directories"]["whois"]
 
             if PyFunceble.CONFIGURATION["referer"]:
+                # The iana database comparison status is not equal to None.
+
+                # We append the iana database comparison status to the output path.
                 output += PyFunceble.CONFIGURATION["referer"]
             else:
+                # The iana database comparison status is not equal to None.
+
+                # We append the invalid status to the output path.
                 output += PyFunceble.STATUS["official"]["invalid"]
 
+            # And we finally write our whois record.
             File(output).write(log)
 
     @classmethod
@@ -252,6 +368,7 @@ class ExpirationDate:
             The unified month name.
         """
 
+        # We map the different month and their possible representation.
         short_month = {
             "jan": [str(1), "01", "Jan", "January"],
             "feb": [str(2), "02", "Feb", "February"],
@@ -268,9 +385,18 @@ class ExpirationDate:
         }
 
         for month in short_month:
+            # We loop through our map.
+
             if data in short_month[month]:
+                # If the parsed data (or month if you prefer) is into our map.
+
+                # We return the element (or key if you prefer) assigned to
+                # the month.
                 return month
 
+        # The element is not into our map.
+
+        # We return the parsed element (or month if you prefer).
         return data
 
     def log(self):  # pragma: no cover
@@ -279,9 +405,13 @@ class ExpirationDate:
         """
 
         if PyFunceble.CONFIGURATION["logs"]:
+            # The logs subsystem is activated.
+
+            # We construct our log format.
             log = self.log_separator + "Expiration Date: %s \n" % self.expiration_date
             log += "Tested domain: %s \n" % PyFunceble.CONFIGURATION["domain"]
 
+            # And we write the log into the right location.
             File(
                 PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
@@ -291,12 +421,16 @@ class ExpirationDate:
             ).write(log)
 
             if PyFunceble.CONFIGURATION["share_logs"]:
+                # The logs sharing is activated.
+
+                # We map the data we have to send.
                 date_to_share = {
                     "domain": PyFunceble.CONFIGURATION["domain"],
                     "expiration_date": self.expiration_date,
                     "whois_server": PyFunceble.CONFIGURATION["referer"],
                 }
 
+                # And we share the logs with the api.
                 requests.post(PyFunceble.LINKS["api_date_format"], data=date_to_share)
 
     def _cases_management(self, regex_number, matched_result):
@@ -313,6 +447,8 @@ class ExpirationDate:
             - list: the list representing the date [day, month, year]
         """
 
+        # We map our regex numbers with with the right group order.
+        # Note: please report to the method note for more information about the mapping.
         cases = {
             "first": [[1, 2, 3, 10, 11, 22, 26, 27, 28, 29, 32, 34, 38], [0, 1, 2]],
             "second": [[14, 15, 31, 33, 36, 37], [1, 0, 2]],
@@ -323,16 +459,27 @@ class ExpirationDate:
         }
 
         for case in cases:
+            # We loop through the cases.
+
+            # We get the case data.
             case_data = cases[case]
 
             if int(regex_number) in case_data[0]:
+                # The regex number is into the currently read case data.
 
+                # We return a list with the formated elements.
+                # 1. We convert the day to 2 digits.
+                # 2. We convert the month to the unified format.
+                # 3. We return the year.
                 return [
                     self._convert_1_to_2_digits(matched_result[case_data[1][0]]),
                     self._convert_or_shorten_month(matched_result[case_data[1][1]]),
                     str(matched_result[case_data[1][2]]),
                 ]
 
+        # The regex number is not already mapped.
+
+        # We return the parsed data.
         return matched_result  # pragma: no cover
 
     def _format(self, date_to_convert=None):
@@ -345,8 +492,14 @@ class ExpirationDate:
         """
 
         if not date_to_convert:  # pragma: no cover
+            # The date to conver is given.
+
+            # We initiate the date we are working with.
             date_to_convert = self.expiration_date
 
+        # We map the different possible regex.
+        # The regex index represent a unique number which have to be reported
+        # to the self._case_management() method.
         regex_dates = {
             # Date in format: 02-jan-2017
             "1": r"([0-9]{2})-([a-z]{3})-([0-9]{4})",
@@ -428,16 +581,27 @@ class ExpirationDate:
         }
 
         for regx in regex_dates:
+            # We loop through our map.
+
+            # We try to get the matched groups if the date to convert match the currently
+            # read regex.
             matched_result = Regex(
                 date_to_convert, regex_dates[regx], return_data=True, rematch=True
             ).match()
 
             if matched_result:
+                # The matched result is not None or an empty list.
+
+                # We get the date.
                 date = self._cases_management(regx, matched_result)
 
                 if date:
+                    # The date is given.
+
+                    # We return the formated date.
                     return "-".join(date)
 
+        # We return an empty string as we were not eable to match the date format.
         return ""
 
     def _extract(self):  # pragma: no cover
@@ -445,8 +609,10 @@ class ExpirationDate:
         Extract the expiration date from the whois record.
         """
 
+        # We get the whois record.
         self.whois_record = Lookup().whois(PyFunceble.CONFIGURATION["referer"])
 
+        # We list the list of regex which will help us get an unformated expiration date.
         to_match = [
             r"expire:(.*)",
             r"expire on:(.*)",
@@ -486,19 +652,32 @@ class ExpirationDate:
         ]
 
         if self.whois_record:
+            # The whois record is not empty.
+
             for string in to_match:
+                # We loop through the list of regex.
+
+                # We try tro extract the expiration date from the WHOIS record.
                 expiration_date = Regex(
                     self.whois_record, string, return_data=True, rematch=True, group=0
                 ).match()
 
                 if expiration_date:
+                    # The expiration date could be extracted.
+
+                    # We get the extracted expiration date.
                     self.expiration_date = expiration_date[0].strip()
 
+                    # We initate a regex which will help us know if a number
+                    # is present into the extracted expiration date.
                     regex_rumbers = r"[0-9]"
+
                     if Regex(
                         self.expiration_date, regex_rumbers, return_data=False
                     ).match():
+                        # The extracted expiration date has a number.
 
+                        # We format the extracted expiration date.
                         self.expiration_date = self._format()
 
                         if (
@@ -509,20 +688,37 @@ class ExpirationDate:
                                 return_data=False,
                             ).match()
                         ):
+                            # The formated expiration date does not match our unified format.
+
+                            # We log the problem.
                             self.log()
+
+                            # We log the whois record.
                             self._whois_log()
 
+                        # We generate the files and print the status.
+                        # It's an active element!
                         Generate(
                             PyFunceble.STATUS["official"]["up"],
                             "WHOIS",
                             self.expiration_date,
                         ).status_file()
 
+                        # We log the whois record.
                         self._whois_log()
+
+                        # We handle und return the official up status.
                         return PyFunceble.STATUS["official"]["up"]
 
+                    # The extracted expiration date does not have a number.
+
+                    # We log the whois record.
                     self._whois_log()
+
+                    # We handle and return and h the official down status.
                     return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
-        self._whois_log()
+        # The whois record is not empty.
+
+        # We handle and return the official down status.
         return Status(PyFunceble.STATUS["official"]["down"]).handle()
