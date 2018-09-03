@@ -97,10 +97,17 @@ class Hash:  # pylint: disable=too-few-public-methods
     def __init__(
         self, file_path, algorithm="sha512", only_hash=False
     ):  # pragma: no cover
+
+        # We initiate the list of allowed algorithms.
         self.valid_algorithms = ["all", "md5", "sha1", "sha224", "sha384", "sha512"]
 
+        # We get the parsed file path.
         self.path = file_path
+
+        # We get the parsed algorithm.
         self.algorithm = algorithm
+
+        # We get the parsed decision about the only hash arguments.
         self.only_hash = only_hash
 
     def hash_data(self, algo):
@@ -109,12 +116,19 @@ class Hash:  # pylint: disable=too-few-public-methods
         :param algo: A string, the algorithm to use.
         """
 
+        # We het the algorithm function.
         hash_data = getattr(hashlib, algo)()
 
         with open(self.path, "rb") as file:
+            # We open an read the parsed path.
+
+            # We read the content.
             content = file.read()
 
+            # We parse the content to the hash algorithm.
             hash_data.update(content)
+
+        # And we extract and return the hash.
         return hash_data.hexdigest()
 
     def get(self):
@@ -122,23 +136,52 @@ class Hash:  # pylint: disable=too-few-public-methods
         Return the hash of the given file
         """
 
+        # We initiate a variable which will save the result we are going
+        # to return.
         result = {}
 
         if path.isfile(self.path) and self.algorithm in self.valid_algorithms:
+            # * The parsed path exist.
+            # and
+            # * The parsed algorithm is in the list of valid algorithms.
+
             if self.algorithm == "all":
+                # The parsed algorithm is `all`.
+
+                # We remove `all` (the first element of the list) from
+                # the list of valid algorithms because we are going to
+                # loop through the list of valid algorithms.
                 del self.valid_algorithms[0]
+
                 for algo in self.valid_algorithms:
-                    result[algo] = None
+                    # We loop through the list of valid algorithms.
+
+                    # We save the hash into the result variable.
                     result[algo] = self.hash_data(algo)
             else:
-                result[self.algorithm] = None
+                # The parsed algorithm is a specific one.
+
+                # We save the hash into the result variable.
                 result[self.algorithm] = self.hash_data(self.algorithm)
         else:
+            # * The parsed path does not exist.
+            # or
+            # * The parsed algorithm is nor in the list of valid algorithms.
             return None
 
         if self.algorithm != "all" and self.only_hash:
+            # * The parsed algorithm is not equal to `all`.
+            # and
+            # * We only have to return the selected hash.
+
+            # We return the selected algorithm.
             return result[self.algorithm]
 
+        # * The parsed algorithm is equal to `all`.
+        # or
+        # * We do not have to return the selected hash.
+
+        # We return all hashes.
         return result
 
 
@@ -148,7 +191,10 @@ class Command:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, command):  # pragma: no cover
+        # We set the default decoding type.
         self.decode_type = "utf-8"
+
+        # We get the command to run.
         self.command = command
 
     def _decode_output(self, to_decode):
@@ -173,12 +219,21 @@ class Command:  # pylint: disable=too-few-public-methods
             The output in byte format.
         """
 
+        # We initiate a process and parse the command to it.
         process = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=True)
+
+        # We communicate the command and get the output and the error.
         (output, error) = process.communicate()
 
         if process.returncode != 0:  # pragma: no cover
+            # The return code is different to 0.
+
+            # We return the decoded error.
             return self._decode_output(error)
 
+        # The return code (or exit code if you prefer) if equal to 0.
+
+        # We return the decoded output of the executed command.
         return self._decode_output(output)
 
 
@@ -190,8 +245,14 @@ class Dict:
     def __init__(self, main_dictionnary=None):  # pragma: no cover
 
         if main_dictionnary is None:
+            # A dictionnary is not parsed.
+
+            # We set the main dictionnary as an empty dictionnary.
             self.main_dictionnary = {}
         else:
+            # A dictionnary is parsed.
+
+            # We set the main dictionnary as the parsed dictionnary.
             self.main_dictionnary = main_dictionnary
 
     def remove_key(self, key_to_remove):
@@ -208,13 +269,28 @@ class Dict:
         """
 
         if isinstance(self.main_dictionnary, dict):
+            # The main dictionnary is a dictionnary
+
             if isinstance(key_to_remove, list):
-                for k in key_to_remove:
-                    del self.main_dictionnary[k]
+                # The parsed key to remove is a list.
+
+                for key in key_to_remove:
+                    # We loop through the list of key to remove.
+
+                    # We delete the key from the dictionnary.
+                    del self.main_dictionnary[key]
             else:
+                # The parsed key to remove is not a list.
+
+                # We delete the given key from the dictionnary.
                 del self.main_dictionnary[key_to_remove]
+
+            # We return the final dictionnary.
             return self.main_dictionnary
 
+        # The main dictionnary is not a dictionnary.
+
+        # We return None.
         return None
 
     def rename_key(self, key_to_rename, strict=True):
@@ -231,19 +307,48 @@ class Dict:
         """
 
         if isinstance(self.main_dictionnary, dict) and isinstance(key_to_rename, dict):
+            # * The given main directory is a dictionnary.
+            # and
+            # * The given key to rename is a dictionnary.
+
             for old, new in key_to_rename.items():
+                # We loop through the key to raname.
+
                 if strict:
+                    # The strict method is activated.
+
+                    # We initiate the new with the old and remove the old content.
                     self.main_dictionnary[new] = self.main_dictionnary.pop(old)
                 else:
+                    # The strict method is not activated.
+
+                    # We initiate the elements to rename.
                     to_rename = {}
+
                     for index in self.main_dictionnary:
+                        # We loop throught the indexes of the main dictionnary.
+
                         if old in index:
+                            # The old key is into the index name.
+
+                            # We append the index name and the new index to our
+                            # local list to rename.
                             to_rename.update({index: new[:-1] + index.split(old)[-1]})
+
+                    # We run this method against the local list to rename in order
+                    # to rename the element.
                     self.main_dictionnary = Dict(self.main_dictionnary).rename_key(
                         to_rename, True
                     )
+
+            # We return the final list.
             return self.main_dictionnary
 
+        # * The given main directory is not a dictionnary.
+        # or
+        # * The given key to rename is not a dictionnary.
+
+        # We return None.
         return None
 
     def to_json(self, destination):
@@ -257,6 +362,10 @@ class Dict:
         """
 
         with open(destination, "w") as file:
+            # We open the file we are going to write.
+            # Note: We always overwrite the destination.
+
+            # We save the current dictionnary into a json format.
             dump(
                 self.main_dictionnary,
                 file,
@@ -275,6 +384,10 @@ class Dict:
         """
 
         with open(destination, "w") as file:
+            # We open the file we are going to write.
+            # Note: We always overwrite the destination.
+
+            # We save the current dictionnary into a json format.
             dump_yaml(self.main_dictionnary, file, indent=4)
 
     @classmethod
@@ -288,9 +401,12 @@ class Dict:
         """
 
         try:
+            # Read a json string and convert it to dictionnary.
             return loads(data)
 
         except decoder.JSONDecodeError:  # pragma: no cover
+            # In case the decoder return an error,
+            # we return and empty dictionnary.
             return {}
 
     @classmethod
@@ -303,6 +419,7 @@ class Dict:
                 A YAML formated string to convert to dict format.
         """
 
+        # We read a YAML string and convert it into a dictionnary.
         return load_yaml(data)
 
 
@@ -316,6 +433,7 @@ class Directory:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, directory):  # pragma: no cover
+        # We get the directory.
         self.directory = directory
 
     def fix_path(self, splited_path=None):
@@ -328,18 +446,28 @@ class Directory:  # pylint: disable=too-few-public-methods
         """
 
         if not splited_path:
+            # A splited path is parsed.
+
+            # We initate a variable which will save the splited path.
             split_path = []
 
             if self.directory:
+                # The parsed directory is not empty or equal to None.
+
                 if "/" in self.directory:
+                    # We split the separator.
                     split_path = self.directory.split("/")
                 elif "\\" in self.directory:
+                    # We split the separator.
                     split_path = self.directory.split("\\")
 
+                # We run the same function with the splited_path argument filled.
                 return self.fix_path(splited_path=filter(lambda dir: dir, split_path))
 
+            # We return the directory.
             return self.directory
 
+        # We join the splited element with the directory separator as glue.
         return directory_separator.join(splited_path) + directory_separator
 
 
@@ -353,6 +481,7 @@ class File:
     """
 
     def __init__(self, file):
+        # We get the parsed file.
         self.file = file
 
     def write(self, data_to_write, overwrite=False):
@@ -364,12 +493,35 @@ class File:
                 The data to write.
         """
 
-        if data_to_write and isinstance(data_to_write, str):
-            if overwrite or not path.isfile(self.file):
-                with open(self.file, "w", encoding="utf-8") as file:
+        if overwrite or not path.isfile(self.file):
+            # * We have to overwrite the file data.
+            # or
+            # * The file path does not already exist.
+
+            with open(self.file, "w", encoding="utf-8") as file:
+                # We prepare the file for writting.
+
+                if data_to_write and isinstance(data_to_write, str):
+                    # * A data  to write is given.
+                    # and
+                    # * The data to write is a string
+
+                    # We write the string into the file.
                     file.write(data_to_write)
-            else:
-                with open(self.file, "a", encoding="utf-8") as file:
+        else:
+            # * We do not have to overwrite the file data.
+            # or
+            # * The file path does already exist.
+
+            with open(self.file, "a", encoding="utf-8") as file:
+                # We prepare the file for append writting.
+
+                if data_to_write and isinstance(data_to_write, str):
+                    # * A data  to write is given.
+                    # and
+                    # * The data to write is a string
+
+                    # We append the string into the file.
                     file.write(data_to_write)
 
     def read(self):
@@ -381,8 +533,12 @@ class File:
         """
 
         with open(self.file, "r", encoding="utf-8") as file:
+            # We open and read a file.
+
+            # We get the file content.
             funilrys = file.read()
 
+        # We return the file content.
         return funilrys
 
     def delete(self):
@@ -391,8 +547,10 @@ class File:
         """
 
         try:
+            # We try to remove the existing file.
             remove(self.file)
         except OSError:
+            # If the path is not found, we ignore the error.
             pass
 
     def copy(self, destination):
@@ -418,8 +576,14 @@ class List:  # pylint: disable=too-few-public-methods
 
     def __init__(self, main_list=None):  # pragma: no cover
         if main_list is None:
+            # The main list is not given.
+
+            # We initiate an empty list.
             self.main_list = []
         else:
+            # The main list is given.
+
+            # We get the given list.
             self.main_list = main_list
 
     def format(self):
@@ -576,8 +740,13 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
     """
 
     def __init__(self, link, destination=None, return_data=False):
+        # We get the parsed link.
         self.link = link
+
+        # We get the parsed destination.
         self.destination = destination
+
+        # We get the parsed return data.
         self.return_data = return_data
 
     def text(self):
@@ -585,13 +754,25 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
         This method download the given link and return its requests.text.
         """
 
+        # We request the link.
         req = requests.get(self.link)
 
         if req.status_code == 200:
+            # The request http status code is equal to 200.
+
             if self.return_data:
+                # We have to return the data.
+
+                # We return the link content.
                 return req.text
 
+            # We save the link content to the parsed destination.
             File(self.destination).write(req.text, overwrite=True)
+
+            # We return True.
             return True
 
+        # The request http status code is not equal to 200.
+
+        # We raise an exception saying that we were unable to download.
         raise Exception("Unable to download %s." % repr(self.link))
