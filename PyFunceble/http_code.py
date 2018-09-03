@@ -81,16 +81,30 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, full_url=False):  # pragma: no cover
-        self.full_url = full_url
-
         if full_url:
+            # We should work with full URL which actualy means that we have to get the
+            # http status code from the URL we are currently testing.
+
+            # We initiate the element we have to get.
             self.to_get = PyFunceble.CONFIGURATION["URL"]
         else:
+            # We are working with domain.
+
+            # We construct the element we have to get.
+            # Note: As we may work with IP, we explicitly set the port we are
+            # working with.
             self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
+            # The user-agent is given.
+
+            # We append the user agent to the header we are going to parse with
+            # the request.
             self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
         else:
+            # The user-agent is not given or is empty.
+
+            # We return an empty header.
             self.headers = {}
 
     def _access(self):  # pragma: no cover
@@ -103,12 +117,16 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         """
 
         try:
+            # We try to get the HTTP status code.
+
+            # We get the head of the URL.
             req = requests.head(
                 self.to_get,
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
                 headers=self.headers,
             )
 
+            # And we try to get the status code.
             return req.status_code
 
         except (
@@ -119,6 +137,10 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
+            # If one of the listed exception is matched, that means that something
+            # went wrong and we were unable to extract the status code.
+
+            # We return None.
             return None
 
     def get(self):
@@ -130,7 +152,13 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             int: the status_code.
         """
         if PyFunceble.HTTP_CODE["active"]:
+            # The http status code extraction is activated.
+
+            # We get the http status code.
             http_code = self._access()
+
+            # We initiate a variable which will save the list of allowed
+            # http status code.
             list_of_valid_http_code = []
 
             for codes in [
@@ -138,11 +166,29 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 PyFunceble.HTTP_CODE["list"]["potentially_down"],
                 PyFunceble.HTTP_CODE["list"]["potentially_up"],
             ]:
+                # We loop throught the list of http status code.
+
+                # We extend the list of valid with the currently read
+                # codes.
                 list_of_valid_http_code.extend(codes)
 
             if http_code not in list_of_valid_http_code or http_code is None:
+                # * The extracted http code is not in the list of valid http code.
+                # or
+                # * The extracted http code is equal to `None`.
+
+                # We return 3 star in order to mention that we were not eable to extract
+                # the http status code.
                 return "*" * 3
 
+            # * The extracted http code is in the list of valid http code.
+            # or
+            # * The extracted http code is not equal to `None`.
+
+            # We return the extracted http status code.
             return http_code
 
+        # The http status code extraction is activated.
+
+        # We return None.
         return None
