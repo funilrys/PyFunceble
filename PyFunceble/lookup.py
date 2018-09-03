@@ -79,13 +79,20 @@ class Lookup:
         """
 
         try:
+            # We try to get the addresse information of the given domain or IP.
             socket.getaddrinfo(
                 PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
             )
 
+            # It was done successfuly, we return True.
+            # Note: we don't need to read the addresses so we consider as successful
+            # as long as there is no error.
             return True
 
         except (OSError, socket.herror, socket.gaierror):
+            # One of the listed exception is matched.
+
+            # It was done unsuccesfuly, we return False.
             return False
 
     @classmethod
@@ -107,52 +114,94 @@ class Lookup:
         """
 
         if domain is None:
+            # The domain is not given (localy).
+
+            # We consider the domain as the domain or IP we are currently testing.
             domain = PyFunceble.CONFIGURATION["domain"]
 
         if timeout is None:
+            # The time is not given (localy).
+
+            # We consider the timeout from the configuration as the timeout to use.
             timeout = PyFunceble.CONFIGURATION["seconds_before_http_timeout"]
 
         if whois_server:
+            # A whois server is given.
 
+            # We initiate a socket.
             req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-            if PyFunceble.CONFIGURATION["seconds_before_http_timeout"] % 3 == 0:
+            if timeout % 3 == 0:
+                # The timeout is modulo 3.
+
+                # We report the timeout to our initiated socket.
                 req.settimeout(timeout)
             else:
+                # The timeout is not modulo 3.
+
+                # We report 3 seconds as the timeout to our initiated socket.
                 req.settimeout(3)
 
             try:
+                # We try to connect to the whois server at the port 43.
                 req.connect((whois_server, 43))
             except socket.error:
+                # We got an error.
+
+                # We return None.
                 return None
 
+            # We send end encode the domain we want the data from.
             req.send((domain + "\r\n").encode())
+
+            # We initiate a bytes variable which will save the response
+            # from the server.
             response = b""
 
             while True:
+                # We loop infinitly.
                 try:
-                    try:
-                        data = req.recv(4096)
-                    except ConnectionResetError:
-                        req.close()
+                    # We try to receive the data in a buffer of 4096 bytes.
+                    data = req.recv(4096)
+                except (socket.timeout, ConnectionResetError):
+                    # We got an error.
 
-                        return None
-
-                except socket.timeout:
+                    # We close the connection.
                     req.close()
 
+                    # And we return None.
                     return None
 
+                # Everything goes right.
+
+                # We append data to the response we got.
                 response += data
+
                 if not data:
+                    # The data is empty.
+
+                    # We break the loop.
                     break
 
+            # We close the connection.
             req.close()
 
             try:
+
+                # We finally decode and return the response we got from the
+                # server.
                 return response.decode()
 
             except UnicodeDecodeError:
+                # We got an encoding error.
+
+                # We decode the response.
+                # Note: Because we don't want to deal with other issue, we
+                # decided to use `replace` in order to automatically replace
+                # all non utf-8 encoded characters.
                 return response.decode("utf-8", "replace")
 
+        # The whois server is not given.
+
+        # We return None.
         return None
