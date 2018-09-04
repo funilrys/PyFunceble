@@ -73,14 +73,21 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def __init__(self):
         if not PyFunceble.CONFIGURATION["quiet"]:
+            # The quiet mode is not activated.
+
+            # We print a message for the user on screen.
             print(
                 "Update of %s" % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
                 end=" ",
             )
 
+        # We initiate the destination of our database.
         self.destination = PyFunceble.OUTPUTS["default_files"]["public_suffix"]
 
+        # We initiate a variablw which will save the database we are going to save.
         self.public_suffix_db = {}
+
+        # And we run the update logic.
         self.update()
 
     @classmethod
@@ -89,8 +96,10 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         Get the database from the public suffix repository.
         """
 
+        # We initiate a variable which will save the link to the upstream public suffix file.
         public_suffix_url = "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
 
+        # And we return the content of the previously declared link.
         return Download(public_suffix_url, return_data=True).text()
 
     def _extensions(self, line):
@@ -102,21 +111,40 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
                 The line from the official public suffix repository.
         """
 
+        # We strip the parsed line.
         line = line.strip()
 
         if not line.startswith("//") and "." in line:
+            # * The parsed line is not a commented line.
+            # and
+            # * There is a point in the parsed line.
             line = line.encode("idna").decode("utf-8")
 
             if line.startswith("*."):
+                # The parsed line start with `*.`.
+
+                # We remove the first two characters.
                 line = line[2:]
 
+            # We we split the points and we get the last element.
+            # Explanation: The idea behind this action is to
+            # always get the extension.
             extension = line.split(".")[-1]
 
             if extension in self.public_suffix_db:
+                # The extension is alrady in our database.
+
+                # We update the content of the 1st level TDL with
+                # the content of the suffix.
+                # In between, we format so that we ensure that there is no
+                # duplicate in the database index content.
                 self.public_suffix_db[extension] = List(
                     self.public_suffix_db[extension] + [line]
                 ).format()
             else:
+                # The extension is not already in our database.
+
+                # We append the currently formated extension and the line content.
                 self.public_suffix_db.update({extension: [line]})
 
     def update(self):
@@ -124,8 +152,14 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         Update of the content of the `public-suffix.json`.
         """
 
+        # We loop through the line of the upstream file.
         list(map(self._extensions, self._data().split("\n")))
+
+        # We save the content of our database in the final testination.
         Dict(self.public_suffix_db).to_json(self.destination)
 
         if not PyFunceble.CONFIGURATION["quiet"]:
+            # The quiet mode is not activated.
+
+            # We inform the user that everything goes right.
             print(PyFunceble.CONFIGURATION["done"])
