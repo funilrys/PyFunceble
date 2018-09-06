@@ -89,25 +89,45 @@ class URL:
         """
 
         if url:
+            # The given url is not empty.
+
+            # We initiate the element to test.
             to_test = url
         else:
+            # The given url is empty.
+
+            # We initiate the element to test from the globaly URl to test.
             to_test = PyFunceble.CONFIGURATION["URL"]
 
         if to_test.startswith("http"):
+            # The element to test starts with http.
+
             try:
+                # We initiate a regex which will match the domain or the url base.
                 regex = r"((http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
+
+                # We extract the url base with the help of the initiated regex.
                 domain = Regex(to_test, regex, return_data=True, rematch=True).match()[
                     2
                 ]
 
+                # We check if the url base is a valid domain.
                 domain_status = ExpirationDate().is_domain_valid(domain)
+
+                # We check if the url base is a valid IP.
                 ip_status = ExpirationDate().is_ip_valid(domain)
 
                 if domain_status or ip_status:
+                    # * The url base is a valid domain.
+                    # and
+                    # * The url base is a valid IP.
+
+                    # We return True.
                     return True
             except TypeError:
                 pass
 
+        # We return False.
         return False
 
     def get(self):  # pragma: no cover
@@ -116,22 +136,36 @@ class URL:
         """
 
         if self.is_url_valid():
+            # The url is valid.
+
+            # We initiate the HTTP status code.
             PyFunceble.CONFIGURATION.update(
                 {"http_code": HTTPCode(full_url=True).get()}
             )
 
+            # We initiate the list of active status code.
             active_list = []
             active_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_up"])
             active_list.extend(PyFunceble.HTTP_CODE["list"]["up"])
 
+            # We initiate the list of inactive status code.
             inactive_list = []
             inactive_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_down"])
             inactive_list.append("*" * 3)
 
             if PyFunceble.CONFIGURATION["http_code"] in active_list:
+                # The extracted HTTP status code is in the list of active list.
+
+                # We handle and return the up status.
                 return URLStatus(PyFunceble.STATUS["official"]["up"]).handle()
 
             if PyFunceble.CONFIGURATION["http_code"] in inactive_list:
+                # The extracted HTTP status code is in the list of inactive list.
+
+                # We handle and return the down status.
                 return URLStatus(PyFunceble.STATUS["official"]["down"]).handle()
 
+        # The extracted HTTP status code is not in the list of active nor invalid list.
+
+        # We handle and return the invalid down status.
         return URLStatus(PyFunceble.STATUS["official"]["invalid"]).handle()
