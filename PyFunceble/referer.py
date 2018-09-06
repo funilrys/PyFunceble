@@ -76,10 +76,18 @@ class Referer:  # pragma: no cover
     """
 
     def __init__(self):
+        # Note: A URL testing or an IP testing does not come around
+        # here. So there is no need to be scared by the following.
+
+        # We get the extension of the currently tested element.
+        # We basically get everything after the last point.
         self.domain_extension = PyFunceble.CONFIGURATION["domain"][
             PyFunceble.CONFIGURATION["domain"].rindex(".") + 1 :
         ]
 
+        # We create a list of ignored extension.
+        # Note: We need the following because those extension does
+        # not have a centralized whois server (yet).
         self.ignored_extension = [
             "ad",
             "al",
@@ -168,10 +176,12 @@ class Referer:  # pragma: no cover
         Convert `iana-domains-db.json` into a dictionnary.
         """
 
+        # We construct/get the file to read.
         file_to_read = (
             PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
         )
 
+        # And we read and return the database file.
         return Dict().from_json(File(file_to_read).read())
 
     def get(self):
@@ -180,25 +190,55 @@ class Referer:  # pragma: no cover
         """
 
         if not PyFunceble.CONFIGURATION["no_whois"]:
+            # We are authorized to use WHOIS for the test result.
+
             if self.domain_extension not in self.ignored_extension:
+                # The extension of the domain we are testing is not into
+                # the list of ignored extensions.
+
+                # We set the referer to None as we do not have any.
                 referer = None
 
-                if PyFunceble.CONFIGURATION["iana_db"] == {}:
+                if not PyFunceble.CONFIGURATION["iana_db"]:
+                    # The iana database is empty.
+
+                    # We generate/construct the database from the local file.
                     PyFunceble.CONFIGURATION["iana_db"].update(self._iana_database())
 
                 if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
+                    # The domain extension is in the iana database.
+
+                    # We get the referer from the database.
                     referer = PyFunceble.CONFIGURATION["iana_db"][self.domain_extension]
 
-                    if referer is None:
+                    if not referer:
+                        # The referer is not filled.
+
+                        # We log the case of the current extension.
                         self.log()
+
+                        # And we handle and return the down status.
                         return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
+                    # The referer is into the database.
+
+                    # We return the extracted referer.
                     return referer
 
+                # The domain extension is not in the iana database.
+
+                # We hanlde and return the invalid status.
                 return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
 
+            # The extension of the domain we are testing is not into
+            # the list of ignored extensions.
+
+            # We handle and return the down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
+        # We are not authorized to use WHOIS for the test result.
+
+        # We return None.
         return None
 
     def log(self):
@@ -207,11 +247,17 @@ class Referer:  # pragma: no cover
         """
 
         if PyFunceble.CONFIGURATION["logs"]:
+            # The generation of logs is activated.
+
+            # * We initiate a separator between the older and the current one.
+            # and
+            # * We initiate the message to print.
             logs = "=" * 100
             logs += "\nNo referer found for: %s domains\n" % self.domain_extension
             logs += "=" * 100
             logs += "\n"
 
+            # We write the log into the file.
             File(
                 PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
@@ -221,6 +267,10 @@ class Referer:  # pragma: no cover
             ).write(logs)
 
             if PyFunceble.CONFIGURATION["share_logs"]:
+                # The logs sharing is activated.
+
+                # We initiate the data to share.
                 data_to_share = {"extension": self.domain_extension}
 
+                # We post the data to the API.
                 requests.post(PyFunceble.LINKS["api_no_referer"], data=data_to_share)
