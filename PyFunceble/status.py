@@ -78,6 +78,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
 
     def __init__(self, matched_status):
+        # We get the the parsed status.
         self.matched_status = matched_status
 
     def handle(self):
@@ -88,17 +89,35 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             The status of the domains after generating the files.
         """
 
+        # We initiate the source we are going to parse to the Generate class.
         source = "NSLOOKUP"
 
         if self.matched_status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
+            # The matched status is not in the list of invalid status.
+
             if Lookup().nslookup():
+                # We could execute the nslookup logic.
+
+                # We generate the status files with the up status.
                 Generate(PyFunceble.STATUS["official"]["up"], source).status_file()
+
+                # We return the up status.
                 return PyFunceble.STATUS["official"]["up"]
 
+            # We could not execute the nslookup logic.
+
+            # * We generate the status file with the down status.
             Generate(PyFunceble.STATUS["official"]["down"], source).status_file()
+
+            # We return the down status.
             return PyFunceble.STATUS["official"]["down"]
 
+        # The matched status is in the list of invalid status.
+
+        # We generate the status file with the invalid status.
         Generate(PyFunceble.STATUS["official"]["invalid"], "IANA").status_file()
+
+        # We return the invalid status.
         return PyFunceble.STATUS["official"]["invalid"]
 
 
@@ -112,6 +131,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
 
     def __init__(self, catched_status):
+        # We get the parsed status.
         self.catched = catched_status
 
     def handle(self):
@@ -119,11 +139,19 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         Handle the backend of the given status.
         """
 
+        # We initiate the source we are going to parse to the Generate class.
         source = "URL"
 
         if self.catched.lower() not in PyFunceble.STATUS["list"]["invalid"]:
+            # The parsed status is not in the list of invalid.
+
+            # We generate the status file with the catched status.
             Generate(self.catched, source).status_file()
         else:
+            # The parsed status is in the list of invalid.
+
+            # We generate the status file with the parsed status.
             Generate(self.catched, "IANA").status_file()
 
+        # We return the parsed status.
         return self.catched
