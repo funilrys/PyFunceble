@@ -89,7 +89,7 @@ class ExpirationDate:
         self.whois_record = ""
 
     @classmethod
-    def _psl_db(cls):
+    def psl_db(cls):
         """
         Convert `public_suffix.json` to a dictionnary.
         """
@@ -100,8 +100,12 @@ class ExpirationDate:
             + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
         )
 
-        # We read, convert to dict and return the file content.
-        return Dict().from_json(File(file_to_read).read())
+        # * We read, convert to dict and return the file content.
+        # and
+        # * We fill the database.
+        PyFunceble.CONFIGURATION["psl_db"].update(
+            Dict().from_json(File(file_to_read).read())
+        )
 
     @classmethod
     def is_domain_valid(cls, domain=None):
@@ -118,7 +122,7 @@ class ExpirationDate:
             # The psl database is empty.
 
             # We fill it.
-            PyFunceble.CONFIGURATION["psl_db"].update(cls._psl_db())
+            cls.psl_db()
 
         # We initate our regex which will match for valid domains.
         regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long

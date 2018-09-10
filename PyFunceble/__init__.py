@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.101.23.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.102.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -436,6 +436,17 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "--hierarchical",
+            action="store_true",
+            help="Switch the value of the hierarchical sorting of tested file. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(CONFIGURATION["generate_hosts"])
+                + Style.RESET_ALL
+            ),
+        )
+
+        PARSER.add_argument(
             "-h",
             "--host",
             action="store_true",
@@ -712,6 +723,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.filter:
             CONFIGURATION.update({"to_filter": ARGS.filter})
+
+        if ARGS.hierarchical:
+            CONFIGURATION.update(
+                {"hierarchical_sorting": Core.switch("hierarchical_sorting")}
+            )
 
         if ARGS.host:
             CONFIGURATION.update({"generate_hosts": Core.switch("generate_hosts")})

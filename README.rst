@@ -98,6 +98,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                     |___/
 
 -   dnmTX - `@dnmTX`_
+-   jawz101 - `@jawz101`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
@@ -171,6 +172,7 @@ License
 .. _Dead-Hosts: https://github.com/dead-hosts
 
 .. _@dnmTX: https://github.com/dnmTX
+.. _@jawz101: https://github.com/jawz101
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@pi-hole: https://github.com/pi-hole/pi-hole

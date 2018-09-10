@@ -584,7 +584,7 @@ class List:  # pylint: disable=too-few-public-methods
             # The main list is given.
 
             # We get the given list.
-            self.main_list = main_list
+            self.main_list = list(filter(lambda x: x is None or x, main_list))
 
     def format(self):
         """
@@ -597,6 +597,26 @@ class List:  # pylint: disable=too-few-public-methods
         try:
             return sorted(list(set(self.main_list)), key=str.lower)
 
+        except TypeError:  # pragma: no cover
+            return self.main_list
+
+    def custom_format(self, key_method, reverse=False):
+        """
+        Return a well formated list. With the key_method as a function/method to format
+        the elements before sorting.
+
+        Arguments:
+            - key_method: function
+                A function to use to format the readed element before sorting.
+            - reverse: bool
+                True: Reverse the returned list.
+
+        Returns: list
+            A sorted list.
+        """
+
+        try:
+            return sorted(list(set(self.main_list)), key=key_method, reverse=reverse)
         except TypeError:  # pragma: no cover
             return self.main_list
 

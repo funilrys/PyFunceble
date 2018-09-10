@@ -248,6 +248,15 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 .. warning::
     Do not touch this index unless you have a good reason to.
 
+:code:`hierarchical_sorting`
+----------------------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Say to the system if we have to sort the list and the outputs in a hierarchical order.
+
 :code:`iana_db`
 ---------------
 

@@ -75,17 +75,20 @@ class URL:
     """
 
     @classmethod
-    def is_url_valid(cls, url=None):
+    def is_url_valid(cls, url=None, return_formated=False):
         """
         Check if the domain of the given URL is valid.
 
         Argument:
             - url: str
                 The url to test.
+            - return_formated: bool
+                True: We return the url base.
 
-        Returns: bool
+        Returns: bool|str
             - True: is valid.
             - False: is invalid.
+            - str: return_formated is true and the url base is valid.
         """
 
         if url:
@@ -107,20 +110,23 @@ class URL:
                 regex = r"((http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
-                domain = Regex(to_test, regex, return_data=True, rematch=True).match()[
-                    2
-                ]
+                formated_base = Regex(
+                    to_test, regex, return_data=True, rematch=True
+                ).match()[2]
 
                 # We check if the url base is a valid domain.
-                domain_status = ExpirationDate().is_domain_valid(domain)
+                domain_status = ExpirationDate().is_domain_valid(formated_base)
 
                 # We check if the url base is a valid IP.
-                ip_status = ExpirationDate().is_ip_valid(domain)
+                ip_status = ExpirationDate().is_ip_valid(formated_base)
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.
                     # and
                     # * The url base is a valid IP.
+
+                    if return_formated:
+                        return formated_base
 
                     # We return True.
                     return True

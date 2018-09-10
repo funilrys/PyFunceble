@@ -382,6 +382,23 @@ Code documentation
 .. autoclass:: PyFunceble.referer.Referer
     :members:
 
+Sort
+----
+
+Problematic
+^^^^^^^^^^^
+
+How can we format the list to test (and the outputed informations) in format other than the alphabetical format ?
+
+Code documentation
+^^^^^^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.sort
+   :members: 
+
+.. autoclass:: PyFunceble.sort.Sort
+    :members:
+
 Status
 ------
 

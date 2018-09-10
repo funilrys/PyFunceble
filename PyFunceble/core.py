@@ -62,7 +62,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
+# pylint: disable=bad-continuation, too-many-lines
 
 import PyFunceble
 from PyFunceble import Fore, Style, path, repeat
@@ -74,6 +74,7 @@ from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.helpers import Command, Download, List, Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
+from PyFunceble.sort import Sort
 from PyFunceble.url import URL
 
 
@@ -117,7 +118,7 @@ class Core:  # pragma: no cover
                 The argument passed to the system.
         """
 
-        if passed and passed.startswith("http"):
+        if passed and URL.is_url_valid(passed):
             # The passed string is an URL.
 
             # We get the file name based on the URL.
@@ -835,6 +836,14 @@ class Core:  # pragma: no cover
                     list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
                 ).matching_list()
             ).format()
+
+        list_to_test = List(list(list_to_test)).custom_format(Sort.standard)
+
+        if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+            # The hierarchical sorting is desired by the user.
+
+            # We format the list.
+            list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
 
         # We return the final list to test.
         return list_to_test
