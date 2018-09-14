@@ -165,15 +165,15 @@ We have categorized the HTTP Code into 3 parts.
 - Active
 
   - Consider those ones as the one that influences HTTP source logic.
-  - Please note that the domain is automatically introduced into the official outputs but we keep a record of it :code:`output/HTTP_Analytic/ACTIVE`.
+  - Please note that the domain is automatically introduced into the official outputs but we keep a record of it :code:`output/Analytic/ACTIVE`.
 
 - Potentially Active
 
-  - If the domain status returned by other methods are different from :code:`INACTIVE` or :code:`INVALID` and the HTTP status code is into that list, we save the domain into :code:`output/HTTP_Analytic/POTENTIALLY_ACTIVE`
+  - If the domain status returned by other methods are different from :code:`INACTIVE` or :code:`INVALID` and the HTTP status code is into that list, we save the domain into :code:`output/Analytic/POTENTIALLY_ACTIVE`
 
 - Inactive or potentially inactive
 
-  - If the domain status returned by other methods are different from :code:`ACTIVE` and the HTTP status code is on that list, we save the domain into :code:`output/HTTP_Analytic/POTENTIALLY_INACTIVE`
+  - If the domain status returned by other methods are different from :code:`ACTIVE` and the HTTP status code is on that list, we save the domain into :code:`output/Analytic/POTENTIALLY_INACTIVE`
 
 
 As active

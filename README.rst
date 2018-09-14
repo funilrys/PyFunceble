@@ -20,7 +20,7 @@ The tool to check domains or IP availability
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March, 2018.
 
-Its main objective is to get and the return domains and IPs availability by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
+Its main objective is to get and/or return the availability of domains and IPs by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
 
 PyFunceble is running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, blocklists or even AdBlock filter lists. 
 
@@ -49,24 +49,25 @@ ___________________________________________
 What can PyFunceble do?
 -----------------------
 
-* Test of the availability of a domain.
-* Test of the availability of an IPv4.
-* Test of the availability of a URL.
-* Test of domain or IP which are present into an Adblock formatted file.
-* Test from a given raw link.
-* Save test result(s) on file(s) (in several format).
-* Show test result(s) on screen.
-* Show percentage of each status (:code:`ACTIVE`,:code:`INACTIVE`,:code:`INVALID`)
-* Auto-continuation of tests in case of system crash or script stop.
-* Filtering of a file content. This feature will let us for example test all Blogspot domain of the given file no matter the content of the file.
-* Customisation of the different option via command-line arguments or configuration file.
-* Set the user-agent to use for the tests.
-* Continuous tests under Travis CI with the help of an autosaving and database system.
-    * Set branch to push the result to for the autosaving system.
-    * Set the minimal time before we autosave.
-    * Set a command to execute at the end of the test.
-    * Set the commit message for the autosaving system
-* ... and a lot more!
+- Test of the availability of a domain.
+- Test of the availability of an IPv4.
+- Test of the availability of a URL.
+- Test of domain or IP which are present into an Adblock formatted file.
+- Test from a given raw link.
+- Save test result(s) on file(s) (in several format).
+- Show test result(s) on screen.
+- Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`, :code:`INVALID`)
+- Auto-continuation of tests in case of system crash or script stop.
+- Filtering of a file content. This feature will let us for example test all Blogspot domain of the given file no matter the content of the file.
+- Customisation of the different option via command-line arguments or configuration file.
+- Set the user-agent to use for the tests.
+- Give some analytic depending of the HTTP status code (:code:`ACTIVE`, :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
+- Continuous tests under Travis CI with the help of an autosaving and database system.
+    - Set branch to push the result to for the autosaving system.
+    - Set the minimal time before we autosave.
+    - Set a command to execute at the end of the test.
+    - Set the commit message for the autosaving system
+- ... and a lot more!
 
 ___________________________________________
 

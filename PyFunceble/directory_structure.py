@@ -187,27 +187,48 @@ class DirectoryStructure:  # pragma: no cover
 
         # We map the replacement of other directories.
         to_replace = {
+            #########################################################################
+            #            The following part is there for historical reason.         #
+            #########################################################################
             # We get the replacement of the HTTP_Analytic directory from the
             # configuration file.
-            "HTTP_Analytic": PyFunceble.OUTPUTS["http_analytic"]["directories"][
-                "parent"
-            ],
+            "HTTP_Analytic": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
             # We get the replacement of the HTTP_Analytic/ACTIVE directory from the
             # configuration file.
-            "HTTP_Analytic/ACTIVE": PyFunceble.OUTPUTS["http_analytic"]["directories"][
+            "HTTP_Analytic/ACTIVE": PyFunceble.OUTPUTS["analytic"]["directories"][
                 "parent"
             ]
-            + PyFunceble.OUTPUTS["http_analytic"]["directories"]["up"],
-            "HTTP_Analytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["http_analytic"][
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
+            "HTTP_Analytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
-            + PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_up"],
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
             # We get the replacement of the HTTP_Analytic/POTENTIALLY_INACTIVE directory
             # from the configuration file.
-            "HTTP_Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["http_analytic"][
+            "HTTP_Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
-            + PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_down"],
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
+            #########################################################################
+            #             The previous part is there for historical reason.         #
+            #########################################################################
+            # We get the replacement of the Analytic directory from the
+            # configuration file.
+            "Analytic": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
+            # We get the replacement of the Analytic/ACTIVE directory from the
+            # configuration file.
+            "Analytic/ACTIVE": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
+            "HTTP_AnAnalyticalytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["analytic"][
+                "directories"
+            ]["parent"]
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
+            # We get the replacement of the Analytic/POTENTIALLY_INACTIVE directory
+            # from the configuration file.
+            "Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["analytic"][
+                "directories"
+            ]["parent"]
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
             # We get the replacement of the domains directory from the
             # configuration file.
             "domains": PyFunceble.OUTPUTS["domains"]["directory"],

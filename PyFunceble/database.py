@@ -66,6 +66,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import path, time
+from PyFunceble.generate import Generate
 from PyFunceble.helpers import Dict, File, List
 
 
@@ -531,6 +532,11 @@ class Database:
                         in PyFunceble.CONFIGURATION["inactive_db"][self.file_path][data]
                     ):
                         # The currently tested element into the currently read index.
+
+                        # We generate the suspicious file(s).
+                        Generate("strange").analytic_file(
+                            "suspicious", PyFunceble.STATUS["official"]["up"]
+                        )
 
                         # We remove the currently tested element from the read index.
                         PyFunceble.CONFIGURATION["inactive_db"][self.file_path][

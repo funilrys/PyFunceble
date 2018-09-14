@@ -102,8 +102,8 @@ Under Windows we look for the following directories in their order. If any confi
     This means that under most Windows versions, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\PyFunceble`- as the configuration location.
     But if the :code:`%APPDATA%` directory does not exist, we fallback to current directory as the configuration location.
 
-Custom configuration location
------------------------------
+Custom location
+"""""""""""""""
 
 Sometimes, you may find yourself in a position where you absolutly do not want PyFunceble to use its default configuration location. 
 
@@ -638,31 +638,31 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the default filename of the file which will save the hosts files of the elements.
 
-:code:`outputs[http_analytic]`
-""""""""""""""""""""""""""""""
+:code:`outputs[analytic]`
+"""""""""""""""""""""""""
     
      **Type:** :code:`dict`
     
     **Description:** Set the default name of some important files and directories related to the :code:`generate_hosts` index.
 
-:code:`outputs[http_analytic][directories]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][directories]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`dict`
     
     **Description:** Set the default name of some important directories related to the :code:`http_codes[active]` index.
 
-:code:`outputs[http_analytic][directories][parent]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][directories][parent]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
-    **Default value:** :code:`HTTP_Analytic/`
+    **Default value:** :code:`Analytic/`
     
     **Description:** Set the default directory where we are going to put everything related to the http analytic.
 
-:code:`outputs[http_analytic][directories][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][directories][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
@@ -671,8 +671,8 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Description:** Set the default directory where we are going to put all potentially inactive data.
 
 
-:code:`outputs[http_analytic][directories][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][directories][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
@@ -680,8 +680,8 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the default directory where we are going to put all potentially active data.
 
-:code:`outputs[http_analytic][directories][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][directories][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
@@ -689,16 +689,25 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the default directory where we are going to put all active data.
 
+:code:`outputs[analytic][directories][suspicious]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-:code:`outputs[http_analytic][filenames]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`SUSPICIOUS/`
+    
+    **Description:** Set the default directory where we are going to put all suspicious data.
+
+
+:code:`outputs[analytic][filenames]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`dict`
     
     **Description:** Set the default name of some important files related to the :code:`http_codes[active]` index and the http analytic subsystem.
 
-:code:`outputs[http_analytic][filenames][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][filenames][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
@@ -707,8 +716,8 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Description:** Set the default filename where we are going to put all potentially inactive data.
 
 
-:code:`outputs[http_analytic][filenames][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][filenames][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
@@ -716,14 +725,23 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the default filename where we are going to put all potentially active data.
 
-:code:`outputs[http_analytic][filenames][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`outputs[analytic][filenames][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
     
     **Default value:** :code:`active_and_merged_in_results`
     
     **Description:** Set the default filename where we are going to put all active data.
+
+:code:`outputs[analytic][filenames][suspicious]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`suspicious_and_merged_in_results`
+    
+    **Description:** Set the default filename where we are going to put all suspicious data.
 
 
 :code:`outputs[logs]`
@@ -914,7 +932,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     **Default value:** :code:`["http_active"]`
     
-    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][up]` index.
+    **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][up]` index.
 
 
 :code:`status[list][down]`
@@ -943,7 +961,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     **Default value:** :code:`["potentially_down", "potentially_inactive"]`
     
-    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][potentially_down]` index.
+    **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][potentially_down]` index.
 
 :code:`status[list][potentially_up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -952,7 +970,16 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     **Default value:** :code:`["potentially_up", "potentially_active"]`
     
-    **Description:** Set the accepted status for the :code:`outputs[http_analytic][filenames][potentially_up]` index.
+    **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][potentially_up]` index.
+
+:code:`status[list][suspicious]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["strange", "hum", "suspicious"]`
+    
+    **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][suspicious]` index.
 
 :code:`status[official]`
 """"""""""""""""""""""""

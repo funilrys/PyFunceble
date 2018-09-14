@@ -145,7 +145,7 @@ Install and load the default configuration in the current directory ? [y/n] "
                 PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
             ).fix_path()
 
-        for main_key in ["http_analytic", "logs"]:
+        for main_key in ["analytic", "logs"]:
             # We loop through the key which are more deeper under the `outputs` index.
 
             for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
@@ -220,11 +220,14 @@ Install and load the default configuration in the current directory ? [y/n] "
                 Dict.from_yaml(File(self.path_to_config).read())
             )
 
-            # We install the iana configuration file.
+            # We install the latest iana configuration file.
             self._install_iana_config()
 
-            # We install the public suffix configuration file.
+            # We install the latest public suffix configuration file.
             self._install_psl_config()
+
+            # We install the latest directory structure file.
+            self._install_directory_structure_file()
         except FileNotFoundError:
             # But if the configuration file is not found.
 
@@ -253,9 +256,9 @@ Install and load the default configuration in the current directory ? [y/n] "
         """
 
         # We initiate the link to the production configuration.
-        # It is hard coded because we may not have the chance to have the
-        # configuration file everytime we need it.
-        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+        # It is not hard coded because this method is called only if we
+        # are sure that the configuration file exist.
+        production_config_link = PyFunceble.CONFIGURATION["links"]["config"]
 
         # We update the link according to our current version.
         production_config_link = Version(True).right_url_from_version(
@@ -272,9 +275,9 @@ Install and load the default configuration in the current directory ? [y/n] "
         """
 
         # We initiate the link to the iana configuration.
-        # It is hard coded because we may not have the chance to have the
-        # configuration file everytime we need it.
-        iana_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"  # pylint: disable=line-too-long
+        # It is not hard coded because this method is called only if we
+        # are sure that the configuration file exist.
+        iana_link = PyFunceble.CONFIGURATION["links"]["iana"]
 
         # We update the link according to our current version.
         iana_link = Version(True).right_url_from_version(iana_link)
@@ -300,9 +303,9 @@ Install and load the default configuration in the current directory ? [y/n] "
         """
 
         # We initiate the link to the public suffix configuration.
-        # It is hard coded because we may not have the chance to have the
-        # configuration file everytime we need it.
-        psl_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
+        # It is not hard coded because this method is called only if we
+        # are sure that the configuration file exist.
+        psl_link = PyFunceble.CONFIGURATION["links"]["psl"]
 
         # We update the link according to our current version.
         psl_link = Version(True).right_url_from_version(psl_link)
@@ -318,6 +321,40 @@ Install and load the default configuration in the current directory ? [y/n] "
 
             # We Download the link content and return the download status.
             return Download(psl_link, destination).text()
+
+        # We are in the cloned version.
+
+        # We do not need to download the file, so we are returning None.
+        return None
+
+    @classmethod
+    def _install_directory_structure_file(cls):
+        """
+        This method download the latest version of `dir_structure_production.json`.
+        """
+
+        # We initiate the link to the public suffix configuration.
+        # It is not hard coded because this method is called only if we
+        # are sure that the configuration file exist.
+        dir_structure_link = PyFunceble.CONFIGURATION["links"]["dir_structure"]
+
+        # We update the link according to our current version.
+        dir_structure_link = Version(True).right_url_from_version(dir_structure_link)
+
+        # We set the destination of the downloaded file.
+        destination = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"]
+        )
+
+        if not Version(True).is_cloned():
+            # The current version is not the cloned version.
+
+            # We Download the link content and return the download status.
+            data = Download(dir_structure_link, destination, return_data=True).text()
+
+            File(destination).write(data, overwrite=True)
+            return True
 
         # We are in the cloned version.
 

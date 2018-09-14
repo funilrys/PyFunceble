@@ -126,6 +126,52 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             # We initiate an empty header to use with our request.
             self.headers = {}
 
+        try:
+            PyFunceble.CONFIGURATION["http_code"]
+        except KeyError:
+            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+
+    def _analytic_host_file_directory(self):
+        """
+        Return the analytic directory to write depending of the matched
+        status.
+        """
+
+        # We construct the path to the analytic directory.
+        output_dir = (
+            self.output_parent_dir
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
+        )
+
+        if self.domain_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
+            # The status is in the list of analytic up status.
+
+            # We complete the output directory.
+            output_dir += PyFunceble.OUTPUTS["analytic"]["directories"][
+                "potentially_up"
+            ]
+        elif (
+            self.domain_status.lower() in PyFunceble.STATUS["list"]["potentially_down"]
+        ):
+            # The status is in the list of analytic down status.
+
+            # We complete the output directory.
+            output_dir += PyFunceble.OUTPUTS["analytic"]["directories"][
+                "potentially_down"
+            ]
+        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
+            # The status is in the list of analytic suspicious status.
+
+            # We complete the output directory.
+            output_dir += PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"]
+        else:
+            # The status is not in the list of analytic down or up status.
+
+            # We complete the output directory.
+            output_dir += PyFunceble.OUTPUTS["analytic"]["directories"]["up"]
+
+        return output_dir
+
     def hosts_file(self):
         """
         Generate a hosts file.
@@ -142,11 +188,12 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             # We initiate a variable which whill save the splited testination.
             splited_destination = ""
 
-            # We initiate the list of all http analytic related statuses.
+            # We initiate the list of all analytic related statuses.
             http_list = []
             http_list.extend(PyFunceble.STATUS["list"]["potentially_up"])
             http_list.extend(PyFunceble.STATUS["list"]["potentially_down"])
             http_list.extend(PyFunceble.STATUS["list"]["http_active"])
+            http_list.extend(PyFunceble.STATUS["list"]["suspicious"])
 
             # We partially initiate the path to the hosts file.
             output_hosts = (
@@ -197,41 +244,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     output_domains % PyFunceble.STATUS["official"]["invalid"]
                 )
             elif self.domain_status.lower() in http_list:
-                # The status is in the list of http analytic status.
+                # The status is in the list of analytic status.
 
                 # We construct the path to the analytic directory.
-                output_dir = (
-                    self.output_parent_dir
-                    + PyFunceble.OUTPUTS["http_analytic"]["directories"]["parent"]
-                )
-
-                if (
-                    self.domain_status.lower()
-                    in PyFunceble.STATUS["list"]["potentially_up"]
-                ):
-                    # The status is in the list of http analytic up status.
-
-                    # We complete the output directory.
-                    output_dir += PyFunceble.OUTPUTS["http_analytic"]["directories"][
-                        "potentially_up"
-                    ]
-                elif (
-                    self.domain_status.lower()
-                    in PyFunceble.STATUS["list"]["potentially_down"]
-                ):
-                    # The status is in the list of http analytic down status.
-
-                    # We complete the output directory.
-                    output_dir += PyFunceble.OUTPUTS["http_analytic"]["directories"][
-                        "potentially_down"
-                    ]
-                else:
-                    # The status is not in the list of http analytic down or up status.
-
-                    # We complete the output directory.
-                    output_dir += PyFunceble.OUTPUTS["http_analytic"]["directories"][
-                        "up"
-                    ]
+                output_dir = self._analytic_host_file_directory()
 
                 if not output_dir.endswith(directory_separator):
                     # The output directory does not ends with the directory separator.
@@ -334,9 +350,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # And we print the information on file.
                 Prints(to_print, "Generic_File", output, True).data()
 
-    def _analytic_file(self, new_status, old_status):
+    def analytic_file(self, new_status, old_status):
         """
-        Generate HTTP_Analytic/* files.
+        Generate Analytic/* files based on the given old and new statuses.
 
         Arguments:
             - new_status: str
@@ -348,7 +364,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # We partially construct the path to the file to write/print.
         output = (
             self.output_parent_dir
-            + PyFunceble.OUTPUTS["http_analytic"]["directories"]["parent"]
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
             + "%s%s"
         )
 
@@ -357,8 +373,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
             # We complete the output directory.
             output = output % (
-                PyFunceble.OUTPUTS["http_analytic"]["directories"]["up"],
-                PyFunceble.OUTPUTS["http_analytic"]["filenames"]["up"],
+                PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
+                PyFunceble.OUTPUTS["analytic"]["filenames"]["up"],
             )
 
             # We generate the hosts file.
@@ -368,19 +384,30 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
             # We complete the output directory.
             output = output % (
-                PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_up"],
-                PyFunceble.OUTPUTS["http_analytic"]["filenames"]["potentially_up"],
+                PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
+                PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_up"],
             )
 
             # We generate the hosts file.
             Generate("potentially_up").hosts_file()
+        elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
+            # The new status is in the list of suspicious status.
+
+            # We complete the output directory.
+            output = output % (
+                PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
+                PyFunceble.OUTPUTS["analytic"]["filenames"]["suspicious"],
+            )
+
+            # We generate the hosts file.
+            Generate("suspicious").hosts_file()
         else:
             # The new status is in the list of up and down status.
 
             # We complete the output directory.
             output = output % (
-                PyFunceble.OUTPUTS["http_analytic"]["directories"]["potentially_down"],
-                PyFunceble.OUTPUTS["http_analytic"]["filenames"]["potentially_down"],
+                PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
+                PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_down"],
             )
 
             # We generate the hosts files.
@@ -516,7 +543,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             #   potentially down list.
 
             # We generate the analytics files.
-            self._analytic_file("potentially_down", self.domain_status)
+            self.analytic_file("potentially_down", self.domain_status)
 
             # We initiate a list of domain which are actually.
             # down if they return for example 404 as status code.
@@ -599,7 +626,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # The extracted http code in in the list of up codes.
 
                 # We generate the analytic file(s).
-                self._analytic_file(
+                self.analytic_file(
                     PyFunceble.STATUS["official"]["up"], self.domain_status
                 )
 
@@ -622,7 +649,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # The extracted http status code is in the list of potentially up status.
 
                 # We generate the analytic file(s).
-                self._analytic_file("potentially_up", self.domain_status)
+                self.analytic_file("potentially_up", self.domain_status)
 
         if Regex(
             self.tested,
@@ -678,7 +705,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     # The extracted http code is in the list of up status.
 
                     # We generate the analytic file(s).
-                    self._analytic_file(
+                    self.analytic_file(
                         PyFunceble.STATUS["official"]["up"], self.domain_status
                     )
 
@@ -701,7 +728,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     # The extracted http code is in the list of potentially up status code.
 
                     # We generate the analytic file(s).
-                    self._analytic_file("potentially_up", self.domain_status)
+                    self.analytic_file("potentially_up", self.domain_status)
                 elif (
                     PyFunceble.CONFIGURATION["http_code"]
                     in PyFunceble.HTTP_CODE["list"]["potentially_down"]
@@ -709,7 +736,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     # The extracted http code is in the list of potentially down status code.
 
                     # We generate the analytic file(s).
-                    self._analytic_file("potentially_down", self.domain_status)
+                    self.analytic_file("potentially_down", self.domain_status)
             except KeyError:
                 # In case we match a key error, we ignore it.
 
