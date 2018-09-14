@@ -66,8 +66,8 @@ License:
 import PyFunceble
 from PyFunceble import directory_separator, mkdir, path, rename, requests, walk
 from PyFunceble.auto_save import AutoSave
-from PyFunceble.helpers import Command, Dict, File, Hash, Regex
 from PyFunceble.config import Version
+from PyFunceble.helpers import Command, Dict, File, Hash, Regex
 
 
 class DirectoryStructure:  # pragma: no cover
@@ -79,7 +79,7 @@ class DirectoryStructure:  # pragma: no cover
     def __init__(self, production=False):
         # We set the base directory where we are going to replicate
         # the directory structure.
-        self.base = PyFunceble.CURRENT_DIRECTORY
+        self.base = PyFunceble.OUTPUT_DIRECTORY
 
         if not self.base.endswith(directory_separator):
             # The base path does not ends wiith a directory separator.
@@ -387,10 +387,23 @@ class DirectoryStructure:  # pragma: no cover
         return self._update_structure_from_config(Dict().from_json(req.text))
 
     @classmethod
-    def _create_directory(cls, directory):
+    def _create_directory(cls, directory, loop=False):
         """
         This method create the given directory if it does not exists.
+
+        Argument:
+            - loop: bool
+                Tell us if we are in the loop or not.
         """
+
+        if not loop and directory_separator in directory:
+            splited_directory = directory.split(directory_separator)
+
+            single_path_to_create = ""
+            for single_directory in splited_directory:
+                single_path_to_create += single_directory + directory_separator
+
+                cls._create_directory(single_path_to_create, True)
 
         if not path.isdir(directory):
             # The given directory does not exist.
