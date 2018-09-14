@@ -258,7 +258,7 @@ Install and load the default configuration in the current directory ? [y/n] "
         # We initiate the link to the production configuration.
         # It is not hard coded because this method is called only if we
         # are sure that the configuration file exist.
-        production_config_link = PyFunceble.CONFIGURATION["links"]["config"]
+        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
         production_config_link = Version(True).right_url_from_version(

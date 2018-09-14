@@ -69,6 +69,7 @@ from PyFunceble.auto_save import AutoSave
 from PyFunceble.helpers import Command, Dict, File, Hash, Regex
 from PyFunceble.config import Version
 
+
 class DirectoryStructure:  # pragma: no cover
     """
     Consider this class as a backup/reconstructor of desired directory.
