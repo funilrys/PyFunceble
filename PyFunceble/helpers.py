@@ -316,9 +316,11 @@ class Dict:
 
                 if strict:
                     # The strict method is activated.
+                    if old in self.main_dictionnary:
+                        # The old key is in the main dictionnary.
 
-                    # We initiate the new with the old and remove the old content.
-                    self.main_dictionnary[new] = self.main_dictionnary.pop(old)
+                        # We initiate the new with the old and remove the old content.
+                        self.main_dictionnary[new] = self.main_dictionnary.pop(old)
                 else:
                     # The strict method is not activated.
 

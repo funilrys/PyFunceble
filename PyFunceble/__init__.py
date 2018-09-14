@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.103.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.103.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -236,9 +236,7 @@ def load_config(under_test=False):  # pragma: no cover
     # existant.
     Load(CURRENT_DIRECTORY)
 
-    if not under_test and not path.isdir(
-        CURRENT_DIRECTORY + OUTPUTS["parent_directory"]
-    ):
+    if not under_test:
         # If we are not under test which means that we want to save informations,
         # we initiate the directory structure.
         DirectoryStructure()

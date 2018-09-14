@@ -67,7 +67,7 @@ import PyFunceble
 from PyFunceble import directory_separator, mkdir, path, rename, requests, walk
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.helpers import Command, Dict, File, Hash, Regex
-
+from PyFunceble.config import Version
 
 class DirectoryStructure:  # pragma: no cover
     """
@@ -91,7 +91,7 @@ class DirectoryStructure:  # pragma: no cover
             self.base + PyFunceble.OUTPUTS["default_files"]["dir_structure"]
         )
 
-        if production:
+        if production and Version(True).is_cloned():
             # We are preparing the repository for production.
 
             # We backup the directory structure.
