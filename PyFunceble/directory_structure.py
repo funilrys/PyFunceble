@@ -423,7 +423,10 @@ class DirectoryStructure:  # pragma: no cover
         structure = structure[list_of_key[0]]
 
         # We also set the parent directory as we are going to construct its childen.
-        parent_path = list_of_key[0] + directory_separator
+        parent_path = list_of_key[0]
+
+        if not parent_path.endswith(directory_separator):
+            parent_path += directory_separator
 
         # We get if we have to replace `.gitignore` to `.keep` and versa.
         replacement_status = self._restore_replace()
@@ -432,7 +435,10 @@ class DirectoryStructure:  # pragma: no cover
             # We loop through the list of directory to create.
 
             # We construct the full path.
-            base = self.base + parent_path + directory + directory_separator
+            base = self.base + parent_path + directory
+
+            if not base.endswith(directory_separator):
+                base += directory_separator
 
             # We create the constructed path if it does not exist.
             self._create_directory(base)
