@@ -397,13 +397,24 @@ class DirectoryStructure:  # pragma: no cover
         """
 
         if not loop and directory_separator in directory:
+            # * We are not in the loop.
+            # and
+            # * The directory separator in the given directory.
+
+            # We split the directories separator.
             splited_directory = directory.split(directory_separator)
 
-            single_path_to_create = ""
-            for single_directory in splited_directory:
-                single_path_to_create += single_directory + directory_separator
+            # We initiate a variable which will save the full path to create.
+            full_path_to_create = ""
 
-                cls._create_directory(single_path_to_create, True)
+            for single_directory in splited_directory:
+                # We loop through each directory.
+
+                # We append the currently read directory to the full path.
+                full_path_to_create += single_directory + directory_separator
+
+                # And we create the directory if it does not exist.
+                cls._create_directory(full_path_to_create, True)
 
         if not path.isdir(directory):
             # The given directory does not exist.
