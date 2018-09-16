@@ -257,18 +257,6 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Say to the system if we have to sort the list and the outputs in a hierarchical order.
 
-:code:`iana_db`
----------------
-
-    **Type:** :code:`dict`
-    
-    **Default value:** :code:`{}`
-    
-    **Description:** Save the content of :code:`iana-domains-db.json` for the different system or subsystems.
-
-.. warning::
-    Do not touch this index unless you a have good reason to.
-
 :code:`iana_whois_server`
 -------------------------
 

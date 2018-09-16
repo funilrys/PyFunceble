@@ -199,11 +199,11 @@ class Referer:  # pragma: no cover
                 # We set the referer to None as we do not have any.
                 referer = None
 
-                if not PyFunceble.CONFIGURATION["iana_db"]:
+                if "iana_db" not in PyFunceble.CONFIGURATION:
                     # The iana database is empty.
 
                     # We generate/construct the database from the local file.
-                    PyFunceble.CONFIGURATION["iana_db"].update(self._iana_database())
+                    PyFunceble.CONFIGURATION["iana_db"] = self._iana_database()
 
                 if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
                     # The domain extension is in the iana database.

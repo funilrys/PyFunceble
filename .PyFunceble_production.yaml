@@ -21,8 +21,6 @@ generate_hosts: True
 header_printed: False
 # Tell to the system to use the historical sorting instead of the alphabetical sorting.
 hierarchical_sorting: False
-# Save the content of iana-domains-db.json for the different system.
-iana_db: {}
 # Set the server to call to get the whois referer of a given element.
 iana_whois_server: whois.iana.org
 # Enable / Disable the usage of a database to store the INACTIVE and INVALID domain to retest overtime.
