@@ -326,15 +326,6 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Enable / Disable the generation of the plain list of elements sorted by statuses.
 
-:code:`psl_db`
---------------
-
-    **Type:** :code:`dict`
-    
-    **Default value:** :code:`{}`
-    
-    **Description:** Save the content of :code:`public-suffix.json` for the different systems or subsystems.
-
 .. warning::
     Do not touch this index unless you a have good reason to.
 

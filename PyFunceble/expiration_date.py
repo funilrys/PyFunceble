@@ -66,9 +66,10 @@ License:
 import PyFunceble
 from PyFunceble import requests
 from PyFunceble.generate import Generate
-from PyFunceble.helpers import Dict, File, Regex
+from PyFunceble.helpers import File, Regex
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.lookup import Lookup
+from PyFunceble.publicsuffix import PublicSuffix
 from PyFunceble.referer import Referer
 from PyFunceble.status import Status
 
@@ -88,24 +89,8 @@ class ExpirationDate:
         # We initate a variable which will save our WHOIS record.s
         self.whois_record = ""
 
-    @classmethod
-    def psl_db(cls):
-        """
-        Convert `public_suffix.json` to a dictionnary.
-        """
-
-        # We construct the file path to read.
-        file_to_read = (
-            PyFunceble.CURRENT_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
-        )
-
-        # * We read, convert to dict and return the file content.
-        # and
-        # * We fill the database.
-        PyFunceble.CONFIGURATION["psl_db"].update(
-            Dict().from_json(File(file_to_read).read())
-        )
+        # We load the public suffix database.
+        PublicSuffix(False).load()
 
     @classmethod
     def is_domain_valid(cls, domain=None):
@@ -117,12 +102,6 @@ class ExpirationDate:
                 The domain to test
 
         """
-
-        if PyFunceble.CONFIGURATION["psl_db"] == {}:
-            # The psl database is empty.
-
-            # We fill it.
-            cls.psl_db()
 
         # We initate our regex which will match for valid domains.
         regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long

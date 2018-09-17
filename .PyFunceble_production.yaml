@@ -35,8 +35,6 @@ no_files: False
 no_whois: False
 # Enable / Disable the generation of the plain list of element sorted by statuses.
 plain_list_domain: False
-# Save the content of public-suffix.json for the different system or subsystems.
-psl_db: {}
 # Enable / Disable the generation of output on screen.
 quiet: False
 # Set the referer of the element that is currently under tested.

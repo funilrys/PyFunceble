@@ -62,8 +62,8 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.helpers import Regex
+from PyFunceble.publicsuffix import PublicSuffix
 from PyFunceble.url import URL
 
 
@@ -136,11 +136,8 @@ class Sort:  # pylint: disable=too-few-public-methods
         # We try to get the url base.
         url_base = URL.is_url_valid(element, return_formated=True)
 
-        if not PyFunceble.CONFIGURATION["psl_db"]:
-            # The public suffix database is empty.
-
-            # We fill it.
-            ExpirationDate.psl_db()
+        # We laod the public suffix database.
+        PublicSuffix(False).load()
 
         if not isinstance(url_base, str):
             # The url base is not found.

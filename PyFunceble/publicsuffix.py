@@ -63,7 +63,7 @@ License:
 """
 
 import PyFunceble
-from PyFunceble.helpers import Dict, Download, List
+from PyFunceble.helpers import Dict, Download, File, List
 
 
 class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -71,24 +71,34 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     This class will help us interract with the public suffix database.
     """
 
-    def __init__(self):
-        if not PyFunceble.CONFIGURATION["quiet"]:
-            # The quiet mode is not activated.
-
-            # We print a message for the user on screen.
-            print(
-                "Update of %s" % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
-                end=" ",
-            )
-
+    def __init__(self, live=True):
         # We initiate the destination of our database.
-        self.destination = PyFunceble.OUTPUTS["default_files"]["public_suffix"]
+        self.destination = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
+        )
 
         # We initiate a variablw which will save the database we are going to save.
         self.public_suffix_db = {}
 
-        # And we run the update logic.
-        self.update()
+        if "psl_db" not in PyFunceble.CONFIGURATION:
+            # The psl database was not initiated.
+
+            PyFunceble.CONFIGURATION["psl_db"] = {}
+
+        if live:
+            if not PyFunceble.CONFIGURATION["quiet"]:
+                # The quiet mode is not activated.
+
+                # We print a message for the user on screen.
+                print(
+                    "Update of %s"
+                    % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
+                    end=" ",
+                )
+
+            # And we run the update logic.
+            self.update()
 
     @classmethod
     def _data(cls):
@@ -163,3 +173,18 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We inform the user that everything goes right.
             print(PyFunceble.CONFIGURATION["done"])
+
+    def load(self):
+        """
+        Load the public suffix database into the system.
+        """
+
+        if not PyFunceble.CONFIGURATION["psl_db"]:
+            # The public database was not already loaded.
+
+            # * We read, convert to dict and return the file content.
+            # and
+            # * We fill the database.
+            PyFunceble.CONFIGURATION["psl_db"].update(
+                Dict().from_json(File(self.destination).read())
+            )
