@@ -107,6 +107,12 @@ class Database:
             # We set a variable which will save the actual element we are working with.
             self.element = PyFunceble.CONFIGURATION["URL"]
 
+        if "inactive_db" not in PyFunceble.CONFIGURATION:
+            # The database is empty or equal to None.
+
+            # We initiate it with an empty dictionnary.
+            PyFunceble.CONFIGURATION["inactive_db"] = {}
+
     def _reformat_historical_formating_error(self):  # pragma: no cover
         """
         This method will format the old format so it can be merged into the newer format.
@@ -161,7 +167,7 @@ class Database:
                             int(time()) - (self.one_day_in_seconds * 30)
                         ] = data[top_key][low_key]
 
-            if PyFunceble.CONFIGURATION["inactive_db"]:
+            if "inactive_db" in PyFunceble.CONFIGURATION:
                 # The current (new) database is not empty.
 
                 # We update add the content of the old into the current database.
@@ -201,6 +207,8 @@ class Database:
                 ] = database_content[database_top_key]
             else:
                 # The currently read top key is already into the database.
+
+                # We get the list of lower indexes.
                 database_low_keys = database_content[database_top_key].keys()
 
                 for database_low_key in database_low_keys:
@@ -252,14 +260,6 @@ class Database:
 
                 # We merge our current database into already initiated one.
                 self._merge()
-            else:
-                # The database file does not exist.
-
-                if not PyFunceble.CONFIGURATION["inactive_db"]:
-                    # The database is empty or equal to None.
-
-                    # We initiate it with an empty dictionnary.
-                    PyFunceble.CONFIGURATION["inactive_db"] = {}
 
     def _backup(self):
         """
@@ -399,7 +399,8 @@ class Database:
             # The database subsystem is activated.
 
             if (
-                self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
+                "inactive_db" in PyFunceble.CONFIGURATION
+                and self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
                 and PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
             ):
                 # The file we are testing is into the database and its content
@@ -455,8 +456,11 @@ class Database:
             # We get the timestamp to use as index.
             timestamp = str(self._timestamp())
 
-            if self.file_path in PyFunceble.CONFIGURATION["inactive_db"]:
-                # The file path is not into the database.
+            if (
+                "inactive_db" in PyFunceble.CONFIGURATION
+                and self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
+            ):
+                # * The file path is not into the database.
 
                 if timestamp in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]:
                     # The timetamp is already into the database related to the file we
@@ -506,8 +510,8 @@ class Database:
                 # The file path is not into the database.
 
                 # We initiate the file path and its content into the database.
-                PyFunceble.CONFIGURATION["inactive_db"][self.file_path] = {
-                    timestamp: [self.element]
+                PyFunceble.CONFIGURATION["inactive_db"] = {
+                    self.file_path: {timestamp: [self.element]}
                 }
 
             # And we save the data into the database.

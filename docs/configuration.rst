@@ -281,18 +281,6 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Enable / Disable the usage of a database to store the :code:`INACTIVE` and :code:`INVALID` element to retest overtime.
 
-:code:`inactive_db`
--------------------
-
-    **Type:** :code:`dict`
-    
-    **Default value:** :code:`{}`
-    
-    **Description:** Save the content of :code:`inactive-db.json` for the different system or subsystems.
-
-.. warning::
-    Do not touch this index unless you a have good reason to.
-
 :code:`less`
 ------------
 
