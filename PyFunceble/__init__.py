@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.105.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.105.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -230,7 +230,7 @@ def test(domain):  # pragma: no cover
     return Core(domain=domain, modulo_test=True).test()
 
 
-def url_test(url):
+def url_test(url):  # pragma: no covere
     """
     Test for the given URL.
 
