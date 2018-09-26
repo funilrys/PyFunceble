@@ -544,9 +544,12 @@ Basic example
     Note:
     * Official output: ACTIVE, INACTIVE, INVALID
     """
+
     from PyFunceble import test as PyFunceble
+    from PyFunceble import url_test as PyFuncebleURL
 
     print(PyFunceble(domain='google.com'))
+    print(PyFuncebleURL(url='https://google.com'))
 
 .. _learn Python: http://www.learnpython.org/
 
@@ -567,6 +570,7 @@ This part is unnecessary but we wanted to document it!!
         suited for `__name__ != '__main__'` usage.
     """
     from PyFunceble import test as PyFunceble
+    from PyFunceble import url_test as PyFuncebleURL
 
     DOMAINS = [
         'twitter.com',
@@ -580,13 +584,33 @@ This part is unnecessary but we wanted to document it!!
         """
         Check the status of the given domain name or IP.
 
-        :param domain_or_ip: A string, the domain or IPv4 address to test.
+        Argument:
+            - domain_or_ip: str
+                The domain or IPv4 to test.
+        
+        Returns: str
+            The status of the domain.
         """
+
         return PyFunceble(domain_or_ip)
+    
+    def url_status(url):
+        """
+        Check the status of the given url.
+
+        Argument:
+            - url: str
+                The URL to test.
+        
+        Returns: str
+            The status of the URL.
+        """
+
+        return PyFuncebleURL(url)
 
 
     for domain in DOMAINS:
-        print('%s is %s' % (domain, domain_status(domain)))
+        print('%s is %s and %s is %s' % (domain, domain_status(domain), 'http://' + domain, url_status('http://' + domain)))
 
 From Travis CI
 ---------------

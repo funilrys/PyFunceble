@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.104.4.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.105.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -211,7 +211,16 @@ ASCII_PYFUNCEBLE = """
 
 def test(domain):  # pragma: no cover
     """
+    Test for the given domain.
+
     This function provide an access to the core while use PyFunceble as an imported module.
+
+    Argument:
+        - domain: str
+            The domain to test.
+
+    Returns: str
+        The status of the domain
     """
 
     # We silently load the configuration.
@@ -219,6 +228,27 @@ def test(domain):  # pragma: no cover
 
     # And we return the status of the given domain.
     return Core(domain=domain, modulo_test=True).test()
+
+
+def url_test(url):
+    """
+    Test for the given URL.
+
+    This function provice an access to the core while using PyFunceble as an imported module.
+
+    Argument:
+        - url: str
+            The url to test.
+
+    Returns: str
+        The status of the URL.
+    """
+
+    # We silently load the configuration.
+    load_config(True)
+
+    # And we return the status of the given URL.
+    return Core(url_test=url, modulo_test=True).test()
 
 
 def load_config(under_test=False):  # pragma: no cover
