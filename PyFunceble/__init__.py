@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.105.1.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.106.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -518,6 +518,22 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "--link", type=str, help="Download and test the given file."
+        )
+
+        PARSER.add_argument(
+            "-m",
+            "--mining",
+            action="store_true",
+            help="Switch the value of the mining subsystem usage. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(not CONFIGURATION["mining"])
+                + Style.RESET_ALL
+            ),
+        )
+
+        PARSER.add_argument(
             "-n",
             "--no-files",
             action="store_true",
@@ -525,10 +541,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             % (
                 CURRENT_VALUE_FORMAT + repr(CONFIGURATION["no_files"]) + Style.RESET_ALL
             ),
-        )
-
-        PARSER.add_argument(
-            "--link", type=str, help="Download and test the given file."
         )
 
         PARSER.add_argument(
@@ -768,6 +780,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.ip:
             CONFIGURATION.update({"custom_ip": ARGS.ip})
+
+        if ARGS.mining:
+            CONFIGURATION.update({"mining": Core.switch("mining")})
 
         if ARGS.no_files:
             CONFIGURATION.update({"no_files": Core.switch("no_files")})

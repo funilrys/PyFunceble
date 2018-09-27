@@ -76,7 +76,7 @@ class TestDatabase(TestCase):
 
     def setUp(self):
         """
-        This variable setup everything needed for the test
+        This method setup everything needed for the test
         """
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
@@ -124,9 +124,9 @@ class TestDatabase(TestCase):
         This method test the case that we want to retrieve a file that exist.
         """
 
+        expected = False
         File(self.file).delete()
 
-        expected = False
         actual = PyFunceble.path.isfile(self.file)
 
         self.assertEqual(expected, actual)
@@ -134,7 +134,6 @@ class TestDatabase(TestCase):
         Dict(self.expected_content).to_json(self.file)
         Database()._retrieve()
 
-        Dict(PyFunceble.CONFIGURATION["inactive_db"]).to_json("export")
         self.assertEqual(self.expected_content, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
@@ -144,10 +143,14 @@ class TestDatabase(TestCase):
         expected = False
         actual = PyFunceble.path.isfile(self.file)
 
+        self.assertEqual(expected, actual)
+
     def test_backup(self):
         """
-        This method test the backup system.
+        This method test the backup of the database.
         """
+
+        PyFunceble.CONFIGURATION["inactive_db"] = self.expected_content
 
         File(self.file).delete()
 
@@ -156,7 +159,6 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = self.expected_content
         Database()._backup()
 
         expected = True
@@ -617,14 +619,14 @@ class TestDatabase(TestCase):
         This method test Database.remove().
         """
 
+        timestamp = str(Database()._timestamp())
+
         File(self.file).delete()
 
         expected = False
         actual = PyFunceble.path.isfile(self.file)
 
         self.assertEqual(expected, actual)
-
-        timestamp = str(Database()._timestamp())
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {

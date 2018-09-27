@@ -297,6 +297,23 @@ Code documentation
 .. autoclass:: PyFunceble.lookup.Lookup
     :members:
 
+Mining
+------
+
+Problematic
+^^^^^^^^^^^
+
+How can we get the list of domain or URL which link to the desired domain, IPv4 or URL ?
+
+Code documentation
+^^^^^^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.mining
+    :members:
+
+.. autoclass:: PyFunceble.mining.Mining
+    :members:
+
 Percentage
 ----------
 

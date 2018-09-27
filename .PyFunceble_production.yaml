@@ -33,6 +33,8 @@ logs: True
 no_files: False
 # Enable / Disable the usage of whois in the tests.
 no_whois: False
+# Enable / Disable the URL/domain mining.
+mining: True
 # Enable / Disable the generation of the plain list of element sorted by statuses.
 plain_list_domain: False
 # Enable / Disable the generation of output on screen.

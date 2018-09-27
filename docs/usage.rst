@@ -251,6 +251,21 @@ This argument generate or update `iana-domains-db.json`.
     ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ---------- 
     pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302        
 
+:code:`--link "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Download and test the given file.
+
+Want to test a raw link ? This argument will download and test the given raw link.
+
+:code:`-m` | :code:`--mining`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the value of the mining subsystem usage.
+        Default value: :code:`False`
+
+Want to find domain or URL linked to a domain in your list ? This argument will exactly do that.
+
 :code:`-n` | :code:`--no-files`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -258,13 +273,6 @@ This argument generate or update `iana-domains-db.json`.
         Default value: :code:`False`
 
 Want to disable the production of the outputed files? This argument is for you!
-
-:code:`--link "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Download and test the given file.
-
-Want to test a raw link ? This argument will download and test the given raw link.
 
 :code:`-nl` | :code:`--no-logs`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,120 +413,123 @@ Global overview
 
 ::
 
-    usage: pyfunceble [-ad] [-a] [--cmd-before-end CMD_BEFORE_END] [-c]
-                    [--autosave-minutes AUTOSAVE_MINUTES] [--clean]
-                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
-                    [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                    [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
-                    [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
-                    [--help] [--hierarchical] [-h] [--http] [--iana] [-ip IP]
-                    [--less] [-n] [--link LINK] [-nl] [-nu] [-nw] [-p] [--plain]
-                    [--production] [-psl] [-q] [--share-logs] [-s] [--split]
-                    [-t TIMEOUT] [--travis] [--travis-branch TRAVIS_BRANCH]
-                    [-u URL] [-uf URL_FILE] [-ua USER_AGENT] [-v]
+    usage: PyFunceble [-ad] [-a] [--cmd-before-end CMD_BEFORE_END] [-c]
+                  [--autosave-minutes AUTOSAVE_MINUTES] [--clean]
+                  [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
+                  [--commit-results-message COMMIT_RESULTS_MESSAGE]
+                  [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
+                  [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
+                  [--help] [--hierarchical] [-h] [--http] [--iana] [-ip IP]
+                  [--less] [--link LINK] [-m] [-n] [-nl] [-nu] [-nw] [-p]
+                  [--plain] [--production] [-psl] [-q] [--share-logs] [-s]
+                  [--split] [-t TIMEOUT] [--travis]
+                  [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
+                  [-ua USER_AGENT] [-v]
 
     The tool to check domain or IP availability.
 
     optional arguments:
-    -ad, --adblock        Switch the decoding of the adblock format.
-                            Installed value: False
-    -a, --all             Output all available informations on screen.
-                            Installed value: True
-    --cmd-before-end CMD_BEFORE_END
-                            Pass a command before the results (final) commit under
-                            the travis mode. Installed value: ''
-    -c, --auto-continue, --continue
-                            Switch the value of the auto continue mode.
-                            Installed value: True
-    --autosave-minutes AUTOSAVE_MINUTES
-                            Update the minimum of minutes before we start
-                            committing to upstream under Travis CI.
-                            Installed value: 15
-    --clean               Clean all files under output.
-    --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
-                            Replace the default autosave commit message.
-                            Installed value: 'PyFunceble -
-                            AutoSave'
-    --commit-results-message COMMIT_RESULTS_MESSAGE
-                            Replace the default results (final) commit message.
-                            Installed value: 'PyFunceble -
-                            Results'
-    -d DOMAIN, --domain DOMAIN
-                            Set and test the given domain.
-    -db, --database       Switch the value of the usage of a database to store
-                            inactive domains of the currently tested list.
-                            Installed value: True
-    -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
-                            Set the numbers of day(s) between each retest of
-                            domains present into inactive-db.json.
-                            Installed value: 1
-    --debug               Switch the value of the debug mode. Installed
-                            value: False
-    --directory-structure
-                            Generate the directory and files that are needed and
-                            which does not exist in the current directory.
-    -ex, --execution      Switch the dafault value of the execution time
-                            showing. Installed value: False
-    -f FILE, --file FILE  Read the given file and test all domains inside it. If
-                            a URL is given we download and test the content of the
-                            given URL.
-    --filter FILTER       Domain to filter (regex).
-    --help                Show this help message and exit.
-    --hierarchical        Switch the value of the hierarchical sorting of tested
-                            file. Installed value: True
-    -h, --host            Switch the value of the generation of hosts file.
-                            Installed value: True
-    --http                Switch the value of the usage of HTTP code.
-                            Installed value: True
-    --iana                Update/Generate `iana-domains-db.json`.
-    -ip IP                Change the ip to print in the hosts files.
-                            Installed value: '0.0.0.0'
-    --less                Output less informations on screen. Installed
-                            value: False
-    -n, --no-files        Switch the value the production of output files.
-                            Installed value: False
-    --link LINK           Download and test the given file.
-    -nl, --no-logs        Switch the value of the production of logs files in
-                            the case we encounter some errors. Installed
-                            value: False
-    -nu, --no-unified     Switch the value of the production unified logs under
-                            the output directory. Installed value:
-                            True
-    -nw, --no-whois       Switch the value the usage of whois to test domain's
-                            status. Installed value: False
-    -p, --percentage      Switch the value of the percentage output mode.
-                            Installed value: True
-    --plain               Switch the value of the generation of the plain list
-                            of domain. Installed value: False
-    --production          Prepare the repository for production.
-    -psl, --public-suffix
-                            Update/Generate `public-suffix.json`.
-    -q, --quiet           Run the script in quiet mode. Installed
-                            value: False
-    --share-logs          Switch the value of the sharing of logs.
-                            Installed value: True
-    -s, --simple          Switch the value of the simple output mode.
-                            Installed value: False
-    --split               Switch the value of the split of the generated output
-                            files. Installed value: True
-    -t TIMEOUT, --timeout TIMEOUT
-                            Switch the value of the timeout. Installed
-                            value: 3
-    --travis              Switch the value of the travis mode.
-                            Installed value: False
-    --travis-branch TRAVIS_BRANCH
-                            Switch the branch name where we are going to push.
-                            Installed value: 'master'
-    -u URL, --url URL     Analyze the given URL.
-    -uf URL_FILE, --url-file URL_FILE
-                            Read and test the list of URL of the given file. If a
-                            URL is given we download and test the content of the
-                            given URL.
-    -ua USER_AGENT, --user-agent USER_AGENT
-                            Set the user-agent to use and set everytime we
-                            interact with everything which is not our logs sharing
-                            system.
-    -v, --version         Show the version of PyFunceble and exit.
+        -ad, --adblock        Switch the decoding of the adblock format.
+                                Installed value: False
+        -a, --all             Output all available informations on screen.
+                                Installed value: True
+        --cmd-before-end CMD_BEFORE_END
+                                Pass a command before the results (final) commit under
+                                the travis mode. Installed value: ''
+        -c, --auto-continue, --continue
+                                Switch the value of the auto continue mode.
+                                Installed value: True
+        --autosave-minutes AUTOSAVE_MINUTES
+                                Update the minimum of minutes before we start
+                                committing to upstream under Travis CI.
+                                Installed value: 15
+        --clean               Clean all files under output.
+        --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
+                                Replace the default autosave commit message.
+                                Installed value: 'PyFunceble -
+                                AutoSave'
+        --commit-results-message COMMIT_RESULTS_MESSAGE
+                                Replace the default results (final) commit message.
+                                Installed value: 'PyFunceble -
+                                Results'
+        -d DOMAIN, --domain DOMAIN
+                                Set and test the given domain.
+        -db, --database       Switch the value of the usage of a database to store
+                                inactive domains of the currently tested list.
+                                Installed value: True
+        -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
+                                Set the numbers of day(s) between each retest of
+                                domains present into inactive-db.json.
+                                Installed value: 1
+        --debug               Switch the value of the debug mode. Installed
+                                value: False
+        --directory-structure
+                                Generate the directory and files that are needed and
+                                which does not exist in the current directory.
+        -ex, --execution      Switch the dafault value of the execution time
+                                showing. Installed value: False
+        -f FILE, --file FILE  Read the given file and test all domains inside it. If
+                                a URL is given we download and test the content of the
+                                given URL.
+        --filter FILTER       Domain to filter (regex).
+        --help                Show this help message and exit.
+        --hierarchical        Switch the value of the hierarchical sorting of tested
+                                file. Installed value: True
+        -h, --host            Switch the value of the generation of hosts file.
+                                Installed value: True
+        --http                Switch the value of the usage of HTTP code.
+                                Installed value: True
+        --iana                Update/Generate `iana-domains-db.json`.
+        -ip IP                Change the ip to print in the hosts files.
+                                Installed value: '0.0.0.0'
+        --less                Output less informations on screen. Installed
+                                value: False
+        --link LINK           Download and test the given file.
+        -m, --mining          Switch the value of the mining subsystem usage.
+                                Installed value: False
+        -n, --no-files        Switch the value the production of output files.
+                                Installed value: False
+        -nl, --no-logs        Switch the value of the production of logs files in
+                                the case we encounter some errors. Installed
+                                value: False
+        -nu, --no-unified     Switch the value of the production unified logs under
+                                the output directory. Installed value:
+                                True
+        -nw, --no-whois       Switch the value the usage of whois to test domain's
+                                status. Installed value: False
+        -p, --percentage      Switch the value of the percentage output mode.
+                                Installed value: True
+        --plain               Switch the value of the generation of the plain list
+                                of domain. Installed value: False
+        --production          Prepare the repository for production.
+        -psl, --public-suffix
+                                Update/Generate `public-suffix.json`.
+        -q, --quiet           Run the script in quiet mode. Installed
+                                value: False
+        --share-logs          Switch the value of the sharing of logs.
+                                Installed value: True
+        -s, --simple          Switch the value of the simple output mode.
+                                Installed value: False
+        --split               Switch the value of the split of the generated output
+                                files. Installed value: True
+        -t TIMEOUT, --timeout TIMEOUT
+                                Switch the value of the timeout. Installed
+                                value: 3
+        --travis              Switch the value of the travis mode.
+                                Installed value: False
+        --travis-branch TRAVIS_BRANCH
+                                Switch the branch name where we are going to push.
+                                Installed value: 'master'
+        -u URL, --url URL     Analyze the given URL.
+        -uf URL_FILE, --url-file URL_FILE
+                                Read and test the list of URL of the given file. If a
+                                URL is given we download and test the content of the
+                                given URL.
+        -ua USER_AGENT, --user-agent USER_AGENT
+                                Set the user-agent to use and set everytime we
+                                interact with everything which is not our logs sharing
+                                system.
+        -v, --version         Show the version of PyFunceble and exit.
 
     Crafted with ♥ by Nissar Chababy (Funilrys) with the
     help of https://pyfunceble.rtfd.io/en/dev/contributors.html &&

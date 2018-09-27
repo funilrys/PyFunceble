@@ -299,6 +299,15 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Enable / Disable the output of all logs.
 
+:code:`mining`
+--------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Enable / Disable the mining subsystem.
+
 :code:`no_files`
 ----------------
 

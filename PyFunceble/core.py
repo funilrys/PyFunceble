@@ -72,6 +72,7 @@ from PyFunceble.database import Database
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.helpers import Command, Download, List, Regex
+from PyFunceble.mining import Mining
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
@@ -403,6 +404,16 @@ class Core:  # pragma: no cover
                 # and
                 # * A file to test is set.
 
+                # We run the mining logic.
+                Mining().process()
+
+                # We delete the currently tested element from the mining
+                # database.
+                # Indeed, as it is tested, it is already in our
+                # testing process which means that we don't need it into
+                # the mining database.
+                Mining().remove()
+
                 if status.lower() in PyFunceble.STATUS["list"]["up"]:
                     # The status is in the list of up status.
 
@@ -452,7 +463,7 @@ class Core:  # pragma: no cover
             # We loop through some configuration index we have to empty.
 
             if index in PyFunceble.CONFIGURATION:
-                # The index is in in the configuration.
+                # The index is in the configuration.
 
                 # We empty the configuration index.
                 PyFunceble.CONFIGURATION[index] = ""
@@ -763,6 +774,12 @@ class Core:  # pragma: no cover
 
         # We get the list to test from the file we have to test.
         list_to_test = self._extract_domain_from_file()
+
+        # We get the list of mined.
+        mined_list = Mining().list_of_mined()
+
+        if mined_list:
+            list_to_test.extend(mined_list)
 
         # We restore the data from the last session if it does exist.
         AutoContinue().restore()
