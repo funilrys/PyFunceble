@@ -75,6 +75,7 @@ outputs:
     inactive_db: inactive_db.json
     results: results.txt
     public_suffix: public-suffix.json
+    mining: mining.json
 
   domains:
     directory: domains/
