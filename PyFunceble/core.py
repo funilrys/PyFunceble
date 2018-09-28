@@ -64,6 +64,8 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation, too-many-lines
 
+from domain2idna import get as domain2idna
+
 import PyFunceble
 from PyFunceble import Fore, Style, path, repeat
 from PyFunceble.auto_continue import AutoContinue
@@ -211,8 +213,13 @@ class Core:  # pragma: no cover
                 # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
 
+                if PyFunceble.CONFIGURATION["idna_conversion"]:
+                    domain = domain2idna(domain.lower())
+                else:
+                    domain = domain.lower()
+
                 # We test the domain after converting it to lower case.
-                self.domain(domain.lower())
+                self.domain(domain)
             elif self.url_to_test and not file_path:  # pylint: disable=no-member
                 # An url to test is given and the file path is empty.
 
@@ -873,6 +880,23 @@ class Core:  # pragma: no cover
 
         # We get, format, filter, clean the list to test.
         list_to_test = self._file_list_to_test_filtering()
+
+        if PyFunceble.CONFIGURATION["idna_conversion"]:
+            # We have to convert domains to idna.
+
+            # We convert if we need to convert.
+            list_to_test = domain2idna(list_to_test)
+
+            if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                # The hierarchical sorting is desired by the user.
+
+                # We format the list.
+                list_to_test = List(list_to_test).custom_format(Sort.hierarchical)
+            else:
+                # The hierarchical sorting is not desired by the user.
+
+                # We format the list.
+                list_to_test = List(list_to_test).custom_format(Sort.standard)
 
         # We test each element of the list to test.
         list(

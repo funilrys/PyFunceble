@@ -225,6 +225,19 @@ You don't want to take the result of the HTTP code execution in consideration ? 
 
 This argument generate or update `iana-domains-db.json`.
 
+:code:`--idna`
+^^^^^^^^^^^^^^
+
+    Switch the value of the IDNA conversion.
+        Default value: :code:`False`
+
+This argument allow the conversion of the domains using `domain2idna`__main__
+
+.. warning::
+    This feature is not supporter yet for the URL testing.
+
+.. _domain2idna: https://github.com/funilrys/domain2idna
+
 :code:`-ip "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -480,6 +493,8 @@ Global overview
         --http                Switch the value of the usage of HTTP code.
                                 Installed value: True
         --iana                Update/Generate `iana-domains-db.json`.
+        --idna                Switch the value of the IDNA conversion.
+                                Installed value: False
         -ip IP                Change the ip to print in the hosts files.
                                 Installed value: '0.0.0.0'
         --less                Output less informations on screen. Installed

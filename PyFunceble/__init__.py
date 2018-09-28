@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.106.2.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.107.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -500,6 +500,17 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "--idna",
+            action="store_true",
+            help="Switch the value of the IDNA conversion. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(CONFIGURATION["idna_conversion"])
+                + Style.RESET_ALL
+            ),
+        )
+
+        PARSER.add_argument(
             "-ip",
             type=str,
             help="Change the ip to print in the hosts files. %s"
@@ -777,6 +788,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.iana:
             IANA()
+
+        if ARGS.idna:
+            CONFIGURATION.update({"idna_conversion": Core.switch("idna_conversion")})
 
         if ARGS.ip:
             CONFIGURATION.update({"custom_ip": ARGS.ip})

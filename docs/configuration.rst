@@ -272,6 +272,21 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 .. warning::
     Do not touch this index unless you a have good reason to.
 
+:code:`idna_conversion`
+-----------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Tell the system to convert all domains to IDNA before testing.
+
+.. note::
+    We use `domain2idna`_ for the conversion.
+
+.. warning:
+    This feature is not supported for the URL testing.
+
 :code:`inactive_database`
 -------------------------
 
