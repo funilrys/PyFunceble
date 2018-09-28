@@ -287,6 +287,8 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 .. warning:
     This feature is not supported for the URL testing.
 
+.. _domain2idna: https://github.com/funilrys/domain2idna
+
 :code:`inactive_database`
 -------------------------
 

@@ -231,10 +231,10 @@ This argument generate or update `iana-domains-db.json`.
     Switch the value of the IDNA conversion.
         Default value: :code:`False`
 
-This argument allow the conversion of the domains using `domain2idna`__main__
+This argument allow the conversion of the domains using `domain2idna`_
 
 .. warning::
-    This feature is not supporter yet for the URL testing.
+    This feature is not supported yet for the URL testing.
 
 .. _domain2idna: https://github.com/funilrys/domain2idna
 

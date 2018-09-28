@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.107.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.107.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -539,7 +539,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             help="Switch the value of the mining subsystem usage. %s"
             % (
                 CURRENT_VALUE_FORMAT
-                + repr(not CONFIGURATION["mining"])
+                + repr(CONFIGURATION["mining"])
                 + Style.RESET_ALL
             ),
         )
