@@ -4,6 +4,9 @@
 The tool to check domain or IP availability
 ===========================================
 
+.. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
+    :target: https://ko-fi.com/V7V3EH2Y
+    :height: 30px
 .. image:: https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
 .. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev
@@ -45,6 +48,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
    code
    contributors
    special-thanks
+   supporting-the-project
    license
    code-of-conduct
    contact

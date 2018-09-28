@@ -3,6 +3,9 @@
 The tool to check domains or IP availability
 --------------------------------------------
 
+.. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
+    :target: https://ko-fi.com/V7V3EH2Y
+    :height: 30px
 .. image:: https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
 .. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev
@@ -74,12 +77,13 @@ ___________________________________________
 Supporting the project
 ----------------------
 
-`PyFunceble`_, `Dead-Hosts`_, `Funceble`_ and all other analog projects are powered by :coffee:!
+`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of :coffee:!
 
-This project helps you and or you like it?
+This project helps you and/or you like it?
 
-.. image:: https://img.shields.io/badge/Help%20me%20out-with%20a%20cup%20of%20%E2%98%95%20-blue.svg
-    :target: https://www.paypal.me/funilrys/
+.. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
+    :target: https://ko-fi.com/V7V3EH2Y
+    :height: 36px
 
 ___________________________________________
 
