@@ -65,6 +65,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import requests
+from PyFunceble.check import Check
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import File, Regex
 from PyFunceble.http_code import HTTPCode
@@ -92,145 +93,15 @@ class ExpirationDate:
         # We load the public suffix database.
         PublicSuffix(False).load()
 
-    @classmethod
-    def is_domain_valid(cls, domain=None):
-        """
-        Check if PyFunceble.CONFIGURATION['domain'] is a valid domain.
-
-        Argument:
-            - domain: str
-                The domain to test
-
-        """
-
-        # We initate our regex which will match for valid domains.
-        regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
-
-        # We initiate our regex which will match for valid subdomains.
-        regex_valid_subdomains = r"^(?=.{0,253}$)(([a-z0-9_][a-z0-9-_]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
-
-        if domain:
-            # A domain is given.
-
-            # We set the element to test as the parsed domain.
-            to_test = domain
-        else:
-            # A domain is not given.
-
-            # We set the element to test as the currently tested element.
-            to_test = PyFunceble.CONFIGURATION["domain"]
-
-        if Regex(to_test, regex_valid_domains, return_data=False).match():
-            # The element pass the domain validation.
-
-            # We return True. The domain is valid.
-            return True
-
-        # The element did not pass the domain validation. That means that it has invalid character
-        # or the position of - or _ are not right.
-
-        try:
-            # We get the position of the last point.
-            last_point_index = to_test.rindex(".")
-            # And with the help of the position of the last point, we get the domain extension.
-            extension = to_test[last_point_index + 1 :]
-
-            if extension in PyFunceble.CONFIGURATION["psl_db"]:
-                # The extension is into the psl database.
-
-                for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
-                    # We loop through the element of the extension into the psl database.
-
-                    try:
-                        # We try to get the position of the currently read suffix
-                        # in the element ot test.
-                        suffix_index = to_test.rindex("." + suffix)
-
-                        # We get the element to check.
-                        # The idea here is to delete the suffix, then retest with our
-                        # subdomains regex.
-                        to_check = to_test[:suffix_index]
-
-                        if "." in to_check:
-                            # There is a point into the new element to check.
-
-                            # We check if it passes our subdomain regex.
-                            # * True: It's a valid domain.
-                            # * False: It's an invalid domain.
-                            return Regex(
-                                to_check, regex_valid_subdomains, return_data=False
-                            ).match()
-
-                    except ValueError:
-                        # In case of a value error because the position is not found,
-                        # we continue to the next element.
-                        pass
-
-            # * The extension is not into the psl database.
-            # or
-            # * there was no point into the suffix checking.
-
-            # We get the element before the last point.
-            to_check = to_test[:last_point_index]
-
-            if "." in to_check:
-                # There is a point in to_check
-
-                # We check if it passes our subdomain regex.
-                # * True: It's a valid domain.
-                # * False: It's an invalid domain.
-                return Regex(
-                    to_check, regex_valid_subdomains, return_data=False
-                ).match()
-
-        except (ValueError, AttributeError):
-            # In case of a value or attribute error we ignore them.
-            pass
-
-        # And we return False, the domain is not valid.
-        return False
-
-    @classmethod
-    def is_ip_valid(cls, ip_to_check=None):
-        """
-        Check if PyFunceble.CONFIGURATION['domain'] is a valid IPv4.
-
-        Argument:
-            - ip_to_check: str
-                The ip to test
-
-        Note:
-            We only test IPv4 because for now we only support domain and IPv4.
-        """
-
-        # We initate our regex which will match for valid IPv4.
-        regex_ipv4 = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
-
-        if ip_to_check:
-            # An element is localy given.
-
-            # We consider it as the element to test.
-            to_test = ip_to_check
-        else:
-            # An element is not localy given.
-
-            # We consider the global element to test as the element to test.
-            to_test = PyFunceble.CONFIGURATION["domain"]
-
-        # We check if it passes our IPv4 regex.
-        # * True: It's a valid IPv4.
-        # * False: It's an invalid IPv4.
-        return Regex(to_test, regex_ipv4, return_data=False).match()
-
     def get(self):  # pragma: no cover
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
         """
 
         # We get the status of the domain validation.
-        domain_validation = self.is_domain_valid()
+        domain_validation = Check().is_domain_valid()
         # We get the status of the IPv4 validation.
-        ip_validation = self.is_ip_valid()
+        ip_validation = Check().is_ip_valid()
 
         if domain_validation and not ip_validation or domain_validation:
             # * The element is a valid domain.

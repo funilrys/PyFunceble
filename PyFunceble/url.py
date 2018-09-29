@@ -63,85 +63,23 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.expiration_date import ExpirationDate
-from PyFunceble.helpers import Regex
+from PyFunceble.check import Check
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.status import URLStatus
 
 
-class URL:
+class URL:  # pylint: disable=too-few-public-methods
     """
     This method will manage everything aroud the tests of urls.
     """
 
     @classmethod
-    def is_url_valid(cls, url=None, return_formated=False):
-        """
-        Check if the domain of the given URL is valid.
-
-        Argument:
-            - url: str
-                The url to test.
-            - return_formated: bool
-                True: We return the url base.
-
-        Returns: bool|str
-            - True: is valid.
-            - False: is invalid.
-            - str: return_formated is true and the url base is valid.
-        """
-
-        if url:
-            # The given url is not empty.
-
-            # We initiate the element to test.
-            to_test = url
-        else:
-            # The given url is empty.
-
-            # We initiate the element to test from the globaly URl to test.
-            to_test = PyFunceble.CONFIGURATION["URL"]
-
-        if to_test.startswith("http"):
-            # The element to test starts with http.
-
-            try:
-                # We initiate a regex which will match the domain or the url base.
-                regex = r"((http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
-
-                # We extract the url base with the help of the initiated regex.
-                formated_base = Regex(
-                    to_test, regex, return_data=True, rematch=True
-                ).match()[2]
-
-                # We check if the url base is a valid domain.
-                domain_status = ExpirationDate().is_domain_valid(formated_base)
-
-                # We check if the url base is a valid IP.
-                ip_status = ExpirationDate().is_ip_valid(formated_base)
-
-                if domain_status or ip_status:
-                    # * The url base is a valid domain.
-                    # and
-                    # * The url base is a valid IP.
-
-                    if return_formated:
-                        return formated_base
-
-                    # We return True.
-                    return True
-            except TypeError:
-                pass
-
-        # We return False.
-        return False
-
-    def get(self):  # pragma: no cover
+    def get(cls):  # pragma: no cover
         """
         Execute the logic behind the URL handling.
         """
 
-        if self.is_url_valid():
+        if Check().is_url_valid():
             # The url is valid.
 
             # We initiate the HTTP status code.

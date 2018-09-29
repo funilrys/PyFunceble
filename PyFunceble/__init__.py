@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.107.1.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.108.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -522,6 +522,18 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "--json",
+            action="store_true",
+            help="Switch the value of the generation \
+                of the json list of domain. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(CONFIGURATION["generate_json"])
+                + Style.RESET_ALL
+            ),
+        )
+
+        PARSER.add_argument(
             "--less",
             action="store_true",
             help="Output less informations on screen. %s"
@@ -537,11 +549,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             "--mining",
             action="store_true",
             help="Switch the value of the mining subsystem usage. %s"
-            % (
-                CURRENT_VALUE_FORMAT
-                + repr(CONFIGURATION["mining"])
-                + Style.RESET_ALL
-            ),
+            % (CURRENT_VALUE_FORMAT + repr(CONFIGURATION["mining"]) + Style.RESET_ALL),
         )
 
         PARSER.add_argument(
@@ -794,6 +802,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.ip:
             CONFIGURATION.update({"custom_ip": ARGS.ip})
+
+        if ARGS.json:
+            CONFIGURATION.update({"generate_json": Core.switch("generate_json")})
 
         if ARGS.mining:
             CONFIGURATION.update({"mining": Core.switch("mining")})

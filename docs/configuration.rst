@@ -236,6 +236,15 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Enable / disable the generation of the hosts file(s).
 
+:code:`generate_json`
+---------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the generation of the JSON file(s).
+
 :code:`header_printed`
 ----------------------
 
@@ -607,7 +616,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Description:** Set the default filename of the file which will save the plain list of elements.
 
 :code:`outputs[hosts]`
-""""""""""""""""""""""""
+""""""""""""""""""""""
     
      **Type:** :code:`dict`
     
@@ -630,6 +639,31 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     **Default value:** :code:`hosts`
     
     **Description:** Set the default filename of the file which will save the hosts files of the elements.
+
+:code:`outputs[json]`
+"""""""""""""""""""""
+    
+     **Type:** :code:`dict`
+    
+    **Description:** Set the default name of some important files related to the :code:`generate_json` index.
+
+:code:`outputs[json][directory]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`json/`
+    
+    **Description:** Set the default directory where we have to save the JSON files of the elements for each status.
+
+:code:`outputs[json][filename]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+    
+    **Default value:** :code:`dump.json`
+    
+    **Description:** Set the default filename of the file which will save the JSON files of the elements.
 
 :code:`outputs[analytic]`
 """""""""""""""""""""""""

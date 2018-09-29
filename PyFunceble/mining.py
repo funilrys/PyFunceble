@@ -67,8 +67,8 @@ import urllib3.exceptions as urllib3_exceptions
 
 import PyFunceble
 from PyFunceble import path, requests, socket
+from PyFunceble.check import Check
 from PyFunceble.helpers import Dict, File, List
-from PyFunceble.url import URL
 
 
 class Mining:
@@ -157,7 +157,7 @@ class Mining:
                         # We are testing a full url.
 
                         # We get the element to append.
-                        to_append = URL().is_url_valid(element, return_formated=False)
+                        to_append = Check().is_url_valid(element, return_formated=False)
                     elif (
                         "domain" in PyFunceble.CONFIGURATION
                         and PyFunceble.CONFIGURATION["domain"]
@@ -165,7 +165,7 @@ class Mining:
                         # We are testing a domain.
 
                         # We get the element to append.
-                        to_append = URL().is_url_valid(element, return_formated=True)
+                        to_append = Check().is_url_valid(element, return_formated=True)
                     else:
                         raise Exception("Unknown tested.")
 

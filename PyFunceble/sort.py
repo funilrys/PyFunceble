@@ -62,9 +62,9 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
+from PyFunceble.check import Check
 from PyFunceble.helpers import Regex
 from PyFunceble.publicsuffix import PublicSuffix
-from PyFunceble.url import URL
 
 
 class Sort:  # pylint: disable=too-few-public-methods
@@ -134,7 +134,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         element = element.lower()
 
         # We try to get the url base.
-        url_base = URL.is_url_valid(element, return_formated=True)
+        url_base = Check().is_url_valid(element, return_formated=True)
 
         # We laod the public suffix database.
         PublicSuffix(False).load()

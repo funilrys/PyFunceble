@@ -244,6 +244,12 @@ This argument allow the conversion of the domains using `domain2idna`_
     Change the IP to print with the hosts files.
         Default value: :code:`0.0.0.0`
 
+:code:`--json`
+^^^^^^^^^^^^^^
+
+    Switch the value of the generation of the json list of domain.
+        Default value: :code:`False`
+
 :code:`--less`
 ^^^^^^^^^^^^^^
 
@@ -497,6 +503,8 @@ Global overview
                                 Installed value: False
         -ip IP                Change the ip to print in the hosts files.
                                 Installed value: '0.0.0.0'
+        --json                Switch the value of the generation of the json list of
+                                domain. Installed value: False
         --less                Output less informations on screen. Installed
                                 value: False
         --link LINK           Download and test the given file.

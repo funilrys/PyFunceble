@@ -17,6 +17,8 @@ domain: ""
 filter: ""
 # Enable / disable the generation of the hosts file(s).
 generate_hosts: True
+# Enable / Disable the generation of a JSON format for the output
+generate_json: False
 # Say to the system if the header has been already printed or not.
 header_printed: False
 # Tell to the system to use the historical sorting instead of the alphabetical sorting.
@@ -86,6 +88,10 @@ outputs:
   hosts:
     directory: hosts/
     filename: hosts
+
+  json:
+    directory: json/
+    filename: dump.json
 
   analytic:
     directories:

@@ -67,8 +67,8 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout
+from PyFunceble.core import Prints
 from PyFunceble.helpers import File
-from PyFunceble.prints import Prints
 
 
 class TestPrints(BaseStdout):

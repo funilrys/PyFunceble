@@ -102,6 +102,24 @@ Code documentation
 .. autoclass:: PyFunceble.auto_save.AutoSave
     :members:
 
+Check
+-----
+
+Problematic
+^^^^^^^^^^^
+
+How can we efficiently check the format of IP, domains and URL.
+
+Code documentation
+^^^^^^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.check
+   :members: 
+
+.. autoclass:: PyFunceble.check.Check
+    :members:
+
+
 Cleaning
 --------
 

@@ -65,7 +65,8 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import Back, Fore, OrderedDict, path
-from PyFunceble.helpers import Dict, File
+from PyFunceble.helpers import Dict, File, List
+from PyFunceble.sort import Sort
 
 
 class Prints:
@@ -515,7 +516,58 @@ class Prints:
         # We return the data.
         return data
 
-    def data(self):  # pragma: no cover
+    def _json_print(self):  # pragma: no cover
+        """
+        Management of the json template.
+        """
+
+        if self.output:
+            # The given output is not empty.
+
+            if path.isfile(self.output):
+                # The given output already exist.
+
+                # We get the content of the output.
+                content = Dict().from_json(File(self.output).read())
+
+                if isinstance(content, list):
+                    # The content is a list.
+
+                    # We extend the content with our data to print.
+                    content.extend(self.data_to_print)
+
+                    # We format our list.
+                    content = List(content).custom_format(Sort.standard)
+
+                    if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                        # The hierarchical sorting is activated.
+
+                        # We format our content hierarchicaly
+                        content = List(content).custom_format(Sort.hierarchical)
+
+                    # We finally save our content into the file.
+                    Dict(content).to_json(self.output)
+                else:
+                    # The content is not a list.
+
+                    # We raise an exception.
+                    raise Exception("Output not correctly formated.")
+            else:
+                # The given output does not already exist.
+
+                # We save our data to print into the output.
+                #
+                # Note: We do not have to take care if self.data_to_print is a list
+                # formated or not because this method should not be called if it is
+                # not the case.
+                Dict(self.data_to_print).to_json(self.output)
+        else:
+            # The given output is empty.
+
+            # We raise an exception.
+            raise Exception("Empty output given.")
+
+    def data(self):  #  pragma: no cover  pylint: disable=inconsistent-return-statements
         """
         Management and input of data to the table.
 
@@ -539,6 +591,10 @@ class Prints:
             # we initiate a variable which will list the list of
             # template which does not need a header.
             without_header = ["FullHosts", "PlainDomain"]
+
+            if self.template.lower() == "json":
+                # The template is the json template.
+                return self._json_print()
 
             if self.template not in alone_cases and self.template not in without_header:
                 # * The template is not in the list of alone case.

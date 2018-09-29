@@ -62,7 +62,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
+# pylint: disable=bad-continuation, too-many-lines
 import PyFunceble
 from PyFunceble import directory_separator, requests
 from PyFunceble.helpers import Regex
@@ -172,14 +172,15 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
         return output_dir
 
-    def hosts_file(self):
+    def info_files(self):
         """
-        Generate a hosts file.
+        Generate the hosts file, the plain list and the splitted lists.
         """
 
         if (
             PyFunceble.CONFIGURATION["generate_hosts"]
             or PyFunceble.CONFIGURATION["plain_list_domain"]
+            or PyFunceble.CONFIGURATION["generate_json"]
         ):
             # * The hosts file generation is activated.
             # or
@@ -213,6 +214,15 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 + PyFunceble.OUTPUTS["domains"]["filename"]
             )
 
+            # We partially intiate the path to the json list file.
+            output_json = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["json"]["directory"]
+                + "%s"
+                + directory_separator
+                + PyFunceble.OUTPUTS["json"]["filename"]
+            )
+
             if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
                 # The status is in the list of up list.
 
@@ -221,6 +231,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
                 # We complete the path to the plain list file.
                 plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
+
+                # We complete the path to the json list file.
+                json_destination = output_json % PyFunceble.STATUS["official"]["up"]
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
                 # The status is in the list of down list.
 
@@ -231,6 +244,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 plain_destination = (
                     output_domains % PyFunceble.STATUS["official"]["down"]
                 )
+
+                # We complete the path to the json list file.
+                json_destination = output_json % PyFunceble.STATUS["official"]["down"]
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
                 # The status is in the list of invalid list.
 
@@ -242,6 +258,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # We complete the path to the plain list file.
                 plain_destination = (
                     output_domains % PyFunceble.STATUS["official"]["invalid"]
+                )
+
+                # We complete the path to the json list file.
+                json_destination = (
+                    output_json % PyFunceble.STATUS["official"]["invalid"]
                 )
             elif self.domain_status.lower() in http_list:
                 # The status is in the list of analytic status.
@@ -262,6 +283,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 plain_destination = (
                     output_dir + PyFunceble.OUTPUTS["domains"]["filename"]
                 )
+
+                # We complete the path to the json list file.
+                json_destination = output_dir + PyFunceble.OUTPUTS["json"]["filename"]
 
                 # We initiate the path to the http code file.
                 # Note: We generate the http code file so that
@@ -288,7 +312,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
                 # We generate/append the currently tested element in its
                 # final location. (the plain list format)
-                # We print on screen and on file.
+                # We print on file.
                 Prints([self.tested], "PlainDomain", plain_destination).data()
 
             if PyFunceble.CONFIGURATION["split"] and splited_destination:
@@ -296,8 +320,16 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
                 # We generate/append the currently tested element in its
                 # final location. (the split list format)
-                # We print on screen and on file.
+                # We print on file.
                 Prints([self.tested], "PlainDomain", splited_destination).data()
+
+            if PyFunceble.CONFIGURATION["generate_json"]:
+                # The jsaon list generation is activated.
+
+                # We generate/append the currently tested element in its
+                # final location. (the json format)
+                # We print on file.
+                Prints([self.tested], "JSON", json_destination).data()
 
     def unified_file(self):
         """
@@ -378,7 +410,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             )
 
             # We generate the hosts file.
-            Generate("HTTP_Active").hosts_file()
+            Generate("HTTP_Active").info_files()
         elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
             # The new status is in the list of down status.
 
@@ -389,7 +421,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             )
 
             # We generate the hosts file.
-            Generate("potentially_up").hosts_file()
+            Generate("potentially_up").info_files()
         elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
             # The new status is in the list of suspicious status.
 
@@ -400,7 +432,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             )
 
             # We generate the hosts file.
-            Generate("suspicious").hosts_file()
+            Generate("suspicious").info_files()
         else:
             # The new status is in the list of up and down status.
 
@@ -411,7 +443,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             )
 
             # We generate the hosts files.
-            Generate("potentially_down").hosts_file()
+            Generate("potentially_down").info_files()
 
         # We print the information on file.
         Prints(
@@ -903,7 +935,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             self.invalid_status_file()
 
         # We generate the hosts file.
-        Generate(self.domain_status, self.source, self.expiration_date).hosts_file()
+        Generate(self.domain_status, self.source, self.expiration_date).info_files()
 
         # We increase the percentage count.
         Percentage(self.domain_status).count()

@@ -70,6 +70,7 @@ import PyFunceble
 from PyFunceble import Fore, Style, path, repeat
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
+from PyFunceble.check import Check
 from PyFunceble.database import Database
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
@@ -121,7 +122,7 @@ class Core:  # pragma: no cover
                 The argument passed to the system.
         """
 
-        if passed and URL.is_url_valid(passed):
+        if passed and Check().is_url_valid(passed):
             # The passed string is an URL.
 
             # We get the file name based on the URL.
@@ -672,8 +673,7 @@ class Core:  # pragma: no cover
                     return cls._format_adblock_decoded(data.split("|"), result)
 
                 if data and (
-                    ExpirationDate.is_domain_valid(data)
-                    or ExpirationDate.is_ip_valid(data)
+                    Check().is_domain_valid(data) or Check().is_ip_valid(data)
                 ):
                     # * The currently read line is not empty.
                     # and

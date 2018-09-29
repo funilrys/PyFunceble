@@ -266,6 +266,24 @@ class DirectoryStructure:  # pragma: no cover
             "hosts/INVALID": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"]
             + directory_separator,
+            # We get the replacement of the json directory from the
+            # configuration file.
+            "json": PyFunceble.OUTPUTS["json"]["directory"],
+            # We get the replacement of the json/ACTIVE directory from the
+            # configuration file.
+            "json/ACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
+            + PyFunceble.STATUS["official"]["up"]
+            + directory_separator,
+            # We get the replacement of the json/INACTIVE directory from the
+            # configuration file.
+            "json/INACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
+            + PyFunceble.STATUS["official"]["down"]
+            + directory_separator,
+            # We get the replacement of the json/INVALID directory from the
+            # configuration file.
+            "json/INVALID": PyFunceble.OUTPUTS["json"]["directory"]
+            + PyFunceble.STATUS["official"]["invalid"]
+            + directory_separator,
             # We get the replacement of the logs directory from the
             # configuration file.
             "logs": PyFunceble.OUTPUTS["logs"]["directories"]["parent"],
