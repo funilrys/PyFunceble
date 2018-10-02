@@ -122,7 +122,7 @@ class Check:
 
             try:
                 # We initiate a regex which will match the domain or the url base.
-                regex = r"(^([a-z]+:\/\/)(.+?(?=\/)|.+?$))"
+                regex = r"(^(http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
                 formated_base = Regex(

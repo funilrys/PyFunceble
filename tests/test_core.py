@@ -353,8 +353,9 @@ class TestAdblockDecode(TestCase):
 
         load_config(True)
         self.lines = [
-            "||google.com$script,image",
-            "||twitter.com^",
+            "||funilrys.github.io$script,image",
+            "||google.com^$script,image",
+            "||twitter.com^helloworld.com",
             "||api.google.com/papi/action$popup",
             "facebook.com###player-above-2",
             "~github.com,hello.world##.wrapper",
@@ -362,36 +363,28 @@ class TestAdblockDecode(TestCase):
             "!||world.hello/*ad.xml",
             "bing.com,bingo.com#@##adBanner",
             "!@@||funceble.world/js",
-            "yahoo.com,msn.com,api.hello.world#@#awesomeWorld",
+            "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld",
             "!funilrys.com##body",
             "hello#@#badads",
             "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
             '##[href^="https://funceble.funilrys.com/"]',
+            "[AdBlock Plus 2.0]",
             '##div[href^="http://funilrys.com/"]',
-            '##[href^="ftp://funceble.funilrys.com/"]',
+            'com##[href^="ftp://funceble.funilrys-funceble.com/"]',
+            "/banner/*/img^" "|github.io|",
+            "|github.io|",
+            "||api.funilrys.com/widget/$",
         ]
 
         self.expected = [
+            "funilrys.github.io",
             "google.com",
             "twitter.com",
             "api.google.com",
-            "facebook.com",
-            "github.com",
-            "hello.world",
-            "cnn.com",
-            "world.hello",
-            "bing.com",
-            "bingo.com",
-            "funceble.world",
-            "api.hello.world",
-            "msn.com",
-            "yahoo.com",
-            "funilrys.com",
-            "hubgit.com",
-            "ipa.elloh.dlorw",
-            "oohay.com",
             "funceble.funilrys.com",
             "funilrys.com",
+            "github.io",
+            "api.funilrys.com",
         ]
 
     def test_adblock_decode(self):

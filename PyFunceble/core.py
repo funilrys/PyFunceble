@@ -637,6 +637,13 @@ class Core:  # pragma: no cover
             if data:
                 # The currently read line is not empty.
 
+                if "^" in data:
+                    # There is an accent in the currently read line.
+
+                    # We recall this method but with the current result state
+                    # and splited data.
+                    return cls._format_adblock_decoded(data.split("^"), result)
+
                 if "#" in data:
                     # There is a dash in the currently read line.
 
@@ -650,13 +657,6 @@ class Core:  # pragma: no cover
                     # We recall this method but with the current result state
                     # and splited data.
                     return cls._format_adblock_decoded(data.split(","), result)
-
-                if "~" in data:
-                    # There is a tilde in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split("~"), result)
 
                 if "!" in data:
                     # There is an exclamation mark in the currently read line.
@@ -719,18 +719,25 @@ class Core:  # pragma: no cover
         # the element to format.
         regex = r"^(?:.*\|\|)([^\/\$\^]{1,}).*$"
 
-        # We initiate the second regex we are going to use to get
-        # the element to format.
-        regex_v2 = r"((.*\..*)(?:#{1,}.*))"
-
         # We initiate the third regex we are going to use to get
         # the element to format.
-        regex_v3 = r"(?:#+(?:[a-z]+?)?\[[a-z]+\^\=(?:\'|\"))(.*\..*)(?:(?:\'|\")\])"
+        regex_v3 = (
+            r"(?:#+(?:[a-z]+?)?\[[a-z]+(?:\^|\*)\=(?:\'|\"))(.*\..*)(?:(?:\'|\")\])"
+        )
+
+        # We initiate the fourth regex we are going to use to get
+        # the element to format.
+        regex_v4 = r"^\|(.*\..*)\|$"
 
         for line in list_to_test:
             # We loop through the different line.
 
-            if line.startswith("!"):
+            if (
+                line.startswith("!")
+                or line.startswith("@@")
+                or line.startswith("/")
+                or line.startswith("[")
+            ):
                 continue
 
             # We extract the different group from our first regex.
@@ -738,9 +745,12 @@ class Core:  # pragma: no cover
                 line, regex, return_data=True, rematch=True, group=0
             ).match()
 
-            # We extract the different group from our second regex.
-            rematch_v2 = Regex(
-                line, regex_v2, return_data=True, rematch=True, group=0
+            # We extract the different group from our fourth regex.
+            #
+            # Note: We execute the following in second because it is more
+            # specific that others.
+            rematch_v4 = Regex(
+                line, regex_v4, return_data=True, rematch=True, group=0
             ).match()
 
             # We extract the different group from our third regex.
@@ -754,11 +764,11 @@ class Core:  # pragma: no cover
                 # We extend the result with the extracted elements.
                 result.extend(rematch)
 
-            if rematch_v2:
-                # The second extraction was successfull.
+            if rematch_v4:
+                # The fourth extraction was successfull.
 
                 # We extend the formated elements from the extracted elements.
-                result.extend(List(self._format_adblock_decoded(rematch_v2)).format())
+                result.extend(List(self._format_adblock_decoded(rematch_v4)).format())
 
             if rematch_v3:
                 # The second extraction was successfull.
