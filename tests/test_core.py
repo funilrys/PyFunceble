@@ -67,8 +67,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout, sys
-from PyFunceble import Fore, initiate
-from PyFunceble.config import Load
+from PyFunceble import Fore, initiate, load_config
 from PyFunceble.core import Core
 
 
@@ -82,7 +81,7 @@ class TestsResetCounters(TestCase):
         This method setup everything that is needed for the test.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
         self.types = ["up", "down", "invalid", "tested"]
 
     def set_counter(self):
@@ -129,7 +128,7 @@ class TestsColoredLogo(BaseStdout):
         """
 
         initiate(True)
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
 
         BaseStdout.setUp(self)
         logo = """
@@ -202,7 +201,7 @@ class TestsFormatDomain(TestCase):
         This method setup everything that is needed for the tests.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
         self.domains = [
             "google.com",
             "twitter.com",
@@ -352,7 +351,7 @@ class TestAdblockDecode(TestCase):
         This method setup everything needed for the test.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
         self.lines = [
             "||google.com$script,image",
             "||twitter.com^",
@@ -367,6 +366,9 @@ class TestAdblockDecode(TestCase):
             "!funilrys.com##body",
             "hello#@#badads",
             "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
+            '##[href^="https://funceble.funilrys.com/"]',
+            '##div[href^="http://funilrys.com/"]',
+            '##[href^="ftp://funceble.funilrys.com/"]',
         ]
 
         self.expected = [
@@ -388,6 +390,8 @@ class TestAdblockDecode(TestCase):
             "hubgit.com",
             "ipa.elloh.dlorw",
             "oohay.com",
+            "funceble.funilrys.com",
+            "funilrys.com",
         ]
 
     def test_adblock_decode(self):
@@ -410,7 +414,7 @@ class TestExtractDomain(TestCase):
         This method setup everything that is needed for the test.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
 
     def test_file_does_not_exist(self):
         """
@@ -459,7 +463,7 @@ class TestSwitch(TestCase):
         This method setup everything that is needed.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        load_config(True)
         self.exception_message = "Impossible to switch %s. Please post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
 
     def test_index_not_exist(self):

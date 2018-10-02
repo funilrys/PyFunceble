@@ -672,17 +672,29 @@ class Core:  # pragma: no cover
                     # and splited data.
                     return cls._format_adblock_decoded(data.split("|"), result)
 
-                if data and (
-                    Check().is_domain_valid(data) or Check().is_ip_valid(data)
-                ):
+                if data:
                     # * The currently read line is not empty.
-                    # and
-                    # * The currently read line is a valid domain.
-                    # or
-                    # * The currently read line is a valid IP.
 
-                    # We append the currently read line to the result.
-                    result.append(data)
+                    if Check().is_domain_valid(data) or Check().is_ip_valid(data):
+                        # * The currently read line is a valid domain.
+                        # or
+                        # * The currently read line is a valid IP.
+
+                        # We append the currently read line to the result.
+                        result.append(data)
+                    else:
+                        # * The currently read line is not a valid domain.
+                        # or
+                        # * The currently read line is not a valid IP.
+
+                        # We try to get the url base.
+                        url_base = Check().is_url_valid(data, return_formated=True)
+
+                        if url_base:
+                            # The url_base is not empty or equal to False or None.
+
+                            # We appent the url base to the result.
+                            result.append(url_base)
 
         # We return the result element.
         return result
@@ -704,24 +716,36 @@ class Core:  # pragma: no cover
         result = []
 
         # We initiate the first regex we are going to use to get
-        # the element to to format.
+        # the element to format.
         regex = r"^(?:.*\|\|)([^\/\$\^]{1,}).*$"
 
         # We initiate the second regex we are going to use to get
-        # the element to to format.
-        regex_v2 = r"(.*\..*)(?:#{1,}.*)"
+        # the element to format.
+        regex_v2 = r"((.*\..*)(?:#{1,}.*))"
+
+        # We initiate the third regex we are going to use to get
+        # the element to format.
+        regex_v3 = r"(?:#+(?:[a-z]+?)?\[[a-z]+\^\=(?:\'|\"))(.*\..*)(?:(?:\'|\")\])"
 
         for line in list_to_test:
             # We loop through the different line.
+
+            if line.startswith("!"):
+                continue
 
             # We extract the different group from our first regex.
             rematch = Regex(
                 line, regex, return_data=True, rematch=True, group=0
             ).match()
 
-            # We extract the different group from our first regex.
+            # We extract the different group from our second regex.
             rematch_v2 = Regex(
                 line, regex_v2, return_data=True, rematch=True, group=0
+            ).match()
+
+            # We extract the different group from our third regex.
+            rematch_v3 = Regex(
+                line, regex_v3, return_data=True, rematch=True, group=0
             ).match()
 
             if rematch:
@@ -735,6 +759,12 @@ class Core:  # pragma: no cover
 
                 # We extend the formated elements from the extracted elements.
                 result.extend(List(self._format_adblock_decoded(rematch_v2)).format())
+
+            if rematch_v3:
+                # The second extraction was successfull.
+
+                # We extend the formated elements from the extracted elements.
+                result.extend(List(self._format_adblock_decoded(rematch_v3)).format())
 
         # We return the result.
         return result
