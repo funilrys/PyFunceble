@@ -115,6 +115,7 @@ Special Thanks
 Thanks to those awesome organization(s) and people(s) for
 
 *   Their awesome repository
+*   Their awesome documentation
 *   Their breaking reports
 *   Their contributions
 *   Their current work
@@ -136,6 +137,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
                                                      |___/
 
 -   Adam Warner - `@PromoFaux`_
+-   Adblock Plus - `@adblockplus`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
 -   Reza Rizqullah - `@ybreza`_
@@ -173,6 +175,7 @@ License
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _Dead-Hosts: https://github.com/dead-hosts
 
+.. _adblockplus: https://github.com/adblockplus
 .. _@dnmTX: https://github.com/dnmTX
 .. _@jawz101: https://github.com/jawz101
 .. _@mitchellkrogza: https://github.com/mitchellkrogza

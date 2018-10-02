@@ -4,6 +4,7 @@ Special Thanks
 Thanks to those awesome organization(s) and people(s) for
 
 *   Their awesome repository
+*   Their awesome documentation
 *   Their breaking reports
 *   Their contributions
 *   Their current work
@@ -25,6 +26,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
                                                      |___/
 
 -   Adam Warner - `@PromoFaux`_
+-   Adblock Plus - `@adblockplus`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
 -   Reza Rizqullah - `@ybreza`_
