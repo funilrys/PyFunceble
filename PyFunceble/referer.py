@@ -189,24 +189,24 @@ class Referer:  # pragma: no cover
         Return the referer aka the WHOIS server of the current domain extension.
         """
 
-        if not PyFunceble.CONFIGURATION["no_whois"]:
-            # We are authorized to use WHOIS for the test result.
+        if self.domain_extension not in self.ignored_extension:
+            # The extension of the domain we are testing is not into
+            # the list of ignored extensions.
 
-            if self.domain_extension not in self.ignored_extension:
-                # The extension of the domain we are testing is not into
-                # the list of ignored extensions.
+            # We set the referer to None as we do not have any.
+            referer = None
 
-                # We set the referer to None as we do not have any.
-                referer = None
+            if "iana_db" not in PyFunceble.CONFIGURATION:
+                # The iana database is empty.
 
-                if "iana_db" not in PyFunceble.CONFIGURATION:
-                    # The iana database is empty.
+                # We generate/construct the database from the local file.
+                PyFunceble.CONFIGURATION["iana_db"] = self._iana_database()
 
-                    # We generate/construct the database from the local file.
-                    PyFunceble.CONFIGURATION["iana_db"] = self._iana_database()
+            if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
+                # The domain extension is in the iana database.
 
-                if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
-                    # The domain extension is in the iana database.
+                if not PyFunceble.CONFIGURATION["no_whois"]:
+                    # We are authorized to use WHOIS for the test result.
 
                     # We get the referer from the database.
                     referer = PyFunceble.CONFIGURATION["iana_db"][self.domain_extension]
@@ -225,21 +225,21 @@ class Referer:  # pragma: no cover
                     # We return the extracted referer.
                     return referer
 
-                # The domain extension is not in the iana database.
+                # We are not authorized to use WHOIS for the test result.
 
-                # We hanlde and return the invalid status.
-                return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
+                # We return None.
+                return None
 
-            # The extension of the domain we are testing is not into
-            # the list of ignored extensions.
+            # The domain extension is not in the iana database.
 
-            # We handle and return the down status.
-            return Status(PyFunceble.STATUS["official"]["down"]).handle()
+            # We hanlde and return the invalid status.
+            return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
 
-        # We are not authorized to use WHOIS for the test result.
+        # The extension of the domain we are testing is not into
+        # the list of ignored extensions.
 
-        # We return None.
-        return None
+        # We handle and return the down status.
+        return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
     def log(self):
         """
