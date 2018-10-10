@@ -270,6 +270,14 @@ This argument allow the conversion of the domains using `domain2idna`_
     ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ---------- 
     pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302        
 
+:code:`--local`
+^^^^^^^^^^^^^^^
+
+    Switch the value of the local network testing.
+        Default value: :code:`False`
+
+Want to run a test over a local or private network ? This argument will disable the limitation which do not apply to private networks.
+
 :code:`--link "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -438,10 +446,10 @@ Global overview
                   [--commit-results-message COMMIT_RESULTS_MESSAGE]
                   [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
                   [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
-                  [--help] [--hierarchical] [-h] [--http] [--iana] [-ip IP]
-                  [--less] [--link LINK] [-m] [-n] [-nl] [-nu] [-nw] [-p]
-                  [--plain] [--production] [-psl] [-q] [--share-logs] [-s]
-                  [--split] [-t TIMEOUT] [--travis]
+                  [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
+                  [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
+                  [-nl] [-nu] [-nw] [-p] [--plain] [--production] [-psl] [-q]
+                  [--share-logs] [-s] [--split] [-t TIMEOUT] [--travis]
                   [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
                   [-ua USER_AGENT] [-v]
 
@@ -507,6 +515,8 @@ Global overview
                                 domain. Installed value: False
         --less                Output less informations on screen. Installed
                                 value: False
+        --local               Switch the value of the local network testing.
+                                Installed value: True
         --link LINK           Download and test the given file.
         -m, --mining          Switch the value of the mining subsystem usage.
                                 Installed value: False

@@ -316,6 +316,15 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Enable / Disable the output of every information of screen.
 
+:code:`local`
+-------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the execution of the test(s) in a local or private network.
+
 :code:`logs`
 ------------
 

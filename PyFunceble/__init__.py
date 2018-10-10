@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.111.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.112.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -541,6 +541,13 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "--local",
+            action="store_true",
+            help="Switch the value of the local network testing. %s"
+            % (CURRENT_VALUE_FORMAT + repr(Core.switch("local")) + Style.RESET_ALL),
+        )
+
+        PARSER.add_argument(
             "--link", type=str, help="Download and test the given file."
         )
 
@@ -805,6 +812,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.json:
             CONFIGURATION.update({"generate_json": Core.switch("generate_json")})
+
+        if ARGS.local:
+            CONFIGURATION.update({"local": Core.switch("local")})
 
         if ARGS.mining:
             CONFIGURATION.update({"mining": Core.switch("mining")})

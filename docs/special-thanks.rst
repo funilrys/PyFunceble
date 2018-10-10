@@ -36,6 +36,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _@PromoFaux: https://github.com/PromoFaux
+.. _@adblockplus: https://github.com/adblockplus
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@ybreza: https://github.com/ybreza
