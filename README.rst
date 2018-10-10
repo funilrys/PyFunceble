@@ -1,7 +1,7 @@
 .. image:: https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.assets/logo/RM.png
 
-The tool to check domains or IP availability
---------------------------------------------
+The tool to check the availability of domains, IPv4 or URL
+----------------------------------------------------------
 
 .. image:: https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
@@ -10,8 +10,6 @@ The tool to check domains or IP availability
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.svg
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.svg
-    :target: https://github.com/funilrys/PyFunceble/releases/latest
-.. image:: https://img.shields.io/github/release/funilrys/PyFunceble.svg
     :target: https://github.com/funilrys/PyFunceble/releases/latest
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.svg
     :target: https://github.com/funilrys/PyFunceble/issues
