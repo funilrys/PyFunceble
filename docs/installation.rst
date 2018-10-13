@@ -62,6 +62,30 @@ From GitHub
 
    $ pip3 install git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
 
+Using the AUR (for Arch Linux users)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The package can be found at https://aur.archlinux.org/packages/python-pyfunceble/.
+
+With makepkg
+""""""""""""
+
+::
+
+    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble
+    $ makepkg
+    $ sudo pacman -U python-pyfunceble*.tar.xz
+
+With your favorite AUR helper
+"""""""""""""""""""""""""""""
+
+.. warning::
+    We do not recommend any AUR helper but keep in mind that some AUR helper are "better" than other.
+    For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
+
+::
+
+    $ yourFavoriteAurHelper -S python-pyfunceble
 
 Pure Python method
 ^^^^^^^^^^^^^^^^^^
@@ -116,7 +140,28 @@ Execute one of the following and enjoy PyFunceble!
 
    $ pip3 install git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
+Using the AUR (for Arch Linux users)
+""""""""""""""""""""""""""""""""""""
 
+The package can be found at https://aur.archlinux.org/packages/python-pyfunceble-dev/.
+
+**With makepkg**
+
+::
+
+    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev
+    $ makepkg
+    $ sudo pacman -U python-pyfunceble-dev*.tar.xz
+
+**With your favorite AUR helper**
+
+.. warning::
+    We do not recommend any AUR helper but keep in mind that some AUR helper are "better" than other.
+    For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
+
+::
+
+    $ yourFavoriteAurHelper -S python-pyfunceble-dev
 
 Pure Python method
 """"""""""""""""""
@@ -143,3 +188,4 @@ Make sure that you can run
 
 and enjoy PyFunceble!!
 
+.. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers
