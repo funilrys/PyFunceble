@@ -73,6 +73,7 @@ What can PyFunceble do?
     - Set a command to execute at the end of the test.
     - Set the commit message for the autosaving system.
 - ... and a lot more!
+
 ___________________________________________
 
 Supporting the project
