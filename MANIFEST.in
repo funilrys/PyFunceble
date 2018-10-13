@@ -1,0 +1,14 @@
+recursive-include PyFunceble *.py
+recursive-include docs *.rst Makefile *.bat *.py
+recursive-include tests *.py
+include README.rst
+include LICENSE
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include requirements.txt
+include .PyFunceble_production.yaml
+include .coveragerc
+include version.yaml
+include iana-domains-db.json
+include dir_structure_production.json
+include public-suffix.json
