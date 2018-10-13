@@ -101,7 +101,7 @@ class Load:  # pylint: disable=too-few-public-methods
                     # We ask the user if we should install and load the default configuration.
                     response = input(
                         "%s was not found.\n\
-Install and load the default configuration in the current directory ? [y/n] "
+Install and load the default configuration at the mentioned location? [y/n] "
                         % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
                     )
 
