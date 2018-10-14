@@ -177,11 +177,13 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Generate the hosts file, the plain list and the splitted lists.
         """
 
-        if (
+        if PyFunceble.CONFIGURATION["file_to_test"] and (
             PyFunceble.CONFIGURATION["generate_hosts"]
             or PyFunceble.CONFIGURATION["plain_list_domain"]
             or PyFunceble.CONFIGURATION["generate_json"]
         ):
+            # * We are testing a file.
+            # and
             # * The hosts file generation is activated.
             # or
             # * The plain list generation is activated.
@@ -338,8 +340,13 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         misunderstanding.
         """
 
-        if PyFunceble.CONFIGURATION["unified"]:
-            # The unified file generation is activated.
+        if (
+            PyFunceble.CONFIGURATION["file_to_test"]
+            and PyFunceble.CONFIGURATION["unified"]
+        ):
+            # * We are testing a file.
+            # and
+            # * The unified file generation is activated.
 
             # We construct the path of the unified file.
             output = (
@@ -393,70 +400,73 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 The old status of the domain.
         """
 
-        # We partially construct the path to the file to write/print.
-        output = (
-            self.output_parent_dir
-            + PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
-            + "%s%s"
-        )
+        if PyFunceble.CONFIGURATION["file_to_test"]:
+            # We are testing a file.
 
-        if new_status.lower() in PyFunceble.STATUS["list"]["up"]:
-            # The new status is in the list of up status.
-
-            # We complete the output directory.
-            output = output % (
-                PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
-                PyFunceble.OUTPUTS["analytic"]["filenames"]["up"],
+            # We partially construct the path to the file to write/print.
+            output = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
+                + "%s%s"
             )
 
-            # We generate the hosts file.
-            Generate("HTTP_Active").info_files()
-        elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
-            # The new status is in the list of down status.
+            if new_status.lower() in PyFunceble.STATUS["list"]["up"]:
+                # The new status is in the list of up status.
 
-            # We complete the output directory.
-            output = output % (
-                PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
-                PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_up"],
-            )
+                # We complete the output directory.
+                output = output % (
+                    PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
+                    PyFunceble.OUTPUTS["analytic"]["filenames"]["up"],
+                )
 
-            # We generate the hosts file.
-            Generate("potentially_up").info_files()
-        elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
-            # The new status is in the list of suspicious status.
+                # We generate the hosts file.
+                Generate("HTTP_Active").info_files()
+            elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
+                # The new status is in the list of down status.
 
-            # We complete the output directory.
-            output = output % (
-                PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
-                PyFunceble.OUTPUTS["analytic"]["filenames"]["suspicious"],
-            )
+                # We complete the output directory.
+                output = output % (
+                    PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
+                    PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_up"],
+                )
 
-            # We generate the hosts file.
-            Generate("suspicious").info_files()
-        else:
-            # The new status is in the list of up and down status.
+                # We generate the hosts file.
+                Generate("potentially_up").info_files()
+            elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
+                # The new status is in the list of suspicious status.
 
-            # We complete the output directory.
-            output = output % (
-                PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
-                PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_down"],
-            )
+                # We complete the output directory.
+                output = output % (
+                    PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
+                    PyFunceble.OUTPUTS["analytic"]["filenames"]["suspicious"],
+                )
 
-            # We generate the hosts files.
-            Generate("potentially_down").info_files()
+                # We generate the hosts file.
+                Generate("suspicious").info_files()
+            else:
+                # The new status is in the list of up and down status.
 
-        # We print the information on file.
-        Prints(
-            [
-                self.tested,
-                old_status,
-                PyFunceble.CONFIGURATION["http_code"],
-                PyFunceble.CURRENT_TIME,
-            ],
-            "HTTP",
-            output,
-            True,
-        ).data()
+                # We complete the output directory.
+                output = output % (
+                    PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
+                    PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_down"],
+                )
+
+                # We generate the hosts files.
+                Generate("potentially_down").info_files()
+
+            # We print the information on file.
+            Prints(
+                [
+                    self.tested,
+                    old_status,
+                    PyFunceble.CONFIGURATION["http_code"],
+                    PyFunceble.CURRENT_TIME,
+                ],
+                "HTTP",
+                output,
+                True,
+            ).data()
 
     def _special_blogspot(self):
         """
@@ -792,111 +802,118 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Logic behind the printing when generating status file.
         """
 
-        if PyFunceble.CONFIGURATION["less"]:
-            # We have to print less information.
+        if PyFunceble.CONFIGURATION["file_to_test"]:
+            # We are testing a file.
 
-            # We print the information on file.
-            Prints(
-                [self.tested, self.domain_status, self.source],
-                "Less",
-                self.output,
-                True,
-            ).data()
-        elif PyFunceble.CONFIGURATION["split"]:
-            # We have to split the information we print on file.
-
-            if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
-                # The status is in the list of up status.
-
-                if PyFunceble.HTTP_CODE["active"]:
-                    # The http code extraction is activated.
-
-                    # We initiate the data to print.
-                    data_to_print = [
-                        self.tested,
-                        self.expiration_date,
-                        self.source,
-                        PyFunceble.CONFIGURATION["http_code"],
-                        PyFunceble.CURRENT_TIME,
-                    ]
-                else:
-                    # The http code extraction is not activated.
-
-                    # We initiate the data to print.
-                    data_to_print = [
-                        self.tested,
-                        self.expiration_date,
-                        self.source,
-                        PyFunceble.CURRENT_TIME,
-                    ]
-
-                # We print the informations to print on file.
-                Prints(
-                    data_to_print,
-                    PyFunceble.STATUS["official"]["up"],
-                    self.output,
-                    True,
-                ).data()
-            elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
-                # The status is in the list of down status.
-
-                if PyFunceble.HTTP_CODE["active"]:
-                    # The http statuc code extraction is activated.
-
-                    # We initiate the data to print.
-                    data_to_print = [
-                        self.tested,
-                        PyFunceble.CONFIGURATION["referer"],
-                        self.domain_status,
-                        self.source,
-                        PyFunceble.CONFIGURATION["http_code"],
-                        PyFunceble.CURRENT_TIME,
-                    ]
-                else:
-                    # The http status code extraction is not activated.
-
-                    # We initate the data to print.
-                    data_to_print = [
-                        self.tested,
-                        PyFunceble.CONFIGURATION["referer"],
-                        self.domain_status,
-                        self.source,
-                        PyFunceble.CURRENT_TIME,
-                    ]
+            if PyFunceble.CONFIGURATION["less"]:
+                # We have to print less information.
 
                 # We print the information on file.
                 Prints(
-                    data_to_print,
-                    PyFunceble.STATUS["official"]["down"],
+                    [self.tested, self.domain_status, self.source],
+                    "Less",
                     self.output,
                     True,
                 ).data()
-            elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-                # The status is in the list of invalid status.
+            elif PyFunceble.CONFIGURATION["split"]:
+                # We have to split the information we print on file.
 
-                if PyFunceble.HTTP_CODE["active"]:
-                    # The http status code extraction is activated.
+                if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
+                    # The status is in the list of up status.
 
-                    # We initiate the data to print.
-                    data_to_print = [
-                        self.tested,
-                        self.source,
-                        PyFunceble.CONFIGURATION["http_code"],
-                        PyFunceble.CURRENT_TIME,
-                    ]
-                else:
-                    # The http status code extraction is not activated.
+                    if PyFunceble.HTTP_CODE["active"]:
+                        # The http code extraction is activated.
 
-                    # We initiate the data to print.
-                    data_to_print = [self.tested, self.source, PyFunceble.CURRENT_TIME]
+                        # We initiate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            self.expiration_date,
+                            self.source,
+                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.CURRENT_TIME,
+                        ]
+                    else:
+                        # The http code extraction is not activated.
 
-                # We print the information to print on file.
-                Prints(
-                    data_to_print,
-                    PyFunceble.STATUS["official"]["invalid"],
-                    self.output,
-                    True,
-                ).data()
+                        # We initiate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            self.expiration_date,
+                            self.source,
+                            PyFunceble.CURRENT_TIME,
+                        ]
+
+                    # We print the informations to print on file.
+                    Prints(
+                        data_to_print,
+                        PyFunceble.STATUS["official"]["up"],
+                        self.output,
+                        True,
+                    ).data()
+                elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
+                    # The status is in the list of down status.
+
+                    if PyFunceble.HTTP_CODE["active"]:
+                        # The http statuc code extraction is activated.
+
+                        # We initiate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            PyFunceble.CONFIGURATION["referer"],
+                            self.domain_status,
+                            self.source,
+                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.CURRENT_TIME,
+                        ]
+                    else:
+                        # The http status code extraction is not activated.
+
+                        # We initate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            PyFunceble.CONFIGURATION["referer"],
+                            self.domain_status,
+                            self.source,
+                            PyFunceble.CURRENT_TIME,
+                        ]
+
+                    # We print the information on file.
+                    Prints(
+                        data_to_print,
+                        PyFunceble.STATUS["official"]["down"],
+                        self.output,
+                        True,
+                    ).data()
+                elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
+                    # The status is in the list of invalid status.
+
+                    if PyFunceble.HTTP_CODE["active"]:
+                        # The http status code extraction is activated.
+
+                        # We initiate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            self.source,
+                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.CURRENT_TIME,
+                        ]
+                    else:
+                        # The http status code extraction is not activated.
+
+                        # We initiate the data to print.
+                        data_to_print = [
+                            self.tested,
+                            self.source,
+                            PyFunceble.CURRENT_TIME,
+                        ]
+
+                    # We print the information to print on file.
+                    Prints(
+                        data_to_print,
+                        PyFunceble.STATUS["official"]["invalid"],
+                        self.output,
+                        True,
+                    ).data()
 
     def status_file(self):
         """

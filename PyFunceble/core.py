@@ -72,6 +72,7 @@ from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check
 from PyFunceble.database import Database
+from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.helpers import Command, Download, List, Regex
@@ -908,6 +909,12 @@ class Core:  # pragma: no cover
 
             # We format the list.
             list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
+
+        # We generate the directory structure.
+        DirectoryStructure()
+
+        # We update the status of the file testing.
+        PyFunceble.CONFIGURATION["file_testing"] = False
 
         # We return the final list to test.
         return list_to_test
