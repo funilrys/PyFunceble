@@ -80,9 +80,26 @@ class Lookup:
 
         try:
             # We try to get the addresse information of the given domain or IP.
-            socket.getaddrinfo(
-                PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
-            )
+
+            if "current_test_data" in PyFunceble.CONFIGURATION:  # pragma: no cover
+                # The end-user want more information whith his test.
+
+                # We request the address informations.
+                request = socket.getaddrinfo(
+                    PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
+                )
+
+                for sequence in request:
+                    # We loop through the sequence returned by the request.
+
+                    # We append the NS informations into the nslookup index.
+                    PyFunceble.CONFIGURATION["current_test_data"]["nslookup"].append(
+                        sequence[-1][0]
+                    )
+            else:
+                socket.getaddrinfo(
+                    PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
+                )
 
             # It was done successfuly, we return True.
             # Note: we don't need to read the addresses so we consider as successful

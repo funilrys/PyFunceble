@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.113.3.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.114.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -209,15 +209,17 @@ ASCII_PYFUNCEBLE = """
 """
 
 
-def test(domain):  # pragma: no cover
+def test(domain, complete=True):  # pragma: no cover
     """
     Test for the given domain.
 
     This function provide an access to the core while use PyFunceble as an imported module.
 
-    Argument:
+    Arguments:
         - domain: str
             The domain to test.
+        - complete: bool
+            True:  We return a dict with some significant data from the tests.
 
     Returns: str
         The status of the domain
@@ -227,18 +229,20 @@ def test(domain):  # pragma: no cover
     load_config(True)
 
     # And we return the status of the given domain.
-    return Core(domain=domain, modulo_test=True).test()
+    return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
 
 
-def url_test(url):  # pragma: no covere
+def url_test(url, complete=False):  # pragma: no covere
     """
     Test for the given URL.
 
     This function provice an access to the core while using PyFunceble as an imported module.
 
-    Argument:
+    Arguments:
         - url: str
             The url to test.
+        - complete: bool
+            True: We return a dict with some significant data from the tests.
 
     Returns: str
         The status of the URL.
@@ -248,7 +252,7 @@ def url_test(url):  # pragma: no covere
     load_config(True)
 
     # And we return the status of the given URL.
-    return Core(url_test=url, modulo_test=True).test()
+    return Core(url_to_test=url, modulo_test=True).test(complete)
 
 
 def load_config(under_test=False):  # pragma: no cover
@@ -880,7 +884,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         # We call our Core which will handle all case depending of the configuration or
         # the used command line arguments.
         Core(
-            domain=ARGS.domain,
+            domain_or_ip_to_test=ARGS.domain,
             file_path=ARGS.file,
             url_to_test=ARGS.url,
             url_file=ARGS.url_file,

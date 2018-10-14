@@ -1,4 +1,3 @@
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability of domains, IPv4 or URL.
@@ -82,6 +81,11 @@ class URL:  # pylint: disable=too-few-public-methods
         if Check().is_url_valid():
             # The url is valid.
 
+            if "current_test_data" in PyFunceble.CONFIGURATION:
+                PyFunceble.CONFIGURATION["current_test_data"][
+                    "url_syntax_validation"
+                ] = True
+
             # We initiate the HTTP status code.
             PyFunceble.CONFIGURATION.update(
                 {"http_code": HTTPCode(full_url=True).get()}
@@ -110,6 +114,14 @@ class URL:  # pylint: disable=too-few-public-methods
                 return URLStatus(PyFunceble.STATUS["official"]["down"]).handle()
 
         # The extracted HTTP status code is not in the list of active nor invalid list.
+
+        if "current_test_data" in PyFunceble.CONFIGURATION:
+            # The end-user want more information whith his test.
+
+            # We update the url_syntax_validation index.
+            PyFunceble.CONFIGURATION["current_test_data"][
+                "url_syntax_validation"
+            ] = False
 
         # We handle and return the invalid down status.
         return URLStatus(PyFunceble.STATUS["official"]["invalid"]).handle()

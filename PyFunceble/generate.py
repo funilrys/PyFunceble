@@ -177,10 +177,14 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Generate the hosts file, the plain list and the splitted lists.
         """
 
-        if PyFunceble.CONFIGURATION["file_to_test"] and (
-            PyFunceble.CONFIGURATION["generate_hosts"]
-            or PyFunceble.CONFIGURATION["plain_list_domain"]
-            or PyFunceble.CONFIGURATION["generate_json"]
+        if (
+            "file_to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["file_to_test"]
+            and (
+                PyFunceble.CONFIGURATION["generate_hosts"]
+                or PyFunceble.CONFIGURATION["plain_list_domain"]
+                or PyFunceble.CONFIGURATION["generate_json"]
+            )
         ):
             # * We are testing a file.
             # and
@@ -341,7 +345,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         """
 
         if (
-            PyFunceble.CONFIGURATION["file_to_test"]
+            "file_to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["file_to_test"]
             and PyFunceble.CONFIGURATION["unified"]
         ):
             # * We are testing a file.

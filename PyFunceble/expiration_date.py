@@ -103,6 +103,17 @@ class ExpirationDate:
         # We get the status of the IPv4 validation.
         ip_validation = Check().is_ip_valid()
 
+        if "current_test_data" in PyFunceble.CONFIGURATION:
+            # The end-user want more information whith his test.
+
+            # We update some index.
+            PyFunceble.CONFIGURATION["current_test_data"].update(
+                {
+                    "domain_syntax_validation": domain_validation,
+                    "ip4_syntax_validation": ip_validation,
+                }
+            )
+
         if domain_validation and not ip_validation or domain_validation:
             # * The element is a valid domain.
             # and
@@ -128,6 +139,14 @@ class ExpirationDate:
                 return PyFunceble.CONFIGURATION["referer"]
 
             # The WHOIS record status is not into our list of official status.
+
+            if "current_test_data" in PyFunceble.CONFIGURATION:
+                # The end-user want more information whith his test.
+
+                # We update the whois_server index.
+                PyFunceble.CONFIGURATION["current_test_data"][
+                    "whois_server"
+                ] = PyFunceble.CONFIGURATION["referer"]
 
             if PyFunceble.CONFIGURATION["referer"]:
                 # The iana database comparison status is not None.
@@ -508,6 +527,14 @@ class ExpirationDate:
         if self.whois_record:
             # The whois record is not empty.
 
+            if "current_test_data" in PyFunceble.CONFIGURATION:
+                # The end-user want more information whith his test.
+
+                # We update the whois_record index.
+                PyFunceble.CONFIGURATION["current_test_data"][
+                    "whois_record"
+                ] = self.whois_record
+
             for string in to_match:
                 # We loop through the list of regex.
 
@@ -550,6 +577,14 @@ class ExpirationDate:
                             # We log the whois record.
                             self._whois_log()
 
+                        if "current_test_data" in PyFunceble.CONFIGURATION:
+                            # The end-user want more information whith his test.
+
+                            # We update the expiration_date index.
+                            PyFunceble.CONFIGURATION["current_test_data"][
+                                "expiration_date"
+                            ] = self.expiration_date
+
                         # We generate the files and print the status.
                         # It's an active element!
                         Generate(
@@ -572,7 +607,7 @@ class ExpirationDate:
                     # We handle and return and h the official down status.
                     return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
-        # The whois record is not empty.
+        # The whois record is empty.
 
         # We handle and return the official down status.
         return Status(PyFunceble.STATUS["official"]["down"]).handle()

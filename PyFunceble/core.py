@@ -95,9 +95,11 @@ class Core:  # pragma: no cover
             A path to a file to read.
     """
 
-    def __init__(self, domain=None, file_path=None, **args):
+    def __init__(self, **args):
         # We initiate our list of optional arguments with their default values.
         optional_arguments = {
+            "domain_or_ip_to_test": None,
+            "file_path": None,
             "url_to_test": None,
             "url_file": None,
             "modulo_test": False,
@@ -110,7 +112,7 @@ class Core:  # pragma: no cover
             setattr(self, arg, args.get(arg, default))
 
         # We manage the entries.
-        self._entry_management(domain, file_path)
+        self._entry_management()
 
     @classmethod
     def _entry_management_url_download(cls, passed):
@@ -172,15 +174,9 @@ class Core:  # pragma: no cover
                 "file_to_test"
             ] = self.url_file  # pylint: disable=no-member
 
-    def _entry_management(self, domain, file_path):
+    def _entry_management(self):  # pylint: disable=too-many-branches
         """
         This method avoid to have 1 millions line into self.__init__()
-
-        Arguments:
-            - domain: string
-                The domain parsed to Core().
-            - file_path: string
-                The file_path parsed to Core().
         """
 
         if not self.modulo_test:  # pylint: disable=no-member
@@ -189,7 +185,7 @@ class Core:  # pragma: no cover
             # We set the file_path as the file we have to test.
             PyFunceble.CONFIGURATION[
                 "file_to_test"
-            ] = file_path  # pylint: disable=no-member
+            ] = self.file_path  # pylint: disable=no-member
 
             # We check if the given file_path is an url.
             # If it is an URL we update the file to test and download
@@ -208,7 +204,7 @@ class Core:  # pragma: no cover
             # We set the start time.
             ExecutionTime("start")
 
-            if domain:
+            if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # The given domain is not empty or None.
 
                 # We deactivate the showing of percentage as we are in a single
@@ -216,13 +212,17 @@ class Core:  # pragma: no cover
                 PyFunceble.CONFIGURATION["show_percentage"] = False
 
                 if PyFunceble.CONFIGURATION["idna_conversion"]:
-                    domain = domain2idna(domain.lower())
+                    domain_or_ip_to_test = domain2idna(
+                        self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
+                    )
                 else:
-                    domain = domain.lower()
+                    domain_or_ip_to_test = (
+                        self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
+                    )  # pylint: disable=no-member
 
                 # We test the domain after converting it to lower case.
-                self.domain(domain)
-            elif self.url_to_test and not file_path:  # pylint: disable=no-member
+                self.domain(domain_or_ip_to_test)
+            elif self.url_to_test and not self.file_path:  # pylint: disable=no-member
                 # An url to test is given and the file path is empty.
 
                 # We deactivate the showing of percentage as we are in a single
@@ -258,8 +258,10 @@ class Core:  # pragma: no cover
                 self._entry_management_url_download(
                     self.link_to_test  # pylint: disable=no-member
                 )
-                or self._entry_management_url_download(file_path)
-                or file_path
+                or self._entry_management_url_download(
+                    self.file_path  # pylint: disable=no-member
+                )  # pylint: disable=no-member
+                or self.file_path  # pylint: disable=no-member
             ):
                 # * A file path is given.
                 # or
@@ -281,7 +283,7 @@ class Core:  # pragma: no cover
             # We log the current percentage state.
             Percentage().log()
 
-            if domain:
+            if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # We are testing a domain.
 
                 # We show the colored logo.
@@ -299,16 +301,29 @@ class Core:  # pragma: no cover
             # And we deactivate the generation of files.
             PyFunceble.CONFIGURATION["no_files"] = True
 
-            if domain:
+            if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.
 
                 # We set the domain to test.
-                PyFunceble.CONFIGURATION["domain"] = domain.lower()
+                PyFunceble.CONFIGURATION[
+                    "domain"
+                ] = self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
+            elif self.url_to_test:  # pylint: disable=no-member
+                # A url is given,
 
-    def test(self):
+                # We set the url to test.
+                PyFunceble.CONFIGURATION[
+                    "URL"
+                ] = self.url_to_test  # pylint: disable=no-member
+
+    def test(self, complete=False):
         """
         This method avoid confusion between self.domain which is called into
         __main__ and test() which should be called out of PyFunceble's scope.
+
+        Argument:
+            - complete: bool
+                True: We return a list with significant data about the test.
 
         Returns: str
             ACTIVE, INACTIVE or INVALID.
@@ -327,6 +342,62 @@ class Core:  # pragma: no cover
 
         else:
             # We are used as an imported module.
+
+            if complete:
+                # We have to return much more information into our result.
+
+                # We initiate the location and the information we have to return.
+                PyFunceble.CONFIGURATION["current_test_data"] = {
+                    "tested": None,
+                    "expiration_date": None,
+                    "domain_syntax_validation": None,
+                    "http_status_code": None,
+                    "ip4_syntax_validation": None,
+                    "nslookup": [],
+                    "status": None,
+                    "url_syntax_validation": None,
+                    "whois_server": None,
+                    "whois_record": None,
+                }
+
+                if (
+                    "domain" in PyFunceble.CONFIGURATION
+                    and PyFunceble.CONFIGURATION["domain"]
+                ):
+                    # We are testing a domain.
+
+                    # We update the tested index.
+                    PyFunceble.CONFIGURATION["current_test_data"][
+                        "tested"
+                    ] = PyFunceble.CONFIGURATION["domain"]
+
+                    # We get the status of the domain.
+                    PyFunceble.CONFIGURATION["current_test_data"][
+                        "status"
+                    ] = ExpirationDate().get()
+                else:
+                    # We are not testing a domain.
+
+                    # We update the tested index.
+                    PyFunceble.CONFIGURATION["current_test_data"][
+                        "tested"
+                    ] = PyFunceble.CONFIGURATION["URL"]
+
+                    # We get the satatus of the url.
+                    PyFunceble.CONFIGURATION["current_test_data"][
+                        "status"
+                    ] = URL().get()
+
+                if "http_code" in PyFunceble.CONFIGURATION:
+                    # The http status code exist into the configuration.
+
+                    # We update the tested index.
+                    PyFunceble.CONFIGURATION["current_test_data"][
+                        "http_status_code"
+                    ] = PyFunceble.CONFIGURATION["http_code"]
+
+                # We finaly return our dataset.
+                return PyFunceble.CONFIGURATION["current_test_data"]
 
             # We return the status of the parsed domain.
             return ExpirationDate().get()
