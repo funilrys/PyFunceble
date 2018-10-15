@@ -81,26 +81,26 @@ class TestLookup(TestCase):
 
         # Test of the case that the domains is down
         expected = False
-        PyFunceble.CONFIGURATION["domain"] = "thisdoes-not-workdnfhfep.de"
+        PyFunceble.CONFIGURATION["to_test"] = "thisdoes-not-workdnfhfep.de"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
 
         # Test of the case that the domains is invalid
         expected = False
-        PyFunceble.CONFIGURATION["domain"] = "helloworld-.com"
+        PyFunceble.CONFIGURATION["to_test"] = "helloworld-.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
 
         # Test of the case that the domains is up
         expected = True
-        PyFunceble.CONFIGURATION["domain"] = "google.com"
+        PyFunceble.CONFIGURATION["to_test"] = "google.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["domain"]
+        del PyFunceble.CONFIGURATION["to_test"]
 
 
 if __name__ == "__main__":

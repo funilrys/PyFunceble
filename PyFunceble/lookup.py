@@ -86,7 +86,7 @@ class Lookup:
 
                 # We request the address informations.
                 request = socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
+                    PyFunceble.CONFIGURATION["to_test"], 80, 0, 0, socket.IPPROTO_TCP
                 )
 
                 for sequence in request:
@@ -98,7 +98,7 @@ class Lookup:
                     )
             else:
                 socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["domain"], 80, 0, 0, socket.IPPROTO_TCP
+                    PyFunceble.CONFIGURATION["to_test"], 80, 0, 0, socket.IPPROTO_TCP
                 )
 
             # It was done successfuly, we return True.
@@ -134,7 +134,7 @@ class Lookup:
             # The domain is not given (localy).
 
             # We consider the domain as the domain or IP we are currently testing.
-            domain = PyFunceble.CONFIGURATION["domain"]
+            domain = PyFunceble.CONFIGURATION["to_test"]
 
         if timeout is None:
             # The time is not given (localy).

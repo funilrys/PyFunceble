@@ -142,12 +142,15 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
+        PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+
         Dict(self.excepted_content).to_json(self.file)
         Mining()._retrieve()
 
         self.assertEqual(self.excepted_content, PyFunceble.CONFIGURATION["mined"])
 
         del PyFunceble.CONFIGURATION["mined"]
+        del PyFunceble.CONFIGURATION["to_test_type"]
 
         File(self.file).delete()
 
@@ -210,7 +213,8 @@ class TestMining(TestCase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["mined"] = self.excepted_content
-        PyFunceble.CONFIGURATION["domain"] = "www.google.com"
+        PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+        PyFunceble.CONFIGURATION["to_test"] = "www.google.com"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -223,7 +227,8 @@ class TestMining(TestCase):
         self.assertEqual(expected, PyFunceble.CONFIGURATION["mined"])
 
         del PyFunceble.CONFIGURATION["mined"]
-        del PyFunceble.CONFIGURATION["domain"]
+        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.CONFIGURATION["to_test_type"]
 
         File(self.file).delete()
 

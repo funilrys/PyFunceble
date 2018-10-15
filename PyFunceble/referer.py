@@ -81,8 +81,8 @@ class Referer:  # pragma: no cover
 
         # We get the extension of the currently tested element.
         # We basically get everything after the last point.
-        self.domain_extension = PyFunceble.CONFIGURATION["domain"][
-            PyFunceble.CONFIGURATION["domain"].rindex(".") + 1 :
+        self.domain_extension = PyFunceble.CONFIGURATION["to_test"][
+            PyFunceble.CONFIGURATION["to_test"].rindex(".") + 1 :
         ]
 
         # We create a list of ignored extension.

@@ -82,18 +82,24 @@ class Mining:
     """
 
     def __init__(self):  # pragma: no cover
-        if "domain" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["domain"]:
-            # We are testing a domain.
+        if (
+            "to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["to_test"]
+        ):
+            # There is something to test.
 
-            # We set a variable which will save the actual element we are working with.
-            self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
-            self.to_get_bare = PyFunceble.CONFIGURATION["domain"]
-        elif "URL" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["URL"]:
-            # We are testing an URL.
+            if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+                # We are testing a domain.
 
-            # We set a variable which will save the actual element we are working with.
-            self.to_get = PyFunceble.CONFIGURATION["URL"]
-            self.to_get_bare = PyFunceble.CONFIGURATION["URL"]
+                # We set a variable which will save the actual element we are working with.
+                self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["to_test"]
+                self.to_get_bare = PyFunceble.CONFIGURATION["to_test"]
+            elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
+                # We are testing an URL.
+
+                # We set a variable which will save the actual element we are working with.
+                self.to_get = PyFunceble.CONFIGURATION["to_test"]
+                self.to_get_bare = PyFunceble.CONFIGURATION["to_test"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -150,18 +156,12 @@ class Mining:
                     # We update the element.
                     element = element.url
 
-                    if (
-                        "URL" in PyFunceble.CONFIGURATION
-                        and PyFunceble.CONFIGURATION["URL"]
-                    ):
+                    if PyFunceble.CONFIGURATION["to_test_type"] == "url":
                         # We are testing a full url.
 
                         # We get the element to append.
                         to_append = Check().is_url_valid(element, return_formated=False)
-                    elif (
-                        "domain" in PyFunceble.CONFIGURATION
-                        and PyFunceble.CONFIGURATION["domain"]
-                    ):
+                    elif PyFunceble.CONFIGURATION["to_test_type"] == "domain":
                         # We are testing a domain.
 
                         # We get the element to append.

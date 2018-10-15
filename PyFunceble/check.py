@@ -115,7 +115,7 @@ class Check:
             # The given url is empty.
 
             # We initiate the element to test from the globaly URl to test.
-            to_test = PyFunceble.CONFIGURATION["URL"]
+            to_test = PyFunceble.CONFIGURATION["to_test"]
 
         if to_test.startswith("http"):
             # The element to test starts with http.
@@ -184,7 +184,7 @@ class Check:
             # A domain is not given.
 
             # We set the element to test as the currently tested element.
-            to_test = PyFunceble.CONFIGURATION["domain"]
+            to_test = PyFunceble.CONFIGURATION["to_test"]
 
         if Regex(to_test, regex_valid_domains, return_data=False).match():
             # The element pass the domain validation.
@@ -289,7 +289,7 @@ class Check:
             # An element is not localy given.
 
             # We consider the global element to test as the element to test.
-            to_test = PyFunceble.CONFIGURATION["domain"]
+            to_test = PyFunceble.CONFIGURATION["to_test"]
 
         # We check if it passes our IPv4 regex.
         # * True: It's a valid IPv4.

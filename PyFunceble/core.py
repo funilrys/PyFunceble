@@ -220,6 +220,10 @@ class Core:  # pragma: no cover
                         self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
                     )  # pylint: disable=no-member
 
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+
                 # We test the domain after converting it to lower case.
                 self.domain(domain_or_ip_to_test)
             elif self.url_to_test and not self.file_path:  # pylint: disable=no-member
@@ -228,6 +232,10 @@ class Core:  # pragma: no cover
                 # We deactivate the showing of percentage as we are in a single
                 # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
+
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "url"
 
                 # We test the url to test.
                 self.url(self.url_to_test)  # pylint: disable=no-member
@@ -252,6 +260,10 @@ class Core:  # pragma: no cover
                 # url testing.
                 PyFunceble.CONFIGURATION["generate_hosts"] = False
 
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "url"
+
                 # And we test the given or the downloaded file.
                 self.file_url()
             elif (
@@ -268,6 +280,10 @@ class Core:  # pragma: no cover
                 # * The given file path is an URL.
                 # or
                 # * A link to test is given.
+
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
 
                 # We test the given or the downloaded file.
                 self.file()
@@ -304,16 +320,24 @@ class Core:  # pragma: no cover
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.
 
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+
                 # We set the domain to test.
                 PyFunceble.CONFIGURATION[
-                    "domain"
+                    "to_test"
                 ] = self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
             elif self.url_to_test:  # pylint: disable=no-member
                 # A url is given,
 
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "url"
+
                 # We set the url to test.
                 PyFunceble.CONFIGURATION[
-                    "URL"
+                    "to_test"
                 ] = self.url_to_test  # pylint: disable=no-member
 
     def test(self, complete=False):
@@ -361,32 +385,20 @@ class Core:  # pragma: no cover
                 }
 
                 if (
-                    "domain" in PyFunceble.CONFIGURATION
-                    and PyFunceble.CONFIGURATION["domain"]
+                    "to_test" in PyFunceble.CONFIGURATION
+                    and PyFunceble.CONFIGURATION["to_test"]
                 ):
-                    # We are testing a domain.
+                    # We are testing something.
 
                     # We update the tested index.
                     PyFunceble.CONFIGURATION["current_test_data"][
                         "tested"
-                    ] = PyFunceble.CONFIGURATION["domain"]
+                    ] = PyFunceble.CONFIGURATION["to_test"]
 
                     # We get the status of the domain.
                     PyFunceble.CONFIGURATION["current_test_data"][
                         "status"
                     ] = ExpirationDate().get()
-                else:
-                    # We are not testing a domain.
-
-                    # We update the tested index.
-                    PyFunceble.CONFIGURATION["current_test_data"][
-                        "tested"
-                    ] = PyFunceble.CONFIGURATION["URL"]
-
-                    # We get the satatus of the url.
-                    PyFunceble.CONFIGURATION["current_test_data"][
-                        "status"
-                    ] = URL().get()
 
                 if "http_code" in PyFunceble.CONFIGURATION:
                     # The http status code exist into the configuration.
@@ -566,14 +578,14 @@ class Core:  # pragma: no cover
             # A domain is given.
 
             # We format and set the domain we are testing and treating.
-            PyFunceble.CONFIGURATION["domain"] = self._format_domain(domain)
+            PyFunceble.CONFIGURATION["to_test"] = self._format_domain(domain)
         else:
             # A domain is not given.
 
             # We set the domain we are testing and treating to None.
-            PyFunceble.CONFIGURATION["domain"] = None
+            PyFunceble.CONFIGURATION["to_test"] = None
 
-        if PyFunceble.CONFIGURATION["domain"]:
+        if PyFunceble.CONFIGURATION["to_test"]:
             # The domain is given (Not None).
 
             # We test and get the status of the domain.
@@ -984,9 +996,6 @@ class Core:  # pragma: no cover
         # We generate the directory structure.
         DirectoryStructure()
 
-        # We update the status of the file testing.
-        PyFunceble.CONFIGURATION["file_testing"] = False
-
         # We return the final list to test.
         return list_to_test
 
@@ -1043,21 +1052,21 @@ class Core:  # pragma: no cover
             # An url to test is given.
 
             # We set the url we are going to test.
-            PyFunceble.CONFIGURATION["URL"] = url_to_test
+            PyFunceble.CONFIGURATION["to_test"] = url_to_test
         else:
             # An URL to test is not given.
 
             # We set the url we are going to test to None.
-            PyFunceble.CONFIGURATION["URL"] = None
+            PyFunceble.CONFIGURATION["to_test"] = None
 
-        if PyFunceble.CONFIGURATION["URL"]:
+        if PyFunceble.CONFIGURATION["to_test"]:
             # An URL to test is given.
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
 
                 # We print the URL informations.
-                print(PyFunceble.CONFIGURATION["URL"], URL().get())
+                print(PyFunceble.CONFIGURATION["to_test"], URL().get())
             else:
                 # The simple mode is not activated.
 

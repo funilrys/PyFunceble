@@ -81,11 +81,11 @@ class TestCheck(TestCase):
 
         # Test of the case that the URL is valid
         expected = True
-        PyFunceble.CONFIGURATION["URL"] = "http://hello.world/helloworld"
+        PyFunceble.CONFIGURATION["to_test"] = "http://hello.world/helloworld"
         actual = Check().is_url_valid()
 
         self.assertEqual(expected, actual)
-        actual = Check(PyFunceble.CONFIGURATION["URL"]).is_url_valid()
+        actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_url_valid()
         self.assertEqual(expected, actual)
 
         # Test of the case that the domains is not valid
@@ -154,11 +154,11 @@ class TestCheck(TestCase):
         expected = True
 
         for domain in valid:
-            PyFunceble.CONFIGURATION["domain"] = domain
+            PyFunceble.CONFIGURATION["to_test"] = domain
             actual = Check().is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % domain)
-            actual = Check(PyFunceble.CONFIGURATION["domain"]).is_domain_valid()
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_domain_valid()
             self.assertEqual(expected, actual, msg="%s is invalid." % domain)
 
         self.assertEqual(expected, actual)
@@ -190,11 +190,11 @@ class TestCheck(TestCase):
         expected = False
 
         for domain in not_valid:
-            PyFunceble.CONFIGURATION["domain"] = domain
+            PyFunceble.CONFIGURATION["to_test"] = domain
             actual = Check().is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
-            actual = Check(PyFunceble.CONFIGURATION["domain"]).is_domain_valid()
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
 
@@ -221,12 +221,12 @@ class TestCheck(TestCase):
         invalid = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
 
         for ip_to_test in invalid:
-            PyFunceble.CONFIGURATION["domain"] = ip_to_test
+            PyFunceble.CONFIGURATION["to_test"] = ip_to_test
             actual = Check().is_ip_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
 
-            actual = Check(PyFunceble.CONFIGURATION["domain"]).is_ip_valid()
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_ip_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
 

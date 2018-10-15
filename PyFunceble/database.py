@@ -96,16 +96,14 @@ class Database:
             + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
         )
 
-        if "domain" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["domain"]:
-            # We are testing a domain.
+        if (
+            "to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["to_test"]
+        ):
+            # We are testing something.
 
             # We set a variable which will save the actual element we are working with.
-            self.element = PyFunceble.CONFIGURATION["domain"]
-        elif "URL" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["URL"]:
-            # We are testing an URL.
-
-            # We set a variable which will save the actual element we are working with.
-            self.element = PyFunceble.CONFIGURATION["URL"]
+            self.element = PyFunceble.CONFIGURATION["to_test"]
 
         if "inactive_db" not in PyFunceble.CONFIGURATION:
             # The database is empty or equal to None.

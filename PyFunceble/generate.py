@@ -104,16 +104,14 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # We set a variable which will save the output.
         self.output = ""
 
-        if "domain" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["domain"]:
-            # The element we are testing is a domain.
+        if (
+            "to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["to_test"]
+        ):
+            # We are testing something.
 
             # We save it into an unified variable.
-            self.tested = PyFunceble.CONFIGURATION["domain"]
-        elif "URL" in PyFunceble.CONFIGURATION and PyFunceble.CONFIGURATION["URL"]:
-            # The element we are testing is a URL.
-
-            # We save it into an unified variable.
-            self.tested = PyFunceble.CONFIGURATION["URL"]
+            self.tested = PyFunceble.CONFIGURATION["to_test"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent (from the configuration file) is not empty.
@@ -485,7 +483,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # the status of the domain.
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
-        if self.tested == PyFunceble.CONFIGURATION["domain"]:
+        if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
             # The element we are testing is a domain.
 
             # We construct the url to get.

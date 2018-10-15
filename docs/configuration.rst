@@ -203,18 +203,6 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 .. warning::
     Do not touch this index unless you have been invited to.
 
-:code:`domain`
---------------
-
-    **Type:** :code:`string`
-    
-    **Default value:** :code:`""`
-    
-    **Description:** Set the element that have to be tested.
-
-.. note::
-    If empty, we use this index as saver of the element we are currently testing.
-
 :code:`filter`
 --------------
 

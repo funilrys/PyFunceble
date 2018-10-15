@@ -282,7 +282,7 @@ class ExpirationDate:
 
             # We construct our log format.
             log = self.log_separator + "Expiration Date: %s \n" % self.expiration_date
-            log += "Tested domain: %s \n" % PyFunceble.CONFIGURATION["domain"]
+            log += "Tested domain: %s \n" % PyFunceble.CONFIGURATION["to_test"]
 
             # And we write the log into the right location.
             File(
@@ -298,7 +298,7 @@ class ExpirationDate:
 
                 # We map the data we have to send.
                 date_to_share = {
-                    "domain": PyFunceble.CONFIGURATION["domain"],
+                    "domain": PyFunceble.CONFIGURATION["to_test"],
                     "expiration_date": self.expiration_date,
                     "whois_server": PyFunceble.CONFIGURATION["referer"],
                 }

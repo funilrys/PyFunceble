@@ -79,7 +79,7 @@ class TestHTTPCode(TestCase):
         This method will test if HTTPCode().get() is filtering correctly.
         """
 
-        PyFunceble.CONFIGURATION["domain"] = "google.com"
+        PyFunceble.CONFIGURATION["to_test"] = "google.com"
 
         # Test of the case that it returns None
         PyFunceble.HTTP_CODE["active"] = False
@@ -110,7 +110,7 @@ class TestHTTPCode(TestCase):
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["domain"]
+        del PyFunceble.CONFIGURATION["to_test"]
 
 
 if __name__ == "__main__":

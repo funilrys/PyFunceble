@@ -472,7 +472,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -484,9 +484,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
-        PyFunceble.CONFIGURATION["domain"] = ""
-
-        PyFunceble.CONFIGURATION["URL"] = "http://hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "http://hello.world"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -498,8 +496,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
-        PyFunceble.CONFIGURATION["domain"] = ""
-        PyFunceble.CONFIGURATION["URL"] = ""
+        PyFunceble.CONFIGURATION["to_test"] = ""
 
         File(self.file).delete()
 
@@ -520,7 +517,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         timestamp = str(Database()._timestamp())
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {timestamp: ["hello.world"]}
         }
@@ -530,7 +527,7 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["domain"]
+        del PyFunceble.CONFIGURATION["to_test"]
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
         File(self.file).delete()
@@ -552,7 +549,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         timestamp = str(Database()._timestamp())
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -590,7 +587,7 @@ class TestDatabase(TestCase):
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
                 str(int(timestamp) - (5 * 24 * 3600)): ["world.hello"],
-                "to_test": [PyFunceble.CONFIGURATION["domain"]],
+                "to_test": [PyFunceble.CONFIGURATION["to_test"]],
             }
         }
 
@@ -634,7 +631,7 @@ class TestDatabase(TestCase):
                 "to_test": ["hello.world", "world.hello"],
             }
         }
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -675,7 +672,7 @@ class TestDatabase(TestCase):
                 "to_test": ["hello.world", "world.hello"],
             }
         }
-        PyFunceble.CONFIGURATION["domain"] = "hello.world"
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
 
         expected = ["hello.world", "world.hello", "hello-world.com"]
 
@@ -703,7 +700,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
-        PyFunceble.CONFIGURATION["domain"] = ""
+        PyFunceble.CONFIGURATION["to_test"] = ""
         PyFunceble.CONFIGURATION["inactive_database"] = True
 
         File(self.file).delete()

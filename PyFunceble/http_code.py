@@ -86,14 +86,14 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             # http status code from the URL we are currently testing.
 
             # We initiate the element we have to get.
-            self.to_get = PyFunceble.CONFIGURATION["URL"]
+            self.to_get = PyFunceble.CONFIGURATION["to_test"]
         else:
             # We are working with domain.
 
             # We construct the element we have to get.
             # Note: As we may work with IP, we explicitly set the port we are
             # working with.
-            self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["domain"]
+            self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["to_test"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
