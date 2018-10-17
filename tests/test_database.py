@@ -65,7 +65,7 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.database import Database
+from PyFunceble.database import InactiveDatabase
 from PyFunceble.helpers import Dict, File
 
 
@@ -107,7 +107,7 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        Database()._retrieve()
+        InactiveDatabase()._retrieve()
 
         expected = {}
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
@@ -132,7 +132,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         Dict(self.expected_content).to_json(self.file)
-        Database()._retrieve()
+        InactiveDatabase()._retrieve()
 
         self.assertEqual(self.expected_content, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -159,7 +159,7 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        Database()._backup()
+        InactiveDatabase()._backup()
 
         expected = True
         actual = PyFunceble.path.isfile(self.file)
@@ -189,7 +189,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
-        Database()._add_to_test("hello.world")
+        InactiveDatabase()._add_to_test("hello.world")
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {"to_test": ["hello.world"]}
@@ -227,7 +227,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        Database()._add_to_test("world.hello")
+        InactiveDatabase()._add_to_test("world.hello")
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -259,7 +259,7 @@ class TestDatabase(TestCase):
             PyFunceble.CONFIGURATION["file_to_test"]: {"to_test": ["hello.world"]}
         }
 
-        Database()._add_to_test("hello.world")
+        InactiveDatabase()._add_to_test("hello.world")
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -285,7 +285,7 @@ class TestDatabase(TestCase):
 
         expected = {PyFunceble.CONFIGURATION["file_to_test"]: {}}
 
-        Database().to_test()
+        InactiveDatabase().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -323,7 +323,7 @@ class TestDatabase(TestCase):
         }
 
         Dict(PyFunceble.CONFIGURATION["inactive_db"]).to_json(self.file)
-        Database().to_test()
+        InactiveDatabase().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -361,7 +361,7 @@ class TestDatabase(TestCase):
         }
 
         Dict(PyFunceble.CONFIGURATION["inactive_db"]).to_json(self.file)
-        Database().to_test()
+        InactiveDatabase().to_test()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -388,7 +388,7 @@ class TestDatabase(TestCase):
         PyFunceble.CONFIGURATION["inactive_db"] = {}
 
         expected = int(PyFunceble.time())
-        actual = Database()._timestamp()
+        actual = InactiveDatabase()._timestamp()
 
         self.assertGreaterEqual(expected, actual)
 
@@ -419,7 +419,7 @@ class TestDatabase(TestCase):
         }
 
         expected = int(PyFunceble.time())
-        actual = Database()._timestamp()
+        actual = InactiveDatabase()._timestamp()
         self.assertGreaterEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
@@ -449,7 +449,7 @@ class TestDatabase(TestCase):
         }
 
         expected = int(self.time_future)
-        actual = Database()._timestamp()
+        actual = InactiveDatabase()._timestamp()
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
@@ -476,11 +476,11 @@ class TestDatabase(TestCase):
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                str(Database()._timestamp()): ["hello.world"]
+                str(InactiveDatabase()._timestamp()): ["hello.world"]
             }
         }
 
-        Database().add()
+        InactiveDatabase().add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
@@ -488,11 +488,11 @@ class TestDatabase(TestCase):
 
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
-                str(Database()._timestamp()): ["http://hello.world"]
+                str(InactiveDatabase()._timestamp()): ["http://hello.world"]
             }
         }
 
-        Database().add()
+        InactiveDatabase().add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
         PyFunceble.CONFIGURATION["inactive_db"] = {}
@@ -516,13 +516,13 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        timestamp = str(Database()._timestamp())
+        timestamp = str(InactiveDatabase()._timestamp())
         PyFunceble.CONFIGURATION["to_test"] = "hello.world"
         expected = {
             PyFunceble.CONFIGURATION["file_to_test"]: {timestamp: ["hello.world"]}
         }
 
-        Database().add()
+        InactiveDatabase().add()
         actual = Dict().from_json(File(self.file).read())
 
         self.assertEqual(expected, actual)
@@ -548,7 +548,7 @@ class TestDatabase(TestCase):
 
         self.assertEqual(expected, actual)
 
-        timestamp = str(Database()._timestamp())
+        timestamp = str(InactiveDatabase()._timestamp())
         PyFunceble.CONFIGURATION["to_test"] = "hello.world"
 
         expected = {
@@ -561,7 +561,7 @@ class TestDatabase(TestCase):
             PyFunceble.CONFIGURATION["file_to_test"]: {timestamp: ["world.hello"]}
         }
 
-        Database().add()
+        InactiveDatabase().add()
         actual = Dict().from_json(File(self.file).read())
 
         self.assertEqual(expected, actual)
@@ -579,7 +579,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        Database().add()
+        InactiveDatabase().add()
         actual = Dict().from_json(File(self.file).read())
 
         self.assertEqual(expected, actual)
@@ -599,7 +599,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        Database().add()
+        InactiveDatabase().add()
         actual = Dict().from_json(File(self.file).read())
 
         self.assertEqual(expected, actual)
@@ -616,7 +616,7 @@ class TestDatabase(TestCase):
         This method test Database.remove().
         """
 
-        timestamp = str(Database()._timestamp())
+        timestamp = str(InactiveDatabase()._timestamp())
 
         File(self.file).delete()
 
@@ -640,7 +640,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        Database().remove()
+        InactiveDatabase().remove()
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
@@ -664,7 +664,7 @@ class TestDatabase(TestCase):
         self.assertEqual(expected, actual)
 
         # Test of the case that everything goes right !
-        timestamp = str(Database()._timestamp())
+        timestamp = str(InactiveDatabase()._timestamp())
 
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -676,7 +676,7 @@ class TestDatabase(TestCase):
 
         expected = ["hello.world", "world.hello", "hello-world.com"]
 
-        actual = Database().content()
+        actual = InactiveDatabase().content()
 
         self.assertEqual(expected, actual)
 
@@ -684,7 +684,7 @@ class TestDatabase(TestCase):
         PyFunceble.CONFIGURATION["inactive_database"] = False
 
         expected = []
-        actual = Database().content()
+        actual = InactiveDatabase().content()
 
         self.assertEqual(expected, actual)
 
@@ -695,7 +695,7 @@ class TestDatabase(TestCase):
             }
         }
 
-        actual = Database().content()
+        actual = InactiveDatabase().content()
 
         self.assertEqual(expected, actual)
 
