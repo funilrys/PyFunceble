@@ -75,7 +75,7 @@ from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
 from PyFunceble import copy as shutil_copy
-from PyFunceble import directory_separator, path, requests
+from PyFunceble import directory_separator, path, requests, Fore
 
 
 class Hash:  # pylint: disable=too-few-public-methods
@@ -776,25 +776,29 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
         This method download the given link and return its requests.text.
         """
 
-        # We request the link.
-        req = requests.get(self.link)
+        try:
+            # We request the link.
+            req = requests.get(self.link)
 
-        if req.status_code == 200:
-            # The request http status code is equal to 200.
+            if req.status_code == 200:
+                # The request http status code is equal to 200.
 
-            if self.return_data:
-                # We have to return the data.
+                if self.return_data:
+                    # We have to return the data.
 
-                # We return the link content.
-                return req.text
+                    # We return the link content.
+                    return req.text
 
-            # We save the link content to the parsed destination.
-            File(self.destination).write(req.text, overwrite=True)
+                # We save the link content to the parsed destination.
+                File(self.destination).write(req.text, overwrite=True)
 
-            # We return True.
-            return True
+                # We return True.
+                return True
 
-        # The request http status code is not equal to 200.
+            # The request http status code is not equal to 200.
 
-        # We raise an exception saying that we were unable to download.
-        raise Exception("Unable to download %s." % repr(self.link))
+            # We raise an exception saying that we were unable to download.
+            raise Exception("Unable to download %s." % repr(self.link))
+        except requests.exceptions.ConnectionError:
+            print(Fore.RED + "No Internet connection available.")
+            exit()

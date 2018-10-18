@@ -71,7 +71,7 @@ from PyFunceble import Fore, Style, path, repeat
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check
-from PyFunceble.database import InactiveDatabase
+from PyFunceble.database import Inactive
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
@@ -511,13 +511,13 @@ class Core:  # pragma: no cover
 
                     # We remove the currently tested element from the
                     # database.
-                    InactiveDatabase().remove()
+                    Inactive().remove()
                 else:
                     # The status is not in the list of up status.
 
                     # We add the currently tested element to the
                     # database.
-                    InactiveDatabase().add()
+                    Inactive().add()
 
                 # We backup the current state of the file reading
                 # for the case that we need to continue later.
@@ -930,7 +930,7 @@ class Core:  # pragma: no cover
         PyFunceble.Clean(list_to_test)
 
         # We get the list we have to test in the current session (from the database).
-        InactiveDatabase().to_test()
+        Inactive().to_test()
 
         if (
             PyFunceble.CONFIGURATION["file_to_test"]
@@ -963,7 +963,7 @@ class Core:  # pragma: no cover
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
 
         # We get the database content.
-        database_content = InactiveDatabase().content()
+        database_content = Inactive().content()
 
         # We remove the element which are in the database from the
         # current list to test.

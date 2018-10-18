@@ -70,7 +70,7 @@ from PyFunceble.generate import Generate
 from PyFunceble.helpers import Dict, File, List
 
 
-class InactiveDatabase:
+class Inactive:
     """
     Logic behind the generation and the usage of a database system.
     The main idea behind this is to provide an inactive-db.json and test all
