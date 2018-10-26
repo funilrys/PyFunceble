@@ -201,11 +201,11 @@ class Core:  # pragma: no cover
             # We check if we need to bypass the execution of PyFunceble.
             self.bypass()
 
-            # We set the start time.
-            ExecutionTime("start")
-
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # The given domain is not empty or None.
+
+                # We set the start time.
+                ExecutionTime("start")
 
                 # We deactivate the showing of percentage as we are in a single
                 # test run.
@@ -231,6 +231,9 @@ class Core:  # pragma: no cover
                 self.domain(domain_or_ip_to_test)
             elif self.url_to_test and not self.file_path:  # pylint: disable=no-member
                 # An url to test is given and the file path is empty.
+
+                # We set the start time.
+                ExecutionTime("start")
 
                 # We deactivate the showing of percentage as we are in a single
                 # test run.
@@ -297,7 +300,7 @@ class Core:  # pragma: no cover
                 print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
 
             # We stop and log the execution time.
-            ExecutionTime("stop")
+            ExecutionTime("stop", last=True)
 
             # We log the current percentage state.
             Percentage().log()
@@ -561,7 +564,7 @@ class Core:  # pragma: no cover
                     # The current element is the last one.
 
                     # We stop and log the execution time.
-                    ExecutionTime("stop")
+                    ExecutionTime("stop", True)
 
                     # We show/log the percentage.
                     Percentage().log()
@@ -957,6 +960,9 @@ class Core:  # pragma: no cover
 
         # We clean the output directory if it is needed.
         PyFunceble.Clean(list_to_test)
+
+        # We set the start time.
+        ExecutionTime("start")
 
         # We get the list we have to test in the current session (from the database).
         Inactive().to_test()

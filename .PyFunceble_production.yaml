@@ -115,7 +115,7 @@ outputs:
       whois: whois/
     filenames:
       auto_continue: continue.json
-      execution_time: execution.log
+      execution_time: execution_time.json
       percentage: percentage.txt
 
   # This is the main directory which we call output/ in all our communication.

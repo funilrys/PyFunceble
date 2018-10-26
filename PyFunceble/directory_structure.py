@@ -79,7 +79,7 @@ class DirectoryStructure:  # pragma: no cover
     def __init__(self, production=False):
         # We set the base directory where we are going to replicate
         # the directory structure.
-        self.base = PyFunceble.CURRENT_DIRECTORY
+        self.base = PyFunceble.OUTPUT_DIRECTORY
 
         if not self.base.endswith(directory_separator):
             # The base path does not ends wiith a directory separator.

@@ -64,7 +64,8 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Fore, OrderedDict, Style, time
+from PyFunceble import Fore, OrderedDict, Style, path, time
+from PyFunceble.helpers import Dict, File
 
 
 class ExecutionTime:  # pylint: disable=too-few-public-methods
@@ -72,27 +73,27 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     Set and return the exection time of the program.
 
     Arguments:
-        - action: 'start' or 'stop'
-        - return_result: bool
-            True: we return the execution time.
-            False: we return nothing.
+        - action: str
+            'start' or 'stop'
+        - last
+            Tell the subsystem if we are at the very end of the test.
     """
 
-    def __init__(self, action="start"):
-        if (
-            PyFunceble.CONFIGURATION["show_execution_time"]
-            or PyFunceble.CONFIGURATION["travis"]
-        ):
+    def __init__(self, action="start", last=False):
+        # We parse the action to the class scope.
+        self.action = action
+
+        if self._authorization():
             # * The execution time disaply is activated.
             # or
             # * The Travis CI mode is activated.
 
-            if action == "start":
+            if self.action == "start":
                 # The action is equal to `start`.
 
                 # We set the starting time.
                 self._starting_time()
-            elif action == "stop":
+            elif self.action == "stop":
                 # * The action is not equal to `start`.
                 # and
                 # * The action is equal to `stop`
@@ -104,9 +105,78 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 print(
                     Fore.MAGENTA
                     + Style.BRIGHT
-                    + "\nExecution Time: "
+                    + "\nExecution time: "
                     + self.format_execution_time()
                 )
+
+        self._save(last=last)
+
+    @classmethod
+    def _authorization(cls):
+        """
+        Check the execution authorization.
+        """
+
+        if (
+            PyFunceble.CONFIGURATION["show_execution_time"]
+            or PyFunceble.CONFIGURATION["travis"]
+        ):
+            return True
+
+        return False
+
+    def _save(self, last=False):
+        """
+        Save the current time to the file.
+
+        Argument:
+            - last: bool
+                Tell us if we are at the really end of the testing.
+        """
+
+        if self._authorization() and PyFunceble.CONFIGURATION["logs"]:
+            self.file = (
+                PyFunceble.OUTPUT_DIRECTORY
+                + PyFunceble.OUTPUTS["parent_directory"]
+                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+                + PyFunceble.OUTPUTS["logs"]["filenames"]["execution_time"]
+            )
+
+            if path.isfile(self.file):
+                content = Dict().from_json(File(self.file).read())
+            else:
+                content = {}
+
+            if self.action == "start":
+                if "final_total" in content and content["final_total"]:
+                    del content["final_total"]
+
+                if "data" in content:
+                    content["data"].append([PyFunceble.CONFIGURATION["start"]])
+                else:
+                    content["data"] = [[PyFunceble.CONFIGURATION["start"]]]
+            elif self.action == "stop":
+                try:
+                    content["data"][-1].append(PyFunceble.CONFIGURATION["end"])
+
+                    start = content["data"][0][0]
+                    end = content["data"][-1][-1]
+
+                    content["current_total"] = self.format_execution_time(start, end)
+
+                    if last:
+                        content["final_total"] = content["current_total"]
+
+                        print(
+                            Fore.MAGENTA
+                            + Style.BRIGHT
+                            + "Global execution time: "
+                            + content["final_total"]
+                        )
+                except KeyError:
+                    pass
+
+            Dict(content).to_json(self.file)
 
     @classmethod
     def _starting_time(cls):  # pragma: no cover
@@ -127,7 +197,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         PyFunceble.CONFIGURATION["end"] = int(time())
 
     @classmethod
-    def _calculate(cls):
+    def _calculate(cls, start=None, end=None):
         """
         calculate the difference between starting and ending time.
 
@@ -135,10 +205,18 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             A dics with `days`,`hours`,`minutes` and `seconds`.
         """
 
-        # We get the difference between the ending and the starting time.
-        time_difference = (
-            PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION["start"]
-        )
+        if start and end:
+            # The start and end time is explicitly given.
+
+            # We get the difference between the ending and the starting time.
+            time_difference = int(end) - int(start)
+        else:
+            # The start and end time is not explicitly given.
+
+            # We get the difference between the ending and the starting time.
+            time_difference = (
+                PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION["start"]
+            )
 
         # We initiate an OrderedDict.
         # Indeed, we use an ordered dict because we want the structuration and the
@@ -162,7 +240,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         # We finaly return our data.
         return data
 
-    def format_execution_time(self):
+    def format_execution_time(self, start=None, end=None):
         """
         Format the calculated time into a human readable format.
 
@@ -171,4 +249,4 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We return the formated execution time.
-        return ":".join(list(self._calculate().values()))
+        return ":".join(list(self._calculate(start, end).values()))
