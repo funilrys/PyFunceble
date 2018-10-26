@@ -198,6 +198,70 @@ class TestCheck(TestCase):
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
 
+    def test_is_subdomain(self):
+        """
+        This method test Check().is_subdomain().
+        """
+
+        # Test of the case that the domains are valid
+        valid = [
+            "hello_world.world.com",
+            "hello_world.world.hello.com",
+            "hello.world_hello.world.com",
+            "hello.world.hello.com",
+            "hello_.world.eu.com",
+            "_world.hello.eu.com",
+            "_world_.hello.eu.com",
+            "_hello-beautiful-world_.wold.eu.com",
+            "_hello_world_.hello.eu.com",
+            "_hello.abuse.co.za",
+            "_hello_.abuse.co.za",
+            "_hello._world.abuse.co.za",
+            "_hello-world.abuse.co.za",
+            "_hello_world_.abuse.co.za",
+            "hello_world.abuse.co.za",
+            "hello-.abuse.co.za",
+        ]
+        expected = True
+
+        for domain in valid:
+            PyFunceble.CONFIGURATION["to_test"] = domain
+            actual = Check().is_subdomain()
+
+            self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_subdomain()
+            self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
+            actual = Check().is_subdomain(PyFunceble.CONFIGURATION["to_test"])
+            self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
+
+        self.assertEqual(expected, actual)
+
+        # Test of the case that the domains are not valid
+        not_valid = [
+            "hello-world",
+            "-hello.world",
+            "hello-.world",
+            "hello_world.com",
+            "hello_world_.com",
+            "bittréẋ.com",
+            "bịllogram.com",
+            "coinbȧse.com",
+            "cryptopiạ.com",
+            "cṙyptopia.com",
+            "google.com",
+        ]
+        expected = False
+
+        for domain in not_valid:
+            PyFunceble.CONFIGURATION["to_test"] = domain
+            actual = Check().is_subdomain()
+
+            self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_subdomain()
+            self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
+            actual = Check().is_subdomain(PyFunceble.CONFIGURATION["to_test"])
+            self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
+
     def test_is_ip_valid(self):
         """
         This method test ExpirationDate().is_ip_valid().

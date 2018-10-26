@@ -521,6 +521,15 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the User-Agent to use everytime we are requesting something from a web server other than our API.
 
+:code:`whois_database`
+----------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Enable / Disable the usage of the whois database to avoid/bypass whois server requests rate limit.
+
 :code:`outputs`
 ---------------
 

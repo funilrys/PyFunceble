@@ -60,7 +60,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error
+# pylint: disable=import-error, protected-access
 from unittest import TestCase
 from unittest import main as launch_tests
 
@@ -91,7 +91,21 @@ class TestHash(TestCase):
 
     def testhash_data(self):
         """
-        This method will test Hash.hash_data().
+        This method will test Hash._hash_data().
+        """
+
+        to_test = "\n".join(self.data_to_write)
+
+        for algo, result in self.expected_hashed.items():
+            self.assertEqual(
+                result,
+                Hash(data=to_test)._hash_data(algo),
+                msg="%s did not passed the test" % repr(algo),
+            )
+
+    def testhash_file(self):
+        """
+        This method will test Hash._hash_file().
         """
 
         expected = False
@@ -107,7 +121,7 @@ class TestHash(TestCase):
         for algo, result in self.expected_hashed.items():
             self.assertEqual(
                 result,
-                Hash(self.file).hash_data(algo),
+                Hash(self.file)._hash_file(algo),
                 msg="%s did not passed the test" % repr(algo),
             )
 
@@ -151,6 +165,9 @@ class TestHash(TestCase):
         actual = Hash(self.file, algorithm="all").get()
         self.assertEqual(expected, actual)
 
+        actual = Hash(data="\n".join(self.data_to_write), algorithm="all").get()
+        self.assertEqual(expected, actual)
+
         File(self.file).delete()
 
         expected = False
@@ -175,6 +192,12 @@ class TestHash(TestCase):
 
         expected = self.expected_hashed["sha512"]
         actual = Hash(self.file, algorithm="sha512", only_hash=True).get()
+        self.assertEqual(expected, actual)
+
+        expected = self.expected_hashed["sha512"]
+        actual = Hash(
+            data="\n".join(self.data_to_write), algorithm="sha512", only_hash=True
+        ).get()
         self.assertEqual(expected, actual)
 
         File(self.file).delete()

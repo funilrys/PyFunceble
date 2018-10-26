@@ -18,6 +18,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
+-   ScriptTiger - `@ScriptTiger`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 
@@ -27,6 +28,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 .. _@jawz101: https://github.com/jawz101
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
+.. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@ybreza: https://github.com/ybreza
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx

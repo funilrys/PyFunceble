@@ -45,12 +45,7 @@ This part is unnecessary but we wanted to document it!!
     from PyFunceble import test as PyFunceble
     from PyFunceble import url_test as PyFuncebleURL
 
-    DOMAINS = [
-        'twitter.com',
-        'google.com',
-        'github.com',
-        'github.comcomcom',
-        'funilrys.co']
+    DOMAINS = ["twitter.com", "google.com", "github.com", "github.comcomcom", "funilrys.co"]
 
 
     def domain_status(domain_or_ip):
@@ -60,13 +55,14 @@ This part is unnecessary but we wanted to document it!!
         Argument:
             - domain_or_ip: str
                 The domain or IPv4 to test.
-        
+
         Returns: str
             The status of the domain.
         """
 
         return PyFunceble(domain_or_ip)
-    
+
+
     def url_status(url):
         """
         Check the status of the given url.
@@ -74,7 +70,7 @@ This part is unnecessary but we wanted to document it!!
         Argument:
             - url: str
                 The URL to test.
-        
+
         Returns: str
             The status of the URL.
         """
@@ -83,7 +79,15 @@ This part is unnecessary but we wanted to document it!!
 
 
     for domain in DOMAINS:
-        print('%s is %s and %s is %s' % (domain, domain_status(domain), 'http://' + domain, url_status('http://' + domain)))
+        print(
+            "%s is %s and %s is %s"
+            % (
+                domain,
+                domain_status(domain),
+                "http://" + domain,
+                url_status("http://" + domain),
+            )
+        )
 
 Advanced example
 """"""""""""""""

@@ -66,6 +66,7 @@ License:
 import PyFunceble
 from PyFunceble import requests
 from PyFunceble.check import Check
+from PyFunceble.database import Whois
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import File, Regex
 from PyFunceble.http_code import HTTPCode
@@ -148,8 +149,10 @@ class ExpirationDate:
                     "whois_server"
                 ] = PyFunceble.CONFIGURATION["referer"]
 
-            if PyFunceble.CONFIGURATION["referer"]:
-                # The iana database comparison status is not None.
+            if PyFunceble.CONFIGURATION["referer"] and not Check().is_subdomain():
+                # * The iana database comparison status is not None.
+                # and
+                # * The domain we are testing is not a subdomain.
 
                 # We try to extract the expiration date from the WHOIS record.
                 # And we return the matched status.
@@ -482,6 +485,25 @@ class ExpirationDate:
         Extract the expiration date from the whois record.
         """
 
+        # We try to get the expiration date from the database.
+        expiration_date_from_database = Whois().get_expiration_date()
+
+        if expiration_date_from_database:
+            # The hash of the current whois record did not changed and the
+            # expiration date from the database is not empty not equal to
+            # None or False.
+
+            # We generate the files and print the status.
+            # It's an active element!
+            Generate(
+                PyFunceble.STATUS["official"]["up"],
+                "WHOIS",
+                expiration_date_from_database,
+            ).status_file()
+
+            # We handle und return the official up status.
+            return PyFunceble.STATUS["official"]["up"]
+
         # We get the whois record.
         self.whois_record = Lookup().whois(PyFunceble.CONFIGURATION["referer"])
 
@@ -595,6 +617,9 @@ class ExpirationDate:
 
                         # We log the whois record.
                         self._whois_log()
+
+                        # We save the whois record into the database.
+                        Whois(expiration_date=self.expiration_date).add()
 
                         # We handle und return the official up status.
                         return PyFunceble.STATUS["official"]["up"]

@@ -211,6 +211,9 @@ class Core:  # pragma: no cover
                 # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
 
+                # We deactivate the whois database as it is not needed.
+                PyFunceble.CONFIGURATION["whois_db"] = False
+
                 if PyFunceble.CONFIGURATION["idna_conversion"]:
                     domain_or_ip_to_test = domain2idna(
                         self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
@@ -314,6 +317,9 @@ class Core:  # pragma: no cover
             # We activate the quiet mode.
             PyFunceble.CONFIGURATION["quiet"] = True
 
+            # We deactivate the whois database as it is not needed.
+            PyFunceble.CONFIGURATION["whois_db"] = False
+
             # And we deactivate the generation of files.
             PyFunceble.CONFIGURATION["no_files"] = True
 
@@ -395,10 +401,20 @@ class Core:  # pragma: no cover
                         "tested"
                     ] = PyFunceble.CONFIGURATION["to_test"]
 
-                    # We get the status of the domain.
-                    PyFunceble.CONFIGURATION["current_test_data"][
-                        "status"
-                    ] = ExpirationDate().get()
+                    if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+                        # We are testing a domain.
+
+                        # We get the status of the domain.
+                        PyFunceble.CONFIGURATION["current_test_data"][
+                            "status"
+                        ] = ExpirationDate().get()
+                    elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
+                        # We are testing a url.
+
+                        # We get the status of the url.
+                        PyFunceble.CONFIGURATION["current_test_data"][
+                            "status"
+                        ] = URL().get()
 
                 if "http_code" in PyFunceble.CONFIGURATION:
                     # The http status code exist into the configuration.
@@ -411,8 +427,21 @@ class Core:  # pragma: no cover
                 # We finaly return our dataset.
                 return PyFunceble.CONFIGURATION["current_test_data"]
 
-            # We return the status of the parsed domain.
-            return ExpirationDate().get()
+            if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+                # We are testing a domain.
+
+                # We return the status of the parsed domain.
+                return ExpirationDate().get()
+
+            if PyFunceble.CONFIGURATION["to_test_type"] == "url":
+                # We are testing a url.
+
+                # We return the status of the parsed url.
+                return URL().get()
+
+            # We raise an exception because that means that something wrong
+            # happened because of the developer not the user.
+            raise Exception("Unknown to_test_type. Please report issue.")
 
     @classmethod
     def bypass(cls):

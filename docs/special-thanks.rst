@@ -30,6 +30,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
 -   Reza Rizqullah - `@ybreza`_
+-   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
 
 
@@ -40,4 +41,5 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@ybreza: https://github.com/ybreza
+.. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79

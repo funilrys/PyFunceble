@@ -74,8 +74,9 @@ from subprocess import PIPE, Popen
 from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
+from PyFunceble import Fore
 from PyFunceble import copy as shutil_copy
-from PyFunceble import directory_separator, path, requests, Fore
+from PyFunceble import directory_separator, path, requests
 
 
 class Hash:  # pylint: disable=too-few-public-methods
@@ -95,7 +96,7 @@ class Hash:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-        self, file_path, algorithm="sha512", only_hash=False
+        self, file_path=None, algorithm="sha512", only_hash=False, data=None
     ):  # pragma: no cover
 
         # We initiate the list of allowed algorithms.
@@ -104,13 +105,21 @@ class Hash:  # pylint: disable=too-few-public-methods
         # We get the parsed file path.
         self.path = file_path
 
+        # We get the parsed data.
+        if isinstance(data, bytes):
+            self.data = data
+        elif data is None:
+            self.data = "".encode()
+        else:
+            self.data = data.encode()
+
         # We get the parsed algorithm.
         self.algorithm = algorithm
 
         # We get the parsed decision about the only hash arguments.
         self.only_hash = only_hash
 
-    def hash_data(self, algo):
+    def _hash_file(self, algo):
         """Get the hash of the given file
 
         :param algo: A string, the algorithm to use.
@@ -131,6 +140,24 @@ class Hash:  # pylint: disable=too-few-public-methods
         # And we extract and return the hash.
         return hash_data.hexdigest()
 
+    def _hash_data(self, algo):
+        """
+        Get hash of the given data.
+
+        Argument:
+            - algo: str
+                The algorithm to use.
+        """
+
+        # We het the algorithm function.
+        hash_data = getattr(hashlib, algo)()
+
+        # We set the data into our hashlib.
+        hash_data.update(self.data)
+
+        # And we extract and return the hash.
+        return hash_data.hexdigest()
+
     def get(self):
         """
         Return the hash of the given file
@@ -140,7 +167,7 @@ class Hash:  # pylint: disable=too-few-public-methods
         # to return.
         result = {}
 
-        if path.isfile(self.path) and self.algorithm in self.valid_algorithms:
+        if self.algorithm in self.valid_algorithms:
             # * The parsed path exist.
             # and
             # * The parsed algorithm is in the list of valid algorithms.
@@ -156,17 +183,45 @@ class Hash:  # pylint: disable=too-few-public-methods
                 for algo in self.valid_algorithms:
                     # We loop through the list of valid algorithms.
 
-                    # We save the hash into the result variable.
-                    result[algo] = self.hash_data(algo)
+                    if self.path and path.isfile(self.path):
+                        # The file path exist.
+
+                        # We save the hash into the result variable.
+                        result[algo] = self._hash_file(algo)
+                    elif self.data:
+                        # * The path does not exist.
+                        # and
+                        # * The given data is not empty.
+
+                        # We save the hash into the result variable.
+                        result[algo] = self._hash_data(algo)
+                    else:  # pragma: no cover
+                        # All other case are met.
+
+                        # We return None.
+                        return None
             else:
                 # The parsed algorithm is a specific one.
 
-                # We save the hash into the result variable.
-                result[self.algorithm] = self.hash_data(self.algorithm)
-        else:
-            # * The parsed path does not exist.
-            # or
-            # * The parsed algorithm is nor in the list of valid algorithms.
+                if self.path and path.isfile(self.path):
+                    # The file path exist.
+
+                    # We save the hash into the result variable.
+                    result[self.algorithm] = self._hash_file(self.algorithm)
+                elif self.data:
+                    # * The path does not exist.
+                    # and
+                    # * The given data is not empty.
+
+                    # We save the hash into the result variable.
+                    result[self.algorithm] = self._hash_data(self.algorithm)
+                else:
+                    # All the other case are met.
+
+                    # We return None.
+                    return None
+        else:  # pragma: no cover
+            # The parsed algorithm is not in the list of valid algorithms.
             return None
 
         if self.algorithm != "all" and self.only_hash:

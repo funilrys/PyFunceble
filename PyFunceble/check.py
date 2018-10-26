@@ -62,7 +62,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-
+# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Regex
 from PyFunceble.publicsuffix import PublicSuffix
@@ -151,13 +151,15 @@ class Check:
         # We return False.
         return False
 
-    def is_domain_valid(self, domain=None):
+    def is_domain_valid(self, domain=None, subdomain_check=False):
         """
         Check if PyFunceble.CONFIGURATION['domain'] is a valid domain.
 
         Argument:
             - domain: str
                 The domain to validate.
+            - subdomain_check: bool
+                True: We check if it is a subdomain.
 
         Returns: bool
             - True: is valid.
@@ -186,8 +188,13 @@ class Check:
             # We set the element to test as the currently tested element.
             to_test = PyFunceble.CONFIGURATION["to_test"]
 
-        if Regex(to_test, regex_valid_domains, return_data=False).match():
-            # The element pass the domain validation.
+        if (
+            Regex(to_test, regex_valid_domains, return_data=False).match()
+            and not subdomain_check
+        ):
+            # * The element pass the domain validation.
+            # and
+            # We are not checking if it is a subdomain.
 
             # We return True. The domain is valid.
             return True
@@ -217,6 +224,16 @@ class Check:
                         # subdomains regex.
                         to_check = to_test[:suffix_index]
 
+                        if "." in to_check and subdomain_check:
+                            # * There is a point into the new element to check.
+                            # and
+                            # * We are checking if it is a subdomain.
+
+                            # We return True, it is a subdomain.
+                            return True
+
+                        # We are not checking if it is a subdomain.
+
                         if "." in to_check:
                             # There is a point into the new element to check.
 
@@ -239,8 +256,18 @@ class Check:
             # We get the element before the last point.
             to_check = to_test[:last_point_index]
 
+            if "." in to_check and subdomain_check:
+                # * There is a point in to_check.
+                # and
+                # * We are checking if it is a subdomain.
+
+                # We return True, it is a subdomain.
+                return True
+
+            # We are not checking if it is a subdomain.
+
             if "." in to_check:
-                # There is a point in to_check
+                # There is a point in to_check.
 
                 # We check if it passes our subdomain regex.
                 # * True: It's a valid domain.
@@ -255,6 +282,38 @@ class Check:
 
         # And we return False, the domain is not valid.
         return False
+
+    def is_subdomain(self, domain=None):
+        """
+        Check if PyFunceble.CONFIGURATION['to_test'] or the given domain is a subdomain.
+
+        Argument:
+            - domain: str
+                The domain to validate.
+
+        Returns: bool
+            - True: is valid.
+            - False: is invalid.
+        """
+
+        if domain:
+            # A domain is given.
+
+            # We set the element to test as the parsed domain.
+            to_test = domain
+        elif self.element:
+            # A domain is globally given.
+
+            # We set the globally parsed domain.
+            to_test = self.element
+        else:
+            # A domain is not given.
+
+            # We set the element to test as the currently tested element.
+            to_test = PyFunceble.CONFIGURATION["to_test"]
+
+        # We return the status of the check.
+        return self.is_domain_valid(to_test, subdomain_check=True)
 
     def is_ip_valid(self, ip_to_check=None):
         """

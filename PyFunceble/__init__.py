@@ -62,7 +62,7 @@ from os import sep as directory_separator
 from os import walk
 from platform import system
 from shutil import copy
-from time import strftime, time
+from time import mktime, strftime, strptime, time
 
 import requests
 from colorama import Back, Fore, Style
@@ -79,7 +79,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.116.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.117.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -209,7 +209,7 @@ ASCII_PYFUNCEBLE = """
 """
 
 
-def test(domain, complete=True):  # pragma: no cover
+def test(domain, complete=False):  # pragma: no cover
     """
     Test for the given domain.
 
@@ -738,6 +738,19 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             version="%(prog)s " + VERSION,
         )
 
+        PARSER.add_argument(
+            "-wdb",
+            "--whois-database",
+            action="store_true",
+            help="Switch the value of the usage of a database to store \
+                whois data in order to avoid whois servers rate limit. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(CONFIGURATION["whois_database"])
+                + Style.RESET_ALL
+            ),
+        )
+
         ARGS = PARSER.parse_args()
 
         if ARGS.less:
@@ -874,6 +887,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.user_agent:
             CONFIGURATION.update({"user_agent": ARGS.user_agent})
+
+        if ARGS.whois_database:
+            CONFIGURATION.update({"whois_database": Core.switch("whois_database")})
 
         if not CONFIGURATION["quiet"]:
             print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)

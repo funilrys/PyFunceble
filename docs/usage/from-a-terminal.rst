@@ -431,6 +431,11 @@ Want to test the availability or an URL ? Enjoy this argument!
 
     Show the version of PyFunceble and exit.
 
+:code:`-wdb` | :code:`--whois-database`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
+        Defautl value: :code:`True`
 
 Global overview
 """""""""""""""
@@ -438,17 +443,17 @@ Global overview
 ::
 
     usage: PyFunceble [-ad] [-a] [--cmd-before-end CMD_BEFORE_END] [-c]
-                  [--autosave-minutes AUTOSAVE_MINUTES] [--clean]
-                  [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
-                  [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                  [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
-                  [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
-                  [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
-                  [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
-                  [-nl] [-nu] [-nw] [-p] [--plain] [--production] [-psl] [-q]
-                  [--share-logs] [-s] [--split] [-t TIMEOUT] [--travis]
-                  [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
-                  [-ua USER_AGENT] [-v]
+                    [--autosave-minutes AUTOSAVE_MINUTES] [--clean]
+                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
+                    [--commit-results-message COMMIT_RESULTS_MESSAGE]
+                    [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
+                    [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
+                    [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
+                    [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
+                    [-nl] [-nu] [-nw] [-p] [--plain] [--production] [-psl] [-q]
+                    [--share-logs] [-s] [--split] [-t TIMEOUT] [--travis]
+                    [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
+                    [-ua USER_AGENT] [-v] [-wdb]
 
     The tool to check domain or IP availability.
 
@@ -560,7 +565,12 @@ Global overview
                                 interact with everything which is not our logs sharing
                                 system.
         -v, --version         Show the version of PyFunceble and exit.
+        -wdb, --whois-database
+                                Switch the value of the usage of a database to store
+                                whois data in order to avoid whois servers rate limit.
+                                Installed value: True
 
     Crafted with ♥ by Nissar Chababy (Funilrys) with the
     help of https://pyfunceble.rtfd.io/en/dev/contributors.html &&
     https://pyfunceble.rtfd.io/en/dev/special-thanks.html
+

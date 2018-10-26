@@ -109,6 +109,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
+-   ScriptTiger - `@ScriptTiger`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 
@@ -146,6 +147,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
 -   Reza Rizqullah - `@ybreza`_
+-   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
 
 ___________________________________________
@@ -187,6 +189,7 @@ License
 .. _@Odyseus: https://github.com/Odyseus
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@PromoFaux: https://github.com/PromoFaux
+.. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
 .. _@ybreza: https://github.com/ybreza
 .. _@Wally3K: https://github.com/WaLLy3K

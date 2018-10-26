@@ -65,7 +65,7 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import path, time
+from PyFunceble import mktime, path, strptime, time
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Dict, File, List
 
@@ -580,3 +580,282 @@ class Inactive:
 
         # We return the content of the database.
         return result
+
+
+class Whois:
+    """
+    Logic behind the whois database. Indeed, the idea is to implement #2.
+
+    Arguments:
+        - whois_record: str|bytes
+            The whois record to save.
+        - expiration_date: str
+            The extracted expiration date.
+    """
+
+    def __init__(self, expiration_date=None):
+        # We get the extracted expiration date.
+        self.expiration_date = expiration_date
+
+        if self.expiration_date:
+            # We get the epoch of the expiration date.
+            self.epoch = int(mktime(strptime(self.expiration_date, "%d-%b-%Y")))
+
+        if (
+            "file_to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["file_to_test"]
+        ):
+            # The file path was given previously.
+            self.file_path = PyFunceble.CONFIGURATION["file_to_test"]
+        else:
+            # The file path was not given previously.
+
+            # We set a dummy index.
+            self.file_path = "single_testing"
+
+        # We set the path to the whois database file.
+        self.whois_db_path = (
+            PyFunceble.CURRENT_DIRECTORY
+            + PyFunceble.OUTPUTS["default_files"]["whois_db"]
+        )
+
+        if (
+            "to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["to_test"]
+        ):
+            # We are testing something.
+
+            # We set a variable which will save the actual element we are working with.
+            self.element = PyFunceble.CONFIGURATION["to_test"]
+
+        # We try to retrieve the information from the database file.
+        self._retrieve()
+
+    @classmethod
+    def _authorization(cls):
+        """
+        Check if we are authorized to work with our database.
+        """
+
+        if (
+            not PyFunceble.CONFIGURATION["no_whois"]
+            and PyFunceble.CONFIGURATION["whois_database"]
+        ):
+            # * The usage of whois lookup is activated.
+            # and
+            # * The usage of the whois database is activated.
+
+            # We return True, we are authorized to work.
+            return True
+
+        # * The usage of whois lookup is not activated.
+        # or
+        # * The usage of the whois database is not activated.
+
+        # We return False, we are not authorized to work.
+        return False
+
+    def _retrieve(self):
+        """
+        Retrieve the data from the database.
+        """
+
+        if self._authorization() and "whois_db" not in PyFunceble.CONFIGURATION:
+            # The usage of the whois database is activated.
+
+            if path.isfile(self.whois_db_path):
+                # The database file exist.
+
+                # We merge our current database into already initiated one.
+                PyFunceble.CONFIGURATION["whois_db"] = Dict().from_json(
+                    File(self.whois_db_path).read()
+                )
+            else:
+                # The database file does not exist.
+
+                # We initiate an empty database.
+                PyFunceble.CONFIGURATION["whois_db"] = {}
+
+    def _backup(self):
+        """
+        Backup the database into its file.
+        """
+
+        if self._authorization():
+            # We are authorized to work.
+
+            # We backup the current state of the datbase.
+            Dict(PyFunceble.CONFIGURATION["whois_db"]).to_json(self.whois_db_path)
+
+    def is_in_database(self):
+        """
+        Check if the element is into the database.
+        """
+
+        if (
+            self._authorization()
+            and self.file_path in PyFunceble.CONFIGURATION["whois_db"]
+            and self.element in PyFunceble.CONFIGURATION["whois_db"][self.file_path]
+        ):
+            # * We are authorized to work.
+            # and
+            # * The given file path exist in the database.
+            # and
+            # * The element we are testing is in the database related to the
+            # given file path.
+
+            # We return True, the element we are testing is into the database.
+            return True
+
+        # * We are not authorized to work.
+        # or
+        # * The given file path does not exist in the database.
+        # or
+        # * The element we are testing is not in the database related to the
+        # given file path.
+
+        # We return False,the element we are testing is not into the database.
+        return False
+
+    def is_time_older(self):
+        """
+        Check if the current time is older than the one in the database.
+        """
+
+        if (
+            self._authorization()
+            and self.is_in_database()
+            and int(
+                PyFunceble.CONFIGURATION["whois_db"][self.file_path][self.element][
+                    "epoch"
+                ]
+            )
+            < int(time())
+        ):
+            # * We are authorized to work.
+            # and
+            # * The element we are testing is in the database.
+            # and
+            # * The epoch of the expiration date is less than our current epoch.
+
+            # The expiration date is in the past, we return True.
+            return True
+
+        # The expiration date is in the future, we return False.
+        return False
+
+    def get_expiration_date(self):
+        """
+        Return the expiration date from the database.
+        """
+
+        if self._authorization() and self.is_in_database() and not self.is_time_older():
+            # * We are authorized to work.
+            # and
+            # * The element we are testing is in the database.
+            # and
+            # * The expiration date is in the future.
+
+            # We get the expiration date from the database.
+            result = PyFunceble.CONFIGURATION["whois_db"][self.file_path][self.element][
+                "expiration_date"
+            ]
+
+            if result:
+                # The expiration date from the database is not empty nor
+                # equal to None.
+
+                # We return it.
+                return result
+
+        # We return None, there is no data to work with.
+        return None
+
+    def add(self):
+        """
+        Add the currently tested element into the database.
+        """
+
+        if self._authorization():
+            # We are authorized to work.
+
+            if self.epoch < int(time()):
+                state = "past"
+            else:
+                state = "future"
+
+            if self.is_in_database():
+                # The element we are working with is in the database.
+
+                if (
+                    str(self.epoch)
+                    != PyFunceble.CONFIGURATION["whois_db"][self.file_path][
+                        self.element
+                    ]["epoch"]
+                ):
+                    # The given epoch is diffent from the one saved.
+
+                    # We update it.
+                    PyFunceble.CONFIGURATION["whois_db"][self.file_path][
+                        self.element
+                    ].update(
+                        {
+                            "epoch": str(self.epoch),
+                            "state": state,
+                            "expiration_date": self.expiration_date,
+                        }
+                    )
+
+                elif self.is_time_older():  # pragma: no cover
+                    # The expiration date from the database is in the past.
+
+                    if (
+                        PyFunceble.CONFIGURATION["whois_db"][self.file_path][
+                            self.element
+                        ]["state"]
+                        != "past"
+                    ):
+                        # The state of the element in the datbase is not
+                        # equal to `past`.
+
+                        # We update it to `past`.
+                        PyFunceble.CONFIGURATION["whois_db"][self.file_path][
+                            self.element
+                        ].update({"state": "past"})
+                elif (
+                    PyFunceble.CONFIGURATION["whois_db"][self.file_path][self.element][
+                        "state"
+                    ]
+                    != "future"
+                ):
+                    # * The expiration date from the database is in the future.
+                    # and
+                    # * The state of the element in the database is not
+                    # equal to `future`.
+
+                    # We update it to `future`.
+                    PyFunceble.CONFIGURATION["whois_db"][self.file_path][
+                        self.element
+                    ].update({"state": "future"})
+            else:
+                # The element we are working with is not in the database.
+
+                if not self.file_path in PyFunceble.CONFIGURATION["whois_db"]:
+                    # The file path is not in the database.
+
+                    # We initiate it.
+                    PyFunceble.CONFIGURATION["whois_db"][self.file_path] = {}
+
+                # We create the first dataset.
+                PyFunceble.CONFIGURATION["whois_db"][self.file_path].update(
+                    {
+                        self.element: {
+                            "epoch": str(self.epoch),
+                            "state": state,
+                            "expiration_date": self.expiration_date,
+                        }
+                    }
+                )
+
+            # We do a safety backup of our database.
+            self._backup()

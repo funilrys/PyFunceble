@@ -141,11 +141,11 @@ Code documentation
 Configuration
 -------------
 
-Problematic
-^^^^^^^^^^^
+Problematics
+^^^^^^^^^^^^
 
-How can we avoid the usage of :code:`tool.py` ?
-How can we make personalisation more simple ?
+* How can we avoid the usage of :code:`tool.py` ?
+* How can we make personalisation more simple ?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
@@ -181,10 +181,11 @@ Code documentation
 Database
 --------
 
-Problematic
-^^^^^^^^^^^
+Problematics
+^^^^^^^^^^^^
 
-How can we continuously test :code:`INACTIVE` and :code:`INVALID` domains or IP ?
+* How can we continuously test :code:`INACTIVE` and :code:`INVALID` domains or IP ?
+* How can we reduce the number of whois requests over time ?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
@@ -192,7 +193,10 @@ Code documentation
 .. automodule::PyFunceble.database
    :members: 
 
-.. autoclass:: PyFunceble.database.Database
+.. autoclass:: PyFunceble.database.Inactive
+    :members:
+
+.. autoclass:: PyFunceble.database.Whois
     :members:
 
 Directory Structure
@@ -300,11 +304,11 @@ Code documentation
 Lookup
 ------
 
-Problematic
-^^^^^^^^^^^
+Problematics
+^^^^^^^^^^^^
 
-How can we get information from WHOIS records ?
-How can we check if a domain or IP have a valid pointer (nslookup)?
+* How can we get information from WHOIS records ?
+* How can we check if a domain or IP have a valid pointer (nslookup)?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
