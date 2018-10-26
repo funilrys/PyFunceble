@@ -212,7 +212,7 @@ class Core:  # pragma: no cover
                 PyFunceble.CONFIGURATION["show_percentage"] = False
 
                 # We deactivate the whois database as it is not needed.
-                PyFunceble.CONFIGURATION["whois_db"] = False
+                PyFunceble.CONFIGURATION["whois_database"] = False
 
                 if PyFunceble.CONFIGURATION["idna_conversion"]:
                     domain_or_ip_to_test = domain2idna(
@@ -318,7 +318,7 @@ class Core:  # pragma: no cover
             PyFunceble.CONFIGURATION["quiet"] = True
 
             # We deactivate the whois database as it is not needed.
-            PyFunceble.CONFIGURATION["whois_db"] = False
+            PyFunceble.CONFIGURATION["whois_database"] = False
 
             # And we deactivate the generation of files.
             PyFunceble.CONFIGURATION["no_files"] = True
