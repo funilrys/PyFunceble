@@ -112,7 +112,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         self._save(last=last)
 
     @classmethod
-    def _authorization(cls):
+    def _authorization(cls):  # pragma: no cover
         """
         Check the execution authorization.
         """
@@ -125,7 +125,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
         return False
 
-    def _save(self, last=False):
+    def _save(self, last=False):  # pragma: no cover
         """
         Save the current time to the file.
 
@@ -134,7 +134,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 Tell us if we are at the really end of the testing.
         """
 
-        if self._authorization() and PyFunceble.CONFIGURATION["logs"]:
+        if (
+            self._authorization()
+            and PyFunceble.CONFIGURATION["logs"]
+            and "to_test_type" in PyFunceble.CONFIGURATION
+            and not PyFunceble.CONFIGURATION["to_test_type"] == "domain"
+        ):
             self.file = (
                 PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
@@ -205,7 +210,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             A dics with `days`,`hours`,`minutes` and `seconds`.
         """
 
-        if start and end:
+        if start and end:  # pragma: no cover
             # The start and end time is explicitly given.
 
             # We get the difference between the ending and the starting time.

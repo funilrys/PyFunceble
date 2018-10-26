@@ -204,6 +204,10 @@ class Core:  # pragma: no cover
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # The given domain is not empty or None.
 
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+
                 # We set the start time.
                 ExecutionTime("start")
 
@@ -223,14 +227,14 @@ class Core:  # pragma: no cover
                         self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
                     )  # pylint: disable=no-member
 
-                # We initiate a variable which will tell the system the type
-                # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
-
                 # We test the domain after converting it to lower case.
                 self.domain(domain_or_ip_to_test)
             elif self.url_to_test and not self.file_path:  # pylint: disable=no-member
                 # An url to test is given and the file path is empty.
+
+                # We initiate a variable which will tell the system the type
+                # of the tested element.
+                PyFunceble.CONFIGURATION["to_test_type"] = "url"
 
                 # We set the start time.
                 ExecutionTime("start")
@@ -238,10 +242,6 @@ class Core:  # pragma: no cover
                 # We deactivate the showing of percentage as we are in a single
                 # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
-
-                # We initiate a variable which will tell the system the type
-                # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "url"
 
                 # We test the url to test.
                 self.url(self.url_to_test)  # pylint: disable=no-member
