@@ -79,7 +79,7 @@ class Clean:
             The list of domains to test.
     """
 
-    def __init__(self, list_to_test):
+    def __init__(self, list_to_test, clean_all=False):
         if list_to_test:
             # The list to test is not empty.
 
@@ -108,7 +108,7 @@ class Clean:
                     Core.reset_counters()
 
                     # We clean the output directory.
-                    self.all()
+                    self.almost_everything(clean_all)
             except IndexError:
                 # But if at any time in the conditionnal an Index Error occurs,
 
@@ -116,12 +116,12 @@ class Clean:
                 Core.reset_counters()
 
                 # We clean the output directory.
-                self.all()
+                self.almost_everything(clean_all)
         else:
             # The list to test is empty.
 
             # We clean the output directory.
-            self.all()
+            self.almost_everything(clean_all)
 
     @classmethod
     def file_to_delete(cls):
@@ -168,13 +168,68 @@ class Clean:
         # We return our list of file to delete.
         return result
 
-    def all(self):
+    @classmethod
+    def databases_to_delete(cls):  # pragma: no cover
+        """
+        Set the databases files to delete.
+        """
+
+        # We initiate the directory we have to look for.
+        directory = PyFunceble.CURRENT_DIRECTORY
+
+        # We initate the result variable.
+        result = []
+
+        # We append the dir_structure file.
+        result.append(
+            directory
+            + PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"]
+        )
+
+        # We append the iana file.
+        result.append(
+            directory + PyFunceble.CONFIGURATION["outputs"]["default_files"]["iana"]
+        )
+
+        # We append the public suffix file.
+        result.append(
+            directory
+            + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
+        )
+
+        # We append the inactive database file.
+        result.append(
+            directory
+            + PyFunceble.CONFIGURATION["outputs"]["default_files"]["inactive_db"]
+        )
+
+        # We append the mining database file.
+        result.append(
+            directory + PyFunceble.CONFIGURATION["outputs"]["default_files"]["mining"]
+        )
+
+        # We append the whois database file.
+        result.append(
+            directory + PyFunceble.CONFIGURATION["outputs"]["default_files"]["whois_db"]
+        )
+
+        return result
+
+    def almost_everything(self, clean_all=False):
         """
         Delete all discovered files.
+
+        Argument:
+            - clean_all: bool
+                Tell the system if we have to clean the database
+                along with the output directory.
         """
 
         # We get the list of file to delete.
         to_delete = self.file_to_delete()
+
+        if clean_all:
+            to_delete.extend(self.databases_to_delete())
 
         for file in to_delete:
             # We loop through the list of file to delete.
