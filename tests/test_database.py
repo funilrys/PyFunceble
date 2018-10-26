@@ -65,7 +65,7 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble import load_config, time
+from PyFunceble import load_config, mktime, strptime, time
 from PyFunceble.database import Inactive, Whois
 from PyFunceble.helpers import Dict, File
 
@@ -800,10 +800,11 @@ class TestDatabaseWhois(TestCase):
         PyFunceble.CONFIGURATION["whois_db"] = {}
         PyFunceble.CONFIGURATION["to_test"] = "microsoft.google.com"
 
+        epoch = str(int(mktime(strptime("25-dec-2022", "%d-%b-%Y"))))
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
-                    "epoch": "1671922800",
+                    "epoch": epoch,
                     "expiration_date": "25-dec-2022",
                     "state": "future",
                 }
@@ -820,10 +821,11 @@ class TestDatabaseWhois(TestCase):
         Whois("25-dec-2022").add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["whois_db"])
 
+        epoch = str(int(mktime(strptime("25-dec-2007", "%d-%b-%Y"))))
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
-                    "epoch": "1198537200",
+                    "epoch": epoch,
                     "expiration_date": "25-dec-2007",
                     "state": "past",
                 }
