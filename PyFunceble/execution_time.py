@@ -137,8 +137,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         if (
             self._authorization()
             and PyFunceble.CONFIGURATION["logs"]
-            and "to_test_type" in PyFunceble.CONFIGURATION
-            and not PyFunceble.CONFIGURATION["to_test_type"] == "domain"
+            and "file_to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["file_to_test"]
         ):
             # * We are authorized to work.
             # and
