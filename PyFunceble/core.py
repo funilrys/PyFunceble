@@ -201,6 +201,9 @@ class Core:  # pragma: no cover
             # We check if we need to bypass the execution of PyFunceble.
             self.bypass()
 
+            # We set the start time.
+            ExecutionTime("start")
+
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # The given domain is not empty or None.
 
