@@ -29,7 +29,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Adblock Plus - `@adblockplus`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
--   Public Suffix List `@publicsuffix`_
+-   Public Suffix List - `@publicsuffix`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_

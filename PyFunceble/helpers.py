@@ -73,7 +73,7 @@ from subprocess import PIPE, Popen
 from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
-from PyFunceble import Fore
+from PyFunceble import Fore, Style
 from PyFunceble import copy as shutil_copy
 from PyFunceble import directory_separator, path, requests
 
@@ -905,5 +905,5 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
             # We raise an exception saying that we were unable to download.
             raise Exception("Unable to download %s." % repr(self.link))
         except requests.exceptions.ConnectionError:
-            print(Fore.RED + "No Internet connection available.")
-            exit()
+            print(Fore.RED + "No Internet connection available." + Style.RESET_ALL)
+            exit(1)

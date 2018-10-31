@@ -89,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.120.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.120.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -300,11 +300,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
     """
 
     if __name__ == "PyFunceble":
-        # We load the configuration and the directory structure.
-        load_config(True)
-
         # We initiate the end of the coloration at the end of each line.
         initiate(autoreset=True)
+
+        # We load the configuration and the directory structure.
+        load_config(True)
 
         # The following handle the command line argument.
 
