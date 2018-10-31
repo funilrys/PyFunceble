@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide the exipration date logic.
+This submodule will provide the exipration date extraction logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -78,7 +77,7 @@ from PyFunceble.status import Status
 
 class ExpirationDate:
     """
-    Get, format and return the epiration date of a domain if exist.
+    Get, format and return the expiration date of a domain, if exist.
     """
 
     def __init__(self):
@@ -97,6 +96,11 @@ class ExpirationDate:
     def get(self):  # pragma: no cover
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
+
+        :return:
+            The status of the tested domain.
+            Can be one of the official status.
+        :rtype: str
         """
 
         # We get the status of the domain validation.
@@ -227,6 +231,12 @@ class ExpirationDate:
     def _convert_1_to_2_digits(cls, number):
         """
         Convert 1 digit number to two digits.
+
+        :param number: A number or a digit string.
+        :type number: str|int
+
+        :return: A 2 or more digit string.
+        :rtype: str
         """
 
         return str(number).zfill(2)
@@ -236,12 +246,11 @@ class ExpirationDate:
         """
         Convert a given month into our unified format.
 
-        Argument:
-            - data: str
-                The month to convert or shorten.
+        :param data: The month to convert or shorten.
+        :type data: str
 
-        Returns: str
-            The unified month name.
+        :return: The unified month name.
+        :rtype: str
         """
 
         # We map the different month and their possible representation.
@@ -311,16 +320,26 @@ class ExpirationDate:
 
     def _cases_management(self, regex_number, matched_result):
         """
-        A little helper of self.format. (Avoiding of nested loops)
+        A little internal helper of self.format. (Avoiding of nested loops)
 
-        Note:
+        .. note::
             Please note that the second value of the case represent the groups
-            in order [day,month,year]. This means that a [2,1,0] will be for
-            example for a date in format `2017-01-02` where `01` is the month.
+            in order :code:`[day,month,year]`.
 
-        Retuns: list or None
-            - None: the case is unknown.
-            - list: the list representing the date [day, month, year]
+            This means that a :code:`[2,1,0]` will be for example for a date
+            in format :code:`2017-01-02` where
+            :code:`01` is the month.
+
+        :param regex_number: The identifiant of the regex.
+        :type regex_number: int
+
+        :param matched_result: The matched result to format.
+        :type matched_result: list
+
+        :return:
+            A list representing the expiration date.
+            The list can be "decoded" like :code:`[day, month, year]`
+        :rtype: list|None
         """
 
         # We map our regex numbers with with the right group order.
@@ -362,9 +381,12 @@ class ExpirationDate:
         """
         Format the expiration date into an unified format (01-jan-1970).
 
-        Argument:
-            - date_to_convert: str
-                The date to convert.
+        :param date_to_convert:
+            The date to convert. In other words, the extracted date.
+        :type date_to_convert: str
+
+        :return: The formatted expiration date.
+        :rtype: str
         """
 
         if not date_to_convert:  # pragma: no cover
@@ -483,6 +505,9 @@ class ExpirationDate:
     def _extract(self):  # pragma: no cover
         """
         Extract the expiration date from the whois record.
+
+        :return: The status of the domain.
+        :rtype: str
         """
 
         # We try to get the expiration date from the database.

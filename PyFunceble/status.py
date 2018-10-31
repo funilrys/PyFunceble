@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will manage the status interface.
+This submodule will manage the status.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -69,12 +68,11 @@ from PyFunceble.lookup import Lookup
 
 class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Return the domain status in case we don't use WHOIS or in case that WHOIS
-    record is not readable.
+    Hanle the research of domain status in case we don't use
+    WHOIS or in case that WHOIS record is not readable nor exploitable.
 
-    Argument:
-        - matched_result: str
-            The previously catched status.
+    :param matched_result: The previously catched status.
+    :type matched_result: str
     """
 
     def __init__(self, matched_status):
@@ -83,10 +81,12 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def handle(self):
         """
-        Handle the lack of WHOIS. :)
+        Handle the lack of WHOIS. :smile_cat:
 
-        Returns: str
-            The status of the domains after generating the files.
+        :return:
+            The strus of the domain after generating the files desired
+            by the user.
+        :rtype: str
         """
 
         # We initiate the source we are going to parse to the Generate class.
@@ -123,11 +123,10 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
 
 class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Generate everything around the catched status.
+    Generate everything around the catched status when testing for URL.
 
-    Argument:
-        - catched_status: str
-            The catched status.
+    :param catched_status: THe catched status.
+    :type catched_status: str
     """
 
     def __init__(self, catched_status):

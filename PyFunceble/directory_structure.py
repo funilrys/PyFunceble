@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide the class related to the directory structure.
+This submodule will provide the directory structure management subsystem.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -72,8 +71,13 @@ from PyFunceble.helpers import Command, Dict, File, Hash, Regex
 
 class DirectoryStructure:  # pragma: no cover
     """
-    Consider this class as a backup/reconstructor of desired directory.
-    (By default, the output direcctory)
+    Basically a backup/reconstructor of our :code:`output` directory.
+
+    :param production:
+        Tell the subsystem if we are preparing for production which
+        imply the execution of the backup insteam of of the
+        "reconstructore" mode.
+    :type production: optional, bool
     """
 
     def __init__(self, production=False):
@@ -153,6 +157,9 @@ class DirectoryStructure:  # pragma: no cover
     def _restore_replace(self):
         """
         Check if we need to replace ".gitignore" to ".keep".
+
+        :return: The replacement status.
+        :rtype: bool
         """
 
         if path.isdir(self.base + ".git"):
@@ -174,11 +181,10 @@ class DirectoryStructure:  # pragma: no cover
 
     def _update_structure_from_config(self, structure):
         """
-        This method update the paths according to configs.
+        Update the paths according to configs.
 
-        Argument:
-            - structure: dict
-                The readed structure.
+        :param structure: The read structure.
+        :type structure: dict
         """
 
         # We initiate a variable which will map what we have to replace `ouput` to.
@@ -336,7 +342,10 @@ class DirectoryStructure:  # pragma: no cover
 
     def _get_structure(self):
         """
-        This method return the structure we are goinng to work with.
+        Get the structure we are going to work with.
+
+        :return: The structure we have to work with.
+        :rtype: dict
         """
 
         # We initiate an empty variable which is going to save the location of
@@ -407,11 +416,13 @@ class DirectoryStructure:  # pragma: no cover
     @classmethod
     def _create_directory(cls, directory, loop=False):
         """
-        This method create the given directory if it does not exists.
+        Creates the given directory if it does not exists.
 
-        Argument:
-            - loop: bool
-                Tell us if we are in the loop or not.
+        :param directory: The directory to create.
+        :type directory: str
+
+        :param loop: Tell us if we are in the creation loop or not.
+        :type loop: optional, bool
         """
 
         if not loop and directory_separator in directory:

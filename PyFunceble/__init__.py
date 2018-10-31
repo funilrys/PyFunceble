@@ -4,6 +4,16 @@
 """
 The tool to check the availability of domains, IPv4 or URL.
 
+::
+
+
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+
 This submodule is the main entry of PyFunceble.
 
 Author:
@@ -79,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.119.4.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.120.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -213,16 +223,20 @@ def test(domain, complete=False):  # pragma: no cover
     """
     Test for the given domain.
 
-    This function provide an access to the core while use PyFunceble as an imported module.
+    :param domain: The domain to test.
+    :type domain: str
 
-    Arguments:
-        - domain: str
-            The domain to test.
-        - complete: bool
-            True:  We return a dict with some significant data from the tests.
+    :param complete:
+        Activate the return of a dict with some significant data from
+        the test.
+    :type complete: optional, bool
 
-    Returns: str
-        The status of the domain
+    :return: The status or the informations of the domain.
+    :rtype: str|dict
+
+    .. note::
+        This function provide an access to the core while use PyFunceble as
+        an imported module.
     """
 
     # We silently load the configuration.
@@ -236,16 +250,20 @@ def url_test(url, complete=False):  # pragma: no covere
     """
     Test for the given URL.
 
-    This function provice an access to the core while using PyFunceble as an imported module.
+    :param url: The URL to test.
+    :type url: str
 
-    Arguments:
-        - url: str
-            The url to test.
-        - complete: bool
-            True: We return a dict with some significant data from the tests.
+    :param complete:
+        Activate the return of a dict with some significant data from
+        the test.
+    :type complete: optional, bool
 
-    Returns: str
-        The status of the URL.
+    :return: The status or the informations of the URL.
+    :rtype: str|dict
+
+    .. note::
+        This function provice an access to the core while using PyFunceble as
+        an imported module.
     """
 
     # We silently load the configuration.
@@ -257,13 +275,13 @@ def url_test(url, complete=False):  # pragma: no covere
 
 def load_config(under_test=False):  # pragma: no cover
     """
-    This function will load the configuration.
+    Load the configuration.
 
-    Argument:
-        - under_test: bool
-            Tell us if we only have to load the configuration file (True)
-            or load the configuration file and initate the output directory
-            if it does not exist (False).
+    :param under_test:
+        Tell us if we only have to load the configuration file (True)
+        or load the configuration file and initate the output directory
+        if it does not exist (False).
+    :type under_test: optional, bool
     """
 
     # We load and download the different configuration file if they are non
@@ -278,7 +296,7 @@ def load_config(under_test=False):  # pragma: no cover
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
     """
-    This function provide the command line arguments of PyFunceble.
+    Provide the command line interface.
     """
 
     if __name__ == "PyFunceble":

@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide the configuration.
+This submodule will provide the configuration loading and construction logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -70,11 +69,10 @@ from PyFunceble.helpers import Dict, Directory, Download, File
 
 class Load:  # pylint: disable=too-few-public-methods
     """
-    This class will help to load the configurations.
+    Help us load the configuration(s) file(s).
 
-    Argument:
-        - path_to_config: str
-            The possible path to the config to load.
+    :param path_to_config: The possible path to the configuration to load.
+    :type path_to_config: str
     """
 
     def __init__(self, path_to_config):
@@ -179,14 +177,15 @@ Install and load the default configuration at the mentioned location? [y/n] "
     @classmethod
     def _set_path_to_configs(cls, path_to_config):
         """
-        This method will set the paths to the configuration files.
+        Set the paths to the configuration files.
 
-        Argument:
-            - path_to_config: str
-                The possible path to the config to load.
+        :param path_to_config: The possible path to the config to load.
+        :type path_to_config: str
 
-        Returns: tuple
-            (The path to the config to read, the path to the default configuration to read.)
+        :return:
+            The path to the config to read (0), the path to the default
+            configuration to read as fallback.(1)
+        :rtype: tuple
         """
 
         if not path_to_config.endswith(directory_separator):
@@ -210,7 +209,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _load_config_file(self):
         """
-        This method will load .PyFunceble.yaml.
+        Load .PyFunceble.yaml into the system.
         """
 
         try:
@@ -247,12 +246,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_production_config(self):
         """
-        This method download the production configuration and install it in the
+        Download the production configuration and install it in the
         current directory.
-
-        Argument:
-            - path_to_config: str
-                The path were we have to install the configuration file.
         """
 
         # We initiate the link to the production configuration.
@@ -271,7 +266,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
     @classmethod
     def _install_iana_config(cls):
         """
-        This method download `iana-domains-db.json` if not present.
+        Download `iana-domains-db.json` if not present.
         """
 
         # We initiate the link to the iana configuration.
@@ -299,7 +294,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
     @classmethod
     def _install_psl_config(cls):
         """
-        This method download `public-suffix.json` if not present.
+        Download `public-suffix.json` if not present.
         """
 
         # We initiate the link to the public suffix configuration.
@@ -330,7 +325,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
     @classmethod
     def _install_directory_structure_file(cls):
         """
-        This method download the latest version of `dir_structure_production.json`.
+        Download the latest version of `dir_structure_production.json`.
         """
 
         # We initiate the link to the public suffix configuration.
@@ -364,12 +359,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
 class Version:
     """
-    This class will compare the local with the upstream version.
+    Compare the local with the upstream version.
 
-    Argument:
-        - used: bool
-            True: Version is configured for simple usage.
-            False: Version compare local with upstream.
+    :param used:
+        True: Version is configured for simple usage.
+        False: Version compare local with upstream.
+    :type used: optional, bool
     """
 
     def __init__(self, used=False):
@@ -398,15 +393,18 @@ class Version:
     @classmethod
     def split_versions(cls, version, return_non_digits=False):
         """
-        This method will convert the versions to a shorter one.
+        Convert the versions to a shorter one.
 
-        Arguments:
-            - version: str
-                The version to split.
-            - return_non_digits: bool
-                Return the non digit part of the splited version.
+        :param version: The version to split.
+        :type version: str
 
-        Returns: list
+        :param return_non_digits:
+            Activate the return of the non-digits parts of the splitted
+            version.
+        :type return_non_digits: optional, bool
+
+        :return: The splitted version name/numbers.
+        :rtype: list
         """
 
         # We split the parsed version and keep the digits.
@@ -429,18 +427,19 @@ class Version:
     @classmethod
     def check_versions(cls, local, upstream):
         """
-        This method will compare the given versions.
+        Compare the given versions.
 
-        Arguments:
-            - local: list
-                The local version converted by split_versions().
-            - upstream: list
-                The upstream version converted by split_versions().
+        :param local: The local version converted by split_versions().
+        :type local: list
 
-        Returns:
+        :param upstream: The upstream version converted by split_versions().
+        :type upstream: list
+
+        :return:
             - True: local < upstream
             - None: local == upstream
             - False: local > upstream
+        :rtype: bool|None
         """
 
         # A version should be in format [1,2,3] which is actually the version `1.2.3`
@@ -486,7 +485,7 @@ class Version:
 
     def compare(self):
         """
-        This method will compare the current version with the upstream saved version.
+        Compare the current version with the upstream saved version.
         """
 
         if self.upstream_data["force_update"]["status"]:
@@ -666,7 +665,7 @@ class Version:
     @classmethod
     def is_cloned(cls):
         """
-        This method will let us know if we are currently in the cloned version of
+        Let us know if we are currently in the cloned version of
         PyFunceble which implicitly mean that we are in developement mode.
         """
 
@@ -696,12 +695,14 @@ class Version:
     @classmethod
     def right_url_from_version(cls, url):
         """
-        This method will convert the GitHub URL to the right one depending of the
+        Convert the GitHub URL to the right one depending of the
         branch or version we are working with.
 
-        Argument:
-            - url: str
-                The url to convert.
+        :param url: The URL to convert.
+        :type url: str
+
+        :return: The converted URL.
+        :rtype: str
         """
 
         if "dev" in PyFunceble.VERSION:

@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide HTTP Code extraction logic and interface.
 
@@ -72,28 +71,24 @@ from PyFunceble import requests, socket
 class HTTPCode:  # pylint: disable=too-few-public-methods
     """
     Get and return the HTTP code status of a given domain.
-
-    Argument:
-        - full_url: bool
-            - False: We check only in a domain mode environnment.
-            - True: We check in a www environnment.
-
     """
 
-    def __init__(self, full_url=False):  # pragma: no cover
-        if full_url:
+    def __init__(self):  # pragma: no cover
+        if PyFunceble.CONFIGURATION["to_test_type"] == "url":
             # We should work with full URL which actualy means that we have to get the
             # http status code from the URL we are currently testing.
 
             # We initiate the element we have to get.
             self.to_get = PyFunceble.CONFIGURATION["to_test"]
-        else:
+        elif PyFunceble.CONFIGURATION["to_test_type"] == "domain":
             # We are working with domain.
 
             # We construct the element we have to get.
             # Note: As we may work with IP, we explicitly set the port we are
             # working with.
             self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["to_test"]
+        else:
+            raise Exception("Unknow type of test.")
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -111,9 +106,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         """
         Get the HTTP code status.
 
-        Returns: int or None
-            int: The catched HTTP status_code.
-            None: Nothing catched.
+        :return: The matched HTTP status code.
+        :rtype: int|None
         """
 
         try:
@@ -147,9 +141,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         """
         Return the HTTP code status.
 
-        Returns: str or int
-            str: if no status_code is catched.
-            int: the status_code.
+        :return: The matched and formatted status code.
+        :rtype: str|int|None
         """
         if PyFunceble.HTTP_CODE["active"]:
             # The http status code extraction is activated.

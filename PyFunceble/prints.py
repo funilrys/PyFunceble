@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the printing interface and logic.
 
@@ -74,16 +73,28 @@ class Prints:
     Print data on screen and into a file if needed.
     Template Possibilities: Percentage, Less, HTTP and any status you want.
 
-    Arguments:
-        - to_print: list
-            The list of data to print.
-        - template: str
-            The template to use.
-        - output_file: str
-            The path to the file to write.
-        - only_on_file: bool
-            True: We don't print data on screen.
-            False: We print data on screen.
+    :param to_print: The list of data to print.
+    :type to_pritn: list
+
+    :param template:
+        The template to use.
+
+        .. note::
+            Available templates:
+
+                - :code:`Percentage`
+                - :code:`Less`
+                - :code:`HTTP`
+                - any of the official status.
+
+    :type template: str
+
+    :param output_file: The path to the file to write.
+    :type output_file: optional, str
+
+    :param only_on_file:
+        Tell us if we only have to print on file and not on screen.
+    :type only_on_file: optional, bool
     """
 
     def __init__(self, to_print, template, output_file=None, only_on_file=False):
@@ -223,16 +234,19 @@ class Prints:
         """
         Construct header of the table according to template.
 
-        Arguments:
-            - data_to_print: list
-                The list of data to print into the header.
-            - header_separator: str
-                The separator to use for the table header generation.
-            - colomn_separator: str
-                The separator to use between each colomns.
+        :param data_to_print:
+            The list of data to print into the header of the table.
+        :type data_to_print: list
 
-        Returns: list
-            The data to print in list format.
+        :param header_separator:
+            The separator to use between the table header and our data.
+        :type header_separator: optional, str
+
+        :param colomn_separator: The separator to use between each colomns.
+        :type colomn_separator: optional, str
+
+        :return: The data to print in a list format.
+        :rtype: list
         """
 
         # We initiate a variable which will save the header data.
@@ -312,11 +326,9 @@ class Prints:
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.
 
-        Argument:
-            - do_not_print: bool
-                True: We don't print anything.
-                False: We print what we want.
-
+        :param do_not_print:
+            Tell us if we have to print the header or not.
+        :type do_not_print: optional, bool
         """
 
         if (
@@ -422,16 +434,17 @@ class Prints:
         """
         Construct the table of data according to given size.
 
-        Argument:
-            - size: list
-                The maximal length of each string in the table.
+        :param size: The maximal length of each string in the table.
+        :type size: list
 
-        Returns: OrderedDict
-            An dict with all information about the data and how to which what
+        :return:
+            A dict with all information about the data and how to which what
             maximal size to print it.
+        :rtype: OrderedDict
 
-        Raise:
-            - Exception: if the data and the size does not have the same length.
+        :raises:
+            :code:`Exception`
+                If the data and the size does not have the same length.
         """
 
         # We initiate a variable which will save what we are going to
@@ -462,12 +475,12 @@ class Prints:
         """
         Get the size of each columns from the header.
 
-        Argument:
-            - header_type: dict
-                The header we have to get the size from.
+        :param header:
+            The header template we have to get the size from.
+        :type header: dict
 
-        Returns: list
-            The maximal size of the each data to print.
+        :return: The maximal size of the each data to print.
+        :rtype: list
         """
 
         # We initiate the result we are going to return.
@@ -486,12 +499,11 @@ class Prints:
         """
         Retun colored string.
 
-        Argument:
-            - data: str
-                The string to colorify.
+        :param data: The string to colorify.
+        :type data: str
 
-        Returns: str
-            A colored string.
+        :return: A colored string.
+        :rtype: str
         """
 
         if self.template in ["Generic", "Less"]:
@@ -571,8 +583,9 @@ class Prints:
         """
         Management and input of data to the table.
 
-        Raise:
-            - Exception: When self.data_to_print is not a list.
+        :raises:
+            :code:`Exception`
+                When self.data_to_print is not a list.
         """
 
         if isinstance(self.data_to_print, list):

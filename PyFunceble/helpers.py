@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the helpers.
 
@@ -83,16 +82,19 @@ class Hash:  # pylint: disable=too-few-public-methods
     """
     Get and return the hash a file with the given algorithm.
 
-    Arguments:
-        - file_path: str
-            - The path to the file we have to hash.
-        - algorithm: str
-            The algoritm to use.
-        - only_hash: bool
-            True: Return only the desired algorithm
+    :param file_path: The path to the file we have to hash.
+    :type file_path: optional, str
 
-    Note:
-        Original version : https://git.io/vFQrK
+    :param algorithm: The algorithm to use.
+    :type algorithm: optional, str
+
+    :param only_hash:
+        Tell us if we only have to return the desired algorithm
+        instead of the dummy dict format.
+    :type hash_only: bool
+
+    .. note::
+        The original version can be found at https://git.io/vFQrK.
     """
 
     def __init__(
@@ -122,7 +124,11 @@ class Hash:  # pylint: disable=too-few-public-methods
     def _hash_file(self, algo):
         """Get the hash of the given file
 
-        :param algo: A string, the algorithm to use.
+        :param algo: The algorithm to use.
+        :type algo: str
+
+        :return: The hexdigest of the data.
+        :rtype: str
         """
 
         # We het the algorithm function.
@@ -144,9 +150,8 @@ class Hash:  # pylint: disable=too-few-public-methods
         """
         Get hash of the given data.
 
-        Argument:
-            - algo: str
-                The algorithm to use.
+        :param algo: The algorithm to use.
+        :type algo: str
         """
 
         # We het the algorithm function.
@@ -243,6 +248,9 @@ class Hash:  # pylint: disable=too-few-public-methods
 class Command:  # pylint: disable=too-few-public-methods
     """
     Shell command execution.
+
+    :param command: The command to execute
+    :type command: str
     """
 
     def __init__(self, command):  # pragma: no cover
@@ -256,12 +264,11 @@ class Command:  # pylint: disable=too-few-public-methods
         """
         Decode the output of a shell command in order to be readable.
 
-        Argument:
-            - to_decode: byte
-                Output of a command to decode.
+        :param to_decode: Output of a command to decode.
+        :type: bytes
 
-        Retunes: str
-            The decoded output.
+        :return: The decoded output.
+        :rtype: str
         """
 
         return to_decode.decode(self.decode_type)
@@ -270,8 +277,8 @@ class Command:  # pylint: disable=too-few-public-methods
         """
         Execute the given command.
 
-        Returns: byte
-            The output in byte format.
+        :return: The output of the command.
+        :rtype: str
         """
 
         # We initiate a process and parse the command to it.
@@ -295,6 +302,9 @@ class Command:  # pylint: disable=too-few-public-methods
 class Dict:
     """
     Dictionary manipulations.
+
+    :param main_dictionnary: The dict we are working with.
+    :type main_dictionnary: optional, dict
     """
 
     def __init__(self, main_dictionnary=None):  # pragma: no cover
@@ -314,13 +324,11 @@ class Dict:
         """
         Remove a given key from a given dictionary.
 
-        Argument:
-            - key_to_remove: str or list
-                The key(s) to delete.
+        :param key_to_remove: The key(s) to delete.
+        :type key_to_remove: list|str
 
-        Returns: None or dict
-            - None: no dict passed to the class.
-            - dict: The dict without the removed key(s).
+        :return: The dict without the given key(s).
+        :rtype: dict|None
         """
 
         if isinstance(self.main_dictionnary, dict):
@@ -352,13 +360,17 @@ class Dict:
         """
         Rename the given keys from the given dictionary.
 
-        Argument:
-            - key_to_remove: dict
-                The key(s) to rename.
-                Format: {old:new}
-            - strict: bool
-                True: We replace the exact string
-                False: We replace if the string is like.
+        :param key_to_rename:
+            The key(s) to rename.
+            Expected format: :code:`{old:new}`
+        :type key_to_rename: dict
+
+        :param strict:
+            Tell us if we have to rename the exact index or
+            the index which looks like the given key(s)
+
+        :return: The well formatted dict.
+        :rtype: dict|None
         """
 
         if isinstance(self.main_dictionnary, dict) and isinstance(key_to_rename, dict):
@@ -412,10 +424,10 @@ class Dict:
         """
         Save a dictionnary into a JSON file.
 
-        Argument:
-            - destination: str
-                A path to a file where we're going to
-                write the converted dict into a JSON format.
+        :param destination:
+            A path to a file where we're going to
+            write the converted dict into a JSON format.
+        :type destination: str
         """
 
         with open(destination, "w") as file:
@@ -435,9 +447,10 @@ class Dict:
         """
         Save a dictionnary into a YAML file.
 
-        Argument:
-            - destination: str
-                A path to a file where we're going to write the converted dict into a JSON format.
+        :param destination:
+            A path to a file where we're going to write the
+            converted dict into a JSON format.
+        :type destination: str
         """
 
         with open(destination, "w") as file:
@@ -452,9 +465,11 @@ class Dict:
         """
         Convert a JSON formated string into a dictionary.
 
-        Argument:
-            - data: str
-                A JSON formated string to convert to dict format.
+        :param data: A JSON formated string to convert to dict format.
+        :type data: str
+
+        :return: The dict representation of the JSON formatted string.
+        :rtype: dict
         """
 
         try:
@@ -471,9 +486,11 @@ class Dict:
         """
         Convert a YAML formated string into a dictionary.
 
-        Argument:
-            - data: str
-                A YAML formated string to convert to dict format.
+        :param data: A YAML formated string to convert to dict format.
+        :type data: str
+
+        :return: The dict representation of the YAML formatted string.
+        :rtype: dict
         """
 
         # We read a YAML string and convert it into a dictionnary.
@@ -484,9 +501,8 @@ class Directory:  # pylint: disable=too-few-public-methods
     """
     Directory manipulation.
 
-    Argument:
-        - directory:str
-            A path to the directory to manipulate.
+    :param directory: A path to the directory to manipulate.
+    :type directory: str
     """
 
     def __init__(self, directory):  # pragma: no cover
@@ -497,9 +513,11 @@ class Directory:  # pylint: disable=too-few-public-methods
         """
         This method fix the path of the given path.
 
-        Argument:
-            - splited_path: list
-                A list to convert to the right path
+        :param splited_path: A list to convert to the right path.
+        :type splited_path: optional, list
+
+        :return: The fixed path.
+        :rtype: str
         """
 
         if not splited_path:
@@ -532,9 +550,8 @@ class File:
     """
     File treatment/manipulations.
 
-    Argument:
-        file: str
-            A path to the file to manipulate.
+    :param file: A path to the file to manipulate.
+    :type file: str
     """
 
     def __init__(self, file):
@@ -545,9 +562,13 @@ class File:
         """
         Write or append data into the given file path.
 
-        Argument:
-            - data_to_write: str
-                The data to write.
+        :param data_to_write: The data to write.
+        :type data_to_write: str
+
+        :param overwrite:
+            Tell us if we have to overwrite the
+            content of the file we are working with.
+        :type overwrite: optional, bool
         """
 
         if overwrite or not path.isfile(self.file):
@@ -585,8 +606,8 @@ class File:
         """
         Read a given file path and return its content.
 
-        Returns: str
-            The content of the given file path.
+        :return: The content of the given file path.
+        :rtype: str
         """
 
         with open(self.file, "r", encoding="utf-8") as file:
@@ -612,11 +633,10 @@ class File:
 
     def copy(self, destination):
         """
-        Copy the givven file to the destination.
+        Copy the given file to the destination.
 
-        Argument:
-            - destination: str
-                The destination of the copy
+        :param destination: The destination of the copy.
+        :type destination: str
         """
 
         shutil_copy(self.file, destination)
@@ -626,9 +646,8 @@ class List:  # pylint: disable=too-few-public-methods
     """
     List manipulation.
 
-    Argument:
-        - main_list: list
-            The list to manipulate.
+    :param main_list: The list to manipulate.
+    :type main_list: optional, list
     """
 
     def __init__(self, main_list=None):  # pragma: no cover
@@ -647,8 +666,8 @@ class List:  # pylint: disable=too-few-public-methods
         """
         Return a well formated list. Basicaly, it's sort a list and remove duplicate.
 
-        Returns: list
-            A sorted, without duplicate, list.
+        :return: A sorted, without duplicate, list.
+        :rtype: list
         """
 
         try:
@@ -662,14 +681,16 @@ class List:  # pylint: disable=too-few-public-methods
         Return a well formated list. With the key_method as a function/method to format
         the elements before sorting.
 
-        Arguments:
-            - key_method: function
-                A function to use to format the readed element before sorting.
-            - reverse: bool
-                True: Reverse the returned list.
+        :param key_method:
+            A function or method to use to format the
+            readed element before sorting.
+        :type key_method: function|method
 
-        Returns: list
-            A sorted list.
+        :param reverse: Tell us if we have to reverse the list.
+        :type reverse: optional, bool
+
+        :return: A sorted list.
+        :rtype: list
         """
 
         try:
@@ -680,22 +701,34 @@ class List:  # pylint: disable=too-few-public-methods
 
 class Regex:  # pylint: disable=too-few-public-methods
 
-    """A simple implementation ot the python.re package
+    """
+    A simple implementation ot the python.re package
 
-    Arguments:
-        - data: str
-            The data to regex check.
-        - regex: str
-            The regex to match.
-        - group: int
-            The group to return
-        - rematch: bool
-            True: return the matched groups into a formated list.
-                (implementation of Bash ${BASH_REMATCH})
-        - replace_with: str
-            The value to replace the matched regex with.
-        - occurences: int
-            The number of occurence(s) to replace.
+    :param data: The data to check.
+    :type data: str
+
+    :param regex: The regex to match.
+    :type regex: str
+
+    :param group: The group to return.
+    :type group: optional, int
+
+    :param rematch:
+        Allow to return the matched groups into a formatted list.
+
+        .. note::
+            This is an implementation of Bash :code:`${BASH_REMATCH}`
+    :type rematch: optional, bool
+
+    :param replace_with: The value to replace the matched regex with.
+    :type replace_with: optional, str
+
+    :param occurences: The number of occurence(s) to replace.
+    :type occurences: optional, int
+
+    :param return_type:
+        Tell us if we have to return the matched data or simply check
+        if we matched (True) or not (False)
     """
 
     def __init__(self, data, regex, **args):  # pragma: no cover
@@ -725,7 +758,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
     def not_matching_list(self):
         """
-        This method return a list of string which don't match the
+        Return a list of string which don't match the
         given regex.
         """
 
@@ -737,7 +770,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
     def matching_list(self):
         """
-        This method return a list of the string which match the given
+        Return a list of the string which match the given
         regex.
         """
 
@@ -748,6 +781,9 @@ class Regex:  # pylint: disable=too-few-public-methods
     def match(self):
         """
         Used to get exploitable result of re.search
+
+        :return: The data of the match status.
+        :rtype: mixed
         """
 
         # We initate this variable which gonna contain the returned data
@@ -789,6 +825,9 @@ class Regex:  # pylint: disable=too-few-public-methods
     def replace(self):
         """
         Used to replace a matched string with another.
+
+        :return: The data after replacement.
+        :rtype: str
         """
 
         if self.replace_with:  # pylint: disable=no-member
@@ -804,16 +843,20 @@ class Regex:  # pylint: disable=too-few-public-methods
 
 class Download:  # pragma: no cover pylint:disable=too-few-public-methods
     """
-    This class will download all given file.
+    Download or return the content of the given link.
 
-    Argument:
-        - link: str
-            The link to download
-        - destination: str
-            The location where we should save the downloaded content.
-        - return_data: bool
-            True: We return data
-            False: We save into destination
+    :param link: The link to download.
+    :type link: str
+
+    :param destination:
+        The location where we should save the downloaded content.
+    :type destination: optional, str
+
+    :param return_data:
+        Tell us if we need to return the page content
+        or write its content into the given destination.
+    :type return_data: optional, bool
+
     """
 
     def __init__(self, link, destination=None, return_data=False):
@@ -828,7 +871,14 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
     def text(self):
         """
-        This method download the given link and return its requests.text.
+        Download the given link and return or save its :code:`requests.text`
+        at the given destination.
+
+        :rtype: mixed
+
+        :raises:
+            :code:`Exception`
+                If the status code is not :code:`200`.
         """
 
         try:

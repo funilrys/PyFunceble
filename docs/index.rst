@@ -43,6 +43,7 @@ Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domai
    logs-sharing
    contributing
    logic-representation
+   api
    code
    contributors
    special-thanks

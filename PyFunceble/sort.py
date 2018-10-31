@@ -5,15 +5,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide some sorting preset.
+This submodule will provide some sorting presets.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -69,7 +68,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 
 class Sort:  # pylint: disable=too-few-public-methods
     """
-    This class will provide some sorting preset which we can
+    Provide some sorting presets which we can
     parse to PyFunceble.helpers.List().custom_format().
     """
 
@@ -107,19 +106,19 @@ class Sort:  # pylint: disable=too-few-public-methods
         :return: The formated element.
         :rtype: str
 
-        For a domain like aaa.bbb.ccc.tdl.
+        For a domain like :code:`aaa.bbb.ccc.tdl`.
 
         A normal sorting is done in the following order:
-            1. aaa
-            2. bbb
-            3. ccc
-            4. tdl
+            1. :code:`aaa`
+            2. :code:`bbb`
+            3. :code:`ccc`
+            4. :code:`tdl`
 
         This method allow the sorting to be done in the following order:
-            1. tdl
-            2. ccc
-            3. bbb
-            4. aaa
+            1. :code:`tdl`
+            2. :code:`ccc`
+            3. :code:`bbb`
+            4. :code:`aaa`
 
         """
 

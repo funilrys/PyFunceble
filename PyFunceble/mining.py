@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will give us the mining interface.
+This submodule will give us the mining interface and logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -73,12 +72,7 @@ from PyFunceble.helpers import Dict, File, List
 
 class Mining:
     """
-    This class will manage the minig subsystem.
-
-    Argument:
-        - full_url: bool
-            - False: We check only in a domain mode environnment.
-            - True: We check in a www environnment.
+    Manage the minig subsystem.
     """
 
     def __init__(self):  # pragma: no cover
@@ -100,6 +94,8 @@ class Mining:
                 # We set a variable which will save the actual element we are working with.
                 self.to_get = PyFunceble.CONFIGURATION["to_test"]
                 self.to_get_bare = PyFunceble.CONFIGURATION["to_test"]
+            else:
+                raise Exception("Unknow test type.")
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -133,6 +129,9 @@ class Mining:
     def mine(self):  # pragma: no cover
         """
         Search for domain or URL related to the original URL or domain.
+
+        :return: The mined domains or URL.
+        :rtype: dict
         """
 
         if PyFunceble.CONFIGURATION["mining"]:
@@ -213,7 +212,7 @@ class Mining:
 
     def _retrieve(self):
         """
-        This method retrieve the mining informations.
+        Retrieve the mining informations.
         """
 
         if PyFunceble.CONFIGURATION["mining"]:
@@ -250,7 +249,7 @@ class Mining:
 
     def _backup(self):
         """
-        This method backup the mining informations.
+        Backup the mined informations.
         """
 
         if PyFunceble.CONFIGURATION["mining"]:
@@ -261,12 +260,11 @@ class Mining:
 
     def _add(self, to_add):
         """
-        This method will add the currently mined information to the
+        Add the currently mined information to the
         mined "database".
 
-        Argument:
-            - to_add: dict
-                The element to add.
+        :param to_add: The element to add.
+        :type to_add: dict
         """
 
         if PyFunceble.CONFIGURATION["mining"]:
@@ -308,7 +306,7 @@ class Mining:
 
     def remove(self):
         """
-        This method will remove the currently tested element from the mining
+        Remove the currently tested element from the mining
         data.
         """
 
@@ -340,10 +338,11 @@ class Mining:
 
     def list_of_mined(self):
         """
-        This method will provide the list of mined so they can be added to the list
+        Provide the list of mined so they can be added to the list
         queue.
 
-        Returns: list
+        :return: The list of mined domains or URL.
+        :rtype: list
         """
 
         # We initiate a variable which will return the result.
@@ -373,7 +372,7 @@ class Mining:
 
     def process(self):  # pragma: no cover
         """
-        This method will process the logic and structure of the mining.
+        Process the logic and structuration of the mining database.
         """
 
         if PyFunceble.CONFIGURATION["mining"]:

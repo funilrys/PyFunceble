@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the IANA logic and interface.
 
@@ -92,6 +91,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     def _data(cls):
         """
         Get the database from IANA website.
+
+        :return: The database upstream HTML page.
+        :rtype: str
         """
 
         # We initiate the URL to the IANA Root Zone Database page.
@@ -105,7 +107,11 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Return the referer for the given extension.
 
-        :pram extension: A string, a valid domain extension.
+        :param extension: A valid domain extension.
+        :type extension: str
+
+        :return: The whois server to use to get the WHOIS record.
+        :rtype: str
         """
 
         # We map the list of server which have to be set manually because
@@ -305,9 +311,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         Extract the extention from the given line.
         Plus get its referer.
 
-        Argument:
-            - line: str
-                The line from self.iana_url.
+
+        :param line: The line from the IANA database.
+        :type line: str
         """
 
         # We extract the different extension from the currently readed line.

@@ -1,8 +1,8 @@
 Code documentation
 ==================
 
-.. automodule:: PyFunceble
-   :members: test
+.. note::
+    This section will documents every parts (except the API section) of our code base.
 
 Helpers
 -------
@@ -15,57 +15,65 @@ How can we avoid writing the same thing every time ?
 Code documentation
 ^^^^^^^^^^^^^^^^^^
 
-.. automodule::PyFunceble.helpers
-   :members: 
+.. automodule:: PyFunceble.helpers
+   :members:
+   :private-members:
 
 :code:`Download()`
 """"""""""""""""""
 
 .. autoclass:: PyFunceble.helpers.Download
     :members:
+    :private-members:
 
 :code:`Command()`
 """""""""""""""""
 
 .. autoclass:: PyFunceble.helpers.Command
     :members:
+    :private-members:
 
 :code:`Regex()`
 """""""""""""""
 
 .. autoclass:: PyFunceble.helpers.Regex
     :members:
+    :private-members:
 
 :code:`Dict()`
 """"""""""""""
 
 .. autoclass:: PyFunceble.helpers.Dict
     :members:
+    :private-members:
 
 :code:`List()`
 """"""""""""""
 
 .. autoclass:: PyFunceble.helpers.List
     :members:
+    :private-members:
 
 :code:`Directory()`
 """""""""""""""""""
 
 .. autoclass:: PyFunceble.helpers.Directory
     :members:
+    :private-members:
 
 :code:`File()`
 """"""""""""""
 
 .. autoclass:: PyFunceble.helpers.File
     :members:
+    :private-members:
 
 :code:`Hash()`
 """"""""""""""
 
 .. autoclass:: PyFunceble.helpers.Hash
     :members:
-
+    :private-members:
 
 Auto-continue
 -------------
@@ -76,10 +84,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_continue
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.auto_continue.AutoContinue
     :members:
+    :private-members:
 
 Autosave
 --------
@@ -97,10 +107,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_save
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.auto_save.AutoSave
     :members:
+    :private-members:
 
 Check
 -----
@@ -114,10 +126,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.check
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.check.Check
     :members:
+    :private-members:
 
 
 Cleaning
@@ -132,11 +146,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.clean
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.clean.Clean
     :members:
-    :exclude-members: all, file_to_delete
+    :exclude-members: almost_everything, file_to_delete, databases_to_delete
 
 Configuration
 -------------
@@ -151,19 +166,22 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.config
-   :members: 
+   :members:
+   :private-members:
 
 :code:`Load()`
 """"""""""""""
 
 .. autoclass:: PyFunceble.config.Load
     :members:
+    :private-members:
 
 :code:`Version()`
 """""""""""""""""
 
 .. autoclass:: PyFunceble.config.Version
     :members:
+    :private-members:
 
 Core
 ----
@@ -173,10 +191,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.core
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.core.Core
     :members:
+    :private-members:
 
 Database
 --------
@@ -191,13 +211,16 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.database
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.database.Inactive
     :members:
+    :private-members:
 
 .. autoclass:: PyFunceble.database.Whois
     :members:
+    :private-members:
 
 Directory Structure
 -------------------
@@ -211,10 +234,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.directory_structure
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.directory_structure.DirectoryStructure
     :members:
+    :private-members:
 
 Execution Time
 --------------
@@ -228,10 +253,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.execution_time
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.execution_time.ExecutionTime
     :members:
+    :private-members:
 
 Expiration Date
 ---------------
@@ -245,10 +272,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.expiration_date
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.expiration_date.ExpirationDate
     :members:
+    :private-members:
 
 Generation
 ----------
@@ -262,10 +291,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.generate
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.generate.Generate
     :members:
+    :private-members:
 
 HTTP Code
 ---------
@@ -279,10 +310,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.http_code
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.http_code.HTTPCode
     :members:
+    :private-members:
 
 IANA
 ----
@@ -296,10 +329,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.iana
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.iana.IANA
     :members:
+    :private-members:
 
 Lookup
 ------
@@ -314,10 +349,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.lookup
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.lookup.Lookup
     :members:
+    :private-members:
 
 Mining
 ------
@@ -332,9 +369,11 @@ Code documentation
 
 .. automodule::PyFunceble.mining
     :members:
+    :private-members:
 
 .. autoclass:: PyFunceble.mining.Mining
     :members:
+    :private-members:
 
 Percentage
 ----------
@@ -348,10 +387,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.percentage
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.percentage.Percentage
     :members:
+    :private-members:
 
 Prints
 ------
@@ -365,10 +406,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.prints
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.prints.Prints
     :members:
+    :private-members:
 
 Production
 ----------
@@ -382,7 +425,8 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.production
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.production.Production
     :members:
@@ -399,10 +443,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.publicsuffix
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.publicsuffix.PublicSuffix
     :members:
+    :private-members:
 
 Referer
 -------
@@ -416,10 +462,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.referer
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.referer.Referer
     :members:
+    :private-members:
 
 Sort
 ----
@@ -433,10 +481,12 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.sort
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.sort.Sort
     :members:
+    :private-members:
 
 Status
 ------
@@ -450,19 +500,22 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.status
-   :members: 
+   :members:
+   :private-members:
 
 Normal testing
 """"""""""""""
 
 .. autoclass:: PyFunceble.status.Status
     :members:
+    :private-members:
 
 URL testing
 """""""""""
 
 .. autoclass:: PyFunceble.status.URLStatus
     :members:
+    :private-members:
 
 URL Testing
 -----------
@@ -476,8 +529,10 @@ Code documentation
 ^^^^^^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.url
-   :members: 
+   :members:
+   :private-members:
 
 .. autoclass:: PyFunceble.url.URL
     :members:
+    :private-members:
 

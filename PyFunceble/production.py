@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the production logic. We understand by production login
 the logic to apply before commiting new code.
@@ -75,11 +74,12 @@ from PyFunceble.helpers import Command, Dict, File, Regex
 
 class Production:  # pylint: disable=too-few-public-methods
     """
-    This class will manage and provide the production logic.
+    Manage and provide the production preparation logic.
 
-    Argument:
-        - extern: bool
-            True: We do not execute the logic and allow method to be called.
+    :param extern:
+        Tell us if we do not have to execute the logic automatically.
+        This allow method to be called.
+    :type extern: optional, bool
     """
 
     def __init__(self, extern=False):
@@ -205,7 +205,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _update_code_urls(self):
         """
-        This method will read the code and update all links.
+        Read the code and update all links.
         """
 
         to_ignore = [".gitignore", ".keep", "production.py", "publicsuffix.py"]
@@ -268,7 +268,7 @@ class Production:  # pylint: disable=too-few-public-methods
     @classmethod
     def _get_current_version_yaml(cls):
         """
-        This method get and return the content of version.yaml
+        Get and return the content of version.yaml
         """
 
         return Dict().from_yaml(
@@ -277,7 +277,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _is_version_greater(self):
         """
-        This method check if the current version is greater as the older older one.
+        Check if the current version is greater as the older older one.
         """
 
         # we compare the 2 versions.
@@ -297,7 +297,7 @@ class Production:  # pylint: disable=too-few-public-methods
     @classmethod
     def is_dev_version(cls):
         """
-        This method check if the current branch is `dev`.
+        Check if the current branch is `dev`.
         """
 
         # We initiate the command we have to run in order to
@@ -324,7 +324,7 @@ class Production:  # pylint: disable=too-few-public-methods
     @classmethod
     def is_master_version(cls):
         """
-        This method check if the current branch is `master`.
+        Check if the current branch is `master`.
         """
 
         # We initiate the command we have to run in order to
@@ -350,7 +350,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _does_require_deprecation(self):
         """
-        This method check if we have to put the previous version into the deprecated list.
+        Check if we have to put the previous version into the deprecated list.
         """
 
         for index, version_number in enumerate(self.current_version[0][:2]):
@@ -368,7 +368,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _does_require_force_update(self):
         """
-        This method check if we have to put the previsous verion into the list of minimal version
+        Check if we have to put the previsous verion into the list of minimal version
         for force_update.
         """
 
@@ -385,12 +385,14 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _update_docs(self, file_to_update):
         """
-        This method update README.md so that it's always giving branch related bases.
-        Note: This only apply to `dev` and `master` branch.
+        Update the given documentation file or :code:`README.rst` so that
+        it always gives branch related URL and informations.
 
-        Argument:
-            - file_to_update: str
-                The file to update.
+        .. note::
+            This only apply to :code:`dev` and :code:`master` branch.
+
+        :param file_to_update: The file to update.
+        :type file_to_update: str
         """
 
         if self.is_dev_version():
@@ -426,7 +428,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _update_setup_py(self):
         """
-        This method will update setup.py so that it always have the right name.
+        Update :code:`setup.py` so that it always have the right name.
         """
 
         # We initiate the path to the file we have to filter.
@@ -471,7 +473,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
     def _update_travis_yml(self):
         """
-        This method will update .travis.yml according to current branch.
+        Update :code:`.travis.yml` according to current branch.
         """
 
         # We initiate the file we have to filter/update.

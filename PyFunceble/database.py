@@ -8,13 +8,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the database logic and interface.
 
@@ -113,7 +112,7 @@ class Inactive:
 
     def _reformat_historical_formating_error(self):  # pragma: no cover
         """
-        This method will format the old format so it can be merged into the newer format.
+        Format the old format so it can be merged into the newer format.
         """
 
         # We construct the possible path to an older version of the database.
@@ -182,8 +181,8 @@ class Inactive:
 
     def _merge(self):
         """
-        This method will merge the real database with the older one which
-        has already been set into PyFunceble.CONFIGURATION["inactive_db"]
+        Merge the real database with the older one which
+        has already been set into :code:`PyFunceble.CONFIGURATION["inactive_db"]`
         """
 
         # We get the content of the database.
@@ -273,11 +272,10 @@ class Inactive:
     def _add_to_test(self, to_add):
         """
         Add an element or a list of element into
-        PyFunceble.CONFIGURATION['inactive_db'][self.file_path]['to_test'].
+        :code:`PyFunceble.CONFIGURATION['inactive_db'][self.file_path]['to_test']`.
 
-        Argument:
-            - to_add: str|list
-                The domain or ip to add.
+        :param to_add: The domain, IP or URL to add.
+        :type to_add: str|list
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -387,10 +385,10 @@ class Inactive:
 
     def _timestamp(self):
         """
-        Return the timestamp where we are going to save our current list.
+        Get the timestamp where we are going to save our current list.
 
-        Returns: int or str
-            The timestamp to append with the currently tested domains.
+        :return: The timestamp to append with the currently tested element.
+        :rtype: int|str
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -445,7 +443,8 @@ class Inactive:
 
     def add(self):
         """
-        Save the current PyFunceble.CONFIGURATION['domain'] into the current timestamp.
+        Save the current :code.`PyFunceble.CONFIGURATION['to_test']`
+        into the current timestamp.
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -517,7 +516,8 @@ class Inactive:
 
     def remove(self):
         """
-        Remove all occurence of PyFunceble.CONFIGURATION['domain'] into the database.
+        Remove all occurence of :code:`PyFunceble.CONFIGURATION['to_test']`
+        from the database.
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -550,7 +550,10 @@ class Inactive:
 
     def content(self):
         """
-        This method will return the content of the database.
+        Get the content of the database.
+
+        :return: The content of the database.
+        :rtype: list
         """
 
         # We initiate a variable which will save what we are going to return.
@@ -586,11 +589,8 @@ class Whois:
     """
     Logic behind the whois database. Indeed, the idea is to implement #2.
 
-    Arguments:
-        - whois_record: str|bytes
-            The whois record to save.
-        - expiration_date: str
-            The extracted expiration date.
+    :param expiration_date: The extracted expiration date.
+    :type expiration_date: optional, str
     """
 
     def __init__(self, expiration_date=None):
@@ -746,7 +746,10 @@ class Whois:
 
     def get_expiration_date(self):
         """
-        Return the expiration date from the database.
+        Get the expiration date from the database.
+
+        :return: The expiration date from the database.
+        :rtype: str|None
         """
 
         if self._authorization() and self.is_in_database() and not self.is_time_older():

@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will create the generation interface/logic.
 
@@ -74,13 +73,14 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
     """
     Generate different sort of files.
 
-    Arguments:
-        - domain_status: str
-            The domain status.
-        - source: str
-            The source of the given status.
-        - expiration_date: str
-            The expiration date of the domain if catched.
+    :param domain_status: The domain status.
+    :type domain_status: str
+
+    :param source: The source of the given status.
+    :type source: optional, str
+
+    :param expiration_date: The expiration date of the domain (if catched).
+    :type expiration_date: optional, str
     """
 
     def __init__(self, domain_status, source=None, expiration_date=None):
@@ -394,13 +394,14 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
     def analytic_file(self, new_status, old_status):
         """
-        Generate Analytic/* files based on the given old and new statuses.
+        Generate :code:`Analytic/*` files based on the given old and
+        new statuses.
 
-        Arguments:
-            - new_status: str
-                The new status of the domain.
-            - old_status: str
-                The old status of the domain.
+        :param new_status: The new status of the domain.
+        :type new_status: str
+
+        :param old_status: The old status of the domain.
+        :type old_status: str
         """
 
         if PyFunceble.CONFIGURATION["file_to_test"]:
@@ -488,11 +489,13 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
             # We construct the url to get.
             url_to_get = "http://%s" % self.tested
-        else:
+        elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
             # The element we are testing is a URL.
 
             # We construct the url to get.
             url_to_get = self.tested
+        else:
+            raise Exception("Unknow test type.")
 
         if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
             # The element we are testing is a blogspot subdomain.

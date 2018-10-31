@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will helps us intert with the helpful public sufix.
+This submodule will provide us a place and way to intertact with the helpful public sufix database.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -68,7 +67,7 @@ from PyFunceble.helpers import Dict, Download, File, List
 
 class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    This class will help us interract with the public suffix database.
+    Let us interact with the public suffix database.
     """
 
     def __init__(self, live=True):
@@ -116,9 +115,8 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Extract the extension from the given line.
 
-        Argument:
-            - line: str
-                The line from the official public suffix repository.
+        :param line: The line from the official public suffix repository.
+        :type line: str
         """
 
         # We strip the parsed line.
@@ -159,7 +157,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def update(self):
         """
-        Update of the content of the `public-suffix.json`.
+        Update of the content of the :code:`public-suffix.json`.
         """
 
         # We loop through the line of the upstream file.

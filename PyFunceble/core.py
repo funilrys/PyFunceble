@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This module is half of the brain of PyFunceble.
 
@@ -85,14 +84,28 @@ from PyFunceble.url import URL
 
 class Core:  # pragma: no cover
     """
-    Main entry to PYFunceble. Brain of the program. Also known as "put everything
+    Main entry to PyFunceble. Brain of the program. Also known as "put everything
     together to make the system works".
 
-    Arguments:
-        - domain: str
-            A domain or IP to test.
-        - file_path: str
-            A path to a file to read.
+    :param domain_or_ip_to_test: A domain or IP to test.
+    :type domain_or_ip_to_test: optional, str
+
+    :param file_path: A path to a file to read and test.
+    :type file_path: optional, str
+
+    :param url_to_test: A URL to test.
+    :type url_to_test: optional, str
+
+    :param url_file: A path to a file which contains URL to test.
+    :type url_file: optional, str
+
+    :param link_to_test: A link to a file to download and test.
+    :type link_to_test: optional, str
+
+    :param modulo_test:
+        If set to True, it will tell the system that we are working as an
+        exported module.
+    :param modulo_test: optional, bool
     """
 
     def __init__(self, **args):
@@ -117,12 +130,14 @@ class Core:  # pragma: no cover
     @classmethod
     def _entry_management_url_download(cls, passed):
         """
-        This method will check if the given information is a URL.
-        If it is the case, it download and change the file to test.
+        Check if the given information is a URL.
+        If it is the case, it download and update the location of file to test.
 
-        Argument:
-            - passed: str
-                The argument passed to the system.
+        :param passed: The url passed to the system.
+        :type passed: str
+
+        :return: The state of the check.
+        :rtype: bool
         """
 
         if passed and Check().is_url_valid(passed):
@@ -158,7 +173,7 @@ class Core:  # pragma: no cover
 
     def _entry_management_url(self):
         """
-        This method will manage the loading of the url system.
+        Manage the loading of the url system.
         """
 
         if (
@@ -176,7 +191,7 @@ class Core:  # pragma: no cover
 
     def _entry_management(self):  # pylint: disable=too-many-branches
         """
-        This method avoid to have 1 millions line into self.__init__()
+        Avoid to have 1 millions line into self.__init__()
         """
 
         if not self.modulo_test:  # pylint: disable=no-member
@@ -354,18 +369,25 @@ class Core:  # pragma: no cover
 
     def test(self, complete=False):
         """
-        This method avoid confusion between self.domain which is called into
+        Avoid confusion between self.domain which is called into
         __main__ and test() which should be called out of PyFunceble's scope.
 
-        Argument:
-            - complete: bool
-                True: We return a list with significant data about the test.
+        :param complete:
+            Activate the return of a dictionnary with signigican data about
+            the test.
+        :type complete: optional, bool
 
-        Returns: str
-            ACTIVE, INACTIVE or INVALID.
+        :return: ACTIVE INACTIVE or INVALID.
+        :rtype: str|list
 
-        Raise:
-            - Exception: when this method is called under __name___
+        :raises:
+            :code:`Exception`
+                When this method is called under
+                :code:`__name__ == '__main__'`
+
+        .. note::
+            This method should never be called in a
+            :code:`__name__ == '__main__'` context.
         """
 
         if not self.modulo_test:  # pylint: disable=no-member
@@ -421,6 +443,8 @@ class Core:  # pragma: no cover
                         PyFunceble.CONFIGURATION["current_test_data"][
                             "status"
                         ] = URL().get()
+                    else:
+                        raise Exception("Unknow test type.")
 
                 if "http_code" in PyFunceble.CONFIGURATION:
                     # The http status code exist into the configuration.
@@ -452,7 +476,7 @@ class Core:  # pragma: no cover
     @classmethod
     def bypass(cls):
         """
-        Exit the script if `[PyFunceble skip]` is matched into the latest
+        Exit the script if :code:`[PyFunceble skip]` is matched into the latest
         commit message.
         """
 
@@ -511,13 +535,14 @@ class Core:  # pragma: no cover
         Manage the database, autosave and autocontinue systems for the case that we are reading
         a file.
 
-        Arguments:
-            - status: str
-                The current status of current.
-            - current: str
-                The current domain or URL we are testing.
-            - last: str
-                The last domain or URL of the file we are testing.
+        :param current: The currently tested element.
+        :type current: str
+
+        :param last: The last element of the list.
+        :type last: str
+
+        :param status: The status of the currently tested element.
+        :type status: optional, str
         """
 
         if status:
@@ -599,11 +624,12 @@ class Core:  # pragma: no cover
         """
         Manage the case that we want to test only a domain.
 
-        Argument:
-            - domain: str
-                The domain or IP to test.
-            - last_domain: str
-                The last domain of the file we are testing.
+        :param domain: The domain or IP to test.
+        :type domain: optional, str
+
+        :param last_domain:
+            The last domain to test if we are testing a file.
+        :type last_domain: optional, str
         """
 
         # We print the header.
@@ -650,7 +676,7 @@ class Core:  # pragma: no cover
     @classmethod
     def colored_logo(cls):
         """
-        This method print the colored logo based on global results.
+        Print the colored logo based on global results.
         """
 
         if not PyFunceble.CONFIGURATION["quiet"]:
@@ -672,12 +698,15 @@ class Core:  # pragma: no cover
         """
         Format the extracted domain before passing it to the system.
 
-        Argument:
-            extracted_domain: str
-                The extracted domain from the file.
+        :param extracted_domain: The extracted domain.
+        :type extracted_domain: str
 
-        Returns: str
-            The domain to test.
+        :return: The formatted domain or IP to test.
+        :rtype: str
+
+        .. note:
+            Understand by formating the fact that we get rid
+            of all the noises around the domain we want to test.
         """
 
         if not extracted_domain.startswith("#"):
@@ -734,14 +763,14 @@ class Core:  # pragma: no cover
         """
         Format the exctracted adblock line before passing it to the system.
 
-        Arguments:
-            - to_format: str
-                The extracted line from the file.
-            - result: None or list
-                The list of extracted domain.
+        :param to_format: The extracted line from the file.
+        :type to_format: str
 
-        Returns: list
-            The list of extracted domains.
+        :param result: A list of the result of this method.
+        :type result: optional, list
+
+        :return: The list of domains or IP to test.
+        :rtype: list
         """
 
         if not result:
@@ -823,12 +852,11 @@ class Core:  # pragma: no cover
         Convert the adblock format into a readable format which is understood
         by the system.
 
-        Argument:
-            - list_to_test: list
-                The read content of the given file.
+        :param list_to_test: The content of the file.
+        :type list_to_test: list
 
-        Returns: list
-            The list of domain to test.
+        :return: The list of domains to test.
+        :rtype: list
         """
 
         # We initiate a variable which will save what we are going to return.
@@ -901,10 +929,10 @@ class Core:  # pragma: no cover
     @classmethod
     def _extract_domain_from_file(cls):
         """
-        This method extract all non commented lines.
+        Extract all non commented lines from the file we are testing.
 
-        Returns: list
-            Each line of the file == an element of the list.
+        :return: The elements to test.
+        :rtype: list
         """
 
         # We initiate the variable which will save what we are going to return.
@@ -935,7 +963,7 @@ class Core:  # pragma: no cover
 
     def _file_list_to_test_filtering(self):
         """
-        This method will unify the way we work before testing file contents.
+        Unify the way we work before testing file contents.
         """
 
         # We get the list to test from the file we have to test.
@@ -1040,7 +1068,9 @@ class Core:  # pragma: no cover
     def file(self):
         """
         Manage the case that need to test each domain of a given file path.
-        Note: 1 domain per line.
+
+        .. note::
+            1 domain per line.
         """
 
         # We get, format, filter, clean the list to test.
@@ -1076,11 +1106,13 @@ class Core:  # pragma: no cover
         """
         Manage the case that we want to test only a given url.
 
-        Arguments:
-            - url_to_test: str
-                The url to test.
-            - last_url: str
-                The last url of the file we are testing.
+        :param url_to_test: The url to test.
+        :type url_to_test: optional, str
+
+        :param last_url:
+            The last url of the file we are testing
+            (if exist)
+        :type last_url: optional, str
         """
 
         # We print the header.
@@ -1117,7 +1149,9 @@ class Core:  # pragma: no cover
     def file_url(self):
         """
         Manage the case that we have to test a file
-        Note: 1 URL per line.
+
+        .. note::
+            1 URL per line.
         """
 
         # We get, format, clean the list of URL to test.
@@ -1139,18 +1173,25 @@ class Core:  # pragma: no cover
         """
         Switch PyFunceble.CONFIGURATION variables to their opposite.
 
-        Arguments:
-            - variable: str
-                The PyFunceble.CONFIGURATION[variable_name] to switch.
-            - custom: bool
-                Tell the system if we want to switch a specific variable different
-                from PyFunceble.CONFIGURATION
+        :param variable:
+            The variable name to switch.
+            The variable should be an index our configuration system.
+            If we want to switch a bool variable, we should parse
+            it here.
+        :type variable: str|bool
 
-        Returns: bool
-            The opposite of the installed value of Settings.variable_name.
+        :param custom:
+            Let us know if have to switch the parsed variable instead
+            of our configuration index.
+        :type custom: optional, bool
 
-        Raise:
-            - Exception: When the configuration is not valid. In other words,
+        :return:
+            The opposite of the configuration index or the given variable.
+        :rtype: bool
+
+        :raises:
+            :code:`Exception`
+                When the configuration is not valid. In other words,
                 if the PyFunceble.CONFIGURATION[variable_name] is not a bool.
         """
 

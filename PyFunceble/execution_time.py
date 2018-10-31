@@ -7,13 +7,12 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 This submodule will provide the execution time logic.
 
@@ -72,11 +71,14 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     """
     Set and return the exection time of the program.
 
-    Arguments:
-        - action: str
-            'start' or 'stop'
-        - last
-            Tell the subsystem if we are at the very end of the test.
+    :param action:
+        The action related the execution time.
+        Can be `start` or `stop`.
+    :type action: optional, str
+
+    :param last:
+        Tell the subsystem if we are at the very end of the file testing.
+    :type last: optional, bool
     """
 
     def __init__(self, action="start", last=False):
@@ -115,6 +117,9 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     def _authorization(cls):  # pragma: no cover
         """
         Check the execution authorization.
+
+        :return: The authorization status.
+        :rtype: bool
         """
 
         if (
@@ -129,9 +134,9 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
         Save the current time to the file.
 
-        Argument:
-            - last: bool
-                Tell us if we are at the really end of the testing.
+        :param last:
+            Tell us if we are at the very end of the file testing.
+        :type last: optional, bool
         """
 
         if (
@@ -252,8 +257,22 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
         calculate the difference between starting and ending time.
 
-        Returns: dict
-            A dics with `days`,`hours`,`minutes` and `seconds`.
+        :param start: A starting time.
+        :type start: optional, int|str
+
+        :param stop: A ending time.
+        :type stop: optional, int|str
+
+        :return:
+            A dict with following as index.
+
+                * :code:`days`
+                * :code:`hours`
+                * :code:`minutes`
+                * :code:`seconds`
+
+            as index.
+        :rtype: dict
         """
 
         if start and end:  # pragma: no cover
@@ -295,8 +314,14 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
         Format the calculated time into a human readable format.
 
-        Returns: str
-            A human readable date.
+        :param start: A starting time.
+        :type start: optional, int|str
+
+        :param stop: A ending time.
+        :type stop: optional, int|str
+
+        :return: A human readable date.
+        :rtype: str
         """
 
         # We return the formated execution time.

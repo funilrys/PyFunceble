@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide a checking interface.
+This submodule will provide a checking logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -70,11 +69,10 @@ from PyFunceble.publicsuffix import PublicSuffix
 
 class Check:
     """
-    This class provide some method to check several things around URL, IP or domain format.
+    Provide a place to check several things around URL, IP or domain.
 
-    Argument:
-        - element: str
-            The element to check.
+    :param element: The element (URL, IP or domain) to check.
+    :type element: optional, str
     """
 
     def __init__(self, element=None):
@@ -87,18 +85,17 @@ class Check:
 
     def is_url_valid(self, url=None, return_formated=False):
         """
-        Check if the domain of the given URL is valid.
+        Check if the given URL is valid.
 
-        Argument:
-            - url: str
-                The url to validate.
-            - return_formated: bool
-                True: We return the url base.
+        :param url: The url to validate.
+        :type url: optional, str
 
-        Returns: bool|str
-            - True: is valid.
-            - False: is invalid.
-            - str: return_formated is true and the url base is valid.
+        :param return_formated:
+            Allow the return of the url base (if URL formatted correctly).
+        :type return_formated: optional, bool
+
+        :return: The validity of the URL or its base.
+        :rtype: bool|str
         """
 
         if url:
@@ -153,17 +150,17 @@ class Check:
 
     def is_domain_valid(self, domain=None, subdomain_check=False):
         """
-        Check if PyFunceble.CONFIGURATION['domain'] is a valid domain.
+        Check if the given domain is a valid.
 
-        Argument:
-            - domain: str
-                The domain to validate.
-            - subdomain_check: bool
-                True: We check if it is a subdomain.
+        :param domain: The domain to validate.
+        :type domain: optional, str
 
-        Returns: bool
-            - True: is valid.
-            - False: is invalid.
+        :param subdomain_check:
+            Activate the subdomain checking.
+        :type subdomain_check: optional, bool
+
+        :return: The validity of the sub-domain.
+        :rtype: bool
         """
 
         # We initate our regex which will match for valid domains.
@@ -285,15 +282,13 @@ class Check:
 
     def is_subdomain(self, domain=None):
         """
-        Check if PyFunceble.CONFIGURATION['to_test'] or the given domain is a subdomain.
+        Check if the given subdomain is a subdomain.
 
-        Argument:
-            - domain: str
-                The domain to validate.
+        :param domain: The domain to validate.
+        :type domain: optional, str
 
-        Returns: bool
-            - True: is valid.
-            - False: is invalid.
+        :return: The validity of the subdomain.
+        :rtype: bool
         """
 
         if domain:
@@ -317,18 +312,16 @@ class Check:
 
     def is_ip_valid(self, ip_to_check=None):
         """
-        Check if PyFunceble.CONFIGURATION['domain'] is a valid IPv4.
+        Check if the given IP is a valid IPv4.
 
-        Argument:
-            - ip_to_check: str
-                The ip to test
+        :param ip_to_check: The IP to test.
+        :type ip_to_check: optional, str
 
-        Note:
-            We only test IPv4 because for now we only support domain and IPv4.
+        :return: The validity of the IP.
+        :rtype: bool
 
-        Returns: bool
-            - True: is valid.
-            - False: is invalid.
+        .. note::
+            We only test IPv4 because for now we only them for now.
         """
 
         # We initate our regex which will match for valid IPv4.

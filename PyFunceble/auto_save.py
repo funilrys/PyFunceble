@@ -7,15 +7,14 @@ The tool to check the availability of domains, IPv4 or URL.
 ::
 
 
-    :::::::::  :::   ::: :::::::::: :::    ::: ::::    :::  ::::::::  :::::::::: :::::::::  :::        ::::::::::
-    :+:    :+: :+:   :+: :+:        :+:    :+: :+:+:   :+: :+:    :+: :+:        :+:    :+: :+:        :+:
-    +:+    +:+  +:+ +:+  +:+        +:+    +:+ :+:+:+  +:+ +:+        +:+        +:+    +:+ +:+        +:+
-    +#++:++#+    +#++:   :#::+::#   +#+    +:+ +#+ +:+ +#+ +#+        +#++:++#   +#++:++#+  +#+        +#++:++#
-    +#+           +#+    +#+        +#+    +#+ +#+  +#+#+# +#+        +#+        +#+    +#+ +#+        +#+
-    #+#           #+#    #+#        #+#    #+# #+#   #+#+# #+#    #+# #+#        #+#    #+# #+#        #+#
-    ###           ###    ###         ########  ###    ####  ########  ########## #########  ########## ##########
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will create the auto-save logic.
+This submodule will create the autosave logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -71,13 +70,15 @@ from PyFunceble.percentage import Percentage
 
 class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     """
-    Logic behind autosave.
+    Provide the autosave logic.
 
-    Arguments:
-        - is_last_domain: bool
-            Tell the autosave logic if we are at the end.
-        - is_bypass: bool
-            Tell the autosave logic if we are in bypass mode.
+    :param is_last_domain:
+        Tell this subsystem if we are at the very end of the file testing.
+    :type is_last_domain: optional, bool
+
+    :param is_bypass:
+        Tell this subsystem if we are in bypassing mode.
+    :type is_bypass: optional, bool
     """
 
     def __init__(self, is_last_domain=False, is_bypass=False):
@@ -112,7 +113,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     def _travis(self):
         """
-        Logic behind travis autosave.
+        Logic behind autosave under Travis CI.
         """
 
         try:
