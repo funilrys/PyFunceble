@@ -66,7 +66,6 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout, sys
-from PyFunceble import Fore, initiate, load_config
 from PyFunceble.core import Core
 
 
@@ -80,7 +79,7 @@ class TestsResetCounters(TestCase):
         Setup everything that is needed for the test.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
         self.types = ["up", "down", "invalid", "tested"]
 
@@ -129,8 +128,8 @@ class TestsColoredLogo(BaseStdout):
         Setup everything needed.
         """
 
-        initiate(True)
-        load_config(True)
+        PyFunceble.initiate(True)
+        PyFunceble.load_config(True)
 
         BaseStdout.setUp(self)
         logo = """
@@ -143,8 +142,8 @@ class TestsColoredLogo(BaseStdout):
 
 """
 
-        self.logo_green = Fore.GREEN + logo
-        self.logo_red = Fore.RED + logo
+        self.logo_green = PyFunceble.Fore.GREEN + logo
+        self.logo_red = PyFunceble.Fore.RED + logo
 
     def tests_colored_logo_red(self):
         """
@@ -205,7 +204,7 @@ class TestsFormatDomain(TestCase):
         Setup everything that is needed for the tests.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
         self.domains = [
             "google.com",
             "twitter.com",
@@ -355,7 +354,7 @@ class TestAdblockDecode(TestCase):
         Setup everything needed for the test.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
         self.lines = [
             "||funilrys.github.io$script,image",
             "||google.com^$script,image",
@@ -411,7 +410,7 @@ class TestExtractDomain(TestCase):
         Setup everything that is needed for the test.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
     def test_file_does_not_exist(self):
         """
@@ -460,7 +459,7 @@ class TestSwitch(TestCase):
         Setup everything that is needed.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
         self.exception_message = "Impossible to switch %s. Please post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
 
