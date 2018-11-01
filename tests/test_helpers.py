@@ -69,12 +69,12 @@ from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex
 
 class TestHash(TestCase):
     """
-    This class will test PyFunceble.helpers.Hash
+    Test PyFunceble.helpers.Hash
     """
 
     def setUp(self):
         """
-        This method will initiate everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         self.file = "this_file_should_be_deleted"
@@ -90,7 +90,7 @@ class TestHash(TestCase):
 
     def testhash_data(self):
         """
-        This method will test Hash._hash_data().
+       Test Hash._hash_data().
         """
 
         to_test = "\n".join(self.data_to_write)
@@ -104,7 +104,7 @@ class TestHash(TestCase):
 
     def testhash_file(self):
         """
-        This method will test Hash._hash_file().
+        Test Hash._hash_file().
         """
 
         expected = False
@@ -133,7 +133,7 @@ class TestHash(TestCase):
 
     def test_get_path_not_exist(self):
         """
-        This method will test Hash.get() for the case that the given file does
+        Test Hash.get() for the case that the given file does
         not exist.
         """
 
@@ -147,7 +147,7 @@ class TestHash(TestCase):
 
     def test_get_all(self):
         """
-        This method will test Hash.get() for the case that we want all.
+        Test Hash.get() for the case that we want all.
         """
 
         expected = False
@@ -175,7 +175,7 @@ class TestHash(TestCase):
 
     def test_get_specific_algo(self):
         """
-        This method will test Hash.get() for the case that we want a specifig
+        Test Hash.get() for the case that we want a specifig
         algorithm.
         """
 
@@ -208,7 +208,7 @@ class TestHash(TestCase):
 
 class TestCommand(TestCase):
     """
-    This class will test PyFunceble.helpers.Command().
+    Test PyFunceble.helpers.Command().
     """
 
     def test_command(self):
@@ -224,12 +224,12 @@ class TestCommand(TestCase):
 
 class TestDict(TestCase):
     """
-    This class will test PyFunceble.helpers.Dict().
+    Test PyFunceble.helpers.Dict().
     """
 
     def setUp(self):
         """
-        This method will setup everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         self.to_test = {
@@ -240,9 +240,19 @@ class TestDict(TestCase):
             "pyfunceble": ["funilrys"],
         }
 
+    def test_remove_key_not_dict(self):
+        """
+        Test Dict().remove_key() for the case that a dict is not given.
+        """
+
+        expected = None
+        actual = Dict(["Hello", "World!"]).remove_key("Py")
+
+        self.assertEqual(expected, actual)
+
     def test_remove_key(self):
         """
-        This method will test Dict().remove_key().
+        Test Dict().remove_key().
         """
 
         expected = {
@@ -256,15 +266,9 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
-        # Test of the case that a dict is not given
-        expected = None
-        actual = Dict(["Hello", "World!"]).remove_key("Py")
-
-        self.assertEqual(expected, actual)
-
     def test_rename_key_not_dict(self):
         """
-        This method will test Dict().rename_key() for the case that no dict is
+        Test Dict().rename_key() for the case that no dict is
         given.
         """
 
@@ -273,13 +277,12 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_rename_key_single(self):
+    def test_rename_key_single_strict(self):
         """
-        This method will test Dict().rename_key() for the case that we want to
-        rename only one key.
+        Test Dict().rename_key() for the case that we want to
+        rename only one key strictly.
         """
 
-        # Test of the strict case
         expected = {
             "Hello": "world",
             "World": {"world", "hello"},
@@ -292,21 +295,28 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
-        # Test of the non-strict case
+    def test_rename_key_single_non_strict(self):
+        """
+        Test Dict().rename_key() for the case that we want to
+        rename only one key insensitivly.
+        """
+
         expected = {
             "Hello": "world",
             "World": {"world", "hello"},
-            "funilrys": ["Fun", "Ilrys"],
-            "PyFunceble": "Funceble",
-            "pyfunceble": ["funilrys"],
+            "nuilrys": ["Fun", "Ilrys"],
+            "Py": "Funceble",
+            "nuceble": ["funilrys"],
         }
-
         actual = Dict(self.to_test).rename_key({"fun": "nuf"}, strict=False)
+
+        self.assertEqual(expected, actual)
 
     def test_to_yaml(self):
         """
-        This method will test Dict().to_yaml.
+        Test Dict().to_yaml.
         """
+
         file_to_read = "this_yaml_is_a_ghost.yaml"
 
         expected = False
@@ -335,12 +345,12 @@ world: Fun Ilrys
 
 class TestDirectory(TestCase):
     """
-    This method will test PyFunceble.helpers.Directory().
+    Test PyFunceble.helpers.Directory().
     """
 
     def test_fix_path(self):
         """
-        This method will test Directory.fix_path().
+        Test Directory.fix_path().
         """
 
         expected = (
@@ -374,12 +384,12 @@ class TestDirectory(TestCase):
 
 class TestFile(TestCase):
     """
-    This class will test PyFunceble.helpers.File()
+    Test PyFunceble.helpers.File()
     """
 
     def test_write_delete(self):
         """
-        This method test File.write() along with File.delete().
+        Test File.write() along with File.delete().
         """
 
         expected = "Hello, World! I'm domain2idna"
@@ -398,7 +408,7 @@ class TestFile(TestCase):
 
     def test_write_overwrite_delete(self):
         """
-        This metthod test File.write() along with File.write() for the case that
+        Test File.write() along with File.write() for the case that
         we want to overwrite the content of a file.
         """
 
@@ -426,7 +436,7 @@ class TestFile(TestCase):
 
     def test_copy(self):
         """
-        This method test File.copy().
+        Test File.copy().
         """
 
         file_to_write = "hello_world"
@@ -477,7 +487,7 @@ class TestFile(TestCase):
 
     def test_read_delete(self):
         """
-        This method test File.read() along with helpers.File.delete.
+        Test File.read() along with helpers.File.delete.
         """
 
         expected = "Hello, World! This has been written by Fun Ilrys."
@@ -495,12 +505,12 @@ class TestFile(TestCase):
 
 class TestRegex(TestCase):
     """
-    This class will test Regex().
+    Test Regex().
     """
 
     def setUp(self):
         """
-        This method will setup everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         self.data_list = [
@@ -515,7 +525,7 @@ class TestRegex(TestCase):
 
     def test_not_matching_list(self):
         """
-        This method will test Regex.not_matching_list().
+        Test Regex.not_matching_list().
         """
 
         regex = "fun"
@@ -526,7 +536,7 @@ class TestRegex(TestCase):
 
     def test_matching_list(self):
         """
-        This method will test Regex.match_list().
+        Test Regex.match_list().
         """
 
         regex = "fun"
@@ -535,23 +545,39 @@ class TestRegex(TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_match(self):
+    def test_match_rematch(self):
         """
-        This method will test Regex.match() for the case that we want a specific
-        group.
+        Test Regex.match() for the case that we want to rematch the
+        different groups.
         """
 
-        # Test of the rematch case.
         regex = r"([a-z]{1,})\s([a-z]{1,})\s"
         expected = "is"
         actual = Regex(self.data, regex, rematch=True, group=1).match()
 
         self.assertEqual(expected, actual)
 
-        # Test of the group case
+    def test_match_group(self):
+        """
+        Test Regex.match() for the case that we want a specific
+        group.
+        """
+
         regex = "e"
         expected = "e"
         actual = Regex(self.data, regex, group=0).match()
+
+        self.assertEqual(expected, actual)
+
+    def test_replace_no_replace_with(self):
+        """
+        Test Regex.replace() for the case than no replace
+        with is given.
+        """
+
+        regex = "th"
+        expected = self.data
+        actual = Regex(self.data, regex).replace()
 
         self.assertEqual(expected, actual)
 
@@ -563,13 +589,6 @@ class TestRegex(TestCase):
         regex = "th"
         expected = "Hello, htis is Fun Ilrys. I just wanted to know how htings goes around hte tests."  # pylint: disable=line-too-long
         actual = Regex(self.data, regex, replace_with="ht").replace()
-
-        self.assertEqual(expected, actual)
-
-        # Test of the case that there is not replace_with
-        regex = "th"
-        expected = self.data
-        actual = Regex(self.data, regex).replace()
 
         self.assertEqual(expected, actual)
 
