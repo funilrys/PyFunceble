@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Fore, Style, directory_separator, environ, path
 from PyFunceble.helpers import Dict, Directory, Download, File
 
 
@@ -90,7 +89,7 @@ class Load:  # pylint: disable=too-few-public-methods
         except FileNotFoundError:
             # We got a FileNotFoundError
 
-            if "PYFUNCEBLE_AUTO_CONFIGURATION" not in environ:
+            if "PYFUNCEBLE_AUTO_CONFIGURATION" not in PyFunceble.environ:
                 # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
 
                 while True:
@@ -100,7 +99,11 @@ class Load:  # pylint: disable=too-few-public-methods
                     response = input(
                         "%s was not found.\n\
 Install and load the default configuration at the mentioned location? [y/n] "
-                        % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
+                        % (
+                            PyFunceble.Style.BRIGHT
+                            + self.path_to_config
+                            + PyFunceble.Style.RESET_ALL
+                        )
                     )
 
                     if isinstance(response, str):
@@ -171,7 +174,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # Those 2 strings are used to say if something like the cleaning went right (done)
         # or wrong (error).s
         PyFunceble.CONFIGURATION.update(
-            {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
+            {"done": PyFunceble.Fore.GREEN + "✔", "error": PyFunceble.Fore.RED + "✘"}
         )
 
     @classmethod
@@ -188,11 +191,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
         :rtype: tuple
         """
 
-        if not path_to_config.endswith(directory_separator):
+        if not path_to_config.endswith(PyFunceble.directory_separator):
             # The path to the config does not ends with the directory separator.
 
             # We initiate the default and the parsed variable with the directory separator.
-            default = parsed = path_to_config + directory_separator
+            default = parsed = path_to_config + PyFunceble.directory_separator
         else:
             # The path to the config does ends with the directory separator.
 
@@ -230,7 +233,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         except FileNotFoundError:
             # But if the configuration file is not found.
 
-            if path.isfile(self.path_to_default_config):
+            if PyFunceble.path.isfile(self.path_to_default_config):
                 # The `DEFAULT_CONFIGURATION_FILENAME` file exists.
 
                 # We copy it as the configuration file.
@@ -510,16 +513,16 @@ class Version:
                         # We initiate the message we are going to return to
                         # the user.
                         message = (
-                            Style.BRIGHT
-                            + Fore.RED
+                            PyFunceble.Style.BRIGHT
+                            + PyFunceble.Fore.RED
                             + "A critical issue has been fixed.\n"
-                            + Style.RESET_ALL
+                            + PyFunceble.Style.RESET_ALL
                         )  # pylint:disable=line-too-long
                         message += (
-                            Style.BRIGHT
-                            + Fore.GREEN
+                            PyFunceble.Style.BRIGHT
+                            + PyFunceble.Fore.GREEN
                             + "Please take the time to update PyFunceble!\n"
-                            + Style.RESET_ALL
+                            + PyFunceble.Style.RESET_ALL
                         )  # pylint:disable=line-too-long
 
                         # We print the message on screen.
@@ -556,16 +559,16 @@ class Version:
 
                 # We initiate the message we are going to return to the user.
                 message = (
-                    Style.BRIGHT
-                    + Fore.RED
+                    PyFunceble.Style.BRIGHT
+                    + PyFunceble.Fore.RED
                     + "Your current version is considered as deprecated.\n"
-                    + Style.RESET_ALL
+                    + PyFunceble.Style.RESET_ALL
                 )  # pylint:disable=line-too-long
                 message += (
-                    Style.BRIGHT
-                    + Fore.GREEN
+                    PyFunceble.Style.BRIGHT
+                    + PyFunceble.Fore.GREEN
                     + "Please take the time to update PyFunceble!\n"
-                    + Style.RESET_ALL
+                    + PyFunceble.Style.RESET_ALL
                 )  # pylint:disable=line-too-long
 
                 # We print the message.
@@ -598,22 +601,22 @@ class Version:
 
             # We initiate the message we are going to return to the user.
             message = (
-                Style.BRIGHT
-                + Fore.CYAN
+                PyFunceble.Style.BRIGHT
+                + PyFunceble.Fore.CYAN
                 + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n"  # pylint:disable=line-too-long
-                + Style.RESET_ALL
+                + PyFunceble.Style.RESET_ALL
             )
             message += (
-                Style.BRIGHT
+                PyFunceble.Style.BRIGHT
                 + "Your version: "
-                + Style.RESET_ALL
+                + PyFunceble.Style.RESET_ALL
                 + PyFunceble.VERSION
                 + "\n"
             )
             message += (
-                Style.BRIGHT
+                PyFunceble.Style.BRIGHT
                 + "Upstream version: "
-                + Style.RESET_ALL
+                + PyFunceble.Style.RESET_ALL
                 + self.upstream_data["current_version"]
                 + "\n"
             )
@@ -628,22 +631,22 @@ class Version:
 
                 # We initiate the message we are going to return to the user.
                 message = (
-                    Style.BRIGHT
-                    + Fore.YELLOW
+                    PyFunceble.Style.BRIGHT
+                    + PyFunceble.Fore.YELLOW
                     + "Please take the time to update PyFunceble!\n"
-                    + Style.RESET_ALL
+                    + PyFunceble.Style.RESET_ALL
                 )  # pylint:disable=line-too-long
                 message += (
-                    Style.BRIGHT
+                    PyFunceble.Style.BRIGHT
                     + "Your version: "
-                    + Style.RESET_ALL
+                    + PyFunceble.Style.RESET_ALL
                     + PyFunceble.VERSION
                     + "\n"
                 )  # pylint:disable=line-too-long
                 message += (
-                    Style.BRIGHT
+                    PyFunceble.Style.BRIGHT
                     + "Upstream version: "
-                    + Style.RESET_ALL
+                    + PyFunceble.Style.RESET_ALL
                     + self.upstream_data[  # pylint:disable=line-too-long
                         "current_version"
                     ]
@@ -681,7 +684,7 @@ class Version:
         for file in list_of_file:
             # We loop through the list of file.
 
-            if not path.isfile(file):
+            if not PyFunceble.path.isfile(file):
                 # The file does not exist in the current directory.
 
                 # We return False, the current version is not the cloned version.
