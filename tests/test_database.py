@@ -64,7 +64,6 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble import load_config, mktime, strptime, time
 from PyFunceble.database import Inactive, Whois
 from PyFunceble.helpers import Dict, File
 
@@ -79,7 +78,7 @@ class TestDatabaseInactive(TestCase):
         Setup everything needed for the test
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
 
@@ -735,7 +734,7 @@ class TestDatabaseWhois(TestCase):
 
         PyFunceble.CONFIGURATION["whois_db"][PyFunceble.CONFIGURATION["file_to_test"]][
             "google.com"
-        ]["epoch"] = time() - (15 * (60 * 60 * 24))
+        ]["epoch"] = PyFunceble.time() - (15 * (60 * 60 * 24))
 
         expected = True
         actual = Whois().is_time_older()
@@ -744,7 +743,7 @@ class TestDatabaseWhois(TestCase):
 
         PyFunceble.CONFIGURATION["whois_db"][PyFunceble.CONFIGURATION["file_to_test"]][
             "google.com"
-        ]["epoch"] = time() + (15 * (60 * 60 * 24))
+        ]["epoch"] = PyFunceble.time() + (15 * (60 * 60 * 24))
 
         expected = False
         actual = Whois().is_time_older()
@@ -793,7 +792,7 @@ class TestDatabaseWhois(TestCase):
         PyFunceble.CONFIGURATION["whois_db"] = {}
         PyFunceble.CONFIGURATION["to_test"] = "microsoft.google.com"
 
-        epoch = str(int(mktime(strptime("25-dec-2022", "%d-%b-%Y"))))
+        epoch = str(int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2022", "%d-%b-%Y"))))
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
@@ -814,7 +813,7 @@ class TestDatabaseWhois(TestCase):
         Whois("25-dec-2022").add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["whois_db"])
 
-        epoch = str(int(mktime(strptime("25-dec-2007", "%d-%b-%Y"))))
+        epoch = str(int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2007", "%d-%b-%Y"))))
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
