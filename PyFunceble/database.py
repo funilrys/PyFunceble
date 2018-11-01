@@ -809,7 +809,7 @@ class Whois:
                         }
                     )
 
-                elif self.is_time_older():  # pragma: no cover
+                elif self.is_time_older():
                     # The expiration date from the database is in the past.
 
                     if (

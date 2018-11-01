@@ -71,17 +71,18 @@ from PyFunceble.helpers import Dict, File
 
 class TestDatabaseInactive(TestCase):
     """
-    This class will test PyFunceble.database.Inactive
+    Test PyFunceble.database.Inactive
     """
 
     def setUp(self):
         """
-        This method setup everything needed for the test
+        Setup everything needed for the test
         """
 
         load_config(True)
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
+
         self.file = (
             PyFunceble.CURRENT_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
@@ -99,18 +100,20 @@ class TestDatabaseInactive(TestCase):
 
     def test_file_not_exist(self):
         """
-        This method will test if everything is right with the generated
+        Test if everything is right with the generated
         file.
         """
 
         File(self.file).delete()
+
         expected = False
         actual = PyFunceble.path.isfile(self.file)
+
         self.assertEqual(expected, actual)
 
     def test_retrieve_file_not_exist(self):
         """
-        This method test the case that we want to retrieve a file that does not exist.
+        Test the case that we want to retrieve a file that does not exist.
         """
 
         self.test_file_not_exist()
@@ -118,15 +121,15 @@ class TestDatabaseInactive(TestCase):
         Inactive()._retrieve()
 
         expected = {}
+
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_retrieve_file_exist(self):
         """
-        This method test the case that we want to retrieve a file that exist.
+        Test the case that we want to retrieve a file that exist.
         """
 
         self.test_file_not_exist()
@@ -136,12 +139,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(self.expected_content, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_backup(self):
         """
-        This method test the backup of the database.
+        Test the backup of the Inactive.
         """
 
         self.test_file_not_exist()
@@ -153,14 +156,13 @@ class TestDatabaseInactive(TestCase):
             self.expected_content, Dict().from_json(File(self.file).read())
         )
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_add_to_test__path_not_exist(self):  # pylint: disable=invalid-name
         """
-        This method test Database._add_to_test() for the case that the currently tested
-        path is not present into the database.
+        Test Inactive._add_to_test() for the case that the currently tested
+        path is not present into the Inactive.
         """
 
         self.test_file_not_exist()
@@ -174,14 +176,13 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_add_to_test__path_exist(self):  # pylint: disable=invalid-name
         """
-        This method test Database._add_to_test() for the case that the path exist
-        in the database.
+        Test Inactive._add_to_test() for the case that the path exist
+        in the Inactive.
         """
 
         self.test_file_not_exist()
@@ -200,13 +201,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_add_to_test__path_exist_not_test(self):  # pylint: disable=invalid-name
         """
-        This method test Database._add_to_test() for the case that the path exist
+        Test Inactive._add_to_test() for the case that the path exist
         in the database but the not `to_test` index.
         """
 
@@ -224,13 +224,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_to_test__path_not_exist(self):  # pylint: disable=invalid-name
         """
-        This method test Database.to_test() for the case that the path does not exist.
+        Test Inactive.to_test() for the case that the path does not exist.
         """
 
         self.test_file_not_exist()
@@ -243,13 +242,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_to_test__path_exist_time_past(self):  # pylint: disable=invalid-name
         """
-        This method test Database.to_test() for the case that the path exist but
+        Test Inactive.to_test() for the case that the path exist but
         the timestamp is in the past.
         """
 
@@ -273,13 +271,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_to_test__path_exist_time_future(self):  # pylint: disable=invalid-name
         """
-        This method test Database.to_test() for the case that the path exist but
+        Test Inactive.to_test() for the case that the path exist but
         the timestamp is in the future.
         """
 
@@ -303,13 +300,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_timestamp_path_does_not_exit(self):  # pylint: disable=invalid-name
         """
-        This method test Database.timestamp() for the case that the path does
+        Test Inactive.timestamp() for the case that the path does
         not exist but the time is in the past.
         """
 
@@ -322,13 +318,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertGreaterEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_timestamp_path_exist_time_past(self):  # pylint: disable=invalid-name
         """
-        This method test Database.timestamp() for the case that the path exist but
+        Test Inactive.timestamp() for the case that the path exist but
         the time is in the past.
         """
 
@@ -342,15 +337,15 @@ class TestDatabaseInactive(TestCase):
 
         expected = int(PyFunceble.time())
         actual = Inactive()._timestamp()
+
         self.assertGreaterEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_timestamp_path_exist_time_future(self):  # pylint: disable=invalid-name
         """
-        This method test Database.timestamp() for the case that the path exist but
+        Test Inactive.timestamp() for the case that the path exist but
         the time is in the future.
         """
 
@@ -364,15 +359,15 @@ class TestDatabaseInactive(TestCase):
 
         expected = int(self.time_future)
         actual = Inactive()._timestamp()
+
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_add_path_does_not_exist(self):  # pylint: disable=invalid-name
         """
-        This method test Database.add() for the case that the path does not exist.
+        Test Inactive.add() for the case that the path does not exist.
         """
 
         self.test_file_not_exist()
@@ -401,15 +396,14 @@ class TestDatabaseInactive(TestCase):
         Inactive().add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
+        del PyFunceble.CONFIGURATION["inactive_db"]
         PyFunceble.CONFIGURATION["to_test"] = ""
-
         self.test_file_not_exist()
 
     def test_add_file_path_not_present(self):  # pylint: disable=invalid-name
         """
-        This method test Database.add() for the case that the path is not
-        present into the database.
+        Test Inactive.add() for the case that the path is not
+        present into the Inactive.
         """
 
         self.test_file_not_exist()
@@ -426,14 +420,14 @@ class TestDatabaseInactive(TestCase):
         self.assertEqual(expected, actual)
 
         del PyFunceble.CONFIGURATION["to_test"]
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
+        del PyFunceble.CONFIGURATION["inactive_db"]
 
         self.test_file_not_exist()
 
     def test_add_file_path_present(self):  # pylint: disable=invalid-name
         """
-        This method test Database.add() for the case that the path is present
-        into the database.
+        Test Inactive.add() for the case that the path is present
+        into the Inactive.
         """
 
         self.test_file_not_exist()
@@ -494,13 +488,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_remove(self):
         """
-        This method test Database.remove().
+        Test Inactive.remove().
         """
 
         timestamp = str(Inactive()._timestamp())
@@ -526,13 +519,12 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, PyFunceble.CONFIGURATION["inactive_db"])
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-
+        del PyFunceble.CONFIGURATION["inactive_db"]
         self.test_file_not_exist()
 
     def test_content(self):
         """
-        This method will test Database().content().
+        Test Inactive.content().
         """
 
         self.test_file_not_exist()
@@ -562,7 +554,7 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, actual)
 
-        # Test of the case that there is nothing in the database.
+        # Test of the case that there is nothing in the Inactive.
         PyFunceble.CONFIGURATION["inactive_db"] = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
                 "to_test": ["hello.world", "world.hello"]
@@ -573,21 +565,21 @@ class TestDatabaseInactive(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["inactive_db"] = {}
-        PyFunceble.CONFIGURATION["to_test"] = ""
-        PyFunceble.CONFIGURATION["inactive_database"] = True
+        del PyFunceble.CONFIGURATION["inactive_db"]
+        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.CONFIGURATION["inactive_database"]
 
         self.test_file_not_exist()
 
 
 class TestDatabaseWhois(TestCase):
     """
-    This class will test PyFunceble.database
+    Test PyFunceble.database.Whois
     """
 
     def setUp(self):
         """
-        This method setup everything needed for the test
+        Setup everything needed for the test
         """
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
@@ -613,18 +605,20 @@ class TestDatabaseWhois(TestCase):
 
     def test_file_not_exist(self):
         """
-        This method will test if everything is right with the generated
+        Test if everything is right with the generated
         file.
         """
 
         File(self.file).delete()
+
         expected = False
         actual = PyFunceble.path.isfile(self.file)
+
         self.assertEqual(expected, actual)
 
     def test_authorization(self):
         """
-        This method test the authorization method.
+        Test the authorization method.
         """
 
         PyFunceble.CONFIGURATION["no_whois"] = True
@@ -651,7 +645,7 @@ class TestDatabaseWhois(TestCase):
 
     def test_retrieve_file_not_exist(self):
         """
-        This method test the case that we want to retrieve a file that does not exist.
+        Test the case that we want to retrieve a file that does not exist.
         """
 
         self.test_file_not_exist()
@@ -666,7 +660,7 @@ class TestDatabaseWhois(TestCase):
 
     def test_retrieve_file_exist(self):
         """
-        This method test the case that we want to retrieve a file that exist.
+        Test the case that we want to retrieve a file that exist.
         """
 
         self.test_file_not_exist()
@@ -705,7 +699,7 @@ class TestDatabaseWhois(TestCase):
 
     def test_is_in_database(self):
         """
-        This method will test the check.
+        Test the check.
         """
 
         self.test_file_not_exist()
@@ -731,7 +725,7 @@ class TestDatabaseWhois(TestCase):
 
     def test_is_time_older(self):
         """
-        This method test if a time is older or not than the current date.
+        Test if a time is older or not than the current date.
         """
 
         self.test_file_not_exist()
