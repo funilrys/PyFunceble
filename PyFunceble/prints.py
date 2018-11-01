@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Back, Fore, OrderedDict, path
 from PyFunceble.helpers import Dict, File, List
 from PyFunceble.sort import Sort
 
@@ -110,10 +109,10 @@ class Prints:
         # We initiate the variable which will save the list of header.
         # Note: We initiate an Ordered Dict because we want to keep
         # the order.
-        self.headers = OrderedDict()
+        self.headers = PyFunceble.OrderedDict()
 
         # We iniate the Generic header and the spacement of each colomns.
-        self.headers["Generic"] = OrderedDict(
+        self.headers["Generic"] = PyFunceble.OrderedDict(
             zip(
                 [
                     "Domain",
@@ -128,7 +127,7 @@ class Prints:
         )
 
         # We iniate the official UP header and the spacement of each colomns.
-        self.headers[PyFunceble.STATUS["official"]["up"]] = OrderedDict(
+        self.headers[PyFunceble.STATUS["official"]["up"]] = PyFunceble.OrderedDict(
             zip(
                 ["Domain", "Expiration Date", "Source", "HTTP Code", "Analyze Date"],
                 [100, 17, 10, 10, 20],
@@ -136,7 +135,7 @@ class Prints:
         )
 
         # We iniate the official DOWN header and the spacement of each colomns.
-        self.headers[PyFunceble.STATUS["official"]["down"]] = OrderedDict(
+        self.headers[PyFunceble.STATUS["official"]["down"]] = PyFunceble.OrderedDict(
             zip(
                 [
                     "Domain",
@@ -151,22 +150,22 @@ class Prints:
         )
 
         # We iniate the official INVALID header and the spacement of each colomns.
-        self.headers[PyFunceble.STATUS["official"]["invalid"]] = OrderedDict(
+        self.headers[PyFunceble.STATUS["official"]["invalid"]] = PyFunceble.OrderedDict(
             zip(["Domain", "Source", "HTTP Code", "Analyze Date"], [100, 10, 10, 20])
         )
 
         # We iniate the official LESS header and the spacement of each colomns.
-        self.headers["Less"] = OrderedDict(
+        self.headers["Less"] = PyFunceble.OrderedDict(
             zip(["Domain", "Status", "HTTP Code"], [100, 11, 10])
         )
 
         # We iniate the official Percentage header and the spacement of each colomns.
-        self.headers["Percentage"] = OrderedDict(
+        self.headers["Percentage"] = PyFunceble.OrderedDict(
             zip(["Status", "Percentage", "Numbers"], [11, 12, 12])
         )
 
         # We iniate the official HTTP header and the spacement of each colomns.
-        self.headers["HTTP"] = OrderedDict(
+        self.headers["HTTP"] = PyFunceble.OrderedDict(
             zip(["Domain", "Status", "HTTP Code", "Analyze Date"], [100, 11, 10, 20])
         )
 
@@ -182,7 +181,7 @@ class Prints:
         if (
             not PyFunceble.CONFIGURATION["no_files"]
             and self.output
-            and not path.isfile(self.output)
+            and not PyFunceble.path.isfile(self.output)
         ):
             # * We are allowed to generate files.
             # and
@@ -449,7 +448,7 @@ class Prints:
 
         # We initiate a variable which will save what we are going to
         # return.
-        result = OrderedDict()
+        result = PyFunceble.OrderedDict()
 
         if len(self.data_to_print) == len(size):
             # The length of the data to print is equal to the length of the given size.
@@ -513,17 +512,17 @@ class Prints:
                 # The status is in the list of up status.
 
                 # We print the data with a green background.
-                data = Fore.BLACK + Back.GREEN + data
+                data = PyFunceble.Fore.BLACK + PyFunceble.Back.GREEN + data
             elif self.data_to_print[1].lower() in PyFunceble.STATUS["list"]["down"]:
                 # The status is in the list of down status.
 
                 # We print the data with a red background.
-                data = Fore.BLACK + Back.RED + data
+                data = PyFunceble.Fore.BLACK + PyFunceble.Back.RED + data
             else:
                 # The status is not in the list of up and down status.
 
                 # We print the data with a cyan background.
-                data = Fore.BLACK + Back.CYAN + data
+                data = PyFunceble.Fore.BLACK + PyFunceble.Back.CYAN + data
 
         # We return the data.
         return data
@@ -536,7 +535,7 @@ class Prints:
         if self.output:
             # The given output is not empty.
 
-            if path.isfile(self.output):
+            if PyFunceble.path.isfile(self.output):
                 # The given output already exist.
 
                 # We get the content of the output.
