@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble import directory_separator, time
 from PyFunceble.helpers import Command
 from PyFunceble.percentage import Percentage
 
@@ -99,7 +98,8 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                 "sudo chown -R travis:travis %s" % (build_dir),
                 "sudo chgrp -R travis %s" % (build_dir),
                 "sudo chmod -R g+rwX %s" % (build_dir),
-                "sudo chmod 777 -Rf %s.git" % (build_dir + directory_separator),
+                "sudo chmod 777 -Rf %s.git"
+                % (build_dir + PyFunceble.directory_separator),
                 r"sudo find %s -type d -exec chmod g+x '{}' \;" % (build_dir),
             ]
 
@@ -121,7 +121,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
             time_autorisation = False
 
             try:
-                time_autorisation = int(time()) >= int(
+                time_autorisation = int(PyFunceble.time()) >= int(
                     PyFunceble.CONFIGURATION["start"]
                 ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
             except KeyError:
