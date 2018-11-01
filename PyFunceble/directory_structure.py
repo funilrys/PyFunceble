@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import directory_separator, mkdir, path, rename, requests, walk
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.config import Version
 from PyFunceble.helpers import Command, Dict, File, Hash, Regex
@@ -85,11 +84,11 @@ class DirectoryStructure:  # pragma: no cover
         # the directory structure.
         self.base = PyFunceble.OUTPUT_DIRECTORY
 
-        if not self.base.endswith(directory_separator):
+        if not self.base.endswith(PyFunceble.directory_separator):
             # The base path does not ends wiith a directory separator.
 
             # We append the directory separator to the ends.
-            self.base += directory_separator
+            self.base += PyFunceble.directory_separator
 
         # We set the structure base.
         self.structure = (
@@ -119,7 +118,7 @@ class DirectoryStructure:  # pragma: no cover
         # We initiate the structure base.
         result = {PyFunceble.OUTPUTS["parent_directory"]: {}}
 
-        for root, _, files in walk(output_path):
+        for root, _, files in PyFunceble.walk(output_path):
             # We loop through the current output directory structure.
 
             # We get the currently read directory name.
@@ -132,7 +131,7 @@ class DirectoryStructure:  # pragma: no cover
                 # We loop through the list of files.
 
                 # We construct the file path.
-                file_path = root + directory_separator + file
+                file_path = root + PyFunceble.directory_separator + file
 
                 # We get the hash of the file.
                 file_hash = Hash(file_path, "sha512", True).get()
@@ -162,7 +161,7 @@ class DirectoryStructure:  # pragma: no cover
         :rtype: bool
         """
 
-        if path.isdir(self.base + ".git"):
+        if PyFunceble.path.isdir(self.base + ".git"):
             # The `.git` directory exist.
 
             if "PyFunceble" not in Command("git remote show origin").execute():
@@ -243,17 +242,17 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "domains/ACTIVE": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["up"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the domains/INACTIVE directory from the
             # configuration file.
             "domains/INACTIVE": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["down"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the domains/INVALID directory from the
             # configuration file.
             "domains/INVALID": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the hosts directory from the
             # configuration file.
             "hosts": PyFunceble.OUTPUTS["hosts"]["directory"],
@@ -261,17 +260,17 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "hosts/ACTIVE": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["up"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the hosts/INACTIVE directory from the
             # configuration file.
             "hosts/INACTIVE": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["down"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the hosts/INVALID directory from the
             # configuration file.
             "hosts/INVALID": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the json directory from the
             # configuration file.
             "json": PyFunceble.OUTPUTS["json"]["directory"],
@@ -279,17 +278,17 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "json/ACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["up"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the json/INACTIVE directory from the
             # configuration file.
             "json/INACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["down"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the json/INVALID directory from the
             # configuration file.
             "json/INVALID": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"]
-            + directory_separator,
+            + PyFunceble.directory_separator,
             # We get the replacement of the logs directory from the
             # configuration file.
             "logs": PyFunceble.OUTPUTS["logs"]["directories"]["parent"],
@@ -330,8 +329,10 @@ class DirectoryStructure:  # pragma: no cover
             # But if we get a FileNotFoundError exception,
 
             # We create the directory where the directory structure should be saved.
-            mkdir(
-                directory_separator.join(self.structure.split(directory_separator)[:-1])
+            PyFunceble.mkdir(
+                PyFunceble.directory_separator.join(
+                    self.structure.split(PyFunceble.directory_separator)[:-1]
+                )
             )
 
             # And we retry to save the structure into the right path.
@@ -355,12 +356,12 @@ class DirectoryStructure:  # pragma: no cover
         # We initiate the variable which will save the request instance.
         req = ""
 
-        if path.isfile(self.structure):
+        if PyFunceble.path.isfile(self.structure):
             # The structure path file exist.
 
             # We set it as the destination file.
             structure_file = self.structure
-        elif path.isfile(self.base + "dir_structure_production.json"):
+        elif PyFunceble.path.isfile(self.base + "dir_structure_production.json"):
             # * The structure path file does not exist.
             # but
             # * The production structure path file exist.
@@ -375,14 +376,14 @@ class DirectoryStructure:  # pragma: no cover
                 # `dev` is not into the local version name.
 
                 # We get the production file from the master branch.
-                req = requests.get(
+                req = PyFunceble.requests.get(
                     PyFunceble.LINKS["dir_structure"].replace("dev", "master")
                 )
             else:
                 # `dev` is into the local version name.
 
                 # We get the production file from the dev branch.
-                req = requests.get(
+                req = PyFunceble.requests.get(
                     PyFunceble.LINKS["dir_structure"].replace("master", "dev")
                 )
 
@@ -425,13 +426,13 @@ class DirectoryStructure:  # pragma: no cover
         :type loop: optional, bool
         """
 
-        if not loop and directory_separator in directory:
+        if not loop and PyFunceble.directory_separator in directory:
             # * We are not in the loop.
             # and
             # * The directory separator in the given directory.
 
             # We split the directories separator.
-            splited_directory = directory.split(directory_separator)
+            splited_directory = directory.split(PyFunceble.directory_separator)
 
             # We initiate a variable which will save the full path to create.
             full_path_to_create = ""
@@ -440,12 +441,12 @@ class DirectoryStructure:  # pragma: no cover
                 # We loop through each directory.
 
                 # We append the currently read directory to the full path.
-                full_path_to_create += single_directory + directory_separator
+                full_path_to_create += single_directory + PyFunceble.directory_separator
 
                 # And we create the directory if it does not exist.
                 cls._create_directory(full_path_to_create, True)
 
-        if not path.isdir(directory):
+        if not PyFunceble.path.isdir(directory):
             # The given directory does not exist.
 
             # We update the permission.
@@ -453,7 +454,7 @@ class DirectoryStructure:  # pragma: no cover
             AutoSave.travis_permissions()
 
             # We create the directory.
-            mkdir(directory)
+            PyFunceble.mkdir(directory)
 
             # We update the permission.
             # (Only if we are under Travis CI.)
@@ -478,8 +479,8 @@ class DirectoryStructure:  # pragma: no cover
         # We also set the parent directory as we are going to construct its childen.
         parent_path = list_of_key[0]
 
-        if not parent_path.endswith(directory_separator):
-            parent_path += directory_separator
+        if not parent_path.endswith(PyFunceble.directory_separator):
+            parent_path += PyFunceble.directory_separator
 
         # We get if we have to replace `.gitignore` to `.keep` and versa.
         replacement_status = self._restore_replace()
@@ -490,8 +491,8 @@ class DirectoryStructure:  # pragma: no cover
             # We construct the full path.
             base = self.base + parent_path + directory
 
-            if not base.endswith(directory_separator):
-                base += directory_separator
+            if not base.endswith(PyFunceble.directory_separator):
+                base += PyFunceble.directory_separator
 
             # We create the constructed path if it does not exist.
             self._create_directory(base)
@@ -523,7 +524,7 @@ class DirectoryStructure:  # pragma: no cover
                     # We have to replace every .gitignore to .keep.
 
                     if (
-                        path.isfile(file_path)
+                        PyFunceble.path.isfile(file_path)
                         and Hash(file_path, "sha512", True).get() == online_sha
                     ):
                         # * The currently read file exist.
@@ -531,7 +532,7 @@ class DirectoryStructure:  # pragma: no cover
                         # * Its sha512sum is equal to the one we have in our structure.
 
                         # We rename the file.
-                        rename(file_path, git_to_keep)
+                        PyFunceble.rename(file_path, git_to_keep)
 
                         # And we disallow the file writing.
                         write = False
@@ -551,7 +552,7 @@ class DirectoryStructure:  # pragma: no cover
                 else:
                     # We have to replace every .keep to .gitignore.
                     if (
-                        path.isfile(keep_to_git)
+                        PyFunceble.path.isfile(keep_to_git)
                         and Hash(file_path, "sha512", True).get() == online_sha
                     ):
                         # * The .keep file exist.
@@ -559,7 +560,7 @@ class DirectoryStructure:  # pragma: no cover
                         # * Its sha512sum is equal to the one we have in our structure.
 
                         # We rename the file.
-                        rename(file_path, keep_to_git)
+                        PyFunceble.rename(file_path, keep_to_git)
 
                         # And we disallow the file writing.
                         write = False
