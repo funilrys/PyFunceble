@@ -70,12 +70,19 @@ from PyFunceble.percentage import Percentage
 
 class TestPercentage(BaseStdout):
     """
-    This class will test PyFunceble.percentage.
+    Test PyFunceble.percentage.
     """
+
+    def setUp(self):
+        """
+        Setup everything needed for the tests.
+        """
+
+        PyFunceble.load_config()
 
     def test_count(self):
         """
-        This method test if the counter can be set proprely.
+        Test if the counter can be set proprely.
         """
 
         expected = {}
@@ -102,7 +109,7 @@ class TestPercentage(BaseStdout):
 
     def test_init(self):
         """
-        This method test the `init` argument of Percentage()
+        Test the :code:`init` argument of Percentage()
         """
 
         expected = {"up": 15, "down": 2, "invalid": 0, "tested": 75}
@@ -115,7 +122,7 @@ class TestPercentage(BaseStdout):
 
     def test_calculate(self):
         """
-        This method test the calculation system.
+        Test the calculation system.
         """
 
         PyFunceble.CONFIGURATION["counter"]["number"].update(
@@ -133,7 +140,7 @@ class TestPercentage(BaseStdout):
 
     def test_log(self):
         """
-        This method test the log system.
+        Test the log system.
         """
 
         BaseStdout.setUp(self)
