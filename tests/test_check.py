@@ -65,7 +65,6 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble import load_config
 from PyFunceble.check import Check
 
 
@@ -79,7 +78,7 @@ class TestCheck(TestCase):
         Setup what we need for the tests.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
         self.valid_domain = [
             "_hello_.abuse.co.za",
