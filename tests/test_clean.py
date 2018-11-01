@@ -71,15 +71,16 @@ from PyFunceble.helpers import File
 
 class TestClean(TestCase):
     """
-    This test is in charge of testing PyFunceble.clean.
+    Testing of PyFunceble.clean.
     """
 
     def setUp(self):
         """
-        This method setup everything that is needed.
+        Setup everything that is needed.
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
+
         self.file = (
             PyFunceble.OUTPUT_DIRECTORY
             + PyFunceble.OUTPUTS["parent_directory"]
@@ -89,7 +90,7 @@ class TestClean(TestCase):
 
     def set_counter(self, to_set=15):
         """
-        This method set the counters to the desired number.
+        Set the counters to the desired number.
 
         Argument:
             - to_set: int
@@ -99,9 +100,29 @@ class TestClean(TestCase):
         for string in self.types:
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: to_set})
 
+    def test_clean_all(self):
+        """
+        Test the clean_all process.
+        """
+
+        file = "whois_db.json"
+
+        File(file).write("Hello, World!")
+
+        expected = True
+        actual = PyFunceble.path.isfile(file)
+
+        self.assertEqual(expected, actual)
+        Clean(None, clean_all=True)
+
+        expected = False
+        actual = PyFunceble.path.isfile(file)
+
+        self.assertEqual(expected, actual)
+
     def test_with_empty_list(self):
         """
-        This method test the cleaning in the case that we have to test an empty
+        Test the cleaning in the case that we have to test an empty
         list.
         """
 
@@ -120,7 +141,7 @@ class TestClean(TestCase):
 
     def test_number_of_tested_null(self):
         """
-        This method test the cleaning process in the case that the number of tested
+        Test the cleaning process in the case that the number of tested
         is null.
         """
 
@@ -156,7 +177,7 @@ class TestClean(TestCase):
 
     def test_tested_out_of_index(self):
         """
-        This method test the cleaning process in the case that the number of tested
+        TTest the cleaning process in the case that the number of tested
         is > len(list_to_test).
         """
 
@@ -186,7 +207,7 @@ class TestClean(TestCase):
 
     def test_tested_same_last(self):
         """
-        This method test the cleaning process in the case that the number of tested
+        Test the cleaning process in the case that the number of tested
         is = len(list_to_test).
         """
 
