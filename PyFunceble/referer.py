@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import requests
 from PyFunceble.helpers import Dict, File
 from PyFunceble.status import Status
 
@@ -287,4 +286,6 @@ class Referer:  # pragma: no cover
                 data_to_share = {"extension": self.domain_extension}
 
                 # We post the data to the API.
-                requests.post(PyFunceble.LINKS["api_no_referer"], data=data_to_share)
+                PyFunceble.requests.post(
+                    PyFunceble.LINKS["api_no_referer"], data=data_to_share
+                )
