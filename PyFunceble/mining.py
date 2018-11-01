@@ -65,7 +65,6 @@ License:
 import urllib3.exceptions as urllib3_exceptions
 
 import PyFunceble
-from PyFunceble import path, requests, socket
 from PyFunceble.check import Check
 from PyFunceble.helpers import Dict, File, List
 
@@ -139,7 +138,7 @@ class Mining:
 
             try:
                 # We get the history.
-                history = requests.get(
+                history = PyFunceble.requests.get(
                     self.to_get,
                     timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
                     headers=self.headers,
@@ -197,10 +196,10 @@ class Mining:
                 return None
 
             except (
-                requests.ConnectionError,
-                requests.exceptions.Timeout,
-                requests.exceptions.InvalidURL,
-                socket.timeout,
+                PyFunceble.requests.ConnectionError,
+                PyFunceble.requests.exceptions.Timeout,
+                PyFunceble.requests.exceptions.InvalidURL,
+                PyFunceble.socket.timeout,
                 urllib3_exceptions.InvalidHeader,
                 UnicodeDecodeError,  # The probability that this happend in production is minimal.
             ):
@@ -221,7 +220,7 @@ class Mining:
             if "mined" not in PyFunceble.CONFIGURATION:
                 PyFunceble.CONFIGURATION["mined"] = {}
 
-            if path.isfile(self.file):
+            if PyFunceble.path.isfile(self.file):
                 # Our backup file exist.
 
                 # We return the information from our backup.
