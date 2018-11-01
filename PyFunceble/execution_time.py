@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import Fore, OrderedDict, Style, path, time
 from PyFunceble.helpers import Dict, File
 
 
@@ -105,8 +104,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
                 # And we print the execution time.
                 print(
-                    Fore.MAGENTA
-                    + Style.BRIGHT
+                    PyFunceble.Fore.MAGENTA
+                    + PyFunceble.Style.BRIGHT
                     + "\nExecution time: "
                     + self.format_execution_time()
                 )
@@ -159,7 +158,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 + PyFunceble.OUTPUTS["logs"]["filenames"]["execution_time"]
             )
 
-            if path.isfile(self.file):
+            if PyFunceble.path.isfile(self.file):
                 # The file we are working with exist.
 
                 # We get its content so we can directly work with it.
@@ -219,8 +218,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
                         # We inform the user about the global execution time.
                         print(
-                            Fore.MAGENTA
-                            + Style.BRIGHT
+                            PyFunceble.Fore.MAGENTA
+                            + PyFunceble.Style.BRIGHT
                             + "Global execution time: "
                             + content["final_total"]
                         )
@@ -241,7 +240,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the starting time as the current time.
-        PyFunceble.CONFIGURATION["start"] = int(time())
+        PyFunceble.CONFIGURATION["start"] = int(PyFunceble.time())
 
     @classmethod
     def _stoping_time(cls):  # pragma: no cover
@@ -250,7 +249,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the ending time as the current time.
-        PyFunceble.CONFIGURATION["end"] = int(time())
+        PyFunceble.CONFIGURATION["end"] = int(PyFunceble.time())
 
     @classmethod
     def _calculate(cls, start=None, end=None):
@@ -293,7 +292,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         # order to stay always the same.
         # As a dictionnary is always unordered, we can use it. Otherwise the time will
         # not be shown correctly.
-        data = OrderedDict()
+        data = PyFunceble.OrderedDict()
 
         # We calculate and append the day to our data.
         data["days"] = str(time_difference // (24 * 60 * 60)).zfill(2)
