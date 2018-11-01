@@ -108,6 +108,11 @@ class TestLookup(TestCase):
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION["to_test"] = "172.217.22.14"
+        actual = Lookup().nslookup()
+
+        self.assertEqual(expected, actual)
         del PyFunceble.CONFIGURATION["to_test"]
 
 

@@ -191,7 +191,7 @@ class TestCheck(TestCase):
 
     def test_is_domain_valid(self):
         """
-        Test ExpirationDate().is_domain_valid() for the case that domains
+        Test Check().is_domain_valid() for the case that domains
         are valid.
         """
 
@@ -211,7 +211,7 @@ class TestCheck(TestCase):
 
     def test_is_domain_valid_not_valid(self):
         """
-        Test ExpirationDate().is_domain_valid() for the case that
+        Test Check().is_domain_valid() for the case that
         we meet invalid domains.
         """
 
@@ -312,7 +312,7 @@ class TestCheck(TestCase):
 
     def test_is_ip_valid(self):
         """
-        Test ExpirationDate().is_ip_valid() for the case that the IP is valid.
+        Test Check().is_ip_valid() for the case that the IP is valid.
         """
 
         expected = True
@@ -329,7 +329,7 @@ class TestCheck(TestCase):
 
     def test_is_ip_valid_not_valid(self):
         """
-        Test ExpirationDate().is_ip_valid() for the case that the IP
+        Test Check().is_ip_valid() for the case that the IP
         is not valid.
         """
 
@@ -347,6 +347,47 @@ class TestCheck(TestCase):
             self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
 
             del PyFunceble.CONFIGURATION["to_test"]
+
+    def test_is_ip_range(self):
+        """
+        Test Check().is_ip_range() for the case that the IP is a range.
+        """
+
+        expected = True
+        valid = ["255.45.65.0/24", "255.45.65.6/18"]
+
+        for ip_to_test in valid:
+            PyFunceble.CONFIGURATION["to_test"] = ip_to_test
+            actual = Check().is_ip_range()
+
+            self.assertEqual(
+                expected, actual, msg="%s is not an IP range." % ip_to_test
+            )
+
+            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_ip_range()
+
+            self.assertEqual(
+                expected, actual, msg="%s is not an IP range." % ip_to_test
+            )
+
+            del PyFunceble.CONFIGURATION["to_test"]
+
+    def test_is_ip_range_not(self):
+        """
+        Test Check().is_ip_range() for the case that the IP is not a range.
+        """
+
+        expected = False
+        valid = ["15.47.85.65", "45.66.255.240", "github.com"]
+
+        for ip_to_test in valid:
+            actual = Check().is_ip_range(ip_to_test)
+
+            self.assertEqual(expected, actual, msg="%s is an IP range." % ip_to_test)
+
+            actual = Check(ip_to_test).is_ip_range()
+
+            self.assertEqual(expected, actual, msg="%s is an IP range." % ip_to_test)
 
 
 if __name__ == "__main__":

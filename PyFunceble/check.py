@@ -347,3 +347,43 @@ class Check:
         # * True: It's a valid IPv4.
         # * False: It's an invalid IPv4.
         return Regex(to_test, regex_ipv4, return_data=False).match()
+
+    def is_ip_range(self, ip_to_check=None):
+        """
+        Check if the given IP is a valid IPv4.
+
+        :param ip_to_check: The IP to test.
+        :type ip_to_check: optional, str
+
+        :return: The validity of the IP.
+        :rtype: bool
+
+        .. note::
+            We only test IPv4 because for now we only them for now.
+        """
+
+        if ip_to_check:
+            # An element is localy given.
+
+            # We consider it as the element to test.
+            to_test = ip_to_check
+        elif self.element:
+            # An element is given globally.
+
+            # We consider it as the element to test.
+            to_test = self.element
+        else:
+            # An element is not localy given.
+
+            # We consider the global element to test as the element to test.
+            to_test = PyFunceble.CONFIGURATION["to_test"]
+
+        if self.is_ip_valid(to_test):
+            # We initate our regex which will match for valid IPv4 ranges.
+            regex_ipv4_range = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.([0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
+
+            # We check if it passes our regex.
+            # * True: It's an IPv4 range.
+            # * False: It's not an IPv4 range.
+            return Regex(to_test, regex_ipv4_range, return_data=False).match()
+        return False

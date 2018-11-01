@@ -63,6 +63,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
+from PyFunceble.check import Check
 
 
 class Lookup:
@@ -82,30 +83,55 @@ class Lookup:
             if "current_test_data" in PyFunceble.CONFIGURATION:  # pragma: no cover
                 # The end-user want more information whith his test.
 
-                # We request the address informations.
-                request = PyFunceble.socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["to_test"],
-                    80,
-                    0,
-                    0,
-                    PyFunceble.socket.IPPROTO_TCP,
-                )
+                if not Check().is_ip_valid():
+                    # The element we are testing is not an IP.
 
-                for sequence in request:
-                    # We loop through the sequence returned by the request.
+                    # We request the address informations.
+                    request = PyFunceble.socket.getaddrinfo(
+                        PyFunceble.CONFIGURATION["to_test"],
+                        80,
+                        0,
+                        0,
+                        PyFunceble.socket.IPPROTO_TCP,
+                    )
+
+                    for sequence in request:
+                        # We loop through the sequence returned by the request.
+
+                        # We append the NS informations into the nslookup index.
+                        PyFunceble.CONFIGURATION["current_test_data"][
+                            "nslookup"
+                        ].append(sequence[-1][0])
+                else:
+                    # The element we are testing is an IP.
+                    request = PyFunceble.socket.gethostbyaddr(
+                        PyFunceble.CONFIGURATION["to_test"]
+                    )
 
                     # We append the NS informations into the nslookup index.
-                    PyFunceble.CONFIGURATION["current_test_data"]["nslookup"].append(
-                        sequence[-1][0]
-                    )
+                    PyFunceble.CONFIGURATION["current_test_data"]["nslookup"][
+                        "hostname"
+                    ] = request[0]
+                    PyFunceble.CONFIGURATION["current_test_data"]["nslookup"][
+                        "aliases"
+                    ] = request[1]
+                    PyFunceble.CONFIGURATION["current_test_data"]["nslookup"][
+                        "ips"
+                    ] = request[2]
             else:
-                PyFunceble.socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["to_test"],
-                    80,
-                    0,
-                    0,
-                    PyFunceble.socket.IPPROTO_TCP,
-                )
+
+                if not Check().is_ip_valid():
+                    # The element we are testing is not an IP.
+                    PyFunceble.socket.getaddrinfo(
+                        PyFunceble.CONFIGURATION["to_test"],
+                        80,
+                        0,
+                        0,
+                        PyFunceble.socket.IPPROTO_TCP,
+                    )
+                else:
+                    # The element we are testing is an IP.
+                    PyFunceble.socket.gethostbyaddr(PyFunceble.CONFIGURATION["to_test"])
 
             # It was done successfuly, we return True.
             # Note: we don't need to read the addresses so we consider as successful

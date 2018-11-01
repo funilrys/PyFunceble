@@ -64,6 +64,7 @@ License:
 # pylint: disable=bad-continuation, too-many-lines
 import PyFunceble
 from PyFunceble import directory_separator, requests
+from PyFunceble.check import Check
 from PyFunceble.helpers import Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
@@ -699,11 +700,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # We generate the analytic file(s).
                 self.analytic_file("potentially_up", self.domain_status)
 
-        if Regex(
-            self.tested,
-            r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$",  # pylint: disable=line-too-long
-            return_data=False,
-        ).match():
+        if Check(self.tested).is_ip_range():
             # The element we are currently testing is an IPv4 with range.
 
             # We update the source.
