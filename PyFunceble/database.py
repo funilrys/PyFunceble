@@ -818,7 +818,7 @@ class Whois:
                             self.element
                         ]["state"]
                         != "past"
-                    ):
+                    ):  # pragma: no cover
                         # The state of the element in the datbase is not
                         # equal to `past`.
 

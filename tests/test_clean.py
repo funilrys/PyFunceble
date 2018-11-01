@@ -105,7 +105,7 @@ class TestClean(TestCase):
         Test the clean_all process.
         """
 
-        if not Version(True).is_cloned():
+        if not Version(True).is_cloned():  # pragma: no cover
             file = "whois_db.json"
 
             File(file).write("Hello, World!")

@@ -230,7 +230,7 @@ class Clean:
         # We get the list of file to delete.
         to_delete = self.file_to_delete()
 
-        if clean_all:
+        if clean_all:  # pragma: no cover
             to_delete.extend(self.databases_to_delete())
 
         for file in to_delete:
