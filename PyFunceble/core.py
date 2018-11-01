@@ -66,7 +66,6 @@ License:
 from domain2idna import get as domain2idna
 
 import PyFunceble
-from PyFunceble import Fore, Style, path, repeat
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check
@@ -148,7 +147,7 @@ class Core:  # pragma: no cover
             file_to_test = passed.split("/")[-1]
 
             if (
-                not path.isfile(file_to_test)
+                not PyFunceble.path.isfile(file_to_test)
                 or PyFunceble.CONFIGURATION["counter"]["number"]["tested"] == 0
             ):
                 # The filename does not exist in the current directory
@@ -315,7 +314,9 @@ class Core:  # pragma: no cover
                 # No file, domain, single url or file or url is given.
 
                 # We print a message on screen.
-                print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
+                print(
+                    PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test."
+                )
 
             # We stop and log the execution time.
             ExecutionTime("stop", last=True)
@@ -686,12 +687,12 @@ class Core:  # pragma: no cover
                 # The percentage of up is greater or equal to 50%.
 
                 # We print the CLI logo in green.
-                print(Fore.GREEN + PyFunceble.ASCII_PYFUNCEBLE)
+                print(PyFunceble.Fore.GREEN + PyFunceble.ASCII_PYFUNCEBLE)
             else:
                 # The percentage of up is less than 50%.
 
                 # We print the CLI logo in red.
-                print(Fore.RED + PyFunceble.ASCII_PYFUNCEBLE)
+                print(PyFunceble.Fore.RED + PyFunceble.ASCII_PYFUNCEBLE)
 
     @classmethod
     def _format_domain(cls, extracted_domain):
@@ -938,7 +939,7 @@ class Core:  # pragma: no cover
         # We initiate the variable which will save what we are going to return.
         result = []
 
-        if path.isfile(PyFunceble.CONFIGURATION["file_to_test"]):
+        if PyFunceble.path.isfile(PyFunceble.CONFIGURATION["file_to_test"]):
             # The give file to test exist.
 
             with open(PyFunceble.CONFIGURATION["file_to_test"]) as file:
@@ -1098,7 +1099,7 @@ class Core:  # pragma: no cover
             map(
                 self.domain,
                 list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
-                repeat(list_to_test[-1]),
+                PyFunceble.repeat(list_to_test[-1]),
             )
         )
 
@@ -1162,7 +1163,7 @@ class Core:  # pragma: no cover
             map(
                 self.url,
                 list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
-                repeat(list_to_test[-1]),
+                PyFunceble.repeat(list_to_test[-1]),
             )
         )
 
