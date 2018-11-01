@@ -65,7 +65,6 @@ import urllib3.exceptions as urllib3_exceptions
 
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import requests, socket
 
 
 class HTTPCode:  # pylint: disable=too-few-public-methods
@@ -114,7 +113,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             # We try to get the HTTP status code.
 
             # We get the head of the URL.
-            req = requests.head(
+            req = PyFunceble.requests.head(
                 self.to_get,
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
                 headers=self.headers,
@@ -124,10 +123,10 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             return req.status_code
 
         except (
-            requests.exceptions.InvalidURL,
-            socket.timeout,
-            requests.exceptions.Timeout,
-            requests.ConnectionError,
+            PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.socket.timeout,
+            PyFunceble.requests.exceptions.Timeout,
+            PyFunceble.requests.ConnectionError,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
