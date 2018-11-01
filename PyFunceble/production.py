@@ -65,7 +65,6 @@ License:
 # pylint: disable=bad-continuation
 
 import PyFunceble
-from PyFunceble import Fore, Style, directory_separator, walk
 from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
@@ -158,9 +157,9 @@ class Production:  # pylint: disable=too-few-public-methods
                 # We fix the urls in the documentation index.
                 self._update_docs(
                     PyFunceble.CURRENT_DIRECTORY
-                    + directory_separator
+                    + PyFunceble.directory_separator
                     + "docs"
-                    + directory_separator
+                    + PyFunceble.directory_separator
                     + "index.rst"
                 )
 
@@ -179,9 +178,13 @@ class Production:  # pylint: disable=too-few-public-methods
                 )
 
                 # We prepare the message we are going to print on screen.
-                message = Fore.GREEN + Style.BRIGHT + "We are ready to ship!! \n"
+                message = (
+                    PyFunceble.Fore.GREEN
+                    + PyFunceble.Style.BRIGHT
+                    + "We are ready to ship!! \n"
+                )
                 message += (
-                    Fore.CYAN
+                    PyFunceble.Fore.CYAN
                     + "Please do not touch version.yaml nor setup.py (version update)"
                 )  # pylint: disable=line-too-long
 
@@ -195,8 +198,8 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We print a message on screen.
                 print(
-                    Fore.YELLOW
-                    + Style.BRIGHT
+                    PyFunceble.Fore.YELLOW
+                    + PyFunceble.Style.BRIGHT
                     + "Are you sure that you did some changes ? Please update PyFunceble.VERSION if it is the case."  # pylint: disable=line-too-long
                 )
 
@@ -210,11 +213,11 @@ class Production:  # pylint: disable=too-few-public-methods
 
         to_ignore = [".gitignore", ".keep", "production.py", "publicsuffix.py"]
 
-        for root, _, files in walk(
+        for root, _, files in PyFunceble.walk(
             PyFunceble.CURRENT_DIRECTORY
-            + directory_separator
+            + PyFunceble.directory_separator
             + "PyFunceble"
-            + directory_separator
+            + PyFunceble.directory_separator
         ):
             # We loop through every directories and files in the `PyFunceble` directory.
 
@@ -226,7 +229,7 @@ class Production:  # pylint: disable=too-few-public-methods
                     # and
                     # * The directory we are reading is not `__pycache__`.
 
-                    if root.endswith(directory_separator):
+                    if root.endswith(PyFunceble.directory_separator):
                         # The root directory ends with the directory separator.
 
                         # We fix the path in the currently read file.
@@ -236,13 +239,13 @@ class Production:  # pylint: disable=too-few-public-methods
 
                         # We fix the path in the currently read file.
                         # (after appending the directory separator between the root and file)
-                        self._update_docs(root + directory_separator + file)
+                        self._update_docs(root + PyFunceble.directory_separator + file)
 
-        for root, _, files in walk(
+        for root, _, files in PyFunceble.walk(
             PyFunceble.CURRENT_DIRECTORY
-            + directory_separator
+            + PyFunceble.directory_separator
             + "tests"
-            + directory_separator
+            + PyFunceble.directory_separator
         ):
             # We loop through every directories and files in the `tests` directory.
             for file in files:
@@ -253,7 +256,7 @@ class Production:  # pylint: disable=too-few-public-methods
                     # and
                     # * The directory we are reading is not `__pycache__`.
 
-                    if root.endswith(directory_separator):
+                    if root.endswith(PyFunceble.directory_separator):
                         # The root directory ends with the directory separator.
 
                         # We fix the path in the currently read file.
@@ -263,7 +266,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                         # We fix the path in the currently read file.
                         # (after appending the directory separator between the root and file)
-                        self._update_docs(root + directory_separator + file)
+                        self._update_docs(root + PyFunceble.directory_separator + file)
 
     @classmethod
     def _get_current_version_yaml(cls):
