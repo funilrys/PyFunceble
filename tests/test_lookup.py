@@ -68,37 +68,46 @@ from PyFunceble.lookup import Lookup
 
 class TestLookup(TestCase):
     """
-    This class try to test PyFunceble.lookup.
+    Try to test PyFunceble.lookup.
     Indeed, we use try because it's impossible to know if a domain is always up
     but we try to keep it simple.
     """
 
-    def test_nslookup(self):
+    def test_nslookup_domain_down(self):
         """
-        This method test the viability of Lookup().nslookup()
+        Test of Lookup().nslookup() for the case a domain is down or non
+        existant.
         """
 
-        # Test of the case that the domains is down
         expected = False
         PyFunceble.CONFIGURATION["to_test"] = "thisdoes-not-workdnfhfep.de"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
+        del PyFunceble.CONFIGURATION["to_test"]
 
-        # Test of the case that the domains is invalid
+    def test_nslookup_domain_invalid(self):
+        """
+        Test of Lookup().nslookup() for the case a domain is invalid.
+        """
+
         expected = False
         PyFunceble.CONFIGURATION["to_test"] = "helloworld-.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
+        del PyFunceble.CONFIGURATION["to_test"]
 
-        # Test of the case that the domains is up
+    def test_nslookup_domain_up(self):
+        """
+        Test of Lookup().nslookup() for the case a domain is up.
+        """
+
         expected = True
         PyFunceble.CONFIGURATION["to_test"] = "google.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
-
         del PyFunceble.CONFIGURATION["to_test"]
 
 
