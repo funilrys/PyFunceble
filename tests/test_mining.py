@@ -65,7 +65,6 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble import load_config
 from PyFunceble.helpers import Dict, File
 from PyFunceble.mining import Mining
 
@@ -80,7 +79,7 @@ class TestMining(TestCase):
         Setup everything needeed for the test.
         """
 
-        load_config(True)
+        PyFunceble.load_config(True)
 
         PyFunceble.CONFIGURATION["mining"] = True
 

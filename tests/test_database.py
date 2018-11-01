@@ -792,7 +792,9 @@ class TestDatabaseWhois(TestCase):
         PyFunceble.CONFIGURATION["whois_db"] = {}
         PyFunceble.CONFIGURATION["to_test"] = "microsoft.google.com"
 
-        epoch = str(int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2022", "%d-%b-%Y"))))
+        epoch = str(
+            int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2022", "%d-%b-%Y")))
+        )
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
@@ -813,7 +815,9 @@ class TestDatabaseWhois(TestCase):
         Whois("25-dec-2022").add()
         self.assertEqual(expected, PyFunceble.CONFIGURATION["whois_db"])
 
-        epoch = str(int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2007", "%d-%b-%Y"))))
+        epoch = str(
+            int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2007", "%d-%b-%Y")))
+        )
         expected = {
             "single_testing": {
                 "microsoft.google.com": {
