@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import requests
 from PyFunceble.check import Check
 from PyFunceble.database import Whois
 from PyFunceble.generate import Generate
@@ -316,7 +315,9 @@ class ExpirationDate:
                 }
 
                 # And we share the logs with the api.
-                requests.post(PyFunceble.LINKS["api_date_format"], data=date_to_share)
+                PyFunceble.requests.post(
+                    PyFunceble.LINKS["api_date_format"], data=date_to_share
+                )
 
     def _cases_management(self, regex_number, matched_result):
         """
