@@ -69,19 +69,19 @@ from PyFunceble.expiration_date import ExpirationDate
 
 class TestExpirationDate(TestCase):
     """
-    This class will test PyFunceble.expiration_date.
+    Test PyFunceble.expiration_date.
     """
 
     def setUp(self):
         """
-        This method will setup everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         load_config(True)
 
     def test_convert_or_shorten_month(self):
         """
-        This method test ExpirationDate()._convert_or_shorten_month().
+        Test ExpirationDate()._convert_or_shorten_month().
         """
 
         expected = "jan"
@@ -98,18 +98,19 @@ class TestExpirationDate(TestCase):
 
     def test_convert_1_to_2_digits(self):
         """
-        This method test ExpirationDate()._convert_1_to_2_digits().
+        Test ExpirationDate()._convert_1_to_2_digits().
         """
 
         expected = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"]
 
         for index, number in enumerate(expected):
             actual = ExpirationDate()._convert_1_to_2_digits(index + 1)
+
             self.assertEqual(number, actual)
 
     def test_format_date(self):
         """
-        This method test ExpirationDate()._format().
+        Test ExpirationDate()._format().
         """
 
         expected = "02-jan-2017"
@@ -155,6 +156,7 @@ class TestExpirationDate(TestCase):
 
         for date in to_test:
             actual = ExpirationDate()._format(date)
+
             self.assertEqual(expected, actual, msg="Error for %s" % repr(date))
 
         special_case = {
@@ -167,6 +169,7 @@ class TestExpirationDate(TestCase):
         for data in special_case:
             actual = ExpirationDate()._format(special_case[data][0])
             expected = special_case[data][-1]
+
             self.assertEqual(
                 expected, actual, msg="Error for %s" % special_case[data[0]]
             )
