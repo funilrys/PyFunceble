@@ -118,7 +118,12 @@ class ExpirationDate:
                 }
             )
 
-        if domain_validation and not ip_validation or domain_validation:
+        if (
+            domain_validation
+            and not ip_validation
+            or domain_validation
+            or PyFunceble.CONFIGURATION["local"]
+        ):
             # * The element is a valid domain.
             # and
             # * The element is not ahe valid IPv4.
@@ -169,7 +174,12 @@ class ExpirationDate:
             # And we return and handle the official down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
 
-        if ip_validation and not domain_validation or ip_validation:
+        if (
+            ip_validation
+            and not domain_validation
+            or ip_validation
+            or PyFunceble.CONFIGURATION["local"]
+        ):
             # * The element is a valid IPv4.
             # and
             # * The element is not a valid domain.

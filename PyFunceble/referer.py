@@ -77,11 +77,15 @@ class Referer:  # pragma: no cover
         # Note: A URL testing or an IP testing does not come around
         # here. So there is no need to be scared by the following.
 
-        # We get the extension of the currently tested element.
-        # We basically get everything after the last point.
-        self.domain_extension = PyFunceble.CONFIGURATION["to_test"][
-            PyFunceble.CONFIGURATION["to_test"].rindex(".") + 1 :
-        ]
+        try:
+            # We get the extension of the currently tested element.
+            # We basically get everything after the last point.
+            self.domain_extension = PyFunceble.CONFIGURATION["to_test"][
+                PyFunceble.CONFIGURATION["to_test"].rindex(".") + 1 :
+            ]
+        except ValueError:
+            # There was not point, so no extension to work with.
+            self.domain_extension = None
 
         # We create a list of ignored extension.
         # Note: We need the following because those extension does
