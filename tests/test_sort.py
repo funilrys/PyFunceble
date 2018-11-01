@@ -70,12 +70,12 @@ from PyFunceble.sort import Sort
 
 class TestSort(TestCase):
     """
-    This class will test PyFunceble.sort.Sort().
+    Test PyFunceble.sort.Sort().
     """
 
     def setUp(self):
         """
-        This method will setup everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         self.data_list = [
@@ -138,7 +138,7 @@ class TestSort(TestCase):
 
     def test_standart_sorting(self):
         """
-        This method will test Sort().standard().
+        Test Sort().standard().
         """
 
         expected = [
@@ -206,7 +206,7 @@ class TestSort(TestCase):
 
     def test_hierarchical_sorting(self):
         """
-        This method will test Sort().hierarchical().
+        Test Sort().hierarchical().
         """
 
         expected = [
