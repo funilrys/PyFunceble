@@ -71,20 +71,22 @@ from PyFunceble.helpers import Dict, File
 
 class TestsAutoContinue(TestCase):
     """
-    This class is in char of testing PyFunceble.AutoSave().
+    Testing of PyFunceble.AutoSave().
     """
 
     def setUp(self):
         """
-        This method setup the needed variables.
+        Setup the needed variables.
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
+
         self.file_to_work_with = (
             PyFunceble.OUTPUT_DIRECTORY
             + PyFunceble.OUTPUTS["parent_directory"]
             + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
         )
+
         PyFunceble.CONFIGURATION["file_to_test"] = "hello.world"
         self.types = ["up", "down", "invalid", "tested"]
 
@@ -100,12 +102,10 @@ class TestsAutoContinue(TestCase):
         for string in self.types:
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: to_set})
 
-    def test_backup(self):
+    def test_delete_file(self):
         """
-        This function test AutoContinue().backup().
+        Delete and ensure that the file we are working with does not exist.
         """
-
-        PyFunceble.CONFIGURATION["auto_continue"] = True
 
         File(self.file_to_work_with).delete()
 
@@ -113,6 +113,14 @@ class TestsAutoContinue(TestCase):
         actual = PyFunceble.path.isfile(self.file_to_work_with)
 
         self.assertEqual(expected, actual)
+
+    def test_backup(self):
+        """
+        Test AutoContinue().backup().
+        """
+
+        self.test_delete_file()
+        PyFunceble.CONFIGURATION["auto_continue"] = True
         self.set_counter(to_set=25)
 
         AutoContinue().backup()
@@ -133,15 +141,17 @@ class TestsAutoContinue(TestCase):
         actual = Dict().from_json(File(self.file_to_work_with).read())
 
         self.assertEqual(expected, actual)
-        PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file_to_work_with).delete()
+
+        del PyFunceble.CONFIGURATION["auto_continue"]
+        self.test_delete_file()
 
     def test_backup_not_activated(self):
         """
-        This function test AutoContinue().backup() for the case that we did not
+        Test AutoContinue().backup() for the case that we did not
         activated the backup system.
         """
 
+        self.test_delete_file()
         PyFunceble.CONFIGURATION["auto_continue"] = False
 
         AutoContinue().backup()
@@ -151,14 +161,16 @@ class TestsAutoContinue(TestCase):
 
         self.assertEqual(expected, actual)
 
+        del PyFunceble.CONFIGURATION["auto_continue"]
+        self.test_delete_file()
+
     def test_restore(self):
         """
-        This method test AutoContinue().restore().
+        Test AutoContinue().restore().
         """
 
+        self.test_delete_file()
         PyFunceble.CONFIGURATION["auto_continue"] = True
-        File(self.file_to_work_with).delete()
-
         self.set_counter(12)
 
         expected = {"up": 12, "down": 12, "invalid": 12, "tested": 12}
@@ -189,17 +201,18 @@ class TestsAutoContinue(TestCase):
         actual = PyFunceble.CONFIGURATION["counter"]["number"]
 
         self.assertEqual(expected, actual)
-        PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file_to_work_with).delete()
+
+        del PyFunceble.CONFIGURATION["auto_continue"]
+        self.test_delete_file()
 
     def test_restore_old_system(self):
         """
-        This method test AutoContinue().restore() for the case that we run the
+        Test AutoContinue().restore() for the case that we run the
         most recent version but with data from the old system.
         """
 
+        self.test_delete_file()
         PyFunceble.CONFIGURATION["auto_continue"] = True
-        File(self.file_to_work_with).delete()
 
         old_system = {
             PyFunceble.CONFIGURATION["file_to_test"]: {
@@ -224,8 +237,9 @@ class TestsAutoContinue(TestCase):
         actual = PyFunceble.CONFIGURATION["counter"]["number"]
 
         self.assertEqual(expected, actual)
-        PyFunceble.CONFIGURATION["auto_continue"] = False
-        File(self.file_to_work_with).delete()
+
+        del PyFunceble.CONFIGURATION["auto_continue"]
+        self.test_delete_file()
 
 
 if __name__ == "__main__":

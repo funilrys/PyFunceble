@@ -68,7 +68,7 @@ from unittest import TestCase
 
 class BaseStdout(TestCase):
     """
-    This class is the one we use when we want to catch stdout.
+    Use when we want to catch stdout.
     """
 
     def setUp(self):
