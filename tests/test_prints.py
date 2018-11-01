@@ -84,10 +84,11 @@ class TestPrints(BaseStdout):
 
     def setUp(self):
         """
-        This method setup everything needed for the tests.
+        Setup everything needed for the tests.
         """
 
         PyFunceble.load_config()
+
         self.file = "this_file_is_a_ghost"
         self.to_print = {
             "basic": {"hello": 5, "world": 6, "here": 7, "is": 8, "PyFunceble": 10},
@@ -99,7 +100,7 @@ class TestPrints(BaseStdout):
     @mock.patch("PyFunceble.prints.Prints._header_constructor")
     def test_before_header(self, header_constructor_patch):
         """
-        This method test the functionability of Prints().before_header()
+        Test the functionability of Prints().before_header()
         """
 
         File(self.file).delete()
@@ -148,7 +149,7 @@ Hello World!
 
     def test_header_constructor_with_separator(self):  # pylint: disable=invalid-name
         """
-        This method test Prints()._header_constructor() for the case that we
+        Test Prints()._header_constructor() for the case that we
         want to print the header.
         """
 
@@ -169,7 +170,7 @@ Hello World!
 
     def test_header_constructor_without_separator(self):  # pylint: disable=invalid-name
         """
-        This method test Prints()._header_constructor() for the case that we
+        Test Prints()._header_constructor() for the case that we
         want to print the result of the test.
         """
 
@@ -196,7 +197,7 @@ Hello World!
 
     def test_data_constructor(self):
         """
-        This method test Prints()._data_constructor().
+        Test Prints()._data_constructor().
         """
 
         File(self.file).delete()
@@ -247,7 +248,7 @@ Hello World!
 
     def test_size_from_header(self):
         """
-        This method test Prints()._size_from_header() which is used to extract
+        Test Prints()._size_from_header() which is used to extract
         the static sizes.
         """
 
@@ -266,7 +267,7 @@ Hello World!
 
     def test_colorify(self):
         """
-        This method test Prints().colorify(). In other word, it test the coloration
+        Test Prints().colorify(). In other word, it test the coloration
         of the line we have to print depending of the status.
         """
 
