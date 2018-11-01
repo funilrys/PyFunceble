@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble import socket
 
 
 class Lookup:
@@ -84,8 +83,12 @@ class Lookup:
                 # The end-user want more information whith his test.
 
                 # We request the address informations.
-                request = socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["to_test"], 80, 0, 0, socket.IPPROTO_TCP
+                request = PyFunceble.socket.getaddrinfo(
+                    PyFunceble.CONFIGURATION["to_test"],
+                    80,
+                    0,
+                    0,
+                    PyFunceble.socket.IPPROTO_TCP,
                 )
 
                 for sequence in request:
@@ -96,8 +99,12 @@ class Lookup:
                         sequence[-1][0]
                     )
             else:
-                socket.getaddrinfo(
-                    PyFunceble.CONFIGURATION["to_test"], 80, 0, 0, socket.IPPROTO_TCP
+                PyFunceble.socket.getaddrinfo(
+                    PyFunceble.CONFIGURATION["to_test"],
+                    80,
+                    0,
+                    0,
+                    PyFunceble.socket.IPPROTO_TCP,
                 )
 
             # It was done successfuly, we return True.
@@ -105,7 +112,7 @@ class Lookup:
             # as long as there is no error.
             return True
 
-        except (OSError, socket.herror, socket.gaierror):
+        except (OSError, PyFunceble.socket.herror, PyFunceble.socket.gaierror):
             # One of the listed exception is matched.
 
             # It was done unsuccesfuly, we return False.
@@ -144,24 +151,26 @@ class Lookup:
         if whois_server:
             # A whois server is given.
 
-            # We initiate a socket.
-            req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # We initiate a PyFunceble.socket.
+            req = PyFunceble.socket.socket(
+                PyFunceble.socket.AF_INET, PyFunceble.socket.SOCK_STREAM
+            )
 
             if timeout % 3 == 0:
                 # The timeout is modulo 3.
 
-                # We report the timeout to our initiated socket.
+                # We report the timeout to our initiated PyFunceble.socket.
                 req.settimeout(timeout)
             else:
                 # The timeout is not modulo 3.
 
-                # We report 3 seconds as the timeout to our initiated socket.
+                # We report 3 seconds as the timeout to our initiated PyFunceble.socket.
                 req.settimeout(3)
 
             try:
                 # We try to connect to the whois server at the port 43.
                 req.connect((whois_server, 43))
-            except socket.error:
+            except PyFunceble.socket.error:
                 # We got an error.
 
                 # We return None.
@@ -179,7 +188,7 @@ class Lookup:
                 try:
                     # We try to receive the data in a buffer of 4096 bytes.
                     data = req.recv(4096)
-                except (socket.timeout, ConnectionResetError):
+                except (PyFunceble.socket.timeout, ConnectionResetError):
                     # We got an error.
 
                     # We close the connection.
