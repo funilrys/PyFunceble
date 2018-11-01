@@ -72,20 +72,21 @@ from PyFunceble.core import Core
 
 class TestsResetCounters(TestCase):
     """
-    This class with test PyFunceble.reset_counters
+    Test of PyFunceble.Core.reset_counters
     """
 
     def setUp(self):
         """
-        This method setup everything that is needed for the test.
+        Setup everything that is needed for the test.
         """
 
         load_config(True)
+
         self.types = ["up", "down", "invalid", "tested"]
 
     def set_counter(self):
         """
-        This method set every counter to 15.
+        Set every counter to 15.
         """
 
         for string in self.types:
@@ -93,7 +94,7 @@ class TestsResetCounters(TestCase):
 
     def tests_counter_set(self):
         """
-        This method will test if the counter is really set.
+        Test if the counter is really set.
         """
 
         self.set_counter()
@@ -101,11 +102,12 @@ class TestsResetCounters(TestCase):
         for string in self.types:
             expected = 15
             actual = PyFunceble.CONFIGURATION["counter"]["number"][string]
+
             self.assertEqual(expected, actual)
 
     def tests_reset_counters(self):
         """
-        This method will test if the counter is reseted.
+        Test if the counter is reseted.
         """
 
         Core.reset_counters()
@@ -113,17 +115,18 @@ class TestsResetCounters(TestCase):
         for string in self.types:
             expected = 0
             actual = PyFunceble.CONFIGURATION["counter"]["number"][string]
+
             self.assertEqual(expected, actual)
 
 
 class TestsColoredLogo(BaseStdout):
     """
-    This class will test that the colored logo is hown correctly.
+    Test that the colored logo is hown correctly.
     """
 
     def setUp(self):
         """
-        This method setup everything needed.
+        Setup everything needed.
         """
 
         initiate(True)
@@ -145,7 +148,7 @@ class TestsColoredLogo(BaseStdout):
 
     def tests_colored_logo_red(self):
         """
-        This method test if the logo is red colored.
+        Test if the logo is red colored.
         """
 
         PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 1
@@ -161,7 +164,7 @@ class TestsColoredLogo(BaseStdout):
 
     def tests_colored_logo_green(self):
         """
-        This method test if the logo is green colored.
+        Test if the logo is green colored.
         """
 
         PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 51
@@ -173,11 +176,11 @@ class TestsColoredLogo(BaseStdout):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 1
+        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 0
 
     def tests_quiet_colored_logo(self):
         """
-        This method test if the logo is not printed when quiet is activated.
+        Test if the logo is not printed when quiet is activated.
         """
 
         PyFunceble.CONFIGURATION["quiet"] = True
@@ -189,15 +192,17 @@ class TestsColoredLogo(BaseStdout):
 
         self.assertEqual(expected, actual)
 
+        del PyFunceble.CONFIGURATION["quiet"]
+
 
 class TestsFormatDomain(TestCase):
     """
-    This class will test PyFunceble._format_domain()
+    Test PyFunceble.Code._format_domain()
     """
 
     def setUp(self):
         """
-        This method setup everything that is needed for the tests.
+        Setup everything that is needed for the tests.
         """
 
         load_config(True)
@@ -212,7 +217,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_simple_line(self):
         """
-        This method test the case that we encouter a simple line without decorator.
+        Test the case that we encouter a simple line without decorator.
         """
 
         for domain in self.domains:
@@ -223,7 +228,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_comment(self):
         """
-        This method test the case that we encouter a commented line.
+        Test the case that we encouter a commented line.
         """
 
         for domain in self.domains:
@@ -236,7 +241,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_ends_with_comment(self):
         """
-        This method test the case that a line has a comment at the end of its line.
+        Test the case that a line has a comment at the end of its line.
         """
 
         for domain in self.domains:
@@ -249,12 +254,12 @@ class TestsFormatDomain(TestCase):
 
     def tests_with_prefix(self):
         """
-        This method test the case that a line has a decorator.
+        Test the case that a line has a decorator.
 
         For example:
-        ```
-        127.0.0.1 google.com
-        ```
+        ::
+
+            127.0.0.1 google.com
         """
 
         for domain in self.domains:
@@ -275,7 +280,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_multiple_spaces(self):
         """
-        This method test the case that we have multiple space as sparator between
+        Test the case that we have multiple space as sparator between
         our domain end its prefix.
         """
 
@@ -297,7 +302,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_with_tabs(self):
         """
-        This method test the case that we have a single tab as sparator between
+        Test the case that we have a single tab as sparator between
         our domain end its prefix.
         """
 
@@ -319,7 +324,7 @@ class TestsFormatDomain(TestCase):
 
     def tests_with_multiple_tabs(self):
         """
-        This method test the case that we have multiple tabs as sparator between
+        Test the case that we have multiple tabs as sparator between
         our domain end its prefix.
         """
 
@@ -342,12 +347,12 @@ class TestsFormatDomain(TestCase):
 
 class TestAdblockDecode(TestCase):
     """
-    This class will test if the adblock decoder works.
+    Test if the adblock decoder works.
     """
 
     def setUp(self):
         """
-        This method setup everything needed for the test.
+        Setup everything needed for the test.
         """
 
         load_config(True)
@@ -388,7 +393,7 @@ class TestAdblockDecode(TestCase):
 
     def test_adblock_decode(self):
         """
-        This method test that the adblock decoding system is working proprely
+        Test that the adblock decoding system is working proprely
         """
 
         actual = Core._adblock_decode(Core, self.lines)
@@ -398,19 +403,19 @@ class TestAdblockDecode(TestCase):
 
 class TestExtractDomain(TestCase):
     """
-    This class is in charge of testing the extraction system
+    Testing of the expiration date extraction subsystem.
     """
 
     def setUp(self):
         """
-        This method setup everything that is needed for the test.
+        Setup everything that is needed for the test.
         """
 
         load_config(True)
 
     def test_file_does_not_exist(self):
         """
-        This method test the case that the given fiel does not exist.
+        Test the case that the given fiel does not exist.
         """
 
         PyFunceble.CONFIGURATION["file_to_test"] = "this_file_does_not_exit"
@@ -422,7 +427,7 @@ class TestExtractDomain(TestCase):
     @mock.patch("PyFunceble.path.isfile")
     def test_extracting_from_file(self, mock_isfile):
         """
-        This method test the extraction.
+        Test the extraction.
         """
 
         mock_isfile.return_value = True
@@ -447,21 +452,22 @@ class TestExtractDomain(TestCase):
 
 class TestSwitch(TestCase):
     """
-    This class test the switching system.
+    Test the switching subsystem.
     """
 
     def setUp(self):
         """
-        This method setup everything that is needed.
+        Setup everything that is needed.
         """
 
         load_config(True)
+
         self.exception_message = "Impossible to switch %s. Please post an issue to https://github.com/funilrys/PyFunceble/issues."  # pylint:disable=line-too-long
 
     def test_index_not_exist(self):
         """
-        This method test the case that the switched data does not exist into
-        the system.
+        Test the case that the switched data does not exist into
+        the configuration system.
         """
 
         to_switch = "helloworld"
@@ -474,7 +480,7 @@ class TestSwitch(TestCase):
 
     def test_switch_true(self):
         """
-        This method test the case that we want to switch a switch which is set
+        Test the case that we want to switch a switch which is set
         to True.
         """
 
@@ -489,7 +495,7 @@ class TestSwitch(TestCase):
 
     def test_switch_false(self):
         """
-        This method test the case that we want to switch a switch which is set
+        Test the case that we want to switch a switch which is set
         to False.
         """
 
@@ -504,7 +510,7 @@ class TestSwitch(TestCase):
 
     def test_switch_value_is_not_bool(self):
         """
-        This method test the case that we want to switch a switch which is not
+        Test the case that we want to switch a switch which is not
         in bool format.
         """
         PyFunceble.CONFIGURATION["helloworld"] = "Hello, World!"

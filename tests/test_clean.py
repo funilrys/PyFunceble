@@ -65,7 +65,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.clean import Clean
-from PyFunceble.config import Load
+from PyFunceble.config import Load, Version
 from PyFunceble.helpers import File
 
 
@@ -105,20 +105,21 @@ class TestClean(TestCase):
         Test the clean_all process.
         """
 
-        file = "whois_db.json"
+        if not Version(True).is_cloned():
+            file = "whois_db.json"
 
-        File(file).write("Hello, World!")
+            File(file).write("Hello, World!")
 
-        expected = True
-        actual = PyFunceble.path.isfile(file)
+            expected = True
+            actual = PyFunceble.path.isfile(file)
 
-        self.assertEqual(expected, actual)
-        Clean(None, clean_all=True)
+            self.assertEqual(expected, actual)
+            Clean(None, clean_all=True)
 
-        expected = False
-        actual = PyFunceble.path.isfile(file)
+            expected = False
+            actual = PyFunceble.path.isfile(file)
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
     def test_with_empty_list(self):
         """
