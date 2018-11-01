@@ -511,7 +511,7 @@ class Directory:  # pylint: disable=too-few-public-methods
 
     def fix_path(self, splited_path=None):
         """
-        This method fix the path of the given path.
+        Fix the path of the given path.
 
         :param splited_path: A list to convert to the right path.
         :type splited_path: optional, list

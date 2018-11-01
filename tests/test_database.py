@@ -676,7 +676,7 @@ class TestDatabaseWhois(TestCase):
 
     def test_backup(self):
         """
-        This method test the backup of the database.
+        Test the backup of the database.
         """
 
         self.test_file_not_exist()

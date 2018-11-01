@@ -92,7 +92,7 @@ class TestsAutoContinue(TestCase):
 
     def set_counter(self, to_set=15):
         """
-        This method will set the counter at a given number.
+        Set the counter at a given number.
 
         Argument:
             - to_set: int

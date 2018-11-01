@@ -79,7 +79,7 @@ class Sort:  # pylint: disable=too-few-public-methods
     @classmethod
     def standard(cls, element):
         """
-        This method implement the standard and alphabetical sorting.
+        Implement the standard and alphabetical sorting.
 
         :param element: The element we are currently reading.
         :type element: str

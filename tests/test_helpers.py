@@ -213,7 +213,7 @@ class TestCommand(TestCase):
 
     def test_command(self):
         """
-        This method test Command().execute().
+        Test Command().execute().
         """
 
         expected = "PyFunceble has been written by Fun Ilrys."
@@ -583,7 +583,7 @@ class TestRegex(TestCase):
 
     def test_replace(self):
         """
-        This method will test Regex.replace().
+        Test Regex.replace().
         """
 
         regex = "th"
