@@ -72,12 +72,12 @@ from PyFunceble.mining import Mining
 
 class TestMining(TestCase):
     """
-    This class will test PyFunceble.mining
+    Test PyFunceble.mining
     """
 
     def setUp(self):
         """
-        This method setup everything needeed for the test.
+        Setup everything needeed for the test.
         """
 
         load_config(True)
@@ -98,14 +98,14 @@ class TestMining(TestCase):
 
     def tearDown(self):
         """
-        This method setup every we do not need after the test.
+        Setup every we do not need after the test.
         """
 
         PyFunceble.CONFIGURATION["mining"] = False
 
     def test_retrieve_file_not_exist(self):
         """
-        This method test the case that we want to retrieve a file that does not exist.
+        Test the case that we want to retrieve a file that does not exist.
         """
 
         File(self.file).delete()
@@ -131,7 +131,7 @@ class TestMining(TestCase):
 
     def test_retrieve_file_exist(self):
         """
-        This method test the case that we want to retrieve a file that exist.
+        Test the case that we want to retrieve a file that exist.
         """
 
         File(self.file).delete()
@@ -160,7 +160,7 @@ class TestMining(TestCase):
 
     def test_add(self):
         """
-        This method will test the addition subsystem.
+        Test the addition subsystem.
         """
 
         File(self.file).delete()
@@ -201,7 +201,7 @@ class TestMining(TestCase):
 
     def test_remove(self):
         """
-        This method will test the deletion subsystem.
+        Test the deletion subsystem.
         """
 
         File(self.file).delete()
@@ -236,7 +236,7 @@ class TestMining(TestCase):
 
     def test_list_of_mined(self):
         """
-        This method will test Mining.list_of_mined
+        Test Mining.list_of_mined
         """
 
         File(self.file).delete()
@@ -261,7 +261,7 @@ class TestMining(TestCase):
 
     def test_backup(self):
         """
-        This method test the backup system.
+        Test the backup system.
         """
 
         File(self.file).delete()
