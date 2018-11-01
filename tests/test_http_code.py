@@ -64,54 +64,81 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
+from PyFunceble import load_config
 from PyFunceble.http_code import HTTPCode
 
 
 class TestHTTPCode(TestCase):
     """
-    This class will test PyFunceble.http_code.
+    Test PyFunceble.http_code.
     """
 
-    @mock.patch("PyFunceble.http_code.HTTPCode._access")
-    def test_get(self, access):
+    def setUp(self):
         """
-        This method will test if HTTPCode().get() is filtering correctly.
+        Setup everything needed for the tests.
         """
+        load_config(True)
 
         PyFunceble.CONFIGURATION["to_test"] = "google.com"
         PyFunceble.CONFIGURATION["to_test_type"] = "domain"
 
-        # Test of the case that it returns None
+    @mock.patch("PyFunceble.http_code.HTTPCode._access")
+    def test_get_not_activated(self, _):
+        """
+        Test if HTTPCode().get() does not have a launch
+        authorization.
+        """
+
         PyFunceble.HTTP_CODE["active"] = False
         expected = None
         actual = HTTPCode().get()
 
         self.assertEqual(expected, actual)
+
+    @mock.patch("PyFunceble.http_code.HTTPCode._access")
+    def test_get_known_code(self, access):
+        """
+        Test of HTTPCode().get() for the case that
+        it match a code which is in our list.
+        """
+
         PyFunceble.HTTP_CODE["active"] = True
 
-        # Test of the case that it returns a code which is in our list
         access.return_value = 200
         expected = 200
         actual = HTTPCode().get()
 
         self.assertEqual(expected, actual)
 
-        # Test of the case that it returns a code which is not in our list
+    @mock.patch("PyFunceble.http_code.HTTPCode._access")
+    def test_get_unknown_code(self, access):
+        """
+        Test of HTTPCode().get() for the case that
+        it match a code which is not in our list.
+        """
+
+        PyFunceble.HTTP_CODE["active"] = True
+
         access.return_value = 859
         expected = "***"
         actual = HTTPCode().get()
 
         self.assertEqual(expected, actual)
 
-        # Test of the case that it returns None
+    @mock.patch("PyFunceble.http_code.HTTPCode._access")
+    def test_get_code_is_none(self, access):
+        """
+        Test of HTTPCode().get() for the case that
+        it match a code which is not in our list.
+        """
+
+        PyFunceble.HTTP_CODE["active"] = True
+
         access.return_value = None
         expected = "***"
         actual = HTTPCode().get()
 
         self.assertEqual(expected, actual)
-
-        del PyFunceble.CONFIGURATION["to_test"]
-        del PyFunceble.CONFIGURATION["to_test_type"]
 
 
 if __name__ == "__main__":
