@@ -64,7 +64,6 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble import load_config
 from PyFunceble.http_code import HTTPCode
 
 
@@ -77,7 +76,7 @@ class TestHTTPCode(TestCase):
         """
         Setup everything needed for the tests.
         """
-        load_config(True)
+        PyFunceble.load_config(True)
 
         PyFunceble.CONFIGURATION["to_test"] = "google.com"
         PyFunceble.CONFIGURATION["to_test_type"] = "domain"
