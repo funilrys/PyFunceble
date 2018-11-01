@@ -275,7 +275,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         :rtype: dict
         """
 
-        if start and end:  # pragma: no cover
+        if start and end:
             # The start and end time is explicitly given.
 
             # We get the difference between the ending and the starting time.
@@ -296,10 +296,10 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         data = OrderedDict()
 
         # We calculate and append the day to our data.
-        data["days"] = str(time_difference // (24 * 3600)).zfill(2)
+        data["days"] = str(time_difference // (24 * 60 * 60)).zfill(2)
 
         # We calculate and append the hours to our data.
-        data["hours"] = str(time_difference // 3600).zfill(2)
+        data["hours"] = str((time_difference // (60 * 60)) % 24).zfill(2)
 
         # We calculate and append the minutes to our data.
         data["minutes"] = str((time_difference % 3600) // 60).zfill(2)

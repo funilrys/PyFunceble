@@ -71,12 +71,12 @@ from PyFunceble.execution_time import ExecutionTime
 
 class TestExecutionTime(BaseStdout):
     """
-    This class will test PyFunceble.execution_time.
+    Test PyFunceble.execution_time.
     """
 
     def setUp(self):
         """
-        This method will load everything needed for the tests
+        Setup everything needed for the tests
         """
 
         Load(PyFunceble.CURRENT_DIRECTORY)
@@ -88,7 +88,7 @@ class TestExecutionTime(BaseStdout):
     @mock.patch("PyFunceble.execution_time.ExecutionTime._stoping_time")
     def test_calculate(self, _):
         """
-        This method test the calculation of the execution time.
+        Test the calculation of the execution time.
         """
 
         expected = PyFunceble.OrderedDict(
@@ -98,10 +98,29 @@ class TestExecutionTime(BaseStdout):
 
         self.assertEqual(expected, actual)
 
+    @mock.patch("PyFunceble.execution_time.ExecutionTime._stoping_time")
+    def test_calculate_consequent(self, _):
+        """
+        Test the calculation of the execution time for more consequent
+        time.
+        """
+
+        day_in_second = 60 * 60 * 24
+        fifty_hours_in_second = 60 * 60 * 50
+
+        expected = PyFunceble.OrderedDict(
+            [("days", "03"), ("hours", "02"), ("minutes", "00"), ("seconds", "00")]
+        )
+
+        end = int(PyFunceble.time()) + day_in_second + fifty_hours_in_second
+        actual = ExecutionTime()._calculate(start=int(PyFunceble.time()), end=end)
+
+        self.assertEqual(expected, actual)
+
     @mock.patch("PyFunceble.execution_time.ExecutionTime._calculate")
     def test_format_execution_time(self, calculate):
         """
-        This method test if the printed format is the one we want.
+        Test if the printed format is the one we want.
         """
 
         calculate.return_value = PyFunceble.OrderedDict(
