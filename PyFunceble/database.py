@@ -64,7 +64,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import mktime, path, strptime, time
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Dict, File, List
 
@@ -118,7 +117,7 @@ class Inactive:
         # We construct the possible path to an older version of the database.
         historical_formating_error = PyFunceble.CURRENT_DIRECTORY + "inactive-db.json"
 
-        if path.isfile(historical_formating_error):
+        if PyFunceble.path.isfile(historical_formating_error):
             # The histortical file already exists.
 
             # We get its content.
@@ -161,7 +160,7 @@ class Inactive:
                         # it become in the past. This way they will be retested
                         # automatically.
                         data_to_parse[top_key][
-                            int(time()) - (self.one_day_in_seconds * 30)
+                            int(PyFunceble.time()) - (self.one_day_in_seconds * 30)
                         ] = data[top_key][low_key]
 
             if "inactive_db" in PyFunceble.CONFIGURATION:
@@ -252,7 +251,7 @@ class Inactive:
             # We get, format and initiate the historical database file.
             self._reformat_historical_formating_error()
 
-            if path.isfile(self.inactive_db_path):
+            if PyFunceble.path.isfile(self.inactive_db_path):
                 # The database file exist.
 
                 # We merge our current database into already initiated one.
@@ -351,7 +350,7 @@ class Inactive:
                     if data != "to_test":
                         # The currently read index is not `to_test`.
 
-                        if int(time()) > int(data) + self.days_in_seconds:
+                        if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
                             # The currently read index is older than the excepted time
                             # for retesting.
 
@@ -419,17 +418,17 @@ class Inactive:
                     # The list of keys is empty.
 
                     # We return the current time.
-                    return int(time())
+                    return int(PyFunceble.time())
 
-                if int(time()) > int(recent_date) + self.one_day_in_seconds:
+                if int(PyFunceble.time()) > int(recent_date) + self.one_day_in_seconds:
                     # The most recent time was in more than one day.
 
                     # We return the current time.
-                    return int(time())
+                    return int(PyFunceble.time())
 
                 # The most recent time was in less than one day.
 
-                if int(time()) < int(recent_date) + self.days_in_seconds:
+                if int(PyFunceble.time()) < int(recent_date) + self.days_in_seconds:
                     # The most recent time was in less than the expected number of day for
                     # retesting.
 
@@ -439,7 +438,7 @@ class Inactive:
         # The database subsystem is not activated.
 
         # We return the current time.
-        return int(time())
+        return int(PyFunceble.time())
 
     def add(self):
         """
@@ -599,7 +598,9 @@ class Whois:
 
         if self.expiration_date:
             # We get the epoch of the expiration date.
-            self.epoch = int(mktime(strptime(self.expiration_date, "%d-%b-%Y")))
+            self.epoch = int(
+                PyFunceble.mktime(PyFunceble.strptime(self.expiration_date, "%d-%b-%Y"))
+            )
 
         if (
             "file_to_test" in PyFunceble.CONFIGURATION
@@ -663,7 +664,7 @@ class Whois:
         if self._authorization() and "whois_db" not in PyFunceble.CONFIGURATION:
             # The usage of the whois database is activated.
 
-            if path.isfile(self.whois_db_path):
+            if PyFunceble.path.isfile(self.whois_db_path):
                 # The database file exist.
 
                 # We merge our current database into already initiated one.
@@ -730,7 +731,7 @@ class Whois:
                     "epoch"
                 ]
             )
-            < int(time())
+            < int(PyFunceble.time())
         ):
             # * We are authorized to work.
             # and
@@ -782,7 +783,7 @@ class Whois:
         if self._authorization():
             # We are authorized to work.
 
-            if self.epoch < int(time()):
+            if self.epoch < int(PyFunceble.time()):
                 state = "past"
             else:
                 state = "future"
