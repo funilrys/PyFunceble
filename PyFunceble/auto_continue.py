@@ -62,7 +62,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble import path
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Dict, File
 
@@ -83,7 +82,7 @@ class AutoContinue:
                 + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
             )
 
-            if path.isfile(self.autocontinue_log_file):
+            if PyFunceble.path.isfile(self.autocontinue_log_file):
                 # The log file already exist.
 
                 # We get its content and save it inside backup_content.
