@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble import directory_separator, walk
 from PyFunceble.core import Core
 from PyFunceble.helpers import File
 
@@ -135,15 +134,15 @@ class Clean:
         # We initiate the directory we have to look for.
         directory = PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
 
-        if not directory.endswith(directory_separator):  # pragma: no cover
+        if not directory.endswith(PyFunceble.directory_separator):  # pragma: no cover
             # For safety, if it does not ends with the directory separator, we append it
             # to its end.
-            directory += directory_separator
+            directory += PyFunceble.directory_separator
 
         # We initiate a variable which will save the list of file to delete.
         result = []
 
-        for root, _, files in walk(directory):
+        for root, _, files in PyFunceble.walk(directory):
             # We walk in the directory and get all files and sub-directories.
 
             for file in files:
@@ -153,7 +152,7 @@ class Clean:
                 if file not in [".gitignore", ".keep"]:
                     # The file is not into our list of file we do not have to delete.
 
-                    if root.endswith(directory_separator):
+                    if root.endswith(PyFunceble.directory_separator):
                         # The root ends with the directory separator.
 
                         # We construct the path and append the full path to the result.
@@ -165,7 +164,7 @@ class Clean:
                         # between the root and the filename and append the full path to
                         # the result.
                         result.append(
-                            root + directory_separator + file
+                            root + PyFunceble.directory_separator + file
                         )  # pragma: no cover
 
         # We return our list of file to delete.
