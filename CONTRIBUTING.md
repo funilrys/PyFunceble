@@ -8,10 +8,25 @@ The `master` branch is used only for releasing a new **stable** version of the c
 
 In order to gain sometime and also understand what you are working on, your pull requests submission as long as your commit descriptions should be clear and complete as much as possible. We do an exception for commit with minor changed but big changes should have a complete description. Please ensure to use the following method before commiting.
 
+## Steps before commits
+
+_Note: The following do not apply if you do not touch the `PyFunceble` nor the `tests` directory._
+
 ```shell
+$ # We format our code.
 $ black PyFunceble && black tests/*.py
+$ # We lint our code. Please make sure to fix all reported issues.
 $ pylint PyFunceble && pylint tests/*.py
+$ # We check the tests coverage. Please ensure that at lease 95% of the code is covered.
+$ coverage run setup.py test && coverage report -m
+$ # Prepare our files, `version.yaml` and code for pushing.
 $ PyFunceble --production
+```
+
+## The commit
+
+```shell
+$ # There paragraph is optional if your changes/commits are obvious.
 $ git commit -S -m "A summary of the commit" -m "A paragraph
 > or a sentence explaining what changed, why and its impact."
 ```
@@ -29,4 +44,4 @@ The usage of `PyFunceble --production` update `version.yaml` and `directory_stru
   - Exception granted for regular expressions or long string assignment.
 - We use [`Black`](https://github.com/ambv/black), _The uncompromising Python code formatter_ , to format our code.
 - Our code should pass `pylint PyFunceble && pylint tests/*.py` with at least a score of 10.00/10.00
-- We do not forget to run `black PyFunceble && black tests/*.py && pylint PyFunceble && pylint tests/*.py && PyFunceble --production` before any commits.
+- We do not forget to follow the steps before commits.
