@@ -125,10 +125,32 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             # We initiate an empty header to use with our request.
             self.headers = {}
 
+        # We handle possible non existant index.
+        self._handle_non_existant_index()
+
+    @classmethod
+    def _handle_non_existant_index(cls):
+        """
+        Handle and check that some configuration index exists.
+        """
+
         try:
+            # We try to call the http code.
             PyFunceble.CONFIGURATION["http_code"]
         except KeyError:
+            # If it is not found.
+
+            # We initiate an empty http code.
             PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+
+        try:
+            # We try to call the referer.
+            PyFunceble.CONFIGURATION["referer"]
+        except KeyError:
+            # If it is not found.
+
+            # We initate an `Unknown` referer.
+            PyFunceble.CONFIGURATION["referer"] = "Unknown"
 
     def _analytic_host_file_directory(self):
         """
@@ -922,15 +944,6 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         """
         Generate a file according to the domain status.
         """
-
-        try:
-            # We try to call the http code.
-            PyFunceble.CONFIGURATION["http_code"]
-        except KeyError:
-            # If it is not found.
-
-            # We initiate an empty http code.
-            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
 
         if not PyFunceble.CONFIGURATION["http_code"]:
             # The http code is equal to None.
