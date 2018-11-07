@@ -107,3 +107,4 @@ venv.bak/
 inactive_db.json
 .PyFunceble.yaml
 dir_structure.json
+whois_db.json
