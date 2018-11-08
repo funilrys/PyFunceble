@@ -99,7 +99,7 @@ Under Windows we look for the following directories in their order. If any confi
 .. note::
     If the parent directory does not exist, we move to the next possible location in the given order.
 
-    This means that under most Windows versions, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\PyFunceble`- as the configuration location.
+    This means that under most Windows versions, we consider :code:`%APPDATA%\PyFunceble` - also know as :code:`C:\Users\userName\AppData\Roaming\PyFunceble`- as the configuration location.
     But if the :code:`%APPDATA%` directory does not exist, we fallback to current directory as the configuration location.
 
 Custom location
@@ -1054,6 +1054,312 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the returned status for the :code:`INVALID` case.
 
+:code:`http_codes`
+------------------
 
-.. todo::
-    Complete the documentation...
+    **Type:** :code:`dict`
+
+    **Description:** Handle the interpretation of each status codes when we do and generate our analytic data.
+
+:code:`http_codes[active]`
+""""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+    
+    **Description:** Enable / Disable the usage of the HTTP status code extraction.
+
+:code:`http_codes[list]`
+""""""""""""""""""""""""
+
+    **Type:** :code:`dict`
+
+    **Description:** Categorize the http status code as mentionned in the documention related to the :code:`HTTP Code` colomn.
+
+:code:`http_codes[list][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:**
+        ::
+
+            - 100
+            - 101
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+
+    **Description:** List the HTTP status code which are considered as :code:`ACTIVE`.
+
+:code:`http_codes[list][potentially_down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:**
+        ::
+
+            - 400
+            - 402
+            - 403
+            - 404
+            - 409
+            - 410
+            - 412
+            - 414
+            - 415
+            - 416
+
+    **Description:** List the HTTP status code which are considered as :code:`INACTIVE` or :code:`POTENTIALLY_INACTIVE`.
+
+
+:code:`http_codes[list][potentially_up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:**
+        ::
+
+            - 000
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 305
+            - 307
+            - 403
+            - 405
+            - 406
+            - 407
+            - 408
+            - 411
+            - 413
+            - 417
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+
+    **Description:** List the HTTP status code which are considered as :code:`ACTIVE` or :code:`POTENTIALLY_ACTIVE`.
+
+:code:`links`
+-------------
+
+    **Type:** :code:`dict`
+
+    **Description:** Set the list of links which can be used/called by the system when needed.
+
+    .. note::
+        The objective of this index is to avoid hard coded links when the configuration file is readable.
+
+
+:code:`links[api_date_format]`
+""""""""""""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://pyfunceble.funilrys.com/api/date-format`
+
+    **Description:** Set the link to use when we share logs.
+
+
+:code:`links[api_no_referer]`
+""""""""""""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://pyfunceble.funilrys.com/api/no-referer`
+
+    **Description:** Set the link to use when we share logs.
+
+:code:`links[config]`
+"""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml`
+
+    **Description:** Set the upstream link to the configuration file.
+
+:code:`links[dir_structure]`
+""""""""""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/dir_structure_production.json`
+
+    **Description:** Set the upstream link to the directory structure dump file.
+
+:code:`links[iana]`
+"""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json`
+
+    **Description:** Set the upstream link to the IANA zone file configuration file.
+
+:code:`links[repo]`
+"""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://github.com/funilrys/PyFunceble`
+
+    **Description:** Set the upstream link to the repository.
+
+:code:`links[requirements]`
+"""""""""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt`
+
+    **Description:** Set the upstream link to the :code:`requirements.txt` file.
+
+:code:`links[psl]`
+""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json`
+
+    **Description:** Set the upstream link to the public suffix database file.
+
+:code:`counter`
+---------------
+
+    **Type:** :code:`dict`
+
+    **Description:** Setup the internal counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[number]`
+"""""""""""""""""""""""
+
+    **Type:** :code:`dict`
+
+    **Description:** Setup the internal counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+
+:code:`counter[number][down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal down counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+
+:code:`counter[number][invalid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal invalid counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[number][tested]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal tested counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[number][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal up counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+
+
+:code:`counter[percentage]`
+"""""""""""""""""""""""""""
+
+    **Type:** :code:`dict`
+
+    **Description:** Setup the internal percentage counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[percentage][down]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal down percentage counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[percentage][invalid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal invalid percentage counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.
+
+:code:`counter[percentage][up]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`0`
+
+    **Description:** Setup the internal up percentage counter.
+
+    .. warning::
+        The following is not intended for modification.
+        Exception for debuging or special cases which requires an initiated counter.

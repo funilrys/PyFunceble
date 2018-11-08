@@ -212,7 +212,6 @@ links:
   iana: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"
-  script: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/PyFunceble.py"
   psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
 counter:
   number:

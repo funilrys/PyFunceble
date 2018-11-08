@@ -12,7 +12,7 @@ We only collect when the following actions/events are encountered:
 
         *   The extension of the currently tested domain.
 
-    *   Shared/posted to :code:`http://pyfunceble.funilrys.com/api/no-referer`
+    *   Shared/posted to :code:`https://pyfunceble.funilrys.com/api/no-referer`
 
 *   The script find and generate logs into :code:`output/logs/date_format/`
 
@@ -22,7 +22,7 @@ We only collect when the following actions/events are encountered:
         *   The currently tested domain name.
         *   The matched whois server (from :code:`iana-domains-db.json`)
 
-    *   Shared/posted to :code:`http://pyfunceble.funilrys.com/api/date-format`
+    *   Shared/posted to :code:`https://pyfunceble.funilrys.com/api/date-format`
 
 How to share logs?
 ------------------

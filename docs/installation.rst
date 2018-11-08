@@ -8,8 +8,11 @@ Here is the list of requirements:
 
 -   Python 3.x
 -   :code:`colorama`
--   :code:`requests`
+-   :code:`domain2idna`
 -   :code:`PyYAML`
+-   :code:`requests`
+-   :code:`setuptools`
+-   :code:`urllib3`
 
 Python 3.x
 ----------
@@ -20,20 +23,42 @@ As we use for example ::
 
 which does not exist in Python 2.x and as I wanted to give a priority to Python 3, Python 3 is required.
 
-colorama
---------
+:code:`colorama`
+----------------
 
-As I wanted to add some coloration, I choose :code:`colorama` for the job as it offers a portable solution.
+As we use some coloration coloration, :code:`colorama` is required.
 
-requests
---------
+:code:`domain2idna`
+-------------------
+
+As we propose the conversion of domains to IDNA, :code:`domain2idna` is required.
+
+.. note::
+    `domain2idna` is maintained and developped by `Nissar Chababy (@funilrys)`_, the main developper of PyFunceble.
+    Its source code can be found `on GitHub`_
+
+.. _Nissar Chababy (@funilrys): https://github.com/funilrys
+.. _on GitHub: https://github.com/funilrys/domain2idna
+
+:code:`PyYAML`
+--------------
+
+As our configuration file is written in :code:`.yaml`, :code:`PyYAML` is required.
+
+:code:`requests`
+----------------
 
 As we use :code:`requests` when calling all :code:`Lookup()` methods, :code:`requests` is required.
 
-PyYAML
-------
+:code:`setuptools`
+------------------
 
-As our configuration file is written in :code:`.yaml`, :code:`PyYAML` is required.
+As we use :code:`install_requires=xx` inside our :code:`setup.py`, :code:`setuptools` is required.
+
+:code:`urllib3`
+---------------
+
+You should normally already have it. But as we handle some of its errors while using :code:`requests`, :code:`urllib3` is required.
 
 --------------------------------------------------------
 
