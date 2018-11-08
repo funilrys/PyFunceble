@@ -80,8 +80,10 @@ class URL:  # pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        if Check().is_url_valid():
-            # The url is valid.
+        if Check().is_url_valid() or PyFunceble.CONFIGURATION["local"]:
+            # * The url is valid.
+            # or
+            # * We are testing in/for a local or private network.
 
             if "current_test_data" in PyFunceble.CONFIGURATION:
                 PyFunceble.CONFIGURATION["current_test_data"][

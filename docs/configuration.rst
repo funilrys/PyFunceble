@@ -521,6 +521,21 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Description:** Set the User-Agent to use everytime we are requesting something from a web server other than our API.
 
+:code:`verify_ssl_certificate`
+------------------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the verification of the SSL/TLS certificate when testing for URL.
+
+.. warning::
+    If you set this index to :code:`True`, you may get **false positive** result.
+    
+    Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you will always get :code:`INACTIVE` as output.
+
+
 :code:`whois_database`
 ----------------------
 

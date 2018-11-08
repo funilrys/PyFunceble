@@ -7,5 +7,5 @@ This flowchart is there for you!
 Domain testing
 --------------
 
-.. image:: https://funilrys.com/user/pages/projects/PyFunceble/logic.png
+.. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_domain.png
     :alt: PyFunceble Logic representation for domain testing

@@ -89,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.124.4.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.125.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -763,6 +763,19 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         )
 
         PARSER.add_argument(
+            "-vsc",
+            "--verify-ssl-certificate",
+            action="store_true",
+            help="Switch the value of the verification of the \
+                SSL/TLS certificate when testing for URL. %s"
+            % (
+                CURRENT_VALUE_FORMAT
+                + repr(CONFIGURATION["verify_ssl_certificate"])
+                + Style.RESET_ALL
+            ),
+        )
+
+        PARSER.add_argument(
             "-wdb",
             "--whois-database",
             action="store_true",
@@ -914,6 +927,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
         if ARGS.user_agent:
             CONFIGURATION.update({"user_agent": ARGS.user_agent})
+
+        if ARGS.verify_ssl_certificate:
+            CONFIGURATION.update(
+                {"verify_ssl_certificate": ARGS.verify_ssl_certificate}
+            )
 
         if ARGS.whois_database:
             CONFIGURATION.update({"whois_database": Core.switch("whois_database")})

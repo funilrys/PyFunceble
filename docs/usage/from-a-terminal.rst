@@ -438,11 +438,23 @@ Want to test the availability or an URL ? Enjoy this argument!
 
     Show the version of PyFunceble and exit.
 
+:code:`-vsc` | :code:`--verify-ssl-certificate`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the value of the verification of the SSL/TLS certificate when testing for URL.
+        Default value: :code:`False`
+
+    .. warning::
+        If you activate the verification of the SSL/TLS certificate, you may get **false positive** result.
+
+        Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you will always get :code:`INACTIVE` as output.
+
+
 :code:`-wdb` | :code:`--whois-database`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
-        Defautl value: :code:`True`
+        Default value: :code:`True`
 
 Global overview
 """""""""""""""
@@ -451,6 +463,7 @@ Global overview
 
     usage: PyFunceble [-ad] [-a] [--cmd-before-end CMD_BEFORE_END] [-c]
                     [--autosave-minutes AUTOSAVE_MINUTES] [--clean]
+                    [--clean-all]
                     [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
                     [--commit-results-message COMMIT_RESULTS_MESSAGE]
                     [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
@@ -460,7 +473,7 @@ Global overview
                     [-nl] [-nu] [-nw] [-p] [--plain] [--production] [-psl] [-q]
                     [--share-logs] [-s] [--split] [-t TIMEOUT] [--travis]
                     [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
-                    [-ua USER_AGENT] [-v] [-wdb]
+                    [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
     The tool to check domain or IP availability.
 
@@ -574,6 +587,10 @@ Global overview
                                 interact with everything which is not our logs sharing
                                 system.
         -v, --version         Show the version of PyFunceble and exit.
+        -vsc, --verify-ssl-certificate
+                                Switch the value of the verification of the SSL/TLS
+                                certificate when testing for URL. Installed
+                                value: False
         -wdb, --whois-database
                                 Switch the value of the usage of a database to store
                                 whois data in order to avoid whois servers rate limit.

@@ -62,6 +62,7 @@ License:
 """
 # pylint: enable=line-too-long
 import urllib3.exceptions as urllib3_exceptions
+from urllib3 import disable_warnings
 
 # pylint: disable=bad-continuation
 import PyFunceble
@@ -76,6 +77,9 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         if PyFunceble.CONFIGURATION["to_test_type"] == "url":
             # We should work with full URL which actualy means that we have to get the
             # http status code from the URL we are currently testing.
+
+            # We disable the urllib warning.
+            disable_warnings(urllib3_exceptions.InsecureRequestWarning)
 
             # We initiate the element we have to get.
             self.to_get = PyFunceble.CONFIGURATION["to_test"]
@@ -112,12 +116,25 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         try:
             # We try to get the HTTP status code.
 
-            # We get the head of the URL.
-            req = PyFunceble.requests.head(
-                self.to_get,
-                timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
-                headers=self.headers,
-            )
+            if PyFunceble.CONFIGURATION["to_test_type"] == "url":
+                # We are globally testing a URL.
+
+                # We get the head of the URL.
+                req = PyFunceble.requests.head(
+                    self.to_get,
+                    timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+                    headers=self.headers,
+                    verify=PyFunceble.CONFIGURATION["verify_ssl_certificate"],
+                )
+            else:
+                # We are not globally testing a URL.
+
+                # We get the head of the constructed URL.
+                req = PyFunceble.requests.head(
+                    self.to_get,
+                    timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+                    headers=self.headers,
+                )
 
             # And we try to get the status code.
             return req.status_code
