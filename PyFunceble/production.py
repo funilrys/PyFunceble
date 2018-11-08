@@ -78,7 +78,7 @@ class Production:  # pylint: disable=too-few-public-methods
     :param extern:
         Tell us if we do not have to execute the logic automatically.
         This allow method to be called.
-    :type extern: optional, bool
+    :type extern: bool
     """
 
     def __init__(self, extern=False):

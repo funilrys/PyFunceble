@@ -73,11 +73,11 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     :param is_last_domain:
         Tell this subsystem if we are at the very end of the file testing.
-    :type is_last_domain: optional, bool
+    :type is_last_domain: bool
 
     :param is_bypass:
         Tell this subsystem if we are in bypassing mode.
-    :type is_bypass: optional, bool
+    :type is_bypass: bool
     """
 
     def __init__(self, is_last_domain=False, is_bypass=False):

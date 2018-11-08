@@ -72,10 +72,10 @@ class Percentage:
     Calculation of the percentage of each status.
 
     :param domain_status: The status to increment.
-    :type domain_status: optional, str
+    :type domain_status: str
 
     :param init: The data from a previous session we are continuing.
-    :type init: optional, dict
+    :type init: dict
     """
 
     def __init__(self, domain_status=None, init=None):

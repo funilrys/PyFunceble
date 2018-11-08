@@ -83,10 +83,10 @@ class Hash:  # pylint: disable=too-few-public-methods
     Get and return the hash a file with the given algorithm.
 
     :param file_path: The path to the file we have to hash.
-    :type file_path: optional, str
+    :type file_path: str
 
     :param algorithm: The algorithm to use.
-    :type algorithm: optional, str
+    :type algorithm: str
 
     :param only_hash:
         Tell us if we only have to return the desired algorithm
@@ -304,7 +304,7 @@ class Dict:
     Dictionary manipulations.
 
     :param main_dictionnary: The dict we are working with.
-    :type main_dictionnary: optional, dict
+    :type main_dictionnary: dict
     """
 
     def __init__(self, main_dictionnary=None):  # pragma: no cover
@@ -514,7 +514,7 @@ class Directory:  # pylint: disable=too-few-public-methods
         Fix the path of the given path.
 
         :param splited_path: A list to convert to the right path.
-        :type splited_path: optional, list
+        :type splited_path: list
 
         :return: The fixed path.
         :rtype: str
@@ -568,7 +568,7 @@ class File:
         :param overwrite:
             Tell us if we have to overwrite the
             content of the file we are working with.
-        :type overwrite: optional, bool
+        :type overwrite: bool
         """
 
         if overwrite or not path.isfile(self.file):
@@ -647,7 +647,7 @@ class List:  # pylint: disable=too-few-public-methods
     List manipulation.
 
     :param main_list: The list to manipulate.
-    :type main_list: optional, list
+    :type main_list: list
     """
 
     def __init__(self, main_list=None):  # pragma: no cover
@@ -687,7 +687,7 @@ class List:  # pylint: disable=too-few-public-methods
         :type key_method: function|method
 
         :param reverse: Tell us if we have to reverse the list.
-        :type reverse: optional, bool
+        :type reverse: bool
 
         :return: A sorted list.
         :rtype: list
@@ -711,20 +711,20 @@ class Regex:  # pylint: disable=too-few-public-methods
     :type regex: str
 
     :param group: The group to return.
-    :type group: optional, int
+    :type group: int
 
     :param rematch:
         Allow to return the matched groups into a formatted list.
 
         .. note::
             This is an implementation of Bash :code:`${BASH_REMATCH}`
-    :type rematch: optional, bool
+    :type rematch: bool
 
     :param replace_with: The value to replace the matched regex with.
-    :type replace_with: optional, str
+    :type replace_with: str
 
     :param occurences: The number of occurence(s) to replace.
-    :type occurences: optional, int
+    :type occurences: int
 
     :param return_type:
         Tell us if we have to return the matched data or simply check
@@ -850,12 +850,12 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
     :param destination:
         The location where we should save the downloaded content.
-    :type destination: optional, str
+    :type destination: str
 
     :param return_data:
         Tell us if we need to return the page content
         or write its content into the given destination.
-    :type return_data: optional, bool
+    :type return_data: bool
 
     """
 

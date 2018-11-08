@@ -153,10 +153,10 @@ class Lookup:
         :type whois_server: str
 
         :param domain: The domain to get the whois record from.
-        :type domain: optional, str
+        :type domain: str
 
         :param timeout: The timeout to apply to the request.
-        :type timeout: optional, int
+        :type timeout: int
 
         :return: The whois record from the given whois server, if exist.
         :rtype: str|None

@@ -89,11 +89,11 @@ class Prints:
     :type template: str
 
     :param output_file: The path to the file to write.
-    :type output_file: optional, str
+    :type output_file: str
 
     :param only_on_file:
         Tell us if we only have to print on file and not on screen.
-    :type only_on_file: optional, bool
+    :type only_on_file: bool
     """
 
     def __init__(self, to_print, template, output_file=None, only_on_file=False):
@@ -239,10 +239,10 @@ class Prints:
 
         :param header_separator:
             The separator to use between the table header and our data.
-        :type header_separator: optional, str
+        :type header_separator: str
 
         :param colomn_separator: The separator to use between each colomns.
-        :type colomn_separator: optional, str
+        :type colomn_separator: str
 
         :return: The data to print in a list format.
         :rtype: list
@@ -327,7 +327,7 @@ class Prints:
 
         :param do_not_print:
             Tell us if we have to print the header or not.
-        :type do_not_print: optional, bool
+        :type do_not_print: bool
         """
 
         if (

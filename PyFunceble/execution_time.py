@@ -73,11 +73,11 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     :param action:
         The action related the execution time.
         Can be `start` or `stop`.
-    :type action: optional, str
+    :type action: str
 
     :param last:
         Tell the subsystem if we are at the very end of the file testing.
-    :type last: optional, bool
+    :type last: bool
     """
 
     def __init__(self, action="start", last=False):
@@ -135,7 +135,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
         :param last:
             Tell us if we are at the very end of the file testing.
-        :type last: optional, bool
+        :type last: bool
         """
 
         if (
@@ -257,10 +257,10 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         calculate the difference between starting and ending time.
 
         :param start: A starting time.
-        :type start: optional, int|str
+        :type start: int|str
 
         :param stop: A ending time.
-        :type stop: optional, int|str
+        :type stop: int|str
 
         :return:
             A dict with following as index.
@@ -314,10 +314,10 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         Format the calculated time into a human readable format.
 
         :param start: A starting time.
-        :type start: optional, int|str
+        :type start: int|str
 
         :param stop: A ending time.
-        :type stop: optional, int|str
+        :type stop: int|str
 
         :return: A human readable date.
         :rtype: str

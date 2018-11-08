@@ -87,24 +87,24 @@ class Core:  # pragma: no cover
     together to make the system works".
 
     :param domain_or_ip_to_test: A domain or IP to test.
-    :type domain_or_ip_to_test: optional, str
+    :type domain_or_ip_to_test: str
 
     :param file_path: A path to a file to read and test.
-    :type file_path: optional, str
+    :type file_path: str
 
     :param url_to_test: A URL to test.
-    :type url_to_test: optional, str
+    :type url_to_test: str
 
     :param url_file: A path to a file which contains URL to test.
-    :type url_file: optional, str
+    :type url_file: str
 
     :param link_to_test: A link to a file to download and test.
-    :type link_to_test: optional, str
+    :type link_to_test: str
 
     :param modulo_test:
         If set to True, it will tell the system that we are working as an
         exported module.
-    :param modulo_test: optional, bool
+    :param modulo_test: bool
     """
 
     def __init__(self, **args):
@@ -376,7 +376,7 @@ class Core:  # pragma: no cover
         :param complete:
             Activate the return of a dictionnary with signigican data about
             the test.
-        :type complete: optional, bool
+        :type complete: bool
 
         :return: ACTIVE INACTIVE or INVALID.
         :rtype: str|list
@@ -543,7 +543,7 @@ class Core:  # pragma: no cover
         :type last: str
 
         :param status: The status of the currently tested element.
-        :type status: optional, str
+        :type status: str
         """
 
         if status:
@@ -626,11 +626,11 @@ class Core:  # pragma: no cover
         Manage the case that we want to test only a domain.
 
         :param domain: The domain or IP to test.
-        :type domain: optional, str
+        :type domain: str
 
         :param last_domain:
             The last domain to test if we are testing a file.
-        :type last_domain: optional, str
+        :type last_domain: str
         """
 
         # We print the header.
@@ -768,7 +768,7 @@ class Core:  # pragma: no cover
         :type to_format: str
 
         :param result: A list of the result of this method.
-        :type result: optional, list
+        :type result: list
 
         :return: The list of domains or IP to test.
         :rtype: list
@@ -1108,12 +1108,12 @@ class Core:  # pragma: no cover
         Manage the case that we want to test only a given url.
 
         :param url_to_test: The url to test.
-        :type url_to_test: optional, str
+        :type url_to_test: str
 
         :param last_url:
             The last url of the file we are testing
             (if exist)
-        :type last_url: optional, str
+        :type last_url: str
         """
 
         # We print the header.
@@ -1184,7 +1184,7 @@ class Core:  # pragma: no cover
         :param custom:
             Let us know if have to switch the parsed variable instead
             of our configuration index.
-        :type custom: optional, bool
+        :type custom: bool
 
         :return:
             The opposite of the configuration index or the given variable.

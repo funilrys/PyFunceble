@@ -106,19 +106,20 @@ class Sort:  # pylint: disable=too-few-public-methods
         :return: The formated element.
         :rtype: str
 
-        For a domain like :code:`aaa.bbb.ccc.tdl`.
+        .. note::
+            For a domain like :code:`aaa.bbb.ccc.tdl`.
 
-        A normal sorting is done in the following order:
-            1. :code:`aaa`
-            2. :code:`bbb`
-            3. :code:`ccc`
-            4. :code:`tdl`
+            A normal sorting is done in the following order:
+                1. :code:`aaa`
+                2. :code:`bbb`
+                3. :code:`ccc`
+                4. :code:`tdl`
 
-        This method allow the sorting to be done in the following order:
-            1. :code:`tdl`
-            2. :code:`ccc`
-            3. :code:`bbb`
-            4. :code:`aaa`
+            This method allow the sorting to be done in the following order:
+                1. :code:`tdl`
+                2. :code:`ccc`
+                3. :code:`bbb`
+                4. :code:`aaa`
 
         """
 

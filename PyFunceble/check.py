@@ -72,7 +72,7 @@ class Check:
     Provide a place to check several things around URL, IP or domain.
 
     :param element: The element (URL, IP or domain) to check.
-    :type element: optional, str
+    :type element: str
     """
 
     def __init__(self, element=None):
@@ -88,11 +88,11 @@ class Check:
         Check if the given URL is valid.
 
         :param url: The url to validate.
-        :type url: optional, str
+        :type url: str
 
         :param return_formated:
             Allow the return of the url base (if URL formatted correctly).
-        :type return_formated: optional, bool
+        :type return_formated: bool
 
         :return: The validity of the URL or its base.
         :rtype: bool|str
@@ -153,11 +153,11 @@ class Check:
         Check if the given domain is a valid.
 
         :param domain: The domain to validate.
-        :type domain: optional, str
+        :type domain: str
 
         :param subdomain_check:
             Activate the subdomain checking.
-        :type subdomain_check: optional, bool
+        :type subdomain_check: bool
 
         :return: The validity of the sub-domain.
         :rtype: bool
@@ -285,7 +285,7 @@ class Check:
         Check if the given subdomain is a subdomain.
 
         :param domain: The domain to validate.
-        :type domain: optional, str
+        :type domain: str
 
         :return: The validity of the subdomain.
         :rtype: bool
@@ -315,7 +315,7 @@ class Check:
         Check if the given IP is a valid IPv4.
 
         :param ip_to_check: The IP to test.
-        :type ip_to_check: optional, str
+        :type ip_to_check: str
 
         :return: The validity of the IP.
         :rtype: bool
@@ -353,7 +353,7 @@ class Check:
         Check if the given IP is a valid IPv4.
 
         :param ip_to_check: The IP to test.
-        :type ip_to_check: optional, str
+        :type ip_to_check: str
 
         :return: The validity of the IP.
         :rtype: bool

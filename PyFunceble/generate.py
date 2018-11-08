@@ -78,10 +78,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
     :type domain_status: str
 
     :param source: The source of the given status.
-    :type source: optional, str
+    :type source: str
 
     :param expiration_date: The expiration date of the domain (if catched).
-    :type expiration_date: optional, str
+    :type expiration_date: str
     """
 
     def __init__(self, domain_status, source=None, expiration_date=None):

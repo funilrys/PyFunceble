@@ -589,7 +589,7 @@ class Whois:
     Logic behind the whois database. Indeed, the idea is to implement #2.
 
     :param expiration_date: The extracted expiration date.
-    :type expiration_date: optional, str
+    :type expiration_date: str
     """
 
     def __init__(self, expiration_date=None):

@@ -76,7 +76,7 @@ class DirectoryStructure:  # pragma: no cover
         Tell the subsystem if we are preparing for production which
         imply the execution of the backup insteam of of the
         "reconstructore" mode.
-    :type production: optional, bool
+    :type production: bool
     """
 
     def __init__(self, production=False):
@@ -423,7 +423,7 @@ class DirectoryStructure:  # pragma: no cover
         :type directory: str
 
         :param loop: Tell us if we are in the creation loop or not.
-        :type loop: optional, bool
+        :type loop: bool
         """
 
         if not loop and PyFunceble.directory_separator in directory:

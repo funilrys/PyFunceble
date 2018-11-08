@@ -367,7 +367,7 @@ class Version:
     :param used:
         True: Version is configured for simple usage.
         False: Version compare local with upstream.
-    :type used: optional, bool
+    :type used: bool
     """
 
     def __init__(self, used=False):
@@ -404,7 +404,7 @@ class Version:
         :param return_non_digits:
             Activate the return of the non-digits parts of the splitted
             version.
-        :type return_non_digits: optional, bool
+        :type return_non_digits: bool
 
         :return: The splitted version name/numbers.
         :rtype: list

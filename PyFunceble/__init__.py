@@ -89,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.124.2.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.124.3.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -229,7 +229,7 @@ def test(domain, complete=False):  # pragma: no cover
     :param complete:
         Activate the return of a dict with some significant data from
         the test.
-    :type complete: optional, bool
+    :type complete: bool
 
     :return: The status or the informations of the domain.
     :rtype: str|dict
@@ -256,7 +256,7 @@ def url_test(url, complete=False):  # pragma: no covere
     :param complete:
         Activate the return of a dict with some significant data from
         the test.
-    :type complete: optional, bool
+    :type complete: bool
 
     :return: The status or the informations of the URL.
     :rtype: str|dict
@@ -281,7 +281,7 @@ def load_config(under_test=False):  # pragma: no cover
         Tell us if we only have to load the configuration file (True)
         or load the configuration file and initate the output directory
         if it does not exist (False).
-    :type under_test: optional, bool
+    :type under_test: bool
     """
 
     # We load and download the different configuration file if they are non
