@@ -105,7 +105,7 @@ Under Windows we look for the following directories in their order. If any confi
 Custom location
 """""""""""""""
 
-Sometimes, you may find yourself in a position where you absolutly do not want PyFunceble to use its default configuration location. 
+Sometimes, you may find yourself in a position where you absolutely do not want PyFunceble to use its default configuration location. 
 
 For that reason, if you set your desired configuration location along with the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable, we take that location as the (default) configuration location.
 
@@ -114,7 +114,7 @@ Auto configuration
 
 Sometimes, you may find yourself in a position that you do not or you can't answer the question which ask you if you would like to install the default configuration file. 
 
-For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environnement variable with what you want as assignement, we do not ask that question. We simply do what we have to do whithout asking anything.
+For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environnement variable with what you want as assignment, we do not ask that question. We simply do what we have to do without asking anything.
 
 -----------------------------------
 
@@ -129,20 +129,20 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
 .. note::
 
-    If this index is set to :code:`True`, everytime we read a given file, we try to extract the elements that are present.
+    If this index is set to :code:`True`, every time we read a given file, we try to extract the elements that are present.
     
     We basically only decode the adblock format.
 
 .. note::
 
-    If this index is set to :code:`False`, everytime we read a given file, we will consider one line as an element to test.
+    If this index is set to :code:`False`, every time we read a given file, we will consider one line as an element to test.
 
 :code:`auto_continue`
 ---------------------
 
     **Type:** :code:`boolean`
     
-    **Default value:** :code:`Trus`
+    **Default value:** :code:`True`
     
     **Description:** Enable / disable the auto continue system.
 
@@ -456,7 +456,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`False`
     
-    **Description:** Enable / disable the Travis CI autosave system.
+    **Description:** Enable / disable the Travis CI auto saving system.
 
 .. warning::
     Do not activate this index unless you are using PyFunceble under Travis CI.
@@ -519,7 +519,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
     
     **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"`
     
-    **Description:** Set the User-Agent to use everytime we are requesting something from a web server other than our API.
+    **Description:** Set the User-Agent to use every time we are requesting something from a web server other than our API.
 
 :code:`verify_ssl_certificate`
 ------------------------------
@@ -1090,7 +1090,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     **Type:** :code:`dict`
 
-    **Description:** Categorize the http status code as mentionned in the documention related to the :code:`HTTP Code` colomn.
+    **Description:** Categorize the http status code as mentioned in the documentation related to the :code:`HTTP Code` column.
 
 :code:`http_codes[list][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1260,7 +1260,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[number]`
 """""""""""""""""""""""
@@ -1271,7 +1271,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 
 :code:`counter[number][down]`
@@ -1285,7 +1285,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 
 :code:`counter[number][invalid]`
@@ -1299,7 +1299,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[number][tested]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1312,7 +1312,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[number][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1325,7 +1325,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 
 
@@ -1338,7 +1338,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[percentage][down]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1351,7 +1351,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[percentage][invalid]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1364,7 +1364,7 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.
 
 :code:`counter[percentage][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1377,4 +1377,4 @@ For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as environneme
 
     .. warning::
         The following is not intended for modification.
-        Exception for debuging or special cases which requires an initiated counter.
+        Exception for debugging or special cases which requires an initiated counter.

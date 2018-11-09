@@ -59,10 +59,10 @@ Execute the following and enjoy PyFunceble!
    $ python3 setup.py test && python3 setup.py install
 
 
-Developement version
+Development version
 --------------------
 
-For developement
+For development
 ^^^^^^^^^^^^^^^^
 
 ::

@@ -34,7 +34,7 @@ As we use some coloration coloration, :code:`colorama` is required.
 As we propose the conversion of domains to IDNA, :code:`domain2idna` is required.
 
 .. note::
-    `domain2idna` is maintained and developped by `Nissar Chababy (@funilrys)`_, the main developper of PyFunceble.
+    `domain2idna` is maintained and developed by `Nissar Chababy (@funilrys)`_, the main developer of PyFunceble.
     Its source code can be found `on GitHub`_
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
@@ -124,15 +124,15 @@ Execute the following and enjoy PyFunceble!
    $ python3 setup.py test && python3 setup.py install
 
 
-Developement version
+Development version
 --------------------
 
-The developement version of PyFunceble represents the :code:`dev` branch.
-It's intended for the developement of next features but is always at a usable state.
+The development version of PyFunceble represents the :code:`dev` branch.
+It's intended for the development of next features but is always at a usable state.
 
 Indeed, We should not push to the :code:`dev` branch until we are sure that the new commit does not break or introduce critical issue under PyFunceble.
 
-For developement
+For development
 ^^^^^^^^^^^^^^^^
 
 Execute the following and let's hack PyFunceble!

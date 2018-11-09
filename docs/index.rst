@@ -24,7 +24,7 @@ PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 
 
 Its main objective is to provide the availability of domains, IPs and since recently URL by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
 
-PyFunceble is currently running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, blocklists or even AdBlock filter lists.
+PyFunceble is currently running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, block lists or even AdBlock filter lists.
 
 PyFunceble provides some useful features for continuous testing.
 
@@ -41,7 +41,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    update
    configuration
    usage
-   colomns
+   columns
    logs-sharing
    contributing
    logic-representation

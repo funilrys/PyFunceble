@@ -2,7 +2,7 @@ Columns
 =======
 
 Because PyFunceble provide multiple information in a table, we choosed to document them all.
-The objective of this page is to reflect what the code actually do in a more clear and understandeable way.
+The objective of this page is to reflect what the code actually do in a more clear and understandable way.
 
 Domains
 -------
@@ -158,7 +158,7 @@ HTTP Code
   This section reflect exactly what the code do. So any changes made here should also be reported to the code or at least the configuration file.
 
 .. note::
-  A :code:`***` in this colomn means that it was impossible to catch the HTTP status code from the webserver.
+  A :code:`***` in this column means that it was impossible to catch the HTTP status code from the web server.
 
 We have categorized the HTTP Code into 3 parts.
 

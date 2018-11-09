@@ -78,7 +78,7 @@ Code documentation
 Auto-continue
 -------------
 
-How can we continue the test after exectutable stop ?
+How can we continue the test after executable stop ?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
@@ -91,10 +91,10 @@ Code documentation
     :members:
     :private-members:
 
-Autosave
+Auto-save
 --------
 
-This subsystem provide several logic around the autosaving. 
+This subsystem provide several logic around the auto-saving. 
 Actually only Travis CI is supported 
 
 
@@ -160,7 +160,7 @@ Problematics
 ^^^^^^^^^^^^
 
 * How can we avoid the usage of :code:`tool.py` ?
-* How can we make personalisation more simple ?
+* How can we make personalization more simple ?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
@@ -475,7 +475,7 @@ Sort
 Problematic
 ^^^^^^^^^^^
 
-How can we format the list to test (and the outputed informations) in format other than the alphabetical format ?
+How can we format the list to test (and the outputted information) in format other than the alphabetical format ?
 
 Code documentation
 ^^^^^^^^^^^^^^^^^^
