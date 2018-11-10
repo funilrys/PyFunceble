@@ -201,7 +201,7 @@ class ExpirationDate:
         self._whois_log()
 
         # And we return and handle the official invalid status.
-        return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
+        return Status(PyFunceble.STATUS["official"]["invalid"], "SYNTAX").handle()
 
     def _whois_log(self):  # pragma: no cover
         """

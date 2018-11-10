@@ -75,9 +75,12 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     :type matched_result: str
     """
 
-    def __init__(self, matched_status):
+    def __init__(self, matched_status, invalid_source="IANA"):
         # We get the the parsed status.
         self.matched_status = matched_status
+
+        # We get the parsed source.
+        self.invalid_source = invalid_source
 
     def handle(self):
         """
@@ -89,11 +92,11 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        # We initiate the source we are going to parse to the Generate class.
-        source = "NSLOOKUP"
-
         if self.matched_status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
             # The matched status is not in the list of invalid status.
+
+            # We initiate the source we are going to parse to the Generate class.
+            source = "NSLOOKUP"
 
             if Lookup().nslookup():
                 # We could execute the nslookup logic.
@@ -115,7 +118,9 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         # The matched status is in the list of invalid status.
 
         # We generate the status file with the invalid status.
-        Generate(PyFunceble.STATUS["official"]["invalid"], "IANA").status_file()
+        Generate(
+            PyFunceble.STATUS["official"]["invalid"], self.invalid_source
+        ).status_file()
 
         # We return the invalid status.
         return PyFunceble.STATUS["official"]["invalid"]
@@ -150,7 +155,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             # The parsed status is in the list of invalid.
 
             # We generate the status file with the parsed status.
-            Generate(self.catched, "IANA").status_file()
+            Generate(self.catched, "SYNTAX").status_file()
 
         # We return the parsed status.
         return self.catched
