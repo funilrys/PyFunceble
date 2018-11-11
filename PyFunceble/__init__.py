@@ -89,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.126.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.126.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -467,7 +467,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             "-ex",
             "--execution",
             action="store_true",
-            help="Switch the dafault value of the execution time showing. %s"
+            help="Switch the default value of the execution time showing. %s"
             % (
                 CURRENT_VALUE_FORMAT
                 + repr(CONFIGURATION["show_execution_time"])
@@ -751,7 +751,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             "-ua",
             "--user-agent",
             type=str,
-            help="Set the user-agent to use and set everytime we interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
+            help="Set the user-agent to use and set every time we interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
         )
 
         PARSER.add_argument(

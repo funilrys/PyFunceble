@@ -73,7 +73,7 @@ Getting a GitHub token
 
 For the :code:`secure` index of the :code:`.travis.yml` file, you have to generate a `new GitHub token`_.
 
-After you got your token, please write it or save it in a safe place as you're going to need it everytime you're going to interact with Travis CI.
+After you got your token, please write it or save it in a safe place as you're going to need it every time you're going to interact with Travis CI.
 
 .. note::
     The scope to set is :code:`public_repo` but you can also set others depending on your needs.

@@ -114,7 +114,7 @@ This argument allow us to set a custom commit message which is going to be used 
 This argument will test and give the results of the tests of the given domain.
 
 .. note::
-    For this argument (and only for this argument9, we are converting the given string to lowercase.
+    For this argument (and only for this argument), we are converting the given string to lowercase.
 
 
 :code:`-db` | :code:`--database`
@@ -162,7 +162,7 @@ Want to start without anything ? This argument generate the output directory aut
 :code:`-ex` | :code:`--execution`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Switch the dafault value of the execution time showing.
+    Switch the default value of the execution time showing.
         Default value: :code:`False`
 
 Want to know the execution time of your test ? Well, this argument will let you know!
@@ -303,7 +303,7 @@ Want to find domain or URL linked to a domain in your list ? This argument will 
     Switch the value the production of output files.
         Default value: :code:`False`
 
-Want to disable the production of the outputed files? This argument is for you!
+Want to disable the production of the outputted files? This argument is for you!
 
 :code:`-nl` | :code:`--no-logs`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -403,7 +403,7 @@ This argument will set the default timeout to apply everywhere it is possible to
 ^^^^^^^^^^^^^^^^
 
     Switch the value of the travis mode.
-        Defautl value: :code:`False`
+        Default value: :code:`False`
 
 Want to use PyFunceble under Travis CI? This argument is suited for your need!
 
@@ -431,7 +431,7 @@ Want to test the availability or an URL ? Enjoy this argument!
 :code:`-ua "something"` | :code:`--user-agent "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Set the user-agent to use and set everytime we interact with everything which is not our logs sharing system.
+    Set the user-agent to use and set every time we interact with everything which is not our logs sharing system.
 
 :code:`-v` | :code:`--version`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -517,7 +517,7 @@ Global overview
         --directory-structure
                                 Generate the directory and files that are needed and
                                 which does not exist in the current directory.
-        -ex, --execution      Switch the dafault value of the execution time
+        -ex, --execution      Switch the default value of the execution time
                                 showing. Installed value: False
         -f FILE, --file FILE  Read the given file and test all domains inside it. If
                                 a URL is given we download and test the content of the
@@ -583,7 +583,7 @@ Global overview
                                 URL is given we download and test the content of the
                                 given URL.
         -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set everytime we
+                                Set the user-agent to use and set every time we
                                 interact with everything which is not our logs sharing
                                 system.
         -v, --version         Show the version of PyFunceble and exit.

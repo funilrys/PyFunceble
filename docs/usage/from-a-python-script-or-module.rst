@@ -92,7 +92,7 @@ This part is unnecessary but we wanted to document it!!
 Advanced example
 """"""""""""""""
 
-**PyFunceble** now allow you to get the following information as dictionnary. 
+**PyFunceble** now allow you to get the following information as dictionary. 
 The objective behind this feature is to let you know more about the element you are testing.
 
 ::
