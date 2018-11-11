@@ -1,56 +1,59 @@
 """
 The tool to check the availability of domains, IPv4 or URL.
 
+::
 
-██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
-██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
-██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
-██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
-██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
-╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
 PyFunceble is the little sister of Funceble (https://github.com/funilrys/funceble)
-which was archived on 13th March, 2018.
+which was archived on 13th March 2018.
 
-Its main objective is to get and the return domains and IPs availability by
-generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
+Its main objective is to provide the availability of domains, IPs and since recently
+URL by generating an accurate result based on results from WHOIS, NSLOOKUP and
+HTTP status codes.
 
-In its daily usage, PyFunceble is mostly used to clean `hosts` files or blocklist.
-Indeed, it is possible because PyFunceble generates a list of all `ACTIVE` domains
-or IPs but in the same time, it creates by default a database of the `INACTIVE`
-domains or IPs so we can retest them overtime automatically at the next execution.
-
-PyFunceble is running actively and daily with the help of Travis CI under 60+
-repositories. It is used to clean or test the availability of data which are
-present in hosts files, list of IP, list of domains, blocklists or even AdBlock
+PyFunceble is currently running actively and daily with the help of Travis CI under
+60+ repositories. It is used to clean or test the availability of data which are
+present in hosts files, list of IP, list of domains, block lists or even AdBlock
 filter lists.
+
+PyFunceble provides some useful features for continuous testing.
+
+As an example, its auto-continue system coupled with its auto-save system allows
+it to run nice and smoothly under Travis CI without even reaching Travis CI time
+restriction. In the other side, its internal inactive database system
+let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs being
+automatically retested over time on next run.
+
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
-Special thanks to:
-    Adam Warner - @PromoFaux
-    Mitchell Krog - @mitchellkrogza
-    Pi-Hole - @pi-hole
-    SMed79 - @SMed79
+Special thanks:
+    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    Let's contribute to PyFunceble!!
+    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
-    Mitchell Krog - @mitchellkrogza
-    Odyseus - @Odyseus
-    WaLLy3K - @WaLLy3K
-    xxcriticxx - @xxcriticxx
-
-    The complete list can be found at https://git.io/vND4m
-
-Original project link:
+Project link:
     https://github.com/funilrys/PyFunceble
 
-Original project wiki:
-    https://github.com/funilrys/PyFunceble/wiki
+Project documentation:
+    https://pyfunceble.readthedocs.io
 
-License: MIT
+Project homepage:
+    https://funilrys.github.io/PyFunceble/
+
+License:
+::
+
+
     MIT License
 
     Copyright (c) 2017-2018 Nissar Chababy
