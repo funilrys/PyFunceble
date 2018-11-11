@@ -92,7 +92,7 @@ Code documentation
     :private-members:
 
 Auto-save
---------
+---------
 
 This subsystem provide several logic around the auto-saving. 
 Actually only Travis CI is supported 

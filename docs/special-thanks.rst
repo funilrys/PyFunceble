@@ -1,5 +1,5 @@
 Special Thanks
-##############
+==============
 
 Thanks to those awesome organization(s) and people(s) for
 
