@@ -7,17 +7,17 @@ The tool to check the availability of domains, IPv4 or URL
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
     :height: 30px
-.. image:: https://travis-ci.com/funilrys/PyFunceble.svg?branch=dev
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.svg?branch=dev
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
     :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
-.. image:: https://img.shields.io/github/license/funilrys/PyFunceble.svg
+.. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
-.. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.svg
+.. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
     :target: https://github.com/funilrys/PyFunceble/releases/latest
-.. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.svg
+.. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+.. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
