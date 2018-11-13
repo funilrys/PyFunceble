@@ -134,7 +134,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         element = element.lower()
 
         # We try to get the url base.
-        url_base = Check().is_url_valid(element, return_formated=True)
+        url_base = Check().is_url_valid(element, return_base=True)
 
         # We laod the public suffix database.
         PublicSuffix(False).load()

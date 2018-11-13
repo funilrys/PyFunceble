@@ -260,8 +260,13 @@ class Core:  # pragma: no cover
                 # test run.
                 PyFunceble.CONFIGURATION["show_percentage"] = False
 
-                # We test the url to test.
-                self.url(self.url_to_test)  # pylint: disable=no-member
+                # We test the url to test after converting it if needed (IDNA).
+                self.url(
+                    Check().is_url_valid(
+                        self.url_to_test,  # pylint: disable=no-member
+                        return_formated=True,
+                    )
+                )
             elif (
                 self._entry_management_url_download(
                     self.url_file  # pylint: disable=no-member
@@ -837,7 +842,7 @@ class Core:  # pragma: no cover
                         # * The currently read line is not a valid IP.
 
                         # We try to get the url base.
-                        url_base = Check().is_url_valid(data, return_formated=True)
+                        url_base = Check().is_url_valid(data, return_base=True)
 
                         if url_base:
                             # The url_base is not empty or equal to False or None.

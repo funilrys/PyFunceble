@@ -179,14 +179,76 @@ class TestCheck(TestCase):
         URL protocol is not supported nor given.
         """
 
+        expected = False
+
         for domain in self.not_valid_domain:
-            expected = False
             actual = Check().is_url_valid("%s/hello_world" % domain)
 
             self.assertEqual(expected, actual)
 
             actual = Check("%s/hello_world" % domain).is_url_valid()
 
+            self.assertEqual(expected, actual)
+
+    def test_is_url_valid_convert_idna(self):
+        """
+        Test Check().is_url_valid() for the case that
+        we have to convert to IDNA.
+        """
+
+        PyFunceble.CONFIGURATION["idna_conversion"] = True
+
+        domains_to_test = [
+            "bittréẋ.com",
+            "hello-world.com",
+            "coinbȧse.com",
+            "cryptopiạ.com",
+            "cṙyptopia.com",
+        ]
+        expected_domains = [
+            "xn--bittr-fsa6124c.com",
+            "hello-world.com",
+            "xn--coinbse-30c.com",
+            "xn--cryptopi-ux0d.com",
+            "xn--cyptopia-4e0d.com",
+        ]
+
+        for num, domain in enumerate(domains_to_test):
+            expected = "http://%s/hello_world" % expected_domains[num]
+            to_test = "http://%s/hello_world" % domain
+
+            actual = Check().is_url_valid(to_test, return_formated=True)
+
+            self.assertEqual(expected, actual)
+
+            actual = Check(to_test).is_url_valid(return_formated=True)
+            self.assertEqual(expected, actual)
+
+    def test_is_url_valid_not_convert_idna(self):
+        """
+        Test Check().is_url_valid() for the case that
+        we do not have to convert to IDNA.
+        """
+
+        PyFunceble.CONFIGURATION["idna_conversion"] = False
+
+        domains_to_test = [
+            "bittréẋ.com",
+            "hello-world.com",
+            "coinbȧse.com",
+            "cryptopiạ.com",
+            "cṙyptopia.com",
+        ]
+
+        for domain in domains_to_test:
+            to_test = "http://%s/hello_world" % domain
+            expected = to_test
+
+            actual = Check().is_url_valid(to_test, return_formated=True)
+
+            self.assertEqual(expected, actual)
+
+            actual = Check(to_test).is_url_valid(return_formated=True)
             self.assertEqual(expected, actual)
 
     def test_is_domain_valid(self):

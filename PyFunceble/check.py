@@ -62,6 +62,7 @@ License:
 """
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
+from domain2idna import get as domain2idna
 import PyFunceble
 from PyFunceble.helpers import Regex
 from PyFunceble.publicsuffix import PublicSuffix
@@ -83,20 +84,30 @@ class Check:
         except KeyError:
             PublicSuffix(False).load()
 
-    def is_url_valid(self, url=None, return_formated=False):
+    def is_url_valid(self, url=None, return_base=False, return_formated=False):
         """
         Check if the given URL is valid.
 
         :param url: The url to validate.
         :type url: str
 
-        :param return_formated:
-            Allow the return of the url base (if URL formatted correctly).
+        :param return_base:
+            Allow us the return of the url base (if URL formatted correctly).
         :type return_formated: bool
+
+        :param return_formated:
+            Allow us to get the URL converted to IDNA if the conversion
+            is activated.
+        :type return_formated: bool
+
 
         :return: The validity of the URL or its base.
         :rtype: bool|str
         """
+
+        # We initiate a variable which will save the initial base in case
+        # we have to convert the base to IDNA.
+        initial_base = None
 
         if url:
             # The given url is not empty.
@@ -122,28 +133,66 @@ class Check:
                 regex = r"(^(http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
-                formated_base = Regex(
+                initial_base = base = Regex(
                     to_test, regex, return_data=True, rematch=True
                 ).match()[2]
 
+                if PyFunceble.CONFIGURATION["idna_conversion"]:
+                    # We have to convert the domain to IDNA.
+
+                    # We convert the initial base to IDNA.
+                    base = domain2idna(base)
+
                 # We check if the url base is a valid domain.
-                domain_status = self.is_domain_valid(formated_base)
+                domain_status = self.is_domain_valid(base)
 
                 # We check if the url base is a valid IP.
-                ip_status = self.is_ip_valid(formated_base)
+                ip_status = self.is_ip_valid(base)
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.
                     # and
                     # * The url base is a valid IP.
 
+                    if PyFunceble.CONFIGURATION["idna_conversion"] and return_formated:
+                        # * We have to convert to IDNA.
+                        # and
+                        # * We have to return the converted full URL.
+
+                        # We return the converted full URL.
+                        return Regex(
+                            to_test,
+                            initial_base,
+                            escape=True,
+                            return_data=True,
+                            replace_with=base,
+                            occurences=1,
+                        ).replace()
+
                     if return_formated:
-                        return formated_base
+                        # * We do not have to convert to IDNA.
+                        # but
+                        # * We have to return the full URL.
+
+                        # We return the initially given URL.
+                        return to_test
+
+                    if return_base:
+                        # We have to return the base of the URL.
+
+                        # We return the base of the URL.
+                        return base
 
                     # We return True.
                     return True
             except TypeError:
                 pass
+
+        if return_formated:
+            # We have to return an URL.
+
+            # We return the initily given URL.
+            return to_test
 
         # We return False.
         return False
