@@ -70,12 +70,11 @@ from re import escape
 from re import sub as substrings
 from subprocess import PIPE, Popen
 
-from yaml import dump as dump_yaml
-from yaml import load as load_yaml
-
 from PyFunceble import Fore, Style
 from PyFunceble import copy as shutil_copy
 from PyFunceble import directory_separator, path, requests
+from yaml import dump as dump_yaml
+from yaml import load as load_yaml
 
 
 class Hash:  # pylint: disable=too-few-public-methods

@@ -60,12 +60,11 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+# pylint: disable=bad-continuation
+import PyFunceble
 # pylint: enable=line-too-long
 import urllib3.exceptions as urllib3_exceptions
 from urllib3 import disable_warnings
-
-# pylint: disable=bad-continuation
-import PyFunceble
 
 
 class HTTPCode:  # pylint: disable=too-few-public-methods
