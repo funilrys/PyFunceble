@@ -8,5 +8,4 @@ The objective of this page is to reflect what the code actually do in a more cle
 .. include:: columns/status.rst
 .. include:: columns/expiration_date.rst
 .. include:: columns/source.rst
-.. include:: columns/status.rst
 .. include:: columns/http_code.rst
