@@ -134,3 +134,6 @@ Execute the following and enjoy PyFunceble!
    $ git clone https://github.com/funilrys/PyFunceble.git
    $ cd PyFunceble && git checkout dev
    $ python3 setup.py test && python3 setup.py install
+
+
+.. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers
