@@ -64,10 +64,9 @@ import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import main as launch_tests
 
 import PyFunceble
+from helpers import BaseStdout
 from PyFunceble.config import Load
 from PyFunceble.execution_time import ExecutionTime
-
-from helpers import BaseStdout
 
 
 class TestExecutionTime(BaseStdout):

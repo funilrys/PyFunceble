@@ -60,10 +60,11 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-import PyFunceble
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import urllib3.exceptions as urllib3_exceptions
+
+import PyFunceble
 from PyFunceble.check import Check
 from PyFunceble.helpers import Dict, File, List
 

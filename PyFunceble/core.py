@@ -63,8 +63,9 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation, too-many-lines
 
-import PyFunceble
 from domain2idna import get as domain2idna
+
+import PyFunceble
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check

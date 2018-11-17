@@ -64,9 +64,8 @@ License:
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.percentage import Percentage
-
 from helpers import BaseStdout, sys
+from PyFunceble.percentage import Percentage
 
 
 class TestPercentage(BaseStdout):

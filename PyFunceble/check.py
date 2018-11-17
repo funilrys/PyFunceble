@@ -60,8 +60,12 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-import PyFunceble
+# pylint: enable=line-too-long
+# pylint: disable=bad-continuation
+
 from domain2idna import get as domain2idna
+
+import PyFunceble
 from PyFunceble.helpers import Regex
 from PyFunceble.publicsuffix import PublicSuffix
 

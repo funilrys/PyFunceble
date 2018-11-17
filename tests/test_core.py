@@ -65,9 +65,8 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.core import Core
-
 from helpers import BaseStdout, sys
+from PyFunceble.core import Core
 
 
 class TestsResetCounters(TestCase):
