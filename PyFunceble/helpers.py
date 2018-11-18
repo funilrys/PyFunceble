@@ -70,6 +70,8 @@ from re import escape
 from re import sub as substrings
 from subprocess import PIPE, Popen
 
+import urllib3.exceptions as urllib3_exceptions
+from urllib3 import disable_warnings
 from yaml import dump as dump_yaml
 from yaml import load as load_yaml
 
@@ -857,9 +859,14 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
         or write its content into the given destination.
     :type return_data: bool
 
+    :param verify_certificate:
+        Tell us if we need to verify the SSL/TLS certificate.
+    :type verify_certificate: bool
     """
 
-    def __init__(self, link, destination=None, return_data=False):
+    def __init__(
+        self, link, destination=None, return_data=False, verify_certificate=True
+    ):
         # We get the parsed link.
         self.link = link
 
@@ -868,6 +875,13 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
         # We get the parsed return data.
         self.return_data = return_data
+
+        # We get the parsed verification flag.
+        self.verification = verify_certificate
+
+        if not self.verification:
+            # We disable the urllib warning.
+            disable_warnings(urllib3_exceptions.InsecureRequestWarning)
 
     def text(self):
         """
@@ -883,7 +897,7 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
         try:
             # We request the link.
-            req = requests.get(self.link)
+            req = requests.get(self.link, verify=self.verification)
 
             if req.status_code == 200:
                 # The request http status code is equal to 200.

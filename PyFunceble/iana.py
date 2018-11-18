@@ -61,10 +61,9 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
+# pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.helpers import Dict, Download, Regex
-from PyFunceble.lookup import Lookup
-
+from PyFunceble.helpers import Dict, Download, File, Regex
 
 class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     """
@@ -81,42 +80,23 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the destination of the constructed IANA database.
         self.destination = PyFunceble.OUTPUTS["default_files"]["iana"]
 
-        # We initiate the local variable which will save the content of the database.
-        self.iana_db = {}
+        if PyFunceble.path.isfile(self.destination):
+            # The destination exist.
 
-        # And we run the update logic.
-        self.update()
+            # We get its content.
+            self.iana_db = Dict().from_json(File(self.destination).read())
+        else:
+            # The destination does not exist.
 
-    @classmethod
-    def _data(cls):
-        """
-        Get the database from IANA website.
-
-        :return: The database upstream HTML page.
-        :rtype: str
-        """
+            # We initiate the local variable which will save the content of the database.
+            self.iana_db = {}
 
         # We initiate the URL to the IANA Root Zone Database page.
-        iana_url = "https://www.iana.org/domains/root/db"
-
-        # And we return the content of the page.
-        return Download(iana_url, return_data=True).text()
-
-    @classmethod
-    def _referer(cls, extension):
-        """
-        Return the referer for the given extension.
-
-        :param extension: A valid domain extension.
-        :type extension: str
-
-        :return: The whois server to use to get the WHOIS record.
-        :rtype: str
-        """
+        self.iana_url = "https://www.iana.org/domains/root/db"
 
         # We map the list of server which have to be set manually because
         # they are not present into the IANA Root Zone Database.
-        manual_server = {
+        self.manual_server = {
             "aaa": "whois.nic.aaa",
             "abb": "whois.nic.abb",
             "able": "whois.nic.able",
@@ -264,76 +244,94 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             "za": "whois.registry.net.za",
         }
 
-        # We get the iana whois record regarding the currently parsed extension.
-        whois_record = Lookup().whois(
-            PyFunceble.CONFIGURATION["iana_whois_server"], "hello." + extension
-        )
+        # And we run the update logic.
+        self.update()
 
-        if whois_record:
-            # The whois record is not empty.
+    def _referer(self, extension):
+        """
+        Return the referer for the given extension.
 
-            # We initiate a regex which will help us extract the refer.
-            regex_referer = r"(refer:)\s+(.*)"
+        :param extension: A valid domain extension.
+        :type extension: str
 
-            # We try to match for the referer.
+        :return: The whois server to use to get the WHOIS record.
+        :rtype: str
+        """
+
+        # We get the a copy of the page.
+        iana_record = Download(
+            self.iana_url + "/" + extension + ".html", return_data=True
+        ).text()
+
+        if iana_record:
+            # The record is not empty.
+
+            # We initiate a regex which will extract the referer.
+            regex_referer = r"(?s)\<b\>(?:WHOIS\sServer:)\<\/b>\s+([a-zA-Z0-9._-]+)"
+
+            # We try to extract the referer.
             matched = Regex(
-                whois_record, regex_referer, return_data=True, rematch=True
+                iana_record, regex_referer, return_data=True, group=1
             ).match()
 
-            if matched and "domain: " not in matched[1]:
-                # * The referer was matched.
-                # and
-                # * `domain:` is not in the matched referer.
-                #   Indeed, this condition is for safety because for the case of the
-                #   deletion of for example xperia, they left the referer empty.
-                #   Actually they left something like:
-                #   ```
-                #   referer:
-                #   domain: xxxxx.xxxx
-                #   ```
-                #
-                #   As we do not want to read those one, we ignore that case.
+            if matched:
+                # The referer was extracted successfully.
 
                 # We return the matched referer.
-                return matched[1]
+                return matched
 
-        if extension in manual_server:
+        # *The referer was not extracted successfully.
+        # or
+        # * The iana record is empty.
+
+        if extension in self.manual_server:
             # The extension is in the list of manual entries.
 
             # We return the server which we set manually.
-            return manual_server[extension]
+            return self.manual_server[extension]
 
         # We return None because we weren't able to get the server to call for
         # the given extension.
         return None
 
-    def _extensions(self, line):
+    def _extensions(self, block):
         """
-        Extract the extention from the given line.
+        Extract the extention from the given block.
         Plus get its referer.
 
-
-        :param line: The line from the IANA database.
-        :type line: str
+        :param block: The line from the IANA database.
+        :type block: str
         """
 
         # We extract the different extension from the currently readed line.
         regex_valid_extension = r"(/domains/root/db/)(.*)(\.html)"
 
-        if "/domains/root/db/" in line:
+        if "/domains/root/db/" in block:
             # The link is in the line.
 
             # We try to extract the extension.
             matched = Regex(
-                line, regex_valid_extension, return_data=True, rematch=True
+                block, regex_valid_extension, return_data=True, rematch=True
             ).match()[1]
 
             if matched:
                 # The extraction is not empty or None.
 
-                # We append the extension to the database and we try to get its
-                # referer at the same time.
-                self.iana_db.update({matched: self._referer(matched)})
+                # We get the referer.
+                referer = self._referer(matched)
+
+                if (
+                    matched in self.iana_db and referer != self.iana_db[matched]
+                ) or matched not in self.iana_db:
+                    # * The referer is different from the previously set
+                    # or
+                    # * The extension is not already into the database.
+
+                    # We update/set the referer.
+                    self.iana_db[matched] = referer
+
+                    # We save the content of the constructed database.
+                    Dict(self.iana_db).to_json(self.destination)
 
     def update(self):
         """
@@ -341,10 +339,14 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We loop through the line of the iana website.
-        list(map(self._extensions, self._data().split("\n")))
-
-        # We save the content of the constructed database.
-        Dict(self.iana_db).to_json(self.destination)
+        list(
+            map(
+                self._extensions,
+                Download(self.iana_url, return_data=True)
+                .text()
+                .split('<span class="domain tld">'),
+            )
+        )
 
         if not PyFunceble.CONFIGURATION["quiet"]:
             # The quiet mode is not activated.
