@@ -65,9 +65,10 @@ License:
 import PyFunceble
 from PyFunceble.helpers import Dict, File
 from PyFunceble.status import Status
+from PyFunceble.logs import Logs
 
 
-class Referer:  # pragma: no cover
+class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Get the WHOIS server (referer) of the current domain extension according to
     the IANA database.
@@ -225,7 +226,7 @@ class Referer:  # pragma: no cover
                             # The referer is not filled.
 
                             # We log the case of the current extension.
-                            self.log()
+                            Logs().referer_not_found(self.domain_extension)
 
                             # And we handle and return the down status.
                             return Status(
@@ -257,39 +258,3 @@ class Referer:  # pragma: no cover
 
         # We return None.
         return None
-
-    def log(self):
-        """
-        Log if no referer is found for a domain extension.
-        """
-
-        if PyFunceble.CONFIGURATION["logs"]:
-            # The generation of logs is activated.
-
-            # * We initiate a separator between the older and the current one.
-            # and
-            # * We initiate the message to print.
-            logs = "=" * 100
-            logs += "\nNo referer found for: %s domains\n" % self.domain_extension
-            logs += "=" * 100
-            logs += "\n"
-
-            # We write the log into the file.
-            File(
-                PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["no_referer"]
-                + self.domain_extension
-            ).write(logs)
-
-            if PyFunceble.CONFIGURATION["share_logs"]:
-                # The logs sharing is activated.
-
-                # We initiate the data to share.
-                data_to_share = {"extension": self.domain_extension}
-
-                # We post the data to the API.
-                PyFunceble.requests.post(
-                    PyFunceble.LINKS["api_no_referer"], data=data_to_share
-                )

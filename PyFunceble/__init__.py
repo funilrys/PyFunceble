@@ -71,7 +71,7 @@ from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
 from platform import system
-from shutil import copy
+from shutil import copy, rmtree
 from time import mktime, strftime, strptime, time
 
 import requests
@@ -89,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.128.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.129.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.

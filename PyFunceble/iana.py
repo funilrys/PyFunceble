@@ -65,6 +65,7 @@ License:
 import PyFunceble
 from PyFunceble.helpers import Dict, Download, File, Regex
 
+
 class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Logic behind the update of `iana-domains-db.json`

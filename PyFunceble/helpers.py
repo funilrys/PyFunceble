@@ -537,9 +537,13 @@ class Directory:  # pylint: disable=too-few-public-methods
                 elif "\\" in self.directory:
                     # We split the separator.
                     split_path = self.directory.split("\\")
+                else:
+                    split_path = [self.directory]
 
                 # We run the same function with the splited_path argument filled.
-                return self.fix_path(splited_path=filter(lambda dir: dir, split_path))
+                return self.fix_path(
+                    splited_path=list(filter(lambda directory: directory, split_path))
+                )
 
             # We return the directory.
             return self.directory

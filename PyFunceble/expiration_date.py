@@ -66,15 +66,16 @@ import PyFunceble
 from PyFunceble.check import Check
 from PyFunceble.database import Whois
 from PyFunceble.generate import Generate
-from PyFunceble.helpers import File, Regex
+from PyFunceble.helpers import Regex
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.lookup import Lookup
 from PyFunceble.publicsuffix import PublicSuffix
 from PyFunceble.referer import Referer
 from PyFunceble.status import Status
+from PyFunceble.logs import Logs
 
 
-class ExpirationDate:
+class ExpirationDate:  # pylint: disable=too-few-public-methods
     """
     Get, format and return the expiration date of a domain, if exist.
     """
@@ -169,7 +170,7 @@ class ExpirationDate:
             # The iana database comparison status is None.
 
             # We log our whois record if the debug mode is activated.
-            self._whois_log()
+            Logs().whois(self.whois_record)
 
             # And we return and handle the official down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
@@ -190,7 +191,7 @@ class ExpirationDate:
             PyFunceble.CONFIGURATION["http_code"] = HTTPCode().get()
 
             # We log our whois record if the debug mode is activated.
-            self._whois_log()
+            Logs().whois(self.whois_record)
 
             # And we return and handle the official down status.
             return Status(PyFunceble.STATUS["official"]["down"]).handle()
@@ -198,43 +199,10 @@ class ExpirationDate:
         # The validation was not passed.
 
         # We log our whois record if the debug mode is activated.
-        self._whois_log()
+        Logs().whois(self.whois_record)
 
         # And we return and handle the official invalid status.
         return Status(PyFunceble.STATUS["official"]["invalid"], "SYNTAX").handle()
-
-    def _whois_log(self):  # pragma: no cover
-        """
-        Log the whois record into a file
-        """
-
-        if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
-            # The debug and the logs subsystem are activated.
-
-            # We construct the log format
-            log = (
-                self.log_separator + str(self.whois_record) + "\n" + self.log_separator
-            )
-
-            # We construct the path to the file we have to create/write.
-            output = PyFunceble.OUTPUT_DIRECTORY
-            output += PyFunceble.OUTPUTS["parent_directory"]
-            output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-            output += PyFunceble.OUTPUTS["logs"]["directories"]["whois"]
-
-            if PyFunceble.CONFIGURATION["referer"]:
-                # The iana database comparison status is not equal to None.
-
-                # We append the iana database comparison status to the output path.
-                output += PyFunceble.CONFIGURATION["referer"]
-            else:
-                # The iana database comparison status is not equal to None.
-
-                # We append the invalid status to the output path.
-                output += PyFunceble.STATUS["official"]["invalid"]
-
-            # And we finally write our whois record.
-            File(output).write(log)
 
     @classmethod
     def _convert_1_to_2_digits(cls, number):
@@ -292,42 +260,6 @@ class ExpirationDate:
 
         # We return the parsed element (or month if you prefer).
         return data
-
-    def log(self):  # pragma: no cover
-        """
-        Log the extracted expiration date and domain into a file.
-        """
-
-        if PyFunceble.CONFIGURATION["logs"]:
-            # The logs subsystem is activated.
-
-            # We construct our log format.
-            log = self.log_separator + "Expiration Date: %s \n" % self.expiration_date
-            log += "Tested domain: %s \n" % PyFunceble.CONFIGURATION["to_test"]
-
-            # And we write the log into the right location.
-            File(
-                PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["date_format"]
-                + PyFunceble.CONFIGURATION["referer"]
-            ).write(log)
-
-            if PyFunceble.CONFIGURATION["share_logs"]:
-                # The logs sharing is activated.
-
-                # We map the data we have to send.
-                date_to_share = {
-                    "domain": PyFunceble.CONFIGURATION["to_test"],
-                    "expiration_date": self.expiration_date,
-                    "whois_server": PyFunceble.CONFIGURATION["referer"],
-                }
-
-                # And we share the logs with the api.
-                PyFunceble.requests.post(
-                    PyFunceble.LINKS["api_date_format"], data=date_to_share
-                )
 
     def _cases_management(self, regex_number, matched_result):
         """
@@ -630,10 +562,10 @@ class ExpirationDate:
                             # The formated expiration date does not match our unified format.
 
                             # We log the problem.
-                            self.log()
+                            Logs().expiration_date(self.expiration_date)
 
                             # We log the whois record.
-                            self._whois_log()
+                            Logs().whois(self.whois_record)
 
                         if "current_test_data" in PyFunceble.CONFIGURATION:
                             # The end-user want more information whith his test.
@@ -652,7 +584,7 @@ class ExpirationDate:
                         ).status_file()
 
                         # We log the whois record.
-                        self._whois_log()
+                        Logs().whois(self.whois_record)
 
                         # We save the whois record into the database.
                         Whois(expiration_date=self.expiration_date).add()
@@ -663,7 +595,7 @@ class ExpirationDate:
                     # The extracted expiration date does not have a number.
 
                     # We log the whois record.
-                    self._whois_log()
+                    Logs().whois(self.whois_record)
 
                     # We handle and return and h the official down status.
                     return Status(PyFunceble.STATUS["official"]["down"]).handle()
