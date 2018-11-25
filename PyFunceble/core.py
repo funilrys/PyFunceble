@@ -334,6 +334,9 @@ class Core:  # pragma: no cover
 
                 # We show the colored logo.
                 self.colored_logo()
+
+            # We print our friendly message :)
+            PyFunceble.stay_safe()
         else:
             # We are used as an imported module.
 

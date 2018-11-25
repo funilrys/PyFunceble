@@ -6,3 +6,4 @@ API documentation
 
 .. automodule:: PyFunceble
    :members:
+   :exclude-members: stay_safe
