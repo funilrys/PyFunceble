@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -78,6 +78,7 @@ from PyFunceble.mining import Mining
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
+from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
 
 
@@ -206,17 +207,20 @@ class Core:  # pragma: no cover
             # the given URL.
             self._entry_management_url()
 
-            if PyFunceble.CONFIGURATION["travis"]:
-                # The Travis CI mode is activated.
-
-                # We fix the environnement permissions.
-                AutoSave().travis_permissions()
+            # We fix the environnement permissions.
+            AutoSave().travis_permissions()
 
             # We check if we need to bypass the execution of PyFunceble.
             self.bypass()
 
             # We set the start time.
             ExecutionTime("start")
+
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # We are checking for syntax.
+
+                # We deactivate the http status code.
+                PyFunceble.HTTP_CODE["active"] = False
 
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # The given domain is not empty or None.
@@ -333,7 +337,7 @@ class Core:  # pragma: no cover
                 # We are testing a domain.
 
                 # We show the colored logo.
-                self.colored_logo()
+                self.colorify_logo()
 
             # We print our friendly message :)
             PyFunceble.stay_safe()
@@ -554,71 +558,74 @@ class Core:  # pragma: no cover
         :type status: str
         """
 
-        if status:
-            # The status is given.
+        if (
+            status
+            and not PyFunceble.CONFIGURATION["simple"]
+            and PyFunceble.CONFIGURATION["file_to_test"]
+        ):
+            # * The status is given.
+            # and
+            # * The simple mode is deactivated.
+            # and
+            # * A file to test is set.
+
+            # We run the mining logic.
+            Mining().process()
+
+            # We delete the currently tested element from the mining
+            # database.
+            # Indeed, as it is tested, it is already in our
+            # testing process which means that we don't need it into
+            # the mining database.
+            Mining().remove()
 
             if (
-                not PyFunceble.CONFIGURATION["simple"]
-                and PyFunceble.CONFIGURATION["file_to_test"]
+                status.lower() in PyFunceble.STATUS["list"]["up"]
+                or status.lower() in PyFunceble.STATUS["list"]["valid"]
             ):
-                # * The simple mode is deactivated.
-                # and
-                # * A file to test is set.
+                # The status is in the list of up status.
 
-                # We run the mining logic.
-                Mining().process()
-
-                # We delete the currently tested element from the mining
+                # We remove the currently tested element from the
                 # database.
-                # Indeed, as it is tested, it is already in our
-                # testing process which means that we don't need it into
-                # the mining database.
-                Mining().remove()
+                Inactive().remove()
+            else:
+                # The status is not in the list of up status.
 
-                if status.lower() in PyFunceble.STATUS["list"]["up"]:
-                    # The status is in the list of up status.
+                # We add the currently tested element to the
+                # database.
+                Inactive().add()
 
-                    # We remove the currently tested element from the
-                    # database.
-                    Inactive().remove()
-                else:
-                    # The status is not in the list of up status.
+            # We backup the current state of the file reading
+            # for the case that we need to continue later.
+            AutoContinue().backup()
 
-                    # We add the currently tested element to the
-                    # database.
-                    Inactive().add()
+            if current != last:
+                # The current element is not the last one.
+
+                # We run the autosave logic.
+                AutoSave()
+            else:
+                # The current element is the last one.
+
+                # We stop and log the execution time.
+                ExecutionTime("stop", True)
+
+                # We show/log the percentage.
+                Percentage().log()
+
+                # We reset the counters as we end the process.
+                self.reset_counters()
 
                 # We backup the current state of the file reading
                 # for the case that we need to continue later.
                 AutoContinue().backup()
 
-                if current != last:
-                    # The current element is not the last one.
+                # We show the colored logo.
+                self.colorify_logo()
 
-                    # We run the autosave logic.
-                    AutoSave()
-                else:
-                    # The current element is the last one.
-
-                    # We stop and log the execution time.
-                    ExecutionTime("stop", True)
-
-                    # We show/log the percentage.
-                    Percentage().log()
-
-                    # We reset the counters as we end the process.
-                    self.reset_counters()
-
-                    # We backup the current state of the file reading
-                    # for the case that we need to continue later.
-                    AutoContinue().backup()
-
-                    # We show the colored logo.
-                    self.colored_logo()
-
-                    # We save and stop the script if we are under
-                    # Travis CI.
-                    AutoSave(True)
+                # We save and stop the script if we are under
+                # Travis CI.
+                AutoSave(True)
 
         for index in ["http_code", "referer"]:
             # We loop through some configuration index we have to empty.
@@ -639,6 +646,9 @@ class Core:  # pragma: no cover
         :param last_domain:
             The last domain to test if we are testing a file.
         :type last_domain: str
+
+        :param return_status: Tell us if we need to return the status.
+        :type return_status: bool
         """
 
         # We print the header.
@@ -658,8 +668,14 @@ class Core:  # pragma: no cover
         if PyFunceble.CONFIGURATION["to_test"]:
             # The domain is given (Not None).
 
-            # We test and get the status of the domain.
-            status = ExpirationDate().get()
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # The syntax mode is activated.
+
+                # We get the status from Syntax.
+                status = Syntax().get()
+            else:
+                # We test and get the status of the domain.
+                status = ExpirationDate().get()
 
             # We run the file decision logic.
             self._file_decision(domain, last_domain, status)
@@ -669,6 +685,56 @@ class Core:  # pragma: no cover
 
                 # We print the domain and the status.
                 print(domain, status)
+
+    def url(self, url_to_test=None, last_url=None):
+        """
+        Manage the case that we want to test only a given url.
+
+        :param url_to_test: The url to test.
+        :type url_to_test: str
+
+        :param last_url:
+            The last url of the file we are testing
+            (if exist)
+        :type last_url: str
+        """
+
+        # We print the header.
+        self._print_header()
+
+        if url_to_test:
+            # An url to test is given.
+
+            # We set the url we are going to test.
+            PyFunceble.CONFIGURATION["to_test"] = url_to_test
+        else:
+            # An URL to test is not given.
+
+            # We set the url we are going to test to None.
+            PyFunceble.CONFIGURATION["to_test"] = None
+
+        if PyFunceble.CONFIGURATION["to_test"]:
+            # An URL to test is given.
+
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # The syntax mode is activated.
+
+                # We get the status from Syntax.
+                status = Syntax().get()
+            else:
+                # The syntax mode is not activated.
+
+                # We get the status from URL.
+                status = URL().get()
+
+            # We run the file decision logic.
+            self._file_decision(url_to_test, last_url, status)
+
+            if PyFunceble.CONFIGURATION["simple"]:
+                # The simple mode is activated.
+
+                # We print the URL informations.
+                print(PyFunceble.CONFIGURATION["to_test"], status)
 
     @classmethod
     def reset_counters(cls):
@@ -683,7 +749,7 @@ class Core:  # pragma: no cover
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: 0})
 
     @classmethod
-    def colored_logo(cls):
+    def colorify_logo(cls):
         """
         Print the colored logo based on global results.
         """
@@ -984,6 +1050,9 @@ class Core:  # pragma: no cover
         if mined_list:
             list_to_test.extend(mined_list)
 
+        # We generate the directory structure.
+        DirectoryStructure()
+
         # We restore the data from the last session if it does exist.
         AutoContinue().restore()
 
@@ -1068,9 +1137,6 @@ class Core:  # pragma: no cover
             # We format the list.
             list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
 
-        # We generate the directory structure.
-        DirectoryStructure()
-
         # We return the final list to test.
         return list_to_test
 
@@ -1110,50 +1176,6 @@ class Core:  # pragma: no cover
                 PyFunceble.repeat(list_to_test[-1]),
             )
         )
-
-    def url(self, url_to_test=None, last_url=None):
-        """
-        Manage the case that we want to test only a given url.
-
-        :param url_to_test: The url to test.
-        :type url_to_test: str
-
-        :param last_url:
-            The last url of the file we are testing
-            (if exist)
-        :type last_url: str
-        """
-
-        # We print the header.
-        self._print_header()
-
-        if url_to_test:
-            # An url to test is given.
-
-            # We set the url we are going to test.
-            PyFunceble.CONFIGURATION["to_test"] = url_to_test
-        else:
-            # An URL to test is not given.
-
-            # We set the url we are going to test to None.
-            PyFunceble.CONFIGURATION["to_test"] = None
-
-        if PyFunceble.CONFIGURATION["to_test"]:
-            # An URL to test is given.
-
-            if PyFunceble.CONFIGURATION["simple"]:
-                # The simple mode is activated.
-
-                # We print the URL informations.
-                print(PyFunceble.CONFIGURATION["to_test"], URL().get())
-            else:
-                # The simple mode is not activated.
-
-                # We get the status of the URL.
-                status = URL().get()
-
-            # We run the file decision logic.
-            self._file_decision(url_to_test, last_url, status)
 
     def file_url(self):
         """

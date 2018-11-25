@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -152,7 +152,7 @@ class TestsColoredLogo(BaseStdout):
 
         PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 1
 
-        Core.colored_logo()
+        Core.colorify_logo()
 
         expected = self.logo_red
         actual = sys.stdout.getvalue()
@@ -168,7 +168,7 @@ class TestsColoredLogo(BaseStdout):
 
         PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 51
 
-        Core.colored_logo()
+        Core.colorify_logo()
 
         expected = self.logo_green
         actual = sys.stdout.getvalue()
@@ -184,7 +184,7 @@ class TestsColoredLogo(BaseStdout):
 
         PyFunceble.CONFIGURATION["quiet"] = True
 
-        Core.colored_logo()
+        Core.colorify_logo()
 
         expected = ""
         actual = sys.stdout.getvalue()

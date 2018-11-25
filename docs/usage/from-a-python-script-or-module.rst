@@ -24,6 +24,23 @@ Basic example
     print(PyFunceble(domain='google.com'))
     print(PyFuncebleURL(url='https://google.com'))
 
+
+::
+
+
+    """
+    This is a basic example which check syntax.
+    """
+
+    from PyFunceble import syntax_check as PyFuncebleDomainSyntax
+    from PyFunceble import url_syntax_check as PyFuncebleURLSyntax
+    from PyFunceble import ipv4_syntax_check as PyFuncebleIPv4Syntax
+
+
+    print(PyFuncebleDomainSyntax(domain='google.com'))
+    print(PyFuncebleURLSyntax(url='https://google.com'))
+    print(PyFuncebleIPv4Syntax(ip='216.58.207.46'))
+
 .. _learn Python: http://www.learnpython.org/
 
 Loop example

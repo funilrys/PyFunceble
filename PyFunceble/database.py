@@ -3,7 +3,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 

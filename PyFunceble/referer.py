@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -64,8 +64,8 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, File
-from PyFunceble.status import Status
 from PyFunceble.logs import Logs
+from PyFunceble.status import Status
 
 
 class Referer:  # pragma: no cover pylint: disable=too-few-public-methods

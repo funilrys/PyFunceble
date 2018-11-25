@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -156,6 +156,30 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We generate the status file with the parsed status.
             Generate(self.catched, "SYNTAX").status_file()
+
+        # We return the parsed status.
+        return self.catched
+
+
+class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
+    """
+    Generate everything around the catched status when testing for Syntax.
+
+    :param catched_status: THe catched status.
+    :type catched_status: str
+    """
+
+    def __init__(self, catched_status):
+        # We get the parsed status.
+        self.catched = catched_status
+
+    def handle(self):
+        """
+        Handle the backend of the given status.
+        """
+
+        # We generate the status file with the catched status.
+        Generate(self.catched, "SYNTAX").status_file()
 
         # We return the parsed status.
         return self.catched

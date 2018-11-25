@@ -1,5 +1,5 @@
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         name="PyFunceble-dev",
         version=_get_version(),
         install_requires=_get_requirements(),
-        description="The tool to check the availability of domains, IPv4 or URL.",
+        description="The tool to check the availability or syntax of domains, IPv4 or URL.",
         long_description=_get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
@@ -143,6 +143,8 @@ if __name__ == "__main__":
             "domain",
             "IP",
             "availability",
+            "syntax",
+            "syntax-checker",
             "PyFunceble",
             "WHOIS",
             "nslookup",

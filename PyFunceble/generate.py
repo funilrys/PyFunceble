@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -261,6 +261,21 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
                 # We complete the path to the json list file.
                 json_destination = output_json % PyFunceble.STATUS["official"]["up"]
+            elif self.domain_status.lower() in PyFunceble.STATUS["list"]["valid"]:
+                # The status is in the list of valid list.
+
+                # We complete the path to the hosts file.
+                hosts_destination = (
+                    output_hosts % PyFunceble.STATUS["official"]["valid"]
+                )
+
+                # We complete the path to the plain list file.
+                plain_destination = (
+                    output_domains % PyFunceble.STATUS["official"]["valid"]
+                )
+
+                # We complete the path to the json list file.
+                json_destination = output_json % PyFunceble.STATUS["official"]["valid"]
             elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
                 # The status is in the list of down list.
 
@@ -676,6 +691,24 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 + self.domain_status
             )
 
+    def valid_status_file(self):
+        """
+        Logic behind the valis status when generating the status file.
+        """
+
+        # We update the expiration date.
+        self.expiration_date = "Unknown"
+
+        # We update the domain status.
+        self.domain_status = PyFunceble.STATUS["official"]["valid"]
+
+        # We update the output file.
+        self.output = (
+            self.output_parent_dir
+            + PyFunceble.OUTPUTS["splited"]["directory"]
+            + self.domain_status
+        )
+
     def down_status_file(self):
         """
         Logic behind the down status when generating the status file.
@@ -822,9 +855,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     + self.domain_status
                 )
 
-    def _prints_status_file(self):
+    def _prints_status_file(self):  # pylint: disable=too-many-branches
         """
-        Logic behind the printing when generating status file.
+        Logic behind the printing (in file) when generating status file.
         """
 
         if PyFunceble.CONFIGURATION["file_to_test"]:
@@ -872,6 +905,19 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     Prints(
                         data_to_print,
                         PyFunceble.STATUS["official"]["up"],
+                        self.output,
+                        True,
+                    ).data()
+                elif self.domain_status.lower() in PyFunceble.STATUS["list"]["valid"]:
+                    # The status is in the list of valid status.
+
+                    # We initiate the data to print.
+                    data_to_print = [self.tested, self.source, PyFunceble.CURRENT_TIME]
+
+                    # We print the informations to print on file.
+                    Prints(
+                        data_to_print,
+                        PyFunceble.STATUS["official"]["valid"],
                         self.output,
                         True,
                     ).data()
@@ -940,38 +986,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         True,
                     ).data()
 
-    def status_file(self):
+    def _prints_status_screen(self):
         """
-        Generate a file according to the domain status.
+        Logic behind the printing (on screen) when generating status file.
         """
-
-        if not PyFunceble.CONFIGURATION["http_code"]:
-            # The http code is equal to None.
-
-            # We initiate an empty http code.
-            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
-
-        if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
-            # The status is in the list of up status.
-
-            # We generate the status file(s).
-            self.up_status_file()
-        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
-            # The status is in the list of down status.
-
-            # We generate the status file(s).
-            self.down_status_file()
-        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-            # The status is in the list of invalid status.
-
-            # We generate the status file(s).
-            self.invalid_status_file()
-
-        # We generate the hosts file.
-        Generate(self.domain_status, self.source, self.expiration_date).info_files()
-
-        # We increase the percentage count.
-        Percentage(self.domain_status).count()
 
         if not PyFunceble.CONFIGURATION["quiet"]:
             # The quiet mode is not activated.
@@ -979,15 +997,22 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             if PyFunceble.CONFIGURATION["less"]:
                 # We have to print less information.
 
-                # We print the informations on screen and file.
-                Prints(
-                    [
-                        self.tested,
-                        self.domain_status,
-                        PyFunceble.CONFIGURATION["http_code"],
-                    ],
-                    "Less",
-                ).data()
+                # We initiate the data to print.
+                to_print = [
+                    self.tested,
+                    self.domain_status,
+                    PyFunceble.CONFIGURATION["http_code"],
+                ]
+
+                if not PyFunceble.HTTP_CODE["active"]:
+                    # The http status code is not activated.
+
+                    # We replace the last element to print with
+                    # the source.
+                    to_print[-1] = self.source
+
+                # We print the informations on screen.
+                Prints(to_print, "Less").data()
             else:
                 # We have to print all informations on screen.
 
@@ -1014,8 +1039,49 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         PyFunceble.CURRENT_TIME,
                     ]
 
-                # We print the information on screen and file.
+                # We print the information on screen.
                 Prints(data_to_print, "Generic").data()
+
+    def status_file(self):
+        """
+        Generate a file according to the domain status.
+        """
+
+        if not PyFunceble.CONFIGURATION["http_code"]:
+            # The http code is equal to None.
+
+            # We initiate an empty http code.
+            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+
+        if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
+            # The status is in the list of up status.
+
+            # We generate the status file(s).
+            self.up_status_file()
+        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["valid"]:
+            # The status is in the list of valid status.
+
+            # We generate the status file(s).
+            self.valid_status_file()
+        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["down"]:
+            # The status is in the list of down status.
+
+            # We generate the status file(s).
+            self.down_status_file()
+        elif self.domain_status.lower() in PyFunceble.STATUS["list"]["invalid"]:
+            # The status is in the list of invalid status.
+
+            # We generate the status file(s).
+            self.invalid_status_file()
+
+        # We generate the hosts file.
+        Generate(self.domain_status, self.source, self.expiration_date).info_files()
+
+        # We increase the percentage count.
+        Percentage(self.domain_status).count()
+
+        # We print on screen if needed.
+        self._prints_status_screen()
 
         if (
             not PyFunceble.CONFIGURATION["no_files"]

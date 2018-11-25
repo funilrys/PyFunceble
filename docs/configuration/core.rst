@@ -329,6 +329,18 @@
 .. note::
     Understand with "results files" the mirror of what is shown on screen.
 
+:code:`syntax`
+--------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the syntax (only) testing.
+
+.. warning::
+    If this index is set to :code:`True`, we **ONLY** check for syntax not availability.
+
 :code:`travis`
 --------------
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -14,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide some helpers for the tests.
+This submodule will provide the interface for Syntax testing.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -60,24 +58,41 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
-import sys
-from io import StringIO
-from unittest import TestCase
+import PyFunceble
+from PyFunceble.check import Check
+from PyFunceble.status import SyntaxStatus
 
 
-class BaseStdout(TestCase):
+class Syntax:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Use when we want to catch stdout.
+    Manage everything around the Syntax testing.
     """
 
-    def setUp(self):
+    @classmethod
+    def get(cls):
         """
-        Setup stdout.
+        Execute the logic behind the Syntax handling.
+
+        :return: The syntax status.
+        :rtype: str
         """
 
-        sys.stdout = StringIO()
+        if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+            # We are testing for domain or ip.
 
-    def tearDown(self):
-        sys.stdout.close()
-        sys.stdout = sys.__stdout__
+            if Check().is_domain_valid() or Check().is_ip_valid():
+                # * The domain is valid.
+                # or
+                # * The IP is valid.
+                return SyntaxStatus(PyFunceble.STATUS["official"]["valid"]).handle()
+        elif PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+            # We are testing for URL.
+
+            if Check().is_url_valid():
+                # * The url is valid.
+
+                return SyntaxStatus(PyFunceble.STATUS["official"]["valid"]).handle()
+        else:
+            raise Exception("Unknow test type.")
+
+        return SyntaxStatus(PyFunceble.STATUS["official"]["invalid"]).handle()

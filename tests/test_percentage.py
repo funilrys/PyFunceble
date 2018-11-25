@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -105,7 +105,28 @@ class TestPercentage(BaseStdout):
             except KeyError:
                 pass
 
+        PyFunceble.CONFIGURATION["syntax"] = True
+
+        for i, element in enumerate(["tested", "up", "down", "invalid"]):
+            PyFunceble.CONFIGURATION["counter"]["number"][element] = 12 + i
+            expected.update({element: 12 + i})
+
+        for element in ["tested", "up", "down", "invalid"]:
+            try:
+                Percentage(
+                    domain_status=PyFunceble.STATUS["official"][element], init=None
+                ).count()
+
+                expected[element] += 1
+                expected["tested"] += 1
+                actual = PyFunceble.CONFIGURATION["counter"]["number"]
+
+                self.assertEqual(expected, actual)
+            except KeyError:
+                pass
+
         PyFunceble.CONFIGURATION["counter"]["number"] = {}
+        PyFunceble.CONFIGURATION["syntax"] = False
 
     def test_init(self):
         """
@@ -155,6 +176,47 @@ INVALID     1%%           2%s
 """ % (
             " " * 5,
             " " * 10,
+            " " * 10,
+            " " * 11,
+        )
+        PyFunceble.CONFIGURATION["counter"]["number"].update(
+            {"up": 45, "down": 78, "invalid": 2, "tested": 125}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+        actual = sys.stdout.getvalue()
+
+        self.assertEqual(expected, actual)
+
+        # Test for the case that we do not show_percentage
+        PyFunceble.CONFIGURATION["show_percentage"] = False
+        PyFunceble.CONFIGURATION["counter"]["number"].update(
+            {"up": 45, "down": 78, "invalid": 2, "tested": 125}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+
+        actual = PyFunceble.CONFIGURATION["counter"]["percentage"]
+        expected = {"up": 36, "down": 62, "invalid": 1}
+        self.assertEqual(expected, actual)
+
+    def test_log_syntax(self):
+        """
+        Test the log system for the case that we are checking for syntax.
+        """
+
+        PyFunceble.CONFIGURATION["syntax"] = True
+
+        BaseStdout.setUp(self)
+
+        expected = """
+
+Status      Percentage   Numbers%s
+----------- ------------ ------------
+VALID       36%%          45%s
+INVALID     1%%           2%s
+""" % (
+            " " * 5,
             " " * 10,
             " " * 11,
         )

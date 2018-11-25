@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -106,7 +106,10 @@ class Percentage:
             # We increase the number of tested.
             PyFunceble.CONFIGURATION["counter"]["number"]["tested"] += 1
 
-            if self.status.lower() in PyFunceble.STATUS["list"]["up"]:
+            if (
+                self.status.lower() in PyFunceble.STATUS["list"]["up"]
+                or self.status.lower() in PyFunceble.STATUS["list"]["valid"]
+            ):
                 # The status is in the list of up status.
 
                 # We increase the number of up.
@@ -210,6 +213,15 @@ class Percentage:
                         PyFunceble.CONFIGURATION["counter"]["number"]["invalid"],
                     ],
                 ]
+
+                if PyFunceble.CONFIGURATION["syntax"]:
+                    # We are checking for syntax.
+
+                    # We update the denomination of the UP.
+                    lines_to_print[0][0] = PyFunceble.STATUS["official"]["valid"]
+
+                    # And we unset the INACTIVE line.
+                    del lines_to_print[1]
 
                 for to_print in lines_to_print:
                     # We loop throught the different line to print.

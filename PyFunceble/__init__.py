@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long, too-many-lines
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -79,6 +79,7 @@ import requests
 from colorama import Back, Fore, Style
 from colorama import init as initiate
 
+from PyFunceble.check import Check
 from PyFunceble.clean import Clean
 from PyFunceble.config import Load, Version
 from PyFunceble.core import Core
@@ -90,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.129.2.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.130.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -222,9 +223,9 @@ ASCII_PYFUNCEBLE = """
 
 def test(domain, complete=False):  # pragma: no cover
     """
-    Test for the given domain.
+    Test the availability of the given domain or IP.
 
-    :param domain: The domain to test.
+    :param domain: The domain or IP to test.
     :type domain: str
 
     :param complete:
@@ -236,8 +237,8 @@ def test(domain, complete=False):  # pragma: no cover
     :rtype: str|dict
 
     .. note::
-        This function provide an access to the core while use PyFunceble as
-        an imported module.
+        This function abstract and simplify for the access to the core for the
+        end-user.
     """
 
     # We silently load the configuration.
@@ -247,9 +248,51 @@ def test(domain, complete=False):  # pragma: no cover
     return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
 
 
+def syntax_check(domain):  # pragma: no cover
+    """
+    Check the syntax of the given domain.
+
+    :param domain: The domain to check the syntax for.
+    :type domain: str
+
+    :return: The syntax validity.
+    :rtype: bool
+    """
+
+    return Check(domain).is_domain_valid()
+
+
+def ipv4_syntax_check(ip):  # pragma: no cover
+    """
+    Check the syntax of the given IPv4.
+
+    :param ip: The IPv4 to check the syntax for.
+    :type ip: str
+
+    :return: The syntax validity.
+    :rtype: bool
+    """
+
+    return Check(ip).is_ip_valid()
+
+
+def url_syntax_check(url):  # pragma: no cover
+    """
+    Check the syntax of the given URL.
+
+    :param url: The URL to check the syntax for.
+    :type url: str
+
+    :return The syntax validity.
+    :rtype: bool
+    """
+
+    return Check(url).is_url_valid()
+
+
 def url_test(url, complete=False):  # pragma: no covere
     """
-    Test for the given URL.
+    Test the availability of the given URL.
 
     :param url: The URL to test.
     :type url: str
@@ -263,8 +306,8 @@ def url_test(url, complete=False):  # pragma: no covere
     :rtype: str|dict
 
     .. note::
-        This function provice an access to the core while using PyFunceble as
-        an imported module.
+        This function abstract and simplify for the access to the core for the
+        end-user.
     """
 
     # We silently load the configuration.
@@ -295,7 +338,7 @@ def load_config(under_test=False):  # pragma: no cover
         DirectoryStructure()
 
 
-def stay_safe(): # pragma: no cover
+def stay_safe():  # pragma: no cover
     """
     Print a friendly message.
     """
@@ -349,7 +392,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             # The following handle the command line argument.
 
             PARSER = argparse.ArgumentParser(
-                description="The tool to check domain or IP availability.",
+                description="The tool to check the availability or syntax of domains, IPv4 or URL.",
                 epilog="Crafted with %s by %s"
                 % (
                     Fore.RED + "♥" + Fore.RESET,
@@ -371,7 +414,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             )
 
             CURRENT_VALUE_FORMAT = (
-                Fore.YELLOW + Style.BRIGHT + "Installed value: " + Fore.BLUE
+                Fore.YELLOW + Style.BRIGHT + "Configured value: " + Fore.BLUE
             )
 
             PARSER.add_argument(
@@ -775,6 +818,17 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
             )
 
             PARSER.add_argument(
+                "--syntax",
+                action="store_true",
+                help="Switch the value of the syntax test mode. %s"
+                % (
+                    CURRENT_VALUE_FORMAT
+                    + repr(CONFIGURATION["syntax"])
+                    + Style.RESET_ALL
+                ),
+            )
+
+            PARSER.add_argument(
                 "-t",
                 "--timeout",
                 type=int,
@@ -991,6 +1045,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
             if ARGS.split:
                 CONFIGURATION.update({"split": Core.switch("split")})
+
+            if ARGS.syntax:
+                CONFIGURATION.update({"syntax": Core.switch("syntax")})
 
             if ARGS.timeout and ARGS.timeout % 3 == 0:
                 CONFIGURATION.update({"seconds_before_http_timeout": ARGS.timeout})

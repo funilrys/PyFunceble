@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -263,6 +263,24 @@ class TestDict(TestCase):
         }
 
         actual = Dict(self.to_test).remove_key("Py")
+
+        self.assertEqual(expected, actual)
+
+    def test_remove_key_not_found(self):
+        """
+        Test Dict().remove_key() for the case that
+        the given key does not exist.
+        """
+
+        expected = {
+            "Hello": "world",
+            "World": {"world", "hello"},
+            "funilrys": ["Fun", "Ilrys"],
+            "Py": "Funceble",
+            "pyfunceble": ["funilrys"],
+        }
+
+        actual = Dict(self.to_test).remove_key("xxx")
 
         self.assertEqual(expected, actual)
 

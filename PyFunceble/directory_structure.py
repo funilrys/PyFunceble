@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -65,7 +65,7 @@ License:
 import PyFunceble
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.config import Version
-from PyFunceble.helpers import Command, Dict, File, Hash, Regex, Directory
+from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex
 
 
 class DirectoryStructure:  # pragma: no cover
@@ -250,6 +250,10 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "domains/INVALID": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
+            # We get the replacement of the domains/VALID directory from the
+            # configuration file.
+            "domains/VALID": PyFunceble.OUTPUTS["domains"]["directory"]
+            + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the hosts directory from the
             # configuration file.
             "hosts": PyFunceble.OUTPUTS["hosts"]["directory"],
@@ -265,6 +269,10 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "hosts/INVALID": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
+            # We get the replacement of the hosts/VALID directory from the
+            # configuration file.
+            "hosts/VALID": PyFunceble.OUTPUTS["hosts"]["directory"]
+            + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the json directory from the
             # configuration file.
             "json": PyFunceble.OUTPUTS["json"]["directory"],
@@ -280,6 +288,10 @@ class DirectoryStructure:  # pragma: no cover
             # configuration file.
             "json/INVALID": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
+            # We get the replacement of the json/VALID directory from the
+            # configuration file.
+            "json/VALID": PyFunceble.OUTPUTS["json"]["directory"]
+            + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the logs directory from the
             # configuration file.
             "logs": PyFunceble.OUTPUTS["logs"]["directories"]["parent"],

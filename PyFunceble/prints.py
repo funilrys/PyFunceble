@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -134,6 +134,11 @@ class Prints:
             )
         )
 
+        # We iniate the official VALID header and the spacement of each colomns.
+        self.headers[PyFunceble.STATUS["official"]["valid"]] = PyFunceble.OrderedDict(
+            zip(["Domain", "Source", "Analyze Date"], [100, 10, 20])
+        )
+
         # We iniate the official DOWN header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS["official"]["down"]] = PyFunceble.OrderedDict(
             zip(
@@ -205,6 +210,7 @@ class Prints:
                 PyFunceble.STATUS["official"]["up"],
                 PyFunceble.STATUS["official"]["down"],
                 PyFunceble.STATUS["official"]["invalid"],
+                PyFunceble.STATUS["official"]["valid"],
                 "Less",
             ]
 
@@ -362,11 +368,16 @@ class Prints:
 
                     # We remove the Analyze Date colomn from the data to print.
                     to_print = Dict(to_print).remove_key("Analyze Date")
-            if self.template.lower() in PyFunceble.STATUS["list"]["up"]:
+            elif self.template.lower() in PyFunceble.STATUS["list"]["up"]:
                 # The template is in the list of up status.
 
                 # We informations to print is the up header.
                 to_print = self.headers[PyFunceble.STATUS["official"]["up"]]
+            elif self.template.lower() in PyFunceble.STATUS["list"]["valid"]:
+                # The template is in the list of valid status.
+
+                # We informations to print is the valid header.
+                to_print = self.headers[PyFunceble.STATUS["official"]["valid"]]
             elif self.template.lower() in PyFunceble.STATUS["list"]["down"]:
                 # The template is in the list of down status.
 
@@ -508,7 +519,10 @@ class Prints:
         if self.template in ["Generic", "Less"]:
             # The template is in the list of template that need the coloration.
 
-            if self.data_to_print[1].lower() in PyFunceble.STATUS["list"]["up"]:
+            if (
+                self.data_to_print[1].lower() in PyFunceble.STATUS["list"]["up"]
+                or self.data_to_print[1].lower() in PyFunceble.STATUS["list"]["valid"]
+            ):
                 # The status is in the list of up status.
 
                 # We print the data with a green background.

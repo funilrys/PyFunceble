@@ -16,12 +16,24 @@
 .. warning::
     All status should be in lowercase.
 
+:code:`status[list][valid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`list`
+
+    **Default value:** :code:`["valid","syntax_valid","valid_syntax"]`
+    
+    **Description:** Set the accepted :code:`VALID` status.
+
+.. note::
+    This status is only shown if the :code:`syntax` index is activated.
+
 :code:`status[list][up]`
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`list`
 
-    **Default value:** :code:`["up","active", "valid"]`
+    **Default value:** :code:`["up","active"]`
     
     **Description:** Set the accepted :code:`ACTIVE` status.
 
@@ -132,3 +144,15 @@
     **Default value:** :code:`INVALID`
     
     **Description:** Set the returned status for the :code:`INVALID` case.
+
+:code:`status[official][valid]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`VALID`
+    
+    **Description:** Set the returned status for the :code:`VALID` case.
+
+.. note::
+    This status is only shown if the :code:`syntax` index is activated.

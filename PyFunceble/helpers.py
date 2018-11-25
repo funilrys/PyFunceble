@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -347,8 +347,11 @@ class Dict:
             else:
                 # The parsed key to remove is not a list.
 
-                # We delete the given key from the dictionnary.
-                del self.main_dictionnary[key_to_remove]
+                try:
+                    # We delete the given key from the dictionnary.
+                    del self.main_dictionnary[key_to_remove]
+                except KeyError:
+                    pass
 
             # We return the final dictionnary.
             return self.main_dictionnary

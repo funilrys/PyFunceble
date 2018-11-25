@@ -1,8 +1,8 @@
 .. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/logo/RM.png
     :alt: PyFunceble Logic representation
 
-The tool to check the availability of domains, IPv4 or URL
-==========================================================
+The tool to check the availability or syntax of domains, IPv4 or URL.
+=====================================================================
 
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y

@@ -11,7 +11,8 @@ Detailed
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the decoding of the adblock format.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 If this argument is activated the system will extract all domains or IP from the given adblock file.
 
@@ -19,7 +20,8 @@ If this argument is activated the system will extract all domains or IP from the
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Output all available informations on screen.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 **When activated:**
 
@@ -43,7 +45,8 @@ If this argument is activated the system will extract all domains or IP from the
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Pass a command before the results (final) commit under the travis mode.
-        Default value: :code:`''`
+
+    **Default value:** :code:`''`
 
 In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
 
@@ -54,7 +57,8 @@ In this example, :code:`something` should be a script or a program which have to
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the auto continue mode.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 This argument activate or deactivated the auto-continue subsystem. 
 Indeed, as we can automatically continue if the script has been stopped, this switch allows us to disable or enable the usage of that specific subsystem.
@@ -81,7 +85,8 @@ As it is sometime needed to clean our :code:`output/` directory, this argument d
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Replace the default autosave commit message.
-        Default value: :code:`PyFunceble - AutoSave`
+
+    **Default value:** :code:`PyFunceble - AutoSave`
 
 This argument allow us to set a custom commit message which is going to be used as commit message when saving.
 
@@ -98,7 +103,8 @@ This argument allow us to set a custom commit message which is going to be used 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Replace the default results (final) commit message.
-        Default value: :code:`PyFunceble - Results`
+
+    **Default value:** :code:`PyFunceble - Results`
 
 .. note::
     This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
@@ -121,7 +127,8 @@ This argument will test and give the results of the tests of the given domain.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the usage of a database to store inactive domains of the currently tested list.
-        Default value: :code:`True`   
+
+    **Default value:** :code:`True`   
 
 This argument will disable or enable the usage of a database which save all `INACTIVE` and `INVALID` domain of the given file over time.
 
@@ -132,7 +139,8 @@ This argument will disable or enable the usage of a database which save all `INA
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
     Set the numbers of day(s) between each retest of domains present into the database of `INACTIVE` and `INVALID` domains.
-        Default value: :code:`1`
+
+    **Default value:** :code:`1`
 
 .. note::
     This argument is only used if :code:`-db` or :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are activated.
@@ -142,7 +150,8 @@ This argument will disable or enable the usage of a database which save all `INA
 ^^^^^^^^^^^^^^^
 
     Switch the value of the debug mode.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 This argument activate the debug mode. Under the debug mode, everything catched by the whois subsystem is saved.
 
@@ -163,7 +172,8 @@ Want to start without anything ? This argument generate the output directory aut
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the default value of the execution time showing.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want to know the execution time of your test ? Well, this argument will let you know!
 
@@ -198,7 +208,8 @@ Want to test all :code:`blogspot` from your list ? This argument allow you to do
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the generation of hosts file.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 This argument will let the system know if it have to generate the hosts file version of each status.
 
@@ -206,7 +217,8 @@ This argument will let the system know if it have to generate the hosts file ver
 ^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the hierarchical sorting of tested file.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 This argument will let the system know if we have to sort the list and our output in hierarchical order.
 
@@ -215,7 +227,8 @@ This argument will let the system know if we have to sort the list and our outpu
 ^^^^^^^^^^^^^^
 
     Switch the value of the usage of HTTP code.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 You don't want to take the result of the HTTP code execution in consideration ? This argument allows you to disable that!
 
@@ -233,7 +246,8 @@ This argument generate or update `iana-domains-db.json`.
 ^^^^^^^^^^^^^^
 
     Switch the value of the IDNA conversion.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 This argument allow the conversion of the domains using `domain2idna`_
 
@@ -246,13 +260,15 @@ This argument allow the conversion of the domains using `domain2idna`_
 ^^^^^^^^^^^^^^^^^^^^^^^
 
     Change the IP to print with the hosts files.
-        Default value: :code:`0.0.0.0`
+
+    **Default value:** :code:`0.0.0.0`
 
 :code:`--json`
 ^^^^^^^^^^^^^^
 
     Switch the value of the generation of the json list of domain.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 :code:`--less`
 ^^^^^^^^^^^^^^
@@ -278,7 +294,8 @@ This argument allow the conversion of the domains using `domain2idna`_
 ^^^^^^^^^^^^^^^
 
     Switch the value of the local network testing.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want to run a test over a local or private network ? This argument will disable the limitation which do not apply to private networks.
 
@@ -293,7 +310,8 @@ Want to test a raw link ? This argument will download and test the given raw lin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the mining subsystem usage.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want to find domain or URL linked to a domain in your list ? This argument will exactly do that.
 
@@ -301,7 +319,8 @@ Want to find domain or URL linked to a domain in your list ? This argument will 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value the production of output files.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want to disable the production of the outputted files? This argument is for you!
 
@@ -309,7 +328,8 @@ Want to disable the production of the outputted files? This argument is for you!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the production of logs files in the case we encounter some errors.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Don't want any logs to go out of PyFunceble ? This arguments disable every logs subsystems.
 
@@ -317,7 +337,8 @@ Don't want any logs to go out of PyFunceble ? This arguments disable every logs 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the production unified logs under the output directory.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 This argument disable the generation of `result.txt`.
 
@@ -325,7 +346,8 @@ This argument disable the generation of `result.txt`.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value the usage of whois to test domain's status.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Don't want to use or take in consideration the results from :code:`whois` ? This argument allows you to disable it!
 
@@ -333,7 +355,8 @@ Don't want to use or take in consideration the results from :code:`whois` ? This
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the percentage output mode.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 This argument will disable or enable the generation of the percentage of each status.
 
@@ -341,7 +364,8 @@ This argument will disable or enable the generation of the percentage of each st
 ^^^^^^^^^^^^^^^
 
     Switch the value of the generation of the plain list of domain.
-        Default value: :code:`False:`
+
+    **Default value:** :code:`False:`
 
 Want to get a list with all domain for each status ? The activation of this argument do the work while testing!
 
@@ -364,14 +388,16 @@ This argument will generate or update `public-suffix.json`.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Run the script in quiet mode.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 You prefer to run a program silently ? This argument is for you!
 
 :code:`--share-logs`
 
     Switch the value of the sharing of logs.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 Want to make PyFunceble a better tool? Share your logs with our API which collect all logs!
 
@@ -379,7 +405,8 @@ Want to make PyFunceble a better tool? Share your logs with our API which collec
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the simple output mode.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want as less as possible data on screen ? This argument return as less informations as possible on screen!
 
@@ -387,15 +414,24 @@ Want as less as possible data on screen ? This argument return as less informati
 ^^^^^^^^^^^^^^^
     
     Switch the value of the split of the generated output
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 Want to get the logs (copy of what you see on screen) on different files? This argument is suited for you!
+
+:code:`--syntax`
+^^^^^^^^^^^^^^^^
+
+    Switch the value of the syntax test mode.
+
+    **Default value:** :code:`False`
 
 :code:`-t "something"` | :code:`--timeout "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the timeout.
-        Default value: :code:`3`
+
+    **Default value:** :code:`3`
     
 This argument will set the default timeout to apply everywhere it is possible to set a timeout.
 
@@ -403,7 +439,8 @@ This argument will set the default timeout to apply everywhere it is possible to
 ^^^^^^^^^^^^^^^^
 
     Switch the value of the travis mode.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
 Want to use PyFunceble under Travis CI? This argument is suited for your need!
 
@@ -442,7 +479,8 @@ Want to test the availability or an URL ? Enjoy this argument!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the verification of the SSL/TLS certificate when testing for URL.
-        Default value: :code:`False`
+
+    **Default value:** :code:`False`
 
     .. warning::
         If you activate the verification of the SSL/TLS certificate, you may get **false positive** result.
@@ -454,7 +492,8 @@ Want to test the availability or an URL ? Enjoy this argument!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
-        Default value: :code:`True`
+
+    **Default value:** :code:`True`
 
 Global overview
 """""""""""""""
@@ -471,112 +510,115 @@ Global overview
                     [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
                     [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
                     [-nl] [-nu] [-nw] [-p] [--plain] [--production] [-psl] [-q]
-                    [--share-logs] [-s] [--split] [-t TIMEOUT] [--travis]
-                    [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
-                    [-ua USER_AGENT] [-v] [-vsc] [-wdb]
+                    [--share-logs] [-s] [--split] [--syntax] [-t TIMEOUT]
+                    [--travis] [--travis-branch TRAVIS_BRANCH] [-u URL]
+                    [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
-    The tool to check domain or IP availability.
+    The tool to check the availability or syntax of domains, IPv4 or URL.
 
     optional arguments:
         -ad, --adblock        Switch the decoding of the adblock format.
-                                Installed value: False
+                                Configured value: False
         -a, --all             Output all available informations on screen.
-                                Installed value: True
+                                Configured value: True
         --cmd-before-end CMD_BEFORE_END
                                 Pass a command before the results (final) commit under
-                                the travis mode. Installed value: ''
+                                the travis mode. Configured value:
+                                ''
         -c, --auto-continue, --continue
                                 Switch the value of the auto continue mode.
-                                Installed value: True
+                                Configured value: True
         --autosave-minutes AUTOSAVE_MINUTES
                                 Update the minimum of minutes before we start
                                 committing to upstream under Travis CI.
-                                Installed value: 15
+                                Configured value: 15
         --clean               Clean all files under output.
         --clean-all           Clean all files under output and all file generated by
                                 PyFunceble.
         --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
                                 Replace the default autosave commit message.
-                                Installed value: 'PyFunceble -
+                                Configured value: 'PyFunceble -
                                 AutoSave'
         --commit-results-message COMMIT_RESULTS_MESSAGE
                                 Replace the default results (final) commit message.
-                                Installed value: 'PyFunceble -
+                                Configured value: 'PyFunceble -
                                 Results'
         -d DOMAIN, --domain DOMAIN
                                 Set and test the given domain.
         -db, --database       Switch the value of the usage of a database to store
                                 inactive domains of the currently tested list.
-                                Installed value: True
+                                Configured value: True
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of day(s) between each retest of
                                 domains present into inactive-db.json.
-                                Installed value: 1
-        --debug               Switch the value of the debug mode. Installed
-                                value: False
+                                Configured value: 1
+        --debug               Switch the value of the debug mode.
+                                Configured value: False
         --directory-structure
                                 Generate the directory and files that are needed and
                                 which does not exist in the current directory.
         -ex, --execution      Switch the default value of the execution time
-                                showing. Installed value: False
+                                showing. Configured value: False
         -f FILE, --file FILE  Read the given file and test all domains inside it. If
                                 a URL is given we download and test the content of the
                                 given URL.
         --filter FILTER       Domain to filter (regex).
         --help                Show this help message and exit.
         --hierarchical        Switch the value of the hierarchical sorting of tested
-                                file. Installed value: True
+                                file. Configured value: True
         -h, --host            Switch the value of the generation of hosts file.
-                                Installed value: True
+                                Configured value: True
         --http                Switch the value of the usage of HTTP code.
-                                Installed value: True
+                                Configured value: True
         --iana                Update/Generate `iana-domains-db.json`.
         --idna                Switch the value of the IDNA conversion.
-                                Installed value: False
+                                Configured value: False
         -ip IP                Change the ip to print in the hosts files.
-                                Installed value: '0.0.0.0'
+                                Configured value: '0.0.0.0'
         --json                Switch the value of the generation of the json list of
-                                domain. Installed value: False
-        --less                Output less informations on screen. Installed
-                                value: False
+                                domain. Configured value: False
+        --less                Output less informations on screen.
+                                Configured value: False
         --local               Switch the value of the local network testing.
-                                Installed value: True
+                                Configured value: True
         --link LINK           Download and test the given file.
         -m, --mining          Switch the value of the mining subsystem usage.
-                                Installed value: False
+                                Configured value: False
         -n, --no-files        Switch the value the production of output files.
-                                Installed value: False
+                                Configured value: False
         -nl, --no-logs        Switch the value of the production of logs files in
-                                the case we encounter some errors. Installed
+                                the case we encounter some errors. Configured
                                 value: False
         -nu, --no-unified     Switch the value of the production unified logs under
-                                the output directory. Installed value:
+                                the output directory. Configured value:
                                 True
         -nw, --no-whois       Switch the value the usage of whois to test domain's
-                                status. Installed value: False
+                                status. Configured value: False
         -p, --percentage      Switch the value of the percentage output mode.
-                                Installed value: True
+                                Configured value: True
         --plain               Switch the value of the generation of the plain list
-                                of domain. Installed value: False
+                                of domain. Configured value: False
         --production          Prepare the repository for production.
         -psl, --public-suffix
                                 Update/Generate `public-suffix.json`.
-        -q, --quiet           Run the script in quiet mode. Installed
+        -q, --quiet           Run the script in quiet mode. Configured
                                 value: False
         --share-logs          Switch the value of the sharing of logs.
-                                Installed value: True
+                                Configured value: True
         -s, --simple          Switch the value of the simple output mode.
-                                Installed value: False
+                                Configured value: False
         --split               Switch the value of the split of the generated output
-                                files. Installed value: True
+                                files. Configured value: True
+        --syntax              Switch the value of the syntax test mode.
+                                Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
-                                Switch the value of the timeout. Installed
+                                Switch the value of the timeout. Configured
                                 value: 3
         --travis              Switch the value of the travis mode.
-                                Installed value: False
+                                Configured value: False
         --travis-branch TRAVIS_BRANCH
                                 Switch the branch name where we are going to push.
-                                Installed value: 'master'
+                                Configured value: 'master'
         -u URL, --url URL     Analyze the given URL.
         -uf URL_FILE, --url-file URL_FILE
                                 Read and test the list of URL of the given file. If a
@@ -589,14 +631,13 @@ Global overview
         -v, --version         Show the version of PyFunceble and exit.
         -vsc, --verify-ssl-certificate
                                 Switch the value of the verification of the SSL/TLS
-                                certificate when testing for URL. Installed
+                                certificate when testing for URL. Configured
                                 value: False
         -wdb, --whois-database
                                 Switch the value of the usage of a database to store
                                 whois data in order to avoid whois servers rate limit.
-                                Installed value: True
+                                Configured value: True
 
     Crafted with ♥ by Nissar Chababy (Funilrys) with the
     help of https://pyfunceble.rtfd.io/en/dev/contributors.html &&
     https://pyfunceble.rtfd.io/en/dev/special-thanks.html
-

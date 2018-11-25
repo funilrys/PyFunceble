@@ -2,7 +2,7 @@
 
 # pylint:disable=line-too-long
 """
-The tool to check the availability of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4 or URL.
 
 ::
 
@@ -62,7 +62,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Dict, File
 
 
@@ -91,9 +90,6 @@ class AutoContinue:
                 )
             else:
                 # The log file does not exist.
-
-                # We generate the directory structure just in case.
-                DirectoryStructure()
 
                 # We initiate the backup content.
                 self.backup_content = {}
