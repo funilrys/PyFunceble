@@ -146,6 +146,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
+-   `IANA`_ - `ICANN`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Pi-Hole - `@pi-hole`_
 -   Public Suffix List - `@publicsuffix`_
@@ -184,6 +185,8 @@ License
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _Dead-Hosts: https://github.com/dead-hosts
+.. _IANA: https://www.iana.org/
+.. _ICANN: https://www.icann.org/
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@dnmTX: https://github.com/dnmTX
