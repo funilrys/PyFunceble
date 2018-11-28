@@ -517,6 +517,32 @@ URL testing
     :members:
     :private-members:
 
+Syntax checking
+"""""""""""""""
+
+.. autoclass:: PyFunceble.status.SyntaxStatus
+    :members:
+    :private-members:
+
+Syntax Checking
+---------------
+
+Problematic
+^^^^^^^^^^^
+
+How can we check for syntax directly from the CLI ?
+
+Code documentation
+^^^^^^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.syntax
+   :members:
+   :private-members:
+
+.. autoclass:: PyFunceble.syntax.Syntax
+    :members:
+    :private-members:
+
 URL Testing
 -----------
 
