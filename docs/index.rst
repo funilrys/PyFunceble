@@ -50,6 +50,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    contributors
    special-thanks
    supporting-the-project
+   they-use-it
    license
    code-of-conduct
    contact
