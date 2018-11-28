@@ -289,7 +289,7 @@ class Prints:
             header_data.append(data)
 
             # We construct the header size.
-            # Note: our header size is formated line %s-sizes
+            # Note: our header size is formatted line %s-sizes
             # (the s at the end is part of the formatting.)
             header_size += before_size + str(size) + after_size
 
@@ -313,9 +313,9 @@ class Prints:
             # The header separator is given.
 
             return [
-                # We return the formated header (like we will do with print('%s' % 'hello'))
+                # We return the formatted header (like we will do with print('%s' % 'hello'))
                 header_size % tuple(header_data),
-                # We return the formated header separator.
+                # We return the formatted header separator.
                 header_size % tuple(header_separator_data),
             ]
 
@@ -425,20 +425,20 @@ class Prints:
                 # We generate the before header.
                 self._before_header()
 
-                for formated_template in self._header_constructor(to_print):
-                    # We loop through the formated template.
+                for formatted_template in self._header_constructor(to_print):
+                    # We loop through the formatted template.
 
                     if not self.only_on_file:
                         # We do not have to print only on file.
 
-                        # We print on screen the formated header template.
-                        print(formated_template)
+                        # We print on screen the formatted header template.
+                        print(formatted_template)
 
                     if not PyFunceble.CONFIGURATION["no_files"] and self.output:
                         # An output destination is given.
 
-                        # We write the file with the formated header template.
-                        File(self.output).write(formated_template + "\n")
+                        # We write the file with the formatted header template.
+                        File(self.output).write(formatted_template + "\n")
 
     def _data_constructor(self, size):
         """
@@ -576,14 +576,14 @@ class Prints:
                     # The content is not a list.
 
                     # We raise an exception.
-                    raise Exception("Output not correctly formated.")
+                    raise Exception("Output not correctly formatted.")
             else:
                 # The given output does not already exist.
 
                 # We save our data to print into the output.
                 #
                 # Note: We do not have to take care if self.data_to_print is a list
-                # formated or not because this method should not be called if it is
+                # formatted or not because this method should not be called if it is
                 # not the case.
                 Dict(self.data_to_print).to_json(self.output)
         else:
@@ -652,7 +652,7 @@ class Prints:
             self._before_header()
 
             for data in self._header_constructor(to_print, False):
-                # We loop through the formated data.
+                # We loop through the formatted data.
 
                 if self.template.lower() in PyFunceble.STATUS["list"][
                     "generic"

@@ -86,7 +86,7 @@ class Check:
         except KeyError:
             PublicSuffix(False).load()
 
-    def is_url_valid(self, url=None, return_base=False, return_formated=False):
+    def is_url_valid(self, url=None, return_base=False, return_formatted=False):
         """
         Check if the given URL is valid.
 
@@ -95,12 +95,12 @@ class Check:
 
         :param return_base:
             Allow us the return of the url base (if URL formatted correctly).
-        :type return_formated: bool
+        :type return_formatted: bool
 
-        :param return_formated:
+        :param return_formatted:
             Allow us to get the URL converted to IDNA if the conversion
             is activated.
-        :type return_formated: bool
+        :type return_formatted: bool
 
 
         :return: The validity of the URL or its base.
@@ -156,7 +156,7 @@ class Check:
                     # and
                     # * The url base is a valid IP.
 
-                    if PyFunceble.CONFIGURATION["idna_conversion"] and return_formated:
+                    if PyFunceble.CONFIGURATION["idna_conversion"] and return_formatted:
                         # * We have to convert to IDNA.
                         # and
                         # * We have to return the converted full URL.
@@ -171,7 +171,7 @@ class Check:
                             occurences=1,
                         ).replace()
 
-                    if return_formated:
+                    if return_formatted:
                         # * We do not have to convert to IDNA.
                         # but
                         # * We have to return the full URL.
@@ -190,7 +190,7 @@ class Check:
             except TypeError:
                 pass
 
-        if return_formated:
+        if return_formatted:
             # We have to return an URL.
 
             # We return the initily given URL.

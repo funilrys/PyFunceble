@@ -468,9 +468,9 @@ class Dict:
     @classmethod
     def from_json(cls, data):
         """
-        Convert a JSON formated string into a dictionary.
+        Convert a JSON formatted string into a dictionary.
 
-        :param data: A JSON formated string to convert to dict format.
+        :param data: A JSON formatted string to convert to dict format.
         :type data: str
 
         :return: The dict representation of the JSON formatted string.
@@ -489,9 +489,9 @@ class Dict:
     @classmethod
     def from_yaml(cls, data):
         """
-        Convert a YAML formated string into a dictionary.
+        Convert a YAML formatted string into a dictionary.
 
-        :param data: A YAML formated string to convert to dict format.
+        :param data: A YAML formatted string to convert to dict format.
         :type data: str
 
         :return: The dict representation of the YAML formatted string.
@@ -673,7 +673,7 @@ class List:  # pylint: disable=too-few-public-methods
 
     def format(self):
         """
-        Return a well formated list. Basicaly, it's sort a list and remove duplicate.
+        Return a well formatted list. Basicaly, it's sort a list and remove duplicate.
 
         :return: A sorted, without duplicate, list.
         :rtype: list
@@ -687,7 +687,7 @@ class List:  # pylint: disable=too-few-public-methods
 
     def custom_format(self, key_method, reverse=False):
         """
-        Return a well formated list. With the key_method as a function/method to format
+        Return a well formatted list. With the key_method as a function/method to format
         the elements before sorting.
 
         :param key_method:

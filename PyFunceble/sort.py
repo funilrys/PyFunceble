@@ -84,11 +84,11 @@ class Sort:  # pylint: disable=too-few-public-methods
         :param element: The element we are currently reading.
         :type element: str
 
-        :return: The formated element.
+        :return: The formatted element.
         :rtype: str
         """
 
-        # We remove all special characters and return the formated string.
+        # We remove all special characters and return the formatted string.
         return (
             Regex(element, cls.regex_replace, replace_with="@funilrys")
             .replace()
@@ -103,7 +103,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         :param element: The element we are currently reading.
         :type element: str
 
-        :return: The formated element.
+        :return: The formatted element.
         :rtype: str
 
         .. note::
@@ -158,14 +158,14 @@ class Sort:  # pylint: disable=too-few-public-methods
                         # We loop through the list of suffix of the extracted extension.
 
                         # We suffix the sufix with a point.
-                        formated_suffix = "." + suffix
+                        formatted_suffix = "." + suffix
 
-                        if element.endswith(formated_suffix):
+                        if element.endswith(formatted_suffix):
                             # The elements ends with the suffix.
 
                             # We get the position of the first character of the suffix in
                             # the parsed element.
-                            suffix_index = element.rindex(formated_suffix)
+                            suffix_index = element.rindex(formatted_suffix)
 
                             # We update the to_sort variable with the element without the suffix.
                             to_sort = element[:suffix_index]
@@ -205,14 +205,14 @@ class Sort:  # pylint: disable=too-few-public-methods
                         list(map(lambda x: x[::-1], tros_ot.split(".")))
                     )
 
-                    # We remove all special characters and return the formated string.
+                    # We remove all special characters and return the formatted string.
                     return (
                         Regex(reversion, cls.regex_replace, replace_with="@funilrys")
                         .replace()
                         .replace("@funilrys", "")
                     )
 
-                # We remove all special characters and return the formated string.
+                # We remove all special characters and return the formatted string.
                 return (
                     Regex(
                         full_extension + tros_ot,

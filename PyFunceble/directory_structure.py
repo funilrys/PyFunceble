@@ -141,13 +141,13 @@ class DirectoryStructure:  # pragma: no cover
 
                 # We convert the file content into a more flat format.
                 # We use `@@@` as glue and implicitly replacement for `\n`.
-                formated_content = "@@@".join(lines_in_list)
+                formatted_content = "@@@".join(lines_in_list)
 
                 # We update the local result (and implicitly the global result)
                 # with the files and directory informations/structure.
                 local_result = local_result.setdefault(
                     directories,
-                    {file: {"sha512": file_hash, "content": formated_content}},
+                    {file: {"sha512": file_hash, "content": formatted_content}},
                 )
 
         # We finally save the directory structure into the production file.

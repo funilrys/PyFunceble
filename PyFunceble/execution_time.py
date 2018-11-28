@@ -323,5 +323,5 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        # We return the formated execution time.
+        # We return the formatted execution time.
         return ":".join(list(self._calculate(start, end).values()))

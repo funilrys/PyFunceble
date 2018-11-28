@@ -152,7 +152,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             else:
                 # The extension is not already in our database.
 
-                # We append the currently formated extension and the line content.
+                # We append the currently formatted extension and the line content.
                 self.public_suffix_db.update({extension: [line]})
 
     def update(self):

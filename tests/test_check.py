@@ -217,11 +217,11 @@ class TestCheck(TestCase):
             expected = "http://%s/hello_world" % expected_domains[num]
             to_test = "http://%s/hello_world" % domain
 
-            actual = Check().is_url_valid(to_test, return_formated=True)
+            actual = Check().is_url_valid(to_test, return_formatted=True)
 
             self.assertEqual(expected, actual)
 
-            actual = Check(to_test).is_url_valid(return_formated=True)
+            actual = Check(to_test).is_url_valid(return_formatted=True)
             self.assertEqual(expected, actual)
 
     def test_is_url_valid_not_convert_idna(self):
@@ -244,11 +244,11 @@ class TestCheck(TestCase):
             to_test = "http://%s/hello_world" % domain
             expected = to_test
 
-            actual = Check().is_url_valid(to_test, return_formated=True)
+            actual = Check().is_url_valid(to_test, return_formatted=True)
 
             self.assertEqual(expected, actual)
 
-            actual = Check(to_test).is_url_valid(return_formated=True)
+            actual = Check(to_test).is_url_valid(return_formatted=True)
             self.assertEqual(expected, actual)
 
     def test_is_domain_valid(self):

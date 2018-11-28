@@ -305,7 +305,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             if int(regex_number) in case_data[0]:
                 # The regex number is into the currently read case data.
 
-                # We return a list with the formated elements.
+                # We return a list with the formatted elements.
                 # 1. We convert the day to 2 digits.
                 # 2. We convert the month to the unified format.
                 # 3. We return the year.
@@ -439,7 +439,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 if date:
                     # The date is given.
 
-                    # We return the formated date.
+                    # We return the formatted date.
                     return "-".join(date)
 
         # We return an empty string as we were not eable to match the date format.
@@ -475,7 +475,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         # We get the whois record.
         self.whois_record = Lookup().whois(PyFunceble.CONFIGURATION["referer"])
 
-        # We list the list of regex which will help us get an unformated expiration date.
+        # We list the list of regex which will help us get an unformatted expiration date.
         to_match = [
             r"expire:(.*)",
             r"expire on:(.*)",
@@ -559,7 +559,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                                 return_data=False,
                             ).match()
                         ):
-                            # The formated expiration date does not match our unified format.
+                            # The formatted expiration date does not match our unified format.
 
                             # We log the problem.
                             Logs().expiration_date(self.expiration_date)

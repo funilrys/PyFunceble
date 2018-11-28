@@ -268,7 +268,7 @@ class Core:  # pragma: no cover
                 self.url(
                     Check().is_url_valid(
                         self.url_to_test,  # pylint: disable=no-member
-                        return_formated=True,
+                        return_formatted=True,
                     )
                 )
             elif (
@@ -989,13 +989,13 @@ class Core:  # pragma: no cover
             if rematch_v4:
                 # The fourth extraction was successfull.
 
-                # We extend the formated elements from the extracted elements.
+                # We extend the formatted elements from the extracted elements.
                 result.extend(List(self._format_adblock_decoded(rematch_v4)).format())
 
             if rematch_v3:
                 # The second extraction was successfull.
 
-                # We extend the formated elements from the extracted elements.
+                # We extend the formatted elements from the extracted elements.
                 result.extend(List(self._format_adblock_decoded(rematch_v3)).format())
 
         # We return the result.
@@ -1064,7 +1064,7 @@ class Core:  # pragma: no cover
         else:
             # The adblock decoder is not activated.
 
-            # We get the formated list of domain to test.
+            # We get the formatted list of domain to test.
             list_to_test = list(map(self._format_domain, list_to_test))
 
         # We clean the output directory if it is needed.
