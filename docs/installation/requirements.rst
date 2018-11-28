@@ -3,7 +3,7 @@ Requirements
 
 Here is the list of requirements:
 
--   Python 3.x
+-   Python 3.6+
 -   :code:`colorama`
 -   :code:`domain2idna`
 -   :code:`PyYAML`
@@ -11,8 +11,8 @@ Here is the list of requirements:
 -   :code:`setuptools`
 -   :code:`urllib3`
 
-Python 3.x
-----------
+Python 3.6+
+-----------
 
 As we use for example ::
 
