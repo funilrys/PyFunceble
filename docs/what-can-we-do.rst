@@ -19,6 +19,7 @@ What can PyFunceble do?
 - "Mining" of domain or IP which are related to the tested element.
 - Auto-continuation of tests in case of system crash or script stop.
 - Filtering of a file content.
+
     - This feature will let us for example test all blogspot domain of the given file no matter the content of the file.
 - Set the user-agent to use for the tests.
 - Give some analytic depending of the HTTP status code (:code:`ACTIVE`, :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
@@ -26,6 +27,7 @@ What can PyFunceble do?
 - Print the execution time on screen and file.
 - Customization of the different option via command-line arguments or configuration file.
 - Continuous tests under Travis CI with the help of an auto saving and database system.
+
     - Set branch to push the result to for the auto saving system.
     - Set the minimal time before we autosave in order to avoid Travis CI limitation.
     - Set a command to execute at the end of the test.

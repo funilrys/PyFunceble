@@ -31,16 +31,16 @@ INVALID
 
 This status is returned when **all the following cases** are met:
 
-- Domain does not match ::
-
-   ^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$
-
-- IP does not match ::
-   
-   ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
+- Domain/IP does not match pass our syntax checker.
 
 - Domain extension is unregistered in `IANA`_ Root Zone Database.
 
-  - Understand by this that the extension is not present in the :code:`iana-domains-db.json` file.
+   .. note::
+      Understand by this that the extension is not present in the :code:`iana-domains-db.json` file.
 
 .. _IANA: https://www.iana.org/domains/root/db
+
+VALID
+^^^^^
+
+This status is returned when we are checking for syntax. It is the equivalent of :code:`ACTIVE` but for syntax checking.

@@ -21,7 +21,7 @@ The usage of this source comes from the comparison of the element extension agai
 SYNTAX
 ^^^^^^
 
-This source is always returned when the domain has the status :code:`INVALID`.
+This source is always returned when the domain has the status :code:`INVALID` or in the case that we are only checking for syntax instead of availability.
 The usage of this source comes from the comparison of the element against our domain, IP or URL syntax validation system.
 
 
