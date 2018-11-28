@@ -374,7 +374,7 @@ class TestAdblockDecode(TestCase):
             "[AdBlock Plus 2.0]",
             '##div[href^="http://funilrys.com/"]',
             'com##[href^="ftp://funceble.funilrys-funceble.com/"]',
-            "/banner/*/img^" "|github.io|",
+            "/banner/*/img^",
             "|github.io|",
             "||api.funilrys.com/widget/$",
         ]
