@@ -270,6 +270,15 @@ Install and load the default configuration at the mentioned location? [y/n] "
             production_config_link
         )
 
+        if not Version(True).is_cloned():
+            # The current version is not the cloned one.
+
+            # We download the link content and save it inside the default location.
+            #
+            # Note: We add this one in order to allow the enduser to always have
+            # a copy of our upstream configuration file.
+            Download(production_config_link, self.path_to_default_config).text()
+
         # And we download the link content and return the download status.
         return Download(production_config_link, self.path_to_config).text()
 
@@ -365,6 +374,114 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         # We do not need to download the file, so we are returning None.
         return None
+
+
+class Merge:  # pylint: disable=too-few-public-methods
+    """
+    Merge the old into the new configuration file.
+
+    :param configuration_path: The path to the configuration file to update.
+    :type configuration_path: str
+    """
+
+    def __init__(self, configuration_path):
+        self.path_to_config = configuration_path
+
+        if not self.path_to_config.endswith(PyFunceble.directory_separator):
+            self.path_to_config += PyFunceble.directory_separator
+
+        self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
+
+        self.upstream_config = Dict().from_yaml(
+            Download(PyFunceble.LINKS["config"], return_data=True).text()
+        )
+
+        if self.upstream_config["links"]["config"] != PyFunceble.LINKS["config"]:
+            self.upstream_config = Dict().from_yaml(
+                Download(self.upstream_config["links"]["repo"], return_data=True).text()
+            )
+
+        self.new_config = {}
+
+        self._load()
+
+    def _merge_values(self):
+        """
+        Simply merge the older into the new one.
+        """
+
+        to_remove = ["done", "error", "header_printed", "referer", "http_code"]
+
+        self.new_config = Dict(
+            Dict(self.upstream_config).merge(PyFunceble.CONFIGURATION)
+        ).remove_key(to_remove)
+
+    def _save(self):
+        """
+        Save the new configuration inside the configuration file.
+        """
+
+        Dict(self.new_config).to_yaml(self.path_to_config)
+
+    def _load(self):
+        """
+        Execute the logic behind the merging.
+        """
+
+        if "PYFUNCEBLE_AUTO_CONFIGURATION" not in PyFunceble.environ:
+            # The auto configuration environment variable is not set.
+
+            while True:
+                # We infinitly loop until we get a reponse which is `y|Y` or `n|N`.
+
+                # We ask the user if we should install and load the default configuration.
+                response = input(
+                    PyFunceble.Style.BRIGHT
+                    + PyFunceble.Fore.RED
+                    + "A configuration key is missing.\n"
+                    + PyFunceble.Fore.RESET
+                    + "Try to merge upstream configuration file into %s ? [y/n] "
+                    % (
+                        PyFunceble.Style.BRIGHT
+                        + self.path_to_config
+                        + PyFunceble.Style.RESET_ALL
+                    )
+                )
+
+                if isinstance(response, str):
+                    # The response is a string
+
+                    if response.lower() == "y":
+                        # The response is a `y` or `Y`.
+
+                        # We merge the old values inside the new one.
+                        self._merge_values()
+
+                        # And we save.
+                        self._save()
+
+                        print(
+                            PyFunceble.Style.BRIGHT + PyFunceble.Fore.GREEN + "Done!\n"
+                            "Please try again, if it happens again,"
+                            " please fill a new issue."
+                        )
+
+                        # And we break the loop as we got a satisfied response.
+                        break
+
+                    elif response.lower() == "n":
+                        # The response is a `n` or `N`.
+
+                        # We inform the user that something went wrong.
+                        raise Exception("Configuration key still missing.")
+        else:
+            # The auto configuration environment variable is set.
+
+            # We merge the old values inside the new one.
+            self._merge_values()
+
+            # And we save.
+            self._save()
 
 
 class Version:

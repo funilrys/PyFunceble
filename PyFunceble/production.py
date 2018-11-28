@@ -183,7 +183,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We save our version data into our `version.yaml` file.
                 Dict(self.data_version_yaml).to_yaml(
-                    PyFunceble.CURRENT_DIRECTORY + "version.yaml"
+                    PyFunceble.CURRENT_DIRECTORY + "version.yaml", flow_style=None
                 )
 
                 # We prepare the message we are going to print on screen.

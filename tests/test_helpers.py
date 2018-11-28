@@ -64,7 +64,7 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex
+from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex, List
 
 
 class TestHash(TestCase):
@@ -222,6 +222,63 @@ class TestCommand(TestCase):
         self.assertEqual(expected + "\n", actual)
 
 
+class TestList(TestCase):
+    """
+    Test PyFunceble.helpers.List()
+    """
+
+    def setUp(self):
+        """
+        Setup everything needed for the tests.
+        """
+
+        self.main_list = ["hello", "world", 5, {"hello": "world"}, [1, 2, 3]]
+
+    def test_merge(self):
+        """
+        Test List().merge().
+        """
+
+        to_merge = ["hello", "world", 5, {"world": "hello"}]
+        expected = ["hello", "world", 5, {"hello": "world", "world": "hello"}]
+
+        actual = List(self.main_list).merge(to_merge)
+        self.assertEqual(expected, actual)
+
+        to_merge = ["hello", "world", 5, {"world": "hello"}]
+        expected = [
+            "hello",
+            "world",
+            5,
+            {"hello": "world"},
+            [1, 2, 3],
+            {"world": "hello"},
+        ]
+
+        actual = List(self.main_list).merge(to_merge, False)
+        self.assertEqual(expected, actual)
+
+        to_merge = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
+        expected = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
+
+        actual = List(self.main_list).merge(to_merge)
+        self.assertEqual(expected, actual)
+
+        to_merge = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
+        expected = [
+            "hello",
+            "world",
+            5,
+            {"hello": "world"},
+            [1, 2, 3],
+            {"hello": "you!"},
+            [1, 2, 4, 5],
+        ]
+
+        actual = List(self.main_list).merge(to_merge, False)
+        self.assertEqual(expected, actual)
+
+
 class TestDict(TestCase):
     """
     Test PyFunceble.helpers.Dict().
@@ -344,11 +401,17 @@ class TestDict(TestCase):
 
         to_write = {"hello": ["This is PyFunceble!", "Uhh!"], "world": "Fun Ilrys"}
 
-        expected = """hello: [This is PyFunceble!, Uhh!]
+        expected = "{hello: [This is PyFunceble!, Uhh!], world: Fun Ilrys}\n"
+
+        Dict(to_write).to_yaml(file_to_read, flow_style=True)
+
+        expected = """hello:
+- This is PyFunceble!
+- Uhh!
 world: Fun Ilrys
 """
 
-        Dict(to_write).to_yaml(file_to_read)
+        Dict(to_write).to_yaml(file_to_read, flow_style=False)
 
         actual = File(file_to_read).read()
         self.assertEqual(expected, actual)
@@ -357,6 +420,39 @@ world: Fun Ilrys
 
         expected = False
         actual = PyFunceble.path.isfile(file_to_read)
+
+        self.assertEqual(expected, actual)
+
+    def test_merge(self):
+        """
+        Test of Dict().merge().
+        """
+
+        origin = {
+            "hello": ["This is PyFunceble!", "Uhh!"],
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "funilrys", "name": "Fun"},
+        }
+        to_merge = {
+            "hello": ["hello", "Uhh"],
+            "hello_world": {"author": "nobody", "surname": "body"},
+        }
+
+        expected = {
+            "hello": ["hello", "Uhh"],
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+        }
+        actual = Dict(origin).merge(to_merge)
+
+        self.assertEqual(expected, actual)
+
+        expected = {
+            "hello": ["This is PyFunceble!", "Uhh!", "hello", "Uhh"],
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+        }
+        actual = Dict(origin).merge(to_merge, False)
 
         self.assertEqual(expected, actual)
 

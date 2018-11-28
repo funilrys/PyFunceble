@@ -61,7 +61,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
+# pylint: disable=bad-continuation,too-many-lines
 import hashlib
 from json import decoder, dump, loads
 from os import remove
@@ -425,6 +425,77 @@ class Dict:
         # We return None.
         return None
 
+    def merge(self, to_merge, strict=True):
+        """
+        Merge the content of to_merge into the given main dictionnary.
+
+        :param to_merge: The dictionnary to merge.
+        :type to_merge: dict
+
+        :param strict:
+            Tell us if we have to strictly merge lists.
+
+            :code:`True`: We follow index
+            :code`False`: We follow element (content)
+        :type strict: bool
+
+        :return: The merged dict.
+        :rtype: dict
+        """
+
+        # We initiate a variable which will save our result.
+        result = {}
+
+        for element in to_merge:
+            # We loop throught the given dict to merge.
+
+            if element in self.main_dictionnary:
+                # The currently read element is in the main dict.
+
+                if isinstance(to_merge[element], dict) and isinstance(
+                    self.main_dictionnary[element], dict
+                ):
+                    # They are in both side dict.
+
+                    # We merge the dict tree and save into result.
+                    result[element] = Dict(self.main_dictionnary[element]).merge(
+                        to_merge[element]
+                    )
+
+                elif isinstance(to_merge[element], list) and isinstance(
+                    self.main_dictionnary[element], list
+                ):
+                    # They are in both side list.
+
+                    # We merge the lists and save into result.
+                    result[element] = List(self.main_dictionnary[element]).merge(
+                        to_merge[element], strict
+                    )
+                else:
+                    # They are not list, not dict.
+
+                    # We append the currently read element to the result.
+                    result.update({element: to_merge[element]})
+            else:
+                # The currently read element is not into the main
+                # dict.
+
+                # We append the currently read element to the result.
+                result.update({element: to_merge[element]})
+
+        for element in self.main_dictionnary:
+            # We loop through each element of the main dict.
+
+            if element not in result:
+                # The currently read element is not into
+                # the result.
+
+                # We append it to the result.
+                result[element] = self.main_dictionnary[element]
+
+        # We return the result.
+        return result
+
     def to_json(self, destination):
         """
         Save a dictionnary into a JSON file.
@@ -448,7 +519,7 @@ class Dict:
                 sort_keys=True,
             )
 
-    def to_yaml(self, destination):
+    def to_yaml(self, destination, flow_style=False):
         """
         Save a dictionnary into a YAML file.
 
@@ -463,7 +534,14 @@ class Dict:
             # Note: We always overwrite the destination.
 
             # We save the current dictionnary into a json format.
-            dump_yaml(self.main_dictionnary, file, indent=4)
+            dump_yaml(
+                self.main_dictionnary,
+                file,
+                encoding="utf-8",
+                allow_unicode=True,
+                indent=4,
+                default_flow_style=flow_style,
+            )
 
     @classmethod
     def from_json(cls, data):
@@ -706,6 +784,81 @@ class List:  # pylint: disable=too-few-public-methods
             return sorted(list(set(self.main_list)), key=key_method, reverse=reverse)
         except TypeError:  # pragma: no cover
             return self.main_list
+
+    def merge(self, to_merge, strict=True):
+        """
+        Merge to_merge into the given main list.
+
+        :param to_merge: The list to merge.
+        :type to_merge: list
+
+        :param strict:
+            Tell us if we have to respect index (True)
+            or not (False).
+        :type strict: bool
+
+        :return: The merged list.
+        :rtype: list
+        """
+
+        # We initiate a variable which will save the
+        # result
+        result = []
+
+        if strict:
+            # We are in strict mode.
+
+            for index, element in enumerate(to_merge):
+                # We loop through each element of the list to merge
+                # to the main dict.
+
+                try:
+                    if isinstance(element, dict) and isinstance(
+                        self.main_list[index], dict
+                    ):
+                        # The currently read element is a dict.
+
+                        # We merge its content into the main dict
+                        # and append into the result.
+                        result.append(Dict(self.main_list[index]).merge(element))
+                    elif isinstance(element, list) and isinstance(
+                        self.main_list[index], list
+                    ):
+                        # The currently read element is a list.
+
+                        # We loop through this method.
+                        result.append(List(self.main_list[index]).merge(element))
+                    else:
+                        # The currently read element is not a list
+                        # nor a dict.
+
+                        # We append the element to the result.
+                        result.append(element)
+                except IndexError:  # pragma: no cover
+                    # The index does not exist.
+                    # Which means that for example one list is bigger
+                    # than the other one.
+
+                    # We append the element to the result.
+                    result.append(element)
+        else:
+            # We are not is strict mode.
+
+            # We initiate the result with the main list.
+            result = self.main_list
+
+            for element in to_merge:
+                # We loop through the element to merge.
+
+                if element not in result:
+                    # The currently read element is not
+                    # in the result.
+
+                    # We append it to the result
+                    result.append(element)
+
+        # We return the result.
+        return result
 
 
 class Regex:  # pylint: disable=too-few-public-methods
