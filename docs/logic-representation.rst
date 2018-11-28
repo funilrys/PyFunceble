@@ -7,6 +7,9 @@ This flowchart is there for you!
 .. note::
     This is a simplified version of what we actually do.
 
+.. note::
+    The diagrams were generated with the help of `yEd Graph Editor`_.
+
 Domain testing
 --------------
 
@@ -27,3 +30,6 @@ URL testing
 .. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_url.png
     :alt: PyFunceble Logic representation for URL testing
     :target: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_url.png
+
+
+.. _yEd Graph Editor: https://www.yworks.com/products/yed

@@ -394,6 +394,7 @@ This argument will generate or update `public-suffix.json`.
 You prefer to run a program silently ? This argument is for you!
 
 :code:`--share-logs`
+^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the sharing of logs.
 

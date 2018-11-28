@@ -124,9 +124,10 @@ ___________________________________________
 Special Thanks
 --------------
 
-Thanks to those awesome organization(s) and people(s) for
+Thanks to those awesome organization(s), tools and or people(s) for
 
 *   Their awesome repository
+*   Their awesome tool/software/code
 *   Their awesome documentation
 *   Their breaking reports
 *   Their contributions
@@ -157,6 +158,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   `yEd Graph Editor`_ - `yWorks`_
 
 ___________________________________________
 
@@ -191,6 +193,8 @@ License
 .. _Dead-Hosts: https://github.com/dead-hosts
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
+.. _yEd Graph Editor: https://www.yworks.com/products/yed
+.. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@dnmTX: https://github.com/dnmTX

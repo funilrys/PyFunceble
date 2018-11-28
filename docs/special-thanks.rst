@@ -1,13 +1,14 @@
 Special Thanks
 ==============
 
-Thanks to those awesome organization(s) and people(s) for
+Thanks to those awesome organization(s), tools and or people(s) for
 
 *   Their awesome repository
+*   Their awesome tool/software/code
 *   Their awesome documentation
 *   Their breaking reports
 *   Their contributions
-*   Their current work
+*   Their current work/purpose
 *   Their promotion of Funceble and (or indirectly) PyFunceble
 *   Their support
 *   Their testings reports
@@ -34,12 +35,15 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   `yEd Graph Editor`_ - `yWorks`_
 
 
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
+.. _yEd Graph Editor: https://www.yworks.com/products/yed
+.. _yWorks: https://www.yworks.com/company
 
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@adblockplus: https://github.com/adblockplus

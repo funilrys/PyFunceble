@@ -48,7 +48,7 @@ The usage of :code:`PyFunceble --production` update :code:`version.yaml` and :co
 Coding conventions
 ------------------
 
-- We make sure that a method, a function, and a class **has a doctring**.
+- We make sure that a method, a function, and a class **have doctrings**.
 - One line should not exceed 79 characters for docstring and 100 characters for long declaration/assignment.
   - Exception granted for regular expressions or long string assignment.
 - We use `Black`_, *The uncompromising Python code formatter* , to format our code.
