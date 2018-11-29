@@ -155,6 +155,13 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
                         Command(command % message).execute()
                     else:
+                        if PyFunceble.CONFIGURATION["command"]:
+                            print(
+                                Command(PyFunceble.CONFIGURATION["command"]).execute()
+                            )
+
+                            self.travis_permissions()
+
                         Command(
                             command % PyFunceble.CONFIGURATION["travis_autosave_commit"]
                         ).execute()

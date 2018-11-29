@@ -1,4 +1,4 @@
-Code documentation
+Code Documentation
 ==================
 
 .. note::
@@ -12,8 +12,8 @@ Problematic
 
 How can we avoid writing the same thing every time ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule:: PyFunceble.helpers
    :members:
@@ -80,8 +80,8 @@ Auto-continue
 
 How can we continue the test after executable stop ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_continue
    :members:
@@ -103,8 +103,8 @@ Travis CI problematic
 
 How can we bypass the default Travis CI timeout of 45 minutes ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.auto_save
    :members:
@@ -122,8 +122,8 @@ Problematic
 
 How can we efficiently check the format of IP, domains and URL.
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.check
    :members:
@@ -142,8 +142,8 @@ Problematic
 
 How can we clean the :code:`output/` directory so we do not have collision between old and new files ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.clean
    :members:
@@ -162,8 +162,8 @@ Problematics
 * How can we avoid the usage of :code:`tool.py` ?
 * How can we make personalization more simple ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.config
    :members:
@@ -187,8 +187,8 @@ Core
 ----
 
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.core
    :members:
@@ -207,8 +207,8 @@ Problematics
 * How can we continuously test :code:`INACTIVE` and :code:`INVALID` domains or IP ?
 * How can we reduce the number of whois requests over time ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.database
    :members:
@@ -230,8 +230,8 @@ Problematic
 
 How can we give make the output directory less **annoying** after update ? 
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.directory_structure
    :members:
@@ -249,8 +249,8 @@ Problematic
 
 How to monitor the execution time of the session ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.execution_time
    :members:
@@ -268,8 +268,8 @@ Problematic
 
 How can we get the expiration date of a given domain ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.expiration_date
    :members:
@@ -287,8 +287,8 @@ Problematic
 
 How can we generate file which reflects the results of PyFunceble ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.generate
    :members:
@@ -306,8 +306,8 @@ Problematic
 
 How can we get the HTTP status code of the given domain or IP ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.http_code
    :members:
@@ -325,14 +325,33 @@ Problematic
 
 How can we get information from IANA ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.iana
    :members:
    :private-members:
 
 .. autoclass:: PyFunceble.iana.IANA
+    :members:
+    :private-members:
+
+Logs
+----
+
+Problematic
+^^^^^^^^^^^
+
+How can we efficiently generate and share logs.
+
+Documentation
+^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.logs
+   :members:
+   :private-members:
+
+.. autoclass:: PyFunceble.lookup.Logs
     :members:
     :private-members:
 
@@ -345,8 +364,8 @@ Problematics
 * How can we get information from WHOIS records ?
 * How can we check if a domain or IP have a valid pointer (nslookup)?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.lookup
    :members:
@@ -364,8 +383,8 @@ Problematic
 
 How can we get the list of domain or URL which link to the desired domain, IPv4 or URL ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.mining
     :members:
@@ -383,8 +402,8 @@ Problematic
 
 How can we calculate the percentage of each status ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.percentage
    :members:
@@ -402,8 +421,8 @@ Problematic
 
 How can we print information on screen and on file in a table format ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.prints
    :members:
@@ -421,8 +440,8 @@ Problematic
 
 How can we efficiently prepare the repository for push/production ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.production
    :members:
@@ -439,8 +458,8 @@ Problematic
 
 How can we get the list of all possible or at least most used domain suffix ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.publicsuffix
    :members:
@@ -458,8 +477,8 @@ Problematic
 
 How can we efficiently get the whois server to call for whois record request ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.referer
    :members:
@@ -477,8 +496,8 @@ Problematic
 
 How can we format the list to test (and the outputted information) in format other than the alphabetical format ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.sort
    :members:
@@ -496,8 +515,8 @@ Problematic
 
 How can we efficiently manage the statuses in function of the test type ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.status
    :members:
@@ -532,8 +551,8 @@ Problematic
 
 How can we check for syntax directly from the CLI ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.syntax
    :members:
@@ -551,8 +570,8 @@ Problematic
 
 How can we test full URL ?
 
-Code documentation
-^^^^^^^^^^^^^^^^^^
+Documentation
+^^^^^^^^^^^^^
 
 .. automodule::PyFunceble.url
    :members:

@@ -26,6 +26,18 @@
     
     **Description:** Enable / disable the auto continue system.
 
+:code:`command`
+---------------
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`""`
+
+    **Description:** Set the command to run before each commit (except the final one).
+
+.. note::
+    The parsed command is called only if :code:`auto_continue` and :code:`travis` are set to :code:`True`.
+
 :code:`command_before_end`
 --------------------------
 

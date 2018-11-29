@@ -2,6 +2,8 @@
 adblock: False
 # Enable / disable the auto continue system.
 auto_continue: True
+# Set the command to run before each commit (except the final one).
+command: ""
 # Set the command to run before the final commit.
 command_before_end: ""
 # Set the custom IP to use when we generate a line in the hosts file format.
