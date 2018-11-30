@@ -38,7 +38,6 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   `yEd Graph Editor`_ - `yWorks`_
 
 
-.. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/

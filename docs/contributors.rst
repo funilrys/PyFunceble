@@ -2,6 +2,7 @@ Contributors
 ============
 
 Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
+
 ::
 
     _______ _                 _          _                              _

@@ -81,6 +81,7 @@ What can PyFunceble do?
     - Set a command to execute at the end of the test.
     - Set the commit message for the auto saving system.
 - ... and a lot more!
+
 ___________________________________________
 
 Supporting the project
@@ -100,6 +101,7 @@ Contributors
 ------------
 
 Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
+
 ::
 
     _______ _                 _          _                              _
