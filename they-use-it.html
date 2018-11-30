@@ -20,6 +20,7 @@
 
     <title>PyFunceble</title>
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/font-logos@0.10.0/assets/font-logos.css">
 </head>
 
 <body class="pushable">
@@ -27,17 +28,17 @@
     <!-- Following Menu -->
     <div class="ui large top fixed menu transition hidden" style="display: undefined !important;">
         <div class="ui container">
-            <a href="/PyFunceble" class="item">Home</a>
+            <a href="/PyFunceble" class="active item">Home</a>
             <a href="https://pyfunceble.readthedocs.io" class="item">Docs</a>
-            <a href="/PyFunceble/they-use-it.html" class="active item">They use PyFunceble!</a>
+            <a href="/PyFunceble/they-use-it.html" class="item">They use PyFunceble!</a>
         </div>
     </div>
 
     <!-- Sidebar Menu -->
     <div class="ui vertical inverted sidebar menu left">
-        <a href="/PyFunceble" class="item">Home</a>
+        <a href="/PyFunceble" class="active item">Home</a>
         <a href="https://pyfunceble.readthedocs.io" class="item">Docs</a>
-        <a href="/PyFunceble/they-use-it.html" class="active item">They use PyFunceble!</a>
+        <a href="/PyFunceble/they-use-it.html" class="item">They use PyFunceble!</a>
     </div>
 
 
@@ -50,9 +51,9 @@
                     <a class="toc item">
                         <i class="sidebar icon"></i>
                     </a>
-                    <a href="/PyFunceble" class="item">Home</a>
+                    <a href="/PyFunceble" class="active item">Home</a>
                     <a href="https://pyfunceble.readthedocs.io" class="item">Docs</a>
-                    <a href="/PyFunceble/they-use-it.html" class="active item">They use PyFunceble!</a>
+                    <a href="/PyFunceble/they-use-it.html" class="item">They use PyFunceble!</a>
                 </div>
             </div>
 
@@ -61,13 +62,21 @@
                     <img class="ui centered huge image" src="https://github.com/funilrys/PyFunceble/raw/master/.assets/logo/RM.png"
                         alt="">
                 </div>
-                <h2>The tool to check the availability of domains, IPv4 or URL</h2>
-                <a href="https://github.com/funilrys/PyFunceble" class="ui huge button">
-                    <i class="icon github"></i>View on GitHub</a>
-                <a href="https://github.com/funilrys/PyFunceble/releases/latest" class="ui huge button">
-                    <i class="icon zip"></i>Download</a>
-                <a href="https://pyfunceble.readthedocs.io/" class="ui huge button">
-                    <i class="icon book"></i>Docs</a>
+                <h2>The tool to check the availability or syntax <br /> of domains, IPv4 or URL</h2>
+                <div class="row">
+                    <div class="colomn"><a href="https://github.com/funilrys/PyFunceble" class="ui huge button">
+                            <i class="icon github"></i>View on GitHub</a>
+                        <a href="https://pyfunceble.readthedocs.io/" class="ui huge button">
+                            <i class="icon book"></i>Docs</a></div>
+                    <div class="colomn">
+                        <a href="https://pypi.org/project/PyFunceble/" class="ui huge button">
+                            <i class="python icon"></i>PyPi</a>
+                        <a href="https://github.com/funilrys/PyFunceble/releases/latest" class="ui huge button">
+                            <i class="icon zip"></i>Download</a>
+                        <a href="https://aur.archlinux.org/packages/python-pyfunceble" class="ui huge button">
+                            <span class="fl-archlinux"></span> AUR</a>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -77,7 +86,7 @@
 
                 <div class="row">
                     <div class="center aligned column">
-                        <table class="ui sortable celled inverted table">
+                        <table class="ui sortable inverted black table">
                             <thead>
                                 <tr>
                                     <th class="sorted ascending">Repository / List Name</th>
@@ -384,7 +393,8 @@
                                     </td>
                                     <td>
                                         <h4 class="ui image header">
-                                            <img src="https://avatars3.githubusercontent.com/u/22780683?s=400&v=4" class="ui mini rounded image">
+                                            <img src="https://avatars3.githubusercontent.com/u/22780683?s=400&v=4"
+                                                class="ui mini rounded image">
                                             <div class="content">
                                                 Imre Kristoffer Eilertsen
                                             </div>
@@ -406,7 +416,8 @@
     <script type="text/javascript" src="https://semantic-ui.com/javascript/library/tablesort.js"></script>
     <script>
         $(document).ready(function () {
-            $('table').tablesort()
+            $('table').tablesort();
+
             // fix menu when passed
             $('.masthead')
                 .visibility({
