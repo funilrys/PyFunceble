@@ -32,7 +32,7 @@ Documentation as place to be!
 -----------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
 
 Want a local copy ? We get you covered!
 
