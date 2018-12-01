@@ -73,13 +73,24 @@ For development
 
 Execute the following and let's hack PyFunceble!
 
-Please note that we recommend that you develop PyFunceble under a virtualenv this way we ensure that it should work correctly.
+.. note::
+   We highly recommend you to develop PyFunceble under a :code:`virtualenv`.
 
 ::
 
    $ git clone https://github.com/funilrys/PyFunceble.git
    $ cd PyFunceble && git checkout dev && virtualenv venv
    $ source venv/bin/activate && pip3 install -e .
+
+.. note::
+   After installing with:
+
+   ::
+
+      $ source venv/bin/activate && pip3 install -e .
+   
+   * you only need to update the repository.
+   * you don't have to rerun the :code:`pip` command.
 
 For usage
 ^^^^^^^^^

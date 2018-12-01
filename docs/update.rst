@@ -69,7 +69,15 @@ For development
 
    $ cd PyFunceble && git checkout dev
    $ git fetch origin && git merge origin/dev
-   $ . venv/bin/activate && pip3 install -e .
+
+.. note::
+   As you previously installed with
+
+   ::
+
+      $ . venv/bin/activate && pip3 install -e .
+   
+   Only code/repository update is required.
 
 For usage
 ^^^^^^^^^
