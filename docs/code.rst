@@ -351,7 +351,7 @@ Documentation
    :members:
    :private-members:
 
-.. autoclass:: PyFunceble.lookup.Logs
+.. autoclass:: PyFunceble.logs.Logs
     :members:
     :private-members:
 
