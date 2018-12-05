@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.134.3.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.135.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -1139,7 +1139,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     url_file=ARGS.url_file,
                     link_to_test=ARGS.link,
                 )
-            except KeyError:
-                Merge(CURRENT_DIRECTORY)
+            except KeyError as e:
+                if not Version(True).is_cloned():
+                    Merge(CURRENT_DIRECTORY)
+                else:
+                    raise e
         except KeyboardInterrupt:
             stay_safe()

@@ -344,62 +344,6 @@ class TestsFormatDomain(TestCase):
             self.assertEqual(expected, actual)
 
 
-class TestAdblockDecode(TestCase):
-    """
-    Test if the adblock decoder works.
-    """
-
-    def setUp(self):
-        """
-        Setup everything needed for the test.
-        """
-
-        PyFunceble.load_config(True)
-        self.lines = [
-            "||funilrys.github.io$script,image",
-            "||google.com^$script,image",
-            "||twitter.com^helloworld.com",
-            "||api.google.com/papi/action$popup",
-            "facebook.com###player-above-2",
-            "~github.com,hello.world##.wrapper",
-            "@@||cnn.com/*ad.xml",
-            "!||world.hello/*ad.xml",
-            "bing.com,bingo.com#@##adBanner",
-            "!@@||funceble.world/js",
-            "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld",
-            "!funilrys.com##body",
-            "hello#@#badads",
-            "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
-            '##[href^="https://funceble.funilrys.com/"]',
-            "[AdBlock Plus 2.0]",
-            '##div[href^="http://funilrys.com/"]',
-            'com##[href^="ftp://funceble.funilrys-funceble.com/"]',
-            "/banner/*/img^",
-            "|github.io|",
-            "||api.funilrys.com/widget/$",
-        ]
-
-        self.expected = [
-            "funilrys.github.io",
-            "google.com",
-            "twitter.com",
-            "api.google.com",
-            "funceble.funilrys.com",
-            "funilrys.com",
-            "github.io",
-            "api.funilrys.com",
-        ]
-
-    def test_adblock_decode(self):
-        """
-        Test that the adblock decoding system is working proprely
-        """
-
-        actual = Core._adblock_decode(Core, self.lines)
-
-        self.assertEqual(self.expected, actual)
-
-
 class TestExtractDomain(TestCase):
     """
     Testing of the expiration date extraction subsystem.

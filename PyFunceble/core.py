@@ -80,6 +80,7 @@ from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
 from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
+from PyFunceble.adblock import AdBlock
 
 
 class Core:  # pragma: no cover
@@ -834,174 +835,6 @@ class Core:  # pragma: no cover
         return ""
 
     @classmethod
-    def _format_adblock_decoded(cls, to_format, result=None):
-        """
-        Format the exctracted adblock line before passing it to the system.
-
-        :param to_format: The extracted line from the file.
-        :type to_format: str
-
-        :param result: A list of the result of this method.
-        :type result: list
-
-        :return: The list of domains or IP to test.
-        :rtype: list
-        """
-
-        if not result:
-            # The result is not given.
-
-            # We set the result as an empty list.
-            result = []
-
-        for data in List(to_format).format():
-            # We loop through the different lines to format.
-
-            if data:
-                # The currently read line is not empty.
-
-                if "^" in data:
-                    # There is an accent in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split("^"), result)
-
-                if "#" in data:
-                    # There is a dash in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split("#"), result)
-
-                if "," in data:
-                    # There is a comma in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split(","), result)
-
-                if "!" in data:
-                    # There is an exclamation mark in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split("!"), result)
-
-                if "|" in data:
-                    # There is a vertival bar in the currently read line.
-
-                    # We recall this method but with the current result state
-                    # and splited data.
-                    return cls._format_adblock_decoded(data.split("|"), result)
-
-                if data:
-                    # * The currently read line is not empty.
-
-                    if Check().is_domain_valid(data) or Check().is_ip_valid(data):
-                        # * The currently read line is a valid domain.
-                        # or
-                        # * The currently read line is a valid IP.
-
-                        # We append the currently read line to the result.
-                        result.append(data)
-                    else:
-                        # * The currently read line is not a valid domain.
-                        # or
-                        # * The currently read line is not a valid IP.
-
-                        # We try to get the url base.
-                        url_base = Check().is_url_valid(data, return_base=True)
-
-                        if url_base:
-                            # The url_base is not empty or equal to False or None.
-
-                            # We appent the url base to the result.
-                            result.append(url_base)
-
-        # We return the result element.
-        return result
-
-    def _adblock_decode(self, list_to_test):
-        """
-        Convert the adblock format into a readable format which is understood
-        by the system.
-
-        :param list_to_test: The content of the file.
-        :type list_to_test: list
-
-        :return: The list of domains to test.
-        :rtype: list
-        """
-
-        # We initiate a variable which will save what we are going to return.
-        result = []
-
-        # We initiate the first regex we are going to use to get
-        # the element to format.
-        regex = r"^(?:.*\|\|)([^\/\$\^]{1,}).*$"
-
-        # We initiate the third regex we are going to use to get
-        # the element to format.
-        regex_v3 = (
-            r"(?:#+(?:[a-z]+?)?\[[a-z]+(?:\^|\*)\=(?:\'|\"))(.*\..*)(?:(?:\'|\")\])"
-        )
-
-        # We initiate the fourth regex we are going to use to get
-        # the element to format.
-        regex_v4 = r"^\|(.*\..*)\|$"
-
-        for line in list_to_test:
-            # We loop through the different line.
-
-            if (
-                line.startswith("!")
-                or line.startswith("@@")
-                or line.startswith("/")
-                or line.startswith("[")
-            ):
-                continue
-
-            # We extract the different group from our first regex.
-            rematch = Regex(
-                line, regex, return_data=True, rematch=True, group=0
-            ).match()
-
-            # We extract the different group from our fourth regex.
-            #
-            # Note: We execute the following in second because it is more
-            # specific that others.
-            rematch_v4 = Regex(
-                line, regex_v4, return_data=True, rematch=True, group=0
-            ).match()
-
-            # We extract the different group from our third regex.
-            rematch_v3 = Regex(
-                line, regex_v3, return_data=True, rematch=True, group=0
-            ).match()
-
-            if rematch:
-                # The first extraction was successfull.
-
-                # We extend the result with the extracted elements.
-                result.extend(rematch)
-
-            if rematch_v4:
-                # The fourth extraction was successfull.
-
-                # We extend the formatted elements from the extracted elements.
-                result.extend(List(self._format_adblock_decoded(rematch_v4)).format())
-
-            if rematch_v3:
-                # The second extraction was successfull.
-
-                # We extend the formatted elements from the extracted elements.
-                result.extend(List(self._format_adblock_decoded(rematch_v3)).format())
-
-        # We return the result.
-        return result
-
-    @classmethod
     def _extract_domain_from_file(cls):
         """
         Extract all non commented lines from the file we are testing.
@@ -1060,7 +893,7 @@ class Core:  # pragma: no cover
             # The adblock decoder is activated.
 
             # We get the list of domain to test (decoded).
-            list_to_test = self._adblock_decode(list_to_test)
+            list_to_test = AdBlock(list_to_test).decode()
         else:
             # The adblock decoder is not activated.
 

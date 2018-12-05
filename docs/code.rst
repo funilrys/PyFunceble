@@ -75,8 +75,30 @@ Documentation
     :members:
     :private-members:
 
+AdBlock
+-------
+
+Problematic
+^^^^^^^^^^^
+
+How can we efficiently decode adblock filter list ?
+
+Documentation
+^^^^^^^^^^^^^
+
+.. automodule::PyFunceble.adblock
+   :members:
+   :private-members:
+
+.. autoclass:: PyFunceble.adblock.AdBlock
+    :members:
+    :private-members:
+
 Auto-continue
 -------------
+
+Problematic
+^^^^^^^^^^^
 
 How can we continue the test after executable stop ?
 
@@ -94,9 +116,8 @@ Documentation
 Auto-save
 ---------
 
-This subsystem provide several logic around the auto-saving. 
-Actually only Travis CI is supported 
-
+.. note::
+    Only Travis CI is actually supported.
 
 Travis CI problematic
 ^^^^^^^^^^^^^^^^^^^^^
