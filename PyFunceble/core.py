@@ -334,7 +334,10 @@ class Core:  # pragma: no cover
             # We log the current percentage state.
             Percentage().log()
 
-            if self.domain_or_ip_to_test:  # pylint: disable=no-member
+            if (
+                self.domain_or_ip_to_test  # pylint: disable=no-member
+                or self.url_to_test  # pylint: disable=no-member
+            ):
                 # We are testing a domain.
 
                 # We show the colored logo.
