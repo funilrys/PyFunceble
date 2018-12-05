@@ -81,7 +81,10 @@ class AdBlock:  # pylint: disable=too-few-public-methods
 
         self._remove_ignored()
 
+        # We set the options separator.
         self.options_separator = "$"
+
+        # We set the separator of options
         self.option_separator = ","
 
     def _remove_ignored(self):
@@ -102,12 +105,21 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         :type line: str
         """
 
+        # We set the list of regex to match to be
+        # considered as ignored.
         to_ignore = [r"(^!|^@@|^\/|^\[|^\.|^-|^_|^\?|^&)"]  # , r"(\$|,)(image)"]
 
         for element in to_ignore:
+            # We loop through the list of regex.
+
             if Regex(line, element, return_data=False).match():
+                # The currently read line match the currently read
+                # regex.
+
+                # We return true, it has to be ignored.
                 return True
 
+        # Wer return False, it does not has to be ignored.
         return False
 
     def _handle_options(self, options):
@@ -121,6 +133,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         :rtype: list
         """
 
+        # We initiate a variable which will save our result
         result = []
 
         # We initiate the regex which will be used to extract the domain listed
@@ -128,12 +141,17 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         regex_domain_option = r"domain=(.*)"
 
         for option in options:
+            # We loop through the list of option.
             try:
+                # We try to extract the list of domains from the currently read
+                # option.
                 domains = Regex(
                     option, regex_domain_option, return_data=True, rematch=True, group=0
                 ).match()[-1]
 
                 if domains:
+                    # We could extract something.
+
                     if self.aggressive:  # pragma: no cover
                         result.extend(
                             list(
@@ -144,10 +162,12 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                             )
                         )
                     else:
+                        # We return True.
                         return True
             except TypeError:
                 pass
 
+        # We return the result.
         return result
 
     @classmethod
@@ -163,15 +183,30 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
 
         if isinstance(element, list):
+            # The given element is a list.
+
+            # We get the base of each element of the list.
             return [cls._extract_base(x) for x in element]
 
+        # We get the base if it is an URL.
         base = Check(element).is_url_valid(return_base=True)
 
         if base:
+            # It is an URL.
+
+            # We return the extracted base.
             return base
 
         if "/" in element:
+            # / is in the given element.
+
+            # We return the first element before the
+            # first /
             return element.split("/")[0]
+
+        # / is not in the given element.
+
+        # We return the given element.
         return element
 
     def decode(self):
