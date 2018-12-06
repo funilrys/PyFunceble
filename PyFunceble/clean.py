@@ -96,7 +96,7 @@ class Clean:
                 if (
                     number_of_tested == 0
                     or list_to_test[number_of_tested - 1] == list_to_test[-1]
-                    or number_of_tested == len(list_to_test)
+                    or number_of_tested >= len(list_to_test)
                 ):
                     # * If the number of tested is null,
                     # or
