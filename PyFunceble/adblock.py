@@ -391,7 +391,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         if url_base:
                             # The url_base is not empty or equal to False or None.
 
-                            # We appent the url base to the result.
+                            # We append the url base to the result.
                             result.append(url_base)
 
         # We return the result element.
