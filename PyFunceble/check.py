@@ -242,7 +242,7 @@ class Check:
         ):
             # * The element pass the domain validation.
             # and
-            # We are not checking if it is a subdomain.
+            # * We are not checking if it is a subdomain.
 
             # We return True. The domain is valid.
             return True
