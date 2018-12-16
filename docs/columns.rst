@@ -1,7 +1,7 @@
 Columns
 =======
 
-Because PyFunceble provide multiple information in a table, we choosed to document them all.
+Because PyFunceble provides multiple information in a table, we chose to document them all.
 The objective of this page is to reflect what the code actually do in a more clear and understandable way.
 
 .. include:: columns/domains.rst

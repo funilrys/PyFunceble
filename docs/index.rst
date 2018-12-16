@@ -37,6 +37,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Contents
 
    what-can-we-do
+   dead-hosts
    installation
    update
    configuration
@@ -47,6 +48,8 @@ As an example, its auto-continue system coupled with its auto-save system allows
    logic-representation
    api
    code
+   issues
+   faq
    contributors
    special-thanks
    supporting-the-project
