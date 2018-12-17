@@ -41,7 +41,7 @@ With your favorite AUR helper
 """""""""""""""""""""""""""""
 
 .. warning::
-    We do not recommend any AUR helper but keep in mind that some AUR helper are "better" than other.
+    We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
     For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
 
 ::
@@ -128,7 +128,7 @@ The package can be found at https://aur.archlinux.org/packages/python-pyfunceble
 **With your favorite AUR helper**
 
 .. warning::
-    We do not recommend any AUR helper but keep in mind that some AUR helper are "better" than other.
+    We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
     For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
 
 ::

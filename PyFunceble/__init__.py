@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.136.8.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.136.9.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -442,7 +442,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-a",
                     "--all",
                     action="store_false",
-                    help="Output all available informations on screen. %s"
+                    help="Output all available information on the screen. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["less"])
@@ -489,7 +489,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--cmd",
                     type=str,
                     help="Pass a command to run before each commit "
-                    "(except the final one) under the travis mode. %s"
+                    "(except the final one) under the Travis mode. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["command_before_end"])
@@ -501,7 +501,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--cmd-before-end",
                     type=str,
                     help="Pass a command to run before the results "
-                    "(final) commit under the travis mode. %s"
+                    "(final) commit under the Travis mode. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["command_before_end"])
@@ -552,7 +552,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-dbr",
                     "--days-between-db-retest",
                     type=int,
-                    help="Set the numbers of day(s) between each retest of domains present "
+                    help="Set the numbers of days between each retest of domains present "
                     "into inactive-db.json. %s"
                     % (
                         CURRENT_VALUE_FORMAT
@@ -613,7 +613,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 PARSER.add_argument(
                     "--hierarchical",
                     action="store_true",
-                    help="Switch the value of the hierarchical sorting of tested file. %s"
+                    help="Switch the value of the hierarchical sorting of the tested file. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["hierarchical_sorting"])
@@ -664,7 +664,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 PARSER.add_argument(
                     "-ip",
                     type=str,
-                    help="Change the ip to print in the hosts files. %s"
+                    help="Change the IP to print in the hosts files with the given one. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["custom_ip"])
@@ -676,7 +676,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--json",
                     action="store_true",
                     help="Switch the value of the generation "
-                    "of the json list of domain. %s"
+                    "of the JSON formatted list of domains. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["generate_json"])
@@ -726,7 +726,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-n",
                     "--no-files",
                     action="store_true",
-                    help="Switch the value the production of output files. %s"
+                    help="Switch the value of the production of output files. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["no_files"])
@@ -788,7 +788,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--plain",
                     action="store_true",
                     help="Switch the value of the generation "
-                    "of the plain list of domain. %s"
+                    "of the plain list of domains. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["plain_list_domain"])
@@ -882,7 +882,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 PARSER.add_argument(
                     "--travis",
                     action="store_true",
-                    help="Switch the value of the travis mode. %s"
+                    help="Switch the value of the Travis mode. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["travis"])

@@ -87,7 +87,7 @@
     **Description:** Enable / disable the generation of debug file(s).
 
 .. note::
-    This index has not effect if :code:`logs` is set to :code:`False`
+    This index has no effect if :code:`logs` is set to :code:`False`
 
 .. warning::
     Do not touch this index unless you a have good reason to.
@@ -260,7 +260,7 @@
     
     **Default value:** :code:`False`
     
-    **Description:** Enable / Disable the generation of output on screen.
+    **Description:** Enable / Disable the generation of output on the screen.
 
 :code:`referer`
 ---------------
@@ -269,7 +269,7 @@
     
     **Default value:** :code:`""`
     
-    **Description:** Set the referer of the element that is currently under tested.
+    **Description:** Set the referer of the element that is currently under test.
 
 .. warning::
     Do not touch this index unless you a have good reason to.
@@ -315,7 +315,7 @@
     
     **Default value:** :code:`True`
     
-    **Description:** Enable / disable the output of the percentage of each statuses.
+    **Description:** Enable / disable the output of the percentage of each status.
 
 :code:`simple`
 --------------
@@ -351,7 +351,7 @@
     **Description:** Enable / disable the syntax (only) testing.
 
 .. warning::
-    If this index is set to :code:`True`, we **ONLY** check for syntax not availability.
+    If this index is set to :code:`True`, we **ONLY** check for syntax, not availability.
 
 :code:`travis`
 --------------
@@ -360,7 +360,7 @@
     
     **Default value:** :code:`False`
     
-    **Description:** Enable / disable the Travis CI auto saving system.
+    **Description:** Enable / disable the Travis CI autosaving system.
 
 .. warning::
     Do not activate this index unless you are using PyFunceble under Travis CI.
@@ -381,7 +381,7 @@
     
     **Default value:** :code:`"PyFunceble - Results"`
     
-    **Description:** Set the default final commit message we have to use when have to save and all tests are finished.
+    **Description:** Set the default final commit message we want to use when we all tests are finished.
 
 :code:`travis_autosave_minutes`
 -------------------------------

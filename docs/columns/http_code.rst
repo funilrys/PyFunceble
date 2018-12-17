@@ -2,7 +2,7 @@ HTTP Code
 ---------
 
 .. note::
-  This section reflect exactly what the code do. So any changes made here should also be reported to the code or at least the configuration file.
+  This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
 
 .. note::
   A :code:`***` in this column means that it was impossible to catch the HTTP status code from the web server.
@@ -11,7 +11,7 @@ We have categorized the HTTP Code into 3 parts.
 
 - Active
 
-  - Consider those ones as the one that influences HTTP source logic.
+  - Consider those ones like the one that influences HTTP source logic.
   - Please note that the domain is automatically introduced into the official outputs but we keep a record of it :code:`output/Analytic/ACTIVE`.
 
 - Potentially Active

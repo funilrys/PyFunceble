@@ -2,7 +2,7 @@ Code Documentation
 ==================
 
 .. note::
-    This section will documents every parts (except the API section) of our code base.
+    This section will document every part (except the API section) of our code base.
 
 Helpers
 -------
@@ -10,7 +10,7 @@ Helpers
 Problematic
 ^^^^^^^^^^^
 
-How can we avoid writing the same thing every time ?
+How can we avoid writing the same thing every time?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -81,7 +81,7 @@ AdBlock
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently decode adblock filter list ?
+How can we efficiently decode AdBlock filter list?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -100,7 +100,7 @@ Auto-continue
 Problematic
 ^^^^^^^^^^^
 
-How can we continue the test after executable stop ?
+How can we continue the test after executable stop?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -122,7 +122,7 @@ Auto-save
 Travis CI problematic
 ^^^^^^^^^^^^^^^^^^^^^
 
-How can we bypass the default Travis CI timeout of 45 minutes ?
+How can we bypass the default Travis CI timeout of 45 minutes?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -141,7 +141,7 @@ Check
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently check the format of IP, domains and URL.
+How can we efficiently check the format of IP, domains, and URL?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -161,7 +161,7 @@ Cleaning
 Problematic
 ^^^^^^^^^^^
 
-How can we clean the :code:`output/` directory so we do not have collision between old and new files ?
+How can we clean the :code:`output/` directory so we do not have a collision between old and new files?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -180,8 +180,8 @@ Configuration
 Problematics
 ^^^^^^^^^^^^
 
-* How can we avoid the usage of :code:`tool.py` ?
-* How can we make personalization more simple ?
+* How can we avoid the usage of :code:`tool.py`?
+* How can we make personalization more simple?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -225,8 +225,8 @@ Database
 Problematics
 ^^^^^^^^^^^^
 
-* How can we continuously test :code:`INACTIVE` and :code:`INVALID` domains or IP ?
-* How can we reduce the number of whois requests over time ?
+* How can we continuously test :code:`INACTIVE` and :code:`INVALID` domains or IP?
+* How can we reduce the number of whois requests over time?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -249,7 +249,7 @@ Directory Structure
 Problematic
 ^^^^^^^^^^^
 
-How can we give make the output directory less **annoying** after update ? 
+How can we give make the output directory less **annoying** after an update? 
 
 Documentation
 ^^^^^^^^^^^^^
@@ -268,7 +268,7 @@ Execution Time
 Problematic
 ^^^^^^^^^^^
 
-How to monitor the execution time of the session ?
+How to monitor the execution time of the session?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -287,7 +287,7 @@ Expiration Date
 Problematic
 ^^^^^^^^^^^
 
-How can we get the expiration date of a given domain ?
+How can we get the expiration date of a given domain?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -306,7 +306,7 @@ Generation
 Problematic
 ^^^^^^^^^^^
 
-How can we generate file which reflects the results of PyFunceble ?
+How can we generate files which reflects the results of PyFunceble?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -325,7 +325,7 @@ HTTP Code
 Problematic
 ^^^^^^^^^^^
 
-How can we get the HTTP status code of the given domain or IP ?
+How can we get the HTTP status code of the given domain or IP?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -344,7 +344,7 @@ IANA
 Problematic
 ^^^^^^^^^^^
 
-How can we get information from IANA ?
+How can we get information from IANA?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -363,7 +363,7 @@ Logs
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently generate and share logs.
+How can we efficiently generate and share logs?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -382,7 +382,7 @@ Lookup
 Problematics
 ^^^^^^^^^^^^
 
-* How can we get information from WHOIS records ?
+* How can we get information from WHOIS records?
 * How can we check if a domain or IP have a valid pointer (nslookup)?
 
 Documentation
@@ -402,7 +402,7 @@ Mining
 Problematic
 ^^^^^^^^^^^
 
-How can we get the list of domain or URL which link to the desired domain, IPv4 or URL ?
+How can we get the list of domain or URL which link to the desired domain, IPv4 or URL?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -421,7 +421,7 @@ Percentage
 Problematic
 ^^^^^^^^^^^
 
-How can we calculate the percentage of each status ?
+How can we calculate the percentage of each status?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -440,7 +440,7 @@ Prints
 Problematic
 ^^^^^^^^^^^
 
-How can we print information on screen and on file in a table format ?
+How can we print information on the screen and on file in a table format?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -459,7 +459,7 @@ Production
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently prepare the repository for push/production ?
+How can we efficiently prepare the repository for push/production?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -477,7 +477,7 @@ Public Suffix
 Problematic
 ^^^^^^^^^^^
 
-How can we get the list of all possible or at least most used domain suffix ?
+How can we get the list of all possible or at least most used domain suffix?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -496,7 +496,7 @@ Referer
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently get the whois server to call for whois record request ?
+How can we efficiently get the whois server to call for whois record request?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -515,7 +515,7 @@ Sort
 Problematic
 ^^^^^^^^^^^
 
-How can we format the list to test (and the outputted information) in format other than the alphabetical format ?
+How can we format the list to test (and the outputted information) in a format other than the alphabetical format?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -534,7 +534,7 @@ Status
 Problematic
 ^^^^^^^^^^^
 
-How can we efficiently manage the statuses in function of the test type ?
+How can we efficiently manage the statuses in function of the test type?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -570,7 +570,7 @@ Syntax Checking
 Problematic
 ^^^^^^^^^^^
 
-How can we check for syntax directly from the CLI ?
+How can we check for syntax directly from the CLI?
 
 Documentation
 ^^^^^^^^^^^^^
@@ -589,7 +589,7 @@ URL Testing
 Problematic
 ^^^^^^^^^^^
 
-How can we test full URL ?
+How can we test full URL?
 
 Documentation
 ^^^^^^^^^^^^^

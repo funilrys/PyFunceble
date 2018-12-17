@@ -22,7 +22,7 @@
     
     **Default value:** :code:`dir_structure.json`
     
-    **Description:** Set the default filename of the file which have the structure to re-construct.
+    **Description:** Set the default filename of the file which has the structure to re-construct.
 
 .. note::
     This index has no influence with :code:`dir_structure_production.json`
@@ -160,7 +160,7 @@
     
     **Default value:** :code:`Analytic/`
     
-    **Description:** Set the default directory where we are going to put everything related to the http analytic.
+    **Description:** Set the default directory where we are going to put everything related to the HTTP analytic.
 
 :code:`outputs[analytic][directories][potentially_down]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -205,7 +205,7 @@
 
     **Type:** :code:`dict`
     
-    **Description:** Set the default name of some important files related to the :code:`http_codes[active]` index and the http analytic subsystem.
+    **Description:** Set the default name of some important files related to the :code:`http_codes[active]` index and the HTTP analytic subsystem.
 
 :code:`outputs[analytic][filenames][potentially_down]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -268,7 +268,7 @@
     
     **Default value:** :code:`date_format/`
     
-    **Description:** Set the default directory where we are going to put everything related to the data when the dates are in wrong format.
+    **Description:** Set the default directory where we are going to put everything related to the data when the dates are in the wrong format.
 
 :code:`outputs[logs][directories][no_referer]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -368,7 +368,7 @@
 
     **Default value:** :code:`output/`
     
-    **Description:** Set the directory name of the parent directory which will contains all previously nouned directories.
+    **Description:** Set the directory name of the parent directory which will contain all previously nouned directories.
 
 
 :code:`outputs[splited]`
@@ -385,4 +385,4 @@
     
     **Default value:** :code:`splited/`
     
-    **Description:** Set the default directory name where we are going to put the splited data.
+    **Description:** Set the default directory name where we are going to put the split data.

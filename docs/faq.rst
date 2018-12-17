@@ -3,7 +3,7 @@ Frequently Asked Questions
 
 .. include:: dead-hosts/global-note.rst
 
-How to speed up a bit the process/test ?
+How to speed up a bit the process/test?
 ----------------------------------------
 
 For now, we only invite you to disable the usage/request of the WHOIS record.

@@ -28,13 +28,13 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 ___________________________________________
 
-Documentation as place to be!
+Documentation as the place to be!
 -----------------------------
 
 Want to know more about **PyFunceble**?
 We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
 
-Want a local copy ? We get you covered!
+Want a local copy? We get you covered!
 
 Simply run the following and enjoy the documentation!
 
@@ -77,10 +77,10 @@ What can PyFunceble do?
 - Customization of the different option via command-line arguments or configuration file.
 - Continuous tests under Travis CI with the help of an auto saving and database system.
 
-  - Set branch to push the result to for the auto saving system.
+  - Set branch to push the result to for the autosaving system.
   - Set the minimal time before we autosave in order to avoid Travis CI limitation.
   - Set a command to execute at the end of the test.
-  - Set the commit message for the auto saving system.
+  - Set the commit message for the autosaving system.
 
 - ... and a lot more!
 

@@ -1,14 +1,14 @@
 Logs Sharing
 ============
 
-Why logs sharing ?
+Why logs sharing?
 ------------------
 
-We choosed to initiate the logs sharing as some actions can really be random when working with millions of domains.
+We chose to initiate the logs sharing as some actions can really be random when working with millions of domains.
 
-The idea and purpose of this feature is **ONLY** to make PyFunceble a better tool.
+The idea and purpose of this feature are**ONLY** to make PyFunceble a better tool.
 
-What do we share / collect?
+What do we share/collect?
 ---------------------------
 
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
@@ -26,7 +26,7 @@ How to share logs?
 
 The logs sharing is now activated by default.
 
-If you do not whish to share your logs simply change
+If you do not wish to share your logs simply change
 
 ::
 

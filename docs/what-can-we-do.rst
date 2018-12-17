@@ -29,9 +29,9 @@ What can PyFunceble do?
 - Customization of the different option via command-line arguments or configuration file.
 - Continuous tests under Travis CI with the help of an auto saving and database system.
 
-  - Set branch to push the result to for the auto saving system.
+  - Set branch to push the result to for the autosaving system.
   - Set the minimal time before we autosave in order to avoid Travis CI limitation.
   - Set a command to execute at the end of the test.
-  - Set the commit message for the auto saving system.
+  - Set the commit message for the autosaving system.
 
 - ... and a lot more!

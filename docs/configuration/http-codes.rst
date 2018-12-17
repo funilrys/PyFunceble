@@ -39,7 +39,7 @@
             - 205
             - 206
 
-    **Description:** List the HTTP status code which are considered as :code:`ACTIVE`.
+    **Description:** List the HTTP status codes which are considered as :code:`ACTIVE`.
 
 :code:`http_codes[list][potentially_down]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -6,7 +6,7 @@
     **Description:** Set the list of links which can be used/called by the system when needed.
 
     .. note::
-        The objective of this index is to avoid hard coded links when the configuration file is readable.
+        The objective of this index is to avoid hardcoded links when the configuration file is readable.
 
 
 :code:`links[api_date_format]`

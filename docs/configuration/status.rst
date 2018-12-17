@@ -47,7 +47,7 @@
     **Description:** Set the accepted :code:`generic` status.
 
 .. note::
-    This status is the one used to say the system that we have to print the complete information on screen.
+    This status is the one used to say the system that we have to print the complete information on the screen.
 
 :code:`status[list][http_active]`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,7 +113,7 @@
     **Description:** Set the official status name.
 
 .. note::
-    Those status are the ones that are printed on screen.
+    Those status are the ones that are printed on the screen.
 
 .. warning::
     After any changes here please delete :code:`dir_structure.json` and the :code:`output/` directory.

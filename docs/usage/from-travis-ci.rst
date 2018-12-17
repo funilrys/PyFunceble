@@ -38,7 +38,7 @@ Configuration
     python:
     - "3.6"
 
-    # The following will tell to Travis CI to ends as fast as possible.
+    # The following will tell Travis CI to ends as fast as possible.
     matrix:
         fast_finish: true
 
@@ -62,7 +62,7 @@ Configuration
         #     but you work without it if you set `travis: true` inside your `.PyFunceble.yaml`
         - PyFunceble --travis -f my_awesome_list --plain
 
-    # The following set the email notification logic.
+    # The following initiate email notification logic.
     notifications:
         # As we want to get a mail on failure and on status change, we set the following.
         on_success:   change

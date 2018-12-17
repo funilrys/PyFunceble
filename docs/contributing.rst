@@ -11,7 +11,7 @@ Before anything, please keep in mind the following. If one or more of those cond
 
 The :code:`master` branch is used only for releasing a new or stable version of the code. That's why we require that all contributions/modifications must be done under the :code:`dev` or a new branch.
 
-In order to gain some time and also understand what you are working on, your pull requests submission as long as your commit descriptions should be clear and complete as much as possible. We do an exception for commit with minor changed but big changes should have a complete description. Please ensure to use the following method when committing a big change.
+In order to gain some time and also understand what you are working on, your pull requests submission as long as your commit descriptions should be clear and complete as much as possible. We do an exception to commit with minor changed but big changes should have a complete description. Please ensure to use the following method when committing a big change.
 
 Steps before commit
 ^^^^^^^^^^^^^^^^^^^
@@ -51,7 +51,7 @@ Coding conventions
 - We make sure that a method, a function, and a class **have doctrings**.
 - One line should not exceed 79 characters for docstring and 100 characters for long declaration/assignment.
   - Exception granted for regular expressions or long string assignment.
-- We use `Black`_, *The uncompromising Python code formatter* , to format our code.
+- We use `Black`_, *The uncompromising Python code formatter*, to format our code.
 - Our code should pass :code:`pylint PyFunceble && pylint tests/*.py` with at least a score of 10.00/10.00
 - We do not forget to follow the steps before any commits.
 

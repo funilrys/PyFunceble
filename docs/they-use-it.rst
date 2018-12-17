@@ -1,7 +1,7 @@
 They use PyFunceble!
 ====================
 
-Just a list of tool/repository/code/infrastructure which use or used PyFunceble!
+Just a list of tool/repository/code/infrastructure which uses or used PyFunceble!
 
 * `.pl-host-file`_
 * `add.2o7Net`_

@@ -17,7 +17,7 @@ Once a list is set up inside our infrastructure, PyFunceble will
 test the list regularly and produce a :code:`clean.list` file which represents
 the list of domains/IP/URL which remains or became :code:`ACTIVE`.
 
-In addition, if needed, we can setup a list of GitHub username
+In addition, if needed, we can set up a list of GitHub username
 to @ping once the :code:`clean.list` is updated/generated.
 
 History of  Dead-Hosts

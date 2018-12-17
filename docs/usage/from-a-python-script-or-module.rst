@@ -29,7 +29,7 @@ Basic example
 
 
     """
-    This is a basic example which check syntax.
+    This is a basic example which checks syntax.
     """
 
     from PyFunceble import syntax_check as PyFuncebleDomainSyntax
@@ -59,7 +59,7 @@ This part is unnecessary but we wanted to document it!!
 
     Note:
     * Official output: ACTIVE, INACTIVE, INVALID
-    * You should always use PyFunceble().test() as it's the method which is specially
+    * You should always use PyFunceble().test() as it's the method which is especially
         suited for `__name__ != '__main__'` usage.
     """
     from PyFunceble import test as PyFunceble
@@ -112,7 +112,7 @@ This part is unnecessary but we wanted to document it!!
 Advanced example
 """"""""""""""""
 
-**PyFunceble** now allow you to get the following information as dictionary. 
+**PyFunceble** now allow you to get the following information as a dictionary. 
 The objective behind this feature is to let you know more about the element you are testing.
 
 ::
@@ -130,7 +130,7 @@ The objective behind this feature is to let you know more about the element you 
         "whois_record": None, # The whois record if whois_server is found. 
     }
 
-To get those information simply work with our interface like follow :)
+To get that information simply work with our interface like follow :)
 
 ::
 
