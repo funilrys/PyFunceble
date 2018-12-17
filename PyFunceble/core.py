@@ -753,24 +753,52 @@ class Core:  # pragma: no cover
             PyFunceble.CONFIGURATION["counter"]["number"].update({string: 0})
 
     @classmethod
-    def colorify_logo(cls):
+    def colorify_logo(cls, home=False):
         """
         Print the colored logo based on global results.
+
+        :param home: Tell us if we have to print the initial coloration.
+        :type home: bool
         """
 
         if not PyFunceble.CONFIGURATION["quiet"]:
             # The quiet mode is not activated.
 
-            if PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] >= 50:
+            to_print = []
+
+            if home:
+                # We have to print the initial logo.
+
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                    # We loop through each lines of the ASCII representation
+                    # of PyFunceble.
+
+                    # And we append to the data to print the currently read
+                    # line with the right coloration.
+                    to_print.append(PyFunceble.Fore.YELLOW + line + PyFunceble.Fore.RESET)
+
+            elif PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] >= 50:
                 # The percentage of up is greater or equal to 50%.
 
-                # We print the CLI logo in green.
-                print(PyFunceble.Fore.GREEN + PyFunceble.ASCII_PYFUNCEBLE)
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                    # We loop through each lines of the ASCII representation
+                    # of PyFunceble.
+
+                    # And we append to the data to print the currently read
+                    # line with the right coloration.
+                    to_print.append(PyFunceble.Fore.GREEN + line + PyFunceble.Fore.RESET)
             else:
                 # The percentage of up is less than 50%.
 
-                # We print the CLI logo in red.
-                print(PyFunceble.Fore.RED + PyFunceble.ASCII_PYFUNCEBLE)
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                    # We loop through each lines of the ASCII representation
+                    # of PyFunceble.
+
+                    # And we append to the data to print the currently read
+                    # line with the right coloration.
+                    to_print.append(PyFunceble.Fore.RED + line + PyFunceble.Fore.RESET)
+
+            print('\n'.join(to_print))
 
     @classmethod
     def _format_domain(cls, extracted_domain):

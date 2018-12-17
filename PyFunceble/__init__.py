@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.136.9.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.137.0.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -1125,7 +1125,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if not CONFIGURATION["quiet"]:
-                    print(Fore.YELLOW + ASCII_PYFUNCEBLE + Fore.RESET)
+                    Core.colorify_logo(home=True)
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()
