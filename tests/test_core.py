@@ -139,11 +139,20 @@ class TestsColoredLogo(BaseStdout):
 ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
 ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
 ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
-
 """
 
-        self.logo_green = PyFunceble.Fore.GREEN + logo
-        self.logo_red = PyFunceble.Fore.RED + logo
+        self.logo_green = "\n".join(
+            [
+                PyFunceble.Fore.GREEN + line + PyFunceble.Fore.RESET
+                for line in logo.split("\n")
+            ]
+        )
+        self.logo_red = "\n".join(
+            [
+                PyFunceble.Fore.RED + line + PyFunceble.Fore.RESET
+                for line in logo.split("\n")
+            ]
+        )
 
     def tests_colored_logo_red(self):
         """
@@ -154,7 +163,7 @@ class TestsColoredLogo(BaseStdout):
 
         Core.colorify_logo()
 
-        expected = self.logo_red
+        expected = self.logo_red + "\n"
         actual = sys.stdout.getvalue()
 
         self.assertEqual(expected, actual)
@@ -170,7 +179,7 @@ class TestsColoredLogo(BaseStdout):
 
         Core.colorify_logo()
 
-        expected = self.logo_green
+        expected = self.logo_green + "\n"
         actual = sys.stdout.getvalue()
 
         self.assertEqual(expected, actual)

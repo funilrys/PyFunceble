@@ -769,28 +769,32 @@ class Core:  # pragma: no cover
             if home:
                 # We have to print the initial logo.
 
-                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split("\n"):
                     # We loop through each lines of the ASCII representation
                     # of PyFunceble.
 
                     # And we append to the data to print the currently read
                     # line with the right coloration.
-                    to_print.append(PyFunceble.Fore.YELLOW + line + PyFunceble.Fore.RESET)
+                    to_print.append(
+                        PyFunceble.Fore.YELLOW + line + PyFunceble.Fore.RESET
+                    )
 
             elif PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] >= 50:
                 # The percentage of up is greater or equal to 50%.
 
-                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split("\n"):
                     # We loop through each lines of the ASCII representation
                     # of PyFunceble.
 
                     # And we append to the data to print the currently read
                     # line with the right coloration.
-                    to_print.append(PyFunceble.Fore.GREEN + line + PyFunceble.Fore.RESET)
+                    to_print.append(
+                        PyFunceble.Fore.GREEN + line + PyFunceble.Fore.RESET
+                    )
             else:
                 # The percentage of up is less than 50%.
 
-                for line in PyFunceble.ASCII_PYFUNCEBLE.split('\n'):
+                for line in PyFunceble.ASCII_PYFUNCEBLE.split("\n"):
                     # We loop through each lines of the ASCII representation
                     # of PyFunceble.
 
@@ -798,7 +802,7 @@ class Core:  # pragma: no cover
                     # line with the right coloration.
                     to_print.append(PyFunceble.Fore.RED + line + PyFunceble.Fore.RESET)
 
-            print('\n'.join(to_print))
+            print("\n".join(to_print))
 
     @classmethod
     def _format_domain(cls, extracted_domain):
