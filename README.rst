@@ -29,7 +29,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
 ___________________________________________
 
 Documentation as the place to be!
------------------------------
+---------------------------------
 
 Want to know more about **PyFunceble**?
 We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
