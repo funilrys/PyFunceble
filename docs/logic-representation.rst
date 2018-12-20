@@ -13,23 +13,23 @@ This flowchart is there for you!
 Domain testing
 --------------
 
-.. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_domain.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/domain.png
     :alt: PyFunceble Logic representation for domain testing
-    :target: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_domain.png
+    :target: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/domain.png
 
 IP testing
 ----------
 
-.. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_ip.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/ip.png
     :alt: PyFunceble Logic representation for IP testing
-    :target: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_ip.png
+    :target: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/ip.png
 
 URL testing
 -----------
 
-.. image:: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_url.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/url.png
     :alt: PyFunceble Logic representation for URL testing
-    :target: https://github.com/funilrys/PyFunceble/raw/dev/.assets/graphml/exported/PyFunceble_url.png
+    :target: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/url.png
 
 
 .. _yEd Graph Editor: https://www.yworks.com/products/yed

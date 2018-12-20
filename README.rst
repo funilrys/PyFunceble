@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.assets/logo/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
 The tool to check the availability of domains, IPv4 or URL
 ----------------------------------------------------------
