@@ -14,11 +14,12 @@ How do Dead-Hosts work?
 containers in order to test lists with PyFunceble.
 
 Once a list is set up inside our infrastructure, PyFunceble will
-test the list regularly and produce a :code:`clean.list` file which represents
-the list of domains/IP/URL which remains or became :code:`ACTIVE`.
+test the list regularly and the Dead-Hosts infrastructure will produce a
+:code:`clean.list` file which represents the list of domains/IP/URL
+which remains or became :code:`ACTIVE`.
 
 In addition, if needed, we can set up a list of GitHub username
-to @ping once the :code:`clean.list` is updated/generated.
+to @ping once a new test is finished.
 
 History of  Dead-Hosts
 -----------------------

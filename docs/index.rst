@@ -37,6 +37,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Contents
 
    what-can-we-do
+   in-action
    dead-hosts
    installation
    update
@@ -44,12 +45,12 @@ As an example, its auto-continue system coupled with its auto-save system allows
    usage
    columns
    logs-sharing
-   contributing
    logic-representation
    api
    code
    issues
    faq
+   contributing
    contributors
    special-thanks
    supporting-the-project

@@ -84,6 +84,11 @@ What can PyFunceble do?
 
 - ... and a lot more!
 
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+
+Please report to the `documentation for more GIF`_.
+
 ___________________________________________
 
 Supporting the project
@@ -156,13 +161,14 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
--   `IANA`_ - `ICANN`_
 -   Mitchell Krog - `@mitchellkrogza`_
+-   Mohammad Fares - `@faressoft`_
 -   Pi-Hole - `@pi-hole`_
 -   Public Suffix List - `@publicsuffix`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   `IANA`_ - `ICANN`_
 -   `yEd Graph Editor`_ - `yWorks`_
 
 ___________________________________________
@@ -193,24 +199,27 @@ License
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
-.. _Funceble: https://github.com/funilrys/funceble
-.. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _Dead-Hosts: https://github.com/dead-hosts
+.. _Funceble: https://github.com/funilrys/funceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
+.. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@dnmTX: https://github.com/dnmTX
+.. _@faressoft: https://github.com/faressoft
 .. _@jawz101: https://github.com/jawz101
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
-.. _@publicsuffix: https://github.com/publicsuffix
 .. _@PromoFaux: https://github.com/PromoFaux
+.. _@publicsuffix: https://github.com/publicsuffix
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
-.. _@ybreza: https://github.com/ybreza
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
+.. _@ybreza: https://github.com/ybreza
+
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html

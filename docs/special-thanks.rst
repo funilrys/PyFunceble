@@ -28,27 +28,29 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
--   `IANA`_ - `ICANN`_
 -   Mitchell Krog - `@mitchellkrogza`_
+-   Mohammad Fares - `@faressoft`_
 -   Pi-Hole - `@pi-hole`_
 -   Public Suffix List - `@publicsuffix`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   `IANA`_ - `ICANN`_
 -   `yEd Graph Editor`_ - `yWorks`_
 
 
-.. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
+.. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company
 
-.. _@PromoFaux: https://github.com/PromoFaux
 .. _@adblockplus: https://github.com/adblockplus
+.. _@faressoft: https://github.com/faressoft
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
+.. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
-.. _@ybreza: https://github.com/ybreza
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
+.. _@ybreza: https://github.com/ybreza
