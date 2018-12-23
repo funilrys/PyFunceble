@@ -1,5 +1,5 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
-    :alt: PyFunceble Logic representation
+    :alt: PyFunceble logo
 
 The tool to check the availability or syntax of domains, IPv4 or URL.
 =====================================================================
