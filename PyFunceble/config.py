@@ -796,14 +796,32 @@ class Version:
         PyFunceble which implicitly mean that we are in developement mode.
         """
 
+        if not PyFunceble.path.isdir(".git"):
+            # The git directory does not exist.
+
+            # We return False, the current version is not the cloned version.
+            return False
+
         # We list the list of file which can be found only in a cloned version.
         list_of_file = [
             ".coveragerc",
             ".coveralls.yml",
+            ".gitignore",
+            ".PyFunceble_production.yaml",
+            ".travis.yml",
             "CODE_OF_CONDUCT.md",
             "CONTRIBUTING.md",
+            "dir_structure_production.json",
+            "MANIFEST.in",
+            "README.rst",
+            "requirements.txt",
+            "setup.py",
             "version.yaml",
         ]
+
+        # We list the list of directory which can be found only in a cloned
+        # version.
+        list_of_dir = ["docs", "PyFunceble", "tests"]
 
         for file in list_of_file:
             # We loop through the list of file.
@@ -814,7 +832,18 @@ class Version:
                 # We return False, the current version is not the cloned version.
                 return False
 
-        # All files does exist in the current directory.
+        # All required files exist in the current directory.
+
+        for directory in list_of_dir:
+            # We loop through the list of directory.
+
+            if not PyFunceble.path.isdir(directory):
+                # The directory does not exist in the current directory.
+
+                # We return False, the current version is not the cloned version.
+                return False
+
+        # All required directories exist in the current directory.
 
         # We return True, the current version is a cloned version.
         return True
