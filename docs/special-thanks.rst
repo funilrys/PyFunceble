@@ -3,13 +3,13 @@ Special Thanks
 
 Thanks to those awesome organization(s), tools and or people(s) for
 
-*   Their awesome repository
-*   Their awesome tool/software/code
 *   Their awesome documentation
+*   Their awesome repository
+*   Their awesome tool/software/source code
 *   Their breaking reports
 *   Their contributions
 *   Their current work/purpose
-*   Their promotion of Funceble and (or indirectly) PyFunceble
+*   Their promotion of Py-Funceble
 *   Their support
 *   Their testings reports
 
