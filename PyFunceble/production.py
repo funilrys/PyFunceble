@@ -154,6 +154,9 @@ class Production:  # pylint: disable=too-few-public-methods
                     PyFunceble.CURRENT_DIRECTORY + ".PyFunceble_production.yaml"
                 )
 
+                # We fix the urls in the setup.py file.
+                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "setup.py")
+
                 # We fix the urls in the documentation index.
                 self._update_docs(
                     PyFunceble.CURRENT_DIRECTORY
@@ -170,6 +173,28 @@ class Production:  # pylint: disable=too-few-public-methods
                     + "docs"
                     + PyFunceble.directory_separator
                     + "logic-representation.rst"
+                )
+
+                # We fix the urls in the usage documentation.
+                self._update_docs(
+                    PyFunceble.CURRENT_DIRECTORY
+                    + PyFunceble.directory_separator
+                    + "docs"
+                    + PyFunceble.directory_separator
+                    + "usage"
+                    + PyFunceble.directory_separator
+                    + "from-a-terminal.rst"
+                )
+
+                # We fix the urls in the links configuration documentation.
+                self._update_docs(
+                    PyFunceble.CURRENT_DIRECTORY
+                    + PyFunceble.directory_separator
+                    + "docs"
+                    + PyFunceble.directory_separator
+                    + "configuration"
+                    + PyFunceble.directory_separator
+                    + "links.rst"
                 )
 
                 # We fix the urls in the code.
@@ -220,7 +245,7 @@ class Production:  # pylint: disable=too-few-public-methods
         Read the code and update all links.
         """
 
-        to_ignore = [".gitignore", ".keep", "production.py", "publicsuffix.py"]
+        to_ignore = [".gitignore", ".keep"]
 
         for root, _, files in PyFunceble.walk(
             PyFunceble.CURRENT_DIRECTORY
@@ -412,12 +437,18 @@ class Production:  # pylint: disable=too-few-public-methods
 
             # We map what we have to replace.
             # Format: {match:replacement}
-            regexes = {"/dev/": r"\/master\/", "=dev": "=master"}
+            regexes = {
+                "/%s/" % "dev": r"\/%s\/" % "master",
+                "=%s" % "dev": "=%s" % "master",
+            }
         elif self.is_master_version():
             # The current version is the master version.
 
             # We map what we have to replace.
-            regexes = {"/master/": r"\/dev\/", "=master": "=dev"}
+            regexes = {
+                "/%s/" % "master": r"\/%s\/" % "dev",
+                "=%s" % "master": "=%s" % "dev",
+            }
         else:
             # The current version is not the master nor the dev version.
 

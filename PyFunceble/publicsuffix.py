@@ -106,7 +106,10 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We initiate a variable which will save the link to the upstream public suffix file.
-        public_suffix_url = "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
+        public_suffix_url = (
+            "https://raw.githubusercontent.com/publicsuffix/list/%s/public_suffix_list.dat"
+            % "master"
+        )
 
         # And we return the content of the previously declared link.
         return Download(public_suffix_url, return_data=True).text()
