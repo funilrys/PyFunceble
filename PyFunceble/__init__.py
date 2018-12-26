@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.139.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "0.139.1.dev-beta (Sarcoline Puku / Mosquito)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -289,7 +289,7 @@ def url_syntax_check(url):  # pragma: no cover
     :param url: The URL to check the syntax for.
     :type url: str
 
-    :return The syntax validity.
+    :return: The syntax validity.
     :rtype: bool
     """
 
