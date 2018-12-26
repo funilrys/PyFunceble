@@ -20,16 +20,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    https://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://funilrys.github.io/PyFunceble/
@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "0.140.0.dev-beta (Sarcoline Puku / Mosquito)"
+VERSION = "1.0.0 (Blue Bontebok)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -412,12 +412,12 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                         + "with the help of "
                         + Style.BRIGHT
                         + Fore.GREEN
-                        + "https://pyfunceble.rtfd.io/en/dev/contributors.html "
+                        + "https://pyfunceble.rtfd.io/en/master/contributors.html "
                         + Style.RESET_ALL
                         + "&& "
                         + Style.BRIGHT
                         + Fore.GREEN
-                        + "https://pyfunceble.rtfd.io/en/dev/special-thanks.html",
+                        + "https://pyfunceble.rtfd.io/en/master/special-thanks.html",
                     ),
                     add_help=False,
                 )
