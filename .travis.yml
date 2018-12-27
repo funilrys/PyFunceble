@@ -21,13 +21,13 @@ matrix:
 
 install:
   - pip3 install --upgrade pip
-  - pip3 install pyfunceble
+  - pip3 install pyfunceble-dev
   - pip3 install pylint coverage coveralls pip-autoremove
 
 script:
   # Everything is into one line because we want the test to fail if one of those command fails.
   - PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
-  - pip-autoremove pyfunceble -y && coverage run setup.py test && python3 setup.py install && PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
+  - pip-autoremove pyfunceble-dev -y && coverage run setup.py test && python3 setup.py install && PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
   - echo "Lint PyFunceble" && pylint PyFunceble && echo "Lint tests" && pylint tests/*.py
 
 after_success:
