@@ -1,7 +1,7 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
-The tool to check the availability of domains, IPv4 or URL
-----------------------------------------------------------
+The tool to check the availability or syntax of domains, IPv4 or URL
+--------------------------------------------------------------------
 
 .. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
