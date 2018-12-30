@@ -31,9 +31,10 @@ install:
   - conda update -q conda
   - conda create -q -n test-environment python=${TRAVIS_PYTHON_VERSION} pip
   - source activate test-environment
-  - pip3 install --upgrade pip
-  - pip3 install pyfunceble-dev
-  - pip3 install pylint coverage coveralls pip-autoremove
+  - pip --version
+  - pip install --upgrade pip
+  - pip install pyfunceble-dev
+  - pip install pylint coverage coveralls pip-autoremove
 
 script:
   # Everything is into one line because we want the test to fail if one of those command fails.
