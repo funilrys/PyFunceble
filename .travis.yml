@@ -1,5 +1,4 @@
 env:
-  - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
   - PYTHON_VERSION="3.6.0"
   - PYTHON_VERSION="3.6.1"
   - PYTHON_VERSION="3.6.2"
@@ -9,6 +8,8 @@ env:
   - PYTHON_VERSION="3.6.6"
   - PYTHON_VERSION="3.7.0"
   - PYTHON_VERSION="3.7.1"
+  matrix:
+    - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
 language: generic
 sudo: false
