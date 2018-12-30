@@ -442,7 +442,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         :type old_status: str
         """
 
-        if PyFunceble.CONFIGURATION["file_to_test"]:
+        if (
+            "file_to_test" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["file_to_test"]
+        ):
             # We are testing a file.
 
             # We partially construct the path to the file to write/print.

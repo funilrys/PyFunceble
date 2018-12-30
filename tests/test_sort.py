@@ -210,13 +210,17 @@ class TestSort(TestCase):
         """
 
         expected = [
-            "google.com",
-            "adservice.google.com",
+            "chart.googleapis.com",
+            "ad-creatives-public.commondatastorage.googleapis.com",
+            "googleadservices.com",
             "pagead2.googleadservices.com",
             "partner.googleadservices.com",
             "www.googleadservices.com",
+            "google-analytics.com",
             "ssl.google-analytics.com",
             "www.google-analytics.com",
+            "google.com",
+            "adservice.google.com",
             "hello_world.google.com",
             "s0-2mdn-net.l.google.com",
             "ssl-google-analytics.l.google.com",
@@ -229,25 +233,25 @@ class TestSort(TestCase):
             "redirector.googlevideo.com",
             "0.gravatar.com",
             "1.gravatar.com",
-            "google-analytics.com",
-            "googleadservices.com",
-            "ad-creatives-public.commondatastorage.googleapis.com",
-            "imasdk.googleapis.com",
-            "chart.googleapis.com",
             "hello",
+            "imasdk.googleapis.com",
         ]
 
         actual = List(self.data_list).custom_format(Sort.hierarchical)
         self.assertEqual(expected, actual)
 
         expected = [
-            "https://google.com",
-            "https://adservice.google.com",
+            "https://chart.googleapis.com",
+            "https://ad-creatives-public.commondatastorage.googleapis.com",
+            "https://googleadservices.com",
             "https://pagead2.googleadservices.com",
             "https://partner.googleadservices.com",
             "https://www.googleadservices.com",
+            "https://google-analytics.com",
             "https://ssl.google-analytics.com",
             "https://www.google-analytics.com",
+            "https://google.com",
+            "https://adservice.google.com",
             "https://hello_world.google.com",
             "https://s0-2mdn-net.l.google.com",
             "https://ssl-google-analytics.l.google.com",
@@ -260,12 +264,8 @@ class TestSort(TestCase):
             "https://redirector.googlevideo.com",
             "https://0.gravatar.com",
             "https://1.gravatar.com",
-            "https://google-analytics.com",
-            "https://googleadservices.com",
-            "https://ad-creatives-public.commondatastorage.googleapis.com",
-            "https://imasdk.googleapis.com",
-            "https://chart.googleapis.com",
             "https://hello",
+            "https://imasdk.googleapis.com",
         ]
 
         actual = List(self.data_list_url).custom_format(Sort.hierarchical)

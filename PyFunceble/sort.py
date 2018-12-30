@@ -74,7 +74,7 @@ class Sort:  # pylint: disable=too-few-public-methods
 
     # We initiate a regex which will match everything which is not
     # a letter, a number or a point.
-    regex_replace = r"[^a-z0-9]"
+    regex_replace = r"[^a-zA-Z0-9]"
 
     @classmethod
     def standard(cls, element):
@@ -148,7 +148,8 @@ class Sort:  # pylint: disable=too-few-public-methods
                 # We get the position of the first letter of the extension.
                 extension_index = element.rindex(".") + 1
 
-                # We get the extension from the position of the last point.
+                # We get the extension from the position of the first letter
+                # of the extension.
                 extension = element[extension_index:]
 
                 if extension in PyFunceble.CONFIGURATION["psl_db"]:
@@ -196,6 +197,16 @@ class Sort:  # pylint: disable=too-few-public-methods
                 if "." in tros_ot:
                     # There is a point in the reversed string.
 
+                    # We prefix the full extension with the top level
+                    # domain name.
+                    full_extension = (
+                        tros_ot[: tros_ot.index(".")][::-1] + "." + full_extension
+                    )
+
+                    # We remove the tor level domain from the rest of
+                    # the reversed string.
+                    tros_ot = tros_ot[tros_ot.index(".") + 1 :]
+
                     # * We reverse each level of the parsed element.
                     # and
                     # * We glue each level of the parsed element with each other.
@@ -215,7 +226,7 @@ class Sort:  # pylint: disable=too-few-public-methods
                 # We remove all special characters and return the formatted string.
                 return (
                     Regex(
-                        full_extension + tros_ot,
+                        to_sort + full_extension,
                         cls.regex_replace,
                         replace_with="@funilrys",
                     )
@@ -228,7 +239,7 @@ class Sort:  # pylint: disable=too-few-public-methods
             # We return the parsed element.
             return element
 
-        # The url base is not found.
+        # The url base is found.
 
         # We get the position of the element.
         protocol_position = element.rindex(url_base)
