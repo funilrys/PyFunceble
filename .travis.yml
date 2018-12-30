@@ -32,6 +32,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip
+  - source activate test-environment
   - pip3 install --upgrade pip
   - pip3 install pyfunceble-dev
   - pip3 install pylint coverage coveralls pip-autoremove
