@@ -23,16 +23,15 @@ matrix:
   fast_finish: true
 
 install:
+  - export PATH="${HOME}/miniconda/bin:${PATH}"
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p ${HOME}/miniconda
-  - export PATH="${HOME}/miniconda/bin:$PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - conda create -q -n test-environment python=${TRAVIS_PYTHON_VERSION} pip
+  - conda create -q -n test-environment python="${TRAVIS_PYTHON_VERSION}" pip
   - source activate test-environment
   - pip --version
-  - pip install --upgrade pip
   - pip install pyfunceble-dev
   - pip install pylint coverage coveralls pip-autoremove
 
