@@ -1,18 +1,21 @@
 env:
-  global:
-    - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
-  - PYTHON_VERSION: "3.6.0"
-  - PYTHON_VERSION: "3.6.1"
-  - PYTHON_VERSION: "3.6.2"
-  - PYTHON_VERSION: "3.6.3"
-  - PYTHON_VERSION: "3.6.4"
-  - PYTHON_VERSION: "3.6.5"
-  - PYTHON_VERSION: "3.6.6"
-  - PYTHON_VERSION: "3.7.0"
-  - PYTHON_VERSION: "3.7.1"
+  - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
+  - PYTHON_VERSION="3.6.0"
+  - PYTHON_VERSION="3.6.1"
+  - PYTHON_VERSION="3.6.2"
+  - PYTHON_VERSION="3.6.3"
+  - PYTHON_VERSION="3.6.4"
+  - PYTHON_VERSION="3.6.5"
+  - PYTHON_VERSION="3.6.6"
+  - PYTHON_VERSION="3.7.0"
+  - PYTHON_VERSION="3.7.1"
 
 language: generic
-sudo: required
+sudo: false
+
+cache:
+  directories:
+    - ${HOME}/miniconda
 
 os:
   - linux
@@ -22,14 +25,13 @@ matrix:
   fast_finish: true
 
 install:
-  - sudo apt-get update
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH: $HOME/miniconda/bin:$PATH"
+  - bash miniconda.sh -b -p ${HOME}/miniconda
+  - export PATH=${HOME}/miniconda/bin:$PATH"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip
+  - conda create -q -n test-environment python=${TRAVIS_PYTHON_VERSION} pip
   - source activate test-environment
   - pip3 install --upgrade pip
   - pip3 install pyfunceble-dev
