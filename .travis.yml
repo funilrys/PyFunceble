@@ -15,10 +15,6 @@ env:
 language: generic
 sudo: false
 
-cache:
-  directories:
-    - ${HOME}/miniconda
-
 os:
   - linux
   - osx
