@@ -2,24 +2,36 @@ env:
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
 
-language:       python
-dist: xenial
+language: python
 sudo: required
 
 python:
-  - "3.6"
+  - "3.6.0"
+  - "3.6.1"
+  - "3.6.2"
+  - "3.6.3"
+  - "3.6.4"
   - "3.6.5"
   - "3.6.6"
-  - "3.7"
+  - "3.7.0"
+  - "3.7.1"
 
 os:
   - linux
-  #- osx
+  - osx
 
 matrix:
-  fast_finish:  true
+  fast_finish: true
 
 install:
+  - sudo apt-get update
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pip
   - pip3 install --upgrade pip
   - pip3 install pyfunceble-dev
   - pip3 install pylint coverage coveralls pip-autoremove
@@ -31,8 +43,8 @@ script:
   - echo "Lint PyFunceble" && pylint PyFunceble && echo "Lint tests" && pylint tests/*.py
 
 after_success:
-- coveralls
+  - coveralls
 
 notifications:
-  on_success:   change
-  on_failure:   always
+  on_success: change
+  on_failure: always
