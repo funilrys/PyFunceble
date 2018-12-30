@@ -63,8 +63,8 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.helpers import Dict, File
 from PyFunceble.directory_structure import DirectoryStructure
+from PyFunceble.helpers import Dict, File
 
 
 class ExecutionTime:  # pylint: disable=too-few-public-methods

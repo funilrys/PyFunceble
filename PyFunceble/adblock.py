@@ -64,7 +64,7 @@ License:
 # pylint: disable=bad-continuation
 
 from PyFunceble.check import Check
-from PyFunceble.helpers import Regex, List
+from PyFunceble.helpers import List, Regex
 
 
 class AdBlock:  # pylint: disable=too-few-public-methods

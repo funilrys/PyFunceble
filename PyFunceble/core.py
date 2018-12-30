@@ -66,6 +66,7 @@ License:
 from domain2idna import get as domain2idna
 
 import PyFunceble
+from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check
@@ -80,7 +81,6 @@ from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
 from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
-from PyFunceble.adblock import AdBlock
 
 
 class Core:  # pragma: no cover

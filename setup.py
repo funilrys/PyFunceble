@@ -77,6 +77,7 @@ License:
     SOFTWARE.
 """
 
+from platform import system
 from re import compile as comp
 from unittest import TestLoader
 
@@ -100,6 +101,9 @@ def _get_requirements():
 
     with open("requirements.txt") as file:
         requirements = file.read().splitlines()
+
+    if system().lower() == "darwin":
+        requirements.append("pyobjc>=5.1.2")
 
     return requirements
 
