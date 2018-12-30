@@ -2,7 +2,7 @@ env:
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION: PyFunceble
 
-language: python
+language: generic
 sudo: required
 
 python:
