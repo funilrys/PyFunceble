@@ -41,9 +41,18 @@ script:
   - echo "Lint PyFunceble" && pylint PyFunceble
   - echo "Lint tests" && pylint tests/*.py
   - PyFunceble -v
+  - PyFunceble --clean
+  - PyFunceble --clean-all
+  - rm -R output && PyFunceble --directory-structure && ls -al output
   - PyFunceble -ex -d github.com
-  - PyFunceble -ex -f .travis/list_to_test
-  - PyFunceble -ex --adblock -f .travis/adblock_to_test
+  - PyFunceble -ex -s -f .travis/list_to_test
+  - PyFunceble -ex --syntax -f .travis/adblock_to_test
+  - PyFunceble -ex -f .travis/list_to_test --json --plain
+  - PyFunceble -ex -f .travis/list_to_test # Normally, all inactive are not tested anymore.
+  - PyFunceble -ex --database -f .travis/list_to_test # And they will be retested.
+  - PyFunceble -ex -f --database --filter "\.info$" .travis/list_to_test # Only .info domains should be tested.
+  - PyFunceble -ex --adblock -a -f .travis/adblock_to_test
+  - PyFunceble -ex --link https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
 
 after_success:
   - coveralls
