@@ -105,7 +105,7 @@ elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
 else:  # pragma: no cover
     # We handle all other case and distributions specific cases.
 
-    if system().lower() == "linux":
+    if system().lower() == "linux" or system().lower() == "darwin":
         # We are under a Linux distribution.
 
         # We set the default configuration location path.
@@ -135,22 +135,6 @@ else:  # pragma: no cover
             #   * `~` soes not exists.
             # We set the current directory as the directory we are working with.
             CURRENT_DIRECTORY = getcwd() + directory_separator
-    elif system().lower() == "darwin":
-        # We are under a Darwin Kernel (probably MacOS)
-
-        import Cocoa
-
-        # We follow the directive we described in the documentation.
-        # But for those who want it in code...
-        #
-        # From Mac documentation:
-        #   To get the path to this directory use the NSApplicationSupportDirectory
-        #   search path key with the NSLocalDomainMask domain.
-        #
-        # We set the found path as the directory we are working with.
-        CURRENT_DIRECTORY = Cocoa.NSSearchPathForDirectoriesInDomains(
-            Cocoa.NSApplicationSupportDirectory, Cocoa.NSUserDomainMask, True
-        )[0]
     elif system().lower() == "windows":
         # We are under Windows.
 
