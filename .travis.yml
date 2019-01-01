@@ -16,7 +16,7 @@ language: generic
 sudo: false
 
 os:
-  - linux
+  #- linux
   - osx
 
 matrix:

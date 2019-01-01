@@ -138,11 +138,7 @@ else:  # pragma: no cover
     elif system().lower() == "darwin":
         # We are under a Darwin Kernel (probably MacOS)
 
-        from Cocoa import (  # pylint: disable=import-error
-            NSSearchPathForDirectoriesInDomains,
-            NSApplicationSupportDirectory,
-            NSUserDomainMask,
-        )
+        import Cocoa
 
         # We follow the directive we described in the documentation.
         # But for those who want it in code...
@@ -152,8 +148,8 @@ else:  # pragma: no cover
         #   search path key with the NSLocalDomainMask domain.
         #
         # We set the found path as the directory we are working with.
-        CURRENT_DIRECTORY = NSSearchPathForDirectoriesInDomains(
-            NSApplicationSupportDirectory, NSUserDomainMask, True
+        CURRENT_DIRECTORY = Cocoa.NSSearchPathForDirectoriesInDomains(
+            Cocoa.NSApplicationSupportDirectory, Cocoa.NSUserDomainMask, True
         )[0]
     elif system().lower() == "windows":
         # We are under Windows.
