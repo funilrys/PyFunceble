@@ -29,17 +29,16 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - conda create -q -n test-environment python="${TRAVIS_PYTHON_VERSION}" pip
+  - conda create -q -n test-environment python="${TRAVIS_PYTHON_VERSION}"
   - source activate test-environment
   - pip --version
-  - pip install pyfunceble-dev
-  - pip install pylint coverage coveralls pip-autoremove
+  - pip install pylint coverage coveralls
 
 script:
   # Everything is into one line because we want the test to fail if one of those command fails.
-  - PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
-  - pip-autoremove pyfunceble-dev -y && coverage run setup.py test && python3 setup.py install && PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
   - echo "Lint PyFunceble" && pylint PyFunceble && echo "Lint tests" && pylint tests/*.py
+  - coverage run setup.py test && python3 setup.py install
+  - PyFunceble -ex -d github.com  && PyFunceble -ex -f .travis/list_to_test && PyFunceble -ex --adblock -f .travis/adblock_to_test
 
 after_success:
   - coveralls
