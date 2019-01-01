@@ -138,7 +138,7 @@ else:  # pragma: no cover
     elif system().lower() == "darwin":
         # We are under a Darwin Kernel (probably MacOS)
 
-        from AppKit import (  # pylint: disable=import-error
+        from Cocoa import (  # pylint: disable=import-error
             NSSearchPathForDirectoriesInDomains,
             NSApplicationSupportDirectory,
             NSUserDomainMask,
