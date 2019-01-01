@@ -237,7 +237,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We install the latest directory structure file.
             self._install_directory_structure_file()
-        except FileNotFoundError:
+        except FileNotFoundError as exception:
             # But if the configuration file is not found.
 
             if PyFunceble.path.isfile(self.path_to_default_config):
@@ -251,8 +251,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
             else:
                 # The `DEFAULT_CONFIGURATION_FILENAME` file does not exists.
 
-                # We raile the exception we were handling.
-                raise FileNotFoundError
+                # We raise the exception we were handling.
+                raise exception
 
     def _install_production_config(self):
         """
@@ -299,7 +299,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We set the destination of the downloaded file.
         destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
 
-        if not Version(True).is_cloned():
+        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -330,7 +330,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
         )
 
-        if not Version(True).is_cloned():
+        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -361,7 +361,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"]
         )
 
-        if not Version(True).is_cloned():
+        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.

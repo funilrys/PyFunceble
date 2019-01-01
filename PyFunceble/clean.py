@@ -65,6 +65,7 @@ License:
 import PyFunceble
 from PyFunceble.core import Core
 from PyFunceble.helpers import File
+from PyFunceble.config import Load
 
 
 class Clean:
@@ -238,3 +239,6 @@ class Clean:
 
             # And we delete the currently read file.
             File(file).delete()
+
+        if clean_all:  # pragma: no cover
+            Load(PyFunceble.CURRENT_DIRECTORY)
