@@ -36,8 +36,8 @@ install:
   - pip install pylint coverage coveralls
 
 script:
-  - coverage run setup.py test
   - python setup.py install
+  - coverage run setup.py test
   - echo "Lint PyFunceble" && pylint PyFunceble
   - echo "Lint tests" && pylint tests/*.py
   - PyFunceble -ex -d github.com
