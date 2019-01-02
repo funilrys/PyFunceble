@@ -11,6 +11,7 @@ Just a list of tool/repository/code/infrastructure which uses or used PyFunceble
 * `adfilt`_
 * `Badd-Boyz-Hosts`_
 * `Badger Sett`_
+* `blacklist`_
 * `CoinBlockerLists`_
 * `cookies_filters`_
 * `Facebook Zero Hosts Block`_
@@ -37,6 +38,7 @@ Just a list of tool/repository/code/infrastructure which uses or used PyFunceble
 .. _adfilt : https://github.com/DandelionSprout/adfilt
 .. _Badd-Boyz-Hosts : https://github.com/mitchellkrogza/Badd-Boyz-Hosts
 .. _Badger Sett : https://github.com/EFForg/badger-sett
+.. _Blacklist : https://github.com/anudeepND/blacklist
 .. _CoinBlockerLists : https://gitlab.com/ZeroDot1/CoinBlockerLists
 .. _cookies_filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/cookies_filters/adblock_cookies.txt
 .. _Facebook Zero Hosts Block : https://github.com/kowith337/PersonalFilterListCollection/blob/master/hosts/hosts_facebook0.txt
