@@ -126,9 +126,9 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
+-   speedmann - `@speedmann`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
-
 ___________________________________________
 
 Special Thanks
@@ -218,6 +218,7 @@ License
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
+.. _@speedmann: https://github.com/speedmann
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
