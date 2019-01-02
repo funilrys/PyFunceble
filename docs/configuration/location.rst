@@ -30,10 +30,10 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
 
 .. _Travis CI: https://travis-ci.org/
 
-Linux
-"""""
+Linux and MacOS (Darwin Kernel)
+"""""""""""""""""""""""""""""""
 
-Under Linux, we look for the following directories in their order. If any configuration directory is found, the system proposes you to install them automatically on the first configuration file.
+Under Linux and MacOS, we look for the following directories in their order. If any configuration directory is found, the system proposes you to install them automatically on the first configuration file.
 
 1. :code:`~/.config/PyFunceble`
 2. :code:`~/.PyFunceble`
@@ -42,38 +42,8 @@ Under Linux, we look for the following directories in their order. If any config
 .. note::
     If the parent directory does not exist, we move to the next possible location in the given order. 
 
-    This means that under most distributions, we consider :code:`~/.config/PyFunceble` as the configuration location. 
-    But if  the :code:`~/.config` directory does not exist, we fallback to :code:`~/.PyFunceble` as the configuration location.
-
-Mac (Darwin Kernel)
-""""""""""""""""""""
-
-As mentioned by the `Mac Application Environment`_ documentation:
-
-    The Application Support directory is where your app stores any type of file that supports the app but is not required for the app to run, such as document templates or configuration files. 
-    The files should be app-specific but should never store user data. This directory is located inside the Library directory.
-
-This means that we follow that direction for our application configuration files. 
-
-.. note::
-    The reason we do not use the :code:`Library directory` is because of the mention:
-
-        In OS X v10.7 and later, the Finder hides the Library directory in the user’s home folder by default. Therefore, you should never store files in this directory that you want the user to access. 
-
-    But as we except the user to modify the configuration files as they want, we fall back to the following.
-
-Under MacOS we look for the following directories in their order. If any configuration directory is found, the system proposes you to install them automatically on the first configuration file.
-
-1. :code:`~/Library/Application Support/PyFunceble`
-2. :code:`${PWD}`
-
-.. _Mac Application Environment: https://developer.apple.com/library/archive/documentation/General/Conceptual/MOSXAppProgrammingGuide/AppRuntime/AppRuntime.html
-
-.. note::
-    If the parent directory does not exist, we move to the next possible location in the given order. 
-
-    This means that under most MacOS, we consider :code:`~/Library/Application Support/PyFunceble` as the configuration location. 
-    But if the :code:`~/Library/Application Support` directory does not exist, we fall back to the current directory as the configuration location.
+    This means that under most Linux distributions and MacOS versions, we consider :code:`~/.config/PyFunceble` as the configuration location. 
+    But if the :code:`~/.config` directory does not exist, we fallback to :code:`~/.PyFunceble` as the configuration location.
 
 Windows
 """""""
