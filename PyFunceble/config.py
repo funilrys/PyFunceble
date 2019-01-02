@@ -552,6 +552,25 @@ class Version:
         return (digits, non_digits[0])
 
     @classmethod
+    def check_versions_literally(cls, local, upstream):
+        """
+        Compare the given versions literally.
+
+        :param local: The local version converted by split_versions().
+        :type local: str
+
+        :param upstream: The upstream version converted by split_versions().
+        :type upstream: str
+
+        :return:
+            - True: local == upstream
+            - False: local != upstream
+        :rtype: bool
+        """
+
+        return local == upstream
+
+    @classmethod
     def check_versions(cls, local, upstream):
         """
         Compare the given versions.
