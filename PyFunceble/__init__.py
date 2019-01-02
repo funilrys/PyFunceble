@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.2.1.dev (Blue Bontebok: Dragonfly)"
+VERSION = "1.3.0.dev (Blue Bontebok: Dragonfly)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -1000,7 +1000,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if ARGS.filter:
-                    CONFIGURATION.update({"to_filter": ARGS.filter})
+                    CONFIGURATION.update({"filter": ARGS.filter})
 
                 if ARGS.hierarchical:
                     CONFIGURATION.update(
