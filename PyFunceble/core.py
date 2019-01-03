@@ -993,7 +993,7 @@ class Core:  # pragma: no cover
             # matches the given filter.
             list_to_test = List(
                 Regex(
-                    list_to_test, PyFunceble.CONFIGURATION["filter"], escape=True
+                    list_to_test, PyFunceble.CONFIGURATION["filter"], escape=False
                 ).matching_list()
             ).format()
 
