@@ -60,7 +60,8 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-
+# pylint:enable=line-too-long
+# pylint:disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, Download, File, List
 
@@ -70,7 +71,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     Let us interact with the public suffix database.
     """
 
-    def __init__(self, live=True):
+    def __init__(self):
         # We initiate the destination of our database.
         self.destination = (
             PyFunceble.CURRENT_DIRECTORY
@@ -84,20 +85,6 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             # The psl database was not initiated.
 
             PyFunceble.CONFIGURATION["psl_db"] = {}
-
-        if live:
-            if not PyFunceble.CONFIGURATION["quiet"]:
-                # The quiet mode is not activated.
-
-                # We print a message for the user on screen.
-                print(
-                    "Update of %s"
-                    % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
-                    end=" ",
-                )
-
-            # And we run the update logic.
-            self.update()
 
     @classmethod
     def _data(cls):
@@ -163,6 +150,15 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         Update of the content of the :code:`public-suffix.json`.
         """
 
+        if not PyFunceble.CONFIGURATION["quiet"]:
+            # The quiet mode is not activated.
+
+            # We print a message for the user on screen.
+            print(
+                "Update of %s" % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
+                end=" ",
+            )
+
         # We loop through the line of the upstream file.
         list(map(self._extensions, self._data().split("\n")))
 
@@ -185,7 +181,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # * We read, convert to dict and return the file content.
             # and
-            # * We fill the database.
-            PyFunceble.CONFIGURATION["psl_db"].update(
-                Dict().from_json(File(self.destination).read())
+            # * We fill/create the database.
+            PyFunceble.CONFIGURATION["psl_db"] = Dict().from_json(
+                File(self.destination).read()
             )

@@ -63,7 +63,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.helpers import Dict, File
 from PyFunceble.logs import Logs
 from PyFunceble.status import Status
 
@@ -84,6 +83,13 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
             self.domain_extension = PyFunceble.CONFIGURATION["to_test"][
                 PyFunceble.CONFIGURATION["to_test"].rindex(".") + 1 :
             ]
+
+            if not self.domain_extension and PyFunceble.CONFIGURATION[
+                "to_test"
+            ].endswith("."):
+                self.domain_extension = list(
+                    filter(lambda x: x, PyFunceble.CONFIGURATION["to_test"].split("."))
+                )[-1]
         except ValueError:
             # There was not point, so no extension to work with.
             self.domain_extension = None
@@ -173,23 +179,6 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
             "zw",
         ]
 
-    @classmethod
-    def _iana_database(cls):
-        """
-        Convert :code:`iana-domains-db.json` into a dictionnary.
-
-        :return: The content of the database in dictionnary format.
-        :rtype: dict
-        """
-
-        # We construct/get the file to read.
-        file_to_read = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
-        )
-
-        # And we read and return the database file.
-        return Dict().from_json(File(file_to_read).read())
-
     def get(self):
         """
         Return the referer aka the WHOIS server of the current domain extension.
@@ -204,12 +193,6 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
                 # We set the referer to None as we do not have any.
                 referer = None
-
-                if "iana_db" not in PyFunceble.CONFIGURATION:
-                    # The iana database is empty.
-
-                    # We generate/construct the database from the local file.
-                    PyFunceble.CONFIGURATION["iana_db"] = self._iana_database()
 
                 if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
                     # The domain extension is in the iana database.

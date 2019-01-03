@@ -68,16 +68,10 @@ from PyFunceble.helpers import Dict, Download, File, Regex
 
 class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Logic behind the update of `iana-domains-db.json`
+    Logic behind the update and usage of `iana-domains-db.json`
     """
 
     def __init__(self):
-        if not PyFunceble.CONFIGURATION["quiet"]:
-            # The quiet mode is not activated.
-
-            # We print on screen what we are doing.
-            print("Update of iana-domains-db", end=" ")
-
         # We get the destination of the constructed IANA database.
         self.destination = PyFunceble.OUTPUTS["default_files"]["iana"]
 
@@ -245,8 +239,19 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             "za": "whois.registry.net.za",
         }
 
-        # And we run the update logic.
-        self.update()
+    def load(self):
+        """
+        Initiate the IANA database if it is not the case.
+        """
+
+        if (
+            "iana_db" not in PyFunceble.CONFIGURATION
+            or not PyFunceble.CONFIGURATION["iana_db"]
+        ):
+            # The global database is empty, None or does not exist.
+
+            # We update it with the database content.
+            PyFunceble.CONFIGURATION["iana_db"] = self.iana_db
 
     def _referer(self, extension):
         """
@@ -338,6 +343,12 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Update the content of the `iana-domains-db` file.
         """
+
+        if not PyFunceble.CONFIGURATION["quiet"]:
+            # * The quiet mode is not activated.
+
+            # We print on screen what we are doing.
+            print("Update of iana-domains-db", end=" ")
 
         # We loop through the line of the iana website.
         list(

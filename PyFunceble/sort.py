@@ -63,7 +63,6 @@ License:
 import PyFunceble
 from PyFunceble.check import Check
 from PyFunceble.helpers import Regex
-from PyFunceble.publicsuffix import PublicSuffix
 
 
 class Sort:  # pylint: disable=too-few-public-methods
@@ -135,9 +134,6 @@ class Sort:  # pylint: disable=too-few-public-methods
 
         # We try to get the url base.
         url_base = Check().is_url_valid(element, return_base=True)
-
-        # We laod the public suffix database.
-        PublicSuffix(False).load()
 
         if not isinstance(url_base, str):
             # The url base is not found.

@@ -63,9 +63,9 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
+from PyFunceble.config import Load
 from PyFunceble.core import Core
 from PyFunceble.helpers import File
-from PyFunceble.config import Load
 
 
 class Clean:

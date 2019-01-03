@@ -58,6 +58,8 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+# pylint: enable=line-too-long
+# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.check import Check
 from PyFunceble.status import SyntaxStatus
@@ -84,15 +86,19 @@ class Syntax:  # pragma: no cover pylint: disable=too-few-public-methods
                 # * The domain is valid.
                 # or
                 # * The IP is valid.
+
+                # We handle and return the valid status.
                 return SyntaxStatus(PyFunceble.STATUS["official"]["valid"]).handle()
-        elif PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+        elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
             # We are testing for URL.
 
             if Check().is_url_valid():
                 # * The url is valid.
 
+                # We handle and return the valid status.
                 return SyntaxStatus(PyFunceble.STATUS["official"]["valid"]).handle()
         else:
             raise Exception("Unknow test type.")
 
+        # We handle and return the invalid status.
         return SyntaxStatus(PyFunceble.STATUS["official"]["invalid"]).handle()

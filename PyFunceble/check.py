@@ -67,7 +67,6 @@ from domain2idna import get as domain2idna
 
 import PyFunceble
 from PyFunceble.helpers import Regex
-from PyFunceble.publicsuffix import PublicSuffix
 
 
 class Check:
@@ -80,11 +79,6 @@ class Check:
 
     def __init__(self, element=None):
         self.element = element
-
-        try:
-            PyFunceble.CONFIGURATION["psl_db"]
-        except KeyError:
-            PublicSuffix(False).load()
 
     def is_url_valid(self, url=None, return_base=False, return_formatted=False):
         """
@@ -199,7 +193,9 @@ class Check:
         # We return False.
         return False
 
-    def is_domain_valid(self, domain=None, subdomain_check=False):
+    def is_domain_valid(
+        self, domain=None, subdomain_check=False
+    ):  # pylint:disable=too-many-return-statements, too-many-branches
         """
         Check if the given domain is a valid.
 
@@ -215,7 +211,7 @@ class Check:
         """
 
         # We initate our regex which will match for valid domains.
-        regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
+        regex_valid_domains = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"  # pylint: disable=line-too-long
 
         # We initiate our regex which will match for valid subdomains.
         regex_valid_subdomains = r"^(?=.{0,253}$)(([a-z0-9_][a-z0-9-_]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
@@ -236,25 +232,36 @@ class Check:
             # We set the element to test as the currently tested element.
             to_test = PyFunceble.CONFIGURATION["to_test"]
 
-        if (
-            Regex(to_test, regex_valid_domains, return_data=False).match()
-            and not subdomain_check
-        ):
-            # * The element pass the domain validation.
-            # and
-            # * We are not checking if it is a subdomain.
-
-            # We return True. The domain is valid.
-            return True
-
-        # The element did not pass the domain validation. That means that it has invalid character
-        # or the position of - or _ are not right.
-
         try:
             # We get the position of the last point.
             last_point_index = to_test.rindex(".")
             # And with the help of the position of the last point, we get the domain extension.
             extension = to_test[last_point_index + 1 :]
+
+            if not extension and to_test.endswith("."):
+                extension = list(filter(lambda x: x, to_test.split(".")))[-1]
+
+            if not extension or extension not in PyFunceble.CONFIGURATION["iana_db"]:
+                # * The extension is not found.
+                # or
+                # * The extension is not into the IANA database.
+
+                # We return false.
+                return False
+
+            if (
+                Regex(to_test, regex_valid_domains, return_data=False).match()
+                and not subdomain_check
+            ):
+                # * The element pass the domain validation.
+                # and
+                # * We are not checking if it is a subdomain.
+
+                # We return True. The domain is valid.
+                return True
+
+            # The element did not pass the domain validation. That means that
+            # it has invalid character or the position of - or _ are not right.
 
             if extension in PyFunceble.CONFIGURATION["psl_db"]:
                 # The extension is into the psl database.

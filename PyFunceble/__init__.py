@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.3.1.dev (Blue Bontebok: Grasshopper)"
+VERSION = "1.4.0.dev (Blue Bontebok: Grasshopper)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -1016,7 +1016,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     HTTP_CODE.update({"active": Core.switch(HTTP_CODE["active"], True)})
 
                 if ARGS.iana:
-                    IANA()
+                    IANA().update()
 
                 if ARGS.idna:
                     CONFIGURATION.update(
@@ -1063,7 +1063,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     Production()
 
                 if ARGS.public_suffix:
-                    PublicSuffix()
+                    PublicSuffix().update()
 
                 if ARGS.quiet:
                     CONFIGURATION.update({"quiet": Core.switch("quiet")})

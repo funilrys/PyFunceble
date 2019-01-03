@@ -64,6 +64,8 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, Directory, Download, File
+from PyFunceble.iana import IANA
+from PyFunceble.publicsuffix import PublicSuffix
 
 
 class Load:  # pylint: disable=too-few-public-methods
@@ -177,12 +179,17 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We update the LINKS variable with the links from the configuration.
         PyFunceble.LINKS.update(PyFunceble.CONFIGURATION["links"])
 
-        # And we finaly append two string to the configuration.
         # Those 2 strings are used to say if something like the cleaning went right (done)
-        # or wrong (error).s
+        # or wrong (error).
         PyFunceble.CONFIGURATION.update(
             {"done": PyFunceble.Fore.GREEN + "✔", "error": PyFunceble.Fore.RED + "✘"}
         )
+
+        # We load the PSL database.
+        PublicSuffix().load()
+
+        # We load the IANA database.
+        IANA().load()
 
     @classmethod
     def _set_path_to_configs(cls, path_to_config):

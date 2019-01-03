@@ -70,7 +70,6 @@ from PyFunceble.helpers import Regex
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.logs import Logs
 from PyFunceble.lookup import Lookup
-from PyFunceble.publicsuffix import PublicSuffix
 from PyFunceble.referer import Referer
 from PyFunceble.status import Status
 
@@ -89,9 +88,6 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
         # We initate a variable which will save our WHOIS record.s
         self.whois_record = ""
-
-        # We load the public suffix database.
-        PublicSuffix(False).load()
 
     def get(self):  # pragma: no cover
         """
