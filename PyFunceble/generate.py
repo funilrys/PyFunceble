@@ -68,6 +68,7 @@ from PyFunceble.check import Check
 from PyFunceble.helpers import Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
+from PyFunceble.database import Inactive
 
 
 class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
@@ -193,10 +194,19 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
         return output_dir
 
-    def info_files(self):
+    def info_files(self):  # pylint: disable=inconsistent-return-statements
         """
         Generate the hosts file, the plain list and the splitted lists.
         """
+
+        if Inactive().is_present() and self.domain_status in [
+            PyFunceble.STATUS["official"]["down"],
+            PyFunceble.STATUS["official"]["invalid"],
+        ]:
+            # * The currently tested domain is in the database
+            # and
+            # * Its status did not changed.
+            return False
 
         if (
             "file_to_test" in PyFunceble.CONFIGURATION
@@ -1045,7 +1055,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # We print the information on screen.
                 Prints(data_to_print, "Generic").data()
 
-    def status_file(self):
+    def status_file(self):  # pylint: disable=inconsistent-return-statements
         """
         Generate a file according to the domain status.
         """
@@ -1085,6 +1095,12 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
         # We print on screen if needed.
         self._prints_status_screen()
+
+        if Inactive().is_present() and self.domain_status in [
+            PyFunceble.STATUS["official"]["down"],
+            PyFunceble.STATUS["official"]["invalid"],
+        ]:
+            return None
 
         if (
             not PyFunceble.CONFIGURATION["no_files"]

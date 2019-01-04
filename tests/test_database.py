@@ -570,6 +570,42 @@ class TestDatabaseInactive(TestCase):
 
         self.test_file_not_exist()
 
+    def test_is_present(self):
+        """
+        Test Inactive.is_present().
+        """
+
+        self.test_file_not_exist()
+
+        # Test of the case that everything goes right !
+        timestamp = str(Inactive()._timestamp())
+
+        PyFunceble.CONFIGURATION["inactive_db"] = {
+            PyFunceble.CONFIGURATION["file_to_test"]: {
+                timestamp: ["hello.world", "world.hello", "hello-world.com"],
+                "to_test": ["hello.world", "world.hello"],
+            }
+        }
+        PyFunceble.CONFIGURATION["to_test"] = "hello.world"
+
+        expected = True
+        actual = Inactive().is_present()
+
+        self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION["to_test"] = "github.com"
+
+        expected = False
+        actual = Inactive().is_present()
+
+        self.assertEqual(expected, actual)
+
+        del PyFunceble.CONFIGURATION["inactive_db"]
+        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.CONFIGURATION["inactive_database"]
+
+        self.test_file_not_exist()
+
 
 class TestDatabaseWhois(TestCase):
     """

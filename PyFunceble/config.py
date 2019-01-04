@@ -417,7 +417,25 @@ class Merge:  # pylint: disable=too-few-public-methods
         Simply merge the older into the new one.
         """
 
-        to_remove = ["done", "error", "header_printed", "referer", "http_code"]
+        to_remove = [
+            "current_test_data",
+            "done",
+            "end",
+            "error",
+            "file_to_test",
+            "flatten_inactive_db",
+            "header_printed",
+            "http_code",
+            "iana_db",
+            "inactive_db",
+            "mined",
+            "psl_db",
+            "referer",
+            "start",
+            "to_test_type",
+            "to_test",
+            "whois_db",
+        ]
 
         self.new_config = Dict(
             Dict(self.upstream_config).merge(PyFunceble.CONFIGURATION)

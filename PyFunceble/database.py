@@ -64,7 +64,6 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.generate import Generate
 from PyFunceble.helpers import Dict, File, List
 
 
@@ -108,6 +107,15 @@ class Inactive:
 
             # We initiate it with an empty dictionnary.
             PyFunceble.CONFIGURATION["inactive_db"] = {}
+
+        if (
+            "flatten_inactive_db" not in PyFunceble.CONFIGURATION
+            or not PyFunceble.CONFIGURATION["flatten_inactive_db"]
+        ):
+            # The flatten version of the database does not exist or is not set.
+
+            # We create it.
+            PyFunceble.CONFIGURATION["flatten_inactive_db"] = self.content()
 
     def _reformat_historical_formating_error(self):  # pragma: no cover
         """
@@ -534,11 +542,6 @@ class Inactive:
                     ):
                         # The currently tested element into the currently read index.
 
-                        # We generate the suspicious file(s).
-                        Generate("strange").analytic_file(
-                            "suspicious", PyFunceble.STATUS["official"]["up"]
-                        )
-
                         # We remove the currently tested element from the read index.
                         PyFunceble.CONFIGURATION["inactive_db"][self.file_path][
                             data
@@ -582,6 +585,25 @@ class Inactive:
 
         # We return the content of the database.
         return result
+
+    def is_present(self):
+        """
+        Check if the currently tested element is into the database.
+        """
+
+        if PyFunceble.CONFIGURATION["inactive_database"]:
+            # The database subsystem is activated.
+
+            if self.element in PyFunceble.CONFIGURATION["flatten_inactive_db"] or (
+                self.file_path in PyFunceble.CONFIGURATION["inactive_db"]
+                and PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
+                and "to_test" in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]
+                and self.element
+                in PyFunceble.CONFIGURATION["inactive_db"][self.file_path]["to_test"]
+            ):
+                return True
+
+        return False
 
 
 class Whois:

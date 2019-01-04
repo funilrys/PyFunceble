@@ -81,6 +81,7 @@ from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
 from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
+from PyFunceble.generate import Generate
 
 
 class Core:  # pragma: no cover
@@ -589,9 +590,18 @@ class Core:  # pragma: no cover
             ):
                 # The status is in the list of up status.
 
-                # We remove the currently tested element from the
-                # database.
-                Inactive().remove()
+                if Inactive().is_present():
+                    # The currently tested element is in the database.
+
+                    # We generate the suspicious file(s).
+                    Generate("strange").analytic_file(
+                        "suspicious", PyFunceble.STATUS["official"]["up"]
+                    )
+
+                    # We remove the currently tested element from the
+                    # database.
+                    Inactive().remove()
+
             else:
                 # The status is not in the list of up status.
 
@@ -974,15 +984,15 @@ class Core:  # pragma: no cover
         # Understand with this variable that we don't want to test those.
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
 
-        # We get the database content.
-        database_content = Inactive().content()
+        # We load the flatten version of the database.
+        PyFunceble.CONFIGURATION.update({"flatten_inactive_db": Inactive().content()})
 
         # We remove the element which are in the database from the
         # current list to test.
         list_to_test = List(
             list(
                 set(Regex(list_to_test, regex_delete).not_matching_list())
-                - set(database_content)
+                - set(PyFunceble.CONFIGURATION["flatten_inactive_db"])
             )
         ).format()
 
