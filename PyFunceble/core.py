@@ -987,14 +987,27 @@ class Core:  # pragma: no cover
         # We load the flatten version of the database.
         PyFunceble.CONFIGURATION.update({"flatten_inactive_db": Inactive().content()})
 
-        # We remove the element which are in the database from the
-        # current list to test.
-        list_to_test = List(
-            list(
-                set(Regex(list_to_test, regex_delete).not_matching_list())
-                - set(PyFunceble.CONFIGURATION["flatten_inactive_db"])
-            )
-        ).format()
+        # We initiate a local variable which will save the current state of the list.
+        not_filtered = list_to_test
+
+        try:
+            # We remove the element which are in the database from the
+            # current list to test.
+            list_to_test = List(
+                list(
+                    set(Regex(list_to_test, regex_delete).not_matching_list())
+                    - set(PyFunceble.CONFIGURATION["flatten_inactive_db"])
+                )
+            ).format()
+            _ = list_to_test[-1]
+        except IndexError:
+            # We test without the database removing.
+            list_to_test = List(
+                Regex(not_filtered, regex_delete).not_matching_list()
+            ).format()
+
+            # We delete the not_filtered variable.
+            del not_filtered
 
         if PyFunceble.CONFIGURATION["filter"]:
             # The filter is not empty.
