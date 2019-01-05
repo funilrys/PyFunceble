@@ -20,16 +20,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.readthedocs.io/en/master/special-thanks.html
+    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/master/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://funilrys.github.io/PyFunceble/
@@ -270,7 +270,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We initiate the link to the production configuration.
         # It is not hard coded because this method is called only if we
         # are sure that the configuration file exist.
-        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
         production_config_link = Version(True).right_url_from_version(
@@ -530,7 +530,7 @@ class Version:
             # It is hard coded because we may not have the chance to have the
             # configuration file everytime we need it.
             upstream_link = (
-                "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
+                "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
             )  # pylint: disable=line-too-long
 
             # We update the link according to our current version.
