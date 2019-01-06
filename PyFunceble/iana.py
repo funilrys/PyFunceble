@@ -244,14 +244,11 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         Initiate the IANA database if it is not the case.
         """
 
-        if (
-            "iana_db" not in PyFunceble.CONFIGURATION
-            or not PyFunceble.CONFIGURATION["iana_db"]
-        ):
+        if "iana_db" not in PyFunceble.INTERN or not PyFunceble.INTERN["iana_db"]:
             # The global database is empty, None or does not exist.
 
             # We update it with the database content.
-            PyFunceble.CONFIGURATION["iana_db"] = self.iana_db
+            PyFunceble.INTERN["iana_db"] = self.iana_db
 
     def _referer(self, extension):
         """
@@ -364,4 +361,4 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The quiet mode is not activated.
 
             # We indicate that the work is done without any issue.
-            print(PyFunceble.CONFIGURATION["done"])
+            print(PyFunceble.INTERN["done"])

@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.6.0.dev (Blue Bontebok: Moth)"
+VERSION = "1.6.1.dev (Blue Bontebok: Moth)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -189,6 +189,8 @@ OUTPUTS = {}
 HTTP_CODE = {}
 # We initiate the location where we are going to get all links.
 LINKS = {}
+# We initiate a location which will have all internal data.
+INTERN = {}
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """

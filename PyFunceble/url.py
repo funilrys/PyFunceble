@@ -85,13 +85,11 @@ class URL:  # pylint: disable=too-few-public-methods
             # or
             # * We are testing in/for a local or private network.
 
-            if "current_test_data" in PyFunceble.CONFIGURATION:
-                PyFunceble.CONFIGURATION["current_test_data"][
-                    "url_syntax_validation"
-                ] = True
+            if "current_test_data" in PyFunceble.INTERN:
+                PyFunceble.INTERN["current_test_data"]["url_syntax_validation"] = True
 
             # We initiate the HTTP status code.
-            PyFunceble.CONFIGURATION.update({"http_code": HTTPCode().get()})
+            PyFunceble.INTERN.update({"http_code": HTTPCode().get()})
 
             # We initiate the list of active status code.
             active_list = []
@@ -103,13 +101,13 @@ class URL:  # pylint: disable=too-few-public-methods
             inactive_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_down"])
             inactive_list.append("*" * 3)
 
-            if PyFunceble.CONFIGURATION["http_code"] in active_list:
+            if PyFunceble.INTERN["http_code"] in active_list:
                 # The extracted HTTP status code is in the list of active list.
 
                 # We handle and return the up status.
                 return URLStatus(PyFunceble.STATUS["official"]["up"]).handle()
 
-            if PyFunceble.CONFIGURATION["http_code"] in inactive_list:
+            if PyFunceble.INTERN["http_code"] in inactive_list:
                 # The extracted HTTP status code is in the list of inactive list.
 
                 # We handle and return the down status.
@@ -117,13 +115,11 @@ class URL:  # pylint: disable=too-few-public-methods
 
         # The extracted HTTP status code is not in the list of active nor invalid list.
 
-        if "current_test_data" in PyFunceble.CONFIGURATION:
+        if "current_test_data" in PyFunceble.INTERN:
             # The end-user want more information whith his test.
 
             # We update the url_syntax_validation index.
-            PyFunceble.CONFIGURATION["current_test_data"][
-                "url_syntax_validation"
-            ] = False
+            PyFunceble.INTERN["current_test_data"]["url_syntax_validation"] = False
 
         # We handle and return the invalid down status.
         return URLStatus(PyFunceble.STATUS["official"]["invalid"]).handle()

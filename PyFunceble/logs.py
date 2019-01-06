@@ -125,14 +125,14 @@ class Logs:  # pragma: no cover
         if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
             # The debug and the logs subsystem are activated.
 
-            if PyFunceble.CONFIGURATION["referer"]:
-                referer = PyFunceble.CONFIGURATION["referer"]
+            if PyFunceble.INTERN["referer"]:
+                referer = PyFunceble.INTERN["referer"]
             else:
                 referer = None
 
             to_write = {
                 self.current_time: {
-                    "domain": PyFunceble.CONFIGURATION["to_test"],
+                    "domain": PyFunceble.INTERN["to_test"],
                     "record": record,
                     "referer": referer,
                 }
@@ -162,14 +162,14 @@ class Logs:  # pragma: no cover
         if PyFunceble.CONFIGURATION["logs"]:
             # The logs subsystem is activated.
 
-            if PyFunceble.CONFIGURATION["referer"]:
-                referer = PyFunceble.CONFIGURATION["referer"]
+            if PyFunceble.INTERN["referer"]:
+                referer = PyFunceble.INTERN["referer"]
             else:
                 referer = None
 
             to_write = {
                 self.current_time: {
-                    "domain": PyFunceble.CONFIGURATION["to_test"],
+                    "domain": PyFunceble.INTERN["to_test"],
                     "expiration_date": extracted,
                     "whois_server": referer,
                 }
@@ -210,7 +210,7 @@ class Logs:  # pragma: no cover
 
             to_write = {
                 self.current_time: {
-                    "domain": PyFunceble.CONFIGURATION["to_test"],
+                    "domain": PyFunceble.INTERN["to_test"],
                     "extension": extension,
                 }
             }

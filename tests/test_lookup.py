@@ -80,11 +80,11 @@ class TestLookup(TestCase):
         """
 
         expected = False
-        PyFunceble.CONFIGURATION["to_test"] = "thisdoes-not-workdnfhfep.de"
+        PyFunceble.INTERN["to_test"] = "thisdoes-not-workdnfhfep.de"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
-        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.INTERN["to_test"]
 
     def test_nslookup_domain_invalid(self):
         """
@@ -92,11 +92,11 @@ class TestLookup(TestCase):
         """
 
         expected = False
-        PyFunceble.CONFIGURATION["to_test"] = "helloworld-.com"
+        PyFunceble.INTERN["to_test"] = "helloworld-.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
-        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.INTERN["to_test"]
 
     def test_nslookup_domain_up(self):
         """
@@ -104,16 +104,16 @@ class TestLookup(TestCase):
         """
 
         expected = True
-        PyFunceble.CONFIGURATION["to_test"] = "google.com"
+        PyFunceble.INTERN["to_test"] = "google.com"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["to_test"] = "172.217.22.14"
+        PyFunceble.INTERN["to_test"] = "172.217.22.14"
         actual = Lookup().nslookup()
 
         self.assertEqual(expected, actual)
-        del PyFunceble.CONFIGURATION["to_test"]
+        del PyFunceble.INTERN["to_test"]
 
 
 if __name__ == "__main__":

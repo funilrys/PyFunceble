@@ -87,7 +87,7 @@ class TestsAutoContinue(TestCase):
             + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
         )
 
-        PyFunceble.CONFIGURATION["file_to_test"] = "hello.world"
+        PyFunceble.INTERN["file_to_test"] = "hello.world"
         self.types = ["up", "down", "invalid", "tested"]
 
     def set_counter(self, to_set=15):
@@ -131,7 +131,7 @@ class TestsAutoContinue(TestCase):
         self.assertEqual(expected, actual)
 
         expected = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "up": 25,
                 "down": 25,
                 "invalid": 25,
@@ -179,7 +179,7 @@ class TestsAutoContinue(TestCase):
         self.assertEqual(expected, actual)
 
         saved = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "up": 17,
                 "down": 12,
                 "invalid": 8,
@@ -190,7 +190,7 @@ class TestsAutoContinue(TestCase):
         Dict(saved).to_json(self.file_to_work_with)
         AutoContinue().restore()
 
-        expected = saved[PyFunceble.CONFIGURATION["file_to_test"]]
+        expected = saved[PyFunceble.INTERN["file_to_test"]]
         actual = PyFunceble.CONFIGURATION["counter"]["number"]
 
         self.assertEqual(expected, actual)
@@ -215,7 +215,7 @@ class TestsAutoContinue(TestCase):
         PyFunceble.CONFIGURATION["auto_continue"] = True
 
         old_system = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "number_of_up": 15,
                 "number_of_down": 18,
                 "number_of_invalid": 5,

@@ -82,8 +82,8 @@ class TestExecutionTime(BaseStdout):
         Load(PyFunceble.CURRENT_DIRECTORY)
         BaseStdout.setUp(self)
         PyFunceble.CONFIGURATION["show_execution_time"] = True
-        PyFunceble.CONFIGURATION["start"] = int(PyFunceble.time())
-        PyFunceble.CONFIGURATION["end"] = int(PyFunceble.time()) + 15
+        PyFunceble.INTERN["start"] = int(PyFunceble.time())
+        PyFunceble.INTERN["end"] = int(PyFunceble.time()) + 15
 
     @mock.patch("PyFunceble.execution_time.ExecutionTime._stoping_time")
     def test_calculate(self, _):

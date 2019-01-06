@@ -181,7 +181,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         # Those 2 strings are used to say if something like the cleaning went right (done)
         # or wrong (error).
-        PyFunceble.CONFIGURATION.update(
+        PyFunceble.INTERN.update(
             {"done": PyFunceble.Fore.GREEN + "✔", "error": PyFunceble.Fore.RED + "✘"}
         )
 
@@ -417,25 +417,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         Simply merge the older into the new one.
         """
 
-        to_remove = [
-            "current_test_data",
-            "done",
-            "end",
-            "error",
-            "file_to_test",
-            "flatten_inactive_db",
-            "header_printed",
-            "http_code",
-            "iana_db",
-            "inactive_db",
-            "mined",
-            "psl_db",
-            "referer",
-            "start",
-            "to_test_type",
-            "to_test",
-            "whois_db",
-        ]
+        to_remove = []
 
         self.new_config = Dict(
             Dict(self.upstream_config).merge(PyFunceble.CONFIGURATION)

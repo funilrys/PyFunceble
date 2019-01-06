@@ -80,15 +80,13 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
         try:
             # We get the extension of the currently tested element.
             # We basically get everything after the last point.
-            self.domain_extension = PyFunceble.CONFIGURATION["to_test"][
-                PyFunceble.CONFIGURATION["to_test"].rindex(".") + 1 :
+            self.domain_extension = PyFunceble.INTERN["to_test"][
+                PyFunceble.INTERN["to_test"].rindex(".") + 1 :
             ]
 
-            if not self.domain_extension and PyFunceble.CONFIGURATION[
-                "to_test"
-            ].endswith("."):
+            if not self.domain_extension and PyFunceble.INTERN["to_test"].endswith("."):
                 self.domain_extension = list(
-                    filter(lambda x: x, PyFunceble.CONFIGURATION["to_test"].split("."))
+                    filter(lambda x: x, PyFunceble.INTERN["to_test"].split("."))
                 )[-1]
         except ValueError:
             # There was not point, so no extension to work with.
@@ -194,16 +192,14 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We set the referer to None as we do not have any.
                 referer = None
 
-                if self.domain_extension in PyFunceble.CONFIGURATION["iana_db"]:
+                if self.domain_extension in PyFunceble.INTERN["iana_db"]:
                     # The domain extension is in the iana database.
 
                     if not PyFunceble.CONFIGURATION["no_whois"]:
                         # We are authorized to use WHOIS for the test result.
 
                         # We get the referer from the database.
-                        referer = PyFunceble.CONFIGURATION["iana_db"][
-                            self.domain_extension
-                        ]
+                        referer = PyFunceble.INTERN["iana_db"][self.domain_extension]
 
                         if not referer:
                             # The referer is not filled.

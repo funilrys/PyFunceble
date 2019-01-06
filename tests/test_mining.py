@@ -83,14 +83,14 @@ class TestMining(TestCase):
 
         PyFunceble.CONFIGURATION["mining"] = True
 
-        PyFunceble.CONFIGURATION["file_to_test"] = "this_file_is_a_ghost"
+        PyFunceble.INTERN["file_to_test"] = "this_file_is_a_ghost"
 
         self.file = (
             PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["mining"]
         )
 
         self.excepted_content = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "myètherwället.com": ["www.google.com", "www.facebook.com"]
             }
         }
@@ -117,9 +117,9 @@ class TestMining(TestCase):
         Mining()._retrieve()
 
         excepted = {}
-        self.assertEqual(excepted, PyFunceble.CONFIGURATION["mined"])
+        self.assertEqual(excepted, PyFunceble.INTERN["mined"])
 
-        PyFunceble.CONFIGURATION["mined"] = {}
+        PyFunceble.INTERN["mined"] = {}
 
         File(self.file).delete()
 
@@ -140,15 +140,15 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+        PyFunceble.INTERN["to_test_type"] = "domain"
 
         Dict(self.excepted_content).to_json(self.file)
         Mining()._retrieve()
 
-        self.assertEqual(self.excepted_content, PyFunceble.CONFIGURATION["mined"])
+        self.assertEqual(self.excepted_content, PyFunceble.INTERN["mined"])
 
-        del PyFunceble.CONFIGURATION["mined"]
-        del PyFunceble.CONFIGURATION["to_test_type"]
+        del PyFunceble.INTERN["mined"]
+        del PyFunceble.INTERN["to_test_type"]
 
         File(self.file).delete()
 
@@ -171,25 +171,25 @@ class TestMining(TestCase):
 
         to_add = {"www.google.com": ["facebook.com", "www.facebook.com"]}
 
-        expected = {PyFunceble.CONFIGURATION["file_to_test"]: to_add}
+        expected = {PyFunceble.INTERN["file_to_test"]: to_add}
 
         Mining()._add(to_add)
 
-        self.assertEqual(expected, PyFunceble.CONFIGURATION["mined"])
+        self.assertEqual(expected, PyFunceble.INTERN["mined"])
 
         to_add["www.google.com"].append("github.com")
 
         expected = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "www.google.com": ["facebook.com", "github.com", "www.facebook.com"]
             }
         }
 
         Mining()._add(to_add)
 
-        self.assertEqual(expected, PyFunceble.CONFIGURATION["mined"])
+        self.assertEqual(expected, PyFunceble.INTERN["mined"])
 
-        del PyFunceble.CONFIGURATION["mined"]
+        del PyFunceble.INTERN["mined"]
 
         File(self.file).delete()
 
@@ -210,23 +210,23 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["mined"] = self.excepted_content
-        PyFunceble.CONFIGURATION["to_test_type"] = "domain"
-        PyFunceble.CONFIGURATION["to_test"] = "www.google.com"
+        PyFunceble.INTERN["mined"] = self.excepted_content
+        PyFunceble.INTERN["to_test_type"] = "domain"
+        PyFunceble.INTERN["to_test"] = "www.google.com"
 
         expected = {
-            PyFunceble.CONFIGURATION["file_to_test"]: {
+            PyFunceble.INTERN["file_to_test"]: {
                 "myètherwället.com": ["www.facebook.com"]
             }
         }
 
         Mining().remove()
 
-        self.assertEqual(expected, PyFunceble.CONFIGURATION["mined"])
+        self.assertEqual(expected, PyFunceble.INTERN["mined"])
 
-        del PyFunceble.CONFIGURATION["mined"]
-        del PyFunceble.CONFIGURATION["to_test"]
-        del PyFunceble.CONFIGURATION["to_test_type"]
+        del PyFunceble.INTERN["mined"]
+        del PyFunceble.INTERN["to_test"]
+        del PyFunceble.INTERN["to_test_type"]
 
         File(self.file).delete()
 
@@ -245,13 +245,13 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["mined"] = self.excepted_content
+        PyFunceble.INTERN["mined"] = self.excepted_content
 
         expected = ["www.facebook.com", "www.google.com"]
 
         self.assertEqual(expected, Mining().list_of_mined())
 
-        del PyFunceble.CONFIGURATION["mined"]
+        del PyFunceble.INTERN["mined"]
 
         File(self.file).delete()
 
@@ -270,7 +270,7 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["mined"] = self.excepted_content
+        PyFunceble.INTERN["mined"] = self.excepted_content
         Mining()._backup()
 
         expected = True
@@ -280,7 +280,7 @@ class TestMining(TestCase):
             self.excepted_content, Dict().from_json(File(self.file).read())
         )
 
-        del PyFunceble.CONFIGURATION["mined"]
+        del PyFunceble.INTERN["mined"]
 
         File(self.file).delete()
 

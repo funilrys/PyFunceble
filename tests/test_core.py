@@ -370,11 +370,11 @@ class TestExtractDomain(TestCase):
         Test the case that the given fiel does not exist.
         """
 
-        PyFunceble.CONFIGURATION["file_to_test"] = "this_file_does_not_exit"
+        PyFunceble.INTERN["file_to_test"] = "this_file_does_not_exit"
 
         self.assertRaises(FileNotFoundError, Core._extract_domain_from_file)
 
-        del PyFunceble.CONFIGURATION["file_to_test"]
+        del PyFunceble.INTERN["file_to_test"]
 
     @mock.patch("PyFunceble.path.isfile")
     def test_extracting_from_file(self, mock_isfile):
@@ -395,11 +395,11 @@ class TestExtractDomain(TestCase):
             mock_open.return_value.__enter__ = mock_open
             mock_open.return_value.__iter__ = mock.Mock(return_value=iter(actual))
 
-            PyFunceble.CONFIGURATION["file_to_test"] = mock_open
+            PyFunceble.INTERN["file_to_test"] = mock_open
 
             self.assertEqual(expected, Core._extract_domain_from_file())
 
-        del PyFunceble.CONFIGURATION["file_to_test"]
+        del PyFunceble.INTERN["file_to_test"]
 
 
 class TestSwitch(TestCase):

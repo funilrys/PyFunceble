@@ -148,10 +148,10 @@ class Sort:  # pylint: disable=too-few-public-methods
                 # of the extension.
                 extension = element[extension_index:]
 
-                if extension in PyFunceble.CONFIGURATION["psl_db"]:
+                if extension in PyFunceble.INTERN["psl_db"]:
                     # The extension is in the public suffix database.
 
-                    for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
+                    for suffix in PyFunceble.INTERN["psl_db"][extension]:
                         # We loop through the list of suffix of the extracted extension.
 
                         # We suffix the sufix with a point.

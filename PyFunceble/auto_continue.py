@@ -110,7 +110,7 @@ class AutoContinue:
             configuration_counter = PyFunceble.CONFIGURATION["counter"]["number"]
 
             # We initiate the data we have to backup.
-            data_to_backup[PyFunceble.CONFIGURATION["file_to_test"]] = {
+            data_to_backup[PyFunceble.INTERN["file_to_test"]] = {
                 # We backup the number of tested.
                 "tested": configuration_counter["tested"],
                 # We backup the number of up.
@@ -144,7 +144,7 @@ class AutoContinue:
             # is not empty.
 
             # We get the file we have to restore.
-            file_to_restore = PyFunceble.CONFIGURATION["file_to_test"]
+            file_to_restore = PyFunceble.INTERN["file_to_test"]
 
             if file_to_restore in self.backup_content:
                 # The file we are working with is already into the backup content.

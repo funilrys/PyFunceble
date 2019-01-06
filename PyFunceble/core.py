@@ -163,7 +163,7 @@ class Core:  # pragma: no cover
             # 0.
 
             # We initiate the file we have to test.
-            PyFunceble.CONFIGURATION["file_to_test"] = file_to_test
+            PyFunceble.INTERN["file_to_test"] = file_to_test
 
             # We return true to say that everything goes right.
             return True
@@ -187,7 +187,7 @@ class Core:  # pragma: no cover
             # The current url_file is not a URL.
 
             # We initiate the filename as the file we have to test.
-            PyFunceble.CONFIGURATION[
+            PyFunceble.INTERN[
                 "file_to_test"
             ] = self.url_file  # pylint: disable=no-member
 
@@ -200,7 +200,7 @@ class Core:  # pragma: no cover
             # We are not in a module usage.
 
             # We set the file_path as the file we have to test.
-            PyFunceble.CONFIGURATION[
+            PyFunceble.INTERN[
                 "file_to_test"
             ] = self.file_path  # pylint: disable=no-member
 
@@ -229,7 +229,7 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+                PyFunceble.INTERN["to_test_type"] = "domain"
 
                 # We set the start time.
                 ExecutionTime("start")
@@ -257,7 +257,7 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "url"
+                PyFunceble.INTERN["to_test_type"] = "url"
 
                 # We set the start time.
                 ExecutionTime("start")
@@ -296,7 +296,7 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "url"
+                PyFunceble.INTERN["to_test_type"] = "url"
 
                 # And we test the given or the downloaded file.
                 self.file_url()
@@ -317,7 +317,7 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+                PyFunceble.INTERN["to_test_type"] = "domain"
 
                 # We test the given or the downloaded file.
                 self.file()
@@ -367,10 +367,10 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+                PyFunceble.INTERN["to_test_type"] = "domain"
 
                 # We set the domain to test.
-                PyFunceble.CONFIGURATION[
+                PyFunceble.INTERN[
                     "to_test"
                 ] = self.domain_or_ip_to_test.lower()  # pylint: disable=no-member
             elif self.url_to_test:  # pylint: disable=no-member
@@ -378,10 +378,10 @@ class Core:  # pragma: no cover
 
                 # We initiate a variable which will tell the system the type
                 # of the tested element.
-                PyFunceble.CONFIGURATION["to_test_type"] = "url"
+                PyFunceble.INTERN["to_test_type"] = "url"
 
                 # We set the url to test.
-                PyFunceble.CONFIGURATION[
+                PyFunceble.INTERN[
                     "to_test"
                 ] = self.url_to_test  # pylint: disable=no-member
 
@@ -423,7 +423,7 @@ class Core:  # pragma: no cover
                 # We have to return much more information into our result.
 
                 # We initiate the location and the information we have to return.
-                PyFunceble.CONFIGURATION["current_test_data"] = {
+                PyFunceble.INTERN["current_test_data"] = {
                     "tested": None,
                     "expiration_date": None,
                     "domain_syntax_validation": None,
@@ -436,52 +436,47 @@ class Core:  # pragma: no cover
                     "whois_record": None,
                 }
 
-                if (
-                    "to_test" in PyFunceble.CONFIGURATION
-                    and PyFunceble.CONFIGURATION["to_test"]
-                ):
+                if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
                     # We are testing something.
 
                     # We update the tested index.
-                    PyFunceble.CONFIGURATION["current_test_data"][
+                    PyFunceble.INTERN["current_test_data"][
                         "tested"
-                    ] = PyFunceble.CONFIGURATION["to_test"]
+                    ] = PyFunceble.INTERN["to_test"]
 
-                    if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+                    if PyFunceble.INTERN["to_test_type"] == "domain":
                         # We are testing a domain.
 
                         # We get the status of the domain.
-                        PyFunceble.CONFIGURATION["current_test_data"][
+                        PyFunceble.INTERN["current_test_data"][
                             "status"
                         ] = ExpirationDate().get()
-                    elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
+                    elif PyFunceble.INTERN["to_test_type"] == "url":
                         # We are testing a url.
 
                         # We get the status of the url.
-                        PyFunceble.CONFIGURATION["current_test_data"][
-                            "status"
-                        ] = URL().get()
+                        PyFunceble.INTERN["current_test_data"]["status"] = URL().get()
                     else:
                         raise Exception("Unknow test type.")
 
-                if "http_code" in PyFunceble.CONFIGURATION:
+                if "http_code" in PyFunceble.INTERN:
                     # The http status code exist into the configuration.
 
                     # We update the tested index.
-                    PyFunceble.CONFIGURATION["current_test_data"][
+                    PyFunceble.INTERN["current_test_data"][
                         "http_status_code"
-                    ] = PyFunceble.CONFIGURATION["http_code"]
+                    ] = PyFunceble.INTERN["http_code"]
 
                 # We finaly return our dataset.
-                return PyFunceble.CONFIGURATION["current_test_data"]
+                return PyFunceble.INTERN["current_test_data"]
 
-            if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+            if PyFunceble.INTERN["to_test_type"] == "domain":
                 # We are testing a domain.
 
                 # We return the status of the parsed domain.
                 return ExpirationDate().get()
 
-            if PyFunceble.CONFIGURATION["to_test_type"] == "url":
+            if PyFunceble.INTERN["to_test_type"] == "url":
                 # We are testing a url.
 
                 # We return the status of the parsed url.
@@ -566,7 +561,7 @@ class Core:  # pragma: no cover
         if (
             status
             and not PyFunceble.CONFIGURATION["simple"]
-            and PyFunceble.CONFIGURATION["file_to_test"]
+            and PyFunceble.INTERN["file_to_test"]
         ):
             # * The status is given.
             # and
@@ -644,11 +639,11 @@ class Core:  # pragma: no cover
         for index in ["http_code", "referer"]:
             # We loop through some configuration index we have to empty.
 
-            if index in PyFunceble.CONFIGURATION:
+            if index in PyFunceble.INTERN:
                 # The index is in the configuration.
 
                 # We empty the configuration index.
-                PyFunceble.CONFIGURATION[index] = ""
+                PyFunceble.INTERN[index] = ""
 
     def domain(self, domain=None, last_domain=None):
         """
@@ -672,14 +667,14 @@ class Core:  # pragma: no cover
             # A domain is given.
 
             # We format and set the domain we are testing and treating.
-            PyFunceble.CONFIGURATION["to_test"] = self._format_domain(domain)
+            PyFunceble.INTERN["to_test"] = self._format_domain(domain)
         else:
             # A domain is not given.
 
             # We set the domain we are testing and treating to None.
-            PyFunceble.CONFIGURATION["to_test"] = None
+            PyFunceble.INTERN["to_test"] = None
 
-        if PyFunceble.CONFIGURATION["to_test"]:
+        if PyFunceble.INTERN["to_test"]:
             # The domain is given (Not None).
 
             if PyFunceble.CONFIGURATION["syntax"]:
@@ -720,14 +715,14 @@ class Core:  # pragma: no cover
             # An url to test is given.
 
             # We set the url we are going to test.
-            PyFunceble.CONFIGURATION["to_test"] = url_to_test
+            PyFunceble.INTERN["to_test"] = url_to_test
         else:
             # An URL to test is not given.
 
             # We set the url we are going to test to None.
-            PyFunceble.CONFIGURATION["to_test"] = None
+            PyFunceble.INTERN["to_test"] = None
 
-        if PyFunceble.CONFIGURATION["to_test"]:
+        if PyFunceble.INTERN["to_test"]:
             # An URL to test is given.
 
             if PyFunceble.CONFIGURATION["syntax"]:
@@ -748,7 +743,7 @@ class Core:  # pragma: no cover
                 # The simple mode is activated.
 
                 # We print the URL informations.
-                print(PyFunceble.CONFIGURATION["to_test"], status)
+                print(PyFunceble.INTERN["to_test"], status)
 
     @classmethod
     def reset_counters(cls):
@@ -891,10 +886,10 @@ class Core:  # pragma: no cover
         # We initiate the variable which will save what we are going to return.
         result = []
 
-        if PyFunceble.path.isfile(PyFunceble.CONFIGURATION["file_to_test"]):
+        if PyFunceble.path.isfile(PyFunceble.INTERN["file_to_test"]):
             # The give file to test exist.
 
-            with open(PyFunceble.CONFIGURATION["file_to_test"]) as file:
+            with open(PyFunceble.INTERN["file_to_test"]) as file:
                 # We open and read the file.
 
                 for line in file:
@@ -909,7 +904,7 @@ class Core:  # pragma: no cover
             # The given file to test does not exist.
 
             # We raise a FileNotFoundError exception.
-            raise FileNotFoundError(PyFunceble.CONFIGURATION["file_to_test"])
+            raise FileNotFoundError(PyFunceble.INTERN["file_to_test"])
 
         # We return the result.
         return result
@@ -955,15 +950,12 @@ class Core:  # pragma: no cover
         Inactive().to_test()
 
         if (
-            PyFunceble.CONFIGURATION["file_to_test"]
-            in PyFunceble.CONFIGURATION["inactive_db"]
+            PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]
             and "to_test"
-            in PyFunceble.CONFIGURATION["inactive_db"][
-                PyFunceble.CONFIGURATION["file_to_test"]
+            in PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
+            and PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
+                "to_test"
             ]
-            and PyFunceble.CONFIGURATION["inactive_db"][
-                PyFunceble.CONFIGURATION["file_to_test"]
-            ]["to_test"]
         ):
             # * The current file to test in into the database.
             # and
@@ -975,9 +967,9 @@ class Core:  # pragma: no cover
             # We extend our list to test with the content of the `to_test` index
             # of the current file database.
             list_to_test.extend(
-                PyFunceble.CONFIGURATION["inactive_db"][
-                    PyFunceble.CONFIGURATION["file_to_test"]
-                ]["to_test"]
+                PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
+                    "to_test"
+                ]
             )
 
         # We set a regex of element to delete.
@@ -985,7 +977,7 @@ class Core:  # pragma: no cover
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
 
         # We load the flatten version of the database.
-        PyFunceble.CONFIGURATION.update({"flatten_inactive_db": Inactive().content()})
+        PyFunceble.INTERN.update({"flatten_inactive_db": Inactive().content()})
 
         # We initiate a local variable which will save the current state of the list.
         not_filtered = list_to_test
@@ -996,7 +988,7 @@ class Core:  # pragma: no cover
             list_to_test = List(
                 list(
                     set(Regex(list_to_test, regex_delete).not_matching_list())
-                    - set(PyFunceble.CONFIGURATION["flatten_inactive_db"])
+                    - set(PyFunceble.INTERN["flatten_inactive_db"])
                 )
             ).format()
             _ = list_to_test[-1]

@@ -79,7 +79,7 @@ class Syntax:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+        if PyFunceble.INTERN["to_test_type"] == "domain":
             # We are testing for domain or ip.
 
             if Check().is_domain_valid() or Check().is_ip_valid():
@@ -89,7 +89,7 @@ class Syntax:  # pragma: no cover pylint: disable=too-few-public-methods
 
                 # We handle and return the valid status.
                 return SyntaxStatus(PyFunceble.STATUS["official"]["valid"]).handle()
-        elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
+        elif PyFunceble.INTERN["to_test_type"] == "url":
             # We are testing for URL.
 
             if Check().is_url_valid():

@@ -124,7 +124,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
                 try:
                     time_autorisation = int(PyFunceble.time()) >= int(
-                        PyFunceble.CONFIGURATION["start"]
+                        PyFunceble.INTERN["start"]
                     ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
                 except KeyError:
                     if self.last and not self.bypass:

@@ -75,7 +75,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self):  # pragma: no cover
-        if PyFunceble.CONFIGURATION["to_test_type"] == "url":
+        if PyFunceble.INTERN["to_test_type"] == "url":
             # We should work with full URL which actualy means that we have to get the
             # http status code from the URL we are currently testing.
 
@@ -83,14 +83,14 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             disable_warnings(urllib3_exceptions.InsecureRequestWarning)
 
             # We initiate the element we have to get.
-            self.to_get = PyFunceble.CONFIGURATION["to_test"]
-        elif PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+            self.to_get = PyFunceble.INTERN["to_test"]
+        elif PyFunceble.INTERN["to_test_type"] == "domain":
             # We are working with domain.
 
             # We construct the element we have to get.
             # Note: As we may work with IP, we explicitly set the port we are
             # working with.
-            self.to_get = "http://%s:80" % PyFunceble.CONFIGURATION["to_test"]
+            self.to_get = "http://%s:80" % PyFunceble.INTERN["to_test"]
         else:
             raise Exception("Unknow type of test.")
 
@@ -117,7 +117,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         try:
             # We try to get the HTTP status code.
 
-            if PyFunceble.CONFIGURATION["to_test_type"] == "url":
+            if PyFunceble.INTERN["to_test_type"] == "url":
                 # We are globally testing a URL.
 
                 # We get the head of the URL.

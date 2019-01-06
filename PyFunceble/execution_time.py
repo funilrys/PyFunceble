@@ -142,8 +142,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         if (
             self._authorization()
             and PyFunceble.CONFIGURATION["logs"]
-            and "file_to_test" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["file_to_test"]
+            and "file_to_test" in PyFunceble.INTERN
+            and PyFunceble.INTERN["file_to_test"]
         ):
             # * We are authorized to work.
             # and
@@ -184,12 +184,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
                     # We append the current start time inside it at
                     # a new sublist.
-                    content["data"].append([PyFunceble.CONFIGURATION["start"]])
+                    content["data"].append([PyFunceble.INTERN["start"]])
                 else:
                     # The data index does not exist.
 
                     # We create the index along with the current start time.
-                    content["data"] = [[PyFunceble.CONFIGURATION["start"]]]
+                    content["data"] = [[PyFunceble.INTERN["start"]]]
             elif self.action == "stop":
                 # The action is equal to `stop`.
 
@@ -201,7 +201,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                     #
                     # Note: It is at the end because we should have as first
                     # the star time.
-                    content["data"][-1].append(PyFunceble.CONFIGURATION["end"])
+                    content["data"][-1].append(PyFunceble.INTERN["end"])
 
                     # We get the start time.
                     start = content["data"][0][0]
@@ -250,7 +250,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the starting time as the current time.
-        PyFunceble.CONFIGURATION["start"] = int(PyFunceble.time())
+        PyFunceble.INTERN["start"] = int(PyFunceble.time())
 
     @classmethod
     def _stoping_time(cls):  # pragma: no cover
@@ -259,7 +259,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the ending time as the current time.
-        PyFunceble.CONFIGURATION["end"] = int(PyFunceble.time())
+        PyFunceble.INTERN["end"] = int(PyFunceble.time())
 
     @classmethod
     def _calculate(cls, start=None, end=None):
@@ -293,9 +293,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # The start and end time is not explicitly given.
 
             # We get the difference between the ending and the starting time.
-            time_difference = (
-                PyFunceble.CONFIGURATION["end"] - PyFunceble.CONFIGURATION["start"]
-            )
+            time_difference = PyFunceble.INTERN["end"] - PyFunceble.INTERN["start"]
 
         # We initiate an OrderedDict.
         # Indeed, we use an ordered dict because we want the structuration and the

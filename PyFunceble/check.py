@@ -119,7 +119,7 @@ class Check:
             # The given url is empty.
 
             # We initiate the element to test from the globaly URl to test.
-            to_test = PyFunceble.CONFIGURATION["to_test"]
+            to_test = PyFunceble.INTERN["to_test"]
 
         if to_test.startswith("http"):
             # The element to test starts with http.
@@ -230,7 +230,7 @@ class Check:
             # A domain is not given.
 
             # We set the element to test as the currently tested element.
-            to_test = PyFunceble.CONFIGURATION["to_test"]
+            to_test = PyFunceble.INTERN["to_test"]
 
         try:
             # We get the position of the last point.
@@ -241,7 +241,7 @@ class Check:
             if not extension and to_test.endswith("."):
                 extension = list(filter(lambda x: x, to_test.split(".")))[-1]
 
-            if not extension or extension not in PyFunceble.CONFIGURATION["iana_db"]:
+            if not extension or extension not in PyFunceble.INTERN["iana_db"]:
                 # * The extension is not found.
                 # or
                 # * The extension is not into the IANA database.
@@ -263,10 +263,10 @@ class Check:
             # The element did not pass the domain validation. That means that
             # it has invalid character or the position of - or _ are not right.
 
-            if extension in PyFunceble.CONFIGURATION["psl_db"]:
+            if extension in PyFunceble.INTERN["psl_db"]:
                 # The extension is into the psl database.
 
-                for suffix in PyFunceble.CONFIGURATION["psl_db"][extension]:
+                for suffix in PyFunceble.INTERN["psl_db"][extension]:
                     # We loop through the element of the extension into the psl database.
 
                     try:
@@ -363,7 +363,7 @@ class Check:
             # A domain is not given.
 
             # We set the element to test as the currently tested element.
-            to_test = PyFunceble.CONFIGURATION["to_test"]
+            to_test = PyFunceble.INTERN["to_test"]
 
         # We return the status of the check.
         return self.is_domain_valid(to_test, subdomain_check=True)
@@ -399,7 +399,7 @@ class Check:
             # An element is not localy given.
 
             # We consider the global element to test as the element to test.
-            to_test = PyFunceble.CONFIGURATION["to_test"]
+            to_test = PyFunceble.INTERN["to_test"]
 
         # We check if it passes our IPv4 regex.
         # * True: It's a valid IPv4.
@@ -434,7 +434,7 @@ class Check:
             # An element is not localy given.
 
             # We consider the global element to test as the element to test.
-            to_test = PyFunceble.CONFIGURATION["to_test"]
+            to_test = PyFunceble.INTERN["to_test"]
 
         if self.is_ip_valid(to_test):
             # We initate our regex which will match for valid IPv4 ranges.

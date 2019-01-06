@@ -169,17 +169,17 @@ class TestCheck(TestCase):
         expected = True
 
         for domain in self.valid_domain:
-            PyFunceble.CONFIGURATION["to_test"] = "http://%s/helloworld" % domain
+            PyFunceble.INTERN["to_test"] = "http://%s/helloworld" % domain
 
             actual = Check().is_url_valid()
 
             self.assertEqual(expected, actual)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_url_valid()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_url_valid()
 
             self.assertEqual(expected, actual)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_url_valid_not_valid(self):
         """
@@ -284,16 +284,16 @@ class TestCheck(TestCase):
         expected = True
 
         for domain in self.valid_domain:
-            PyFunceble.CONFIGURATION["to_test"] = domain
+            PyFunceble.INTERN["to_test"] = domain
             actual = Check().is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % domain)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_domain_valid()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % domain)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_domain_valid_not_valid(self):
         """
@@ -304,16 +304,16 @@ class TestCheck(TestCase):
         expected = False
 
         for domain in self.not_valid_domain:
-            PyFunceble.CONFIGURATION["to_test"] = domain
+            PyFunceble.INTERN["to_test"] = domain
             actual = Check().is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_domain_valid()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_domain_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_subdomain_valid(self):
         """
@@ -343,20 +343,20 @@ class TestCheck(TestCase):
         expected = True
 
         for domain in valid:
-            PyFunceble.CONFIGURATION["to_test"] = domain
+            PyFunceble.INTERN["to_test"] = domain
             actual = Check().is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_subdomain()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
 
-            actual = Check().is_subdomain(PyFunceble.CONFIGURATION["to_test"])
+            actual = Check().is_subdomain(PyFunceble.INTERN["to_test"])
 
             self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_subdomain_not_valid(self):
         """
@@ -381,20 +381,20 @@ class TestCheck(TestCase):
         expected = False
 
         for domain in not_valid:
-            PyFunceble.CONFIGURATION["to_test"] = domain
+            PyFunceble.INTERN["to_test"] = domain
             actual = Check().is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_subdomain()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
 
-            actual = Check().is_subdomain(PyFunceble.CONFIGURATION["to_test"])
+            actual = Check().is_subdomain(PyFunceble.INTERN["to_test"])
 
             self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_ip_valid(self):
         """
@@ -423,16 +423,16 @@ class TestCheck(TestCase):
         invalid = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
 
         for ip_to_test in invalid:
-            PyFunceble.CONFIGURATION["to_test"] = ip_to_test
+            PyFunceble.INTERN["to_test"] = ip_to_test
             actual = Check().is_ip_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_ip_valid()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_ip_valid()
 
             self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_ip_range(self):
         """
@@ -443,20 +443,20 @@ class TestCheck(TestCase):
         valid = ["255.45.65.0/24", "255.45.65.6/18"]
 
         for ip_to_test in valid:
-            PyFunceble.CONFIGURATION["to_test"] = ip_to_test
+            PyFunceble.INTERN["to_test"] = ip_to_test
             actual = Check().is_ip_range()
 
             self.assertEqual(
                 expected, actual, msg="%s is not an IP range." % ip_to_test
             )
 
-            actual = Check(PyFunceble.CONFIGURATION["to_test"]).is_ip_range()
+            actual = Check(PyFunceble.INTERN["to_test"]).is_ip_range()
 
             self.assertEqual(
                 expected, actual, msg="%s is not an IP range." % ip_to_test
             )
 
-            del PyFunceble.CONFIGURATION["to_test"]
+            del PyFunceble.INTERN["to_test"]
 
     def test_is_ip_range_not(self):
         """

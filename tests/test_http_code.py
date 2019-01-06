@@ -78,8 +78,8 @@ class TestHTTPCode(TestCase):
         """
         PyFunceble.load_config(True)
 
-        PyFunceble.CONFIGURATION["to_test"] = "google.com"
-        PyFunceble.CONFIGURATION["to_test_type"] = "domain"
+        PyFunceble.INTERN["to_test"] = "google.com"
+        PyFunceble.INTERN["to_test_type"] = "domain"
 
     @mock.patch("PyFunceble.http_code.HTTPCode._access")
     def test_get_not_activated(self, _):

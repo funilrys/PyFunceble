@@ -106,14 +106,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # We set a variable which will save the output.
         self.output = ""
 
-        if (
-            "to_test" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["to_test"]
-        ):
+        if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
             # We are testing something.
 
             # We save it into an unified variable.
-            self.tested = PyFunceble.CONFIGURATION["to_test"]
+            self.tested = PyFunceble.INTERN["to_test"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent (from the configuration file) is not empty.
@@ -137,21 +134,21 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
         try:
             # We try to call the http code.
-            PyFunceble.CONFIGURATION["http_code"]
+            PyFunceble.INTERN["http_code"]
         except KeyError:
             # If it is not found.
 
             # We initiate an empty http code.
-            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+            PyFunceble.INTERN["http_code"] = "*" * 3
 
         try:
             # We try to call the referer.
-            PyFunceble.CONFIGURATION["referer"]
+            PyFunceble.INTERN["referer"]
         except KeyError:
             # If it is not found.
 
             # We initate an `Unknown` referer.
-            PyFunceble.CONFIGURATION["referer"] = "Unknown"
+            PyFunceble.INTERN["referer"] = "Unknown"
 
     def _analytic_host_file_directory(self):
         """
@@ -209,8 +206,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             return False
 
         if (
-            "file_to_test" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["file_to_test"]
+            "file_to_test" in PyFunceble.INTERN
+            and PyFunceble.INTERN["file_to_test"]
             and (
                 PyFunceble.CONFIGURATION["generate_hosts"]
                 or PyFunceble.CONFIGURATION["plain_list_domain"]
@@ -343,9 +340,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # Note: We generate the http code file so that
                 # we can have each domain in a file which is the
                 # extracted http code.
-                splited_destination = output_dir + str(
-                    PyFunceble.CONFIGURATION["http_code"]
-                )
+                splited_destination = output_dir + str(PyFunceble.INTERN["http_code"])
 
             if PyFunceble.CONFIGURATION["generate_hosts"]:
                 # The hosts file generation is activated.
@@ -391,8 +386,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         """
 
         if (
-            "file_to_test" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["file_to_test"]
+            "file_to_test" in PyFunceble.INTERN
+            and PyFunceble.INTERN["file_to_test"]
             and PyFunceble.CONFIGURATION["unified"]
         ):
             # * We are testing a file.
@@ -414,7 +409,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     to_print = [
                         self.tested,
                         self.domain_status,
-                        PyFunceble.CONFIGURATION["http_code"],
+                        PyFunceble.INTERN["http_code"],
                     ]
                 else:
                     # The http status code request is not activated.
@@ -433,7 +428,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     self.domain_status,
                     self.expiration_date,
                     self.source,
-                    PyFunceble.CONFIGURATION["http_code"],
+                    PyFunceble.INTERN["http_code"],
                     PyFunceble.CURRENT_TIME,
                 ]
 
@@ -452,10 +447,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         :type old_status: str
         """
 
-        if (
-            "file_to_test" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["file_to_test"]
-        ):
+        if "file_to_test" in PyFunceble.INTERN and PyFunceble.INTERN["file_to_test"]:
             # We are testing a file.
 
             # We partially construct the path to the file to write/print.
@@ -515,7 +507,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 [
                     self.tested,
                     old_status,
-                    PyFunceble.CONFIGURATION["http_code"],
+                    PyFunceble.INTERN["http_code"],
                     PyFunceble.CURRENT_TIME,
                 ],
                 "HTTP",
@@ -535,12 +527,12 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # the status of the domain.
         regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
-        if PyFunceble.CONFIGURATION["to_test_type"] == "domain":
+        if PyFunceble.INTERN["to_test_type"] == "domain":
             # The element we are testing is a domain.
 
             # We construct the url to get.
             url_to_get = "http://%s" % self.tested
-        elif PyFunceble.CONFIGURATION["to_test_type"] == "url":
+        elif PyFunceble.INTERN["to_test_type"] == "url":
             # The element we are testing is a URL.
 
             # We construct the url to get.
@@ -633,7 +625,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
         if (
             PyFunceble.HTTP_CODE["active"]
-            and PyFunceble.CONFIGURATION["http_code"]
+            and PyFunceble.INTERN["http_code"]
             in PyFunceble.HTTP_CODE["list"]["potentially_down"]
         ):
             # * The http status request is activated.
@@ -678,7 +670,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             self._special_blogspot()
         elif (
             PyFunceble.HTTP_CODE["active"]
-            and PyFunceble.CONFIGURATION["http_code"]
+            and PyFunceble.INTERN["http_code"]
             in PyFunceble.HTTP_CODE["list"]["potentially_up"]
         ):
             # * The http status code request is activated.
@@ -736,10 +728,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         if PyFunceble.HTTP_CODE["active"]:
             # The http status code request is activated.
 
-            if (
-                PyFunceble.CONFIGURATION["http_code"]
-                in PyFunceble.HTTP_CODE["list"]["up"]
-            ):
+            if PyFunceble.INTERN["http_code"] in PyFunceble.HTTP_CODE["list"]["up"]:
                 # The extracted http code in in the list of up codes.
 
                 # We generate the analytic file(s).
@@ -760,7 +749,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     + self.domain_status
                 )
             elif (
-                PyFunceble.CONFIGURATION["http_code"]
+                PyFunceble.INTERN["http_code"]
                 in PyFunceble.HTTP_CODE["list"]["potentially_up"]
             ):
                 # The extracted http status code is in the list of potentially up status.
@@ -811,10 +800,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             # The http code request/extraction is activated.
 
             try:
-                if (
-                    PyFunceble.CONFIGURATION["http_code"]
-                    in PyFunceble.HTTP_CODE["list"]["up"]
-                ):
+                if PyFunceble.INTERN["http_code"] in PyFunceble.HTTP_CODE["list"]["up"]:
                     # The extracted http code is in the list of up status.
 
                     # We generate the analytic file(s).
@@ -835,7 +821,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         + self.domain_status
                     )
                 elif (
-                    PyFunceble.CONFIGURATION["http_code"]
+                    PyFunceble.INTERN["http_code"]
                     in PyFunceble.HTTP_CODE["list"]["potentially_up"]
                 ):
                     # The extracted http code is in the list of potentially up status code.
@@ -843,7 +829,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     # We generate the analytic file(s).
                     self.analytic_file("potentially_up", self.domain_status)
                 elif (
-                    PyFunceble.CONFIGURATION["http_code"]
+                    PyFunceble.INTERN["http_code"]
                     in PyFunceble.HTTP_CODE["list"]["potentially_down"]
                 ):
                     # The extracted http code is in the list of potentially down status code.
@@ -873,7 +859,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Logic behind the printing (in file) when generating status file.
         """
 
-        if PyFunceble.CONFIGURATION["file_to_test"]:
+        if PyFunceble.INTERN["file_to_test"]:
             # We are testing a file.
 
             if PyFunceble.CONFIGURATION["less"]:
@@ -900,7 +886,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                             self.tested,
                             self.expiration_date,
                             self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.INTERN["http_code"],
                             PyFunceble.CURRENT_TIME,
                         ]
                     else:
@@ -943,10 +929,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         # We initiate the data to print.
                         data_to_print = [
                             self.tested,
-                            PyFunceble.CONFIGURATION["referer"],
+                            PyFunceble.INTERN["referer"],
                             self.domain_status,
                             self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.INTERN["http_code"],
                             PyFunceble.CURRENT_TIME,
                         ]
                     else:
@@ -955,7 +941,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         # We initate the data to print.
                         data_to_print = [
                             self.tested,
-                            PyFunceble.CONFIGURATION["referer"],
+                            PyFunceble.INTERN["referer"],
                             self.domain_status,
                             self.source,
                             PyFunceble.CURRENT_TIME,
@@ -978,7 +964,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         data_to_print = [
                             self.tested,
                             self.source,
-                            PyFunceble.CONFIGURATION["http_code"],
+                            PyFunceble.INTERN["http_code"],
                             PyFunceble.CURRENT_TIME,
                         ]
                     else:
@@ -1014,7 +1000,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 to_print = [
                     self.tested,
                     self.domain_status,
-                    PyFunceble.CONFIGURATION["http_code"],
+                    PyFunceble.INTERN["http_code"],
                 ]
 
                 if not PyFunceble.HTTP_CODE["active"]:
@@ -1038,7 +1024,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         self.domain_status,
                         self.expiration_date,
                         self.source,
-                        PyFunceble.CONFIGURATION["http_code"],
+                        PyFunceble.INTERN["http_code"],
                     ]
                 else:
                     # The http status code extraction is not activated.
@@ -1060,11 +1046,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Generate a file according to the domain status.
         """
 
-        if not PyFunceble.CONFIGURATION["http_code"]:
+        if not PyFunceble.INTERN["http_code"]:
             # The http code is equal to None.
 
             # We initiate an empty http code.
-            PyFunceble.CONFIGURATION["http_code"] = "*" * 3
+            PyFunceble.INTERN["http_code"] = "*" * 3
 
         if self.domain_status.lower() in PyFunceble.STATUS["list"]["up"]:
             # The status is in the list of up status.

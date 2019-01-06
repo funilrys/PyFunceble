@@ -104,11 +104,11 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         # We get the status of the IPv4 validation.
         ip_validation = Check().is_ip_valid()
 
-        if "current_test_data" in PyFunceble.CONFIGURATION:
+        if "current_test_data" in PyFunceble.INTERN:
             # The end-user want more information whith his test.
 
             # We update some index.
-            PyFunceble.CONFIGURATION["current_test_data"].update(
+            PyFunceble.INTERN["current_test_data"].update(
                 {
                     "domain_syntax_validation": domain_validation,
                     "ip4_syntax_validation": ip_validation,
@@ -130,11 +130,11 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             # * We get the HTTP status code of the currently tested element.
             # and
             # * We try to get the element status from the IANA database.
-            PyFunceble.CONFIGURATION.update(
+            PyFunceble.INTERN.update(
                 {"http_code": HTTPCode().get(), "referer": Referer().get()}
             )
 
-            if PyFunceble.CONFIGURATION["referer"] in [
+            if PyFunceble.INTERN["referer"] in [
                 PyFunceble.STATUS["official"]["up"],
                 PyFunceble.STATUS["official"]["down"],
                 PyFunceble.STATUS["official"]["invalid"],
@@ -142,19 +142,19 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 # The WHOIS record status is into our list of official status.
 
                 # We consider that status as the status of the tested element.
-                return PyFunceble.CONFIGURATION["referer"]
+                return PyFunceble.INTERN["referer"]
 
             # The WHOIS record status is not into our list of official status.
 
-            if "current_test_data" in PyFunceble.CONFIGURATION:
+            if "current_test_data" in PyFunceble.INTERN:
                 # The end-user want more information whith his test.
 
                 # We update the whois_server index.
-                PyFunceble.CONFIGURATION["current_test_data"][
+                PyFunceble.INTERN["current_test_data"][
                     "whois_server"
-                ] = PyFunceble.CONFIGURATION["referer"]
+                ] = PyFunceble.INTERN["referer"]
 
-            if PyFunceble.CONFIGURATION["referer"] and not Check().is_subdomain():
+            if PyFunceble.INTERN["referer"] and not Check().is_subdomain():
                 # * The iana database comparison status is not None.
                 # and
                 # * The domain we are testing is not a subdomain.
@@ -184,7 +184,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             # * The element is a valid IPv4.
 
             # We get the HTTP status code.
-            PyFunceble.CONFIGURATION["http_code"] = HTTPCode().get()
+            PyFunceble.INTERN["http_code"] = HTTPCode().get()
 
             # We log our whois record if the debug mode is activated.
             Logs().whois(self.whois_record)
@@ -469,7 +469,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             return PyFunceble.STATUS["official"]["up"]
 
         # We get the whois record.
-        self.whois_record = Lookup().whois(PyFunceble.CONFIGURATION["referer"])
+        self.whois_record = Lookup().whois(PyFunceble.INTERN["referer"])
 
         # We list the list of regex which will help us get an unformatted expiration date.
         to_match = [
@@ -513,11 +513,11 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         if self.whois_record:
             # The whois record is not empty.
 
-            if "current_test_data" in PyFunceble.CONFIGURATION:
+            if "current_test_data" in PyFunceble.INTERN:
                 # The end-user want more information whith his test.
 
                 # We update the whois_record index.
-                PyFunceble.CONFIGURATION["current_test_data"][
+                PyFunceble.INTERN["current_test_data"][
                     "whois_record"
                 ] = self.whois_record
 
@@ -563,11 +563,11 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                             # We log the whois record.
                             Logs().whois(self.whois_record)
 
-                        if "current_test_data" in PyFunceble.CONFIGURATION:
+                        if "current_test_data" in PyFunceble.INTERN:
                             # The end-user want more information whith his test.
 
                             # We update the expiration_date index.
-                            PyFunceble.CONFIGURATION["current_test_data"][
+                            PyFunceble.INTERN["current_test_data"][
                                 "expiration_date"
                             ] = self.expiration_date
 
