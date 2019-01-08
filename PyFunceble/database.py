@@ -75,113 +75,122 @@ class Inactive:
     """
 
     def __init__(self):
-        # We get the file path we are working with.
-        self.file_path = PyFunceble.INTERN["file_to_test"]
 
-        # We set the equivalent of one day in seconds.
-        self.one_day_in_seconds = 1 * 24 * 3600
+        if PyFunceble.CONFIGURATION["inactive_database"]:
+            # The database subsystem is activated.
 
-        # We convert the number of days between the database retest
-        # to seconds.
-        self.days_in_seconds = (
-            PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
-        )
+            # We get the file path we are working with.
+            self.file_path = PyFunceble.INTERN["file_to_test"]
 
-        # We set the path to the inactive database file.
-        self.inactive_db_path = (
-            PyFunceble.CURRENT_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
-        )
+            # We set the equivalent of one day in seconds.
+            self.one_day_in_seconds = 1 * 24 * 3600
 
-        if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
-            # We are testing something.
+            # We convert the number of days between the database retest
+            # to seconds.
+            self.days_in_seconds = (
+                PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
+            )
 
-            # We set a variable which will save the actual element we are working with.
-            self.element = PyFunceble.INTERN["to_test"]
+            # We set the path to the inactive database file.
+            self.inactive_db_path = (
+                PyFunceble.CURRENT_DIRECTORY
+                + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
+            )
 
-        if "inactive_db" not in PyFunceble.INTERN:
-            # The database is empty or equal to None.
+            if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
+                # We are testing something.
 
-            # We initiate it with an empty dictionnary.
-            PyFunceble.INTERN["inactive_db"] = {}
+                # We set a variable which will save the actual element we are working with.
+                self.element = PyFunceble.INTERN["to_test"]
 
-        if (
-            "flatten_inactive_db" not in PyFunceble.INTERN
-            or not PyFunceble.INTERN["flatten_inactive_db"]
-        ):
-            # The flatten version of the database does not exist or is not set.
+            if "inactive_db" not in PyFunceble.INTERN:
+                # The database is empty or equal to None.
 
-            # We create it.
-            PyFunceble.INTERN["flatten_inactive_db"] = self.content()
+                # We initiate it with an empty dictionnary.
+                PyFunceble.INTERN["inactive_db"] = {}
+
+            if (
+                "flatten_inactive_db" not in PyFunceble.INTERN
+                or not PyFunceble.INTERN["flatten_inactive_db"]
+            ):
+                # The flatten version of the database does not exist or is not set.
+
+                # We create it.
+                PyFunceble.INTERN["flatten_inactive_db"] = self.content()
 
     def _reformat_historical_formating_error(self):  # pragma: no cover
         """
         Format the old format so it can be merged into the newer format.
         """
 
-        # We construct the possible path to an older version of the database.
-        historical_formating_error = PyFunceble.CURRENT_DIRECTORY + "inactive-db.json"
+        if PyFunceble.CONFIGURATION["inactive_database"]:
+            # The database subsystem is activated.
 
-        if PyFunceble.path.isfile(historical_formating_error):
-            # The histortical file already exists.
+            # We construct the possible path to an older version of the database.
+            historical_formating_error = (
+                PyFunceble.CURRENT_DIRECTORY + "inactive-db.json"
+            )
 
-            # We get its content.
-            data = Dict().from_json(File(historical_formating_error).read())
+            if PyFunceble.path.isfile(historical_formating_error):
+                # The histortical file already exists.
 
-            # We initiate a variable which will save the data that is going
-            # to be merged.
-            data_to_parse = {}
+                # We get its content.
+                data = Dict().from_json(File(historical_formating_error).read())
 
-            # We get the database keybase.
-            top_keys = data.keys()
+                # We initiate a variable which will save the data that is going
+                # to be merged.
+                data_to_parse = {}
 
-            for top_key in top_keys:
-                # We loop through the list of upper keys.
+                # We get the database keybase.
+                top_keys = data.keys()
 
-                # We get the lowest keys.
-                low_keys = data[top_key].keys()
+                for top_key in top_keys:
+                    # We loop through the list of upper keys.
 
-                # We initiate the data to parse.
-                data_to_parse[top_key] = {}
+                    # We get the lowest keys.
+                    low_keys = data[top_key].keys()
 
-                for low_key in low_keys:
-                    # We loop through the list of lower keys.
+                    # We initiate the data to parse.
+                    data_to_parse[top_key] = {}
 
-                    if low_key.isdigit():
-                        # The current low key is a digit.
+                    for low_key in low_keys:
+                        # We loop through the list of lower keys.
 
-                        # We parse its content (from the old) into the new format.
-                        # In between, we remove 30 days from the low_key so that
-                        # it become in the past. This way they will be retested
-                        # automatically.
-                        data_to_parse[top_key][
-                            int(low_key) - (self.one_day_in_seconds * 30)
-                        ] = data[top_key][low_key]
-                    else:
-                        # The current low key is not a digit.
+                        if low_key.isdigit():
+                            # The current low key is a digit.
 
-                        # We parse its content (from the old) into the new format.
-                        # In between, we remove 30 days from the current time so that
-                        # it become in the past. This way they will be retested
-                        # automatically.
-                        data_to_parse[top_key][
-                            int(PyFunceble.time()) - (self.one_day_in_seconds * 30)
-                        ] = data[top_key][low_key]
+                            # We parse its content (from the old) into the new format.
+                            # In between, we remove 30 days from the low_key so that
+                            # it become in the past. This way they will be retested
+                            # automatically.
+                            data_to_parse[top_key][
+                                int(low_key) - (self.one_day_in_seconds * 30)
+                            ] = data[top_key][low_key]
+                        else:
+                            # The current low key is not a digit.
 
-            if "inactive_db" in PyFunceble.INTERN:
-                # The current (new) database is not empty.
+                            # We parse its content (from the old) into the new format.
+                            # In between, we remove 30 days from the current time so that
+                            # it become in the past. This way they will be retested
+                            # automatically.
+                            data_to_parse[top_key][
+                                int(PyFunceble.time()) - (self.one_day_in_seconds * 30)
+                            ] = data[top_key][low_key]
 
-                # We update add the content of the old into the current database.
-                PyFunceble.INTERN["inactive_db"].update(data_to_parse)
-            else:
-                # The current (new) database is empty.
+                if "inactive_db" in PyFunceble.INTERN:
+                    # The current (new) database is not empty.
 
-                # We replace the content with the data_to_parse as it is complient
-                # with the new format.
-                PyFunceble.INTERN["inactive_db"] = data_to_parse
+                    # We update add the content of the old into the current database.
+                    PyFunceble.INTERN["inactive_db"].update(data_to_parse)
+                else:
+                    # The current (new) database is empty.
 
-            # We delete the old database file.
-            File(historical_formating_error).delete()
+                    # We replace the content with the data_to_parse as it is complient
+                    # with the new format.
+                    PyFunceble.INTERN["inactive_db"] = data_to_parse
+
+                # We delete the old database file.
+                File(historical_formating_error).delete()
 
     def _merge(self):
         """
@@ -189,61 +198,66 @@ class Inactive:
         has already been set into :code:`PyFunceble.INTERN["inactive_db"]`
         """
 
-        # We get the content of the database.
-        database_content = Dict().from_json(File(self.inactive_db_path).read())
+        if PyFunceble.CONFIGURATION["inactive_database"]:
+            # The database subsystem is activated.
 
-        # We get the database top keys.
-        database_top_keys = database_content.keys()
+            # We get the content of the database.
+            database_content = Dict().from_json(File(self.inactive_db_path).read())
 
-        for database_top_key in database_top_keys:
-            # We loop through the list of database top keys.
+            # We get the database top keys.
+            database_top_keys = database_content.keys()
 
-            if database_top_key not in PyFunceble.INTERN["inactive_db"]:
-                # The currently read top key is not already into the database.
+            for database_top_key in database_top_keys:
+                # We loop through the list of database top keys.
 
-                # We initiate the currently read key with the same key from
-                # our database file.
-                PyFunceble.INTERN["inactive_db"][database_top_key] = database_content[
-                    database_top_key
-                ]
-            else:
-                # The currently read top key is already into the database.
+                if database_top_key not in PyFunceble.INTERN["inactive_db"]:
+                    # The currently read top key is not already into the database.
 
-                # We get the list of lower indexes.
-                database_low_keys = database_content[database_top_key].keys()
+                    # We initiate the currently read key with the same key from
+                    # our database file.
+                    PyFunceble.INTERN["inactive_db"][
+                        database_top_key
+                    ] = database_content[database_top_key]
+                else:
+                    # The currently read top key is already into the database.
 
-                for database_low_key in database_low_keys:
-                    # We loop through the lower keys.
+                    # We get the list of lower indexes.
+                    database_low_keys = database_content[database_top_key].keys()
 
-                    if (
-                        database_low_key
-                        not in PyFunceble.INTERN["inactive_db"][database_top_key]
-                    ):  # pragma: no cover
-                        # The lower key is not already into the database.
+                    for database_low_key in database_low_keys:
+                        # We loop through the lower keys.
 
-                        # We initiate the currently read low and top key with the
-                        # same combinaison from our database file.
-                        PyFunceble.INTERN["inactive_db"][database_top_key][
+                        if (
                             database_low_key
-                        ] = database_content[database_top_key][database_low_key]
-                    else:
-                        # The lower key is not already into the database.
+                            not in PyFunceble.INTERN["inactive_db"][database_top_key]
+                        ):  # pragma: no cover
+                            # The lower key is not already into the database.
 
-                        # We exted the currently read low and top key combinaison
-                        # with the same combinaison from our database file.
-                        PyFunceble.INTERN["inactive_db"][database_top_key][
-                            database_low_key
-                        ].extend(database_content[database_top_key][database_low_key])
-
-                        # And we format the list of element to ensure that there is no
-                        # duplicate into the database content.
-                        PyFunceble.INTERN["inactive_db"][database_top_key][
-                            database_low_key
-                        ] = List(
+                            # We initiate the currently read low and top key with the
+                            # same combinaison from our database file.
                             PyFunceble.INTERN["inactive_db"][database_top_key][
                                 database_low_key
-                            ]
-                        ).format()
+                            ] = database_content[database_top_key][database_low_key]
+                        else:
+                            # The lower key is not already into the database.
+
+                            # We exted the currently read low and top key combinaison
+                            # with the same combinaison from our database file.
+                            PyFunceble.INTERN["inactive_db"][database_top_key][
+                                database_low_key
+                            ].extend(
+                                database_content[database_top_key][database_low_key]
+                            )
+
+                            # And we format the list of element to ensure that there is no
+                            # duplicate into the database content.
+                            PyFunceble.INTERN["inactive_db"][database_top_key][
+                                database_low_key
+                            ] = List(
+                                PyFunceble.INTERN["inactive_db"][database_top_key][
+                                    database_low_key
+                                ]
+                            ).format()
 
     def _retrieve(self):
         """

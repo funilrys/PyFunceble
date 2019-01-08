@@ -349,18 +349,17 @@ class Core:  # pragma: no cover
         else:
             # We are used as an imported module.
 
-            # We activate the simple mode as the table or any full
+            # * We activate the simple mode as the table or any full
             # details on screen are irrelevant.
-            PyFunceble.CONFIGURATION["simple"] = True
-
-            # We activate the quiet mode.
-            PyFunceble.CONFIGURATION["quiet"] = True
-
-            # We deactivate the whois database as it is not needed.
-            PyFunceble.CONFIGURATION["whois_database"] = False
-
+            # * We activate the quiet mode.
             # And we deactivate the generation of files.
-            PyFunceble.CONFIGURATION["no_files"] = True
+            PyFunceble.CONFIGURATION["simple"] = PyFunceble.CONFIGURATION[
+                "quiet"
+            ] = PyFunceble.CONFIGURATION["no_files"] = True
+
+            # * We deactivate the whois database as it is not needed.
+            # * We deactivate the database as it is not needed.
+            PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION['inactive_database'] = False
 
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.
