@@ -951,7 +951,8 @@ class Core:  # pragma: no cover
         Inactive().to_test()
 
         if (
-            PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]
+            PyFunceble.CONFIGURATION["inactive_database"]
+            and PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]
             and "to_test"
             in PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
             and PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
