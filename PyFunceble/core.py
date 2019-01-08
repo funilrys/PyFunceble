@@ -359,7 +359,9 @@ class Core:  # pragma: no cover
 
             # * We deactivate the whois database as it is not needed.
             # * We deactivate the database as it is not needed.
-            PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION['inactive_database'] = False
+            PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION[
+                "inactive_database"
+            ] = False
 
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.
@@ -1050,14 +1052,20 @@ class Core:  # pragma: no cover
                 # We format the list.
                 list_to_test = List(list_to_test).custom_format(Sort.standard)
 
-        # We test each element of the list to test.
-        list(
-            map(
-                self.domain,
-                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
-                PyFunceble.repeat(list_to_test[-1]),
+        try:
+            # We test each element of the list to test.
+            list(
+                map(
+                    self.domain,
+                    list_to_test[
+                        PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                    ],
+                    PyFunceble.repeat(list_to_test[-1]),
+                )
             )
-        )
+        except IndexError:
+            # We print a message on screen.
+            print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")
 
     def file_url(self):
         """
