@@ -620,7 +620,17 @@ class Prints:
 
             if self.template.lower() == "json":
                 # The template is the json template.
-                return self._json_print()
+
+                if not PyFunceble.CONFIGURATION["no_files"] and self.output:
+                    # * We are allowed to generate file.
+                    # and
+                    # * The given output is not empty.
+
+                    # We print the json file.
+                    return self._json_print()
+
+                # We return nothing.
+                return None
 
             if self.template not in alone_cases and self.template not in without_header:
                 # * The template is not in the list of alone case.

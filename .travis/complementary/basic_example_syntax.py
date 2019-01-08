@@ -2,9 +2,9 @@
 This is a basic example which checks syntax.
 """
 
+from PyFunceble import ipv4_syntax_check as PyFuncebleIPv4Syntax
 from PyFunceble import syntax_check as PyFuncebleDomainSyntax
 from PyFunceble import url_syntax_check as PyFuncebleURLSyntax
-from PyFunceble import ipv4_syntax_check as PyFuncebleIPv4Syntax
 
 print("Start of basic example for syntax check.")
 print("google.com", PyFuncebleDomainSyntax(domain="google.com"))

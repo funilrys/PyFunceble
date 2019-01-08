@@ -42,15 +42,16 @@ def url_status(url):
 
     return PyFuncebleURL(url)
 
-print('Start of loop example.')
+
+print("Start of loop example.")
 for domain in DOMAINS:
     print(
         "%s is %s and %s is %s"
         % (
-            domain,cc
+            domain,
             domain_status(domain),
             "http://" + domain,
             url_status("http://" + domain),
         )
     )
-print('End of loop example.')
+print("End of loop example.")

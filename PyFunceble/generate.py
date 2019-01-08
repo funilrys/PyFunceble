@@ -196,13 +196,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Generate the hosts file, the plain list and the splitted lists.
         """
 
-        if Inactive().is_present() and self.domain_status in [
-            PyFunceble.STATUS["official"]["down"],
-            PyFunceble.STATUS["official"]["invalid"],
-        ]:
-            # * The currently tested domain is in the database
-            # and
-            # * Its status did not changed.
+        if self._do_not_produce_file():
+            # We do not have to produce file.
+
+            # We return false.
             return False
 
         if (
@@ -1082,10 +1079,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         # We print on screen if needed.
         self._prints_status_screen()
 
-        if Inactive().is_present() and self.domain_status in [
-            PyFunceble.STATUS["official"]["down"],
-            PyFunceble.STATUS["official"]["invalid"],
-        ]:
+        if self._do_not_produce_file():
             return None
 
         if (
@@ -1105,3 +1099,28 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
             # We print or generate the unified files.
             self.unified_file()
+
+    def _do_not_produce_file(self):
+        """
+        Check if we are allowed to produce a file based from the given
+        information.
+
+        :return:
+            The state of the production.
+            True: We do not produce file.
+            False: We do produce file.
+        :rtype: bool
+        """
+
+        if (
+            Inactive().is_present()
+            and self.domain_status
+            in [
+                PyFunceble.STATUS["official"]["down"],
+                PyFunceble.STATUS["official"]["invalid"],
+            ]
+            and PyFunceble.INTERN["to_test"]
+            not in PyFunceble.INTERN["extracted_list_to_test"]
+        ):
+            return True
+        return False

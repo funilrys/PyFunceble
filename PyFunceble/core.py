@@ -918,6 +918,9 @@ class Core:  # pragma: no cover
         # We get the list to test from the file we have to test.
         list_to_test = self._extract_domain_from_file()
 
+        # We save the original list to test globally.
+        PyFunceble.INTERN["extracted_list_to_test"] = list_to_test
+
         # We get the list of mined.
         mined_list = Mining().list_of_mined()
 
