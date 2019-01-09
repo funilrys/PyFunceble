@@ -20,16 +20,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    https://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://funilrys.github.io/PyFunceble/
