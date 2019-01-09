@@ -1082,14 +1082,20 @@ class Core:  # pragma: no cover
         # We get, format, clean the list of URL to test.
         list_to_test = self._file_list_to_test_filtering()
 
-        # We test each URL from the list to test.
-        list(
-            map(
-                self.url,
-                list_to_test[PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :],
-                PyFunceble.repeat(list_to_test[-1]),
+        try:
+            # We test each URL from the list to test.
+            list(
+                map(
+                    self.url,
+                    list_to_test[
+                        PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                    ],
+                    PyFunceble.repeat(list_to_test[-1]),
+                )
             )
-        )
+        except IndexError:
+            # We print a message on screen.
+            print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")
 
     @classmethod
     def switch(
