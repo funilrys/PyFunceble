@@ -40,7 +40,7 @@ License:
 
     MIT License
 
-    Copyright (c) 2017-2018 Nissar Chababy
+    Copyright (c) 2017-2019 Nissar Chababy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.7.1. (Blue Bontebok: Maggot)"
+VERSION = "1.7.2.dev (Blue Bontebok: Maggot)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
