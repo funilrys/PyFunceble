@@ -1,8 +1,9 @@
 """
-This is a basic example which prints one of the official output of PyFunceble.
+This is a basic example which prints one of the availability of 
+the given domain and URL.
 
-Note:
-* Official output: ACTIVE, INACTIVE, INVALID
+.. note:
+    Official output: ACTIVE, INACTIVE, INVALID
 """
 
 from PyFunceble import test as PyFunceble

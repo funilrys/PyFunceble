@@ -65,10 +65,10 @@ License:
 import PyFunceble
 from PyFunceble import directory_separator, requests
 from PyFunceble.check import Check
+from PyFunceble.database import Inactive
 from PyFunceble.helpers import Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
-from PyFunceble.database import Inactive
 
 
 class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes

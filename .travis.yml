@@ -57,9 +57,21 @@ script:
   - python .travis/complementary/basic_example_syntax.py
   - python .travis/complementary/advanced_example.py
   - python .travis/complementary/loop_example.py
+  - python .travis/complementary/custom_configuration.py
 
 after_success:
   - coveralls
+
+deploy:
+  provider: pypi
+  user: "funilrys"
+  password:
+    secure: "gXlGN5Xr7z5ZcKCM+F/1RiD+GTbEJ9lxCRX4ZuWqcwl9YrIx1344G9NiA9UEJDK6uPBbeMA4qND2IFU64f8D+NqQRGIWHOwD/26DifGurPPvM1AHTEPnQZ9/V2x5thVxI9Rs2jAQKWQ+y9E303KVEE2Y9/OwG98SLIhLsioWxmDkc128wq0bHFgBgDHJs7rb7jBoYMo7R7+9k9Wus8yEYn3zGGon+Yu+CcCWChGYWNh71PRdL7yctxenwePlQf4M0y+0/WLbezP2SZEXiP3NTZ3mWhuKFaajx8HLZIjwKSHXUrzOjbRni5o52ARGBvM7dCZIHvhpZo++Ti1SWWFBw1dI/qJt1+55+RcxhN4xcV1a5RYSseVDUotNILMRELdoroTNgvYXFzXtx7AMyO1hKjV50tSKt9Tt4oQugMFeKDjEXKey7Je5whL6T/w9XO9UoZkmrN5odEZElA0EvWg2SloYfnLblhtUzNHRLR287z/hkkw1558R/wZ+kAziQclJcR6kseehW3lxyPNFRjKmnSVbuE99z3C1Ik6aDd0uFPHHu1UGENLOhiw9s6wf04YVcTvfH2inRl4oGV724IuhKCg4IeEthU7xLscIsyffChx8Dl3C2D8KFk4LquXoxuSmoNC0WX+7Oi4L7Ohx2TmznPeG1QY1ge7DT6JT1OuLk3E="
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
+  on:
+    all_branches: true
+    condition: ${TRAVIS_BRANCH} =~ ^dev|master$
 
 notifications:
   on_success: change

@@ -78,7 +78,7 @@ class TestPercentage(BaseStdout):
         Setup everything needed for the tests.
         """
 
-        PyFunceble.load_config()
+        PyFunceble.load_config(True)
 
     def test_count(self):
         """
@@ -205,7 +205,9 @@ INVALID     1%%           2%s
         Test the log system for the case that we are checking for syntax.
         """
 
-        PyFunceble.CONFIGURATION["syntax"] = True
+        PyFunceble.CONFIGURATION["syntax"] = PyFunceble.CONFIGURATION[
+            "show_percentage"
+        ] = True
 
         BaseStdout.setUp(self)
 

@@ -1,8 +1,5 @@
 """
-This is an advanced example which prints some information about the tested element.
-
-Note:
-* Official output: ACTIVE, INACTIVE, INVALID
+This is an advanced example which get more information about the tested element.
 """
 
 from PyFunceble import test as PyFunceble

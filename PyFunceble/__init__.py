@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.7.2.dev (Blue Bontebok: Maggot)"
+VERSION = "1.8.0.dev (Blue Bontebok: Maggot)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -203,7 +203,7 @@ ASCII_PYFUNCEBLE = """
 """
 
 
-def test(domain, complete=False):  # pragma: no cover
+def test(domain, complete=False, config=None):  # pragma: no cover
     """
     Test the availability of the given domain or IP.
 
@@ -215,6 +215,10 @@ def test(domain, complete=False):  # pragma: no cover
         the test.
     :type complete: bool
 
+    :param config:
+        A dict with the configuration index (from .PyFunceble.yaml) to update.
+    :type config: dict
+
     :return: The status or the informations of the domain.
     :rtype: str|dict
 
@@ -225,6 +229,14 @@ def test(domain, complete=False):  # pragma: no cover
 
     # We silently load the configuration.
     load_config(True)
+
+    if config and isinstance(config, dict):
+        # The given configuration is not None or empty.
+        # and
+        # It is a dict.
+
+        # We update the configuration index.
+        CONFIGURATION.update(config)
 
     # And we return the status of the given domain.
     return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
@@ -281,7 +293,7 @@ def url_syntax_check(url):  # pragma: no cover
     return Check(url).is_url_valid()
 
 
-def url_test(url, complete=False):  # pragma: no covere
+def url_test(url, complete=False, config=None):  # pragma: no covere
     """
     Test the availability of the given URL.
 
@@ -292,6 +304,10 @@ def url_test(url, complete=False):  # pragma: no covere
         Activate the return of a dict with some significant data from
         the test.
     :type complete: bool
+
+    :param config:
+        A dict with the configuration index (from .PyFunceble.yaml) to update.
+    :type config: dict
 
     :return: The status or the informations of the URL.
     :rtype: str|dict
@@ -304,11 +320,19 @@ def url_test(url, complete=False):  # pragma: no covere
     # We silently load the configuration.
     load_config(True)
 
+    if config and isinstance(config, dict):
+        # The given configuration is not None or empty.
+        # and
+        # It is a dict.
+
+        # We update the configuration index.
+        CONFIGURATION.update(config)
+
     # And we return the status of the given URL.
     return Core(url_to_test=url, modulo_test=True).test(complete)
 
 
-def load_config(under_test=False):  # pragma: no cover
+def load_config(under_test=False, custom=None):  # pragma: no cover
     """
     Load the configuration.
 
@@ -317,16 +341,34 @@ def load_config(under_test=False):  # pragma: no cover
         or load the configuration file and initate the output directory
         if it does not exist (False).
     :type under_test: bool
+
+    :param custom:
+        A dict with the configuration index (from .PyFunceble.yaml) to update.
+    :type custom: dict
     """
 
-    # We load and download the different configuration file if they are non
-    # existant.
-    Load(CURRENT_DIRECTORY)
+    if "config_loaded" not in INTERN:
+        # The configuration was not already loaded.
 
-    if not under_test:
-        # If we are not under test which means that we want to save informations,
-        # we initiate the directory structure.
-        DirectoryStructure()
+        # We load and download the different configuration file if they are non
+        # existant.
+        Load(CURRENT_DIRECTORY)
+
+        if not under_test:
+            # If we are not under test which means that we want to save informations,
+            # we initiate the directory structure.
+            DirectoryStructure()
+
+        # We save that the configuration was loaded.
+        INTERN.update({"config_loaded": True})
+
+        if custom and isinstance(custom, dict):
+            # The given configuration is not None or empty.
+            # and
+            # It is a dict.
+
+            # We update the configuration index.
+            CONFIGURATION.update(custom)
 
 
 def stay_safe():  # pragma: no cover

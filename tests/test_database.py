@@ -169,9 +169,7 @@ class TestDatabaseInactive(TestCase):
         PyFunceble.INTERN["inactive_db"] = {}
         Inactive()._add_to_test("hello.world")
 
-        expected = {
-            PyFunceble.INTERN["file_to_test"]: {"to_test": ["hello.world"]}
-        }
+        expected = {PyFunceble.INTERN["file_to_test"]: {"to_test": ["hello.world"]}}
 
         self.assertEqual(expected, PyFunceble.INTERN["inactive_db"])
 
@@ -211,13 +209,9 @@ class TestDatabaseInactive(TestCase):
 
         self.test_file_not_exist()
 
-        PyFunceble.INTERN["inactive_db"] = {
-            PyFunceble.INTERN["file_to_test"]: {}
-        }
+        PyFunceble.INTERN["inactive_db"] = {PyFunceble.INTERN["file_to_test"]: {}}
 
-        expected = {
-            PyFunceble.INTERN["file_to_test"]: {"to_test": ["hello.world"]}
-        }
+        expected = {PyFunceble.INTERN["file_to_test"]: {"to_test": ["hello.world"]}}
 
         Inactive()._add_to_test("hello.world")
 
@@ -409,9 +403,7 @@ class TestDatabaseInactive(TestCase):
 
         timestamp = str(Inactive()._timestamp())
         PyFunceble.INTERN["to_test"] = "hello.world"
-        expected = {
-            PyFunceble.INTERN["file_to_test"]: {timestamp: ["hello.world"]}
-        }
+        expected = {PyFunceble.INTERN["file_to_test"]: {timestamp: ["hello.world"]}}
 
         Inactive().add()
         actual = Dict().from_json(File(self.file).read())
@@ -566,7 +558,6 @@ class TestDatabaseInactive(TestCase):
 
         del PyFunceble.INTERN["inactive_db"]
         del PyFunceble.INTERN["to_test"]
-        del PyFunceble.CONFIGURATION["inactive_database"]
 
         self.test_file_not_exist()
 
@@ -574,6 +565,8 @@ class TestDatabaseInactive(TestCase):
         """
         Test Inactive.is_present().
         """
+
+        PyFunceble.CONFIGURATION["inactive_database"] = True
 
         self.test_file_not_exist()
 
@@ -602,7 +595,6 @@ class TestDatabaseInactive(TestCase):
 
         del PyFunceble.INTERN["inactive_db"]
         del PyFunceble.INTERN["to_test"]
-        del PyFunceble.CONFIGURATION["inactive_database"]
 
         self.test_file_not_exist()
 
@@ -768,18 +760,18 @@ class TestDatabaseWhois(TestCase):
         PyFunceble.INTERN["whois_db"] = self.expected_content
         PyFunceble.INTERN["to_test"] = "google.com"
 
-        PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-            "google.com"
-        ]["epoch"] = PyFunceble.time() - (15 * (60 * 60 * 24))
+        PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]]["google.com"][
+            "epoch"
+        ] = PyFunceble.time() - (15 * (60 * 60 * 24))
 
         expected = True
         actual = Whois().is_time_older()
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-            "google.com"
-        ]["epoch"] = PyFunceble.time() + (15 * (60 * 60 * 24))
+        PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]]["google.com"][
+            "epoch"
+        ] = PyFunceble.time() + (15 * (60 * 60 * 24))
 
         expected = False
         actual = Whois().is_time_older()

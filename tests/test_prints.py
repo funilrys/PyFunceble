@@ -87,7 +87,7 @@ class TestPrints(BaseStdout):
         Setup everything needed for the tests.
         """
 
-        PyFunceble.load_config()
+        PyFunceble.load_config(True)
 
         self.file = "this_file_is_a_ghost"
         self.to_print = {

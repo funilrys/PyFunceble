@@ -74,6 +74,7 @@ from PyFunceble.database import Inactive
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.expiration_date import ExpirationDate
+from PyFunceble.generate import Generate
 from PyFunceble.helpers import Command, Download, List, Regex
 from PyFunceble.mining import Mining
 from PyFunceble.percentage import Percentage
@@ -81,7 +82,6 @@ from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
 from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
-from PyFunceble.generate import Generate
 
 
 class Core:  # pragma: no cover
