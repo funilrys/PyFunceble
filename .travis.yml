@@ -24,9 +24,7 @@ matrix:
 
 install:
   - export PATH="${HOME}/miniconda/bin:${PATH}"
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-    -O miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-    -O miniconda.sh; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
@@ -37,7 +35,7 @@ install:
   - pip --version
   - pip install pylint coverage coveralls
 
-  script:
+script:
   - python setup.py install
   - coverage run setup.py test
   - echo "Lint PyFunceble" && pylint PyFunceble
