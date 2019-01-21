@@ -24,7 +24,9 @@ matrix:
 
 install:
   - export PATH="${HOME}/miniconda/bin:${PATH}"
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+    -O miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    -O miniconda.sh; fi
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
@@ -35,7 +37,7 @@ install:
   - pip --version
   - pip install pylint coverage coveralls
 
-script:
+  script:
   - python setup.py install
   - coverage run setup.py test
   - echo "Lint PyFunceble" && pylint PyFunceble
@@ -64,14 +66,14 @@ after_success:
 
 deploy:
   provider: pypi
-  user: "funilrys"
+  user: funilrys
   password:
-    secure: "gXlGN5Xr7z5ZcKCM+F/1RiD+GTbEJ9lxCRX4ZuWqcwl9YrIx1344G9NiA9UEJDK6uPBbeMA4qND2IFU64f8D+NqQRGIWHOwD/26DifGurPPvM1AHTEPnQZ9/V2x5thVxI9Rs2jAQKWQ+y9E303KVEE2Y9/OwG98SLIhLsioWxmDkc128wq0bHFgBgDHJs7rb7jBoYMo7R7+9k9Wus8yEYn3zGGon+Yu+CcCWChGYWNh71PRdL7yctxenwePlQf4M0y+0/WLbezP2SZEXiP3NTZ3mWhuKFaajx8HLZIjwKSHXUrzOjbRni5o52ARGBvM7dCZIHvhpZo++Ti1SWWFBw1dI/qJt1+55+RcxhN4xcV1a5RYSseVDUotNILMRELdoroTNgvYXFzXtx7AMyO1hKjV50tSKt9Tt4oQugMFeKDjEXKey7Je5whL6T/w9XO9UoZkmrN5odEZElA0EvWg2SloYfnLblhtUzNHRLR287z/hkkw1558R/wZ+kAziQclJcR6kseehW3lxyPNFRjKmnSVbuE99z3C1Ik6aDd0uFPHHu1UGENLOhiw9s6wf04YVcTvfH2inRl4oGV724IuhKCg4IeEthU7xLscIsyffChx8Dl3C2D8KFk4LquXoxuSmoNC0WX+7Oi4L7Ohx2TmznPeG1QY1ge7DT6JT1OuLk3E="
-  distributions: "sdist bdist_wheel"
+    secure: E8qLrl95Ccf5atmND4dPYqTTyjmg3UQxyrVn+7WWzBWicGpRBPJ03VfuN+uKyhqmnP4L1N/zLVCDrzdrYJiFkXN2ZEWB5ENyzUdxlEN02FvSWIxpdVhKVThAE6gCERRCvtiOY/J6ESAu+I4xIaF8xGlG0qfLVDfXeQTVY1A0HXwcM2rVOVH1fo0p7+jscv5pLJxi8yLaRfZWNnCOEHsSuUB6DhKR+1A6EPMZje7qGKI9GlgGFK7Qln6vae2QOS8puMFtny33bJ0WsfpTynuwXI7cd5V/MK6Zygh5EVsBPJmWIbm3JSpKSdVwVUrKZs1Bt15cXy45CKcSJtR1tk2kMzYlOLN+RolVx/k36P/6MQdZl3xis3NNlEjG3l5T8ot0GsOIdgt28WXMjyQsyC/6I904N417lTmchSXvV6xaTtJoTKmB4Fy2+i0VNZWj+MyCP2uW3L0O41ZLk28Tf9kFrfCfvEFFy7VIOESM3Nw/fEVgU/maTHBI2oJ9Xfb9/kxE4Ir+bpp1xLfHW/d2Pv+KpUpdrGX/m9EBFDbRSHHAU5oWKnlNgE2jdx+768xfIgjSwIAre9M1Nda06nwLowNREWwB8QXb4aKfp1PkdAzcSm/MU4TAkE3ntSXipP/GKSTkdikWFK5Ioge3+rm7d0qPoskwdDf9XU0M0GaD00Su+xI=
+  distributions: sdist bdist_wheel
   skip_existing: true
   on:
     all_branches: true
-    condition: ${TRAVIS_BRANCH} =~ ^dev|master$
+    condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
 
 notifications:
   on_success: change
