@@ -36,16 +36,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    https://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/master/special-thanks.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://funilrys.github.io/PyFunceble/
@@ -127,7 +127,7 @@ def _get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble-dev",
+        name="PyFunceble",
         version=_get_version(),
         install_requires=_get_requirements(),
         description="The tool to check the availability or syntax of domains, IPv4 or URL.",
@@ -152,7 +152,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 4 - Beta",
+            "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
