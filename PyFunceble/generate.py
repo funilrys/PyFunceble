@@ -517,50 +517,97 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Handle the blogspot SPECIAL case.
         """
 
-        # We initate a variable whith a regex which will match all blogpost domain.
-        regex_blogspot = ".blogspot."
+        if not PyFunceble.CONFIGURATION["no_special"]:
+            # We can run/check the special rule.
 
-        # We iniate a list of elements in the HTML which will tell us more about
-        # the status of the domain.
-        regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
+            # We initate a variable whith a regex which will match all blogpost domain.
+            regex_blogspot = ".blogspot."
 
-        if PyFunceble.INTERN["to_test_type"] == "domain":
-            # The element we are testing is a domain.
+            # We iniate a list of elements in the HTML which will tell us more about
+            # the status of the domain.
+            regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
-            # We construct the url to get.
-            url_to_get = "http://%s" % self.tested
-        elif PyFunceble.INTERN["to_test_type"] == "url":
-            # The element we are testing is a URL.
+            if PyFunceble.INTERN["to_test_type"] == "domain":
+                # The element we are testing is a domain.
 
-            # We construct the url to get.
-            url_to_get = self.tested
-        else:
-            raise Exception("Unknow test type.")
+                # We construct the url to get.
+                url_to_get = "http://%s" % self.tested
+            elif PyFunceble.INTERN["to_test_type"] == "url":
+                # The element we are testing is a URL.
 
-        if Regex(self.tested, regex_blogspot, return_data=False, escape=True).match():
-            # The element we are testing is a blogspot subdomain.
+                # We construct the url to get.
+                url_to_get = self.tested
+            else:
+                raise Exception("Unknow test type.")
 
-            # We get the HTML of the home page.
-            blogger_content_request = requests.get(url_to_get, headers=self.headers)
+            if Regex(
+                self.tested, regex_blogspot, return_data=False, escape=True
+            ).match():
+                # The element we are testing is a blogspot subdomain.
 
-            for regx in regex_blogger:
-                # We loop through the list of regex to match.
+                # We get the HTML of the home page.
+                blogger_content_request = requests.get(url_to_get, headers=self.headers)
 
-                if (
-                    regx in blogger_content_request.text
-                    or Regex(
-                        blogger_content_request.text,
-                        regx,
-                        return_data=False,
-                        escape=False,
-                    ).match()
-                ):
-                    # The content match the currently read regex.
+                for regx in regex_blogger:
+                    # We loop through the list of regex to match.
+
+                    if (
+                        regx in blogger_content_request.text
+                        or Regex(
+                            blogger_content_request.text,
+                            regx,
+                            return_data=False,
+                            escape=False,
+                        ).match()
+                    ):
+                        # The content match the currently read regex.
+
+                        # We update the source.
+                        self.source = "SPECIAL"
+
+                        # We update the domain status.
+                        self.domain_status = PyFunceble.STATUS["official"]["down"]
+
+                        # We update the output file.
+                        self.output = (
+                            self.output_parent_dir
+                            + PyFunceble.OUTPUTS["splited"]["directory"]
+                            + self.domain_status
+                        )
+
+                        # And we break the loop as we matched something.
+                        break
+
+    def _special_wordpress_com(self):
+        """
+        Handle the wordpress.com special case.
+        """
+
+        if not PyFunceble.CONFIGURATION["no_special"]:
+            # We can run/check the special rule.
+
+            # We initiate the domain to match.
+            wordpress_com = ".wordpress.com"
+
+            # We initiate a variable which whill have to be into the HTML
+            # in order to be considered as inactive.
+            does_not_exist = "doesn&#8217;t&nbsp;exist"
+
+            if self.tested.endswith(wordpress_com):
+                # The currently tested element ends with wordpress.com.
+
+                # We get the content of the page.
+                wordpress_com_content = requests.get(
+                    "http://%s:80" % self.tested, headers=self.headers
+                )
+
+                if does_not_exist in wordpress_com_content.text:
+                    # The marker is into the page content.
 
                     # We update the source.
                     self.source = "SPECIAL"
 
-                    # We update the domain status.
+                    # We update the status.
                     self.domain_status = PyFunceble.STATUS["official"]["down"]
 
                     # We update the output file.
@@ -569,45 +616,6 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                         + PyFunceble.OUTPUTS["splited"]["directory"]
                         + self.domain_status
                     )
-
-                    # And we break the loop as we matched something.
-                    break
-
-    def _special_wordpress_com(self):
-        """
-        Handle the wordpress.com special case.
-        """
-
-        # We initiate the domain to match.
-        wordpress_com = ".wordpress.com"
-
-        # We initiate a variable which whill have to be into the HTML
-        # in order to be considered as inactive.
-        does_not_exist = "doesn&#8217;t&nbsp;exist"
-
-        if self.tested.endswith(wordpress_com):
-            # The currently tested element ends with wordpress.com.
-
-            # We get the content of the page.
-            wordpress_com_content = requests.get(
-                "http://%s:80" % self.tested, headers=self.headers
-            )
-
-            if does_not_exist in wordpress_com_content.text:
-                # The marker is into the page content.
-
-                # We update the source.
-                self.source = "SPECIAL"
-
-                # We update the status.
-                self.domain_status = PyFunceble.STATUS["official"]["down"]
-
-                # We update the output file.
-                self.output = (
-                    self.output_parent_dir
-                    + PyFunceble.OUTPUTS["splited"]["directory"]
-                    + self.domain_status
-                )
 
     def up_status_file(self):
         """
@@ -633,38 +641,41 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             # We generate the analytics files.
             self.analytic_file("potentially_down", self.domain_status)
 
-            # We initiate a list of domain which are actually.
-            # down if they return for example 404 as status code.
-            domain_to_match = [
-                ".canalblog.com",
-                ".doubleclick.net",
-                ".liveadvert.com",
-                ".skyrock.com",
-                ".tumblr.com",
-            ]
+            if not PyFunceble.CONFIGURATION["no_special"]:
+                # We can run/check the special rule.
 
-            for domain_to_handle in domain_to_match:
-                # We loop through the list of of domain to handle.
+                # We initiate a list of domain which are actually.
+                # down if they return for example 404 as status code.
+                domain_to_match = [
+                    ".canalblog.com",
+                    ".doubleclick.net",
+                    ".liveadvert.com",
+                    ".skyrock.com",
+                    ".tumblr.com",
+                ]
 
-                if self.tested.endswith(domain_to_handle):
-                    # The currently tested domain is endswith
-                    # the curerntly read domain to handle.
+                for domain_to_handle in domain_to_match:
+                    # We loop through the list of of domain to handle.
 
-                    # We update the source.
-                    self.source = "SPECIAL"
+                    if self.tested.endswith(domain_to_handle):
+                        # The currently tested domain is endswith
+                        # the curerntly read domain to handle.
 
-                    # We update the status.
-                    self.domain_status = PyFunceble.STATUS["official"]["down"]
+                        # We update the source.
+                        self.source = "SPECIAL"
 
-                    # We update the output file.s
-                    self.output = (
-                        self.output_parent_dir
-                        + PyFunceble.OUTPUTS["splited"]["directory"]
-                        + self.domain_status
-                    )
+                        # We update the status.
+                        self.domain_status = PyFunceble.STATUS["official"]["down"]
 
-            # We check again the special blogspot case.
-            self._special_blogspot()
+                        # We update the output file.s
+                        self.output = (
+                            self.output_parent_dir
+                            + PyFunceble.OUTPUTS["splited"]["directory"]
+                            + self.domain_status
+                        )
+
+                # We check again the special blogspot case.
+                self._special_blogspot()
         elif (
             PyFunceble.HTTP_CODE["active"]
             and PyFunceble.INTERN["http_code"]
@@ -754,8 +765,13 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 # We generate the analytic file(s).
                 self.analytic_file("potentially_up", self.domain_status)
 
-        if Check(self.tested).is_ip_range():
-            # The element we are currently testing is an IPv4 with range.
+        if (
+            not PyFunceble.CONFIGURATION["no_special"]
+            and Check(self.tested).is_ip_range()
+        ):
+            # * We can run/check the special rule.
+            # and
+            # * The element we are currently testing is an IPv4 with range.
 
             # We update the source.
             self.source = "SPECIAL"

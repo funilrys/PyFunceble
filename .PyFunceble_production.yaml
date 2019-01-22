@@ -36,6 +36,8 @@ local: False
 logs: True
 # Enable / Disable the generation of any file(s).
 no_files: False
+# Enable / Disable the usage of the SPECIAL rule(s).
+no_special: False
 # Enable / Disable the usage of whois in the tests.
 no_whois: False
 # Enable / Disable the URL/domain mining.

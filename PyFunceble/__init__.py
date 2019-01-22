@@ -91,7 +91,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.8.0.dev (Blue Bontebok: Maggot)"
+VERSION = "1.9.0.dev (Blue Bontebok: Maggot)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -772,6 +772,18 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
+                    "-ns",
+                    "--no-special",
+                    action="store_true",
+                    help="Switch the value of the usage of the SPECIAL rules. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["no_special"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
                     "-nu",
                     "--no-unified",
                     action="store_true",
@@ -779,7 +791,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "under the output directory. %s"
                     % (
                         CURRENT_VALUE_FORMAT
-                        + repr(not CONFIGURATION["unified"])
+                        + repr(CONFIGURATION["unified"])
                         + Style.RESET_ALL
                     ),
                 )
@@ -1086,6 +1098,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.no_logs:
                     CONFIGURATION.update({"logs": Core.switch("logs")})
+
+                if ARGS.no_special:
+                    CONFIGURATION.update({"no_special": Core.switch("no_special")})
 
                 if ARGS.no_unified:
                     CONFIGURATION.update({"unified": Core.switch("unified")})

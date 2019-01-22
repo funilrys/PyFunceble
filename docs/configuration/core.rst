@@ -232,6 +232,15 @@
     
     **Description:** Enable / Disable the generation of any file(s).
 
+:code:`no_special`
+----------------
+
+    **Type:** :code:`boolean`
+    
+    **Default value:** :code:`False`
+    
+    **Description:** Enable / Disable the usage of the SPECIAL rules - which are discribes in the source column section.
+
 :code:`no_whois`
 ----------------
 
