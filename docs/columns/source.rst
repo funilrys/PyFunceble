@@ -40,6 +40,12 @@ So I introduced the SPECIAL source.
 .. note::
     Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :code:`HTTPCode().get()`.
 
+.. warning::
+    Do not want those rules ? You can use following to disable them.
+
+    * :code:`-ns`|:code`--no-special` arguments from the CLI.
+    * :code:`no_special: True` into your local configuration file.
+
 :code:`*.blogspot.*`
 """"""""""""""""""""
 
