@@ -430,7 +430,7 @@
 
     **Type:** :code:`string`
     
-    **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"`
+    **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"`
     
     **Description:** Set the User-Agent to use every time we are requesting something from a web server other than our API.
 
