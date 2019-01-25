@@ -239,7 +239,10 @@ class Check:
             extension = to_test[last_point_index + 1 :]
 
             if not extension and to_test.endswith("."):
-                extension = list(filter(lambda x: x, to_test.split(".")))[-1]
+                try:
+                    extension = list(filter(lambda x: x, to_test.split(".")))[-1]
+                except IndexError:
+                    pass
 
             if not extension or extension not in PyFunceble.INTERN["iana_db"]:
                 # * The extension is not found.

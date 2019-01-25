@@ -140,6 +140,7 @@ class TestCheck(TestCase):
             "-hello.abuse.co.za",
             "-hello.world",
             "-world.hello",
+            "..",
             "bịllogram.com",
             "bittréẋ.com",
             "coinbȧse.com",
