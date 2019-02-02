@@ -64,6 +64,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, Download, File, Regex
+from PyFunceble.lookup import Lookup
 
 
 class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -151,6 +152,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             "dhl": "whois.nic.dhl",
             "discover": "whois.nic.discover",
             "dnp": "whois.nic.dnp",
+            "doosan": "whois.nic.doosan",
             "duns": "whois.nic.duns",
             "dupont": "whois.nic.dupont",
             "earth": "whois.nic.earth",
@@ -190,12 +192,15 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             "hotels": "whois.nic.hotels",
             "hotmail": "whois.nic.hotmail",
             "hsbc": "whois.nic.hsbc",
+            "htc": "whois.nic.htc",
             "hyatt": "whois.nic.hyatt",
             "ieee": "whois.nic.ieee",
+            "iinet": "whois.nic.iinet",
             "imdb": "whois.nic.imdb",
             "int": "whois.iana.org",
             "intel": "whois.nic.intel",
             "intuit": "whois.nic.intuit",
+            "ipiranga": " whois.nic.ipiranga",
             "ipirange": "whois.nic.ipiranga",
             "itau": "whois.nic.itau",
             "iwc": "whois.nic.iwc",
@@ -222,23 +227,160 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             "living": "whois.nic.living",
             "lk": "whois.nic.lk",
             "loft": "whois.nic.loft",
+            "lupin": "whois.nic.lupin",
+            "maif": "whois.nic.maif",
+            "marshalls": "whois.nic.marshalls",
+            "mattel": "whois.nic.mattel",
+            "mcd": "whois.nic.mcd",
+            "mcdonalds": "whois.nic.mcdonalds",
+            "merckmsd": "whois.nic.merckmsd",
             "microsoft": "whois.nic.microsoft",
+            "mint": "whois.nic.mint",
+            "mlb": "whois.nic.mlb",
+            "mobily": "whois.nic.mobily",
             "moi": "whois.nic.moi",
+            "montblanc": "whois.nic.montblanc",
+            "moto": "whois.nic.moto",
+            "msd": "whois.nic.msd",
+            "mtpc": "whois.nic.mtpc",
+            "mutual": "whois.nic.mutual",
+            "mutuelle": "whois.nic.mutuelle",
             "nagoya": "whois.nic.nagoya",
+            "nba": "whois.nic.nba",
+            "netflix": "whois.nic.netflix",
+            "neustar": "whois.nic.neustar",
+            "nfl": "whois.nic.nfl",
+            "nhk": "whois.nic.nhk",
+            "nike": "whois.nic.nike",
+            "northwesternmutual": "whois.nic.northwesternmutual",
+            "now": " whois.nic.now",
+            "ntt": "whois.nic.ntt",
             "nyc": "whois.nic.nyc",
+            "office": "whois.nic.office",
+            "okinawa": "whois.nic.okinawa",
+            "oldnavy": "whois.nic.oldnavy",
+            "open": "whois.nic.open",
+            "orientexpress": "whois.nic.orientexpress",
+            "otsuka": "whois.nic.otsuka",
+            "passagens": "whois.nic.passagens",
+            "pay": "whois.nic.pay",
+            "pfizer": "whois.nic.pfizer",
+            "pharmacy": " whois.nic.pharmacy",
+            "piaget": " whois.nic.piaget",
+            "pictet": "whois.nic.pictet",
+            "pin": "whois.nic.pin",
+            "ping": "whois.nic.ping",
+            "pramerica": "whois.nic.pramerica",
+            "praxi": "whois.nic.praxi",
+            "prime": "whois.nic.prime",
+            "pru": "whois.nic.pru",
+            "prudential": "whois.nic.prudential",
             "ps": "whois.pnina.ps",
+            "qvc": "whois.nic.qvc",
+            "read": "whois.nic.read",
+            "realtor": "whois.nic.realtor",
             "ren": "whois.nic.ren",
+            "rocher": "whois.nic.rocher",
+            "room": "whois.nic.room",
             "rw": "whois.ricta.org.rw",
+            "ryukyu": "whois.nic.ryukyu",
+            "safe": "whois.nic.safe",
+            "safety": "whois.nic.safety",
+            "sakura": "whois.nic.sakura",
+            "sapo": "whois.nic.sapo",
+            "sas": "whois.nic.sas",
+            "save": "whois.nic.save",
+            "secure": "whois.nic.secure",
+            "sener": "whois.nic.sener",
             "shaw": "whois.afilias-srs.net",
             "shop": "whois.nic.shop",
+            "silk": "whois.nic.silk",
+            "skype": "whois.nic.skype",
             "sl": "whois.nic.sl",
+            "smile": "whois.nic.smile",
+            "sohu": "whois.nic.sohu",
+            "song": "whois.nic.song",
+            "spot": "whois.nic.spot",
+            "staples": "whois.nic.staples",
+            "statefarm": "whois.nic.statefarm",
             "stream": "whois.nic.stream",
+            "suzuki": "whois.nic.suzuki",
+            "swiftcover": "whois.nic.swiftcover",
+            "talk": "whois.nic.talk",
+            "taobao": "whois.nic.taobao",
+            "target": "whois.nic.target",
+            "tjmaxx": "whois.nic.tjmaxx",
+            "tjx": "whois.nic.tjx",
+            "tkmaxx": "whois.nic.tkmaxx",
+            "tmall": "whois.nic.tmall",
             "tokyo": "whois.nic.tokyo",
+            "tube": "whois.nic.tube",
+            "tunes": "whois.nic.tunes",
+            "tushu": "whois.nic.tushu",
             "tvs": "whois.nic.tvs",
+            "unicom": "whois.nic.unicom",
             "uno": "whois.nic.uno",
+            "vivo": "whois.nic.vivo",
+            "vuelos": "whois.nic.vuelos",
+            "wanggou": "whois.nic.wanggou",
+            "watches": "whois.nic.watches",
+            "weather": "whois.nic.weather",
+            "weatherchannel": "whois.nic.weatherchannel",
+            "weir": "whois.nic.weir",
+            "whois": "whois.nic.qpon",
+            "windows": "whois.nic.windows",
+            "winners": "whois.nic.winners",
+            "wow": "whois.nic.wow",
+            "xbox": "whois.nic.xbox",
+            "xn--1ck2e1b": "whois.nic.xn--1ck2e1b",
+            "xn--2scrj9c": "whois.inregistry.net",
+            "xn--3hcrj9c": "whois.inregistry.net",
+            "xn--45br5cyl": "whois.inregistry.net",
+            "xn--45brj9c": "whois.inregistry.net",
+            "xn--8y0a063a": "whois.nic.xn--8y0a063a",
+            "xn--bck1b9a5dre4c": "whois.nic.xn--bck1b9a5dre4c",
+            "xn--cck2b3b": "whois.nic.xn--cck2b3b",
+            "xn--czr694b": "whois.nic.xn--czr694b",
             "xn--e1a4c": "whois.eu",
+            "xn--eckvdtc9d": "whois.nic.xn--eckvdtc9d",
+            "xn--fct429k": "whois.nic.xn--fct429k",
+            "xn--fpcrj9c3d": "whois.inregistry.net",
+            "xn--fzc2c9e2c": "whois.nic.lk",
+            "xn--g2xx48c": "whois.nic.xn--g2xx48c",
+            "xn--gckr3f0f": "whois.nic.xn--gckr3f0f",
+            "xn--gecrj9c": "whois.inregistry.net",
+            "xn--gk3at1e": "whois.nic.xn--gk3at1e",
+            "xn--h2breg3eve": "whois.inregistry.net",
+            "xn--h2brj9c": "whois.inregistry.net",
+            "xn--h2brj9c8c": "whois.inregistry.net",
+            "xn--imr513n": "whois.nic.xn--imr513n",
+            "xn--jvr189m": "whois.nic.xn--jvr189m",
+            "xn--kpu716f": "whois.nic.xn--kpu716f",
+            "xn--mgba3a3ejt": "whois.nic.xn--mgba3a3ejt",
+            "xn--mgbb9fbpob": "whois.nic.xn--mgbb9fbpob",
+            "xn--mgbbh1a": "whois.inregistry.net",
+            "xn--mgbbh1a71e": "whois.inregistry.net",
+            "xn--mgbgu82a": "whois.inregistry.net",
+            "xn--nyqy26a": "whois.nic.xn--nyqy26a",
+            "xn--otu796d": "whois.nic.xn--otu796d",
+            "xn--pbt977c": "whois.nic.xn--pbt977c",
+            "xn--rhqv96g": "whois.nic.xn--rhqv96g",
+            "xn--rovu88b": "whois.nic.xn--rovu88b",
+            "xn--rvc1e0am3e": "whois.inregistry.net",
+            "xn--s9brj9c": "whois.inregistry.net",
             "xn--ses554g": "whois.registry.knet.cn",
+            "xn--wgbh1c": "whois.dotmasr.eg",
+            "xn--xkc2al3hye2a": "whois.nic.lk",
+            "xn--xkc2dl3a5ee0h": "whois.inregistry.net",
+            "yahoo": "whois.nic.yahoo",
+            "yamaxun": "whois.nic.yamaxun",
+            "yandex": "whois.nic.yandex",
+            "yokohama": "whois.nic.yokohama",
+            "you": "whois.nic.you",
             "za": "whois.registry.net.za",
+            "zappos": "whois.nic.zappos",
+            "zero": "whois.nic.zero",
+            "zippo": "whois.nic.zippo",
         }
 
     def load(self):
@@ -264,15 +406,15 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We get the a copy of the page.
-        iana_record = Download(
-            self.iana_url + "/" + extension + ".html", return_data=True
-        ).text()
+        iana_record = Lookup().whois(
+            PyFunceble.CONFIGURATION["iana_whois_server"], "hello.%s" % extension
+        )
 
-        if iana_record:
+        if iana_record and "refer" in iana_record:
             # The record is not empty.
 
             # We initiate a regex which will extract the referer.
-            regex_referer = r"(?s)\<b\>(?:WHOIS\sServer:)\<\/b>\s+([a-zA-Z0-9._-]+)"
+            regex_referer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
 
             # We try to extract the referer.
             matched = Regex(
@@ -285,7 +427,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We return the matched referer.
                 return matched
 
-        # *The referer was not extracted successfully.
+        # * The referer was not extracted successfully.
         # or
         # * The iana record is empty.
 
@@ -299,44 +441,38 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # the given extension.
         return None
 
-    def _extensions(self, block):
+    def _extensions(self):
         """
         Extract the extention from the given block.
         Plus get its referer.
-
-        :param block: The line from the IANA database.
-        :type block: str
         """
+
+        upstream_lines = (
+            Download(self.iana_url, return_data=True)
+            .text()
+            .split('<span class="domain tld">')
+        )
 
         # We extract the different extension from the currently readed line.
         regex_valid_extension = r"(/domains/root/db/)(.*)(\.html)"
 
-        if "/domains/root/db/" in block:
-            # The link is in the line.
+        for block in upstream_lines:
+            if "/domains/root/db/" in block:
+                # The link is in the line.
 
-            # We try to extract the extension.
-            matched = Regex(
-                block, regex_valid_extension, return_data=True, rematch=True
-            ).match()[1]
+                # We try to extract the extension.
+                matched = Regex(
+                    block, regex_valid_extension, return_data=True, rematch=True
+                ).match()[1]
 
-            if matched:
-                # The extraction is not empty or None.
+                if matched:
+                    # The extraction is not empty or None.
 
-                # We get the referer.
-                referer = self._referer(matched)
+                    # We get the referer.
+                    referer = self._referer(matched)
 
-                if (
-                    matched in self.iana_db and referer != self.iana_db[matched]
-                ) or matched not in self.iana_db:
-                    # * The referer is different from the previously set
-                    # or
-                    # * The extension is not already into the database.
-
-                    # We update/set the referer.
-                    self.iana_db[matched] = referer
-
-                    # We save the content of the constructed database.
-                    Dict(self.iana_db).to_json(self.destination)
+                    # We yield the matched extension and its referer.
+                    yield (matched, referer)
 
     def update(self):
         """
@@ -350,14 +486,14 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             print("Update of iana-domains-db", end=" ")
 
         # We loop through the line of the iana website.
-        list(
-            map(
-                self._extensions,
-                Download(self.iana_url, return_data=True)
-                .text()
-                .split('<span class="domain tld">'),
-            )
-        )
+        for extension, referer in self._extensions():
+
+            if extension not in self.iana_db or self.iana_db[extension] != referer:
+                # We add the extension to the databae.
+                self.iana_db[extension] = referer
+
+                # We save the content of the constructed database.
+                Dict(self.iana_db).to_json(self.destination)
 
         if not PyFunceble.CONFIGURATION["quiet"]:
             # The quiet mode is not activated.

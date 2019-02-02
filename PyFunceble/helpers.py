@@ -622,9 +622,7 @@ class Directory:  # pylint: disable=too-few-public-methods
                     split_path = [self.directory]
 
                 # We run the same function with the splited_path argument filled.
-                return self.fix_path(
-                    splited_path=list(filter(lambda directory: directory, split_path))
-                )
+                return self.fix_path(splited_path=[x for x in split_path if x])
 
             # We return the directory.
             return self.directory
@@ -747,7 +745,7 @@ class List:  # pylint: disable=too-few-public-methods
             # The main list is given.
 
             # We get the given list.
-            self.main_list = list(filter(lambda x: x is None or x, main_list))
+            self.main_list = [x for x in main_list if x is None or x]
 
     def format(self):
         """
@@ -926,9 +924,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
         pre_result = comp(self.regex)
 
-        return list(
-            filter(lambda element: not pre_result.search(str(element)), self.data)
-        )
+        return [x for x in self.data if not pre_result.search(str(x))]
 
     def matching_list(self):
         """
@@ -938,7 +934,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
         pre_result = comp(self.regex)
 
-        return list(filter(lambda element: pre_result.search(str(element)), self.data))
+        return [x for x in self.data if pre_result.search(str(x))]
 
     def match(self):
         """

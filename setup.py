@@ -114,7 +114,7 @@ def _get_version():
         open("PyFunceble/__init__.py", encoding="utf-8").read()
     )[0]
 
-    return ".".join(list(filter(lambda x: x.isdigit(), extracted.split("."))))
+    return ".".join([x for x in extracted.split(".") if x.isdigit()])
 
 
 def _get_long_description():  # pragma: no cover

@@ -696,6 +696,8 @@ class Core:  # pragma: no cover
                 # We print the domain and the status.
                 print(domain, status)
 
+        return domain, status
+
     def url(self, url_to_test=None, last_url=None):
         """
         Manage the case that we want to test only a given url.
@@ -745,6 +747,8 @@ class Core:  # pragma: no cover
 
                 # We print the URL informations.
                 print(PyFunceble.INTERN["to_test"], status)
+
+        return url_to_test, status
 
     @classmethod
     def reset_counters(cls):
@@ -942,7 +946,7 @@ class Core:  # pragma: no cover
             # The adblock decoder is not activated.
 
             # We get the formatted list of domain to test.
-            list_to_test = list(map(self._format_domain, list_to_test))
+            list_to_test = [self._format_domain(x) for x in list_to_test]
 
         # We clean the output directory if it is needed.
         PyFunceble.Clean(list_to_test)
@@ -1058,15 +1062,12 @@ class Core:  # pragma: no cover
 
         try:
             # We test each element of the list to test.
-            list(
-                map(
-                    self.domain,
-                    list_to_test[
-                        PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
-                    ],
-                    PyFunceble.repeat(list_to_test[-1]),
-                )
-            )
+            return [
+                self.domain(x, list_to_test[-1])
+                for x in list_to_test[
+                    PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                ]
+            ]
         except IndexError:
             # We print a message on screen.
             print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")
@@ -1084,15 +1085,12 @@ class Core:  # pragma: no cover
 
         try:
             # We test each URL from the list to test.
-            list(
-                map(
-                    self.url,
-                    list_to_test[
-                        PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
-                    ],
-                    PyFunceble.repeat(list_to_test[-1]),
-                )
-            )
+            return [
+                self.url(x, list_to_test[-1])
+                for x in list_to_test[
+                    PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                ]
+            ]
         except IndexError:
             # We print a message on screen.
             print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")

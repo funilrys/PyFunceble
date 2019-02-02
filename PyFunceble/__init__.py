@@ -66,7 +66,6 @@ import argparse
 import socket
 from collections import OrderedDict
 from inspect import getsourcefile
-from itertools import repeat
 from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
@@ -91,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.9.1.dev (Blue Bontebok: Maggot)"
+VERSION = "1.9.2.dev (Blue Bontebok: Maggot)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -376,10 +375,9 @@ def stay_safe():  # pragma: no cover
     Print a friendly message.
     """
 
-    if (
-        not CONFIGURATION["quiet"]
-        and int(choice(list(filter(lambda x: x.isdigit(), str(time()))))) % 3 == 0
-    ):
+    random = int(choice(str(int(time()))))
+
+    if not CONFIGURATION["quiet"] and random % 3 == 0:
         print("\n" + Fore.GREEN + Style.BRIGHT + "Thanks for using PyFunceble!")
         print(
             Fore.YELLOW

@@ -209,7 +209,7 @@ class Sort:  # pylint: disable=too-few-public-methods
                     #
                     # Note: after this, there is no point anymore.
                     reversion = full_extension + ".".join(
-                        list(map(lambda x: x[::-1], tros_ot.split(".")))
+                        [x[::-1] for x in tros_ot.split(".")]
                     )
 
                     # We remove all special characters and return the formatted string.

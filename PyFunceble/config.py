@@ -541,8 +541,11 @@ class Version:
         :rtype: list
         """
 
+        # We split the version.
+        splited_version = version.split(".")
+
         # We split the parsed version and keep the digits.
-        digits = list(filter(lambda x: x.isdigit(), version.split(".")))
+        digits = [x for x in splited_version if x.isdigit()]
 
         if not return_non_digits:
             # We do not have to return the non digits part of the version.
@@ -553,7 +556,7 @@ class Version:
         # We have to return the non digit parts of the version.
 
         # We split the parsed version and keep the non digits.
-        non_digits = list(filter(lambda x: not x.isdigit(), version.split(".")))
+        non_digits = [x for x in splited_version if not x.isdigit()]
 
         # We return a tuple with first the digits part and finally the non digit parts.
         return (digits, non_digits[0])

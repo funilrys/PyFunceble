@@ -417,12 +417,11 @@ class Inactive:
                 # is not empty.
 
                 # We get the indexes of the current file (in the dabase).
-                database_keys = list(
-                    filter(
-                        lambda x: x.isdigit(),
-                        PyFunceble.INTERN["inactive_db"][self.file_path].keys(),
-                    )
-                )
+                database_keys = [
+                    x
+                    for x in PyFunceble.INTERN["inactive_db"][self.file_path].keys()
+                    if x.isdigit()
+                ]
 
                 if database_keys:
                     # The list of keys is not empty.

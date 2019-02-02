@@ -240,7 +240,7 @@ class Check:
 
             if not extension and to_test.endswith("."):
                 try:
-                    extension = list(filter(lambda x: x, to_test.split(".")))[-1]
+                    extension = [x for x in to_test.split(".") if x][-1]
                 except IndexError:
                     pass
 

@@ -76,10 +76,8 @@ class AdBlock:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, list_from_file, aggressive=False):
-        self.to_format = list_from_file
+        self.to_format = self._remove_ignored(list_from_file)
         self.aggressive = aggressive
-
-        self._remove_ignored()
 
         # We set the options separator.
         self.options_separator = "$"
@@ -87,14 +85,19 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # We set the separator of options
         self.option_separator = ","
 
-    def _remove_ignored(self):
+    def _remove_ignored(self, list_from_file):
         """
         Removed the ignored element from the given list.
+
+        :param list_from_file:
+            The list which represent the file we are decoding.
+        :type list_from_list: list
+
+        :return: The filtered list.
+        :rtype: list
         """
 
-        self.to_format = list(
-            filter(lambda line: not self._is_to_ignore(line), self.to_format)
-        )
+        return [x for x in list_from_file if not self._is_to_ignore(x)]
 
     @classmethod
     def _is_to_ignore(cls, line):
@@ -154,12 +157,11 @@ class AdBlock:  # pylint: disable=too-few-public-methods
 
                     if self.aggressive:  # pragma: no cover
                         result.extend(
-                            list(
-                                filter(
-                                    lambda x: x and not x.startswith("~"),
-                                    domains.split("|"),
-                                )
-                            )
+                            [
+                                x
+                                for x in domains.split("|")
+                                if x and not x.startswith("~")
+                            ]
                         )
                     else:
                         # We return True.

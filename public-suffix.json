@@ -157,7 +157,10 @@
         "pb.ao"
     ],
     "app": [
-        "hasura.app"
+        "a.run.app",
+        "hasura.app",
+        "run.app",
+        "telebit.app"
     ],
     "ar": [
         "blogspot.com.ar",
@@ -799,6 +802,8 @@
         "gov.co",
         "info.co",
         "int.co",
+        "leadpages.co",
+        "lpages.co",
         "mil.co",
         "mypi.co",
         "n4t.co",
@@ -1049,6 +1054,7 @@
         "likescandy.com",
         "logoip.com",
         "loseyourip.com",
+        "lpusercontent.com",
         "meteorapp.com",
         "mex.com",
         "miniserver.com",
@@ -1363,6 +1369,10 @@
         "net.dz",
         "org.dz",
         "pol.dz"
+    ],
+    "earth": [
+        "bzz.dapps.earth",
+        "dapps.earth"
     ],
     "ec": [
         "com.ec",
@@ -1823,6 +1833,7 @@
         "spacekit.io",
         "stage.nodeart.io",
         "stolos.io",
+        "telebit.io",
         "utwente.io",
         "vaporcloud.io",
         "wedeploy.io"
@@ -5247,7 +5258,6 @@
     ],
     "nl": [
         "blogspot.nl",
-        "bv.nl",
         "cistron.nl",
         "co.nl",
         "demon.nl",
@@ -7608,6 +7618,7 @@
         "blogsite.xyz",
         "crafting.xyz",
         "fhapp.xyz",
+        "telebit.xyz",
         "zapto.xyz"
     ],
     "ye": [
