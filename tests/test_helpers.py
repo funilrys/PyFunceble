@@ -59,13 +59,12 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error, protected-access
+# pylint: disable=import-error, protected-access, bad-continuation
 from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import (Command, Dict, Directory, File, Hash, List,
-                                Regex)
+from PyFunceble.helpers import Command, Dict, Directory, File, Hash, List, Regex
 
 
 class TestHash(TestCase):
@@ -220,7 +219,9 @@ class TestCommand(TestCase):
         expected = "PyFunceble has been written by Fun Ilrys."
         actual = Command("echo '%s'" % expected).execute()
 
-        if PyFunceble.system().lower() in PyFunceble.WINDOWS_PLATFORMS:
+        if (
+            PyFunceble.system().lower() in PyFunceble.WINDOWS_PLATFORMS
+        ):  # pragma: no cover
             self.assertEqual("'{}'\r\n".format(expected), actual)
         else:
             self.assertEqual("{}\n".format(expected), actual)

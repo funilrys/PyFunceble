@@ -519,7 +519,7 @@ class Dict:
                     indent=4,
                     sort_keys=True,
                 )
-        except UnicodeEncodeError:
+        except UnicodeEncodeError:  # pragma: no cover
             with open(destination, "w", encoding="utf-8") as file:
                 # We open the file we are going to write.
                 # Note: We always overwrite the destination.
@@ -715,7 +715,7 @@ class File:
 
                 # We get the file content.
                 funilrys = file.read()
-        except UnicodeDecodeError:
+        except UnicodeDecodeError:  # pragma: no cover
             with open(self.file, "r") as file:
                 # We open and read a file.
 
