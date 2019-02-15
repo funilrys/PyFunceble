@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.9.2.dev (Blue Bontebok: Maggot)"
+VERSION = "1.9.3.dev (Blue Bontebok: Maggot)"
 
 if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
@@ -134,8 +134,8 @@ else:  # pragma: no cover
             #   * `~` soes not exists.
             # We set the current directory as the directory we are working with.
             CURRENT_DIRECTORY = getcwd() + directory_separator
-    elif system().lower() == "windows":
-        # We are under Windows.
+    elif system().lower() in ["windows", "cygwin", "cygwin_nt-10.0"]:
+        # We are under Windows or CygWin.
 
         if "APPDATA" in environ:
             # Everything went right:

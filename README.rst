@@ -121,6 +121,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                     |___/
 
 -   dnmTX - `@dnmTX`_
+-   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
@@ -209,6 +210,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft
 .. _@jawz101: https://github.com/jawz101
