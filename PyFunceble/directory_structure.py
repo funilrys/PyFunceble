@@ -198,20 +198,20 @@ class DirectoryStructure:  # pragma: no cover
             #########################################################################
             # We get the replacement of the HTTP_Analytic directory from the
             # configuration file.
-            "HTTP_Analytic": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
+            "HTTP_Analytic/": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
             # We get the replacement of the HTTP_Analytic/ACTIVE directory from the
             # configuration file.
-            "HTTP_Analytic/ACTIVE": PyFunceble.OUTPUTS["analytic"]["directories"][
+            "HTTP_Analytic/ACTIVE/": PyFunceble.OUTPUTS["analytic"]["directories"][
                 "parent"
             ]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
-            "HTTP_Analytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["analytic"][
+            "HTTP_Analytic/POTENTIALLY_ACTIVE/": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
             # We get the replacement of the HTTP_Analytic/POTENTIALLY_INACTIVE directory
             # from the configuration file.
-            "HTTP_Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["analytic"][
+            "HTTP_Analytic/POTENTIALLY_INACTIVE/": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
@@ -220,88 +220,94 @@ class DirectoryStructure:  # pragma: no cover
             #########################################################################
             # We get the replacement of the Analytic directory from the
             # configuration file.
-            "Analytic": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
+            "Analytic/": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"],
             # We get the replacement of the Analytic/ACTIVE directory from the
             # configuration file.
-            "Analytic/ACTIVE": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
+            "Analytic/ACTIVE/": PyFunceble.OUTPUTS["analytic"]["directories"]["parent"]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
-            "Analytic/POTENTIALLY_ACTIVE": PyFunceble.OUTPUTS["analytic"][
+            "Analytic/POTENTIALLY_ACTIVE/": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
             # We get the replacement of the Analytic/POTENTIALLY_INACTIVE directory
             # from the configuration file.
-            "Analytic/POTENTIALLY_INACTIVE": PyFunceble.OUTPUTS["analytic"][
+            "Analytic/POTENTIALLY_INACTIVE/": PyFunceble.OUTPUTS["analytic"][
                 "directories"
             ]["parent"]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_down"],
+            # We get the replacement of the Analytic/SUSPICIOUS directory
+            # from the configuration file.
+            "Analytic/SUSPICIOUS/": PyFunceble.OUTPUTS["analytic"]["directories"][
+                "parent"
+            ]
+            + PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
             # We get the replacement of the domains directory from the
             # configuration file.
-            "domains": PyFunceble.OUTPUTS["domains"]["directory"],
+            "domains/": PyFunceble.OUTPUTS["domains"]["directory"],
             # We get the replacement of the domains/ACTIVE directory from the
             # configuration file.
-            "domains/ACTIVE": PyFunceble.OUTPUTS["domains"]["directory"]
+            "domains/ACTIVE/": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["up"],
             # We get the replacement of the domains/INACTIVE directory from the
             # configuration file.
-            "domains/INACTIVE": PyFunceble.OUTPUTS["domains"]["directory"]
+            "domains/INACTIVE/": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["down"],
             # We get the replacement of the domains/INVALID directory from the
             # configuration file.
-            "domains/INVALID": PyFunceble.OUTPUTS["domains"]["directory"]
+            "domains/INVALID/": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
             # We get the replacement of the domains/VALID directory from the
             # configuration file.
-            "domains/VALID": PyFunceble.OUTPUTS["domains"]["directory"]
+            "domains/VALID/": PyFunceble.OUTPUTS["domains"]["directory"]
             + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the hosts directory from the
             # configuration file.
-            "hosts": PyFunceble.OUTPUTS["hosts"]["directory"],
+            "hosts/": PyFunceble.OUTPUTS["hosts"]["directory"],
             # We get the replacement of the hosts/ACTIVE directory from the
             # configuration file.
-            "hosts/ACTIVE": PyFunceble.OUTPUTS["hosts"]["directory"]
+            "hosts/ACTIVE/": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["up"],
             # We get the replacement of the hosts/INACTIVE directory from the
             # configuration file.
-            "hosts/INACTIVE": PyFunceble.OUTPUTS["hosts"]["directory"]
+            "hosts/INACTIVE/": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["down"],
             # We get the replacement of the hosts/INVALID directory from the
             # configuration file.
-            "hosts/INVALID": PyFunceble.OUTPUTS["hosts"]["directory"]
+            "hosts/INVALID/": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
             # We get the replacement of the hosts/VALID directory from the
             # configuration file.
-            "hosts/VALID": PyFunceble.OUTPUTS["hosts"]["directory"]
+            "hosts/VALID/": PyFunceble.OUTPUTS["hosts"]["directory"]
             + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the json directory from the
             # configuration file.
-            "json": PyFunceble.OUTPUTS["json"]["directory"],
+            "json/": PyFunceble.OUTPUTS["json"]["directory"],
             # We get the replacement of the json/ACTIVE directory from the
             # configuration file.
-            "json/ACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
+            "json/ACTIVE/": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["up"],
             # We get the replacement of the json/INACTIVE directory from the
             # configuration file.
-            "json/INACTIVE": PyFunceble.OUTPUTS["json"]["directory"]
+            "json/INACTIVE/": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["down"],
             # We get the replacement of the json/INVALID directory from the
             # configuration file.
-            "json/INVALID": PyFunceble.OUTPUTS["json"]["directory"]
+            "json/INVALID/": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["invalid"],
             # We get the replacement of the json/VALID directory from the
             # configuration file.
-            "json/VALID": PyFunceble.OUTPUTS["json"]["directory"]
+            "json/VALID/": PyFunceble.OUTPUTS["json"]["directory"]
             + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the logs directory from the
             # configuration file.
-            "logs": PyFunceble.OUTPUTS["logs"]["directories"]["parent"],
+            "logs/": PyFunceble.OUTPUTS["logs"]["directories"]["parent"],
             # We get the replacement of the logs/percentage directory from the
             # configuration file.
-            "logs/percentage": PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+            "logs/percentage/": PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
             + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"],
             # We get the replacement of the splited directory from the
             # configuration file.
-            "splited": PyFunceble.OUTPUTS["splited"]["directory"],
+            "splited/": PyFunceble.OUTPUTS["splited"]["directory"],
         }
 
         # We initiate the variable which will be used for the structure
@@ -310,9 +316,6 @@ class DirectoryStructure:  # pragma: no cover
 
         for mapped, declared in to_replace_map.items():
             # We loop through the declared mad.
-
-            # We fix the path of the index.
-            mapped = Directory(mapped).fix_path()
 
             # We fix the path of the declared.
             declared = Directory(declared).fix_path()
@@ -325,15 +328,11 @@ class DirectoryStructure:  # pragma: no cover
         for mapped, declared in to_replace_base_map.items():
             # We loop through the declared mad.
 
-            # We fix the path of the index.
-            mapped = Directory(mapped).fix_path()
-
             # We fix the path of the declared.
             declared = Directory(declared).fix_path()
-            # print('dec', declared, 'map', mapped)
 
             # And we update our data.
-            to_replace_base_map.update({mapped: declared})
+            to_replace_base.update({mapped: declared})
 
         # We perform the replacement of the base directory.
         structure = Dict(structure).rename_key(to_replace_base)

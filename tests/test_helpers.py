@@ -64,7 +64,8 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import Command, Dict, Directory, File, Hash, List, Regex
+from PyFunceble.helpers import (Command, Dict, Directory, File, Hash, List,
+                                Regex)
 
 
 class TestHash(TestCase):
@@ -219,7 +220,10 @@ class TestCommand(TestCase):
         expected = "PyFunceble has been written by Fun Ilrys."
         actual = Command("echo '%s'" % expected).execute()
 
-        self.assertEqual(expected + "\n", actual)
+        if PyFunceble.system().lower() in PyFunceble.WINDOWS_PLATFORMS:
+            self.assertEqual("'{}'\r\n".format(expected), actual)
+        else:
+            self.assertEqual("{}\n".format(expected), actual)
 
 
 class TestList(TestCase):

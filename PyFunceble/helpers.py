@@ -113,9 +113,9 @@ class Hash:  # pylint: disable=too-few-public-methods
         if isinstance(data, bytes):
             self.data = data
         elif data is None:
-            self.data = "".encode()
+            self.data = "".encode("utf-8")
         else:
-            self.data = data.encode()
+            self.data = data.encode("utf-8")
 
         # We get the parsed algorithm.
         self.algorithm = algorithm
@@ -506,18 +506,32 @@ class Dict:
         :type destination: str
         """
 
-        with open(destination, "w") as file:
-            # We open the file we are going to write.
-            # Note: We always overwrite the destination.
+        try:
+            with open(destination, "w") as file:
+                # We open the file we are going to write.
+                # Note: We always overwrite the destination.
 
-            # We save the current dictionnary into a json format.
-            dump(
-                self.main_dictionnary,
-                file,
-                ensure_ascii=False,
-                indent=4,
-                sort_keys=True,
-            )
+                # We save the current dictionnary into a json format.
+                dump(
+                    self.main_dictionnary,
+                    file,
+                    ensure_ascii=False,
+                    indent=4,
+                    sort_keys=True,
+                )
+        except UnicodeEncodeError:
+            with open(destination, "w", encoding="utf-8") as file:
+                # We open the file we are going to write.
+                # Note: We always overwrite the destination.
+
+                # We save the current dictionnary into a json format.
+                dump(
+                    self.main_dictionnary,
+                    file,
+                    ensure_ascii=False,
+                    indent=4,
+                    sort_keys=True,
+                )
 
     def to_yaml(self, destination, flow_style=False):
         """
@@ -661,7 +675,7 @@ class File:
             # or
             # * The file path does not already exist.
 
-            with open(self.file, "w", encoding="utf-8") as file:
+            with open(self.file, "w", encoding="utf-8", newline="\n") as file:
                 # We prepare the file for writting.
 
                 if data_to_write and isinstance(data_to_write, str):
@@ -676,7 +690,7 @@ class File:
             # or
             # * The file path does already exist.
 
-            with open(self.file, "a", encoding="utf-8") as file:
+            with open(self.file, "a", encoding="utf-8", newline="\n") as file:
                 # We prepare the file for append writting.
 
                 if data_to_write and isinstance(data_to_write, str):
@@ -695,11 +709,18 @@ class File:
         :rtype: str
         """
 
-        with open(self.file, "r", encoding="utf-8") as file:
-            # We open and read a file.
+        try:
+            with open(self.file, "r", encoding="utf-8") as file:
+                # We open and read a file.
 
-            # We get the file content.
-            funilrys = file.read()
+                # We get the file content.
+                funilrys = file.read()
+        except UnicodeDecodeError:
+            with open(self.file, "r") as file:
+                # We open and read a file.
+
+                # We get the file content.
+                funilrys = file.read()
 
         # We return the file content.
         return funilrys

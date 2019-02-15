@@ -894,17 +894,31 @@ class Core:  # pragma: no cover
         if PyFunceble.path.isfile(PyFunceble.INTERN["file_to_test"]):
             # The give file to test exist.
 
-            with open(PyFunceble.INTERN["file_to_test"]) as file:
-                # We open and read the file.
+            try:
+                with open(PyFunceble.INTERN["file_to_test"]) as file:
+                    # We open and read the file.
 
-                for line in file:
-                    # We loop through each lines.
+                    for line in file:
+                        # We loop through each lines.
 
-                    if not line.startswith("#"):
-                        # The currently read line is not a commented line.
+                        if not line.startswith("#"):
+                            # The currently read line is not a commented line.
 
-                        # We append the current read line to the result.
-                        result.append(line.rstrip("\n").strip())
+                            # We append the current read line to the result.
+                            result.append(line.rstrip("\n").strip())
+            except UnicodeDecodeError:
+                with open(PyFunceble.INTERN["file_to_test"], encoding="utf-8") as file:
+                    # We open and read the file.
+
+                    for line in file:
+                        # We loop through each lines.
+
+                        if not line.startswith("#"):
+                            # The currently read line is not a commented line.
+
+                            # We append the current read line to the result.
+                            result.append(line.rstrip("\n").strip())
+
         else:
             # The given file to test does not exist.
 
