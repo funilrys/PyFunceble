@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.10.0.dev (Blue Bontebok: Maggot)"
+VERSION = "1.10.1.dev (Blue Bontebok: Maggot)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -225,23 +225,34 @@ def test(domain, complete=False, config=None):  # pragma: no cover
     :rtype: str|dict
 
     .. note::
-        This function abstract and simplify for the access to the core for the
+        This function abstract and simplify the access to the core for the
         end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
     """
 
-    # We silently load the configuration.
-    load_config(True)
-
-    if config and isinstance(config, dict):
-        # The given configuration is not None or empty.
+    if domain and isinstance(domain, str):
+        # * The given domain is not empty nor None.
         # and
-        # It is a dict.
+        # * The given domain is a string.
 
-        # We update the configuration index.
-        CONFIGURATION.update(config)
+        # We silently load the configuration.
+        load_config(True)
 
-    # And we return the status of the given domain.
-    return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
+        if config and isinstance(config, dict):
+            # The given configuration is not None or empty.
+            # and
+            # It is a dict.
+
+            # We update the configuration index.
+            CONFIGURATION.update(config)
+
+        # And we return the status of the given domain.
+        return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
+
+    # We return None, there is nothing to test.
+    return None
 
 
 def syntax_check(domain):  # pragma: no cover
@@ -253,12 +264,59 @@ def syntax_check(domain):  # pragma: no cover
 
     :return: The syntax validity.
     :rtype: bool
+
+    .. note::
+        This function abstract and simplify the access to the core for the
+        end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
     """
 
-    # We silently load the configuration.
-    load_config(True)
+    if domain and isinstance(domain, str):
+        # * The given domain is not empty nor None.
+        # and
+        # * The given domain is a string.
 
-    return Check(domain).is_domain_valid()
+        # We silently load the configuration.
+        load_config(True)
+
+        return Check(domain).is_domain_valid()
+
+    # We return None, there is nothing to check.
+    return None
+
+
+def is_subdomain(domain):  # pragma: no cover
+    """
+    Check if the given domain is a subdomain.
+
+    :param domain: The domain we are checking.
+    :type domain: str
+
+    :return: The subdomain state.
+    :rtype: bool
+
+    .. note::
+        This function abstract and simplify the access to the core for the
+        end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
+    """
+
+    if domain and isinstance(domain, str):
+        # * The given domain is not empty nor None.
+        # and
+        # * The given domain is a string.
+
+        # We silently load the configuration.
+        load_config(True)
+
+        return Check(domain).is_subdomain()
+
+    # We return None, there is nothing to check.
+    return None
 
 
 def ipv4_syntax_check(ip):  # pragma: no cover
@@ -270,12 +328,59 @@ def ipv4_syntax_check(ip):  # pragma: no cover
 
     :return: The syntax validity.
     :rtype: bool
+
+    .. note::
+        This function abstract and simplify the access to the core for the
+        end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`ip` is given, we return :code:`None`.
     """
 
-    # We silently load the configuration.
-    load_config(True)
+    if ip and isinstance(ip, str):
+        # The given IP is not empty nor None.
+        # and
+        # * The given IP is a string.
 
-    return Check(ip).is_ip_valid()
+        # We silently load the configuration.
+        load_config(True)
+
+        return Check(ip).is_ip_valid()
+
+    # We return None, there is nothing to check.
+    return None
+
+
+def is_ipv4_range(ip):  # pragma: no cover
+    """
+    Check if the given IP is an IP range.
+
+    :param ip: The IP we are checking.
+    :type ip: str
+
+    :return: The IPv4 range state.
+    :rtype: bool
+
+    .. note::
+        This function abstract and simplify the access to the core for the
+        end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`ip` is given, we return :code:`None`.
+    """
+
+    if ip and isinstance(ip, str):
+        # The given IP is not empty nor None.
+        # and
+        # * The given IP is a string.
+
+        # We silently load the configuration.
+        load_config(True)
+
+        return Check(ip).is_ip_range()
+
+    # We return None, there is nothing to check.
+    return None
 
 
 def url_syntax_check(url):  # pragma: no cover
@@ -287,12 +392,27 @@ def url_syntax_check(url):  # pragma: no cover
 
     :return: The syntax validity.
     :rtype: bool
+
+    .. note::
+        This function abstract and simplify the access to the core for the
+        end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`url` is given, we return :code:`None`.
     """
 
-    # We silently load the configuration.
-    load_config(True)
+    if url and isinstance(url, str):
+        # The given URL is not empty nor None.
+        # and
+        # * The given URL is a string.
 
-    return Check(url).is_url_valid()
+        # We silently load the configuration.
+        load_config(True)
+
+        return Check(url).is_url_valid()
+
+    # We return None, there is nothing to check.
+    return None
 
 
 def url_test(url, complete=False, config=None):  # pragma: no covere
@@ -315,23 +435,34 @@ def url_test(url, complete=False, config=None):  # pragma: no covere
     :rtype: str|dict
 
     .. note::
-        This function abstract and simplify for the access to the core for the
+        This function abstract and simplify the access to the core for the
         end-user.
+
+    .. warning::
+        If an empty or a non-string :code:`url` is given, we return :code:`None`.
     """
 
-    # We silently load the configuration.
-    load_config(True)
-
-    if config and isinstance(config, dict):
-        # The given configuration is not None or empty.
+    if url and isinstance(url, str):
+        # The given URL is not empty nor None.
         # and
-        # It is a dict.
+        # * The given URL is a string.
 
-        # We update the configuration index.
-        CONFIGURATION.update(config)
+        # We silently load the configuration.
+        load_config(True)
 
-    # And we return the status of the given URL.
-    return Core(url_to_test=url, modulo_test=True).test(complete)
+        if config and isinstance(config, dict):
+            # The given configuration is not None or empty.
+            # and
+            # It is a dict.
+
+            # We update the configuration index.
+            CONFIGURATION.update(config)
+
+        # And we return the status of the given URL.
+        return Core(url_to_test=url, modulo_test=True).test(complete)
+
+    # We return None, there is nothing to test.
+    return None
 
 
 def load_config(under_test=False, custom=None):  # pragma: no cover

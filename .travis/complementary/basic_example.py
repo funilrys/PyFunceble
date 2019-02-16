@@ -1,5 +1,5 @@
 """
-This is a basic example which prints one of the availability of 
+This is a basic example which prints one of the availability of
 the given domain and URL.
 
 .. note:

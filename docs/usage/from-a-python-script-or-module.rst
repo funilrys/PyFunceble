@@ -12,9 +12,8 @@ Availability check of domains, IP or URL
 
 ::
 
-
     """
-    This is a basic example which prints one of the availability of 
+    This is a basic example which prints one of the availability of
     the given domain and URL.
 
     .. note:
@@ -36,12 +35,8 @@ Syntax check of domains, IP or URL
 
 ::
 
-
     """
     This is a basic example which checks syntax of the given element.
-
-    .. note:
-        Official output: VALID INVALID
     """
 
     from PyFunceble import syntax_check as PyFuncebleDomainSyntax
@@ -56,7 +51,23 @@ Syntax check of domains, IP or URL
     print("https://forest-jump", PyFuncebleURLSyntax(url="https://forest-jump"))
     print("257.58.207.46", PyFuncebleIPv4Syntax(ip="257.58.207.46"))
 
-.. _learn Python: http://www.learnpython.org/
+IPv4 Range and subdomain syntax check
+""""""""""""""""""""""""""""""""""""""
+
+::
+
+    """
+    This is a basic example which checks syntax of the given element.
+    """
+
+    from PyFunceble import is_ipv4_range, is_subdomain
+
+    print("hello.google.com", is_subdomain(domain="hello.google.com"))
+    print("google.com", is_subdomain(domain="google.com"))
+
+    print("192.168.0.0/24", is_ipv4_range(ip="192.168.0.0/24"))
+    print("192.168.0.0", is_ipv4_range(ip="192.168.0.0"))
+
 
 Loop example
 """"""""""""
@@ -151,7 +162,7 @@ To get that information simply work with our interface like follow :)
     This is an advanced example which get more information about the tested element.
     """
 
-    
+
     from PyFunceble import test as PyFunceble
     from PyFunceble import url_test as PyFuncebleURL
 
@@ -174,9 +185,6 @@ Custom Configuration
 
 Sometime you may want to change **PyFunceble**'s configuration information from within your code.
 Here are way to do it.
-
-Global
-""""""
 
 ::
 
@@ -223,3 +231,5 @@ Global
         )
         print("\n\nEnd of WHOIS record of %s" % DOMAIN)
     print("End with local custom configuration.")
+
+.. _learn Python: http://www.learnpython.org/
