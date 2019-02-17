@@ -330,17 +330,17 @@ class Core:  # pragma: no cover
                     PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test."
                 )
 
-            # We stop and log the execution time.
-            ExecutionTime("stop", last=True)
-
-            # We log the current percentage state.
-            Percentage().log()
-
             if (
                 self.domain_or_ip_to_test  # pylint: disable=no-member
                 or self.url_to_test  # pylint: disable=no-member
             ):
                 # We are testing a domain.
+
+                # We stop and log the execution time.
+                ExecutionTime("stop", last=True)
+
+                # We log the current percentage state.
+                Percentage().log()
 
                 # We show the colored logo.
                 self.colorify_logo()
@@ -619,7 +619,7 @@ class Core:  # pragma: no cover
                 # The current element is the last one.
 
                 # We stop and log the execution time.
-                ExecutionTime("stop", True)
+                ExecutionTime("stop", last=True)
 
                 # We show/log the percentage.
                 Percentage().log()
