@@ -64,7 +64,6 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.logs import Logs
-from PyFunceble.status import Status
 
 
 class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -240,10 +239,8 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                             # We log the case of the current extension.
                             Logs().referer_not_found(self.domain_extension)
 
-                            # And we handle and return the down status.
-                            return Status(
-                                PyFunceble.STATUS["official"]["down"]
-                            ).handle()
+                            # And we handle and return None status.
+                            return None
 
                         # The referer is into the database.
 
@@ -257,14 +254,14 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
                 # The domain extension is not in the iana database.
 
-                # We hanlde and return the invalid status.
-                return Status(PyFunceble.STATUS["official"]["invalid"]).handle()
+                # We return False, it is an invalid domain.
+                return False
 
             # The extension of the domain we are testing is not into
             # the list of ignored extensions.
 
-            # We handle and return the down status.
-            return Status(PyFunceble.STATUS["official"]["down"]).handle()
+            # We return None, the domain does not have a whois server.
+            return None
 
         # We are running a test in a local network.
 

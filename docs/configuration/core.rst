@@ -2,15 +2,15 @@
 ---------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / disable the adblock format decoding.
 
 .. note::
 
     If this index is set to :code:`True`, every time we read a given file, we try to extract the elements that are present.
-    
+
     We basically only decode the adblock format.
 
 .. note::
@@ -21,9 +21,9 @@
 ---------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / disable the auto continue system.
 
 :code:`command`
@@ -42,9 +42,9 @@
 --------------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`""`
-    
+
     **Description:** Set the command to run before the final commit.
 
 .. note::
@@ -57,9 +57,9 @@
 -----------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`"0.0.0.0"`
-    
+
     **Description:** Set the custom IP to use when we generate a line in the hosts file format.
 
 .. note::
@@ -69,9 +69,9 @@
 ------------------------------
 
     **Type:** :code:`integer`
-    
+
     **Default value:** :code:`1`
-    
+
     **Description:** Set the number of day(s) between each retest of the :code:`INACTIVE` and :code:`INVALID` elements which are present into :code:`inactive_db.json`.
 
 .. note::
@@ -81,9 +81,9 @@
 -------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / disable the generation of debug file(s).
 
 .. note::
@@ -99,9 +99,9 @@
 --------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`""`
-    
+
     **Description:** Set the element to filter.
 
 .. note::
@@ -111,9 +111,9 @@
 ----------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / disable the generation of the hosts file(s).
 
 :code:`generate_json`
@@ -129,9 +129,9 @@
 ----------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Say to the system if the header has been already printed or not.
 
 .. warning::
@@ -141,18 +141,18 @@
 ----------------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Say to the system if we have to sort the list and the outputs in a hierarchical order.
 
 :code:`iana_whois_server`
 -------------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`whois.iana.org`
-    
+
     **Description:** Set the server to call to get the :code:`whois` referer of a given element.
 
 .. note::
@@ -182,18 +182,18 @@
 -------------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / Disable the usage of a database to store the :code:`INACTIVE` and :code:`INVALID` element to retest overtime.
 
 :code:`less`
 ------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / Disable the output of every information of screen.
 
 :code:`local`
@@ -209,9 +209,9 @@
 ------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / Disable the output of all logs.
 
 :code:`mining`
@@ -227,36 +227,36 @@
 ----------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the generation of any file(s).
 
 :code:`no_special`
-----------------
+------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the usage of the SPECIAL rules - which are discribes in the source column section.
 
 :code:`no_whois`
 ----------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the usage of :code:`whois` in the tests.
 
 :code:`plain_list_domain`
 -------------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the generation of the plain list of elements sorted by statuses.
 
 .. warning::
@@ -266,18 +266,18 @@
 -------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the generation of output on the screen.
 
 :code:`referer`
 ---------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`""`
-    
+
     **Description:** Set the referer of the element that is currently under test.
 
 .. warning::
@@ -287,9 +287,9 @@
 -----------------------------------
 
     **Type:** :code:`integer`
-    
+
     **Default value:** :code:`3`
-    
+
     **Description:** Set the timeout to apply to every HTTP status code request.
 
 .. note::
@@ -299,9 +299,9 @@
 ------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / disable the logs sharing.
 
 
@@ -312,39 +312,39 @@
 ---------------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / disable the output of the execution time.
 
 :code:`show_percentage`
 -----------------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / disable the output of the percentage of each status.
 
 :code:`simple`
 --------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / disable the simple output mode.
 
 .. note::
-    If this index is set to :code:`True`, the system will only return the result inf format: :code:`tested.element STATUS`. 
+    If this index is set to :code:`True`, the system will only return the result inf format: :code:`tested.element STATUS`.
 
 :code:`split`
 -------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`True`
-    
+
     **Description:** Enable / disable the split of the results files.
 
 .. note::
@@ -366,9 +366,9 @@
 --------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / disable the Travis CI autosaving system.
 
 .. warning::
@@ -378,48 +378,48 @@
 ------------------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`"PyFunceble - AutoSave"`
-    
+
     **Description:** Set the default commit message we want to use when have to commit (save) but our tests are not yet completed.
 
 :code:`travis_autosave_final_commit`
 ------------------------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`"PyFunceble - Results"`
-    
+
     **Description:** Set the default final commit message we want to use when we all tests are finished.
 
 :code:`travis_autosave_minutes`
 -------------------------------
 
     **Type:** :code:`integer`
-    
+
     **Default value:** :code:`15`
-    
+
     **Description:** Set the minimum of minutes we have to run before to automatically save our test results.
 
 .. note::
-    As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes. 
+    As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes.
 
 :code:`travis_branch`
 ---------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`master`
-    
+
     **Description:** Set the git branch where we are going to push our results.
 
 :code:`unified`
 ---------------
 
     **Type:** :code:`boolean`
-    
+
     **Default value:** :code:`False`
-    
+
     **Description:** Enable / Disable the generation of the unified results.
 
 .. note::
@@ -429,9 +429,9 @@
 ------------------
 
     **Type:** :code:`string`
-    
+
     **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"`
-    
+
     **Description:** Set the User-Agent to use every time we are requesting something from a web server other than our API.
 
 :code:`verify_ssl_certificate`
@@ -445,7 +445,7 @@
 
 .. warning::
     If you set this index to :code:`True`, you may get **false positive** result.
-    
+
     Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you will always get :code:`INACTIVE` as output.
 
 

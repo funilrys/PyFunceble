@@ -71,7 +71,6 @@ from PyFunceble.http_code import HTTPCode
 from PyFunceble.logs import Logs
 from PyFunceble.lookup import Lookup
 from PyFunceble.referer import Referer
-from PyFunceble.status import Status
 
 
 class ExpirationDate:  # pylint: disable=too-few-public-methods
@@ -134,14 +133,10 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 {"http_code": HTTPCode().get(), "referer": Referer().get()}
             )
 
-            if PyFunceble.INTERN["referer"] in [
-                PyFunceble.STATUS["official"]["up"],
-                PyFunceble.STATUS["official"]["down"],
-                PyFunceble.STATUS["official"]["invalid"],
-            ]:
-                # The WHOIS record status is into our list of official status.
+            if not isinstance(PyFunceble.INTERN["referer"], str):
+                # We could not get the referer.
 
-                # We consider that status as the status of the tested element.
+                # We parse the referer status into the upstream call.
                 return PyFunceble.INTERN["referer"]
 
             # The WHOIS record status is not into our list of official status.
@@ -168,8 +163,8 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             # We log our whois record if the debug mode is activated.
             Logs().whois(self.whois_record)
 
-            # And we return and handle the official down status.
-            return Status(PyFunceble.STATUS["official"]["down"]).handle()
+            # And we return None, we could not extract the expiration date.
+            return None
 
         if (
             ip_validation
@@ -189,16 +184,16 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             # We log our whois record if the debug mode is activated.
             Logs().whois(self.whois_record)
 
-            # And we return and handle the official down status.
-            return Status(PyFunceble.STATUS["official"]["down"]).handle()
+            # And we return None, there is no expiration date to look for.
+            return None
 
         # The validation was not passed.
 
         # We log our whois record if the debug mode is activated.
         Logs().whois(self.whois_record)
 
-        # And we return and handle the official invalid status.
-        return Status(PyFunceble.STATUS["official"]["invalid"], "SYNTAX").handle()
+        # And we return False, the domain could not pass the IP and domains syntax validation.
+        return False
 
     @classmethod
     def _convert_1_to_2_digits(cls, number):
@@ -593,10 +588,10 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                     # We log the whois record.
                     Logs().whois(self.whois_record)
 
-                    # We handle and return and h the official down status.
-                    return Status(PyFunceble.STATUS["official"]["down"]).handle()
+                    # We return None, we could not get the expiration date.
+                    return None
 
         # The whois record is empty.
 
-        # We handle and return the official down status.
-        return Status(PyFunceble.STATUS["official"]["down"]).handle()
+        # We return None, we could not get the whois record.
+        return None

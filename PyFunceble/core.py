@@ -80,6 +80,7 @@ from PyFunceble.mining import Mining
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 from PyFunceble.sort import Sort
+from PyFunceble.status import Status
 from PyFunceble.syntax import Syntax
 from PyFunceble.url import URL
 
@@ -590,8 +591,8 @@ class Core:  # pragma: no cover
                     # The currently tested element is in the database.
 
                     # We generate the suspicious file(s).
-                    Generate("strange").analytic_file(
-                        "suspicious", PyFunceble.STATUS["official"]["up"]
+                    Generate(PyFunceble.STATUS["official"]["up"]).analytic_file(
+                        "suspicious"
                     )
 
                     # We remove the currently tested element from the
@@ -685,7 +686,7 @@ class Core:  # pragma: no cover
                 status = Syntax().get()
             else:
                 # We test and get the status of the domain.
-                status = ExpirationDate().get()
+                status = Status().get()
 
             # We run the file decision logic.
             self._file_decision(domain, last_domain, status)
