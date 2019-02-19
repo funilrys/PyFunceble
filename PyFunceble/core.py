@@ -730,7 +730,7 @@ class Core:  # pragma: no cover
                 status = Syntax().get()
             else:
                 # We test and get the status of the domain.
-                status = Status().get()
+                status, _ = Status().get()
 
             # We run the file decision logic.
             self._file_decision(domain, last_domain, status)
