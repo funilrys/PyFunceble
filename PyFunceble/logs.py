@@ -109,10 +109,11 @@ class Logs:  # pragma: no cover
         :type file: str
         """
 
-        if not isinstance(content, dict):
-            content = {}
+        if not PyFunceble.CONFIGURATION["no_files"]:
+            if not isinstance(content, dict):
+                content = {}
 
-        Dict(content).to_json(file)
+            Dict(content).to_json(file)
 
     def whois(self, record):
         """
