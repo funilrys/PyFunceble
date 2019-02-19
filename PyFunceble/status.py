@@ -97,7 +97,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 return cls.handle(status="invalid")
 
             if expiration_date == PyFunceble.STATUS["official"]["up"]:
-                return expiration_date
+                return expiration_date, "WHOIS"
 
             return cls.handle(status="inactive")
 
