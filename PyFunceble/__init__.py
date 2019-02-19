@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.11.2.dev (Blue Bontebok: Spider)"
+VERSION = "1.12.0.dev (Blue Bontebok: Spider)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -224,12 +224,33 @@ def test(domain, complete=False, config=None):  # pragma: no cover
     :return: The status or the informations of the domain.
     :rtype: str|dict
 
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
-
     .. warning::
         If an empty or a non-string :code:`domain` is given, we return :code:`None`.
+
+    .. warning::
+        If :code:`config` is given, the given :code:`dict` overwrite
+        the last value of the given indexes.
+
+    .. note::
+        If :code:`complete` is set to :code:`True`, we return the following indexes.
+
+        ::
+
+            {
+                "_status_source": None,
+                "_status": None,
+                "domain_syntax_validation": None,
+                "expiration_date": None,
+                "http_status_code": None,
+                "ip4_syntax_validation": None,
+                "nslookup": [],
+                "status_source": None,
+                "status": None,
+                "tested": None,
+                "url_syntax_validation": None,
+                "whois_record": None,
+                "whois_server": None,
+            }
     """
 
     if domain and isinstance(domain, str):
@@ -265,10 +286,6 @@ def syntax_check(domain):  # pragma: no cover
     :return: The syntax validity.
     :rtype: bool
 
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
-
     .. warning::
         If an empty or a non-string :code:`domain` is given, we return :code:`None`.
     """
@@ -296,10 +313,6 @@ def is_subdomain(domain):  # pragma: no cover
 
     :return: The subdomain state.
     :rtype: bool
-
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
 
     .. warning::
         If an empty or a non-string :code:`domain` is given, we return :code:`None`.
@@ -329,10 +342,6 @@ def ipv4_syntax_check(ip):  # pragma: no cover
     :return: The syntax validity.
     :rtype: bool
 
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
-
     .. warning::
         If an empty or a non-string :code:`ip` is given, we return :code:`None`.
     """
@@ -361,10 +370,6 @@ def is_ipv4_range(ip):  # pragma: no cover
     :return: The IPv4 range state.
     :rtype: bool
 
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
-
     .. warning::
         If an empty or a non-string :code:`ip` is given, we return :code:`None`.
     """
@@ -392,10 +397,6 @@ def url_syntax_check(url):  # pragma: no cover
 
     :return: The syntax validity.
     :rtype: bool
-
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
 
     .. warning::
         If an empty or a non-string :code:`url` is given, we return :code:`None`.
@@ -434,12 +435,13 @@ def url_test(url, complete=False, config=None):  # pragma: no covere
     :return: The status or the informations of the URL.
     :rtype: str|dict
 
-    .. note::
-        This function abstract and simplify the access to the core for the
-        end-user.
-
     .. warning::
         If an empty or a non-string :code:`url` is given, we return :code:`None`.
+
+    .. warning::
+        If :code:`config` is given, the given :code:`dict` overwrite
+        the last value of the given indexes.
+
     """
 
     if url and isinstance(url, str):
@@ -478,6 +480,10 @@ def load_config(under_test=False, custom=None):  # pragma: no cover
     :param custom:
         A dict with the configuration index (from .PyFunceble.yaml) to update.
     :type custom: dict
+
+    .. warning::
+        If :code:`custom` is given, the given :code:`dict` overwrite
+        the last value of the given configuration indexes.
     """
 
     if "config_loaded" not in INTERN:

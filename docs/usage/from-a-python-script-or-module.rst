@@ -142,16 +142,19 @@ The objective behind this feature is to let you know more about the element you 
 ::
 
     {
-        "tested": None, # The tested element.
-        "expiration_date": None, # The expiration_date of the element if found.
+        "_status": None, # If some extra rules are applied, this index will keep the status before the extra rules was applied.
+        "_status_source": None, # If some extra rules are applied, this index will keep the source before the extra rules was applied.
         "domain_syntax_validation": None, # The domain syntax validation status.
+        "expiration_date": None, # The expiration_date of the element if found.
         "http_status_code": None, # The status code of the tested element.
         "ip4_syntax_validation": None, # The IPv4 syntax validation status.
         "nslookup": [], # A list of IP of the tested element.
+        "status_source": None, # The source which gives us the status.
         "status": None, # The status matched by PyFunceble.
+        "tested": None, # The tested element.
         "url_syntax_validation": None, # The url syntax validation status.
-        "whois_server": None, # The whois server if found.
         "whois_record": None, # The whois record if whois_server is found.
+        "whois_server": None, # The whois server we use to get the whois record (if found).
     }
 
 To get that information simply work with our interface like follow :)

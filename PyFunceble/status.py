@@ -142,7 +142,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 Generate(status, source).status_file()
 
                 # We return the up status.
-                return source
+                return status, source
 
             # We could not execute the nslookup logic.
 
@@ -155,7 +155,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             Generate(status, source).status_file()
 
             # We return the down status.
-            return status
+            return status, source
 
         # The matched status is in the list of invalid status.
 
@@ -168,7 +168,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         Generate(status, source).status_file()
 
         # We return the status.
-        return status
+        return status, source
 
     class ExtraRules:
         """
@@ -515,6 +515,16 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                         previous_state
                     )
 
+                    if "current_test_data" in PyFunceble.INTERN:
+                        # The end-user want more informations.
+
+                        # We share the previous status and source.
+                        PyFunceble.INTERN["current_test_data"][
+                            "_status"
+                        ], PyFunceble.INTERN["current_test_data"]["_status_source"] = (
+                            previous_state,
+                            previous_source,
+                        )
                     return new_status, source
                 except TypeError:
                     pass

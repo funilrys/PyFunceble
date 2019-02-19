@@ -73,7 +73,6 @@ from PyFunceble.check import Check
 from PyFunceble.database import Inactive
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
-from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Command, Download, List, Regex
 from PyFunceble.mining import Mining
@@ -387,6 +386,93 @@ class Core:  # pragma: no cover
                     "to_test"
                 ] = self.url_to_test  # pylint: disable=no-member
 
+    @classmethod
+    def test_with_complete_information(cls):
+        """
+        Run a test and return all available informations.
+
+        .. note::
+            The following are the indexes which we return.
+            Please report to the advanced usage documentation for a
+            description of each indexes.
+
+            ::
+
+                {
+                    "whois_server": None,
+                    "whois_record": None,
+                    "url_syntax_validation": None,
+                    "tested": None,
+                    "status": None,
+                    "status_source": None,
+                    "nslookup": [],
+                    "ip4_syntax_validation": None,
+                    "http_status_code": None,
+                    "expiration_date": None,
+                    "domain_syntax_validation": None,
+                    "_status": None,
+                    "_status_source": None,
+                }
+        """
+
+        # We initiate the location and the information we have to return.
+        PyFunceble.INTERN["current_test_data"] = {
+            "whois_server": None,
+            "whois_record": None,
+            "url_syntax_validation": None,
+            "tested": None,
+            "status": None,
+            "status_source": None,
+            "nslookup": [],
+            "ip4_syntax_validation": None,
+            "http_status_code": None,
+            "expiration_date": None,
+            "domain_syntax_validation": None,
+            "_status": None,
+            "_status_source": None,
+        }
+
+        if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
+            # We are testing something.
+
+            # We update the tested index.
+            PyFunceble.INTERN["current_test_data"]["tested"] = PyFunceble.INTERN[
+                "to_test"
+            ]
+
+            if PyFunceble.INTERN["to_test_type"] == "domain":
+                # We are testing a domain.
+
+                # We get the status and the source of the domain.
+                PyFunceble.INTERN["current_test_data"]["status"], PyFunceble.INTERN[
+                    "current_test_data"
+                ]["status_source"] = Status().get()
+            elif PyFunceble.INTERN["to_test_type"] == "url":
+                # We are testing a url.
+
+                # We get the status of the url.
+                PyFunceble.INTERN["current_test_data"]["status"] = URL().get()
+            else:
+                raise Exception("Unknow test type.")
+
+        if "http_code" in PyFunceble.INTERN:
+            # The http status code exist into the configuration.
+
+            # We update the tested index.
+            PyFunceble.INTERN["current_test_data"][
+                "http_status_code"
+            ] = PyFunceble.INTERN["http_code"]
+
+        if "referer" in PyFunceble.INTERN:
+            # The referer exist into the internal memory.
+
+            # We update the related index.
+            PyFunceble.INTERN["current_test_data"]["whois_server"] = PyFunceble.INTERN[
+                "referer"
+            ]
+
+        return PyFunceble.INTERN["current_test_data"]
+
     def test(self, complete=False):
         """
         Avoid confusion between self.domain which is called into
@@ -424,59 +510,17 @@ class Core:  # pragma: no cover
             if complete:
                 # We have to return much more information into our result.
 
-                # We initiate the location and the information we have to return.
-                PyFunceble.INTERN["current_test_data"] = {
-                    "tested": None,
-                    "expiration_date": None,
-                    "domain_syntax_validation": None,
-                    "http_status_code": None,
-                    "ip4_syntax_validation": None,
-                    "nslookup": [],
-                    "status": None,
-                    "url_syntax_validation": None,
-                    "whois_server": None,
-                    "whois_record": None,
-                }
-
-                if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
-                    # We are testing something.
-
-                    # We update the tested index.
-                    PyFunceble.INTERN["current_test_data"][
-                        "tested"
-                    ] = PyFunceble.INTERN["to_test"]
-
-                    if PyFunceble.INTERN["to_test_type"] == "domain":
-                        # We are testing a domain.
-
-                        # We get the status of the domain.
-                        PyFunceble.INTERN["current_test_data"][
-                            "status"
-                        ] = ExpirationDate().get()
-                    elif PyFunceble.INTERN["to_test_type"] == "url":
-                        # We are testing a url.
-
-                        # We get the status of the url.
-                        PyFunceble.INTERN["current_test_data"]["status"] = URL().get()
-                    else:
-                        raise Exception("Unknow test type.")
-
-                if "http_code" in PyFunceble.INTERN:
-                    # The http status code exist into the configuration.
-
-                    # We update the tested index.
-                    PyFunceble.INTERN["current_test_data"][
-                        "http_status_code"
-                    ] = PyFunceble.INTERN["http_code"]
-
                 # We finaly return our dataset.
-                return PyFunceble.INTERN["current_test_data"]
+                return self.test_with_complete_information()
 
             if PyFunceble.INTERN["to_test_type"] == "domain":
                 # We are testing a domain.
 
-                # We return the status of the parsed domain.
-                return ExpirationDate().get()
+                # We get the status of the domain we are trying to test.
+                status, _ = Status().get()
+
+                # We return the catched status of the domains.
+                return status
 
             if PyFunceble.INTERN["to_test_type"] == "url":
                 # We are testing a url.

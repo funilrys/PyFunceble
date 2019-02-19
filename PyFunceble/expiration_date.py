@@ -141,14 +141,6 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
             # The WHOIS record status is not into our list of official status.
 
-            if "current_test_data" in PyFunceble.INTERN:
-                # The end-user want more information whith his test.
-
-                # We update the whois_server index.
-                PyFunceble.INTERN["current_test_data"][
-                    "whois_server"
-                ] = PyFunceble.INTERN["referer"]
-
             if PyFunceble.INTERN["referer"] and not Check().is_subdomain():
                 # * The iana database comparison status is not None.
                 # and
