@@ -110,9 +110,6 @@ class Mining:
             PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["mining"]
         )
 
-        # We get the file path of the list we are testing.
-        self.tested_file_path = PyFunceble.INTERN["file_to_test"]
-
         if "mined" not in PyFunceble.INTERN:
             # The mined index is not into the configuration informations.
 
@@ -266,33 +263,40 @@ class Mining:
         if PyFunceble.CONFIGURATION["mining"]:
             # The mining is activated.
 
-            if self.tested_file_path not in PyFunceble.INTERN["mined"]:
+            if PyFunceble.INTERN["file_to_test"] not in PyFunceble.INTERN["mined"]:
                 # Our tested file path is not into our mined database.
 
                 # We initiate it.
-                PyFunceble.INTERN["mined"][self.tested_file_path] = {}
+                PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]] = {}
 
             for element in to_add:
                 # We loop through the element to add.
 
-                if element in PyFunceble.INTERN["mined"][self.tested_file_path]:
+                if (
+                    element
+                    in PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]]
+                ):
                     # The element is already into the tested file path database.
 
                     # We extent it with our element to add.
-                    PyFunceble.INTERN["mined"][self.tested_file_path][element].extend(
-                        to_add[element]
-                    )
+                    PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
+                        element
+                    ].extend(to_add[element])
                 else:
                     # The element is already into the tested file path database.
 
                     # We initiate it.
-                    PyFunceble.INTERN["mined"][self.tested_file_path][element] = to_add[
+                    PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
                         element
-                    ]
+                    ] = to_add[element]
 
                 # We format the added information in order to avoid duplicate.
-                PyFunceble.INTERN["mined"][self.tested_file_path][element] = List(
-                    PyFunceble.INTERN["mined"][self.tested_file_path][element]
+                PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
+                    element
+                ] = List(
+                    PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
+                        element
+                    ]
                 ).format()
 
             # We backup everything.
@@ -307,28 +311,33 @@ class Mining:
         if PyFunceble.CONFIGURATION["mining"]:
             # The mining is activated.
 
-            if self.tested_file_path in PyFunceble.INTERN["mined"]:
+            if PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["mined"]:
                 # The currently tested file is in our mined database.
 
-                for element in PyFunceble.INTERN["mined"][self.tested_file_path]:
+                for element in PyFunceble.INTERN["mined"][
+                    PyFunceble.INTERN["file_to_test"]
+                ]:
                     # We loop through the mined index.
 
                     if (
                         self.to_get_bare
-                        in PyFunceble.INTERN["mined"][self.tested_file_path][element]
+                        in PyFunceble.INTERN["mined"][
+                            PyFunceble.INTERN["file_to_test"]
+                        ][element]
                     ):
                         # The currently read element content.
 
                         # We remove the globally tested element from the currently
                         # read element content.
-                        PyFunceble.INTERN["mined"][self.tested_file_path][
+                        PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
                             element
                         ].remove(self.to_get_bare)
 
                 # We backup everything.
                 self._backup()
 
-    def list_of_mined(self):
+    @classmethod
+    def list_of_mined(cls):
         """
         Provide the list of mined so they can be added to the list
         queue.
@@ -343,15 +352,19 @@ class Mining:
         if PyFunceble.CONFIGURATION["mining"]:
             # The mining is activated.
 
-            if self.tested_file_path in PyFunceble.INTERN["mined"]:
+            if PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["mined"]:
                 # The file we are testing is into our mining database.
 
-                for element in PyFunceble.INTERN["mined"][self.tested_file_path]:
+                for element in PyFunceble.INTERN["mined"][
+                    PyFunceble.INTERN["file_to_test"]
+                ]:
                     # We loop through the list of index of the file we are testing.
 
                     # We append the element of the currently read index to our result.
                     result.extend(
-                        PyFunceble.INTERN["mined"][self.tested_file_path][element]
+                        PyFunceble.INTERN["mined"][PyFunceble.INTERN["file_to_test"]][
+                            element
+                        ]
                     )
 
                 # We format our result.

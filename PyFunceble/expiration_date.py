@@ -88,6 +88,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         # We initate a variable which will save our WHOIS record.s
         self.whois_record = ""
 
+        # We initate an instance of Check
+        self.checker = Check()
+
     def get(self):  # pragma: no cover
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
@@ -99,9 +102,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         """
 
         # We get the status of the domain validation.
-        domain_validation = Check().is_domain_valid()
+        domain_validation = self.checker.is_domain_valid()
         # We get the status of the IPv4 validation.
-        ip_validation = Check().is_ip_valid()
+        ip_validation = self.checker.is_ip_valid()
 
         if "current_test_data" in PyFunceble.INTERN:
             # The end-user want more information whith his test.
@@ -141,7 +144,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
             # The WHOIS record status is not into our list of official status.
 
-            if PyFunceble.INTERN["referer"] and not Check().is_subdomain():
+            if PyFunceble.INTERN["referer"] and not self.checker.is_subdomain():
                 # * The iana database comparison status is not None.
                 # and
                 # * The domain we are testing is not a subdomain.

@@ -81,6 +81,11 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
 
     @classmethod
+    def __init__(cls):
+        # We initiate an instance of the ExtraRules class.
+        cls.extra_rules = cls.ExtraRules()
+
+    @classmethod
     def get(cls):
         """
         Get the status while testing for an IP or domain.
@@ -121,9 +126,6 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        # We initiate an instance of the ExtraRules class.
-        extra_rules = cls.ExtraRules()
-
         if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
             # The matched status is not in the list of invalid status.
 
@@ -134,7 +136,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We could execute the nslookup logic.
 
                 # We get the status and source after extra rules check.
-                status, source = extra_rules.handle(
+                status, source = cls.extra_rules.handle(
                     PyFunceble.STATUS["official"]["up"], source
                 )
 
@@ -147,7 +149,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             # We could not execute the nslookup logic.
 
             # We get the status and source after extra rules check.
-            status, source = extra_rules.handle(
+            status, source = cls.extra_rules.handle(
                 PyFunceble.STATUS["official"]["down"], source
             )
 
@@ -160,7 +162,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         # The matched status is in the list of invalid status.
 
         # We get the status and source after extra rules check.
-        status, source = extra_rules.handle(
+        status, source = cls.extra_rules.handle(
             PyFunceble.STATUS["official"]["invalid"], invalid_source
         )
 
@@ -307,7 +309,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 # The marker is into the page content.
 
                 # We return the new status and source.
-                return self.__special_down
+                return self.__special_down()
 
             # We return None, there is no changes.
             return None

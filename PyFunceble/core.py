@@ -61,7 +61,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation, too-many-lines
+# pylint: disable=bad-continuation, too-many-lines, too-many-instance-attributes
 
 from domain2idna import get as domain2idna
 
@@ -71,7 +71,6 @@ from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.check import Check
 from PyFunceble.database import Inactive
-from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Command, Download, List, Regex
@@ -126,11 +125,35 @@ class Core:  # pragma: no cover
         for (arg, default) in optional_arguments.items():
             setattr(self, arg, args.get(arg, default))
 
+        # We initiate a variable in order to avoid having to recall/declare
+        # Status() over and over.
+        self.status = Status()
+        # We initiate a variable in order to avoid having to recall/declare
+        # Check() over and over.
+        self.checker = Check()
+        # We initiate a variable in order to avoid having to recall/declare
+        # Percentage() over and over.
+        self.percentage = Percentage()
+        # We initiate a variable in order to avoid having to recall/declare
+        # URL() over and over.
+        self.url_status = URL()
+        # We initiate a variable in order to avoid having to recall/declare
+        # Mining() over and over.
+        self.mining = Mining()
+        # We initiate a variable in order to avoid having to recall/declare
+        # AutoContinue() over and over.
+        self.auto_continue = AutoContinue()
+        # We initiate a variable in order to avoid having to recall/declare
+        # Syntax() over and over.
+        self.syntax_status = Syntax()
+        # We initiate a variable in order to avoid having to recall/declare
+        # Inactive() over and over.
+        self.inactive_database = Inactive()
+
         # We manage the entries.
         self._entry_management()
 
-    @classmethod
-    def _entry_management_url_download(cls, passed):
+    def _entry_management_url_download(self, passed):
         """
         Check if the given information is a URL.
         If it is the case, it download and update the location of file to test.
@@ -142,7 +165,7 @@ class Core:  # pragma: no cover
         :rtype: bool
         """
 
-        if passed and Check().is_url_valid(passed):
+        if passed and self.checker.is_url_valid(passed):
             # The passed string is an URL.
 
             # We get the file name based on the URL.
@@ -268,7 +291,7 @@ class Core:  # pragma: no cover
 
                 # We test the url to test after converting it if needed (IDNA).
                 self.url(
-                    Check().is_url_valid(
+                    self.checker.is_url_valid(
                         self.url_to_test,  # pylint: disable=no-member
                         return_formatted=True,
                     )
@@ -339,7 +362,7 @@ class Core:  # pragma: no cover
                 ExecutionTime("stop", last=True)
 
                 # We log the current percentage state.
-                Percentage().log()
+                self.percentage.log()
 
                 # We show the colored logo.
                 self.colorify_logo()
@@ -386,8 +409,7 @@ class Core:  # pragma: no cover
                     "to_test"
                 ] = self.url_to_test  # pylint: disable=no-member
 
-    @classmethod
-    def test_with_complete_information(cls):
+    def test_with_complete_information(self):
         """
         Run a test and return all available informations.
 
@@ -446,12 +468,12 @@ class Core:  # pragma: no cover
                 # We get the status and the source of the domain.
                 PyFunceble.INTERN["current_test_data"]["status"], PyFunceble.INTERN[
                     "current_test_data"
-                ]["status_source"] = Status().get()
+                ]["status_source"] = self.status.get()
             elif PyFunceble.INTERN["to_test_type"] == "url":
                 # We are testing a url.
 
                 # We get the status of the url.
-                PyFunceble.INTERN["current_test_data"]["status"] = URL().get()
+                PyFunceble.INTERN["current_test_data"]["status"] = self.url_status.get()
             else:
                 raise Exception("Unknow test type.")
 
@@ -517,7 +539,7 @@ class Core:  # pragma: no cover
                 # We are testing a domain.
 
                 # We get the status of the domain we are trying to test.
-                status, _ = Status().get()
+                status, _ = self.status.get()
 
                 # We return the catched status of the domains.
                 return status
@@ -526,7 +548,7 @@ class Core:  # pragma: no cover
                 # We are testing a url.
 
                 # We return the status of the parsed url.
-                return URL().get()
+                return self.url_status.get()
 
             # We raise an exception because that means that something wrong
             # happened because of the developer not the user.
@@ -616,14 +638,14 @@ class Core:  # pragma: no cover
             # * A file to test is set.
 
             # We run the mining logic.
-            Mining().process()
+            self.mining.process()
 
             # We delete the currently tested element from the mining
             # database.
             # Indeed, as it is tested, it is already in our
             # testing process which means that we don't need it into
             # the mining database.
-            Mining().remove()
+            self.mining.remove()
 
             if (
                 status.lower() in PyFunceble.STATUS["list"]["up"]
@@ -631,7 +653,7 @@ class Core:  # pragma: no cover
             ):
                 # The status is in the list of up status.
 
-                if Inactive().is_present():
+                if self.inactive_database.is_present():
                     # The currently tested element is in the database.
 
                     # We generate the suspicious file(s).
@@ -641,18 +663,18 @@ class Core:  # pragma: no cover
 
                     # We remove the currently tested element from the
                     # database.
-                    Inactive().remove()
+                    self.inactive_database.remove()
 
             else:
                 # The status is not in the list of up status.
 
                 # We add the currently tested element to the
                 # database.
-                Inactive().add()
+                self.inactive_database.add()
 
             # We backup the current state of the file reading
             # for the case that we need to continue later.
-            AutoContinue().backup()
+            self.auto_continue.backup()
 
             if current != last:
                 # The current element is not the last one.
@@ -666,14 +688,14 @@ class Core:  # pragma: no cover
                 ExecutionTime("stop", last=True)
 
                 # We show/log the percentage.
-                Percentage().log()
+                self.percentage.log()
 
                 # We reset the counters as we end the process.
                 self.reset_counters()
 
                 # We backup the current state of the file reading
                 # for the case that we need to continue later.
-                AutoContinue().backup()
+                self.auto_continue.backup()
 
                 # We show the colored logo.
                 self.colorify_logo()
@@ -727,10 +749,10 @@ class Core:  # pragma: no cover
                 # The syntax mode is activated.
 
                 # We get the status from Syntax.
-                status = Syntax().get()
+                status = self.syntax_status.get()
             else:
                 # We test and get the status of the domain.
-                status, _ = Status().get()
+                status, _ = self.status.get()
 
             # We run the file decision logic.
             self._file_decision(domain, last_domain, status)
@@ -777,12 +799,12 @@ class Core:  # pragma: no cover
                 # The syntax mode is activated.
 
                 # We get the status from Syntax.
-                status = Syntax().get()
+                status = self.syntax_status.get()
             else:
                 # The syntax mode is not activated.
 
                 # We get the status from URL.
-                status = URL().get()
+                status = self.url_status.get()
 
             # We run the file decision logic.
             self._file_decision(url_to_test, last_url, status)
@@ -985,16 +1007,16 @@ class Core:  # pragma: no cover
         PyFunceble.INTERN["extracted_list_to_test"] = list_to_test
 
         # We get the list of mined.
-        mined_list = Mining().list_of_mined()
+        mined_list = self.mining.list_of_mined()
 
         if mined_list:
             list_to_test.extend(mined_list)
 
         # We generate the directory structure.
-        DirectoryStructure()
+        PyFunceble.DirectoryStructure()
 
         # We restore the data from the last session if it does exist.
-        AutoContinue().restore()
+        self.auto_continue.restore()
 
         if PyFunceble.CONFIGURATION["adblock"]:
             # The adblock decoder is activated.
@@ -1014,7 +1036,7 @@ class Core:  # pragma: no cover
         ExecutionTime("start")
 
         # We get the list we have to test in the current session (from the database).
-        Inactive().to_test()
+        self.inactive_database.to_test()
 
         if (
             PyFunceble.CONFIGURATION["inactive_database"]
@@ -1045,7 +1067,9 @@ class Core:  # pragma: no cover
         regex_delete = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
 
         # We load the flatten version of the database.
-        PyFunceble.INTERN.update({"flatten_inactive_db": Inactive().content()})
+        PyFunceble.INTERN.update(
+            {"flatten_inactive_db": self.inactive_database.content()}
+        )
 
         # We initiate a local variable which will save the current state of the list.
         not_filtered = list_to_test

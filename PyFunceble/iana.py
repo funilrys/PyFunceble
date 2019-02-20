@@ -92,6 +92,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We initiate the URL to the IANA Root Zone Database page.
         self.iana_url = "https://www.iana.org/domains/root/db"
 
+        # We iniitate an instance of Lookup.
+        self.lookup = Lookup()
+
         # We map the list of server which have to be set manually because
         # they are not present into the IANA Root Zone Database.
         self.manual_server = {
@@ -406,7 +409,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We get the a copy of the page.
-        iana_record = Lookup().whois(
+        iana_record = self.lookup.whois(
             PyFunceble.CONFIGURATION["iana_whois_server"], "hello.%s" % extension
         )
 

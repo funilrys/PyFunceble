@@ -85,6 +85,9 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # We set the separator of options
         self.option_separator = ","
 
+        # We create an instance of the checker.
+        self.checker = Check()
+
     def _remove_ignored(self, list_from_file):
         """
         Removed the ignored element from the given list.
@@ -172,8 +175,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # We return the result.
         return result
 
-    @classmethod
-    def _extract_base(cls, element):
+    def _extract_base(self, element):
         """
         Extract the base of the given element.
 
@@ -188,10 +190,10 @@ class AdBlock:  # pylint: disable=too-few-public-methods
             # The given element is a list.
 
             # We get the base of each element of the list.
-            return [cls._extract_base(x) for x in element]
+            return [self._extract_base(x) for x in element]
 
         # We get the base if it is an URL.
-        base = Check(element).is_url_valid(return_base=True)
+        base = self.checker.is_url_valid(url=element, return_base=True)
 
         if base:
             # It is an URL.
@@ -304,8 +306,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # We return the result.
         return List(result).format()
 
-    @classmethod
-    def _format_decoded(cls, to_format, result=None):  # pragma: no cover
+    def _format_decoded(self, to_format, result=None):  # pragma: no cover
         """
         Format the exctracted adblock line before passing it to the system.
 
@@ -336,43 +337,44 @@ class AdBlock:  # pylint: disable=too-few-public-methods
 
                     # We recall this method but with the current result state
                     # and splited data.
-                    return cls._format_decoded(data.split("^"), result)
+                    return self._format_decoded(data.split("^"), result)
 
                 if "#" in data:
                     # There is a dash in the currently read line.
 
                     # We recall this method but with the current result state
                     # and splited data.
-                    return cls._format_decoded(data.split("#"), result)
+                    return self._format_decoded(data.split("#"), result)
 
                 if "," in data:
                     # There is a comma in the currently read line.
 
                     # We recall this method but with the current result state
                     # and splited data.
-                    return cls._format_decoded(data.split(","), result)
+                    return self._format_decoded(data.split(","), result)
 
                 if "!" in data:
                     # There is an exclamation mark in the currently read line.
 
                     # We recall this method but with the current result state
                     # and splited data.
-                    return cls._format_decoded(data.split("!"), result)
+                    return self._format_decoded(data.split("!"), result)
 
                 if "|" in data:
                     # There is a vertival bar in the currently read line.
 
                     # We recall this method but with the current result state
                     # and splited data.
-                    return cls._format_decoded(data.split("|"), result)
+                    return self._format_decoded(data.split("|"), result)
 
                 if data:
                     # The currently read line is not empty.
 
-                    data = cls._extract_base(data)
+                    data = self._extract_base(data)
 
                     if data and (
-                        Check(data).is_domain_valid() or Check(data).is_ip_valid()
+                        self.checker.is_domain_valid(data)
+                        or self.checker.is_ip_valid(data)
                     ):
                         # The extraced base is not empty.
                         # and
@@ -388,7 +390,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         # * The currently read line is not a valid IP.
 
                         # We try to get the url base.
-                        url_base = Check(data).is_url_valid(return_base=True)
+                        url_base = self.checker.is_url_valid(data, return_base=True)
 
                         if url_base:
                             # The url_base is not empty or equal to False or None.
