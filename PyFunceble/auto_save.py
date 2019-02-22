@@ -61,6 +61,9 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
+# pylint: disable=bad-continuation
+
+from sys import stdout as sys_stdout
 
 import PyFunceble
 from PyFunceble.helpers import Command
@@ -140,11 +143,10 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
                     if self.last or self.bypass:
                         if PyFunceble.CONFIGURATION["command_before_end"]:
-                            print(
-                                Command(
-                                    PyFunceble.CONFIGURATION["command_before_end"]
-                                ).execute()
-                            )
+                            for line in Command(
+                                PyFunceble.CONFIGURATION["command_before_end"]
+                            ).run():
+                                sys_stdout.write("{}\n".format(line))
 
                             self.travis_permissions()
 
@@ -156,9 +158,10 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                         Command(command % message).execute()
                     else:
                         if PyFunceble.CONFIGURATION["command"]:
-                            print(
-                                Command(PyFunceble.CONFIGURATION["command"]).execute()
-                            )
+                            for line in Command(
+                                PyFunceble.CONFIGURATION["command"]
+                            ).run():
+                                sys_stdout.write("{}\n".format(line))
 
                             self.travis_permissions()
 

@@ -259,8 +259,20 @@ class Command:  # pylint: disable=too-few-public-methods
         # We set the default decoding type.
         self.decode_type = "utf-8"
 
-        # We get the command to run.
-        self.command = command
+        if isinstance(command, list):
+            # The given command is a list.
+
+            # We construct the command we are going to run.
+            self.command = " ".join(command)
+        elif isinstance(command, str):
+            # The given command is a string.
+
+            # We set the command we are going to run.
+            self.command = command
+        else:
+            raise NotImplementedError(
+                "Unknown command type: `{}`".format(type(command))
+            )
 
     def _decode_output(self, to_decode):
         """
@@ -299,6 +311,39 @@ class Command:  # pylint: disable=too-few-public-methods
 
         # We return the decoded output of the executed command.
         return self._decode_output(output)
+
+    def run(self):
+        """
+        Run the given command and yield each line(s) one by one.
+
+        .. note::
+            The difference between this method and :code:`self.execute()`
+            is that :code:`self.execute()` wait for the process to end
+            in order to return its output.
+        """
+
+        with Popen(self.command, stdout=PIPE, shell=True) as process:
+            # We initiate a process and parse the command to it.
+
+            while True:
+                # We loop infinitly because we want to get the output
+                # until there is none.
+
+                # We get the current line from the process stdout.
+                #
+                # Note: we use rstrip() because we are paranoid :-)
+                current_line = process.stdout.readline().rstrip()
+
+                if not current_line:
+                    # The current line is empty or equal to None.
+
+                    # We break the loop.
+                    break
+
+                # The line is not empty nor equal to None.
+
+                # We encode and yield the current line
+                yield self._decode_output(current_line)
 
 
 class Dict:

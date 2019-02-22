@@ -226,6 +226,16 @@ class TestCommand(TestCase):
         else:
             self.assertEqual("{}\n".format(expected), actual)
 
+    def test_run(self):
+        """
+        Test Command().run().
+        """
+
+        expected = ["PyFunceble has been written by Fun Ilrys."]
+        actual = list(Command("echo '%s'" % expected[0]).run())
+
+        self.assertEqual(expected, actual)
+
 
 class TestList(TestCase):
     """
