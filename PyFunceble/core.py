@@ -386,9 +386,12 @@ class Core:  # pragma: no cover
             # * We deactivate the whois database as it is not needed.
             # * We deactivate the database as it is not needed.
             # * We deactivate the autocontinue subsystem as it is not needed.
+            # * We deactivate the execution time subsystem as it is not needed.
             PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION[
                 "inactive_database"
-            ] = PyFunceble.CONFIGURATION["auto_continue"] = False
+            ] = PyFunceble.CONFIGURATION["auto_continue"] = PyFunceble.CONFIGURATION[
+                "show_execution_time"
+            ] = False
 
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.

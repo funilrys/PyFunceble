@@ -138,37 +138,40 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We load the installed configuration.
                 self._load_config_file()
 
-        for main_key in ["domains", "hosts", "splited", "json"]:
-            # We loop through the key which contain paths under the `outputs` index.
+        if "file_to_test" in PyFunceble.INTERN:
+            # We are not testing as an imported module.
 
-            # And we fix the path.
-            # Which means: If they do not end with the directory separator, we append
-            # it to the end.
-            PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
-                PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
-            ).fix_path()
-
-        for main_key in ["analytic", "logs"]:
-            # We loop through the key which are more deeper under the `outputs` index.
-
-            for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
-                "directories"
-            ].items():
-                # We loop through the more deeper indexes.
+            for main_key in ["domains", "hosts", "splited", "json"]:
+                # We loop through the key which contain paths under the `outputs` index.
 
                 # And we fix the path.
                 # Which means: If they do not end with the directory separator, we append
                 # it to the end.
-                PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
-                    key
-                ] = Directory(value).fix_path()
+                PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
+                    PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
+                ).fix_path()
 
-        # We fix the path.
-        # Which means: If they do not end with the directory separator, we append
-        # it to the end.
-        PyFunceble.CONFIGURATION["outputs"]["parent_directory"] = Directory(
-            PyFunceble.CONFIGURATION["outputs"]["parent_directory"]
-        ).fix_path()
+            for main_key in ["analytic", "logs"]:
+                # We loop through the key which are more deeper under the `outputs` index.
+
+                for key, value in PyFunceble.CONFIGURATION["outputs"][main_key][
+                    "directories"
+                ].items():
+                    # We loop through the more deeper indexes.
+
+                    # And we fix the path.
+                    # Which means: If they do not end with the directory separator, we append
+                    # it to the end.
+                    PyFunceble.CONFIGURATION["outputs"][main_key]["directories"][
+                        key
+                    ] = Directory(value).fix_path()
+
+            # We fix the path.
+            # Which means: If they do not end with the directory separator, we append
+            # it to the end.
+            PyFunceble.CONFIGURATION["outputs"]["parent_directory"] = Directory(
+                PyFunceble.CONFIGURATION["outputs"]["parent_directory"]
+            ).fix_path()
 
         # We update the STATUS variable with the status from the configuration.
         PyFunceble.STATUS.update(PyFunceble.CONFIGURATION["status"])

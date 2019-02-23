@@ -658,38 +658,46 @@ class Whois:
     """
 
     def __init__(self, expiration_date=None):
-        # We get the extracted expiration date.
-        self.expiration_date = expiration_date
+        if self._authorization():
+            # We are authorized to run this submodule.
 
-        if self.expiration_date:
-            # We get the epoch of the expiration date.
-            self.epoch = int(
-                PyFunceble.mktime(PyFunceble.strptime(self.expiration_date, "%d-%b-%Y"))
+            # We get the extracted expiration date.
+            self.expiration_date = expiration_date
+
+            if self.expiration_date:
+                # We get the epoch of the expiration date.
+                self.epoch = int(
+                    PyFunceble.mktime(
+                        PyFunceble.strptime(self.expiration_date, "%d-%b-%Y")
+                    )
+                )
+
+            if (
+                "file_to_test" in PyFunceble.INTERN
+                and PyFunceble.INTERN["file_to_test"]
+            ):
+                # The file path was given previously.
+                PyFunceble.INTERN["file_to_test"] = PyFunceble.INTERN["file_to_test"]
+            else:
+                # The file path was not given previously.
+
+                # We set a dummy index.
+                PyFunceble.INTERN["file_to_test"] = "single_testing"
+
+            # We set the path to the whois database file.
+            self.whois_db_path = (
+                PyFunceble.CURRENT_DIRECTORY
+                + PyFunceble.OUTPUTS["default_files"]["whois_db"]
             )
 
-        if "file_to_test" in PyFunceble.INTERN and PyFunceble.INTERN["file_to_test"]:
-            # The file path was given previously.
-            PyFunceble.INTERN["file_to_test"] = PyFunceble.INTERN["file_to_test"]
-        else:
-            # The file path was not given previously.
+            if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
+                # We are testing something.
 
-            # We set a dummy index.
-            PyFunceble.INTERN["file_to_test"] = "single_testing"
+                # We set a variable which will save the actual element we are working with.
+                PyFunceble.INTERN["to_test"] = PyFunceble.INTERN["to_test"]
 
-        # We set the path to the whois database file.
-        self.whois_db_path = (
-            PyFunceble.CURRENT_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["whois_db"]
-        )
-
-        if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
-            # We are testing something.
-
-            # We set a variable which will save the actual element we are working with.
-            PyFunceble.INTERN["to_test"] = PyFunceble.INTERN["to_test"]
-
-        # We try to retrieve the information from the database file.
-        self._retrieve()
+            # We try to retrieve the information from the database file.
+            self._retrieve()
 
     @classmethod
     def _authorization(cls):

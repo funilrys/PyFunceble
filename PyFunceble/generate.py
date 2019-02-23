@@ -211,7 +211,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                 or PyFunceble.CONFIGURATION["generate_json"]
             )
         ):
-            # * We are testing a file.
+            # * We are not testing as an imported module.
             # and
             # * The hosts file generation is activated.
             # or
@@ -387,7 +387,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             and PyFunceble.INTERN["file_to_test"]
             and PyFunceble.CONFIGURATION["unified"]
         ):
-            # * We are testing a file.
+            # * We are not testing as an imported module.
             # and
             # * The unified file generation is activated.
 
@@ -451,7 +451,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
             old_status = self.domain_status
 
         if "file_to_test" in PyFunceble.INTERN and PyFunceble.INTERN["file_to_test"]:
-            # We are testing a file.
+            # We are not testing as an imported module.
 
             # We partially construct the path to the file to write/print.
             output = (
@@ -710,35 +710,40 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         Generate a file according to the domain status.
         """
 
-        # We generate the hosts file.
-        Generate(self.domain_status, self.source, self.expiration_date).info_files()
+        if "file_to_test" in PyFunceble.INTERN:
+            # We are not testing as an imported module.
 
-        # We increase the percentage count.
-        Percentage(self.domain_status).count()
+            # We generate the hosts file.
+            Generate(self.domain_status, self.source, self.expiration_date).info_files()
 
-        # We print on screen if needed.
-        self._prints_status_screen()
+            # We are testing a file content.
 
-        if self._do_not_produce_file():
-            return None
+            # We increase the percentage count.
+            Percentage(self.domain_status).count()
 
-        if (
-            not PyFunceble.CONFIGURATION["no_files"]
-            and PyFunceble.CONFIGURATION["split"]
-        ):
-            # * The file non-generation of file is globaly deactivated.
-            # and
-            # * We have to split the outputs.
+            # We print on screen if needed.
+            self._prints_status_screen()
 
-            # We print or generate the files.
-            self._prints_status_file()
-        else:
-            # * The file non-generation of file is globaly activated.
-            # or
-            # * We do not have to split the outputs.
+            if self._do_not_produce_file():
+                return None
 
-            # We print or generate the unified files.
-            self.unified_file()
+            if (
+                not PyFunceble.CONFIGURATION["no_files"]
+                and PyFunceble.CONFIGURATION["split"]
+            ):
+                # * The file non-generation of file is globaly deactivated.
+                # and
+                # * We have to split the outputs.
+
+                # We print or generate the files.
+                self._prints_status_file()
+            else:
+                # * The file non-generation of file is globaly activated.
+                # or
+                # * We do not have to split the outputs.
+
+                # We print or generate the unified files.
+                self.unified_file()
 
     def _do_not_produce_file(self):
         """

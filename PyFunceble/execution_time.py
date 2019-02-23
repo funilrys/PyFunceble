@@ -149,7 +149,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # and
             # * The generation of logs is activated.
             # and
-            # * We are not testing a domain.
+            # * We are not testing as an imported module.
 
             # We set the location of the file we are working with.
             self.file = (
