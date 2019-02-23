@@ -61,6 +61,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
+# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, File
 
@@ -71,8 +72,13 @@ class AutoContinue:
     """
 
     def __init__(self):
-        if PyFunceble.CONFIGURATION["auto_continue"]:
-            # The auto_continue subsystem is activated.
+        if (
+            PyFunceble.CONFIGURATION["auto_continue"]
+            and not PyFunceble.CONFIGURATION["no_files"]
+        ):
+            # * The auto_continue subsystem is activated.
+            # and
+            # * We are authorized to generate files.
 
             # We set the log file location.
             self.autocontinue_log_file = (
