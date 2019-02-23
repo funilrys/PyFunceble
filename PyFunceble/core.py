@@ -759,15 +759,19 @@ class Core:  # pragma: no cover
                 status, _ = self.status.get()
 
             # We run the file decision logic.
-            self._file_decision(domain, last_domain, status)
+            self._file_decision(PyFunceble.INTERN["to_test"], last_domain, status)
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
-                print(domain, status)
+                print(PyFunceble.INTERN["to_test"], status)
 
-        return domain, status
+            # We return the tested domain and its status.
+            return PyFunceble.INTERN["to_test"], status
+
+        # We return None, there is nothing to test.
+        return None
 
     def url(self, url_to_test=None, last_url=None):
         """
@@ -811,7 +815,7 @@ class Core:  # pragma: no cover
                 status = self.url_status.get()
 
             # We run the file decision logic.
-            self._file_decision(url_to_test, last_url, status)
+            self._file_decision(PyFunceble.INTERN["to_test"], last_url, status)
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -819,7 +823,11 @@ class Core:  # pragma: no cover
                 # We print the URL informations.
                 print(PyFunceble.INTERN["to_test"], status)
 
-        return url_to_test, status
+            # We return the URL we tested and its status.
+            return PyFunceble.INTERN["to_test"], status
+
+        # We return None, there is nothing to test.
+        return None
 
     @classmethod
     def reset_counters(cls):
@@ -1154,6 +1162,7 @@ class Core:  # pragma: no cover
                 for x in list_to_test[
                     PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
                 ]
+                if x
             ]
         except IndexError:
             # We print a message on screen.
@@ -1177,6 +1186,7 @@ class Core:  # pragma: no cover
                 for x in list_to_test[
                     PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
                 ]
+                if x
             ]
         except IndexError:
             # We print a message on screen.
