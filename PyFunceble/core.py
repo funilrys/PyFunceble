@@ -384,7 +384,7 @@ class Core:  # pragma: no cover
             # * We deactivate the database as it is not needed.
             PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION[
                 "inactive_database"
-            ] = False
+            ] = PyFunceble.CONFIGURATION["auto_continue"] = False
 
             if self.domain_or_ip_to_test:  # pylint: disable=no-member
                 # A domain is given.
