@@ -142,7 +142,7 @@ class Core:  # pragma: no cover
         self.mining = Mining()
         # We initiate a variable in order to avoid having to recall/declare
         # AutoContinue() over and over.
-        self.auto_continue = AutoContinue()
+        self.auto_continue = None
         # We initiate a variable in order to avoid having to recall/declare
         # Syntax() over and over.
         self.syntax_status = Syntax()
@@ -221,6 +221,9 @@ class Core:  # pragma: no cover
 
         if not self.modulo_test:  # pylint: disable=no-member
             # We are not in a module usage.
+
+            # We update the auto continue variable.
+            self.auto_continue = AutoContinue()
 
             # We set the file_path as the file we have to test.
             PyFunceble.INTERN[
@@ -382,6 +385,7 @@ class Core:  # pragma: no cover
 
             # * We deactivate the whois database as it is not needed.
             # * We deactivate the database as it is not needed.
+            # * We deactivate the autocontinue subsystem as it is not needed.
             PyFunceble.CONFIGURATION["whois_database"] = PyFunceble.CONFIGURATION[
                 "inactive_database"
             ] = PyFunceble.CONFIGURATION["auto_continue"] = False
