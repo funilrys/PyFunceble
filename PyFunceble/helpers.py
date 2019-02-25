@@ -73,7 +73,7 @@ from subprocess import PIPE, Popen
 import urllib3.exceptions as urllib3_exceptions
 from urllib3 import disable_warnings
 from yaml import dump as dump_yaml
-from yaml import load as load_yaml
+from yaml import safe_load as load_yaml
 
 from PyFunceble import Fore, Style
 from PyFunceble import copy as shutil_copy
