@@ -282,6 +282,14 @@ class Check:
                         # subdomains regex.
                         to_check = to_test[:suffix_index]
 
+                        if "." not in to_check and subdomain_check:
+                            # * There is no point into the new element to check.
+                            # and
+                            # * We are checking if it is a subdomain.
+
+                            # We return False, it is not a subdomain.
+                            return False
+
                         if "." in to_check and subdomain_check:
                             # * There is a point into the new element to check.
                             # and

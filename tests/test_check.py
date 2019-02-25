@@ -119,6 +119,7 @@ class TestCheck(TestCase):
             "hello.world.com",
             "hello.world.hello.com.",
             "hello.world.hello.com",
+            "pogotowie-komputerowe-warszawa.com.pl",
             "xn--bittr-fsa6124c.com.",
             "xn--bittr-fsa6124c.com",
             "xn--bllogram-g80d.com.",
@@ -366,17 +367,18 @@ class TestCheck(TestCase):
         """
 
         not_valid = [
-            "hello-world",
             "-hello.world",
-            "hello-.world",
-            "hello_world.com",
-            "hello_world_.com",
-            "bittréẋ.com",
             "bịllogram.com",
+            "bittréẋ.com",
             "coinbȧse.com",
             "cryptopiạ.com",
             "cṙyptopia.com",
             "google.com",
+            "hello_world_.com",
+            "hello_world.com",
+            "hello-.world",
+            "hello-world",
+            "pogotowie-komputerowe-warszawa.com.pl",
         ]
 
         expected = False

@@ -121,6 +121,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                     |___/
 
 -   dnmTX - `@dnmTX`_
+-   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
 -   Mitchell Krog - `@mitchellkrogza`_
@@ -213,6 +214,7 @@ License
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft
+.. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus

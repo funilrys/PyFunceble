@@ -136,7 +136,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 {"http_code": HTTPCode().get(), "referer": Referer().get()}
             )
 
-            if not isinstance(PyFunceble.INTERN["referer"], str):
+            if not PyFunceble.INTERN["referer"]:
                 # We could not get the referer.
 
                 # We parse the referer status into the upstream call.
@@ -498,6 +498,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             r"Expiration Date:(.*)",
             r"Expired:(.*)",
             r"Date d'expiration:(.*)",
+            r"expiration date:(.*)",
         ]
 
         if self.whois_record:
