@@ -13,7 +13,7 @@ From PyPi
 """""""""
 
 ::
- 
+
    $ pip3 install PyFunceble
 
 From GitHub
@@ -26,16 +26,16 @@ From GitHub
 Using the AUR (for Arch Linux users)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The package can be found at https://aur.archlinux.org/packages/python-pyfunceble/.
+The package can be found at https://aur.archlinux.org/packages/pyfunceble/.
 
 With makepkg
 """"""""""""
 
 ::
 
-    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble
+    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble
     $ makepkg
-    $ sudo pacman -U python-pyfunceble*.tar.xz
+    $ sudo pacman -U pyfunceble*.tar.xz
 
 With your favorite AUR helper
 """""""""""""""""""""""""""""
@@ -46,7 +46,7 @@ With your favorite AUR helper
 
 ::
 
-    $ yourFavoriteAurHelper -S python-pyfunceble
+    $ yourFavoriteAurHelper -S pyfunceble
 
 Pure Python method
 ^^^^^^^^^^^^^^^^^^
@@ -88,7 +88,7 @@ Execute the following and let's hack PyFunceble!
    ::
 
       $ source venv/bin/activate && pip3 install -e .
-   
+
    * you only need to update the repository.
    * you don't have to rerun the :code:`pip` command.
 
@@ -115,15 +115,15 @@ Execute one of the following and enjoy PyFunceble!
 Using the AUR (for Arch Linux users)
 """"""""""""""""""""""""""""""""""""
 
-The package can be found at https://aur.archlinux.org/packages/python-pyfunceble-dev/.
+The package can be found at https://aur.archlinux.org/packages/pyfunceble-dev/.
 
 **With makepkg**
 
 ::
 
-    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev
+    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev
     $ makepkg
-    $ sudo pacman -U python-pyfunceble-dev*.tar.xz
+    $ sudo pacman -U pyfunceble-dev*.tar.xz
 
 **With your favorite AUR helper**
 
@@ -133,7 +133,7 @@ The package can be found at https://aur.archlinux.org/packages/python-pyfunceble
 
 ::
 
-    $ yourFavoriteAurHelper -S python-pyfunceble-dev
+    $ yourFavoriteAurHelper -S pyfunceble-dev
 
 Pure Python method
 """"""""""""""""""
