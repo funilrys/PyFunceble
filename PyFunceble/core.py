@@ -222,9 +222,6 @@ class Core:  # pragma: no cover
         if not self.modulo_test:  # pylint: disable=no-member
             # We are not in a module usage.
 
-            # We update the auto continue variable.
-            self.auto_continue = AutoContinue()
-
             # We set the file_path as the file we have to test.
             PyFunceble.INTERN[
                 "file_to_test"
@@ -1029,6 +1026,9 @@ class Core:  # pragma: no cover
 
         # We generate the directory structure.
         PyFunceble.DirectoryStructure()
+
+        # We update the auto continue variable.
+        self.auto_continue = AutoContinue()
 
         # We restore the data from the last session if it does exist.
         self.auto_continue.restore()
