@@ -90,9 +90,7 @@ class Clean:
                 # We try to see if we have to reset counters and clean the output directory.
 
                 # We get the number of tested.
-                number_of_tested = PyFunceble.CONFIGURATION["counter"]["number"][
-                    "tested"
-                ]
+                number_of_tested = PyFunceble.INTERN["counter"]["number"]["tested"]
 
                 if (
                     number_of_tested == 0

@@ -100,7 +100,7 @@ class TestsAutoContinue(TestCase):
         """
 
         for string in self.types:
-            PyFunceble.CONFIGURATION["counter"]["number"].update({string: to_set})
+            PyFunceble.INTERN["counter"]["number"].update({string: to_set})
 
     def test_delete_file(self):
         """
@@ -174,7 +174,7 @@ class TestsAutoContinue(TestCase):
         self.set_counter(12)
 
         expected = {"up": 12, "down": 12, "invalid": 12, "tested": 12}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
@@ -191,14 +191,14 @@ class TestsAutoContinue(TestCase):
         AutoContinue().restore()
 
         expected = saved[PyFunceble.INTERN["file_to_test"]]
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
         self.set_counter(0)
 
         expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
@@ -227,14 +227,14 @@ class TestsAutoContinue(TestCase):
         AutoContinue().restore()
 
         expected = {"up": 15, "down": 18, "invalid": 5, "tested": 38}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
         self.set_counter(0)
 
         expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 

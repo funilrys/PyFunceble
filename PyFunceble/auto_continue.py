@@ -113,7 +113,7 @@ class AutoContinue:
             # We initiate the location where we are going to save the data to backup.
             data_to_backup = {}
             # We get the current counter states.
-            configuration_counter = PyFunceble.CONFIGURATION["counter"]["number"]
+            configuration_counter = PyFunceble.INTERN["counter"]["number"]
 
             # We initiate the data we have to backup.
             data_to_backup[PyFunceble.INTERN["file_to_test"]] = {
@@ -173,13 +173,13 @@ class AutoContinue:
 
                     try:
                         # We try to update the counters by using the currently read status.
-                        PyFunceble.CONFIGURATION["counter"]["number"].update(
+                        PyFunceble.INTERN["counter"]["number"].update(
                             {string: self.backup_content[file_to_restore][string]}
                         )
                     except KeyError:
                         # But if the status is not present, we try with the older index
                         # we mapped previously.
-                        PyFunceble.CONFIGURATION["counter"]["number"].update(
+                        PyFunceble.INTERN["counter"]["number"].update(
                             {
                                 string: self.backup_content[file_to_restore][
                                     alternatives[string]

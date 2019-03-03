@@ -88,7 +88,7 @@ class TestPercentage(BaseStdout):
         expected = {}
 
         for i, element in enumerate(["tested", "up", "down", "invalid"]):
-            PyFunceble.CONFIGURATION["counter"]["number"][element] = 12 + i
+            PyFunceble.INTERN["counter"]["number"][element] = 12 + i
             expected.update({element: 12 + i})
 
         for element in ["tested", "up", "down", "invalid"]:
@@ -99,7 +99,7 @@ class TestPercentage(BaseStdout):
 
                 expected[element] += 1
                 expected["tested"] += 1
-                actual = PyFunceble.CONFIGURATION["counter"]["number"]
+                actual = PyFunceble.INTERN["counter"]["number"]
 
                 self.assertEqual(expected, actual)
             except KeyError:
@@ -108,7 +108,7 @@ class TestPercentage(BaseStdout):
         PyFunceble.CONFIGURATION["syntax"] = True
 
         for i, element in enumerate(["tested", "up", "down", "invalid"]):
-            PyFunceble.CONFIGURATION["counter"]["number"][element] = 12 + i
+            PyFunceble.INTERN["counter"]["number"][element] = 12 + i
             expected.update({element: 12 + i})
 
         for element in ["tested", "up", "down", "invalid"]:
@@ -119,13 +119,13 @@ class TestPercentage(BaseStdout):
 
                 expected[element] += 1
                 expected["tested"] += 1
-                actual = PyFunceble.CONFIGURATION["counter"]["number"]
+                actual = PyFunceble.INTERN["counter"]["number"]
 
                 self.assertEqual(expected, actual)
             except KeyError:
                 pass
 
-        PyFunceble.CONFIGURATION["counter"]["number"] = {}
+        PyFunceble.INTERN["counter"]["number"] = {}
         PyFunceble.CONFIGURATION["syntax"] = False
 
     def test_init(self):
@@ -137,27 +137,27 @@ class TestPercentage(BaseStdout):
 
         Percentage(domain_status=None, init=expected)
 
-        self.assertEqual(expected, PyFunceble.CONFIGURATION["counter"]["percentage"])
+        self.assertEqual(expected, PyFunceble.INTERN["counter"]["percentage"])
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"] = {}
+        PyFunceble.INTERN["counter"]["percentage"] = {}
 
     def test_calculate(self):
         """
         Test the calculation system.
         """
 
-        PyFunceble.CONFIGURATION["counter"]["number"].update(
+        PyFunceble.INTERN["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}
         )
 
         expected = {"up": 36, "down": 62, "invalid": 1}
 
         Percentage(domain_status=None, init=None)._calculate()
-        actual = PyFunceble.CONFIGURATION["counter"]["percentage"]
+        actual = PyFunceble.INTERN["counter"]["percentage"]
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["counter"]["number"] = {}
+        PyFunceble.INTERN["counter"]["number"] = {}
 
     def test_log(self):
         """
@@ -179,7 +179,7 @@ INVALID     1%%           2%s
             " " * 10,
             " " * 11,
         )
-        PyFunceble.CONFIGURATION["counter"]["number"].update(
+        PyFunceble.INTERN["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}
         )
 
@@ -190,13 +190,13 @@ INVALID     1%%           2%s
 
         # Test for the case that we do not show_percentage
         PyFunceble.CONFIGURATION["show_percentage"] = False
-        PyFunceble.CONFIGURATION["counter"]["number"].update(
+        PyFunceble.INTERN["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}
         )
 
         Percentage(domain_status=None, init=None).log()
 
-        actual = PyFunceble.CONFIGURATION["counter"]["percentage"]
+        actual = PyFunceble.INTERN["counter"]["percentage"]
         expected = {"up": 36, "down": 62, "invalid": 1}
         self.assertEqual(expected, actual)
 
@@ -222,7 +222,7 @@ INVALID     1%%           2%s
             " " * 10,
             " " * 11,
         )
-        PyFunceble.CONFIGURATION["counter"]["number"].update(
+        PyFunceble.INTERN["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}
         )
 
@@ -233,13 +233,13 @@ INVALID     1%%           2%s
 
         # Test for the case that we do not show_percentage
         PyFunceble.CONFIGURATION["show_percentage"] = False
-        PyFunceble.CONFIGURATION["counter"]["number"].update(
+        PyFunceble.INTERN["counter"]["number"].update(
             {"up": 45, "down": 78, "invalid": 2, "tested": 125}
         )
 
         Percentage(domain_status=None, init=None).log()
 
-        actual = PyFunceble.CONFIGURATION["counter"]["percentage"]
+        actual = PyFunceble.INTERN["counter"]["percentage"]
         expected = {"up": 36, "down": 62, "invalid": 1}
         self.assertEqual(expected, actual)
 

@@ -226,13 +226,3 @@ links:
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"
   psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
-counter:
-  number:
-    down: 0
-    invalid: 0
-    tested: 0
-    up: 0
-  percentage:
-    down: 0
-    invalid: 0
-    up: 0

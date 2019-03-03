@@ -174,7 +174,7 @@ class Core:  # pragma: no cover
 
             if (
                 not PyFunceble.path.isfile(file_to_test)
-                or PyFunceble.CONFIGURATION["counter"]["number"]["tested"] == 0
+                or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
             ):
                 # The filename does not exist in the current directory
                 # or the currently number of tested is equal to 0.
@@ -839,7 +839,7 @@ class Core:  # pragma: no cover
             # We loop through to the index of the autoContinue subsystem.
 
             # And we set their counter to 0.
-            PyFunceble.CONFIGURATION["counter"]["number"].update({string: 0})
+            PyFunceble.INTERN["counter"]["number"].update({string: 0})
 
     @classmethod
     def colorify_logo(cls, home=False):
@@ -868,7 +868,7 @@ class Core:  # pragma: no cover
                         PyFunceble.Fore.YELLOW + line + PyFunceble.Fore.RESET
                     )
 
-            elif PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] >= 50:
+            elif PyFunceble.INTERN["counter"]["percentage"]["up"] >= 50:
                 # The percentage of up is greater or equal to 50%.
 
                 for line in PyFunceble.ASCII_PYFUNCEBLE.split("\n"):
@@ -1163,7 +1163,7 @@ class Core:  # pragma: no cover
             return [
                 self.domain(x, list_to_test[-1])
                 for x in list_to_test[
-                    PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                    PyFunceble.INTERN["counter"]["number"]["tested"] :
                 ]
                 if x
             ]
@@ -1187,7 +1187,7 @@ class Core:  # pragma: no cover
             return [
                 self.url(x, list_to_test[-1])
                 for x in list_to_test[
-                    PyFunceble.CONFIGURATION["counter"]["number"]["tested"] :
+                    PyFunceble.INTERN["counter"]["number"]["tested"] :
                 ]
                 if x
             ]

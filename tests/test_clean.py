@@ -98,7 +98,7 @@ class TestClean(TestCase):
         """
 
         for string in self.types:
-            PyFunceble.CONFIGURATION["counter"]["number"].update({string: to_set})
+            PyFunceble.INTERN["counter"]["number"].update({string: to_set})
 
     def test_clean_all(self):
         """
@@ -155,19 +155,19 @@ class TestClean(TestCase):
         self.set_counter()
 
         expected = {"up": 15, "down": 15, "invalid": 15, "tested": 15}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
-        PyFunceble.CONFIGURATION["counter"]["number"]["tested"] = 0
+        PyFunceble.INTERN["counter"]["number"]["tested"] = 0
 
         expected = {"up": 15, "down": 15, "invalid": 15, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
         Clean(["hello.world"])
 
         expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
@@ -191,13 +191,13 @@ class TestClean(TestCase):
         self.set_counter()
 
         expected = {"up": 15, "down": 15, "invalid": 15, "tested": 15}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
         Clean(["hello.world"])
 
         expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 
@@ -221,13 +221,13 @@ class TestClean(TestCase):
         self.set_counter(3)
 
         expected = {"up": 3, "down": 3, "invalid": 3, "tested": 3}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
         Clean(["hello.world", "world.hello", "hello-world.com"])
 
         expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.CONFIGURATION["counter"]["number"]
+        actual = PyFunceble.INTERN["counter"]["number"]
 
         self.assertEqual(expected, actual)
 

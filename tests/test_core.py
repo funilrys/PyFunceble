@@ -89,7 +89,7 @@ class TestsResetCounters(TestCase):
         """
 
         for string in self.types:
-            PyFunceble.CONFIGURATION["counter"]["number"].update({string: 15})
+            PyFunceble.INTERN["counter"]["number"].update({string: 15})
 
     def tests_counter_set(self):
         """
@@ -100,7 +100,7 @@ class TestsResetCounters(TestCase):
 
         for string in self.types:
             expected = 15
-            actual = PyFunceble.CONFIGURATION["counter"]["number"][string]
+            actual = PyFunceble.INTERN["counter"]["number"][string]
 
             self.assertEqual(expected, actual)
 
@@ -113,7 +113,7 @@ class TestsResetCounters(TestCase):
 
         for string in self.types:
             expected = 0
-            actual = PyFunceble.CONFIGURATION["counter"]["number"][string]
+            actual = PyFunceble.INTERN["counter"]["number"][string]
 
             self.assertEqual(expected, actual)
 
@@ -159,7 +159,7 @@ class TestsColoredLogo(BaseStdout):
         Test if the logo is red colored.
         """
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 1
+        PyFunceble.INTERN["counter"]["percentage"]["up"] = 1
 
         Core.colorify_logo()
 
@@ -168,14 +168,14 @@ class TestsColoredLogo(BaseStdout):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 0
+        PyFunceble.INTERN["counter"]["percentage"]["up"] = 0
 
     def tests_colored_logo_green(self):
         """
         Test if the logo is green colored.
         """
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 51
+        PyFunceble.INTERN["counter"]["percentage"]["up"] = 51
 
         Core.colorify_logo()
 
@@ -184,7 +184,7 @@ class TestsColoredLogo(BaseStdout):
 
         self.assertEqual(expected, actual)
 
-        PyFunceble.CONFIGURATION["counter"]["percentage"]["up"] = 0
+        PyFunceble.INTERN["counter"]["percentage"]["up"] = 0
 
     def tests_quiet_colored_logo(self):
         """

@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.15.3.dev (Blue Bontebok: Caterpillar)"
+VERSION = "1.16.0.dev (Blue Bontebok: Caterpillar)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -192,7 +192,12 @@ HTTP_CODE = {}
 # We initiate the location where we are going to get all links.
 LINKS = {}
 # We initiate a location which will have all internal data.
-INTERN = {}
+INTERN = {
+    "counter": {
+        "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
+        "percentage": {"down": 0, "invalid": 0, "up": 0},
+    }
+}
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """

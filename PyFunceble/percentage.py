@@ -91,9 +91,7 @@ class Percentage:
                 # We loop through the index of the data to initiate.
 
                 # And we update the counter from the currently read data.
-                PyFunceble.CONFIGURATION["counter"]["percentage"].update(
-                    {data: init[data]}
-                )
+                PyFunceble.INTERN["counter"]["percentage"].update({data: init[data]})
 
     def count(self):
         """
@@ -104,7 +102,7 @@ class Percentage:
             # The status is parsed.
 
             # We increase the number of tested.
-            PyFunceble.CONFIGURATION["counter"]["number"]["tested"] += 1
+            PyFunceble.INTERN["counter"]["number"]["tested"] += 1
 
             if (
                 self.status.lower() in PyFunceble.STATUS["list"]["up"]
@@ -113,17 +111,17 @@ class Percentage:
                 # The status is in the list of up status.
 
                 # We increase the number of up.
-                PyFunceble.CONFIGURATION["counter"]["number"]["up"] += 1
+                PyFunceble.INTERN["counter"]["number"]["up"] += 1
             elif self.status.lower() in PyFunceble.STATUS["list"]["down"]:
                 # The status is in the list of down status.
 
                 # We increase the number of down.
-                PyFunceble.CONFIGURATION["counter"]["number"]["down"] += 1
+                PyFunceble.INTERN["counter"]["number"]["down"] += 1
             else:
                 # The status is not in the list of up nor down status.
 
                 # We increase the number of invalid.
-                PyFunceble.CONFIGURATION["counter"]["number"]["invalid"] += 1
+                PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
 
     @classmethod
     def _calculate(cls):
@@ -133,9 +131,9 @@ class Percentage:
 
         # We map the current state/counters of the different status.
         percentages = {
-            "up": PyFunceble.CONFIGURATION["counter"]["number"]["up"],
-            "down": PyFunceble.CONFIGURATION["counter"]["number"]["down"],
-            "invalid": PyFunceble.CONFIGURATION["counter"]["number"]["invalid"],
+            "up": PyFunceble.INTERN["counter"]["number"]["up"],
+            "down": PyFunceble.INTERN["counter"]["number"]["down"],
+            "invalid": PyFunceble.INTERN["counter"]["number"]["invalid"],
         }
 
         for percentage in percentages:
@@ -145,13 +143,11 @@ class Percentage:
             calculation = (
                 percentages[percentage]
                 * 100
-                // PyFunceble.CONFIGURATION["counter"]["number"]["tested"]
+                // PyFunceble.INTERN["counter"]["number"]["tested"]
             )
 
             # And we update the percentage counter of the actual status.
-            PyFunceble.CONFIGURATION["counter"]["percentage"].update(
-                {percentage: calculation}
-            )
+            PyFunceble.INTERN["counter"]["percentage"].update({percentage: calculation})
 
     def log(self):
         """
@@ -160,7 +156,7 @@ class Percentage:
 
         if (
             PyFunceble.CONFIGURATION["show_percentage"]
-            and PyFunceble.CONFIGURATION["counter"]["number"]["tested"] > 0
+            and PyFunceble.INTERN["counter"]["number"]["tested"] > 0
         ):
             # * We are allowed to show the percentage on screen.
             # and
@@ -194,23 +190,19 @@ class Percentage:
                 lines_to_print = [
                     [
                         PyFunceble.STATUS["official"]["up"],
-                        str(PyFunceble.CONFIGURATION["counter"]["percentage"]["up"])
-                        + "%",
-                        PyFunceble.CONFIGURATION["counter"]["number"]["up"],
+                        str(PyFunceble.INTERN["counter"]["percentage"]["up"]) + "%",
+                        PyFunceble.INTERN["counter"]["number"]["up"],
                     ],
                     [
                         PyFunceble.STATUS["official"]["down"],
-                        str(PyFunceble.CONFIGURATION["counter"]["percentage"]["down"])
-                        + "%",
-                        PyFunceble.CONFIGURATION["counter"]["number"]["down"],
+                        str(PyFunceble.INTERN["counter"]["percentage"]["down"]) + "%",
+                        PyFunceble.INTERN["counter"]["number"]["down"],
                     ],
                     [
                         PyFunceble.STATUS["official"]["invalid"],
-                        str(
-                            PyFunceble.CONFIGURATION["counter"]["percentage"]["invalid"]
-                        )
+                        str(PyFunceble.INTERN["counter"]["percentage"]["invalid"])
                         + "%",
-                        PyFunceble.CONFIGURATION["counter"]["number"]["invalid"],
+                        PyFunceble.INTERN["counter"]["number"]["invalid"],
                     ],
                 ]
 
@@ -230,7 +222,7 @@ class Percentage:
                     # And we print the current status line on file and screen.
                     Prints(to_print, "Percentage", output).data()
 
-        elif PyFunceble.CONFIGURATION["counter"]["number"]["tested"] > 0:
+        elif PyFunceble.INTERN["counter"]["number"]["tested"] > 0:
             # * We are not allowed to show the percentage on screen.
             # but
             # * The number of tested is greater than 0.
