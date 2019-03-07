@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.16.1.dev (Blue Bontebok: Caterpillar)"
+VERSION = "1.17.0.dev (Blue Bontebok: Caterpillar)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]

@@ -1085,27 +1085,12 @@ class Core:  # pragma: no cover
             {"flatten_inactive_db": self.inactive_database.content()}
         )
 
-        # We initiate a local variable which will save the current state of the list.
-        not_filtered = list_to_test
-
-        try:
-            # We remove the element which are in the database from the
-            # current list to test.
-            list_to_test = List(
-                list(
-                    set(Regex(list_to_test, regex_delete).not_matching_list())
-                    - set(PyFunceble.INTERN["flatten_inactive_db"])
-                )
-            ).format()
-            _ = list_to_test[-1]
-        except IndexError:
-            # We test without the database removing.
-            list_to_test = List(
-                Regex(not_filtered, regex_delete).not_matching_list()
-            ).format()
-
-            # We delete the not_filtered variable.
-            del not_filtered
+        # We remove the element which are in the database from the
+        # current list to test.
+        list_to_test = List(
+            Regex(list_to_test, regex_delete).not_matching_list()
+        ).format()
+        _ = list_to_test[-1]
 
         if PyFunceble.CONFIGURATION["filter"]:
             # The filter is not empty.
@@ -1119,12 +1104,6 @@ class Core:  # pragma: no cover
             ).format()
 
         list_to_test = List(list(list_to_test)).custom_format(Sort.standard)
-
-        if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
-            # The hierarchical sorting is desired by the user.
-
-            # We format the list.
-            list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
 
         # We return the final list to test.
         return list_to_test
@@ -1157,15 +1136,39 @@ class Core:  # pragma: no cover
                 # We format the list.
                 list_to_test = List(list_to_test).custom_format(Sort.standard)
 
+        # We initiate a local variable which will save the current state of the list.
+        not_filtered = list_to_test
+
+        try:
+            # We remove the element which are in the database from the
+            # current list to test.
+            list_to_test = List(
+                list(
+                    set(
+                        list_to_test[PyFunceble.INTERN["counter"]["number"]["tested"] :]
+                    )
+                    - set(PyFunceble.INTERN["flatten_inactive_db"])
+                )
+            ).format()
+            _ = list_to_test[-1]
+        except IndexError:
+            # Our list to test is the one with the element from the database.
+            list_to_test = not_filtered[
+                PyFunceble.INTERN["counter"]["number"]["tested"] :
+            ]
+
+            # We delete the undesired variable.
+            del not_filtered
+
+        if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+            # The hierarchical sorting is desired by the user.
+
+            # We format the list.
+            list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
+
         try:
             # We test each element of the list to test.
-            return [
-                self.domain(x, list_to_test[-1])
-                for x in list_to_test[
-                    PyFunceble.INTERN["counter"]["number"]["tested"] :
-                ]
-                if x
-            ]
+            return [self.domain(x, list_to_test[-1]) for x in list_to_test if x]
         except IndexError:
             # We print a message on screen.
             print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")
@@ -1181,15 +1184,39 @@ class Core:  # pragma: no cover
         # We get, format, clean the list of URL to test.
         list_to_test = self._file_list_to_test_filtering()
 
+        # We initiate a local variable which will save the current state of the list.
+        not_filtered = list_to_test
+
+        try:
+            # We remove the element which are in the database from the
+            # current list to test.
+            list_to_test = List(
+                list(
+                    set(
+                        list_to_test[PyFunceble.INTERN["counter"]["number"]["tested"] :]
+                    )
+                    - set(PyFunceble.INTERN["flatten_inactive_db"])
+                )
+            ).format()
+            _ = list_to_test[-1]
+        except IndexError:
+            # Our list to test is the one with the element from the database.
+            list_to_test = not_filtered[
+                PyFunceble.INTERN["counter"]["number"]["tested"] :
+            ]
+
+            # We delete the undesired variable.
+            del not_filtered
+
+        if PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+            # The hierarchical sorting is desired by the user.
+
+            # We format the list.
+            list_to_test = List(list(list_to_test)).custom_format(Sort.hierarchical)
+
         try:
             # We test each URL from the list to test.
-            return [
-                self.url(x, list_to_test[-1])
-                for x in list_to_test[
-                    PyFunceble.INTERN["counter"]["number"]["tested"] :
-                ]
-                if x
-            ]
+            return [self.url(x, list_to_test[-1]) for x in list_to_test if x]
         except IndexError:
             # We print a message on screen.
             print(PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT + "Nothing to test.")
