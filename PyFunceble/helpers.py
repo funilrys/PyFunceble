@@ -1041,7 +1041,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
             return result
 
-        elif not self.return_data and pre_result:  # pylint: disable=no-member
+        if not self.return_data and pre_result:  # pylint: disable=no-member
             return True
 
         return False

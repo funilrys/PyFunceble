@@ -530,33 +530,32 @@ class Core:  # pragma: no cover
                 "You should not use this method. Please prefer self.domain()"
             )
 
-        else:
-            # We are used as an imported module.
+        # We are used as an imported module.
 
-            if complete:
-                # We have to return much more information into our result.
+        if complete:
+            # We have to return much more information into our result.
 
-                # We finaly return our dataset.
-                return self.test_with_complete_information()
+            # We finaly return our dataset.
+            return self.test_with_complete_information()
 
-            if PyFunceble.INTERN["to_test_type"] == "domain":
-                # We are testing a domain.
+        if PyFunceble.INTERN["to_test_type"] == "domain":
+            # We are testing a domain.
 
-                # We get the status of the domain we are trying to test.
-                status, _ = self.status.get()
+            # We get the status of the domain we are trying to test.
+            status, _ = self.status.get()
 
-                # We return the catched status of the domains.
-                return status
+            # We return the catched status of the domains.
+            return status
 
-            if PyFunceble.INTERN["to_test_type"] == "url":
-                # We are testing a url.
+        if PyFunceble.INTERN["to_test_type"] == "url":
+            # We are testing a url.
 
-                # We return the status of the parsed url.
-                return self.url_status.get()
+            # We return the status of the parsed url.
+            return self.url_status.get()
 
-            # We raise an exception because that means that something wrong
-            # happened because of the developer not the user.
-            raise Exception("Unknown to_test_type. Please report issue.")
+        # We raise an exception because that means that something wrong
+        # happened because of the developer not the user.
+        raise Exception("Unknown to_test_type. Please report issue.")
 
     @classmethod
     def bypass(cls):
