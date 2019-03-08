@@ -668,5 +668,5 @@ Global overview
                                 Configured value: True
 
     Crafted with ♥ by Nissar Chababy (Funilrys) with the
-    help of https://pyfunceble.rtfd.io/en/master/contributors.html &&
-    https://pyfunceble.rtfd.io/en/master/special-thanks.html
+    help of https://pyfunceble.rtfd.io/en/dev/contributors.html &&
+    https://pyfunceble.rtfd.io/en/dev/special-thanks.html

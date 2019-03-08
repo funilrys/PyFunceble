@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
     :alt: PyFunceble logo
 
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -7,12 +7,12 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
     :height: 30px
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
     :target: https://github.com/funilrys/PyFunceble/releases/latest
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
