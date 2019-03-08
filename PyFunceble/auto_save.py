@@ -169,9 +169,12 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                             command % PyFunceble.CONFIGURATION["travis_autosave_commit"]
                         ).execute()
 
-                    Command(
-                        "git push origin %s" % PyFunceble.CONFIGURATION["travis_branch"]
-                    ).execute()
+                    print(
+                        Command(
+                            "git push origin %s"
+                            % PyFunceble.CONFIGURATION["travis_branch"]
+                        ).execute()
+                    )
                     exit(0)
             except KeyError:
                 pass
