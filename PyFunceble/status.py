@@ -68,60 +68,112 @@ from PyFunceble.check import Check
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
-from PyFunceble.lookup import Lookup
+from PyFunceble.http_code import HTTPCode
+from PyFunceble.referer import Referer
+from PyFunceble.lookup import NSLookup
 
 
 class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Hanle the research of domain status in case we don't use
-    WHOIS or in case that WHOIS record is not readable nor exploitable.
+    Handle the research of the domain status.
 
-    :param matched_result: The previously catched status.
-    :type matched_result: str
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param subject_type:
+        The type of the subject.
+        Should be one of the following.
+        
+            - :code:`domain`
+
+            - :code:`file_domain`
+    :type subject_type: str
     """
 
-    @classmethod
-    def __init__(cls):
-        # We initiate an instance of the ExtraRules class.
-        cls.extra_rules = cls.ExtraRules()
+    output = {}
 
-    @classmethod
-    def get(cls):
+    def __init__(self, subject, subject_type="domain"):
+        self.subject = subject
+        self.subject_type = subject_type.lower()
+
+        self.checker = Check(self.subject)
+
+    def get(self):
         """
         Get the status while testing for an IP or domain.
-
-        .. note::
-            We consider that the domain or IP we are currently testing
-            is into :code:`PyFunceble.INTERN["to_test"]`.
         """
 
-        if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
-            expiration_date = ExpirationDate().get()
+        if self.subject:
+            self.output.update(
+                {
+                    "domain_syntax_validation": self.checker.is_domain_valid(),
+                    "expiration_date": None,
+                    "http_status_code": "***",
+                    "ipv4_range_syntax_validation": self.checker.is_ip_range(),
+                    "ipv4_syntax_validation": self.checker.is_ip_valid(),
+                    "subdomain_syntax_validation": self.checker.is_subdomain(),
+                    "tested": self.subject,
+                    "url_syntax_validation": self.checker.is_url_valid(),
+                    "whois_server": Referer(self.subject).get(),
+                }
+            )
 
-            if expiration_date is False:
-                return cls.handle(status="invalid")
+            if PyFunceble.CONFIGURATION["local"] or (
+                self.output["domain_syntax_validation"]
+                or self.output["ipv4_syntax_validation"]
+                and self.output["whois_server"] is not False
+            ):
+                self.output["http_status_code"] = HTTPCode(
+                    self.subject, self.subject_type
+                ).get()
 
-            if expiration_date == PyFunceble.STATUS["official"]["up"]:
-                return expiration_date, "WHOIS"
+                if not self.output["subdomain_syntax_validation"]:
+                    self.output["expiration_date"], self.output[
+                        "whois_record"
+                    ] = ExpirationDate(self.subject, self.output["whois_server"]).get()
 
-            return cls.handle(status="inactive")
+                    if isinstance(self.output["expiration_date"], str):
+                        self.output["_status_source"] = self.output[
+                            "status_source"
+                        ] = "WHOIS"
+                        self.output["_status"] = self.output[
+                            "status"
+                        ] = PyFunceble.STATUS["official"]["up"]
 
-        raise NotImplementedError("We expect `INTERN['to_test']` to be set.")
+                        Generate(
+                            self.subject,
+                            self.subject_type,
+                            self.output["status"],
+                            source=self.output["status_source"],
+                            expiration_date=self.output["expiration_date"],
+                            http_status_code=self.output["http_status_code"],
+                            whois_server=self.output["whois_server"],
+                        ).status_file()
+                    else:
+                        self.output["_status_source"] = "NSLOOKUP"
+                        self.handle(status="inactive")
+                else:
+                    self.output["_status_source"] = "NSLOOKUP"
+                    self.handle(status="inactive")
+            else:
+                self.output["_status_source"] = "IANA"
+                self.output["_status"] = PyFunceble.STATUS["official"]["invalid"]
 
-    @classmethod
-    def handle(cls, status, invalid_source="IANA"):
+                self.handle(status="invalid")
+
+            return self.output
+
+        raise ValueError("Subject should be given.")
+
+    def handle(self, status):
         """
         Handle the lack of WHOIS and expiration date. :smile_cat:
 
         :param matched_status: The status that we have to handle.
         :type status: str
 
-        :param invalid_source:
-            The source to set when we handle INVALID element.
-        :type invalid_source: str
-
         :return:
-            The strus of the domain after generating the files desired
+            The status of the domain after generating the files desired
             by the user.
         :rtype: str
         """
@@ -129,511 +181,521 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
             # The matched status is not in the list of invalid status.
 
-            # We initiate the source we are going to parse to the Generate class.
-            source = "NSLOOKUP"
+            # We get the nslookup state.
+            self.output["nslookup"] = NSLookup(self.subject).request()
 
-            if Lookup().nslookup():
+            if self.output["nslookup"]:
                 # We could execute the nslookup logic.
 
-                # We get the status and source after extra rules check.
-                status, source = cls.extra_rules.handle(
-                    PyFunceble.STATUS["official"]["up"], source
-                )
+                # We set the status we got.
+                self.output["_status"] = PyFunceble.STATUS["official"]["up"]
+            else:
+                # We could not get something.
 
-                # We generate the status files with the up status.
-                Generate(status, source).status_file()
-
-                # We return the up status.
-                return status, source
-
-            # We could not execute the nslookup logic.
+                # We set the status we got.
+                self.output["_status"] = PyFunceble.STATUS["official"]["down"]
 
             # We get the status and source after extra rules check.
-            status, source = cls.extra_rules.handle(
-                PyFunceble.STATUS["official"]["down"], source
+            self.output["status"], self.output["status_source"] = ExtraRules(
+                self.subject, self.subject_type, self.output["http_status_code"]
+            ).handle(self.output["_status"], self.output["_status_source"])
+        else:
+            self.output["status"], self.output["status_source"] = (
+                self.output["_status"],
+                self.output["_status_source"],
             )
-
-            # We generate the status file with the down status.
-            Generate(status, source).status_file()
-
-            # We return the down status.
-            return status, source
-
-        # The matched status is in the list of invalid status.
-
-        # We get the status and source after extra rules check.
-        status, source = cls.extra_rules.handle(
-            PyFunceble.STATUS["official"]["invalid"], invalid_source
-        )
 
         # We generate the status file with the invalid status.
-        Generate(status, source).status_file()
+        Generate(
+            self.subject,
+            self.subject_type,
+            self.output["status"],
+            source=self.output["status_source"],
+            expiration_date=self.output["expiration_date"],
+            http_status_code=self.output["http_status_code"],
+            whois_server=self.output["whois_server"],
+        ).status_file()
 
-        # We return the status.
-        return status, source
 
-    class ExtraRules:
+class ExtraRules:
+    """
+    Manage some extra rules.,
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param subject_type: 
+        The type of the subject we are working with.
+        Should be one of the following.
+
+            - :code:`domain`
+            - :code:`url`
+    :type subject_tpe: str
+
+    :param http_status_code: The extracted status code.
+    :type http_status_code: str|int
+    """
+
+    def __init__(self, subject, subject_type, http_status_code):
+        # We share the subject we are working with.
+        self.subject = subject
+        # We share the subject type.
+        self.subject_type = subject_type
+        # We share the status code.
+        self.status_code = http_status_code
+
+        # We set the header that we will send when communicating with webservers.
+        self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+
+        # We set a list of regex and methods to call if matched.
+        self.regexes_active_to_inactive_potentially_down = {
+            r"\.blogspot\.": self.__blogspot,
+            r"\.canalblog\.com$": self.__special_down,
+            r"\.doubleclick\.net$": self.__special_down,
+            r"\.liveadvert\.com$": self.__special_down,
+            r"\.skyrock\.com$": self.__special_down,
+            r"\.tumblr\.com$": self.__special_down,
+        }
+
+        # We set a list of regex and methods to call if matched.
+        self.regexes_active_to_inactive_potentially_up = {
+            r"\.blogspot\.": self.__blogspot,
+            r"\.wordpress\.com$": self.__wordpress_dot_com,
+        }
+
+    @classmethod
+    def __special_down(cls):
         """
-        Manage some extra rules.
+        Set what we return for the SPECIAL status de-escalation.
+
+        :return: :code:`(new status, new source)`
+        :rtype: tuple
         """
 
-        def __init__(self):
-            # We set the header that we will send when communicating with webservers.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+        return PyFunceble.STATUS["official"]["down"], "SPECIAL"
 
-            # We set a list of regex and methods to call if matched.
-            self.regexes_active_to_inactive_potentially_down = {
-                r"\.blogspot\.": self.__blogspot,
-                r"\.canalblog\.com$": self.__special_down,
-                r"\.doubleclick\.net$": self.__special_down,
-                r"\.liveadvert\.com$": self.__special_down,
-                r"\.skyrock\.com$": self.__special_down,
-                r"\.tumblr\.com$": self.__special_down,
-            }
+    @classmethod
+    def __special_up(cls):
+        """
+        Set what we return for the SPECIAL status escalation.
 
-            # We set a list of regex and methods to call if matched.
-            self.regexes_active_to_inactive_potentially_up = {
-                r"\.blogspot\.": self.__blogspot,
-                r"\.wordpress\.com$": self.__wordpress_dot_com,
-            }
+        :return: :code:`(new status, new source)`
+        :rtype: tuple
+        """
 
-        @classmethod
-        def __special_down(cls):
-            """
-            Set what we return for the SPECIAL status de-escalation.
+        return PyFunceble.STATUS["official"]["up"], "SPECIAL"
 
-            :return: :code:`(new status, new source)`
-            :rtype: tuple
-            """
+    @classmethod
+    def __http_status_code_up(cls):
+        """
+        Set what we return for the HTTP Code status escalation.
 
-            return PyFunceble.STATUS["official"]["down"], "SPECIAL"
+        :return: :code:`(new status, new source)`
+        :rtype: tuple
+        """
 
-        @classmethod
-        def __special_up(cls):
-            """
-            Set what we return for the SPECIAL status escalation.
+        return PyFunceble.STATUS["official"]["up"], "HTTP Code"
 
-            :return: :code:`(new status, new source)`
-            :rtype: tuple
-            """
+    def __blogspot(self):
+        """
+        Handle the blogspot SPECIAL case.
 
-            return PyFunceble.STATUS["official"]["up"], "SPECIAL"
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
 
-        @classmethod
-        def __http_status_code_up(cls):
-            """
-            Set what we return for the HTTP Code status escalation.
+        # We iniate a list of elements in the HTML which will tell us more about
+        # the status of the domain.
+        regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
 
-            :return: :code:`(new status, new source)`
-            :rtype: tuple
-            """
+        if self.subject_type in ["domain", "file_domain"]:
+            # The element we are testing is a domain.
 
-            return PyFunceble.STATUS["official"]["up"], "HTTP Code"
+            # We construct the url to get.
+            url_to_get = "http://%s" % self.subject
+        elif self.subject_type in ["url", "file_url"]:
+            # The element we are testing is a URL.
 
-        def __blogspot(self):
-            """
-            Handle the blogspot SPECIAL case.
+            # We construct the url to get.
+            url_to_get = self.subject
+        else:
+            raise ValueError("Given subject type not registered.")
 
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
+        # We get the HTML of the home page.
+        blogger_content_request = requests.get(url_to_get, headers=self.headers)
 
-            # We iniate a list of elements in the HTML which will tell us more about
-            # the status of the domain.
-            regex_blogger = ["create-blog.g?", "87065", "doesn&#8217;t&nbsp;exist"]
+        for regx in regex_blogger:
+            # We loop through the list of regex to match.
 
-            if PyFunceble.INTERN["to_test_type"] == "domain":
-                # The element we are testing is a domain.
+            if (
+                regx in blogger_content_request.text
+                or Regex(
+                    blogger_content_request.text, regx, return_data=False, escape=False
+                ).match()
+            ):
+                # * The currently read regex is present into the docuement.
+                # or
+                # * Something in the document match the currently read regex.
 
-                # We construct the url to get.
-                url_to_get = "http://%s" % PyFunceble.INTERN["to_test"]
-            elif PyFunceble.INTERN["to_test_type"] == "url":
-                # The element we are testing is a URL.
-
-                # We construct the url to get.
-                url_to_get = PyFunceble.INTERN["to_test"]
-            else:
-                raise NotImplementedError(
-                    "to_test_type not implemented: `{}`".format(
-                        PyFunceble.INTERN["to_test_type"]
-                    )
-                )
-
-            # We get the HTML of the home page.
-            blogger_content_request = requests.get(url_to_get, headers=self.headers)
-
-            for regx in regex_blogger:
-                # We loop through the list of regex to match.
-
-                if (
-                    regx in blogger_content_request.text
-                    or Regex(
-                        blogger_content_request.text,
-                        regx,
-                        return_data=False,
-                        escape=False,
-                    ).match()
-                ):
-                    # * The currently read regex is present into the docuement.
-                    # or
-                    # * Something in the document match the currently read regex.
-
-                    # We update the status and source.
-                    return self.__special_down()
-
-            # We return None, there is no changes.
-            return None
-
-        def __wordpress_dot_com(self):
-            """
-            Handle the wordpress.com SPECIAL case.
-
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
-
-            # We initiate a variable which whill have to be into the HTML
-            # in order to be considered as inactive.
-            does_not_exist = "doesn&#8217;t&nbsp;exist"
-
-            # We get the content of the page.
-            wordpress_com_content = requests.get(
-                "http://%s:80" % PyFunceble.INTERN["to_test"], headers=self.headers
-            )
-
-            if does_not_exist in wordpress_com_content.text:
-                # The marker is into the page content.
-
-                # We return the new status and source.
+                # We update the status and source.
                 return self.__special_down()
 
-            # We return None, there is no changes.
-            return None
+        # We return None, there is no changes.
+        return None
 
-        def __handle_potentially_inactive(self, previous_state):
-            """
-            Handle the potentially inactive case.
+    def __wordpress_dot_com(self):
+        """
+        Handle the wordpress.com SPECIAL case.
 
-            :param previous_state: The previously catched status.
-            :type previous_state: str
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
 
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
+        # We initiate a variable which whill have to be into the HTML
+        # in order to be considered as inactive.
+        does_not_exist = "doesn&#8217;t&nbsp;exist"
 
-            if (
-                PyFunceble.HTTP_CODE["active"]
-                and PyFunceble.INTERN["http_code"]
-                in PyFunceble.HTTP_CODE["list"]["potentially_down"]
-            ):
-                # * The http status request is activated.
-                # and
-                # * The extracted http status code is in the list of
-                #   potentially down list.
+        # We get the content of the page.
+        wordpress_com_content = requests.get(
+            "http://{}:80".format(self.subject), headers=self.headers
+        )
+
+        if does_not_exist in wordpress_com_content.text:
+            # The marker is into the page content.
+
+            # We return the new status and source.
+            return self.__special_down()
+
+        # We return None, there is no changes.
+        return None
+
+    def __handle_potentially_inactive(self, previous_state):
+        """
+        Handle the potentially inactive case.
+
+        :param previous_state: The previously catched status.
+        :type previous_state: str
+
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
+
+        if (
+            PyFunceble.HTTP_CODE["active"]
+            and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]
+        ):
+            # * The http status request is activated.
+            # and
+            # * The extracted http status code is in the list of
+            #   potentially down list.
+
+            # We generate the analytics files.
+            Generate(self.subject, self.subject_type, previous_state).analytic_file(
+                "potentially_down"
+            )
+
+            if not PyFunceble.CONFIGURATION["no_special"]:
+                # We are authorized to play with the SPEICIAL rules.
+
+                for regx in self.regexes_active_to_inactive_potentially_down:
+                    # We loop through the list of available regex.
+
+                    if Regex(
+                        data=self.subject, regex=regx, return_data=False, escape=False
+                    ).match():
+                        # The element we are currently testing match the
+                        # regex we are currently reading.
+
+                        # We get the output of the function associated
+                        # with the regex.
+                        output = self.regexes_active_to_inactive_potentially_down[
+                            regx
+                        ]()
+
+                        if output is not None:
+                            # The output is not None.
+
+                            # We return the new source and state.
+                            return output
+
+        # We return None, there is no changes.
+        return None
+
+    def __handle_potentially_up(self):
+        """
+        Handle the potentially up  case.
+
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
+
+        if (
+            PyFunceble.HTTP_CODE["active"]
+            and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+        ):
+            # * The http status code request is activated.
+            # and
+            # * The extracted http status code is into the list of potentially up codes.
+
+            if not PyFunceble.CONFIGURATION["no_special"]:
+                # We are authorized to play with the SPEICIAL rules.
+
+                for regx in self.regexes_active_to_inactive_potentially_up:
+                    # We loop through the list of available regex.
+
+                    if Regex(
+                        data=self.subject, regex=regx, return_data=False, escape=False
+                    ).match():
+                        # The element we are currently testing match the
+                        # regex we are currently reading.
+
+                        # We get the output of the function associated
+                        # with the regex.
+                        output = self.regexes_active_to_inactive_potentially_up[regx]()
+
+                        if output is not None:
+                            # The output is not None.
+
+                            # We return the new source and state.
+                            return output
+
+        # We return None, there is no changes.
+        return None
+
+    def __handle_http_code(self, previous_state):
+        """
+        Handle the HTTP Code status escalation.
+
+        :param previous_state: The previously catched status.
+        :type previous_state: str
+
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
+
+        try:
+            if self.status_code in PyFunceble.HTTP_CODE["list"]["up"]:
+                # The extracted http code is in the list of up codes.
 
                 # We generate the analytics files.
-                Generate(domain_status=previous_state).analytic_file("potentially_down")
+                Generate(self.subject, self.subject_type, previous_state).analytic_file(
+                    PyFunceble.STATUS["official"]["up"]
+                )
 
-                if not PyFunceble.CONFIGURATION["no_special"]:
-                    # We are authorized to play with the SPEICIAL rules.
+                # And we return the new status and source
+                return self.__http_status_code_up()
 
-                    for regx in self.regexes_active_to_inactive_potentially_down:
-                        # We loop through the list of available regex.
+            if self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]:
+                # The extracted http status code is in the list of potentially up status.
 
-                        if Regex(
-                            data=PyFunceble.INTERN["to_test"],
-                            regex=regx,
-                            return_data=False,
-                            escape=False,
-                        ).match():
-                            # The element we are currently testing match the
-                            # regex we are currently reading.
-
-                            # We get the output of the function associated
-                            # with the regex.
-                            output = self.regexes_active_to_inactive_potentially_down[
-                                regx
-                            ]()
-
-                            if output is not None:
-                                # The output is not None.
-
-                                # We return the new source and state.
-                                return output
-
-            # We return None, there is no changes.
-            return None
-
-        def __handle_potentially_up(self):
-            """
-            Handle the potentially up  case.
-
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
+                # We generate the analytics files.
+                Generate(self.subject, self.subject_type, previous_state).analytic_file(
+                    "potentially_up"
+                )
 
             if (
-                PyFunceble.HTTP_CODE["active"]
-                and PyFunceble.INTERN["http_code"]
-                in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+                previous_state.lower() in PyFunceble.STATUS["list"]["invalid"]
+                and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]
             ):
-                # * The http status code request is activated.
-                # and
-                # * The extracted http status code is into the list of potentially up codes.
+                # The extracted http code is in the list of potentially down status code.
 
-                if not PyFunceble.CONFIGURATION["no_special"]:
-                    # We are authorized to play with the SPEICIAL rules.
+                # We generate the analytics files.
+                Generate(self.subject, self.subject_type, previous_state).analytic_file(
+                    "potentially_down"
+                )
+        except KeyError:
+            pass
 
-                    for regx in self.regexes_active_to_inactive_potentially_up:
-                        # We loop through the list of available regex.
+        # We return None, there is no changes.
+        return None
 
-                        if Regex(
-                            data=PyFunceble.INTERN["to_test"],
-                            regex=regx,
-                            return_data=False,
-                            escape=False,
-                        ).match():
-                            # The element we are currently testing match the
-                            # regex we are currently reading.
+    def __handle_ipv4_range(self):
+        """
+        Handle the IP range status escalation.
 
-                            # We get the output of the function associated
-                            # with the regex.
-                            output = self.regexes_active_to_inactive_potentially_up[
-                                regx
-                            ]()
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
 
-                            if output is not None:
-                                # The output is not None.
+        if not PyFunceble.CONFIGURATION["no_special"] and Check().is_ip_range():
+            # * We can run/check the special rule.
+            # and
+            # * The element we are currently testing is an IPv4 with range.
 
-                                # We return the new source and state.
-                                return output
+            # We return the new status and source.
+            return self.__special_up()
 
-            # We return None, there is no changes.
-            return None
+        # We return None, there is no changes.
+        return None
 
-        def __handle_http_code(self, previous_state):
-            """
-            Handle the HTTP Code status escalation.
+    def handle(
+        self, previous_state, previous_source
+    ):  # pylint:disable= too-many-return-statements
+        """
+        Globally handle the case of the currently tested domain.
+        """
 
-            :param previous_state: The previously catched status.
-            :type previous_state: str
+        # We preset the new status and the source to None.
+        new_status = None
+        source = None
 
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
+        # We convert the given previous state to lower case.
+        previous_state_modified = previous_state.lower()
+
+        if previous_state_modified in PyFunceble.STATUS["list"]["up"]:
+            # The previous state is in the list of up status.
 
             try:
-                if PyFunceble.INTERN["http_code"] in PyFunceble.HTTP_CODE["list"]["up"]:
-                    # The extracted http code is in the list of up codes.
+                # We try to get the new status and source from another handler.
 
-                    # We generate the analytics files.
-                    Generate(domain_status=previous_state).analytic_file(
-                        PyFunceble.STATUS["official"]["up"]
-                    )
+                new_status, source = self.__handle_potentially_inactive(previous_state)
 
-                    # And we return the new status and source
-                    return self.__http_status_code_up()
-
-                if (
-                    PyFunceble.INTERN["http_code"]
-                    in PyFunceble.HTTP_CODE["list"]["potentially_up"]
-                ):
-                    # The extracted http status code is in the list of potentially up status.
-
-                    # We generate the analytics files.
-                    Generate(domain_status=previous_state).analytic_file(
-                        "potentially_up"
-                    )
-
-                if (
-                    previous_state.lower() in PyFunceble.STATUS["list"]["invalid"]
-                    and PyFunceble.INTERN["http_code"]
-                    in PyFunceble.HTTP_CODE["list"]["potentially_down"]
-                ):
-                    # The extracted http code is in the list of potentially down status code.
-
-                    # We generate the analytics files.
-                    Generate(domain_status=previous_state).analytic_file(
-                        "potentially_down"
-                    )
-            except KeyError:
+                return new_status, source
+            except TypeError:
                 pass
 
-            # We return None, there is no changes.
-            return None
+            try:
+                # We try to get the new status and source from another handler.
 
-        def __handle_ipv4_range(self):
-            """
-            Handle the IP range status escalation.
+                new_status, source = self.__handle_potentially_up()
+                return new_status, source
+            except TypeError:
+                pass
 
-            :return:
-                :code:`(new status, new source)` or :code:`None` if there is any
-                change to apply.
-            :rtype: tuple|None
-            """
-
-            if not PyFunceble.CONFIGURATION["no_special"] and Check().is_ip_range():
-                # * We can run/check the special rule.
-                # and
-                # * The element we are currently testing is an IPv4 with range.
-
-                # We return the new status and source.
-                return self.__special_up()
-
-            # We return None, there is no changes.
-            return None
-
-        def handle(
-            self, previous_state, previous_source
-        ):  # pylint:disable= too-many-return-statements
-            """
-            Globally handle the case of the currently tested domain.
-            """
-
-            # We preset the new status and the source to None.
-            new_status = None
-            source = None
-
-            # We convert the given previous state to lower case.
-            previous_state_modified = previous_state.lower()
-
-            if previous_state_modified in PyFunceble.STATUS["list"]["up"]:
-                # The previous state is in the list of up status.
-
-                try:
-                    # We try to get the new status and source from another handler.
-
-                    new_status, source = self.__handle_potentially_inactive(
-                        previous_state
-                    )
-
-                    if "current_test_data" in PyFunceble.INTERN:
-                        # The end-user want more informations.
-
-                        # We share the previous status and source.
-                        PyFunceble.INTERN["current_test_data"][
-                            "_status"
-                        ], PyFunceble.INTERN["current_test_data"]["_status_source"] = (
-                            previous_state,
-                            previous_source,
-                        )
-                    return new_status, source
-                except TypeError:
-                    pass
-
-                try:
-                    # We try to get the new status and source from another handler.
-
-                    new_status, source = self.__handle_potentially_up()
-                    return new_status, source
-                except TypeError:
-                    pass
-
-            if previous_state_modified in PyFunceble.STATUS["list"]["valid"]:
-                # The previous state is in the list of valid status.
-
-                # We return the given state and source, nothing changes.
-                return previous_state, previous_source
-
-            if previous_state_modified in PyFunceble.STATUS["list"]["down"]:
-                # The previous state is in the list of down status.
-
-                try:
-                    # We try to get the new status and source from another handler.
-
-                    new_status, source = self.__handle_ipv4_range()
-
-                    return new_status, source
-                except TypeError:
-                    pass
-
-                if PyFunceble.HTTP_CODE["active"]:
-                    # The http status code request is activated.
-
-                    try:
-                        # We try to get the new status and source from another handler.
-
-                        new_status, source = self.__handle_http_code(previous_state)
-
-                        return new_status, source
-                    except TypeError:
-                        pass
-
-            if previous_state_modified in PyFunceble.STATUS["list"]["invalid"]:
-                # The previous state is in the list of invalid status.
-
-                if PyFunceble.HTTP_CODE["active"]:
-                    # The http status code request is activated.
-
-                    try:
-                        # We try to get the new status and source from another handler.
-
-                        new_status, source = self.__handle_http_code(previous_state)
-
-                        return new_status, source
-                    except TypeError:
-                        pass
+        if previous_state_modified in PyFunceble.STATUS["list"]["valid"]:
+            # The previous state is in the list of valid status.
 
             # We return the given state and source, nothing changes.
             return previous_state, previous_source
+
+        if previous_state_modified in PyFunceble.STATUS["list"]["down"]:
+            # The previous state is in the list of down status.
+
+            try:
+                # We try to get the new status and source from another handler.
+
+                new_status, source = self.__handle_ipv4_range()
+
+                return new_status, source
+            except TypeError:
+                pass
+
+            if PyFunceble.HTTP_CODE["active"]:
+                # The http status code request is activated.
+
+                try:
+                    # We try to get the new status and source from another handler.
+
+                    new_status, source = self.__handle_http_code(previous_state)
+
+                    return new_status, source
+                except TypeError:
+                    pass
+
+        if previous_state_modified in PyFunceble.STATUS["list"]["invalid"]:
+            # The previous state is in the list of invalid status.
+
+            if PyFunceble.HTTP_CODE["active"]:
+                # The http status code request is activated.
+
+                try:
+                    # We try to get the new status and source from another handler.
+
+                    new_status, source = self.__handle_http_code(previous_state)
+
+                    return new_status, source
+                except TypeError:
+                    pass
+
+        # We return the given state and source, nothing changes.
+        return previous_state, previous_source
 
 
 class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Generate everything around the catched status when testing for URL.
 
-    :param catched_status: THe catched status.
-    :type catched_status: str
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param subject_type: The type of the subject.
+    :type subject_type: str
     """
 
-    def __init__(self, catched_status):
-        # We get the parsed status.
-        self.catched = catched_status
+    def __init__(self, subject, subject_type="url"):
+        # We share the subject.
+        self.subject = subject
+        # We share the subject type.
+        self.subject_type = subject_type
 
-    def handle(self):
+        self.checker = Check(self.subject)
+
+        # We initiate what we are going to return.
+        self.output = {
+            "domain_syntax_validation": self.checker.is_domain_valid(),
+            "expiration_date": None,
+            "http_status_code": None,
+            "ipv4_range_syntax_validation": self.checker.is_ip_range(),
+            "ipv4_syntax_validation": self.checker.is_ip_valid(),
+            "subdomain_syntax_validation": self.checker.is_subdomain(),
+            "tested": self.subject,
+            "url_syntax_validation": self.checker.is_url_valid(),
+            "whois_server": None,
+            "http_status_code": HTTPCode(self.subject, "url").get(),
+        }
+
+    def get(self):
         """
-        Handle the backend of the given status.
+        Get the status of the subject.
         """
 
-        # We initiate the source we are going to parse to the Generate class.
-        source = "URL"
+        # We set the status source.
+        self.output["_status_source"] = self.output["status_source"] = "URL"
 
-        if self.catched.lower() not in PyFunceble.STATUS["list"]["invalid"]:
-            # The parsed status is not in the list of invalid.
+        if self.output["url_syntax_validation"] or PyFunceble.CONFIGURATION["local"]:
+            # * The URL syntax is valid.
+            # or
+            # * We are testing in/for a local or private network URL.
 
-            # We generate the status file with the catched status.
-            Generate(self.catched, source).status_file()
+            # We initiate the list of active status code.
+            active_list = []
+            active_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_up"])
+            active_list.extend(PyFunceble.HTTP_CODE["list"]["up"])
+
+            # We initiate the list of inactive status code.
+            inactive_list = []
+            inactive_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_down"])
+            inactive_list.append("*" * 3)
+
+            if self.output["http_status_code"] in active_list:
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["up"]
+            elif self.output["http_status_code"] in inactive_list:
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["down"]
         else:
-            # The parsed status is in the list of invalid.
+            self.output["_status_source"] = self.output["status_source"] = "SYNTAX"
+            self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                "official"
+            ]["invalid"]
 
-            # We generate the status file with the parsed status.
-            Generate(self.catched, "SYNTAX").status_file()
+        self.handle()
 
-        # We return the parsed status.
-        return self.catched
-
-
-class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
-    """
-    Generate everything around the catched status when testing for Syntax.
-
-    :param catched_status: THe catched status.
-    :type catched_status: str
-    """
-
-    def __init__(self, catched_status):
-        # We get the parsed status.
-        self.catched = catched_status
+        return self.output
 
     def handle(self):
         """
@@ -641,7 +703,97 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We generate the status file with the catched status.
-        Generate(self.catched, "SYNTAX").status_file()
+        Generate(
+            self.subject,
+            self.subject_type,
+            self.output["status"],
+            source=self.output["status_source"],
+            http_status_code=self.output["http_status_code"]
+        ).status_file()
 
-        # We return the parsed status.
-        return self.catched
+
+class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
+    """
+    Generate everything around the catched status when testing for Syntax.
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param subject_type: The type of the subject.
+    :type subject_type: str
+    """
+
+    def __init__(self, subject, subject_type="domain"):
+        # We share the subject
+        self.subject = subject
+        # We share the subject type.
+        self.subject_type = subject_type
+
+        self.checker = Check(self.subject)
+
+        # We initiate what we are going to return.
+        self.output = {
+            "domain_syntax_validation": self.checker.is_domain_valid(),
+            "expiration_date": None,
+            "http_status_code": None,
+            "ipv4_range_syntax_validation": self.checker.is_ip_range(),
+            "ipv4_syntax_validation": self.checker.is_ip_valid(),
+            "subdomain_syntax_validation": self.checker.is_subdomain(),
+            "tested": self.subject,
+            "url_syntax_validation": self.checker.is_url_valid(),
+            "whois_server": None,
+        }
+
+    def get(self):
+        """
+        Get the status of the subject.
+        """
+        # We set the status source.
+        self.output["_status_source"] = self.output["status_source"] = "SYNTAX"
+
+        if self.subject_type in ["url", "file_url"]:
+            # We are testing for URL syntax.
+
+            print(self.output)
+            if self.output["url_syntax_validation"]:
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["valid"]
+            else:
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["invalid"]
+        elif self.subject_type in ["domain", "file_domain"]:
+            # We are testing for domain or IP.
+
+            if (
+                self.output["domain_syntax_validation"]
+                or self.output["ipv4_syntax_validation"]
+            ):
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["valid"]
+            else:
+                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
+                    "official"
+                ]["invalid"]
+        else:
+            raise ValueError("Please register the subject type.")
+
+        self.handle()
+
+        return self.output
+
+    def handle(self):
+        """
+        Handle the backend of the found status.
+        """
+
+        # We generate the status file with the catched status.
+        Generate(
+            self.subject,
+            self.subject_type,
+            self.output["status"],
+            source=self.output["status_source"],
+        ).status_file()
+

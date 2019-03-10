@@ -72,10 +72,29 @@ import PyFunceble
 class HTTPCode:  # pylint: disable=too-few-public-methods
     """
     Get and return the HTTP code status of a given domain.
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param subject _type:
+        The type of the subject we are working with.
+        Should be one of the following.
+
+        - :code:`url`
+        
+        - :code:`domain`
+
+        - :code:`file_url`
+
+        - :code:`file_domain`
     """
 
-    def __init__(self):  # pragma: no cover
-        if PyFunceble.INTERN["to_test_type"] == "url":
+    default = "*" * 3
+
+    def __init__(self, subject, subject_type):  # pragma: no cover
+        subject_type = subject_type.lower()
+
+        if subject_type in ["url", "file_url"]:
             # We should work with full URL which actualy means that we have to get the
             # http status code from the URL we are currently testing.
 
@@ -83,16 +102,20 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             disable_warnings(urllib3_exceptions.InsecureRequestWarning)
 
             # We initiate the element we have to get.
-            self.to_get = PyFunceble.INTERN["to_test"]
-        elif PyFunceble.INTERN["to_test_type"] == "domain":
+            self.subject = subject
+        elif subject_type in ["domain", "file_domain"]:
             # We are working with domain.
 
             # We construct the element we have to get.
             # Note: As we may work with IP, we explicitly set the port we are
             # working with.
-            self.to_get = "http://%s:80" % PyFunceble.INTERN["to_test"]
+            self.subject = "http://%s:80" % subject
         else:
-            raise Exception("Unknow type of test.")
+            raise Exception("Unknow subject type.")
+
+
+        # We share the subject type.
+        self.subject_type = subject_type
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -117,12 +140,12 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         try:
             # We try to get the HTTP status code.
 
-            if PyFunceble.INTERN["to_test_type"] == "url":
+            if self.subject_type in ["url", "file_url"]:
                 # We are globally testing a URL.
 
                 # We get the head of the URL.
                 req = PyFunceble.requests.head(
-                    self.to_get,
+                    self.subject,
                     timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
                     headers=self.headers,
                     verify=PyFunceble.CONFIGURATION["verify_ssl_certificate"],
@@ -132,7 +155,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
 
                 # We get the head of the constructed URL.
                 req = PyFunceble.requests.head(
-                    self.to_get,
+                    self.subject,
                     timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
                     headers=self.headers,
                 )
@@ -187,9 +210,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # or
                 # * The extracted http code is equal to `None`.
 
-                # We return 3 star in order to mention that we were not eable to extract
-                # the http status code.
-                return "*" * 3
+                # We return the default http code.
+                return self.default
 
             # * The extracted http code is in the list of valid http code.
             # or
@@ -200,5 +222,5 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
 
         # The http status code extraction is activated.
 
-        # We return None.
-        return None
+        # We return the default http code.
+        return self.default

@@ -64,7 +64,8 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import Command, Dict, Directory, File, Hash, List, Regex
+from PyFunceble.helpers import (Command, Dict, Directory, File, Hash, List,
+                                Regex)
 
 
 class TestHash(TestCase):

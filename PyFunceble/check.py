@@ -80,7 +80,7 @@ class Check:
     def __init__(self, element=None):
         self.element = element
 
-    def is_url_valid(self, url=None, return_base=False, return_formatted=False):
+    def is_url_valid(self, return_base=False, return_formatted=False):
         """
         Check if the given URL is valid.
 
@@ -105,23 +105,7 @@ class Check:
         # we have to convert the base to IDNA.
         initial_base = None
 
-        if url:
-            # The given url is not empty.
-
-            # We initiate the element to test.
-            to_test = url
-        elif self.element:
-            # The globaly given url is not empty.
-
-            # We initiate the element to test.
-            to_test = self.element
-        else:
-            # The given url is empty.
-
-            # We initiate the element to test from the globaly URl to test.
-            to_test = PyFunceble.INTERN["to_test"]
-
-        if to_test.startswith("http"):
+        if self.element.startswith("http"):
             # The element to test starts with http.
 
             try:
@@ -130,7 +114,7 @@ class Check:
 
                 # We extract the url base with the help of the initiated regex.
                 initial_base = base = Regex(
-                    to_test, regex, return_data=True, rematch=True
+                    self.element, regex, return_data=True, rematch=True
                 ).match()[2]
 
                 if PyFunceble.CONFIGURATION["idna_conversion"]:
@@ -140,10 +124,10 @@ class Check:
                     base = domain2idna(base)
 
                 # We check if the url base is a valid domain.
-                domain_status = self.is_domain_valid(base)
+                domain_status = Check(base).is_domain_valid()
 
                 # We check if the url base is a valid IP.
-                ip_status = self.is_ip_valid(base)
+                ip_status = Check(base).is_ip_valid()
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.
@@ -157,7 +141,7 @@ class Check:
 
                         # We return the converted full URL.
                         return Regex(
-                            to_test,
+                            self.element,
                             initial_base,
                             escape=True,
                             return_data=True,
@@ -171,7 +155,7 @@ class Check:
                         # * We have to return the full URL.
 
                         # We return the initially given URL.
-                        return to_test
+                        return self.element
 
                     if return_base:
                         # We have to return the base of the URL.
@@ -188,19 +172,16 @@ class Check:
             # We have to return an URL.
 
             # We return the initily given URL.
-            return to_test
+            return self.element
 
         # We return False.
         return False
 
     def is_domain_valid(
-        self, domain=None, subdomain_check=False
+        self, subdomain_check=False
     ):  # pylint:disable=too-many-return-statements, too-many-branches
         """
         Check if the given domain is a valid.
-
-        :param domain: The domain to validate.
-        :type domain: str
 
         :param subdomain_check:
             Activate the subdomain checking.
@@ -216,31 +197,15 @@ class Check:
         # We initiate our regex which will match for valid subdomains.
         regex_valid_subdomains = r"^(?=.{0,253}$)(([a-z0-9_][a-z0-9-_]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9]))$"  # pylint: disable=line-too-long
 
-        if domain:
-            # A domain is given.
-
-            # We set the element to test as the parsed domain.
-            to_test = domain
-        elif self.element:
-            # A domain is globally given.
-
-            # We set the globally parsed domain.
-            to_test = self.element
-        else:
-            # A domain is not given.
-
-            # We set the element to test as the currently tested element.
-            to_test = PyFunceble.INTERN["to_test"]
-
         try:
             # We get the position of the last point.
-            last_point_index = to_test.rindex(".")
+            last_point_index = self.element.rindex(".")
             # And with the help of the position of the last point, we get the domain extension.
-            extension = to_test[last_point_index + 1 :]
+            extension = self.element[last_point_index + 1 :]
 
-            if not extension and to_test.endswith("."):
+            if not extension and self.element.endswith("."):
                 try:
-                    extension = [x for x in to_test.split(".") if x][-1]
+                    extension = [x for x in self.element.split(".") if x][-1]
                 except IndexError:
                     pass
 
@@ -253,7 +218,7 @@ class Check:
                 return False
 
             if (
-                Regex(to_test, regex_valid_domains, return_data=False).match()
+                Regex(self.element, regex_valid_domains, return_data=False).match()
                 and not subdomain_check
             ):
                 # * The element pass the domain validation.
@@ -275,12 +240,12 @@ class Check:
                     try:
                         # We try to get the position of the currently read suffix
                         # in the element ot test.
-                        suffix_index = to_test.rindex("." + suffix)
+                        suffix_index = self.element.rindex("." + suffix)
 
                         # We get the element to check.
                         # The idea here is to delete the suffix, then retest with our
                         # subdomains regex.
-                        to_check = to_test[:suffix_index]
+                        to_check = self.element[:suffix_index]
 
                         if "." not in to_check and subdomain_check:
                             # * There is no point into the new element to check.
@@ -320,7 +285,7 @@ class Check:
             # * there was no point into the suffix checking.
 
             # We get the element before the last point.
-            to_check = to_test[:last_point_index]
+            to_check = self.element[:last_point_index]
 
             if "." in to_check and subdomain_check:
                 # * There is a point in to_check.
@@ -349,42 +314,20 @@ class Check:
         # And we return False, the domain is not valid.
         return False
 
-    def is_subdomain(self, domain=None):
+    def is_subdomain(self):
         """
         Check if the given subdomain is a subdomain.
-
-        :param domain: The domain to validate.
-        :type domain: str
 
         :return: The validity of the subdomain.
         :rtype: bool
         """
 
-        if domain:
-            # A domain is given.
-
-            # We set the element to test as the parsed domain.
-            to_test = domain
-        elif self.element:
-            # A domain is globally given.
-
-            # We set the globally parsed domain.
-            to_test = self.element
-        else:
-            # A domain is not given.
-
-            # We set the element to test as the currently tested element.
-            to_test = PyFunceble.INTERN["to_test"]
-
         # We return the status of the check.
-        return self.is_domain_valid(to_test, subdomain_check=True)
+        return self.is_domain_valid(subdomain_check=True)
 
-    def is_ip_valid(self, ip_to_check=None):
+    def is_ip_valid(self):
         """
         Check if the given IP is a valid IPv4.
-
-        :param ip_to_check: The IP to test.
-        :type ip_to_check: str
 
         :return: The validity of the IP.
         :rtype: bool
@@ -396,33 +339,14 @@ class Check:
         # We initate our regex which will match for valid IPv4.
         regex_ipv4 = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
 
-        if ip_to_check:
-            # An element is localy given.
-
-            # We consider it as the element to test.
-            to_test = ip_to_check
-        elif self.element:
-            # An element is given globally.
-
-            # We consider it as the element to test.
-            to_test = self.element
-        else:
-            # An element is not localy given.
-
-            # We consider the global element to test as the element to test.
-            to_test = PyFunceble.INTERN["to_test"]
-
         # We check if it passes our IPv4 regex.
         # * True: It's a valid IPv4.
         # * False: It's an invalid IPv4.
-        return Regex(to_test, regex_ipv4, return_data=False).match()
+        return Regex(self.element, regex_ipv4, return_data=False).match()
 
-    def is_ip_range(self, ip_to_check=None):
+    def is_ip_range(self):
         """
         Check if the given IP is a valid IPv4.
-
-        :param ip_to_check: The IP to test.
-        :type ip_to_check: str
 
         :return: The validity of the IP.
         :rtype: bool
@@ -431,28 +355,12 @@ class Check:
             We only test IPv4 because for now we only them for now.
         """
 
-        if ip_to_check:
-            # An element is localy given.
-
-            # We consider it as the element to test.
-            to_test = ip_to_check
-        elif self.element:
-            # An element is given globally.
-
-            # We consider it as the element to test.
-            to_test = self.element
-        else:
-            # An element is not localy given.
-
-            # We consider the global element to test as the element to test.
-            to_test = PyFunceble.INTERN["to_test"]
-
-        if self.is_ip_valid(to_test):
+        if self.is_ip_valid():
             # We initate our regex which will match for valid IPv4 ranges.
             regex_ipv4_range = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.([0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
 
             # We check if it passes our regex.
             # * True: It's an IPv4 range.
             # * False: It's not an IPv4 range.
-            return Regex(to_test, regex_ipv4_range, return_data=False).match()
+            return Regex(self.element, regex_ipv4_range, return_data=False).match()
         return False

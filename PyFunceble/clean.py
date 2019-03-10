@@ -64,7 +64,7 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.config import Load
-from PyFunceble.core import Core
+#from PyFunceble.core import Core
 from PyFunceble.helpers import File
 
 
@@ -106,7 +106,7 @@ class Clean:
                     #   sequence,
 
                     # We reset the counters.
-                    Core.reset_counters()
+                    # Core.reset_counters()
 
                     # We clean the output directory.
                     self.almost_everything(clean_all)
@@ -114,7 +114,7 @@ class Clean:
                 # But if at any time in the conditionnal an Index Error occurs,
 
                 # We reset the counters.
-                Core.reset_counters()
+                # Core.reset_counters()
 
                 # We clean the output directory.
                 self.almost_everything(clean_all)

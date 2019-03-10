@@ -70,148 +70,159 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Get the WHOIS server (referer) of the current domain extension according to
     the IANA database.
+
+    :param subject: The subject we are working with.
+    :type subject: str
     """
 
-    def __init__(self):
+    # We create a list of ignored extension.
+    # Note: We need the following because those extension does
+    # not have a centralized whois server (yet).
+    ignored_extension = [
+        "ad",
+        "al",
+        "an",
+        "ao",
+        "aq",
+        "arpa",
+        "az",
+        "ba",
+        "bb",
+        "bd",
+        "bf",
+        "bh",
+        "bl",
+        "boots",
+        "bq",
+        "bs",
+        "bt",
+        "bv",
+        "cg",
+        "chloe",
+        "ck",
+        "cu",
+        "cv",
+        "cw",
+        "cy",
+        "dj",
+        "doosan",
+        "eg",
+        "eh",
+        "er",
+        "et",
+        "fk",
+        "flsmidth",
+        "fm",
+        "gb",
+        "gm",
+        "gn",
+        "goodhands",
+        "gp",
+        "gr",
+        "gt",
+        "gu",
+        "gw",
+        "htc",
+        "iinet",
+        "jm",
+        "jo",
+        "kh",
+        "km",
+        "kp",
+        "lb",
+        "lr",
+        "mc",
+        "meo",
+        "mf",
+        "mh",
+        "mil",
+        "mm",
+        "mt",
+        "mv",
+        "mw",
+        "ne",
+        "ni",
+        "np",
+        "nr",
+        "pa",
+        "pamperedchef",
+        "panerai",
+        "pg",
+        "ph",
+        "pk",
+        "pn",
+        "py",
+        "sd",
+        "sj",
+        "spiegel",
+        "sr",
+        "ss",
+        "sv",
+        "sz",
+        "telecity",
+        "tj",
+        "tp",
+        "tt",
+        "um",
+        "va",
+        "vi",
+        "vista",
+        "vn",
+        "xn--0zwm56d",
+        "xn--11b5bs3a9aj6g",
+        "xn--54b7fta0cc",
+        "xn--80akhbyknj4f",
+        "xn--9t4b11yi5a",
+        "xn--deba0ad",
+        "xn--g6w251d",
+        "xn--hgbk6aj7f53bba",
+        "xn--hlcj6aya9esc7a",
+        "xn--hlcj6aya9esc7a",
+        "xn--jxalpdlp",
+        "xn--kgbechtv",
+        "xn--l1acc",
+        "xn--mgbai9azgqp6j",
+        "xn--mgbayh7gpa",
+        "xn--mgbc0a9azcg",
+        "xn--mgbpl2fh",
+        "xn--pgbs0dh",
+        "xn--qxam",
+        "xn--zckzah",
+        "xperia",
+        "ye",
+        "zw",
+    ]
+
+    def __init__(self, subject):
         # Note: A URL testing or an IP testing does not come around
         # here. So there is no need to be scared by the following.
+
+        if subject:
+            if not isinstance(subject, str):
+                raise ValueError("`subject` must be a string.")
+        else:
+            raise ValueError("`subject` must be given.")
 
         try:
             # We get the extension of the currently tested element.
             # We basically get everything after the last point.
-            self.domain_extension = PyFunceble.INTERN["to_test"][
-                PyFunceble.INTERN["to_test"].rindex(".") + 1 :
-            ]
+            self.domain_extension = subject[subject.rindex(".") + 1 :]
 
-            if not self.domain_extension and PyFunceble.INTERN["to_test"].endswith("."):
-                self.domain_extension = [
-                    x for x in PyFunceble.INTERN["to_test"].split(".") if x
-                ][-1]
+            if not self.domain_extension and subject.endswith("."):
+                self.domain_extension = [x for x in subject.split(".") if x][-1]
         except ValueError:
             # There was not point, so no extension to work with.
             self.domain_extension = None
 
-        # We create a list of ignored extension.
-        # Note: We need the following because those extension does
-        # not have a centralized whois server (yet).
-        self.ignored_extension = [
-            "ad",
-            "al",
-            "an",
-            "ao",
-            "aq",
-            "arpa",
-            "az",
-            "ba",
-            "bb",
-            "bd",
-            "bf",
-            "bh",
-            "bl",
-            "boots",
-            "bq",
-            "bs",
-            "bt",
-            "bv",
-            "cg",
-            "chloe",
-            "ck",
-            "cu",
-            "cv",
-            "cw",
-            "cy",
-            "dj",
-            "doosan",
-            "eg",
-            "eh",
-            "er",
-            "et",
-            "fk",
-            "flsmidth",
-            "fm",
-            "gb",
-            "gm",
-            "gn",
-            "goodhands",
-            "gp",
-            "gr",
-            "gt",
-            "gu",
-            "gw",
-            "htc",
-            "iinet",
-            "jm",
-            "jo",
-            "kh",
-            "km",
-            "kp",
-            "lb",
-            "lr",
-            "mc",
-            "meo",
-            "mf",
-            "mh",
-            "mil",
-            "mm",
-            "mt",
-            "mv",
-            "mw",
-            "ne",
-            "ni",
-            "np",
-            "nr",
-            "pa",
-            "pamperedchef",
-            "panerai",
-            "pg",
-            "ph",
-            "pk",
-            "pn",
-            "py",
-            "sd",
-            "sj",
-            "spiegel",
-            "sr",
-            "ss",
-            "sv",
-            "sz",
-            "telecity",
-            "tj",
-            "tp",
-            "tt",
-            "um",
-            "va",
-            "vi",
-            "vista",
-            "vn",
-            "xn--0zwm56d",
-            "xn--11b5bs3a9aj6g",
-            "xn--54b7fta0cc",
-            "xn--80akhbyknj4f",
-            "xn--9t4b11yi5a",
-            "xn--deba0ad",
-            "xn--g6w251d",
-            "xn--hgbk6aj7f53bba",
-            "xn--hlcj6aya9esc7a",
-            "xn--hlcj6aya9esc7a",
-            "xn--jxalpdlp",
-            "xn--kgbechtv",
-            "xn--l1acc",
-            "xn--mgbai9azgqp6j",
-            "xn--mgbayh7gpa",
-            "xn--mgbc0a9azcg",
-            "xn--mgbpl2fh",
-            "xn--pgbs0dh",
-            "xn--qxam",
-            "xn--zckzah",
-            "xperia",
-            "ye",
-            "zw",
-        ]
-
     def get(self):
         """
         Return the referer aka the WHOIS server of the current domain extension.
+
+        :return: 
+            - :code:`None` if there is no referer.
+
+            - :code:`False` if the extension is unknown which implicitly means 
+            that the subject is :code:`INVALID`
         """
 
         if not PyFunceble.CONFIGURATION["local"]:
@@ -220,9 +231,6 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
             if self.domain_extension not in self.ignored_extension:
                 # The extension of the domain we are testing is not into
                 # the list of ignored extensions.
-
-                # We set the referer to None as we do not have any.
-                referer = None
 
                 if self.domain_extension in PyFunceble.INTERN["iana_db"]:
                     # The domain extension is in the iana database.

@@ -64,131 +64,59 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.check import Check
-from PyFunceble.database import Whois
+from PyFunceble.database import Whois as WhoisDatabase
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
 from PyFunceble.http_code import HTTPCode
 from PyFunceble.logs import Logs
-from PyFunceble.lookup import Lookup
+from PyFunceble.lookup import Whois as WhoisLookup
 from PyFunceble.referer import Referer
 
 
 class ExpirationDate:  # pylint: disable=too-few-public-methods
     """
     Get, format and return the expiration date of a domain, if exist.
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param whois_server:
+        The whois server we are trying to get get the expiration
+        date from.
+    :type whois_server: str
     """
 
-    def __init__(self):
-        # We set the log separator.
-        self.log_separator = "=" * 100 + " \n"
+    # We initiate a variable which will save the extracted expiration date.
+    expiration_date = None
+    # We initate a variable which will save the WHOIS record.
+    whois_record = None
 
-        # We initiate a variable which will save the extracted expiration date.
-        self.expiration_date = ""
+    def __init__(self, subject, whois_server):
+        # We share the subject
+        self.subject = subject
 
-        # We initate a variable which will save our WHOIS record.s
-        self.whois_record = ""
-
-        # We initate an instance of Check
-        self.checker = Check()
+        # We share the whois sever
+        self.whois_server = whois_server
 
     def get(self):  # pragma: no cover
         """
         Execute the logic behind the meaning of ExpirationDate + return the matched status.
 
-        :return:
-            The status of the tested domain.
-            Can be one of the official status.
-        :rtype: str
+        :return: (expiration date, whois record)
+        :rtype: tuple
         """
+        if self.whois_server:
+            # The whois server is given.
 
-        # We get the status of the domain validation.
-        domain_validation = self.checker.is_domain_valid()
-        # We get the status of the IPv4 validation.
-        ip_validation = self.checker.is_ip_valid()
-
-        if "current_test_data" in PyFunceble.INTERN:
-            # The end-user want more information whith his test.
-
-            # We update some index.
-            PyFunceble.INTERN["current_test_data"].update(
-                {
-                    "domain_syntax_validation": domain_validation,
-                    "ip4_syntax_validation": ip_validation,
-                }
-            )
-
-        if (
-            domain_validation
-            and not ip_validation
-            or domain_validation
-            or PyFunceble.CONFIGURATION["local"]
-        ):
-            # * The element is a valid domain.
-            # and
-            # * The element is not ahe valid IPv4.
-            # or
-            # * The element is a valid domain.
-
-            # * We get the HTTP status code of the currently tested element.
-            # and
-            # * We try to get the element status from the IANA database.
-            PyFunceble.INTERN.update(
-                {"http_code": HTTPCode().get(), "referer": Referer().get()}
-            )
-
-            if not PyFunceble.INTERN["referer"]:
-                # We could not get the referer.
-
-                # We parse the referer status into the upstream call.
-                return PyFunceble.INTERN["referer"]
-
-            # The WHOIS record status is not into our list of official status.
-
-            if PyFunceble.INTERN["referer"] and not self.checker.is_subdomain():
-                # * The iana database comparison status is not None.
-                # and
-                # * The domain we are testing is not a subdomain.
-
-                # We try to extract the expiration date from the WHOIS record.
-                # And we return the matched status.
-                return self._extract()
-
-            # The iana database comparison status is None.
-
-            # We log our whois record if the debug mode is activated.
-            Logs().whois(self.whois_record)
-
-            # And we return None, we could not extract the expiration date.
-            return None
-
-        if (
-            ip_validation
-            and not domain_validation
-            or ip_validation
-            or PyFunceble.CONFIGURATION["local"]
-        ):
-            # * The element is a valid IPv4.
-            # and
-            # * The element is not a valid domain.
-            # or
-            # * The element is a valid IPv4.
-
-            # We get the HTTP status code.
-            PyFunceble.INTERN["http_code"] = HTTPCode().get()
-
-            # We log our whois record if the debug mode is activated.
-            Logs().whois(self.whois_record)
-
-            # And we return None, there is no expiration date to look for.
-            return None
-
-        # The validation was not passed.
+            # We try to extract the expiration date from the WHOIS record.
+            # And we return the matched status.
+            self._extract()
 
         # We log our whois record if the debug mode is activated.
         Logs().whois(self.whois_record)
 
-        # And we return False, the domain could not pass the IP and domains syntax validation.
-        return False
+        # And we return the expiration date and the whois record.
+        return self.expiration_date, self.whois_record
 
     @classmethod
     def _convert_1_to_2_digits(cls, number):
@@ -434,160 +362,113 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
     def _extract(self):  # pragma: no cover
         """
         Extract the expiration date from the whois record.
-
-        :return: The status of the domain.
-        :rtype: str
         """
 
         # We try to get the expiration date from the database.
-        expiration_date_from_database = Whois().get_expiration_date()
+        expiration_date_from_database = WhoisDatabase().get_expiration_date()
 
         if expiration_date_from_database:
             # The hash of the current whois record did not changed and the
             # expiration date from the database is not empty not equal to
             # None or False.
 
-            # We generate the files and print the status.
-            # It's an active element!
-            Generate(
-                PyFunceble.STATUS["official"]["up"],
-                "WHOIS",
-                expiration_date_from_database,
-            ).status_file()
+            self.expiration_date = expiration_date_from_database
+            self.whois_record = "DATE EXTRACTED FROM WHOIS DATABASE"
+        else:
 
-            # We handle und return the official up status.
-            return PyFunceble.STATUS["official"]["up"]
+            # We get the whois record.
+            self.whois_record = WhoisLookup(
+                self.subject,
+                self.whois_server,
+                timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+            ).request()
 
-        # We get the whois record.
-        self.whois_record = Lookup().whois(PyFunceble.INTERN["referer"])
+            # We list the list of regex which will help us get an unformatted expiration date.
+            to_match = [
+                r"expire:(.*)",
+                r"expire on:(.*)",
+                r"Expiry Date:(.*)",
+                r"free-date(.*)",
+                r"expires:(.*)",
+                r"Expiration date:(.*)",
+                r"Expiry date:(.*)",
+                r"Expire Date:(.*)",
+                r"renewal date:(.*)",
+                r"Expires:(.*)",
+                r"validity:(.*)",
+                r"Expiration Date             :(.*)",
+                r"Expiry :(.*)",
+                r"expires at:(.*)",
+                r"domain_datebilleduntil:(.*)",
+                r"Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)",
+                r"Fecha de expiración \(Expiration date\):(.*)",
+                r"\[Expires on\](.*)",
+                r"Record expires on(.*)(\(YYYY-MM-DD\))",
+                r"status:      OK-UNTIL(.*)",
+                r"renewal:(.*)",
+                r"expires............:(.*)",
+                r"expire-date:(.*)",
+                r"Exp date:(.*)",
+                r"Valid-date(.*)",
+                r"Expires On:(.*)",
+                r"Fecha de vencimiento:(.*)",
+                r"Expiration:.........(.*)",
+                r"Fecha de Vencimiento:(.*)",
+                r"Registry Expiry Date:(.*)",
+                r"Expires on..............:(.*)",
+                r"Expiration Time:(.*)",
+                r"Expiration Date:(.*)",
+                r"Expired:(.*)",
+                r"Date d'expiration:(.*)",
+                r"expiration date:(.*)",
+            ]
 
-        # We list the list of regex which will help us get an unformatted expiration date.
-        to_match = [
-            r"expire:(.*)",
-            r"expire on:(.*)",
-            r"Expiry Date:(.*)",
-            r"free-date(.*)",
-            r"expires:(.*)",
-            r"Expiration date:(.*)",
-            r"Expiry date:(.*)",
-            r"Expire Date:(.*)",
-            r"renewal date:(.*)",
-            r"Expires:(.*)",
-            r"validity:(.*)",
-            r"Expiration Date             :(.*)",
-            r"Expiry :(.*)",
-            r"expires at:(.*)",
-            r"domain_datebilleduntil:(.*)",
-            r"Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)",
-            r"Fecha de expiración \(Expiration date\):(.*)",
-            r"\[Expires on\](.*)",
-            r"Record expires on(.*)(\(YYYY-MM-DD\))",
-            r"status:      OK-UNTIL(.*)",
-            r"renewal:(.*)",
-            r"expires............:(.*)",
-            r"expire-date:(.*)",
-            r"Exp date:(.*)",
-            r"Valid-date(.*)",
-            r"Expires On:(.*)",
-            r"Fecha de vencimiento:(.*)",
-            r"Expiration:.........(.*)",
-            r"Fecha de Vencimiento:(.*)",
-            r"Registry Expiry Date:(.*)",
-            r"Expires on..............:(.*)",
-            r"Expiration Time:(.*)",
-            r"Expiration Date:(.*)",
-            r"Expired:(.*)",
-            r"Date d'expiration:(.*)",
-            r"expiration date:(.*)",
-        ]
+            if self.whois_record:
+                # The whois record is not empty.
 
-        if self.whois_record:
-            # The whois record is not empty.
+                for string in to_match:
+                    # We loop through the list of regex.
 
-            if "current_test_data" in PyFunceble.INTERN:
-                # The end-user want more information whith his test.
+                    # We try tro extract the expiration date from the WHOIS record.
+                    expiration_date = Regex(
+                        self.whois_record,
+                        string,
+                        return_data=True,
+                        rematch=True,
+                        group=0,
+                    ).match()
 
-                # We update the whois_record index.
-                PyFunceble.INTERN["current_test_data"][
-                    "whois_record"
-                ] = self.whois_record
+                    if expiration_date:
+                        # The expiration date could be extracted.
 
-            for string in to_match:
-                # We loop through the list of regex.
+                        # We get the extracted expiration date.
+                        self.expiration_date = expiration_date[0].strip()
 
-                # We try tro extract the expiration date from the WHOIS record.
-                expiration_date = Regex(
-                    self.whois_record, string, return_data=True, rematch=True, group=0
-                ).match()
+                        # We initate a regex which will help us know if a number
+                        # is present into the extracted expiration date.
+                        regex_rumbers = r"[0-9]"
 
-                if expiration_date:
-                    # The expiration date could be extracted.
+                        if Regex(
+                            self.expiration_date, regex_rumbers, return_data=False
+                        ).match():
+                            # The extracted expiration date has a number.
 
-                    # We get the extracted expiration date.
-                    self.expiration_date = expiration_date[0].strip()
+                            # We format the extracted expiration date.
+                            self.expiration_date = self._format()
 
-                    # We initate a regex which will help us know if a number
-                    # is present into the extracted expiration date.
-                    regex_rumbers = r"[0-9]"
+                            if (
+                                self.expiration_date
+                                and not Regex(
+                                    self.expiration_date,
+                                    r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
+                                    return_data=False,
+                                ).match()
+                            ):
+                                # The formatted expiration date does not match our unified format.
 
-                    if Regex(
-                        self.expiration_date, regex_rumbers, return_data=False
-                    ).match():
-                        # The extracted expiration date has a number.
+                                # We log the problem.
+                                Logs().expiration_date(self.expiration_date)
 
-                        # We format the extracted expiration date.
-                        self.expiration_date = self._format()
+                            # We save the whois record into the database.
+                            WhoisDatabase(expiration_date=self.expiration_date).add()
 
-                        if (
-                            self.expiration_date
-                            and not Regex(
-                                self.expiration_date,
-                                r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
-                                return_data=False,
-                            ).match()
-                        ):
-                            # The formatted expiration date does not match our unified format.
-
-                            # We log the problem.
-                            Logs().expiration_date(self.expiration_date)
-
-                            # We log the whois record.
-                            Logs().whois(self.whois_record)
-
-                        if "current_test_data" in PyFunceble.INTERN:
-                            # The end-user want more information whith his test.
-
-                            # We update the expiration_date index.
-                            PyFunceble.INTERN["current_test_data"][
-                                "expiration_date"
-                            ] = self.expiration_date
-
-                        # We generate the files and print the status.
-                        # It's an active element!
-                        Generate(
-                            PyFunceble.STATUS["official"]["up"],
-                            "WHOIS",
-                            self.expiration_date,
-                        ).status_file()
-
-                        # We log the whois record.
-                        Logs().whois(self.whois_record)
-
-                        # We save the whois record into the database.
-                        Whois(expiration_date=self.expiration_date).add()
-
-                        # We handle und return the official up status.
-                        return PyFunceble.STATUS["official"]["up"]
-
-                    # The extracted expiration date does not have a number.
-
-                    # We log the whois record.
-                    Logs().whois(self.whois_record)
-
-                    # We return None, we could not get the expiration date.
-                    return None
-
-        # The whois record is empty.
-
-        # We return None, we could not get the whois record.
-        return None

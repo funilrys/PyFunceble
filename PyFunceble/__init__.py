@@ -70,7 +70,6 @@ from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
 from platform import system
-from random import choice
 from shutil import copy, rmtree
 from time import mktime, strftime, strptime, time
 
@@ -81,7 +80,7 @@ from colorama import init as initiate
 from PyFunceble.check import Check
 from PyFunceble.clean import Clean
 from PyFunceble.config import Load, Merge, Version
-from PyFunceble.core import Core
+from PyFunceble.core import Dispatcher, Preset, CLICore
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.iana import IANA
 from PyFunceble.production import Production
@@ -90,7 +89,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.18.0.detached-future (Blue Bontebok: Beetle)"
+VERSION = "1.20.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -515,43 +514,6 @@ def load_config(under_test=False, custom=None):  # pragma: no cover
             CONFIGURATION.update(custom)
 
 
-def stay_safe():  # pragma: no cover
-    """
-    Print a friendly message.
-    """
-
-    random = int(choice(str(int(time()))))
-
-    if not CONFIGURATION["quiet"] and random % 3 == 0:
-        print("\n" + Fore.GREEN + Style.BRIGHT + "Thanks for using PyFunceble!")
-        print(
-            Fore.YELLOW
-            + Style.BRIGHT
-            + "Share your experience on "
-            + Fore.CYAN
-            + "Twitter"
-            + Fore.YELLOW
-            + " with "
-            + Fore.CYAN
-            + "#PyFunceble"
-            + Fore.YELLOW
-            + "!"
-        )
-        print(
-            Fore.GREEN
-            + Style.BRIGHT
-            + "Have a feedback, an issue or an improvement idea ?"
-        )
-        print(
-            Fore.YELLOW
-            + Style.BRIGHT
-            + "Let us know on "
-            + Fore.CYAN
-            + "GitHub"
-            + Fore.YELLOW
-            + "!"
-        )
-
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
     """
@@ -857,7 +819,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     help="Output less informations on screen. %s"
                     % (
                         CURRENT_VALUE_FORMAT
-                        + repr(Core.switch("less"))
+                        + repr(Preset().switch("less"))
                         + Style.RESET_ALL
                     ),
                 )
@@ -868,7 +830,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     help="Switch the value of the local network testing. %s"
                     % (
                         CURRENT_VALUE_FORMAT
-                        + repr(Core.switch("local"))
+                        + repr(Preset().switch("local"))
                         + Style.RESET_ALL
                     ),
                 )
@@ -1143,11 +1105,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     CONFIGURATION.update({"less": ARGS.all})
 
                 if ARGS.adblock:
-                    CONFIGURATION.update({"adblock": Core.switch("adblock")})
+                    CONFIGURATION.update({"adblock": Preset().switch("adblock")})
 
                 if ARGS.auto_continue:
                     CONFIGURATION.update(
-                        {"auto_continue": Core.switch("auto_continue")}
+                        {"auto_continue": Preset().switch("auto_continue")}
                     )
 
                 if ARGS.autosave_minutes:
@@ -1179,7 +1141,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.database:
                     CONFIGURATION.update(
-                        {"inactive_database": Core.switch("inactive_database")}
+                        {"inactive_database": Preset().switch("inactive_database")}
                     )
 
                 if ARGS.days_between_db_retest:
@@ -1188,14 +1150,14 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if ARGS.debug:
-                    CONFIGURATION.update({"debug": Core.switch("debug")})
+                    CONFIGURATION.update({"debug": Preset().switch("debug")})
 
                 if ARGS.directory_structure:
                     DirectoryStructure()
 
                 if ARGS.execution:
                     CONFIGURATION.update(
-                        {"show_execution_time": Core.switch("show_execution_time")}
+                        {"show_execution_time": Preset().switch("show_execution_time")}
                     )
 
                 if ARGS.filter:
@@ -1203,23 +1165,23 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.hierarchical:
                     CONFIGURATION.update(
-                        {"hierarchical_sorting": Core.switch("hierarchical_sorting")}
+                        {"hierarchical_sorting": Preset().switch("hierarchical_sorting")}
                     )
 
                 if ARGS.host:
                     CONFIGURATION.update(
-                        {"generate_hosts": Core.switch("generate_hosts")}
+                        {"generate_hosts": Preset().switch("generate_hosts")}
                     )
 
                 if ARGS.http:
-                    HTTP_CODE.update({"active": Core.switch(HTTP_CODE["active"], True)})
+                    HTTP_CODE.update({"active": Preset().switch(HTTP_CODE["active"], True)})
 
                 if ARGS.iana:
                     IANA().update()
 
                 if ARGS.idna:
                     CONFIGURATION.update(
-                        {"idna_conversion": Core.switch("idna_conversion")}
+                        {"idna_conversion": Preset().switch("idna_conversion")}
                     )
 
                 if ARGS.ip:
@@ -1227,38 +1189,38 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.json:
                     CONFIGURATION.update(
-                        {"generate_json": Core.switch("generate_json")}
+                        {"generate_json": Preset().switch("generate_json")}
                     )
 
                 if ARGS.local:
-                    CONFIGURATION.update({"local": Core.switch("local")})
+                    CONFIGURATION.update({"local": Preset().switch("local")})
 
                 if ARGS.mining:
-                    CONFIGURATION.update({"mining": Core.switch("mining")})
+                    CONFIGURATION.update({"mining": Preset().switch("mining")})
 
                 if ARGS.no_files:
-                    CONFIGURATION.update({"no_files": Core.switch("no_files")})
+                    CONFIGURATION.update({"no_files": Preset().switch("no_files")})
 
                 if ARGS.no_logs:
-                    CONFIGURATION.update({"logs": Core.switch("logs")})
+                    CONFIGURATION.update({"logs": Preset().switch("logs")})
 
                 if ARGS.no_special:
-                    CONFIGURATION.update({"no_special": Core.switch("no_special")})
+                    CONFIGURATION.update({"no_special": Preset().switch("no_special")})
 
                 if ARGS.no_unified:
-                    CONFIGURATION.update({"unified": Core.switch("unified")})
+                    CONFIGURATION.update({"unified": Preset().switch("unified")})
 
                 if ARGS.no_whois:
-                    CONFIGURATION.update({"no_whois": Core.switch("no_whois")})
+                    CONFIGURATION.update({"no_whois": Preset().switch("no_whois")})
 
                 if ARGS.percentage:
                     CONFIGURATION.update(
-                        {"show_percentage": Core.switch("show_percentage")}
+                        {"show_percentage": Preset().switch("show_percentage")}
                     )
 
                 if ARGS.plain:
                     CONFIGURATION.update(
-                        {"plain_list_domain": Core.switch("plain_list_domain")}
+                        {"plain_list_domain": Preset().switch("plain_list_domain")}
                     )
 
                 if ARGS.production:
@@ -1268,27 +1230,27 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     PublicSuffix().update()
 
                 if ARGS.quiet:
-                    CONFIGURATION.update({"quiet": Core.switch("quiet")})
+                    CONFIGURATION.update({"quiet": Preset().switch("quiet")})
 
                 if ARGS.share_logs:
-                    CONFIGURATION.update({"share_logs": Core.switch("share_logs")})
+                    CONFIGURATION.update({"share_logs": Preset().switch("share_logs")})
 
                 if ARGS.simple:
                     CONFIGURATION.update(
-                        {"simple": Core.switch("simple"), "quiet": Core.switch("quiet")}
+                        {"simple": Preset().switch("simple"), "quiet": Preset().switch("quiet")}
                     )
 
                 if ARGS.split:
-                    CONFIGURATION.update({"split": Core.switch("split")})
+                    CONFIGURATION.update({"split": Preset().switch("split")})
 
                 if ARGS.syntax:
-                    CONFIGURATION.update({"syntax": Core.switch("syntax")})
+                    CONFIGURATION.update({"syntax": Preset().switch("syntax")})
 
                 if ARGS.timeout and ARGS.timeout % 3 == 0:
                     CONFIGURATION.update({"seconds_before_http_timeout": ARGS.timeout})
 
                 if ARGS.travis:
-                    CONFIGURATION.update({"travis": Core.switch("travis")})
+                    CONFIGURATION.update({"travis": Preset().switch("travis")})
 
                 if ARGS.travis_branch:
                     CONFIGURATION.update({"travis_branch": ARGS.travis_branch})
@@ -1303,11 +1265,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.whois_database:
                     CONFIGURATION.update(
-                        {"whois_database": Core.switch("whois_database")}
+                        {"whois_database": Preset().switch("whois_database")}
                     )
 
                 if not CONFIGURATION["quiet"]:
-                    Core.colorify_logo(home=True)
+                    CLICore.colorify_logo(home=True)
 
                 if ARGS.share_logs:
                     print(Style.BRIGHT + Fore.MAGENTA + "Logs sharing activated.")
@@ -1317,11 +1279,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 # We call our Core which will handle all case depending of the configuration or
                 # the used command line arguments.
-                Core(
-                    domain_or_ip_to_test=ARGS.domain,
+                Dispatcher(
+                    domain_or_ip=ARGS.domain,
                     file_path=ARGS.file,
                     url_to_test=ARGS.url,
-                    url_file=ARGS.url_file,
+                    url_file_path=ARGS.url_file,
                     link_to_test=ARGS.link,
                 )
             except KeyError as e:
@@ -1339,4 +1301,4 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     # to search for a mistake while developing.
                     raise e
         except KeyboardInterrupt:
-            stay_safe()
+            CLICore.stay_safe()

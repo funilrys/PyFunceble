@@ -62,197 +62,206 @@ License:
 """
 # pylint: enable=line-too-long
 
-import PyFunceble
+from socket import AF_INET, IPPROTO_TCP, SOCK_STREAM
+from socket import error as socket_error
+from socket import gaierror, getaddrinfo, gethostbyaddr, herror, socket
+from socket import timeout as socket_timeout
+
 from PyFunceble.check import Check
+from PyFunceble.referer import Referer
 
 
-class Lookup:
+class NSLookup:
     """
-    Can be used to NSLOOKUP or WHOIS lookup.
+    Implementation of the UNIX :code:`nslookup` command.
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :return:
+        A dict with following index if an IPv4 is given.
+
+            ::
+
+                {
+                    "addr_info" : []
+                }
+
+        A dict with following index for everythind else.
+
+            ::
+
+                {
+                    "hostname": "xx",
+                    "aliases": [],
+                    "ips": []
+                }
+
+    :rtype: dict
     """
 
-    @classmethod
-    def nslookup(cls):
+    def __init__(self, subject):
+        if subject:
+            if isinstance(subject, str):
+                self.subject = subject
+            else:
+                raise ValueError("`subject` must be a string.")
+        else:
+            raise ValueError("`subject` must be given.")
+
+    def request(self):
         """
-        Implementation of UNIX nslookup.
+        Perform the NS request.
         """
+
+        result = {}
 
         try:
-            # We try to get the addresse information of the given domain or IP.
+            if not Check(self.subject).is_ip_valid():
+                # We are looking for something which is not an IP.
 
-            if "current_test_data" in PyFunceble.INTERN:  # pragma: no cover
-                # The end-user want more information whith his test.
+                # We request the address information.
+                req = getaddrinfo(self.subject, 80, proto=IPPROTO_TCP)
 
-                if not Check().is_ip_valid():
-                    # The element we are testing is not an IP.
+                result["addr_info"] = []
 
-                    # We request the address informations.
-                    request = PyFunceble.socket.getaddrinfo(
-                        PyFunceble.INTERN["to_test"],
-                        80,
-                        0,
-                        0,
-                        PyFunceble.socket.IPPROTO_TCP,
-                    )
+                for sequence in req:
+                    # We loop through the list returned by the request.
 
-                    for sequence in request:
-                        # We loop through the sequence returned by the request.
-
-                        # We append the NS informations into the nslookup index.
-                        PyFunceble.INTERN["current_test_data"]["nslookup"].append(
-                            sequence[-1][0]
-                        )
-                else:
-                    # The element we are testing is an IP.
-                    request = PyFunceble.socket.gethostbyaddr(
-                        PyFunceble.INTERN["to_test"]
-                    )
-
-                    # We append the NS informations into the nslookup index.
-                    PyFunceble.INTERN["current_test_data"]["nslookup"][
-                        "hostname"
-                    ] = request[0]
-                    PyFunceble.INTERN["current_test_data"]["nslookup"][
-                        "aliases"
-                    ] = request[1]
-                    PyFunceble.INTERN["current_test_data"]["nslookup"]["ips"] = request[
-                        2
-                    ]
+                    # We append the NS information into the output.
+                    result["addr_info"].append(sequence[-1][0])
             else:
+                req = gethostbyaddr(self.subject)
 
-                if not Check().is_ip_valid():
-                    # The element we are testing is not an IP.
-                    PyFunceble.socket.getaddrinfo(
-                        PyFunceble.INTERN["to_test"],
-                        80,
-                        0,
-                        0,
-                        PyFunceble.socket.IPPROTO_TCP,
-                    )
-                else:
-                    # The element we are testing is an IP.
-                    PyFunceble.socket.gethostbyaddr(PyFunceble.INTERN["to_test"])
+                result.update({"hostname": req[0], "aliases": req[1], "ips": req[2]})
+        except (OSError, herror, gaierror):
+            pass
 
-            # It was done successfuly, we return True.
-            # Note: we don't need to read the addresses so we consider as successful
-            # as long as there is no error.
-            return True
+        return result
 
-        except (OSError, PyFunceble.socket.herror, PyFunceble.socket.gaierror):
-            # One of the listed exception is matched.
 
-            # It was done unsuccesfuly, we return False.
-            return False
+class Whois:
+    """
+    Implementation of the UNIX `whois` command.
 
-    @classmethod
-    def whois(cls, whois_server, domain=None, timeout=None):  # pragma: no cover
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param server:
+        The WHOIS server we are working with.
+
+        .. note::
+            If none is given, we look for the best one.
+    :type server: str
+
+    :param timeout: 
+        The timeout to apply.
+
+        .. warning::
+            The timeout must be a modulo of :code:`3`.
+    :type timeout: int
+    """
+
+    universal_port = 43
+    buffer_size = 4096
+
+    def __init__(self, subject, server=None, timeout=3):
+        if subject:
+            if isinstance(subject, str):
+                self.subject = subject
+            else:
+                raise ValueError("`subject` must be a string.")
+        else:
+            raise ValueError("`subject` must be given.")
+
+        if server is not None:
+            if isinstance(server, str):
+                self.server = server
+            else:
+                raise ValueError("`server` must be a string.")
+        else:
+            self.server = Referer(self.subject).get()
+
+        if timeout:
+            if isinstance(timeout, int):
+                self.timeout = timeout
+            elif timeout.isdigit():
+                self.timeout = int(timeout)
+            else:
+                raise ValueError("`timeout` must be an integer or digit string.")
+
+    def request(self):
         """
-        Implementation of UNIX whois.
-
-        :param whois_server: The WHOIS server to use to get the record.
-        :type whois_server: str
-
-        :param domain: The domain to get the whois record from.
-        :type domain: str
-
-        :param timeout: The timeout to apply to the request.
-        :type timeout: int
-
-        :return: The whois record from the given whois server, if exist.
-        :rtype: str|None
+        Perform the WHOIS request.
         """
 
-        if domain is None:
-            # The domain is not given (localy).
+        result = None
 
-            # We consider the domain as the domain or IP we are currently testing.
-            domain = PyFunceble.INTERN["to_test"]
+        if self.server:
+            # A server was found or is given.
 
-        if timeout is None:
-            # The time is not given (localy).
+            # We initiate a socket for the request.
+            req = socket(AF_INET, SOCK_STREAM)
 
-            # We consider the timeout from the configuration as the timeout to use.
-            timeout = PyFunceble.CONFIGURATION["seconds_before_http_timeout"]
+            if self.timeout % 3 == 0:
+                # The timeout is a modulo of 3.
 
-        if whois_server:
-            # A whois server is given.
-
-            # We initiate a PyFunceble.socket.
-            req = PyFunceble.socket.socket(
-                PyFunceble.socket.AF_INET, PyFunceble.socket.SOCK_STREAM
-            )
-
-            if timeout % 3 == 0:
-                # The timeout is modulo 3.
-
-                # We report the timeout to our initiated PyFunceble.socket.
-                req.settimeout(timeout)
-            else:
-                # The timeout is not modulo 3.
-
-                # We report 3 seconds as the timeout to our initiated PyFunceble.socket.
-                req.settimeout(3)
+                # We set the timeout.
+                req.settimeout(self.timeout)
 
             try:
                 # We try to connect to the whois server at the port 43.
-                req.connect((whois_server, 43))
-            except PyFunceble.socket.error:
-                # We got an error.
+                req.connect((self.server, self.universal_port))
+            except socket_error:
+                return result
 
-                # We return None.
-                return None
+            # We send and encode the domain we want the information from.
+            req.send("{}\r\n".format(self.subject).encode())
 
-            # We send end encode the domain we want the data from.
-            req.send((domain + "\r\n").encode())
-
-            # We initiate a bytes variable which will save the response
-            # from the server.
-            response = b""
+            # We initiate a bytes variable which will save the response from the server.
+            response = bytes("", "utf-8")
 
             while True:
-                # We loop infinitly.
+                # We loop infinitly
+
                 try:
-                    # We try to receive the data in a buffer of 4096 bytes.
-                    data = req.recv(4096)
-                except (PyFunceble.socket.timeout, ConnectionResetError):
+                    data = req.recv(self.buffer_size)
+                except (ConnectionResetError, socket_timeout):
                     # We got an error.
 
                     # We close the connection.
                     req.close()
 
-                    # And we return None.
-                    return None
+                    # And we return the result.
+                    return result
 
-                # Everything goes right.
+                # Wverythin goes right.
 
-                # We append data to the response we got.
+                # We append the data to the response.
                 response += data
 
                 if not data:
-                    # The data is empty.
+                    # The data is empty or equal to None.
 
-                    # We break the loop.
+                    # We close the connection.
+                    req.close()
+
+                    # And we break the loop.
                     break
 
-            # We close the connection.
-            req.close()
-
             try:
+                # We finally decode and return the response we got from the server.
 
-                # We finally decode and return the response we got from the
-                # server.
                 return response.decode()
-
             except UnicodeDecodeError:
-                # We got an encoding error.
+                # We may get a decoding error.
 
-                # We decode the response.
+                # We decode the response explicitly.
                 # Note: Because we don't want to deal with other issue, we
                 # decided to use `replace` in order to automatically replace
                 # all non utf-8 encoded characters.
                 return response.decode("utf-8", "replace")
 
-        # The whois server is not given.
+        # The whois server is not given nor found.
 
-        # We return None.
-        return None
+        return result
