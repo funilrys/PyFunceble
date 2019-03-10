@@ -90,7 +90,7 @@ from PyFunceble.publicsuffix import PublicSuffix
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.17.1.dev (Blue Bontebok: Beetle)"
+VERSION = "1.18.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -1308,6 +1308,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if not CONFIGURATION["quiet"]:
                     Core.colorify_logo(home=True)
+
+                if ARGS.share_logs:
+                    print(Style.BRIGHT + Fore.MAGENTA + "Logs sharing activated.")
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()

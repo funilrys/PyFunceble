@@ -24,18 +24,16 @@ What do we share/collect?
 How to share logs?
 ------------------
 
-The logs sharing is activated by default.
-
-If you do not wish to share your logs simply change
-
-::
-
-   share_logs:                   True
-
-to
+If you wish to share your logs simply change
 
 ::
 
    share_logs:                   False
 
-into your personal `.PyFunceble.yaml`.
+to
+
+::
+
+   share_logs:                   True
+
+into your personal `.PyFunceble.yaml` or use the `--share-logs` argument from the CLI. 
