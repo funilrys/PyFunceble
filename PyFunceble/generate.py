@@ -765,13 +765,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         :rtype: bool
         """
 
-        if (
-            Inactive().is_present()
-            and self.status
-            in [
-                PyFunceble.STATUS["official"]["down"],
-                PyFunceble.STATUS["official"]["invalid"],
-            ]
-        ):
+        if Inactive().is_present() and self.status in [
+            PyFunceble.STATUS["official"]["down"],
+            PyFunceble.STATUS["official"]["invalid"],
+        ]:
             return True
         return False

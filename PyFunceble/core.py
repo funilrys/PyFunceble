@@ -556,7 +556,6 @@ class FileCore:
                 # We print the domain and the status.
                 print(subject, status)
 
-
     def filter_content(self):
         """
         Take the content of the given file and filter it before
@@ -564,4 +563,3 @@ class FileCore:
         """
 
         list_to_test = self.extract_lines()
-        

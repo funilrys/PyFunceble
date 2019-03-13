@@ -471,4 +471,3 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
                             # We save the whois record into the database.
                             WhoisDatabase(expiration_date=self.expiration_date).add()
-

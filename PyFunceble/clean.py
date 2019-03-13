@@ -64,7 +64,8 @@ License:
 # pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.config import Load
-#from PyFunceble.core import Core
+
+# from PyFunceble.core import Core
 from PyFunceble.helpers import File
 
 

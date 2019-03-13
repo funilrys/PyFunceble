@@ -81,7 +81,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         Should be one of the following.
 
         - :code:`url`
-        
+
         - :code:`domain`
 
         - :code:`file_url`
@@ -112,7 +112,6 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             self.subject = "http://%s:80" % subject
         else:
             raise Exception("Unknow subject type.")
-
 
         # We share the subject type.
         self.subject_type = subject_type

@@ -708,7 +708,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.subject_type,
             self.output["status"],
             source=self.output["status_source"],
-            http_status_code=self.output["http_status_code"]
+            http_status_code=self.output["http_status_code"],
         ).status_file()
 
 
@@ -796,4 +796,3 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.output["status"],
             source=self.output["status_source"],
         ).status_file()
-

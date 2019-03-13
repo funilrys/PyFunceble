@@ -514,7 +514,6 @@ def load_config(under_test=False, custom=None):  # pragma: no cover
             CONFIGURATION.update(custom)
 
 
-
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
     """
     Provide the command line interface.
@@ -1165,7 +1164,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.hierarchical:
                     CONFIGURATION.update(
-                        {"hierarchical_sorting": Preset().switch("hierarchical_sorting")}
+                        {
+                            "hierarchical_sorting": Preset().switch(
+                                "hierarchical_sorting"
+                            )
+                        }
                     )
 
                 if ARGS.host:
@@ -1174,7 +1177,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if ARGS.http:
-                    HTTP_CODE.update({"active": Preset().switch(HTTP_CODE["active"], True)})
+                    HTTP_CODE.update(
+                        {"active": Preset().switch(HTTP_CODE["active"], True)}
+                    )
 
                 if ARGS.iana:
                     IANA().update()
@@ -1237,7 +1242,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.simple:
                     CONFIGURATION.update(
-                        {"simple": Preset().switch("simple"), "quiet": Preset().switch("quiet")}
+                        {
+                            "simple": Preset().switch("simple"),
+                            "quiet": Preset().switch("quiet"),
+                        }
                     )
 
                 if ARGS.split:
