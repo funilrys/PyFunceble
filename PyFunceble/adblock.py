@@ -85,9 +85,6 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # We set the separator of options
         self.option_separator = ","
 
-        # We create an instance of the checker.
-        self.checker = Check()
-
     def _remove_ignored(self, list_from_file):
         """
         Removed the ignored element from the given list.
@@ -193,7 +190,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
             return [self._extract_base(x) for x in element]
 
         # We get the base if it is an URL.
-        base = self.checker.is_url_valid(url=element, return_base=True)
+        base = Check(element).is_url_valid(return_base=True)
 
         if base:
             # It is an URL.
@@ -372,10 +369,10 @@ class AdBlock:  # pylint: disable=too-few-public-methods
 
                     data = self._extract_base(data)
 
-                    if data and (
-                        self.checker.is_domain_valid(data)
-                        or self.checker.is_ip_valid(data)
-                    ):
+                    # We create an instance of the checker.
+                    checker = Check(data)
+
+                    if data and (checker.is_domain_valid() or checker.is_ip_valid()):
                         # The extraced base is not empty.
                         # and
                         # * The currently read line is a valid domain.
@@ -390,7 +387,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         # * The currently read line is not a valid IP.
 
                         # We try to get the url base.
-                        url_base = self.checker.is_url_valid(data, return_base=True)
+                        url_base = checker.is_url_valid(return_base=True)
 
                         if url_base:
                             # The url_base is not empty or equal to False or None.
