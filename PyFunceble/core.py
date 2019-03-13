@@ -60,6 +60,8 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+# pylint:disable=bad-continuation
+
 from random import choice
 
 from domain2idna import get as domain2idna
@@ -85,8 +87,9 @@ class Preset:
             # We deactivate the http status code.
             PyFunceble.HTTP_CODE["active"] = False
 
+    @classmethod
     def switch(
-        self, variable, custom=False
+        cls, variable, custom=False
     ):  # pylint: disable=inconsistent-return-statements
         """
         Switch PyFunceble.CONFIGURATION variables to their opposite.
@@ -148,7 +151,8 @@ class Preset:
             to_print % (repr(variable), PyFunceble.LINKS["repo"] + "/issues.")
         )
 
-    def disable(self, index):
+    @classmethod
+    def disable(cls, index):
         """
         Set the given configuration index to :code:`False`.
         """
@@ -156,7 +160,8 @@ class Preset:
         if PyFunceble.CONFIGURATION[index]:
             PyFunceble.CONFIGURATION[index] = False
 
-    def enable(self, index):
+    @classmethod
+    def enable(cls, index):
         """
         Set the given configuration index to :code:`True`.
         """
@@ -201,6 +206,10 @@ class Preset:
 
 
 class CLICore:
+    """
+    Provide some methods which are dedicated for the CLI.
+    """
+
     @classmethod
     def colorify_logo(cls, home=False):
         """
@@ -340,7 +349,7 @@ class CLICore:
                 )
 
 
-class Dispatcher:
+class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
     """
     Dispatch to the right brain side.
     """
@@ -447,7 +456,7 @@ class FileCore:
     :param file: The file we are testing.
     :type file: str
 
-    :param file_type: 
+    :param file_type:
         The file type.
         Should be one of the following.
 
@@ -487,7 +496,7 @@ class FileCore:
     def extract_lines(self):
         """
         Extract all non commented lines from the file we are testing.
-        
+
         :return: The element we are going to filter before testing.
         :rtype: list
         """
@@ -506,7 +515,8 @@ class FileCore:
 
         return Regex(result, r"^(?!#).*$").not_matching_list()
 
-    def domain(self, subject):
+    @classmethod
+    def domain(cls, subject):
         """
         Handle the test of a single domain.
 
@@ -532,7 +542,8 @@ class FileCore:
                 # We print the domain and the status.
                 print(subject, status)
 
-    def url(self, subject):
+    @classmethod
+    def url(cls, subject):
         """
         Handle the simple URL testing.
 
