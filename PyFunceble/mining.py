@@ -152,12 +152,12 @@ class Mining:
                         # We are testing a full url.
 
                         # We get the element to append.
-                        to_append = Check().is_url_valid(element, return_base=False)
+                        to_append = Check(element).is_url_valid(return_base=False)
                     elif PyFunceble.INTERN["to_test_type"] == "domain":
                         # We are testing a domain.
 
                         # We get the element to append.
-                        to_append = Check().is_url_valid(element, return_base=True)
+                        to_append = Check(element).is_url_valid(return_base=True)
                     else:
                         raise Exception("Unknown tested.")
 

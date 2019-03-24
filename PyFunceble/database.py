@@ -71,10 +71,20 @@ class Inactive:
     """
     Logic behind the generation and the usage of a database system.
     The main idea behind this is to provide an inactive-db.json and test all
-    inactive domain which are into to it regularly
+    inactive domain which are into to it regularly.
+
+    :param subject: The subject we are working with.
+    :type subject: str
+
+    :param filename: The name of the file we are processing.
+    :type filename: str
     """
 
-    def __init__(self):
+    is_subject_present_cache = {}
+
+    def __init__(self, filename):
+        # We share the filename.
+        self.filename = filename
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
             # The database subsystem is activated.
@@ -94,20 +104,8 @@ class Inactive:
                 + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
             )
 
-            if "inactive_db" not in PyFunceble.INTERN:
-                # The database is empty or equal to None.
-
-                # We initiate it with an empty dictionnary.
-                PyFunceble.INTERN["inactive_db"] = {}
-
-            if (
-                "flatten_inactive_db" not in PyFunceble.INTERN
-                or not PyFunceble.INTERN["flatten_inactive_db"]
-            ):
-                # The flatten version of the database does not exist or is not set.
-
-                # We create it.
-                PyFunceble.INTERN["flatten_inactive_db"] = self.content()
+            # We create the database content.
+            self.database_content = {}
 
     def _reformat_historical_formating_error(self):  # pragma: no cover
         """
@@ -168,17 +166,7 @@ class Inactive:
                                 int(PyFunceble.time()) - (self.one_day_in_seconds * 30)
                             ] = data[top_key][low_key]
 
-                if "inactive_db" in PyFunceble.INTERN:
-                    # The current (new) database is not empty.
-
-                    # We update add the content of the old into the current database.
-                    PyFunceble.INTERN["inactive_db"].update(data_to_parse)
-                else:
-                    # The current (new) database is empty.
-
-                    # We replace the content with the data_to_parse as it is complient
-                    # with the new format.
-                    PyFunceble.INTERN["inactive_db"] = data_to_parse
+                self.database_content.update(data_to_parse)
 
                 # We delete the old database file.
                 File(historical_formating_error).delete()
@@ -186,7 +174,7 @@ class Inactive:
     def _merge(self):
         """
         Merge the real database with the older one which
-        has already been set into :code:`PyFunceble.INTERN["inactive_db"]`
+        has already been set into the database.
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -201,14 +189,14 @@ class Inactive:
             for database_top_key in database_top_keys:
                 # We loop through the list of database top keys.
 
-                if database_top_key not in PyFunceble.INTERN["inactive_db"]:
+                if database_top_key not in self.database_content:
                     # The currently read top key is not already into the database.
 
                     # We initiate the currently read key with the same key from
                     # our database file.
-                    PyFunceble.INTERN["inactive_db"][
+                    self.database_content[database_top_key] = database_content[
                         database_top_key
-                    ] = database_content[database_top_key]
+                    ]
                 else:
                     # The currently read top key is already into the database.
 
@@ -220,13 +208,13 @@ class Inactive:
 
                         if (
                             database_low_key
-                            not in PyFunceble.INTERN["inactive_db"][database_top_key]
+                            not in self.database_content[database_top_key]
                         ):  # pragma: no cover
                             # The lower key is not already into the database.
 
                             # We initiate the currently read low and top key with the
                             # same combinaison from our database file.
-                            PyFunceble.INTERN["inactive_db"][database_top_key][
+                            self.database_content[database_top_key][
                                 database_low_key
                             ] = database_content[database_top_key][database_low_key]
                         else:
@@ -234,7 +222,7 @@ class Inactive:
 
                             # We exted the currently read low and top key combinaison
                             # with the same combinaison from our database file.
-                            PyFunceble.INTERN["inactive_db"][database_top_key][
+                            self.database_content[database_top_key][
                                 database_low_key
                             ].extend(
                                 database_content[database_top_key][database_low_key]
@@ -242,10 +230,10 @@ class Inactive:
 
                             # And we format the list of element to ensure that there is no
                             # duplicate into the database content.
-                            PyFunceble.INTERN["inactive_db"][database_top_key][
+                            self.database_content[database_top_key][
                                 database_low_key
                             ] = List(
-                                PyFunceble.INTERN["inactive_db"][database_top_key][
+                                self.database_content[database_top_key][
                                     database_low_key
                                 ]
                             ).format()
@@ -276,12 +264,12 @@ class Inactive:
             # The database subsystem is activated.
 
             # We save the current database state into the database file.
-            Dict(PyFunceble.INTERN["inactive_db"]).to_json(self.inactive_db_path)
+            Dict(self.database_content).to_json(self.inactive_db_path)
 
     def _add_to_test(self, to_add):
         """
         Add an element or a list of element into
-        :code:`PyFunceble.INTERN['inactive_db'][PyFunceble.INTERN["file_to_test"]]['to_test']`.
+        :code:`PyFunceble.INTERN['inactive_db'][self.filename]['to_test']`.
 
         :param to_add: The domain, IP or URL to add.
         :type to_add: str|list
@@ -296,53 +284,38 @@ class Inactive:
                 # We set it into a list.
                 to_add = [to_add]
 
-            if PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]:
+            if self.filename in self.database_content:
                 # The file we are testing is into the database.
 
-                if (
-                    "to_test"
-                    in PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ]
-                ):
+                if "to_test" in self.database_content[self.filename]:
                     # The `to_test` index is into the database related to the file
                     # we are testing.
 
                     # We extend the `to_test` element with the list we have to restest.
-                    PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                        "to_test"
-                    ].extend(to_add)
+                    self.database_content[self.filename]["to_test"].extend(to_add)
                 else:
                     # The `to_test` index is not into the database related to the file
                     # we are testing.
 
                     # We initiate the `to_test` element with the list we have to retest.
-                    PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                        "to_test"
-                    ] = to_add
+                    self.database_content[self.filename]["to_test"] = to_add
             else:
                 # The file we are testing is not into the database.
 
                 # We add the file and its to_test information into the database.
-                PyFunceble.INTERN["inactive_db"].update(
-                    {PyFunceble.INTERN["file_to_test"]: {"to_test": to_add}}
-                )
+                self.database_content.update({self.filename: {"to_test": to_add}})
 
             # We format the list to test in order to avoid duplicate.
-            PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                "to_test"
-            ] = List(
-                PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                    "to_test"
-                ]
+            self.database_content[self.filename]["to_test"] = List(
+                self.database_content[self.filename]["to_test"]
             ).format()
 
             # And we finally backup the database.
             self._backup()
 
-    def to_test(self):
+    def initiate(self):
         """
-        Get the list to test for the next session.
+        Initiate the databse.
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -359,12 +332,10 @@ class Inactive:
             # We retrieve the database informations.
             self._retrieve()
 
-            if PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]:
+            if self.filename in self.database_content:
                 # The file we are testing is into the database.
 
-                for data in PyFunceble.INTERN["inactive_db"][
-                    PyFunceble.INTERN["file_to_test"]
-                ]:
+                for data in self.database_content[self.filename]:
                     # We loop through the database content related to the file we
                     # are testing.
 
@@ -377,20 +348,14 @@ class Inactive:
 
                             # We extend our result variable with the content from the
                             # currently read index.
-                            result.extend(
-                                PyFunceble.INTERN["inactive_db"][
-                                    PyFunceble.INTERN["file_to_test"]
-                                ][data]
-                            )
+                            result.extend(self.database_content[self.filename][data])
 
                             # And we append the currently read index into the list of
                             # index to delete.
                             to_delete.append(data)
 
                 # We remove all indexes which are present into the list of index to delete.
-                Dict(
-                    PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
-                ).remove_key(to_delete)
+                Dict(self.database_content[self.filename]).remove_key(to_delete)
 
                 # And we append our list of element to retest into the `to_test` index.s
                 self._add_to_test(result)
@@ -398,9 +363,7 @@ class Inactive:
                 # The file we are testing is not into the database.
 
                 # We add the file we are testing into the database.
-                PyFunceble.INTERN["inactive_db"].update(
-                    {PyFunceble.INTERN["file_to_test"]: {}}
-                )
+                self.database_content.update({self.filename: {}})
 
             # And we finally backup the database.
             self._backup()
@@ -417,10 +380,8 @@ class Inactive:
             # The database subsystem is activated.
 
             if (
-                "inactive_db" in PyFunceble.INTERN
-                and PyFunceble.INTERN["file_to_test"]
-                in PyFunceble.INTERN["inactive_db"]
-                and PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
+                self.filename in self.database_content
+                and self.database_content[self.filename]
             ):
                 # The file we are testing is into the database and its content
                 # is not empty.
@@ -428,9 +389,7 @@ class Inactive:
                 # We get the indexes of the current file (in the dabase).
                 database_keys = [
                     x
-                    for x in PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ].keys()
+                    for x in self.database_content[self.filename].keys()
                     if x.isdigit()
                 ]
 
@@ -465,10 +424,12 @@ class Inactive:
         # We return the current time.
         return int(PyFunceble.time())
 
-    def add(self):
+    def add(self, subject):
         """
-        Save the current :code.`PyFunceble.CONFIGURATION['to_test']`
-        into the current timestamp.
+        Add the given subject into the database.
+
+        :param subject: The subject we are working with.
+        :type subject: str
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
@@ -477,54 +438,30 @@ class Inactive:
             # We get the timestamp to use as index.
             timestamp = str(self._timestamp())
 
-            if (
-                "inactive_db" in PyFunceble.INTERN
-                and PyFunceble.INTERN["file_to_test"]
-                in PyFunceble.INTERN["inactive_db"]
-            ):
+            if self.filename in self.database_content:
                 # * The file path is not into the database.
 
-                if (
-                    timestamp
-                    in PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ]
-                ):
+                if timestamp in self.database_content[self.filename]:
                     # The timetamp is already into the database related to the file we
                     # are testing.
 
-                    if (
-                        PyFunceble.INTERN["to_test"]
-                        not in PyFunceble.INTERN["inactive_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][timestamp]
-                    ):
+                    if subject not in self.database_content[self.filename][timestamp]:
                         # The currently tested element is not into the database related
                         # to the file we are testing.
 
                         # We append the currently tested element into the database.
-                        PyFunceble.INTERN["inactive_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][timestamp].append(PyFunceble.INTERN["to_test"])
+                        self.database_content[self.filename][timestamp].append(subject)
                 else:
                     # The timetamp is not into the database related to the file we
                     # are testing.
 
                     # We append the index and the database element into the databse
                     # related to the file we are testing.
-                    PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ].update({timestamp: [PyFunceble.INTERN["to_test"]]})
+                    self.database_content[self.filename].update({timestamp: [subject]})
 
                 if (
-                    "to_test"
-                    in PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ]
-                    and PyFunceble.INTERN["to_test"]
-                    in PyFunceble.INTERN["inactive_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ]["to_test"]
+                    "to_test" in self.database_content[self.filename]
+                    and subject in self.database_content[self.filename]["to_test"]
                 ):
                     # * The `to_test` index is into the database related to the file we
                     #   are testing.
@@ -533,119 +470,77 @@ class Inactive:
                     #   the file we are testing.
 
                     # We remove the element from the list of element to test.
-                    PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                        "to_test"
-                    ].remove(PyFunceble.INTERN["to_test"])
+                    self.database_content[self.filename]["to_test"].remove(subject)
             else:
                 # The file path is not into the database.
 
                 # We initiate the file path and its content into the database.
-                PyFunceble.INTERN["inactive_db"] = {
-                    PyFunceble.INTERN["file_to_test"]: {
-                        timestamp: [PyFunceble.INTERN["to_test"]]
-                    }
-                }
+                self.database_content = {self.filename: {timestamp: [subject]}}
 
             # And we save the data into the database.
             self._backup()
 
-    def remove(self):
+    def remove(self, subject):
         """
-        Remove all occurence of :code:`PyFunceble.CONFIGURATION['to_test']`
-        from the database.
+        Remove all occurence of the given subject from the database.
+
+        :param subject: The subject we are working with.
+        :type subject: str
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
             # The database subsystem is activated.
 
-            if PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]:
+            if self.filename in self.database_content:
                 #  The file path is into the database.
 
-                for data in PyFunceble.INTERN["inactive_db"][
-                    PyFunceble.INTERN["file_to_test"]
-                ]:
+                for data in self.database_content[self.filename]:
                     # We loop through the index of the file database.
 
-                    if (
-                        PyFunceble.INTERN["to_test"]
-                        in PyFunceble.INTERN["inactive_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][data]
-                    ):
+                    if subject in self.database_content[self.filename][data]:
                         # The currently tested element into the currently read index.
 
                         # We remove the currently tested element from the read index.
-                        PyFunceble.INTERN["inactive_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][data].remove(PyFunceble.INTERN["to_test"])
+                        self.database_content[self.filename][data].remove(subject)
 
             # And we save the data into the database.
             self._backup()
 
-    @classmethod
-    def content(cls):
-        """
-        Get the content of the database.
-
-        :return: The content of the database.
-        :rtype: list
-        """
-
-        # We initiate a variable which will save what we are going to return.
-        result = []
-
-        if (
-            PyFunceble.CONFIGURATION["inactive_database"]
-            and PyFunceble.INTERN["inactive_db"]
-        ):
-            # * The database subsystem is activated.
-            # and
-            # * The database is not empty.
-
-            for key in PyFunceble.INTERN["inactive_db"][
-                PyFunceble.INTERN["file_to_test"]
-            ]:
-                # We loop through the index of the current file database.
-
-                if key == "to_test":
-                    # The current key is `to_test`.
-
-                    # We continue to the next element.
-                    continue
-
-                # We extend the result with the content of the currently read index.
-                result.extend(
-                    PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                        key
-                    ]
-                )
-
-        # We return the content of the database.
-        return result
-
-    @classmethod
-    def is_present(cls):
+    def is_present(self, subject):
         """
         Check if the currently tested element is into the database.
+
+        :param subject: The subject we are working with.
+        :type subject: str
         """
 
         if PyFunceble.CONFIGURATION["inactive_database"]:
             # The database subsystem is activated.
 
-            if PyFunceble.INTERN["to_test"] in PyFunceble.INTERN[
-                "flatten_inactive_db"
-            ] or (
-                PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["inactive_db"]
-                and PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
-                and "to_test"
-                in PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]]
-                and PyFunceble.INTERN["to_test"]
-                in PyFunceble.INTERN["inactive_db"][PyFunceble.INTERN["file_to_test"]][
-                    "to_test"
-                ]
+            if (
+                subject not in self.is_subject_present_cache
+                and self.filename in self.database_content
             ):
-                return True
 
+                for element in [
+                    x
+                    for x in self.database_content[self.filename].keys()
+                    if x.isdigit()
+                ]:
+                    if (
+                        subject in self.database_content[self.filename][element]
+                        or subject in self.database_content[self.filename]["to_test"]
+                    ):
+                        self.is_subject_present_cache[subject] = True
+                        break
+                    else:
+                        self.is_subject_present_cache[subject] = False
+                        continue
+
+            if subject not in self.is_subject_present_cache:
+                self.is_subject_present_cache[subject] = False
+
+            return self.is_subject_present_cache[subject]
         return False
 
 
@@ -653,11 +548,22 @@ class Whois:
     """
     Logic behind the whois database. Indeed, the idea is to implement #2.
 
+    :param subject: The subject we are working with.
+    :type subject: str
+
     :param expiration_date: The extracted expiration date.
     :type expiration_date: str
+
+    :param filename: The name of the file we are working with.
+    :type filename: str
     """
 
-    def __init__(self, expiration_date=None):
+    def __init__(self, subject, expiration_date=None, filename=None):
+        # We share the subject.
+        self.subject = subject
+        # We share the filename.
+        self.filename = filename
+
         if self._authorization():
             # We are authorized to run this submodule.
 
@@ -672,29 +578,14 @@ class Whois:
                     )
                 )
 
-            if (
-                "file_to_test" in PyFunceble.INTERN
-                and PyFunceble.INTERN["file_to_test"]
-            ):
-                # The file path was given previously.
-                PyFunceble.INTERN["file_to_test"] = PyFunceble.INTERN["file_to_test"]
-            else:
-                # The file path was not given previously.
-
-                # We set a dummy index.
-                PyFunceble.INTERN["file_to_test"] = "single_testing"
+            if not self.filename:
+                self.filename = "single_testing"
 
             # We set the path to the whois database file.
             self.whois_db_path = (
                 PyFunceble.CURRENT_DIRECTORY
                 + PyFunceble.OUTPUTS["default_files"]["whois_db"]
             )
-
-            if "to_test" in PyFunceble.INTERN and PyFunceble.INTERN["to_test"]:
-                # We are testing something.
-
-                # We set a variable which will save the actual element we are working with.
-                PyFunceble.INTERN["to_test"] = PyFunceble.INTERN["to_test"]
 
             # We try to retrieve the information from the database file.
             self._retrieve()
@@ -762,9 +653,8 @@ class Whois:
 
         if (
             self._authorization()
-            and PyFunceble.INTERN["file_to_test"] in PyFunceble.INTERN["whois_db"]
-            and PyFunceble.INTERN["to_test"]
-            in PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]]
+            and self.filename in PyFunceble.INTERN["whois_db"]
+            and self.subject in PyFunceble.INTERN["whois_db"][self.filename]
         ):
             # * We are authorized to work.
             # and
@@ -794,11 +684,7 @@ class Whois:
         if (
             self._authorization()
             and self.is_in_database()
-            and int(
-                PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                    PyFunceble.INTERN["to_test"]
-                ]["epoch"]
-            )
+            and int(PyFunceble.INTERN["whois_db"][self.filename][self.subject]["epoch"])
             < int(PyFunceble.time())
         ):
             # * We are authorized to work.
@@ -829,9 +715,9 @@ class Whois:
             # * The expiration date is in the future.
 
             # We get the expiration date from the database.
-            result = PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                PyFunceble.INTERN["to_test"]
-            ]["expiration_date"]
+            result = PyFunceble.INTERN["whois_db"][self.filename][self.subject][
+                "expiration_date"
+            ]
 
             if result:
                 # The expiration date from the database is not empty nor
@@ -861,16 +747,14 @@ class Whois:
 
                 if (
                     str(self.epoch)
-                    != PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                        PyFunceble.INTERN["to_test"]
-                    ]["epoch"]
+                    != PyFunceble.INTERN["whois_db"][self.filename][self.subject][
+                        "epoch"
+                    ]
                 ):
                     # The given epoch is diffent from the one saved.
 
                     # We update it.
-                    PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                        PyFunceble.INTERN["to_test"]
-                    ].update(
+                    PyFunceble.INTERN["whois_db"][self.filename][self.subject].update(
                         {
                             "epoch": str(self.epoch),
                             "state": state,
@@ -882,22 +766,20 @@ class Whois:
                     # The expiration date from the database is in the past.
 
                     if (
-                        PyFunceble.INTERN["whois_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][PyFunceble.INTERN["to_test"]]["state"]
+                        PyFunceble.INTERN["whois_db"][self.filename][self.subject][
+                            "state"
+                        ]
                         != "past"
                     ):  # pragma: no cover
                         # The state of the element in the datbase is not
                         # equal to `past`.
 
                         # We update it to `past`.
-                        PyFunceble.INTERN["whois_db"][
-                            PyFunceble.INTERN["file_to_test"]
-                        ][PyFunceble.INTERN["to_test"]].update({"state": "past"})
+                        PyFunceble.INTERN["whois_db"][self.filename][
+                            self.subject
+                        ].update({"state": "past"})
                 elif (
-                    PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                        PyFunceble.INTERN["to_test"]
-                    ]["state"]
+                    PyFunceble.INTERN["whois_db"][self.filename][self.subject]["state"]
                     != "future"
                 ):
                     # * The expiration date from the database is in the future.
@@ -906,27 +788,22 @@ class Whois:
                     # equal to `future`.
 
                     # We update it to `future`.
-                    PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]][
-                        PyFunceble.INTERN["to_test"]
-                    ].update({"state": "future"})
+                    PyFunceble.INTERN["whois_db"][self.filename][self.subject].update(
+                        {"state": "future"}
+                    )
             else:
                 # The element we are working with is not in the database.
 
-                if (
-                    not PyFunceble.INTERN["file_to_test"]
-                    in PyFunceble.INTERN["whois_db"]
-                ):
+                if not self.filename in PyFunceble.INTERN["whois_db"]:
                     # The file path is not in the database.
 
                     # We initiate it.
-                    PyFunceble.INTERN["whois_db"][
-                        PyFunceble.INTERN["file_to_test"]
-                    ] = {}
+                    PyFunceble.INTERN["whois_db"][self.filename] = {}
 
                 # We create the first dataset.
-                PyFunceble.INTERN["whois_db"][PyFunceble.INTERN["file_to_test"]].update(
+                PyFunceble.INTERN["whois_db"][self.filename].update(
                     {
-                        PyFunceble.INTERN["to_test"]: {
+                        self.subject: {
                             "epoch": str(self.epoch),
                             "state": state,
                             "expiration_date": self.expiration_date,

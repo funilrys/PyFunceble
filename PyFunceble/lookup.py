@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long, too-few-public-methods
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -154,7 +154,7 @@ class Whois:
             If none is given, we look for the best one.
     :type server: str
 
-    :param timeout: 
+    :param timeout:
         The timeout to apply.
 
         .. warning::

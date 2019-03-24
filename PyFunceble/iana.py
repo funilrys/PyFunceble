@@ -408,7 +408,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the a copy of the page.
         iana_record = Whois(
             "hello.{}".format(extension), PyFunceble.CONFIGURATION["iana_whois_server"]
-        )
+        ).request()
 
         if iana_record and "refer" in iana_record:
             # The record is not empty.

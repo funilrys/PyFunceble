@@ -63,14 +63,10 @@ License:
 # pylint: enable=line-too-long
 # pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.check import Check
 from PyFunceble.database import Whois as WhoisDatabase
-from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
-from PyFunceble.http_code import HTTPCode
 from PyFunceble.logs import Logs
 from PyFunceble.lookup import Whois as WhoisLookup
-from PyFunceble.referer import Referer
 
 
 class ExpirationDate:  # pylint: disable=too-few-public-methods
@@ -84,6 +80,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         The whois server we are trying to get get the expiration
         date from.
     :type whois_server: str
+
+    :param filename: The name of the file we are working with.
+    :type filename: str
     """
 
     # We initiate a variable which will save the extracted expiration date.
@@ -91,9 +90,11 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
     # We initate a variable which will save the WHOIS record.
     whois_record = None
 
-    def __init__(self, subject, whois_server):
+    def __init__(self, subject, whois_server, filename=None):
         # We share the subject
         self.subject = subject
+        # We share the filename
+        self.filename = filename
 
         # We share the whois sever
         self.whois_server = whois_server
@@ -359,13 +360,15 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         # We return an empty string as we were not eable to match the date format.
         return ""
 
-    def _extract(self):  # pragma: no cover
+    def _extract(self):  # pylint: disable=too-many-nested-blocks  # pragma: no cover
         """
         Extract the expiration date from the whois record.
         """
 
         # We try to get the expiration date from the database.
-        expiration_date_from_database = WhoisDatabase().get_expiration_date()
+        expiration_date_from_database = WhoisDatabase(
+            self.subject, filename=self.filename
+        ).get_expiration_date()
 
         if expiration_date_from_database:
             # The hash of the current whois record did not changed and the
@@ -470,4 +473,8 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                                 Logs().expiration_date(self.expiration_date)
 
                             # We save the whois record into the database.
-                            WhoisDatabase(expiration_date=self.expiration_date).add()
+                            WhoisDatabase(
+                                self.subject,
+                                expiration_date=self.expiration_date,
+                                filename=self.filename,
+                            ).add()

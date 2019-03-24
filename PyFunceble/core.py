@@ -68,7 +68,10 @@ from domain2idna import get as domain2idna
 
 import PyFunceble
 from PyFunceble.check import Check
+from PyFunceble.database import Inactive
+from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.execution_time import ExecutionTime
+from PyFunceble.generate import Generate
 from PyFunceble.helpers import Download, Regex
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
@@ -368,6 +371,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             SimpleCore(domain_or_ip).domain()
         elif url_to_test:
             SimpleCore(url_to_test).url()
+        elif file_path:
+            FileCore(file_path, "domain").read_and_test_file_content()
 
         Percentage().log()
 
@@ -466,12 +471,25 @@ class FileCore:
     :type file_type: str
     """
 
+    # We set a regex of element to delete.
+    # Understand with this variable that we don't want to test those.
+    regex_ignore = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
+
     def __init__(self, file, file_type="domain"):
         self.preset = Preset()
         self.file = file
         self.file_type = file_type
 
+        self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
+        self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
+
+        self.inactive_db = Inactive(self.file)
+        self.inactive_db.initiate()
+
         self.download_link()
+
+        # We generate the directory structure.
+        DirectoryStructure()
 
     def download_link(self):
         """
@@ -493,30 +511,7 @@ class FileCore:
 
             self.file = destination
 
-    def extract_lines(self):
-        """
-        Extract all non commented lines from the file we are testing.
-
-        :return: The element we are going to filter before testing.
-        :rtype: list
-        """
-
-        result = []
-
-        if PyFunceble.path.isfile(self.file):
-            try:
-                with open(self.file) as file:
-                    result = file.readlines()
-            except UnicodeDecodeError:
-                with open(self.file, encoding="utf-8") as file:
-                    result = file.readlines()
-        else:
-            raise FileNotFoundError(self.file)
-
-        return Regex(result, r"^(?!#).*$").not_matching_list()
-
-    @classmethod
-    def domain(cls, subject):
+    def domain(self, subject):
         """
         Handle the test of a single domain.
 
@@ -529,12 +524,14 @@ class FileCore:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
-                status = SyntaxStatus(subject, subject_type="file_domain").get()[
-                    "status"
-                ]
+                status = SyntaxStatus(
+                    subject, subject_type="file_domain", filename=self.file
+                ).get()["status"]
             else:
                 # We test and get the status of the domain.
-                status = Status(subject, subject_type="file_domain").get()["status"]
+                status = Status(
+                    subject, subject_type="file_domain", filename=self.file
+                ).get()["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -542,8 +539,18 @@ class FileCore:
                 # We print the domain and the status.
                 print(subject, status)
 
-    @classmethod
-    def url(cls, subject):
+            if status.lower() in self.list_of_up_statuses:
+
+                if self.inactive_db.is_present(subject):
+                    Generate(
+                        subject, "file_domain", PyFunceble.STATUS["official"]["up"]
+                    ).analytic_file("suspicious")
+
+                    self.inactive_db.remove(subject)
+            else:
+                self.inactive_db.add(subject)
+
+    def url(self, subject):
         """
         Handle the simple URL testing.
 
@@ -556,10 +563,14 @@ class FileCore:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
-                status = SyntaxStatus(subject, subject_type="file_url").get()["status"]
+                status = SyntaxStatus(
+                    subject, subject_type="file_url", filename=self.file
+                ).get()["status"]
             else:
                 # We test and get the status of the domain.
-                status = URLStatus(subject, subject_type="file_url").get()["status"]
+                status = URLStatus(
+                    subject, subject_type="file_url", filename=self.file
+                ).get()["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -567,10 +578,92 @@ class FileCore:
                 # We print the domain and the status.
                 print(subject, status)
 
-    def filter_content(self):
+    @classmethod
+    def _format_line(cls, line):
         """
-        Take the content of the given file and filter it before
-        we start the test.
+        Format the extracted line before passing it to the system.
+
+        :param line: The extracted line.
+        :type line: str
+
+        :return: The formatted line with only the element to test.
+        :rtype: str
+
+        .. note:
+            Understand by formating the fact that we get rid
+            of all the noises around the element we want to test.
         """
 
-        list_to_test = self.extract_lines()
+        if not line.startswith("#"):
+            # The line is not a commented line.
+
+            if "#" in line:
+                # There is a comment at the end of the line.
+
+                # We delete the comment from the line.
+                line = line[: line.find("#")].strip()
+
+            if " " in line or "\t" in line:
+                # A space or a tabs is in the line.
+
+                # We remove all whitestring from the extracted line.
+                splited_line = line.split()
+
+                # As there was a space or a tab in the string, we consider
+                # that we are working with the hosts file format which means
+                # that the domain we have to test is after the first string.
+                # So we set the index to 1.
+                index = 1
+
+                while index < len(splited_line):
+                    # We loop until the index is greater than the length of
+                    #  the splited line.
+
+                    if splited_line[index]:
+                        # The element at the current index is not an empty string.
+
+                        # We break the loop.
+                        break
+
+                    # The element at the current index is an empty string.
+
+                    # We increase the index number.
+                    index += 1
+
+                # We return the last read element.
+                return splited_line[index]
+
+            # We return the extracted line.
+            return line
+
+        # The extracted line is a comment line.
+
+        # We return an empty string as we do not want to work with commented line.
+        return ""
+
+    def read_and_test_file_content(self):
+        """
+        Read a file block by block and test its content.
+        """
+
+        CLICore.print_header()
+
+        with open(self.file, "r", encoding="utf-8") as file:
+            for line in file:
+                line = line.rstrip("\n").strip()
+
+                if (
+                    line[0] != "#"
+                    and not Regex(
+                        line, self.regex_ignore, escape=False, return_data=False
+                    ).match()
+                    and not self.inactive_db.is_present(line)
+                ):
+                    if self.file_type == "domain":
+                        self.domain(self._format_line(line))
+                    elif self.file_type == "url":
+                        self.url(self._format_line(line))
+                    else:
+                        raise Exception("Unknown file type.")
+
+

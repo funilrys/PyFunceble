@@ -69,8 +69,8 @@ from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
 from PyFunceble.http_code import HTTPCode
-from PyFunceble.referer import Referer
 from PyFunceble.lookup import NSLookup
+from PyFunceble.referer import Referer
 
 
 class Status:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -83,18 +83,22 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     :param subject_type:
         The type of the subject.
         Should be one of the following.
-        
+
             - :code:`domain`
 
             - :code:`file_domain`
     :type subject_type: str
+
+    :param filename: The name of the file we are working with.
+    :type filename: str
     """
 
     output = {}
 
-    def __init__(self, subject, subject_type="domain"):
+    def __init__(self, subject, subject_type="domain", filename=None):
         self.subject = subject
         self.subject_type = subject_type.lower()
+        self.filename = filename
 
         self.checker = Check(self.subject)
 
@@ -148,6 +152,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             expiration_date=self.output["expiration_date"],
                             http_status_code=self.output["http_status_code"],
                             whois_server=self.output["whois_server"],
+                            filename=self.filename,
                         ).status_file()
                     else:
                         self.output["_status_source"] = "NSLOOKUP"
@@ -214,17 +219,18 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             expiration_date=self.output["expiration_date"],
             http_status_code=self.output["http_status_code"],
             whois_server=self.output["whois_server"],
+            filename=self.filename,
         ).status_file()
 
 
-class ExtraRules:
+class ExtraRules:  # pylint: disable=too-few-public-methods
     """
     Manage some extra rules.,
 
     :param subject: The subject we are working with.
     :type subject: str
 
-    :param subject_type: 
+    :param subject_type:
         The type of the subject we are working with.
         Should be one of the following.
 
@@ -632,13 +638,18 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
     :param subject_type: The type of the subject.
     :type subject_type: str
+
+    :param filename: The name of the file we are working with.
+    :type filename: str
     """
 
-    def __init__(self, subject, subject_type="url"):
+    def __init__(self, subject, subject_type="url", filename=None):
         # We share the subject.
         self.subject = subject
         # We share the subject type.
         self.subject_type = subject_type
+        # We share the filename.
+        self.filename = filename
 
         self.checker = Check(self.subject)
 
@@ -646,7 +657,6 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         self.output = {
             "domain_syntax_validation": self.checker.is_domain_valid(),
             "expiration_date": None,
-            "http_status_code": None,
             "ipv4_range_syntax_validation": self.checker.is_ip_range(),
             "ipv4_syntax_validation": self.checker.is_ip_valid(),
             "subdomain_syntax_validation": self.checker.is_subdomain(),
@@ -709,6 +719,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.output["status"],
             source=self.output["status_source"],
             http_status_code=self.output["http_status_code"],
+            filename=self.filename,
         ).status_file()
 
 
@@ -721,13 +732,18 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
     :param subject_type: The type of the subject.
     :type subject_type: str
+
+    :param filename: The name of the file we are working with.
+    :type filename: str
     """
 
-    def __init__(self, subject, subject_type="domain"):
+    def __init__(self, subject, subject_type="domain", filename=None):
         # We share the subject
         self.subject = subject
         # We share the subject type.
         self.subject_type = subject_type
+        # We share the filename.
+        self.filename = filename
 
         self.checker = Check(self.subject)
 
@@ -795,4 +811,5 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.subject_type,
             self.output["status"],
             source=self.output["status_source"],
+            filename=self.filename,
         ).status_file()

@@ -133,7 +133,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         element = element.lower()
 
         # We try to get the url base.
-        url_base = Check().is_url_valid(element, return_base=True)
+        url_base = Check(element).is_url_valid(return_base=True)
 
         if not isinstance(url_base, str):
             # The url base is not found.

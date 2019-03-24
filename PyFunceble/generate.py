@@ -69,7 +69,7 @@ from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
 
-class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
+class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes, too-many-arguments
     """
     Generate different sort of files.
 
@@ -93,6 +93,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
 
     :param whois_server: The whois server.
     :type whois_server: str
+
+    :param filename: The name of the file we are testing.
+    :type filename: str
     """
 
     def __init__(
@@ -104,6 +107,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         expiration_date=None,
         http_status_code="***",
         whois_server="Unknown",
+        filename=None,
     ):
         # We share the subject.
         self.subject = subject
@@ -115,6 +119,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         self.source = source
         # We share the status code.
         self.status_code = http_status_code
+        # We share the file name.
+        self.filename = filename
 
         if not whois_server:
             whois_server = "Unknown"
@@ -466,6 +472,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     expiration_date=self.expiration_date,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
+                    filename=self.filename,
                 ).info_files()
             elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
                 # The new status is in the list of down status.
@@ -485,6 +492,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     expiration_date=self.expiration_date,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
+                    filename=self.filename,
                 ).info_files()
             elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
                 # The new status is in the list of suspicious status.
@@ -504,6 +512,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     expiration_date=self.expiration_date,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
+                    filename=self.filename,
                 ).info_files()
             else:
                 # The new status is in the list of up and down status.
@@ -523,6 +532,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
                     expiration_date=self.expiration_date,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
+                    filename=self.filename,
                 ).info_files()
 
             # We print the information on file.
@@ -765,7 +775,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes
         :rtype: bool
         """
 
-        if Inactive().is_present() and self.status in [
+        if Inactive(self.filename).is_present(self.subject) and self.status in [
             PyFunceble.STATUS["official"]["down"],
             PyFunceble.STATUS["official"]["invalid"],
         ]:

@@ -218,10 +218,10 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Return the referer aka the WHOIS server of the current domain extension.
 
-        :return: 
+        :return:
             - :code:`None` if there is no referer.
 
-            - :code:`False` if the extension is unknown which implicitly means 
+            - :code:`False` if the extension is unknown which implicitly means
             that the subject is :code:`INVALID`
         """
 
