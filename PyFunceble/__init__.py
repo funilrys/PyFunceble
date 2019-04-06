@@ -910,17 +910,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
-                    "--multiprocess",
-                    action="store_true",
-                    help="Switch the value of the multiprocess usage. %s"
-                    % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["multiprocessing"])
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                PARSER.add_argument(
                     "-n",
                     "--no-files",
                     action="store_true",
@@ -1272,11 +1261,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.mining:
                     CONFIGURATION.update({"mining": Preset().switch("mining")})
-
-                if ARGS.multiprocess:
-                    CONFIGURATION.update(
-                        {"multiprocessing": Preset().switch("multiprocessing")}
-                    )
 
                 if ARGS.no_files:
                     CONFIGURATION.update({"no_files": Preset().switch("no_files")})
