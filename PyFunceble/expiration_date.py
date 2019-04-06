@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,12 +59,10 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.database import Whois as WhoisDatabase
 from PyFunceble.helpers import Regex
 from PyFunceble.logs import Logs
-from PyFunceble.lookup import Whois as WhoisLookup
+from PyFunceble.whois import Whois as WhoisLookup
 
 
 class ExpirationDate:  # pylint: disable=too-few-public-methods
@@ -81,6 +77,10 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         date from.
     :type whois_server: str
 
+    :param whois_db:
+        An instance of the whois database.
+    :type whois_db: :func:`~PyFunceble.whois_db.WhoisDB`
+
     :param filename: The name of the file we are working with.
     :type filename: str
     """
@@ -90,7 +90,49 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
     # We initate a variable which will save the WHOIS record.
     whois_record = None
 
-    def __init__(self, subject, whois_server, filename=None):
+    # We initiate all possible regex which correspond to an
+    # expiration date.
+    # We list the list of regex which will help us get an unformatted expiration date.
+    expiration_patterns = [
+        r"expire:(.*)",
+        r"expire on:(.*)",
+        r"Expiry Date:(.*)",
+        r"free-date(.*)",
+        r"expires:(.*)",
+        r"Expiration date:(.*)",
+        r"Expiry date:(.*)",
+        r"Expire Date:(.*)",
+        r"renewal date:(.*)",
+        r"Expires:(.*)",
+        r"validity:(.*)",
+        r"Expiration Date             :(.*)",
+        r"Expiry :(.*)",
+        r"expires at:(.*)",
+        r"domain_datebilleduntil:(.*)",
+        r"Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)",
+        r"Fecha de expiración \(Expiration date\):(.*)",
+        r"\[Expires on\](.*)",
+        r"Record expires on(.*)(\(YYYY-MM-DD\))",
+        r"status:      OK-UNTIL(.*)",
+        r"renewal:(.*)",
+        r"expires............:(.*)",
+        r"expire-date:(.*)",
+        r"Exp date:(.*)",
+        r"Valid-date(.*)",
+        r"Expires On:(.*)",
+        r"Fecha de vencimiento:(.*)",
+        r"Expiration:.........(.*)",
+        r"Fecha de Vencimiento:(.*)",
+        r"Registry Expiry Date:(.*)",
+        r"Expires on..............:(.*)",
+        r"Expiration Time:(.*)",
+        r"Expiration Date:(.*)",
+        r"Expired:(.*)",
+        r"Date d'expiration:(.*)",
+        r"expiration date:(.*)",
+    ]
+
+    def __init__(self, subject, whois_server, filename=None, whois_db=None):
         # We share the subject
         self.subject = subject
         # We share the filename
@@ -98,6 +140,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
         # We share the whois sever
         self.whois_server = whois_server
+
+        # We share the whois database.
+        self.whois_db = whois_db
 
     def get(self):  # pragma: no cover
         """
@@ -360,15 +405,63 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         # We return an empty string as we were not eable to match the date format.
         return ""
 
-    def _extract(self):  # pylint: disable=too-many-nested-blocks  # pragma: no cover
+    def __extract_from_record(self):  # pragma: no cover
+        """
+        Extract the expiration date from the whois record.
+        """
+
+        if self.whois_record:
+            # The whois record is not empty.
+
+            for string in self.expiration_patterns:
+                # We loop through the list of regex.
+
+                # We try tro extract the expiration date from the WHOIS record.
+                expiration_date = Regex(
+                    self.whois_record, string, return_data=True, rematch=True, group=0
+                ).match()
+
+                if expiration_date:
+                    # The expiration date could be extracted.
+
+                    # We get the extracted expiration date.
+                    self.expiration_date = expiration_date[0].strip()
+
+                    # We initate a regex which will help us know if a number
+                    # is present into the extracted expiration date.
+                    regex_rumbers = r"[0-9]"
+
+                    if Regex(
+                        self.expiration_date, regex_rumbers, return_data=False
+                    ).match():
+                        # The extracted expiration date has a number.
+
+                        # We format the extracted expiration date.
+                        self.expiration_date = self._format()
+
+                        if (
+                            self.expiration_date
+                            and not Regex(
+                                self.expiration_date,
+                                r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
+                                return_data=False,
+                            ).match()
+                        ):
+                            # The formatted expiration date does not match our unified format.
+
+                            # We log the problem.
+                            Logs().expiration_date(self.expiration_date)
+
+                        # We save the whois record into the database.
+                        self.whois_db.add(self.subject, self.expiration_date)
+
+    def _extract(self):  # pragma: no cover
         """
         Extract the expiration date from the whois record.
         """
 
         # We try to get the expiration date from the database.
-        expiration_date_from_database = WhoisDatabase(
-            self.subject, filename=self.filename
-        ).get_expiration_date()
+        expiration_date_from_database = self.whois_db.get_expiration_date(self.subject)
 
         if expiration_date_from_database:
             # The hash of the current whois record did not changed and the
@@ -386,95 +479,4 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
             ).request()
 
-            # We list the list of regex which will help us get an unformatted expiration date.
-            to_match = [
-                r"expire:(.*)",
-                r"expire on:(.*)",
-                r"Expiry Date:(.*)",
-                r"free-date(.*)",
-                r"expires:(.*)",
-                r"Expiration date:(.*)",
-                r"Expiry date:(.*)",
-                r"Expire Date:(.*)",
-                r"renewal date:(.*)",
-                r"Expires:(.*)",
-                r"validity:(.*)",
-                r"Expiration Date             :(.*)",
-                r"Expiry :(.*)",
-                r"expires at:(.*)",
-                r"domain_datebilleduntil:(.*)",
-                r"Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)",
-                r"Fecha de expiración \(Expiration date\):(.*)",
-                r"\[Expires on\](.*)",
-                r"Record expires on(.*)(\(YYYY-MM-DD\))",
-                r"status:      OK-UNTIL(.*)",
-                r"renewal:(.*)",
-                r"expires............:(.*)",
-                r"expire-date:(.*)",
-                r"Exp date:(.*)",
-                r"Valid-date(.*)",
-                r"Expires On:(.*)",
-                r"Fecha de vencimiento:(.*)",
-                r"Expiration:.........(.*)",
-                r"Fecha de Vencimiento:(.*)",
-                r"Registry Expiry Date:(.*)",
-                r"Expires on..............:(.*)",
-                r"Expiration Time:(.*)",
-                r"Expiration Date:(.*)",
-                r"Expired:(.*)",
-                r"Date d'expiration:(.*)",
-                r"expiration date:(.*)",
-            ]
-
-            if self.whois_record:
-                # The whois record is not empty.
-
-                for string in to_match:
-                    # We loop through the list of regex.
-
-                    # We try tro extract the expiration date from the WHOIS record.
-                    expiration_date = Regex(
-                        self.whois_record,
-                        string,
-                        return_data=True,
-                        rematch=True,
-                        group=0,
-                    ).match()
-
-                    if expiration_date:
-                        # The expiration date could be extracted.
-
-                        # We get the extracted expiration date.
-                        self.expiration_date = expiration_date[0].strip()
-
-                        # We initate a regex which will help us know if a number
-                        # is present into the extracted expiration date.
-                        regex_rumbers = r"[0-9]"
-
-                        if Regex(
-                            self.expiration_date, regex_rumbers, return_data=False
-                        ).match():
-                            # The extracted expiration date has a number.
-
-                            # We format the extracted expiration date.
-                            self.expiration_date = self._format()
-
-                            if (
-                                self.expiration_date
-                                and not Regex(
-                                    self.expiration_date,
-                                    r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
-                                    return_data=False,
-                                ).match()
-                            ):
-                                # The formatted expiration date does not match our unified format.
-
-                                # We log the problem.
-                                Logs().expiration_date(self.expiration_date)
-
-                            # We save the whois record into the database.
-                            WhoisDatabase(
-                                self.subject,
-                                expiration_date=self.expiration_date,
-                                filename=self.filename,
-                            ).add()
+            self.__extract_from_record()

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, File, List
 from PyFunceble.sort import Sort
@@ -115,7 +112,7 @@ class Prints:
         self.headers["Generic"] = PyFunceble.OrderedDict(
             zip(
                 [
-                    "Domain",
+                    "Subject",
                     "Status",
                     "Expiration Date",
                     "Source",
@@ -129,21 +126,21 @@ class Prints:
         # We iniate the official UP header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS["official"]["up"]] = PyFunceble.OrderedDict(
             zip(
-                ["Domain", "Expiration Date", "Source", "HTTP Code", "Analyze Date"],
+                ["Subject", "Expiration Date", "Source", "HTTP Code", "Analyze Date"],
                 [100, 17, 10, 10, 20],
             )
         )
 
         # We iniate the official VALID header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS["official"]["valid"]] = PyFunceble.OrderedDict(
-            zip(["Domain", "Source", "Analyze Date"], [100, 10, 20])
+            zip(["Subject", "Source", "Analyze Date"], [100, 10, 20])
         )
 
         # We iniate the official DOWN header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS["official"]["down"]] = PyFunceble.OrderedDict(
             zip(
                 [
-                    "Domain",
+                    "Subject",
                     "WHOIS Server",
                     "Status",
                     "Source",
@@ -156,12 +153,12 @@ class Prints:
 
         # We iniate the official INVALID header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS["official"]["invalid"]] = PyFunceble.OrderedDict(
-            zip(["Domain", "Source", "HTTP Code", "Analyze Date"], [100, 10, 10, 20])
+            zip(["Subject", "Source", "HTTP Code", "Analyze Date"], [100, 10, 10, 20])
         )
 
         # We iniate the official LESS header and the spacement of each colomns.
         self.headers["Less"] = PyFunceble.OrderedDict(
-            zip(["Domain", "Status", "HTTP Code"], [100, 11, 10])
+            zip(["Subject", "Status", "HTTP Code"], [100, 11, 10])
         )
 
         # We iniate the official Percentage header and the spacement of each colomns.
@@ -171,7 +168,7 @@ class Prints:
 
         # We iniate the official HTTP header and the spacement of each colomns.
         self.headers["HTTP"] = PyFunceble.OrderedDict(
-            zip(["Domain", "Status", "HTTP Code", "Analyze Date"], [100, 11, 10, 20])
+            zip(["Subject", "Status", "HTTP Code", "Analyze Date"], [100, 11, 10, 20])
         )
 
         # We initiate a variable which will save the currently in use header.

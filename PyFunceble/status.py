@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,15 +59,14 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble import requests
 from PyFunceble.check import Check
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
-from PyFunceble.http_code import HTTPCode
-from PyFunceble.lookup import NSLookup
+from PyFunceble.http_code import HTTPCode, urllib3_exceptions
+from PyFunceble.nslookup import NSLookup
 from PyFunceble.referer import Referer
 
 
@@ -77,29 +74,32 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Handle the research of the domain status.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param subject_type:
+    :param str subject_type:
         The type of the subject.
         Should be one of the following.
 
             - :code:`domain`
 
             - :code:`file_domain`
-    :type subject_type: str
 
-    :param filename: The name of the file we are working with.
-    :type filename: str
+    :param whois_db:
+        An instance of the whois database.
+    :type whois_db: :func:`~PyFunceble.whois_db.WhoisDB`
+
+
+    :param str filename: The name of the file we are working with.
     """
 
     output = {}
 
-    def __init__(self, subject, subject_type="domain", filename=None):
+    def __init__(self, subject, subject_type="domain", filename=None, whois_db=None):
         self.subject = subject
         self.subject_type = subject_type.lower()
         self.filename = filename
 
+        self.whois_db = whois_db
         self.checker = Check(self.subject)
 
     def get(self):
@@ -110,14 +110,14 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         if self.subject:
             self.output.update(
                 {
-                    "domain_syntax_validation": self.checker.is_domain_valid(),
+                    "domain_syntax_validation": self.checker.is_domain(),
                     "expiration_date": None,
                     "http_status_code": "***",
-                    "ipv4_range_syntax_validation": self.checker.is_ip_range(),
-                    "ipv4_syntax_validation": self.checker.is_ip_valid(),
+                    "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
+                    "ipv4_syntax_validation": self.checker.is_ipv4(),
                     "subdomain_syntax_validation": self.checker.is_subdomain(),
                     "tested": self.subject,
-                    "url_syntax_validation": self.checker.is_url_valid(),
+                    "url_syntax_validation": self.checker.is_url(),
                     "whois_server": Referer(self.subject).get(),
                 }
             )
@@ -134,7 +134,11 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 if not self.output["subdomain_syntax_validation"]:
                     self.output["expiration_date"], self.output[
                         "whois_record"
-                    ] = ExpirationDate(self.subject, self.output["whois_server"]).get()
+                    ] = ExpirationDate(
+                        self.subject,
+                        self.output["whois_server"],
+                        whois_db=self.whois_db,
+                    ).get()
 
                     if isinstance(self.output["expiration_date"], str):
                         self.output["_status_source"] = self.output[
@@ -223,7 +227,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         ).status_file()
 
 
-class ExtraRules:  # pylint: disable=too-few-public-methods
+class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
     """
     Manage some extra rules.,
 
@@ -329,24 +333,37 @@ class ExtraRules:  # pylint: disable=too-few-public-methods
         else:
             raise ValueError("Given subject type not registered.")
 
-        # We get the HTML of the home page.
-        blogger_content_request = requests.get(url_to_get, headers=self.headers)
+        try:
+            # We get the HTML of the home page.
+            blogger_content_request = requests.get(url_to_get, headers=self.headers)
 
-        for regx in regex_blogger:
-            # We loop through the list of regex to match.
+            for regx in regex_blogger:
+                # We loop through the list of regex to match.
 
-            if (
-                regx in blogger_content_request.text
-                or Regex(
-                    blogger_content_request.text, regx, return_data=False, escape=False
-                ).match()
-            ):
-                # * The currently read regex is present into the docuement.
-                # or
-                # * Something in the document match the currently read regex.
+                if (
+                    regx in blogger_content_request.text
+                    or Regex(
+                        blogger_content_request.text,
+                        regx,
+                        return_data=False,
+                        escape=False,
+                    ).match()
+                ):
+                    # * The currently read regex is present into the docuement.
+                    # or
+                    # * Something in the document match the currently read regex.
 
-                # We update the status and source.
-                return self.__special_down()
+                    # We update the status and source.
+                    return self.__special_down()
+        except (
+            PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.socket.timeout,
+            PyFunceble.requests.exceptions.Timeout,
+            PyFunceble.requests.ConnectionError,
+            urllib3_exceptions.InvalidHeader,
+            UnicodeDecodeError,  # The probability that this happend in production is minimal.
+        ):
+            pass
 
         # We return None, there is no changes.
         return None
@@ -535,7 +552,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods
         :rtype: tuple|None
         """
 
-        if not PyFunceble.CONFIGURATION["no_special"] and Check().is_ip_range():
+        if not PyFunceble.CONFIGURATION["no_special"] and Check().is_ipv4_range():
             # * We can run/check the special rule.
             # and
             # * The element we are currently testing is an IPv4 with range.
@@ -655,15 +672,16 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We initiate what we are going to return.
         self.output = {
-            "domain_syntax_validation": self.checker.is_domain_valid(),
+            "domain_syntax_validation": None,
             "expiration_date": None,
-            "ipv4_range_syntax_validation": self.checker.is_ip_range(),
-            "ipv4_syntax_validation": self.checker.is_ip_valid(),
-            "subdomain_syntax_validation": self.checker.is_subdomain(),
+            "ipv4_range_syntax_validation": None,
+            "ipv4_syntax_validation": None,
+            "subdomain_syntax_validation": None,
             "tested": self.subject,
-            "url_syntax_validation": self.checker.is_url_valid(),
+            "url_syntax_validation": self.checker.is_url(),
             "whois_server": None,
             "http_status_code": HTTPCode(self.subject, "url").get(),
+            "nslookup": None,
         }
 
     def get(self):
@@ -749,14 +767,14 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We initiate what we are going to return.
         self.output = {
-            "domain_syntax_validation": self.checker.is_domain_valid(),
+            "domain_syntax_validation": self.checker.is_domain(),
             "expiration_date": None,
             "http_status_code": None,
-            "ipv4_range_syntax_validation": self.checker.is_ip_range(),
-            "ipv4_syntax_validation": self.checker.is_ip_valid(),
+            "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
+            "ipv4_syntax_validation": self.checker.is_ipv4(),
             "subdomain_syntax_validation": self.checker.is_subdomain(),
             "tested": self.subject,
-            "url_syntax_validation": self.checker.is_url_valid(),
+            "url_syntax_validation": self.checker.is_url(),
             "whois_server": None,
         }
 

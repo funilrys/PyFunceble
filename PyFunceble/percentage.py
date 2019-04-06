@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import File
 from PyFunceble.prints import Prints
@@ -129,6 +126,8 @@ class Percentage:
         Calculate the percentage of each status.
         """
 
+        PyFunceble.INTERN["counter"]["percentage"] = {}
+
         # We map the current state/counters of the different status.
         percentages = {
             "up": PyFunceble.INTERN["counter"]["number"]["up"],
@@ -178,7 +177,7 @@ class Percentage:
             self._calculate()
 
             if not PyFunceble.CONFIGURATION["quiet"]:
-                # The quiet mode is activated.
+                # The quiet mode is not activated.
 
                 # We print a new line.
                 print("\n")

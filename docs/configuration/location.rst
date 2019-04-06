@@ -1,16 +1,16 @@
 Location
---------
+========
 
 Problematics
-""""""""""""
+------------
 
 * How can we create a more efficient way to work with configuration?
 * How can we make the configuration file(s) available globally so that PyFunceble can be run everywhere in the user workspace?
 
 To answer those problematics, we moved the configuration location elsewhere in the place where most users expect to have their configuration file(s).
 
-Clone
-"""""
+Repository clone
+----------------
 
 If you cloned the repository and you're trying to test from a cloned directory (the one with for example :code:`CONTRIBUTING.md`) we consider the configuration directory as the current one.
 
@@ -18,7 +18,7 @@ If you cloned the repository and you're trying to test from a cloned directory (
     This behavior allows us to not modify the way we develop PyFunceble.
 
 Travis CI
-""""""""""
+---------
 
 Under `Travis CI`_, we search or initiate the configuration at the directory we are currently located.
 
@@ -31,7 +31,7 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
 .. _Travis CI: https://travis-ci.org/
 
 Linux and MacOS (Darwin Kernel)
-"""""""""""""""""""""""""""""""
+-------------------------------
 
 Under Linux and MacOS, we look for the following directories in their order. If any configuration directory is found, the system proposes you to install them automatically on the first configuration file.
 
@@ -40,13 +40,13 @@ Under Linux and MacOS, we look for the following directories in their order. If 
 3. :code:`${PWD}`
 
 .. note::
-    If the parent directory does not exist, we move to the next possible location in the given order. 
+    If the parent directory does not exist, we move to the next possible location in the given order.
 
-    This means that under most Linux distributions and MacOS versions, we consider :code:`~/.config/PyFunceble` as the configuration location. 
+    This means that under most Linux distributions and MacOS versions, we consider :code:`~/.config/PyFunceble` as the configuration location.
     But if the :code:`~/.config` directory does not exist, we fallback to :code:`~/.PyFunceble` as the configuration location.
 
 Windows
-"""""""
+-------
 
 As mentioned by `Pat Altimore's`_ Blog, we used the :code:`Per user configuration files synchronized across domain joined machines via Active Directory Roaming` section in order to understand what we should do to find our configuration directory.
 
@@ -69,16 +69,8 @@ Under Windows, we look for the following directories in their order. If any conf
     But if the :code:`%APPDATA%` directory does not exist, we fall back to the current directory as the configuration location.
 
 Custom location
-"""""""""""""""
+---------------
 
-Sometimes, you may find yourself in a position where you absolutely do not want PyFunceble to use its default configuration location. 
+Sometimes, you may find yourself in a position where you absolutely do not want PyFunceble to use its default configuration location.
 
 For that reason, if you set your desired configuration location along with the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable, we take that location as the (default) configuration location.
-
-Autoconfiguration
-------------------
-
-Sometimes, you may find yourself in a position that you do not or you can't answer the question which asks you if you would like to install the default configuration file. 
-
-For that reason, if you set :code:`PYFUNCEBLE_AUTO_CONFIGURATION` as an environment variable with what you want an assignment, we do not ask that question. We simply do what we have to do without asking anything.
-

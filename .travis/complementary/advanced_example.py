@@ -8,9 +8,9 @@ from PyFunceble import url_test as PyFuncebleURL
 CONFIG = {"no_whois": True}
 DOMAIN = "google.com"
 
-DOMAIN_RESULT_FROM_API = PyFunceble(domain=DOMAIN, complete=True, config=CONFIG)
+DOMAIN_RESULT_FROM_API = PyFunceble(subject=DOMAIN, complete=True, config=CONFIG)
 URL_RESULT_FROM_API = PyFuncebleURL(
-    url="https://{}".format(DOMAIN), complete=True, config=CONFIG
+    subject="https://{}".format(DOMAIN), complete=True, config=CONFIG
 )
 
 print("Start of information from API for {}.".format(DOMAIN))

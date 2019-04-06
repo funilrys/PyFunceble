@@ -20,6 +20,8 @@ As we use for example ::
 
 which does not exist in Python 2.x and as I wanted to give a priority to Python 3, Python 3 is required.
 
+The specification :code:`3.6+` is because we test PyFunceble in all version from `3.6+`.
+
 :code:`colorama`
 ----------------
 

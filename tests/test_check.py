@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -78,7 +78,7 @@ class TestCheck(TestCase):
         Setup what we need for the tests.
         """
 
-        PyFunceble.load_config(True)
+        PyFunceble.load_config(generate_directory_structure=False)
 
         self.valid_domain = [
             "_hello_.abuse.co.za.",
@@ -142,6 +142,7 @@ class TestCheck(TestCase):
             "-hello.world",
             "-world.hello",
             "..",
+            ".",
             "bịllogram.com",
             "bittréẋ.com",
             "coinbȧse.com",
@@ -163,96 +164,104 @@ class TestCheck(TestCase):
             "world@hello.com",
         ]
 
-    def test_is_url_valid(self):
+    def test_is_url(self):
         """
-        Test URL.is_url_valid() for the case that the URL is valid.
+        Test Check.is_url() for the case that the URL is valid.
         """
 
         expected = True
 
         for domain in self.valid_domain:
-            PyFunceble.INTERN["to_test"] = "http://%s/helloworld" % domain
+            to_test = "http://{0}/helloworld".format(domain)
 
-            actual = Check().is_url_valid()
-
-            self.assertEqual(expected, actual)
-
-            actual = Check(PyFunceble.INTERN["to_test"]).is_url_valid()
+            actual = Check(to_test).is_url()
 
             self.assertEqual(expected, actual)
 
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_url_valid_not_valid(self):
+    def test_is_url_not_valid(self):
         """
-        Test URL.is_url_valid() for the case that the URL is not valid.
+        Test Check.is_url() for the case that the URL is not valid.
         """
 
         expected = False
 
         for domain in self.not_valid_domain:
-            actual = Check().is_url_valid("https://%s/hello_world" % domain)
+            to_check = "https://{0}/hello_world".format(domain)
+            actual = Check(to_check).is_url()
 
             self.assertEqual(expected, actual)
 
-            actual = Check("https://%s/hello_world" % domain).is_url_valid()
-
-            self.assertEqual(expected, actual)
-
-    def test_is_url_valid_protocol_not_supported(self):
+    def test_is_url_protocol_not_supported(self):
         """
-        Test URL.is_url_valid() for the case that the
+        Test Check.is_url() for the case that the
         URL protocol is not supported nor given.
         """
 
         expected = False
 
         for domain in self.not_valid_domain:
-            actual = Check().is_url_valid("%s/hello_world" % domain)
+            to_check = "{0}/hello_world".format(domain)
+            actual = Check(to_check).is_url()
 
             self.assertEqual(expected, actual)
 
-            actual = Check("%s/hello_world" % domain).is_url_valid()
-
-            self.assertEqual(expected, actual)
-
-    def test_is_url_valid_convert_idna(self):
+    def test_is_url_get_base(self):
         """
-        Test Check().is_url_valid() for the case that
+        Test Check.is_url() for the case that we want to
+        extract the url base.
+        """
+
+        for domain in self.valid_domain:
+            to_check = "http://{0}/hello_world".format(domain)
+            expected = domain
+
+            actual = Check(to_check).is_url(return_base=True)
+
+            self.assertEqual(expected, actual)
+
+    def test_is_url_get_not_base(self):
+        """
+        Test Check.is_url() for the case that we want to
+        extract the url base for invalid domains.
+        """
+
+        expected = False
+        PyFunceble.CONFIGURATION["idna_conversion"] = False
+
+        for domain in self.not_valid_domain:
+            to_check = "http://{0}/hello_world".format(domain)
+
+            actual = Check(to_check).is_url(return_base=True)
+
+            self.assertEqual(expected, actual)
+
+    def test_is_url_convert_idna(self):
+        """
+        Test Check().is_url() for the case that
         we have to convert to IDNA.
         """
 
         PyFunceble.CONFIGURATION["idna_conversion"] = True
 
-        domains_to_test = [
-            "bittréẋ.com",
-            "hello-world.com",
-            "coinbȧse.com",
-            "cryptopiạ.com",
-            "cṙyptopia.com",
-        ]
-        expected_domains = [
-            "xn--bittr-fsa6124c.com",
-            "hello-world.com",
-            "xn--coinbse-30c.com",
-            "xn--cryptopi-ux0d.com",
-            "xn--cyptopia-4e0d.com",
-        ]
+        domains_to_test = {
+            "bittréẋ.com": "xn--bittr-fsa6124c.com",
+            "hello-world.com": "hello-world.com",
+            "coinbȧse.com": "xn--coinbse-30c.com",
+            "cryptopiạ.com": "xn--cryptopi-ux0d.com",
+            "cṙyptopia.com": "xn--cyptopia-4e0d.com",
+        }
 
-        for num, domain in enumerate(domains_to_test):
-            expected = "http://%s/hello_world" % expected_domains[num]
-            to_test = "http://%s/hello_world" % domain
+        for domain, expected_after_conversion in domains_to_test.items():
+            expected = "http://{0}/hello_world".format(expected_after_conversion)
+            to_check = "http://{0}/hello_world".format(domain)
 
-            actual = Check().is_url_valid(to_test, return_formatted=True)
+            actual = Check(to_check).is_url(return_formatted=True)
 
             self.assertEqual(expected, actual)
 
-            actual = Check(to_test).is_url_valid(return_formatted=True)
-            self.assertEqual(expected, actual)
-
-    def test_is_url_valid_not_convert_idna(self):
+    def test_is_url_not_convert_idna(self):
         """
-        Test Check().is_url_valid() for the case that
+        Test Check().is_url() for the case that
         we do not have to convert to IDNA.
         """
 
@@ -267,57 +276,42 @@ class TestCheck(TestCase):
         ]
 
         for domain in domains_to_test:
-            to_test = "http://%s/hello_world" % domain
-            expected = to_test
+            to_check = "http://{0}/hello_world".format(domain)
+            expected = to_check
 
-            actual = Check().is_url_valid(to_test, return_formatted=True)
+            actual = Check(to_check).is_url(return_formatted=True)
 
             self.assertEqual(expected, actual)
 
-            actual = Check(to_test).is_url_valid(return_formatted=True)
-            self.assertEqual(expected, actual)
-
-    def test_is_domain_valid(self):
+    def test_is_domain(self):
         """
-        Test Check().is_domain_valid() for the case that domains
+        Test Check().is_domain() for the case that domains
         are valid.
         """
 
         expected = True
 
         for domain in self.valid_domain:
-            PyFunceble.INTERN["to_test"] = domain
-            actual = Check().is_domain_valid()
+            to_check = domain
+            actual = Check(to_check).is_domain()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % domain)
 
-            actual = Check(PyFunceble.INTERN["to_test"]).is_domain_valid()
-
-            self.assertEqual(expected, actual, msg="%s is invalid." % domain)
-
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_domain_valid_not_valid(self):
+    def test_is_domain_not_valid(self):
         """
-        Test Check().is_domain_valid() for the case that
+        Test Check().is_domain() for the case that
         we meet invalid domains.
         """
 
         expected = False
 
         for domain in self.not_valid_domain:
-            PyFunceble.INTERN["to_test"] = domain
-            actual = Check().is_domain_valid()
+            to_check = domain
+            actual = Check(to_check).is_domain()
 
             self.assertEqual(expected, actual, msg="%s is valid." % domain)
 
-            actual = Check(PyFunceble.INTERN["to_test"]).is_domain_valid()
-
-            self.assertEqual(expected, actual, msg="%s is valid." % domain)
-
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_subdomain_valid(self):
+    def test_is_subdomain(self):
         """
         Test Check().is_subdomain() for the case subdomains
         are valid.
@@ -345,20 +339,10 @@ class TestCheck(TestCase):
         expected = True
 
         for domain in valid:
-            PyFunceble.INTERN["to_test"] = domain
-            actual = Check().is_subdomain()
+            to_check = domain
+            actual = Check(to_check).is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
-
-            actual = Check(PyFunceble.INTERN["to_test"]).is_subdomain()
-
-            self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
-
-            actual = Check().is_subdomain(PyFunceble.INTERN["to_test"])
-
-            self.assertEqual(expected, actual, msg="%s is not a subdomain." % domain)
-
-            del PyFunceble.INTERN["to_test"]
 
     def test_is_subdomain_not_valid(self):
         """
@@ -384,84 +368,55 @@ class TestCheck(TestCase):
         expected = False
 
         for domain in not_valid:
-            PyFunceble.INTERN["to_test"] = domain
-            actual = Check().is_subdomain()
+            to_check = domain
+            actual = Check(to_check).is_subdomain()
 
             self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
 
-            actual = Check(PyFunceble.INTERN["to_test"]).is_subdomain()
-
-            self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
-
-            actual = Check().is_subdomain(PyFunceble.INTERN["to_test"])
-
-            self.assertEqual(expected, actual, msg="%s is a subdomain." % domain)
-
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_ip_valid(self):
+    def test_is_ipv4(self):
         """
-        Test Check().is_ip_valid() for the case that the IP is valid.
+        Test Check().is_ipv4() for the case that the IP is valid.
         """
 
         expected = True
         valid = ["15.47.85.65", "45.66.255.240"]
 
-        for ip_to_test in valid:
-            actual = Check().is_ip_valid(ip_to_test)
+        for given_ip in valid:
+            to_check = given_ip
+            actual = Check(to_check).is_ipv4()
 
-            self.assertEqual(expected, actual, msg="%s is invalid." % ip_to_test)
+            self.assertEqual(expected, actual, msg="%s is invalid." % given_ip)
 
-            actual = Check(ip_to_test).is_ip_valid()
-
-            self.assertEqual(expected, actual, msg="%s is invalid." % ip_to_test)
-
-    def test_is_ip_valid_not_valid(self):
+    def test_is_ipv4_not_valid(self):
         """
-        Test Check().is_ip_valid() for the case that the IP
+        Test Check().is_ipv4() for the case that the IP
         is not valid.
         """
 
         expected = False
         invalid = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
 
-        for ip_to_test in invalid:
-            PyFunceble.INTERN["to_test"] = ip_to_test
-            actual = Check().is_ip_valid()
+        for given_ip in invalid:
+            to_check = given_ip
+            actual = Check(to_check).is_ipv4()
 
-            self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
+            self.assertEqual(expected, actual, msg="%s is valid." % given_ip)
 
-            actual = Check(PyFunceble.INTERN["to_test"]).is_ip_valid()
-
-            self.assertEqual(expected, actual, msg="%s is valid." % ip_to_test)
-
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_ip_range(self):
+    def test_is_ipv4_range(self):
         """
-        Test Check().is_ip_range() for the case that the IP is a range.
+        Test Check().is_ipv4_range() for the case that the IP is a range.
         """
 
         expected = True
         valid = ["255.45.65.0/24", "255.45.65.6/18"]
 
-        for ip_to_test in valid:
-            PyFunceble.INTERN["to_test"] = ip_to_test
-            actual = Check().is_ip_range()
+        for given_ip in valid:
+            to_check = given_ip
+            actual = Check(to_check).is_ipv4_range()
 
-            self.assertEqual(
-                expected, actual, msg="%s is not an IP range." % ip_to_test
-            )
+            self.assertEqual(expected, actual, msg="%s is not an IP range." % given_ip)
 
-            actual = Check(PyFunceble.INTERN["to_test"]).is_ip_range()
-
-            self.assertEqual(
-                expected, actual, msg="%s is not an IP range." % ip_to_test
-            )
-
-            del PyFunceble.INTERN["to_test"]
-
-    def test_is_ip_range_not(self):
+    def test_is_ipv4_range_not_valid(self):
         """
         Test Check().is_ip_range() for the case that the IP is not a range.
         """
@@ -469,14 +424,11 @@ class TestCheck(TestCase):
         expected = False
         valid = ["15.47.85.65", "45.66.255.240", "github.com"]
 
-        for ip_to_test in valid:
-            actual = Check().is_ip_range(ip_to_test)
+        for given_ip in valid:
+            to_check = given_ip
+            actual = Check(to_check).is_ipv4_range()
 
-            self.assertEqual(expected, actual, msg="%s is an IP range." % ip_to_test)
-
-            actual = Check(ip_to_test).is_ip_range()
-
-            self.assertEqual(expected, actual, msg="%s is an IP range." % ip_to_test)
+            self.assertEqual(expected, actual, msg="%s is an IP range." % given_ip)
 
 
 if __name__ == "__main__":

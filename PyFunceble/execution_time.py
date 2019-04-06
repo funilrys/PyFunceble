@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Dict, File
@@ -81,40 +78,44 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     :type last: bool
     """
 
+    authorized = False
+
     def __init__(self, action="start", last=False):
+        self.authorized = self.authorization()
+
         # We parse the action to the class scope.
         self.action = action
 
-        if self._authorization():
-            # * The execution time disaply is activated.
-            # or
-            # * The Travis CI mode is activated.
+        if self.action == "start":
+            # The action is equal to `start`.
 
-            if self.action == "start":
-                # The action is equal to `start`.
+            # We set the starting time.
+            self._starting_time()
+        elif self.action == "stop":
+            # * The action is not equal to `start`.
+            # and
+            # * The action is equal to `stop`
 
-                # We set the starting time.
-                self._starting_time()
-            elif self.action == "stop":
-                # * The action is not equal to `start`.
-                # and
-                # * The action is equal to `stop`
+            # We set the ending time.
+            self._stoping_time()
 
-                # We set the ending time.
-                self._stoping_time()
+        if self.authorized and self.action == "stop":
+            # * We are authorized to operate.
+            # and
+            # * The given action is stop.
 
-                # And we print the execution time.
-                print(
-                    PyFunceble.Fore.MAGENTA
-                    + PyFunceble.Style.BRIGHT
-                    + "\nExecution time: "
-                    + self.format_execution_time()
-                )
+            # We print the execution time.
+            print(
+                PyFunceble.Fore.MAGENTA
+                + PyFunceble.Style.BRIGHT
+                + "\nExecution time: "
+                + self.format_execution_time()
+            )
 
         self._save(last=last)
 
     @classmethod
-    def _authorization(cls):  # pragma: no cover
+    def authorization(cls):  # pragma: no cover
         """
         Check the execution authorization.
 
@@ -140,7 +141,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         if (
-            self._authorization()
+            self.authorized
             and PyFunceble.CONFIGURATION["logs"]
             and "file_to_test" in PyFunceble.INTERN
             and PyFunceble.INTERN["file_to_test"]

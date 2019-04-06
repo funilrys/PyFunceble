@@ -34,31 +34,123 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contents
+   :caption: Preface
 
    what-can-we-do
    in-action
-   dead-hosts
-   installation
-   update
-   configuration
-   usage
-   columns
-   logs-sharing
-   logic-representation
-   api
-   code
-   issues
-   faq
-   contributing
+   they-use-it
    contributors
    special-thanks
+   issues
+   faq
+   logs-sharing
    supporting-the-project
-   they-use-it
    license
    code-of-conduct
    contact
 
+.. toctree::
+   :maxdepth: 3
+   :caption: Use Dead-Hosts if you can't!
+
+   dead-hosts/why
+   dead-hosts/how
+   dead-hosts/history
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Installation
+
+   installation/requirements
+   installation/stable
+   installation/dev
+   installation/first-steps
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Update
+
+   update/stable
+   update/dev
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Configuration
+
+   configuration/location
+   configuration/auto
+   configuration/indexes
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Usage
+
+   usage/from-a-python-script-or-module
+   usage/from-a-terminal
+   usage/from-travis-ci
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Our columns
+
+   columns/subject
+   columns/status
+   columns/expiration_date
+   columns/source
+   columns/http_code
+
+.. toctree::
+   :maxdepth: 3
+   :caption: API documentation
+
+   api
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Contributing
+
+   contributing/submit
+   contributing/before_commit
+   contributing/the_commit
+   contributing/coding_conventions
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Code documentation
+
+   logic-representation
+   code/helpers
+   code/adblock
+   code/api_core
+   code/auto_continue
+   code/auto_save
+   code/check
+   code/clean
+   code/cli_core
+   code/config
+   code/directory_structure
+   code/dispatcher
+   code/execution_time
+   code/expiration_date
+   code/file_core
+   code/generate
+   code/http_code
+   code/iana
+   code/inactive_db
+   code/logs
+   code/mining
+   code/nslookup
+   code/percentage
+   code/preset
+   code/prints
+   code/production
+   code/publicsuffix
+   code/referer
+   code/simple_core
+   code/sort
+   code/status
+   code/whois_db
+   code/whois
 
 
 Indices and tables

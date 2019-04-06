@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -76,10 +76,10 @@ class TestHTTPCode(TestCase):
         """
         Setup everything needed for the tests.
         """
-        PyFunceble.load_config(True)
+        PyFunceble.load_config(generate_directory_structure=False)
 
-        PyFunceble.INTERN["to_test"] = "google.com"
-        PyFunceble.INTERN["to_test_type"] = "domain"
+        self.subject = "google.com"
+        self.subject_type = "domain"
 
     @mock.patch("PyFunceble.http_code.HTTPCode._access")
     def test_get_not_activated(self, _):
@@ -89,8 +89,8 @@ class TestHTTPCode(TestCase):
         """
 
         PyFunceble.HTTP_CODE["active"] = False
-        expected = None
-        actual = HTTPCode().get()
+        expected = "***"
+        actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
 
@@ -105,7 +105,7 @@ class TestHTTPCode(TestCase):
 
         access.return_value = 200
         expected = 200
-        actual = HTTPCode().get()
+        actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
 
@@ -120,7 +120,7 @@ class TestHTTPCode(TestCase):
 
         access.return_value = 859
         expected = "***"
-        actual = HTTPCode().get()
+        actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
 
@@ -135,7 +135,7 @@ class TestHTTPCode(TestCase):
 
         access.return_value = None
         expected = "***"
-        actual = HTTPCode().get()
+        actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
 

@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -72,7 +72,7 @@ class Sort:  # pylint: disable=too-few-public-methods
     """
 
     # We initiate a regex which will match everything which is not
-    # a letter, a number or a point.
+    # a letter or a number.
     regex_replace = r"[^a-zA-Z0-9]"
 
     @classmethod
@@ -89,7 +89,7 @@ class Sort:  # pylint: disable=too-few-public-methods
 
         # We remove all special characters and return the formatted string.
         return (
-            Regex(element, cls.regex_replace, replace_with="@funilrys")
+            Regex(element.strip(), cls.regex_replace, replace_with="@funilrys")
             .replace()
             .replace("@funilrys", "")
         )
@@ -130,10 +130,10 @@ class Sort:  # pylint: disable=too-few-public-methods
         full_extension = ""
 
         # We convert the parsed element to lower case.
-        element = element.lower()
+        element = element.lower().strip()
 
         # We try to get the url base.
-        url_base = Check(element).is_url_valid(return_base=True)
+        url_base = Check(element).is_url(return_base=True)
 
         if not isinstance(url_base, str):
             # The url base is not found.

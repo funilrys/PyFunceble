@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,9 +59,8 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
-from PyFunceble.auto_save import AutoSave
+from PyFunceble.auto_save import Travis
 from PyFunceble.config import Version
 from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex
 
@@ -472,14 +469,14 @@ class DirectoryStructure:  # pragma: no cover
 
             # We update the permission.
             # (Only if we are under Travis CI.)
-            AutoSave.travis_permissions()
+            Travis().permissions()
 
             # We create the directory.
             PyFunceble.mkdir(directory)
 
             # We update the permission.
             # (Only if we are under Travis CI.)
-            AutoSave.travis_permissions()
+            Travis().permissions()
 
     def restore(self):
         """

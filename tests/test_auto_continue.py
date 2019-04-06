@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -65,7 +65,6 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.auto_continue import AutoContinue
-from PyFunceble.config import Load
 from PyFunceble.helpers import Dict, File
 
 
@@ -79,7 +78,7 @@ class TestsAutoContinue(TestCase):
         Setup the needed variables.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        PyFunceble.load_config(generate_directory_structure=False)
 
         self.file_to_work_with = (
             PyFunceble.OUTPUT_DIRECTORY
@@ -87,20 +86,8 @@ class TestsAutoContinue(TestCase):
             + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
         )
 
-        PyFunceble.INTERN["file_to_test"] = "hello.world"
-        self.types = ["up", "down", "invalid", "tested"]
-
-    def set_counter(self, to_set=15):
-        """
-        Set the counter at a given number.
-
-        Argument:
-            - to_set: int
-                The number to set to every counter.
-        """
-
-        for string in self.types:
-            PyFunceble.INTERN["counter"]["number"].update({string: to_set})
+        self.file_to_test = "hello.world"
+        self.auto_continue = AutoContinue(self.file_to_test)
 
     def test_delete_file(self):
         """
@@ -114,131 +101,149 @@ class TestsAutoContinue(TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_backup(self):
+    def test_save(self):
         """
         Test AutoContinue().backup().
         """
 
         self.test_delete_file()
-        PyFunceble.CONFIGURATION["auto_continue"] = True
-        self.set_counter(to_set=25)
+        self.auto_continue.authorized = True
 
-        AutoContinue().backup()
+        self.auto_continue.database = {
+            self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}
+        }
+        self.auto_continue.save()
 
         expected = True
         actual = PyFunceble.path.isfile(self.file_to_work_with)
-
         self.assertEqual(expected, actual)
 
-        expected = {
-            PyFunceble.INTERN["file_to_test"]: {
-                "up": 25,
-                "down": 25,
-                "invalid": 25,
-                "tested": 25,
-            }
-        }
+        expected = {self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}}
+
         actual = Dict().from_json(File(self.file_to_work_with).read())
 
         self.assertEqual(expected, actual)
-
-        del PyFunceble.CONFIGURATION["auto_continue"]
         self.test_delete_file()
 
-    def test_backup_not_activated(self):
+    def test_save_not_activated(self):
         """
-        Test AutoContinue().backup() for the case that we did not
+        Test AutoContinue().save() for the case that we did not
         activated the backup system.
         """
 
         self.test_delete_file()
-        PyFunceble.CONFIGURATION["auto_continue"] = False
 
-        AutoContinue().backup()
+        self.auto_continue.authorized = False
+        self.auto_continue.database = {"hello": "world"}
+
+        self.auto_continue.save()
 
         expected = False
         actual = PyFunceble.path.isfile(self.file_to_work_with)
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["auto_continue"]
         self.test_delete_file()
 
-    def test_restore(self):
+    def test_load(self):
         """
         Test AutoContinue().restore().
         """
 
         self.test_delete_file()
-        PyFunceble.CONFIGURATION["auto_continue"] = True
-        self.set_counter(12)
+        self.auto_continue.authorized = True
 
-        expected = {"up": 12, "down": 12, "invalid": 12, "tested": 12}
-        actual = PyFunceble.INTERN["counter"]["number"]
+        Dict({"hello": "world"}).to_json(self.file_to_work_with)
 
-        self.assertEqual(expected, actual)
+        expected = {"hello": "world"}
+        self.auto_continue.load()
 
-        saved = {
-            PyFunceble.INTERN["file_to_test"]: {
-                "up": 17,
-                "down": 12,
-                "invalid": 8,
-                "tested": 37,
-            }
-        }
+        self.assertEqual(expected, self.auto_continue.database)
 
-        Dict(saved).to_json(self.file_to_work_with)
-        AutoContinue().restore()
-
-        expected = saved[PyFunceble.INTERN["file_to_test"]]
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        self.set_counter(0)
-
-        expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        del PyFunceble.CONFIGURATION["auto_continue"]
         self.test_delete_file()
 
-    def test_restore_old_system(self):
+    def test_is_present(self):
         """
-        Test AutoContinue().restore() for the case that we run the
-        most recent version but with data from the old system.
+        Test the presence of elements.
         """
 
         self.test_delete_file()
-        PyFunceble.CONFIGURATION["auto_continue"] = True
+        self.auto_continue.authorized = True
 
-        old_system = {
-            PyFunceble.INTERN["file_to_test"]: {
-                "number_of_up": 15,
-                "number_of_down": 18,
-                "number_of_invalid": 5,
-                "number_of_tested": 38,
+        for status in ["ACTIVE", "INACTIVE", "INVALID"]:
+            self.auto_continue.database = {
+                self.file_to_test: {
+                    "hello": status,
+                    "world": "INACTIVE",
+                    "hehe": "INVALID",
+                }
             }
+
+            expected = True
+            actual = "hello" in self.auto_continue
+
+            self.assertEqual(expected, actual)
+
+        expected = False
+        actual = "hello.world" in self.auto_continue
+
+        self.assertEqual(expected, actual)
+
+        self.test_delete_file()
+
+    def test_is_empty(self):
+        """
+        Test if the databse if empty.
+        """
+
+        self.test_delete_file()
+        self.auto_continue.authorized = True
+
+        self.auto_continue.database = {}
+
+        expected = True
+        actual = self.auto_continue.is_empty()
+
+        self.assertEqual(expected, actual)
+
+        self.auto_continue.database = {self.file_to_test: {"hello": "world"}}
+
+        expected = False
+        actual = self.auto_continue.is_empty()
+
+        self.assertEqual(expected, actual)
+
+        self.test_delete_file()
+
+    def test_add(self):
+        """
+        Test the addition of an element.
+        """
+
+        self.test_delete_file()
+        self.auto_continue.authorized = True
+
+        self.auto_continue.database = {}
+
+        self.auto_continue.add("hello.world", "ACTIVE")
+
+        expected = {self.file_to_test: {"hello.world": "ACTIVE"}}
+
+        self.assertEqual(expected, self.auto_continue.database)
+
+        self.auto_continue.add("world.hello", "INACTIVE")
+
+        expected = {
+            self.file_to_test: {"hello.world": "ACTIVE", "world.hello": "INACTIVE"}
         }
 
-        Dict(old_system).to_json(self.file_to_work_with)
-        AutoContinue().restore()
+        self.assertEqual(expected, self.auto_continue.database)
 
-        expected = {"up": 15, "down": 18, "invalid": 5, "tested": 38}
-        actual = PyFunceble.INTERN["counter"]["number"]
+        expected = {self.file_to_test: {}}
 
-        self.assertEqual(expected, actual)
+        self.auto_continue.clean()
+        self.assertEqual(expected, self.auto_continue.database)
 
-        self.set_counter(0)
-
-        expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        del PyFunceble.CONFIGURATION["auto_continue"]
         self.test_delete_file()
 
 

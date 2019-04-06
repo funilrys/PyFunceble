@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-# pylint:disable=line-too-long, too-many-lines
+# pylint:disable=line-too-long, too-many-lines, invalid-name, cyclic-import
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,9 +59,10 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=invalid-name,cyclic-import, bad-continuation
+
 import argparse
 import socket
+import warnings
 from collections import OrderedDict
 from inspect import getsourcefile
 from os import environ, getcwd, mkdir, path, rename
@@ -77,12 +76,16 @@ import requests
 from colorama import Back, Fore, Style
 from colorama import init as initiate
 
+from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
 from PyFunceble.clean import Clean
+from PyFunceble.cli_core import CLICore
 from PyFunceble.config import Load, Merge, Version
-from PyFunceble.core import Dispatcher, Preset, CLICore
 from PyFunceble.directory_structure import DirectoryStructure
+from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.iana import IANA
+from PyFunceble.nslookup import NSLookup
+from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
 
@@ -209,31 +212,32 @@ ASCII_PYFUNCEBLE = """
 """
 
 
-def test(domain, complete=False, config=None):  # pragma: no cover
+def test(subject, complete=False, config=None):  # pragma: no cover
     """
-    Test the availability of the given domain or IP.
+    Test the availability of the given subject (domain or IP).
 
-    :param domain: The domain or IP to test.
-    :type domain: str
+    :param subject: The subject (IP or domain) to test.
+    :type subject: str|list
 
-    :param complete:
+    :param bool complete:
         Activate the return of a dict with some significant data from
         the test.
-    :type complete: bool
 
-    :param config:
+    :param dict config:
         A dict with the configuration index (from .PyFunceble.yaml) to update.
-    :type config: dict
 
     :return: The status or the informations of the domain.
     :rtype: str|dict
 
-    .. warning::
-        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
-
-    .. warning::
+    .. note::
         If :code:`config` is given, the given :code:`dict` overwrite
-        the last value of the given indexes.
+        the last value of the given indexes in the configuration.
+
+        It's actually something like following:
+
+        ::
+
+            pyfunceble.configuration.update(config_given_by_user)
 
     .. note::
         If :code:`complete` is set to :code:`True`, we return the following indexes.
@@ -257,26 +261,89 @@ def test(domain, complete=False, config=None):  # pragma: no cover
             }
     """
 
-    if domain and isinstance(domain, str):
-        # * The given domain is not empty nor None.
-        # and
-        # * The given domain is a string.
+    if subject:
+        # The subject is not empty nor None.
 
-        # We silently load the configuration.
-        load_config(True)
-
-        if config and isinstance(config, dict):
-            # The given configuration is not None or empty.
-            # and
-            # It is a dict.
-
-            # We update the configuration index.
-            CONFIGURATION.update(config)
-
-        # And we return the status of the given domain.
-        return Core(domain_or_ip_to_test=domain, modulo_test=True).test(complete)
+        # We return the status of the given subject.
+        return APICore(subject, complete=complete, configuration=config).domain_and_ip()
 
     # We return None, there is nothing to test.
+    return None
+
+
+def url_test(subject, complete=False, config=None):  # pragma: no covere
+    """
+    Test the availability of the given subject (URL).
+
+    :param subject: The subject (URL) to test.
+    :type subject: str|list
+
+    :param bool complete:
+        Activate the return of a dict with some significant data from
+        the test.
+
+    :param dict config:
+        A dict with the configuration index (from .PyFunceble.yaml) to update.
+
+    :return: The status or the informations of the URL.
+    :rtype: str|dict
+
+    .. note::
+        If :code:`config` is given, the given :code:`dict` overwrite
+        the last value of the given indexes in the configuration.
+
+        It's actually something like following:
+
+        ::
+
+            pyfunceble.configuration.update(config_given_by_user)
+    """
+
+    if subject:
+        # The given URL is not empty nor None.
+
+        # We retunr the status of the the url.
+        return APICore(subject, complete=complete, configuration=config).url()
+
+    # We return None, there is nothing to test.
+    return None
+
+
+def nslookup(subject):  # pragma: no cover
+    """
+    Make a DNS lookup of the given subject.
+
+    :param str subject: The subject we are working with.
+
+    :return:
+        A dict with following index if an IPv4 is given.
+
+            ::
+
+                {
+                    "addr_info" : []
+                }
+
+        A dict with following index for everything else.
+
+            ::
+
+                {
+                    "hostname": "xx",
+                    "aliases": [],
+                    "ips": []
+                }
+
+    :rtype: dict
+    """
+
+    if subject:
+        # The subject is not empty nor None.
+
+        # We return the lookup.
+        return NSLookup(subject).request()
+
+    # We return None, there is nothing to work with.
     return None
 
 
@@ -284,53 +351,64 @@ def syntax_check(domain):  # pragma: no cover
     """
     Check the syntax of the given domain.
 
-    :param domain: The domain to check the syntax for.
-    :type domain: str
+    :param domain: The domain to check the syntax from.
+    :type domain: str|list
 
     :return: The syntax validity.
-    :rtype: bool
+    :rtype: bool|dict
 
     .. warning::
-        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
+        This method will be deprecated one day in the future.
+
+        Please report to :func:`~PyFunceble.is_domain`.
     """
 
-    if domain and isinstance(domain, str):
-        # * The given domain is not empty nor None.
-        # and
-        # * The given domain is a string.
+    warnings.warn(
+        "`PyFunceble.syntax_check` will be deprecated in future version. "
+        "Please use `PyFunceble.is_domain` instead.",
+        DeprecationWarning,
+    )
 
-        # We silently load the configuration.
-        load_config(True)
+    return is_domain(domain)
 
-        return Check(domain).is_domain_valid()
+
+def is_domain(subject):  # pragma: no cover
+    """
+    Check if the given subject is a syntactically valid domain.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
+
+    :return: The syntax validity.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty nor None.
+
+        # We return the validiry of the given subject.
+        return APICore(subject).domain_syntax()
 
     # We return None, there is nothing to check.
     return None
 
 
-def is_subdomain(domain):  # pragma: no cover
+def is_subdomain(subject):  # pragma: no cover
     """
-    Check if the given domain is a subdomain.
+    Check if the given subject is a syntactically valid subdomain.
 
-    :param domain: The domain we are checking.
-    :type domain: str
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
 
-    :return: The subdomain state.
-    :rtype: bool
-
-    .. warning::
-        If an empty or a non-string :code:`domain` is given, we return :code:`None`.
+    :return: The syntax validity.
+    :rtype: bool|dict
     """
 
-    if domain and isinstance(domain, str):
-        # * The given domain is not empty nor None.
-        # and
-        # * The given domain is a string.
+    if subject:
+        # The given subject is not empty nor None.
 
-        # We silently load the configuration.
-        load_config(True)
-
-        return Check(domain).is_subdomain()
+        # We retun the validity of the given subject.
+        return APICore(subject).subdomain_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -341,52 +419,63 @@ def ipv4_syntax_check(ip):  # pragma: no cover
     Check the syntax of the given IPv4.
 
     :param ip: The IPv4 to check the syntax for.
-    :type ip: str
+    :type ip: str|list
 
     :return: The syntax validity.
-    :rtype: bool
+    :rtype: bool|dict
 
     .. warning::
-        If an empty or a non-string :code:`ip` is given, we return :code:`None`.
+        This method will be deprecated one day in the future.
+
+        Please report to :func:`~PyFunceble.is_ipv4`.
     """
 
-    if ip and isinstance(ip, str):
-        # The given IP is not empty nor None.
-        # and
-        # * The given IP is a string.
+    warnings.warn(
+        "`PyFunceble.ipv4_syntax_check` will be deprecated in future version. "
+        "Please use `PyFunceble.is_ipv4` instead.",
+        DeprecationWarning,
+    )
 
-        # We silently load the configuration.
-        load_config(True)
+    return is_ipv4(ip)
 
-        return Check(ip).is_ip_valid()
+
+def is_ipv4(subject):  # pragma: no cover
+    """
+    Check if the given subject is a syntactically valid IPv4.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
+
+    :return: The syntax validity.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty nor None.
+
+        # We return the validity of the given subject.
+        return APICore(subject).ipv4_syntax()
 
     # We return None, there is nothing to check.
     return None
 
 
-def is_ipv4_range(ip):  # pragma: no cover
+def is_ipv4_range(subject):  # pragma: no cover
     """
-    Check if the given IP is an IP range.
+    Check if the given subject is a syntactically valid IPv4 range.
 
-    :param ip: The IP we are checking.
-    :type ip: str
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
 
     :return: The IPv4 range state.
-    :rtype: bool
-
-    .. warning::
-        If an empty or a non-string :code:`ip` is given, we return :code:`None`.
+    :rtype: bool|dict
     """
 
-    if ip and isinstance(ip, str):
-        # The given IP is not empty nor None.
-        # and
-        # * The given IP is a string.
+    if subject:
+        # The given subject is not empty nor None.
 
-        # We silently load the configuration.
-        load_config(True)
-
-        return Check(ip).is_ip_range()
+        # We return the validity of the given subject.
+        return APICore(subject).ipv4_range_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -397,97 +486,67 @@ def url_syntax_check(url):  # pragma: no cover
     Check the syntax of the given URL.
 
     :param url: The URL to check the syntax for.
-    :type url: str
+    :type url: str|list
 
     :return: The syntax validity.
-    :rtype: bool
+    :rtype: bool|dict
 
     .. warning::
-        If an empty or a non-string :code:`url` is given, we return :code:`None`.
+        This method will be deprecated one day in the future.
+
+        Please report to :func:`~PyFunceble.is_url`.
     """
 
-    if url and isinstance(url, str):
-        # The given URL is not empty nor None.
-        # and
-        # * The given URL is a string.
+    warnings.warn(
+        "`PyFunceble.url_syntax_check` will be deprecated in future version. "
+        "Please use `PyFunceble.is_url` instead.",
+        DeprecationWarning,
+    )
 
-        # We silently load the configuration.
-        load_config(True)
+    return is_url(url)
 
-        return Check(url).is_url_valid()
+
+def is_url(subject):  # pragma: no cover
+    """
+    Check if the given subject is a syntactically valid URL.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
+
+    :return: The syntax validity.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty nor None.
+
+        # We return the validity of the given subject.
+        return APICore(subject).url_syntax()
 
     # We return None, there is nothing to check.
     return None
 
 
-def url_test(url, complete=False, config=None):  # pragma: no covere
-    """
-    Test the availability of the given URL.
-
-    :param url: The URL to test.
-    :type url: str
-
-    :param complete:
-        Activate the return of a dict with some significant data from
-        the test.
-    :type complete: bool
-
-    :param config:
-        A dict with the configuration index (from .PyFunceble.yaml) to update.
-    :type config: dict
-
-    :return: The status or the informations of the URL.
-    :rtype: str|dict
-
-    .. warning::
-        If an empty or a non-string :code:`url` is given, we return :code:`None`.
-
-    .. warning::
-        If :code:`config` is given, the given :code:`dict` overwrite
-        the last value of the given indexes.
-
-    """
-
-    if url and isinstance(url, str):
-        # The given URL is not empty nor None.
-        # and
-        # * The given URL is a string.
-
-        # We silently load the configuration.
-        load_config(True)
-
-        if config and isinstance(config, dict):
-            # The given configuration is not None or empty.
-            # and
-            # It is a dict.
-
-            # We update the configuration index.
-            CONFIGURATION.update(config)
-
-        # And we return the status of the given URL.
-        return Core(url_to_test=url, modulo_test=True).test(complete)
-
-    # We return None, there is nothing to test.
-    return None
-
-
-def load_config(under_test=False, custom=None):  # pragma: no cover
+def load_config(generate_directory_structure=False, custom=None):  # pragma: no cover
     """
     Load the configuration.
 
-    :param under_test:
-        Tell us if we only have to load the configuration file (True)
-        or load the configuration file and initate the output directory
-        if it does not exist (False).
-    :type under_test: bool
+    :param bool generate_directory_structure:
+        Tell us if we generate the directory structure
+        along with loading the configuration file.
 
-    :param custom:
+    :param dict custom:
         A dict with the configuration index (from .PyFunceble.yaml) to update.
-    :type custom: dict
 
-    .. warning::
-        If :code:`custom` is given, the given :code:`dict` overwrite
-        the last value of the given configuration indexes.
+    .. note::
+        If :code:`config` is given, the given :code:`dict` overwrite
+        the last value of the given indexes in the configuration.
+
+        It's actually something like following:
+
+        ::
+
+            pyfunceble.configuration.update(config_given_by_user)
     """
 
     if "config_loaded" not in INTERN:
@@ -497,7 +556,7 @@ def load_config(under_test=False, custom=None):  # pragma: no cover
         # existant.
         Load(CURRENT_DIRECTORY)
 
-        if not under_test:
+        if generate_directory_structure:
             # If we are not under test which means that we want to save informations,
             # we initiate the directory structure.
             DirectoryStructure()
@@ -524,7 +583,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         initiate(autoreset=True)
 
         # We load the configuration and the directory structure.
-        load_config(True)
+        load_config(generate_directory_structure=True)
         try:
             # The following handle the command line argument.
 
@@ -846,6 +905,17 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["mining"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
+                    "--multiprocess",
+                    action="store_true",
+                    help="Switch the value of the multiprocess usage. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["multiprocessing"])
                         + Style.RESET_ALL
                     ),
                 )
@@ -1202,6 +1272,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.mining:
                     CONFIGURATION.update({"mining": Preset().switch("mining")})
+
+                if ARGS.multiprocess:
+                    CONFIGURATION.update(
+                        {"multiprocessing": Preset().switch("multiprocessing")}
+                    )
 
                 if ARGS.no_files:
                     CONFIGURATION.update({"no_files": Preset().switch("no_files")})

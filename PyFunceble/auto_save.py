@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,12 +59,11 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 
 from sys import stdout as sys_stdout
 
 import PyFunceble
-from PyFunceble.helpers import Command
+from PyFunceble.helpers import Command, Regex
 from PyFunceble.percentage import Percentage
 
 
@@ -83,98 +80,160 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     :type is_bypass: bool
     """
 
-    def __init__(self, is_last_domain=False, is_bypass=False):
-        if PyFunceble.CONFIGURATION["travis"]:
-            self.last = is_last_domain
-            self.bypass = is_bypass
-            self._travis()
+    # We set the variable which will save the travis instance.
+    travis = None
+    # We set the variable which will save the starting time.
+    start_time = None
+
+    def __init__(self, start_time=None):
+        self.travis = Travis()
+        self.travis.bypass()
+
+        self.start_time = start_time
+
+    def process(self, test_completed=False):
+        """
+        Process the autosave base on the current state of the test.
+
+        :param bool test_completed: Tell us if we finished the test.
+        """
+
+        if self.travis.authorized:
+            # We are authorized to operate with Travis.
+
+            if test_completed:
+                # The test was completed.
+
+                # We run the end commit.
+                self.travis.end_commit()
+            elif int(PyFunceble.time()) >= int(self.start_time) + (
+                int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
+            ):
+                # The current time excessed the minimal time for autosaving.
+
+                # We run the not end commit.
+                self.travis.not_end_commit()
+
+
+class Travis:
+    """
+    Provide the autosaving for under travis CI.
+    """
+
+    # Save the authorization to process.
+    authorized = False
+
+    # We set the regex to match in order to bypass the execution of
+    # PyFunceble.
+    regex_bypass = r"\[PyFunceble\sskip\]"
+
+    def __init__(self):
+        self.authorized = self.authorization()
 
     @classmethod
-    def travis_permissions(cls):
+    def authorization(cls):
+        """
+        Provide the operation authorization.
+        """
+
+        try:
+            _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
+
+            return PyFunceble.CONFIGURATION["travis"]
+        except KeyError:
+            return False
+
+    def permissions(self):
         """
         Set permissions in order to avoid issues before commiting.
         """
 
-        if PyFunceble.CONFIGURATION["travis"]:
-            try:
-                build_dir = PyFunceble.environ["TRAVIS_BUILD_DIR"]
-                commands = [
-                    "sudo chown -R travis:travis %s" % (build_dir),
-                    "sudo chgrp -R travis %s" % (build_dir),
-                    "sudo chmod -R g+rwX %s" % (build_dir),
-                    "sudo chmod 777 -Rf %s.git"
-                    % (build_dir + PyFunceble.directory_separator),
-                    r"sudo find %s -type d -exec chmod g+x '{}' \;" % (build_dir),
-                ]
+        if self.authorized:
+            build_dir = PyFunceble.environ["TRAVIS_BUILD_DIR"]
+            commands = [
+                "sudo chown -R travis:travis %s" % (build_dir),
+                "sudo chgrp -R travis %s" % (build_dir),
+                "sudo chmod -R g+rwX %s" % (build_dir),
+                "sudo chmod 777 -Rf %s.git"
+                % (build_dir + PyFunceble.directory_separator),
+                r"sudo find %s -type d -exec chmod g+x '{}' \;" % (build_dir),
+            ]
 
-                for command in commands:
-                    Command(command).execute()
+            for command in commands:
+                Command(command).execute()
 
-                if Command("git config core.sharedRepository").execute() == "":
-                    Command("git config core.sharedRepository group").execute()
-            except KeyError:
-                pass
+            if Command("git config core.sharedRepository").execute() == "":
+                Command("git config core.sharedRepository group").execute()
 
-    def _travis(self):
+    def bypass(self):
         """
-        Logic behind autosave under Travis CI.
+        Stop everything if :code:`[PyFunceble skip]` is matched into
+        the latest commit message.
         """
 
-        if PyFunceble.CONFIGURATION["travis"]:
-            try:
-                _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
-                time_autorisation = False
+        if (
+            self.authorized
+            and Regex(
+                Command("git log -1").execute(), self.regex_bypass, return_data=False
+            ).match()
+        ):
 
-                try:
-                    time_autorisation = int(PyFunceble.time()) >= int(
-                        PyFunceble.INTERN["start"]
-                    ) + (int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60)
-                except KeyError:
-                    if self.last and not self.bypass:
-                        raise Exception(
-                            "Please review the way `ExecutionTime()` is called."
-                        )
+            self.end_commit()
 
-                if self.last or time_autorisation or self.bypass:
-                    Percentage().log()
-                    self.travis_permissions()
+    def push(self):
+        """
+        Push.
+        """
 
-                    command = 'git add --all && git commit -a -m "%s"'
+        if self.authorized:
+            Command(
+                "git push origin {0}".format(PyFunceble.CONFIGURATION["travis_branch"])
+            ).execute()
 
-                    if self.last or self.bypass:
-                        if PyFunceble.CONFIGURATION["command_before_end"]:
-                            for line in Command(
-                                PyFunceble.CONFIGURATION["command_before_end"]
-                            ).run():
-                                sys_stdout.write("{}\n".format(line))
+            exit(0)
 
-                            self.travis_permissions()
+    def end_commit(self):
+        """
+        Commit and push at the very end of the test.
+        """
 
-                        message = (
-                            PyFunceble.CONFIGURATION["travis_autosave_final_commit"]
-                            + " [ci skip]"
-                        )
+        if self.authorized:
+            Percentage().log()
+            self.permissions()
 
-                        Command(command % message).execute()
-                    else:
-                        if PyFunceble.CONFIGURATION["command"]:
-                            for line in Command(
-                                PyFunceble.CONFIGURATION["command"]
-                            ).run():
-                                sys_stdout.write("{}\n".format(line))
+            command = 'git add --all && git commit -a -m "{0}"'.format(
+                PyFunceble.CONFIGURATION["travis_autosave_final_commit"] + " [ci skip]"
+            )
 
-                            self.travis_permissions()
+            if PyFunceble.CONFIGURATION["command_before_end"]:
+                for line in Command(
+                    PyFunceble.CONFIGURATION["command_before_end"]
+                ).run():
+                    sys_stdout.write("{}\n".format(line))
 
-                        Command(
-                            command % PyFunceble.CONFIGURATION["travis_autosave_commit"]
-                        ).execute()
+                self.permissions()
 
-                    print(
-                        Command(
-                            "git push origin %s"
-                            % PyFunceble.CONFIGURATION["travis_branch"]
-                        ).execute()
-                    )
-                    exit(0)
-            except KeyError:
-                pass
+            Command(command).execute()
+            self.push()
+
+    def not_end_commit(self):
+        """
+        Commit and push at on the middle of the test.
+        """
+
+        if self.authorized:
+            Percentage().log()
+            self.permissions()
+
+            command = 'git add --all && git commit -a -m "{0}"'.format(
+                PyFunceble.CONFIGURATION["travis_autosave_commit"]
+            )
+
+            if PyFunceble.CONFIGURATION["command"]:
+                for line in Command(PyFunceble.CONFIGURATION["command"]).run():
+                    sys_stdout.write("{}\n".format(line))
+
+                self.permissions()
+
+            Command(command).execute()
+            self.push()

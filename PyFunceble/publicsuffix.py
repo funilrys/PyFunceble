@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint:enable=line-too-long
-# pylint:disable=bad-continuation
 import PyFunceble
 from PyFunceble.helpers import Dict, Download, File, List
 

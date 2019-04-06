@@ -13,6 +13,6 @@ print("Start of basic example.")
 DOMAIN = "github.com"
 URL = "https://{}".format(DOMAIN)
 
-print(DOMAIN, PyFunceble(domain=DOMAIN))
-print(URL, PyFuncebleURL(url=URL))
+print(DOMAIN, PyFunceble(subject=DOMAIN))
+print(URL, PyFuncebleURL(subject=URL))
 print("End of basic example ")

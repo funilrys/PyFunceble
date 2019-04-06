@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -65,7 +65,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from PyFunceble.clean import Clean
-from PyFunceble.config import Load, Version
+from PyFunceble.config import Version
 from PyFunceble.helpers import File
 
 
@@ -79,7 +79,7 @@ class TestClean(TestCase):
         Setup everything that is needed.
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        PyFunceble.load_config(generate_directory_structure=False)
 
         self.file = (
             PyFunceble.OUTPUT_DIRECTORY

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
+
 import PyFunceble
 from PyFunceble.helpers import Dict, File
 
@@ -71,118 +69,154 @@ class AutoContinue:
     Provide the auto-continue subsystem.
     """
 
-    def __init__(self):
-        if (
-            PyFunceble.CONFIGURATION["auto_continue"]
-            and not PyFunceble.CONFIGURATION["no_files"]
-        ):
-            # * The auto_continue subsystem is activated.
-            # and
-            # * We are authorized to generate files.
+    # Save the content of the database.
+    database = {}
+    # Save the database file
+    database_file = None
+    # Save the operation authorization.
+    authorized = False
 
-            # We set the log file location.
-            self.autocontinue_log_file = (
+    # Save the filename we are working with.
+    filename = None
+
+    def __init__(self, filename):
+        # We get the operation authorization.
+        self.authorized = self.authorization()
+        # We share the filename.
+        self.filename = filename
+        # We preset the filename namespace.
+        self.database[self.filename] = {}
+
+        if self.authorized:
+            # We are authorized to operate.
+
+            # We set the location of the database file.
+            self.database_file = (
                 PyFunceble.OUTPUT_DIRECTORY
                 + PyFunceble.OUTPUTS["parent_directory"]
                 + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
             )
 
-            if PyFunceble.path.isfile(self.autocontinue_log_file):
-                # The log file already exist.
+            # We load the backup (if existant).
+            self.load()
+
+    def __contains__(self, index):
+        if index in self.database[self.filename]:
+            if self.database[self.filename][index] in [
+                PyFunceble.STATUS["official"]["up"],
+                PyFunceble.STATUS["official"]["valid"],
+            ]:
+                PyFunceble.INTERN["counter"]["number"]["up"] += 1
+            elif self.database[self.filename][index] in [
+                PyFunceble.STATUS["official"]["down"]
+            ]:
+                PyFunceble.INTERN["counter"]["number"]["down"] += 1
+            elif self.database[self.filename][index] in [
+                PyFunceble.STATUS["official"]["invalid"]
+            ]:
+                PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
+
+            PyFunceble.INTERN["counter"]["number"]["tested"] += 1
+            return True
+
+        return False
+
+    @classmethod
+    def authorization(cls):
+        """
+        Provide the execution authorization.
+        """
+
+        return (
+            PyFunceble.CONFIGURATION["auto_continue"]
+            and not PyFunceble.CONFIGURATION["no_files"]
+        )
+
+    def is_empty(self):
+        """
+        Check if the database related to the currently tested
+        file is emtpy.
+        """
+
+        if self.filename not in self.database or not self.database[self.filename]:
+            return True
+        return False
+
+    def add(self, element, status):
+        """
+        Add the given element into the database.
+        """
+
+        if self.authorized:
+            # We are authorized to operate.
+
+            if self.filename in self.database:
+                # We already have something related
+                # to the file we are testing.
+
+                # We set the new data.
+                self.database[self.filename][element] = status
+            else:
+                # We set the new data.
+                self.database[self.filename] = {element: status}
+
+            # We save everything.
+            self.save()
+
+    def save(self):
+        """
+        Save the current state of the database.
+        """
+
+        if self.authorized:
+            # We are authoried to operate.
+
+            if PyFunceble.path.isfile(self.database_file):
+                # The database file exists.
+
+                # We merge the current content of the
+                # database file with the current state
+                # of the database.
+                Dict(
+                    Dict(self.database).merge(
+                        Dict.from_json(File(self.database_file).read())
+                    )
+                ).to_json(self.database_file)
+            else:
+                # The database file do not exists.
+
+                # We save the current database state.
+                Dict(self.database).to_json(self.database_file)
+
+    def load(self):
+        """
+        Load previously saved database.
+        """
+
+        if self.authorized:
+            # We are authorized to operate.
+
+            if PyFunceble.path.isfile(self.database_file):
+                # The database file exists.
 
                 # We get its content and save it inside backup_content.
-                self.backup_content = Dict().from_json(
-                    File(self.autocontinue_log_file).read()
-                )
+                self.database = Dict().from_json(File(self.database_file).read())
             else:
-                # The log file does not exist.
+                # The database file do not exists.
 
-                # We initiate the backup content.
-                self.backup_content = {}
-                # And we save our empty backup_content to the log file.
-                File(self.autocontinue_log_file).write(str(self.backup_content))
+                # We initiate an empty database.
+                self.database = {self.filename: {}}
 
-    def backup(self):
+    def clean(self):
         """
-        Backup the current execution state.
+        Clean the database.
         """
 
-        if PyFunceble.CONFIGURATION["auto_continue"]:
-            # The auto_continue subsystem is activated.
+        if self.authorized:
+            # We are authorized to operate.
 
-            # We initiate the location where we are going to save the data to backup.
-            data_to_backup = {}
-            # We get the current counter states.
-            configuration_counter = PyFunceble.INTERN["counter"]["number"]
+            # We empty the database.
+            self.database[self.filename] = {}
 
-            # We initiate the data we have to backup.
-            data_to_backup[PyFunceble.INTERN["file_to_test"]] = {
-                # We backup the number of tested.
-                "tested": configuration_counter["tested"],
-                # We backup the number of up.
-                "up": configuration_counter["up"],
-                # We backup the number of down.
-                "down": configuration_counter["down"],
-                # We backup the number of invalid.
-                "invalid": configuration_counter["invalid"],
-            }
-
-            # We initiate the final data we have to save.
-            # We initiate this variable instead of updating backup_content because
-            # we do not want to touch the backup_content.
-            to_save = {}
-
-            # We add the backup_content into to_save.
-            to_save.update(self.backup_content)
-            # And we overwrite with the newly data to backup.
-            to_save.update(data_to_backup)
-
-            # Finaly, we save our informations into the log file.
-            Dict(to_save).to_json(self.autocontinue_log_file)
-
-    def restore(self):
-        """
-        Restore data from the given path.
-        """
-
-        if PyFunceble.CONFIGURATION["auto_continue"] and self.backup_content:
-            # The auto_continue subsystem is activated and the backup_content
-            # is not empty.
-
-            # We get the file we have to restore.
-            file_to_restore = PyFunceble.INTERN["file_to_test"]
-
-            if file_to_restore in self.backup_content:
-                # The file we are working with is already into the backup content.
-
-                # We initiate the different status to set.
-                to_initiate = ["up", "down", "invalid", "tested"]
-
-                # Because at some time it was not the current status, we have to map
-                # the new with the old. This way, if someone is running the latest
-                # version but with old data, we still continue like nothing happend.
-                alternatives = {
-                    "up": "number_of_up",
-                    "down": "number_of_down",
-                    "invalid": "number_of_invalid",
-                    "tested": "number_of_tested",
-                }
-
-                for string in to_initiate:
-                    # We loop over the status we have to initiate.
-
-                    try:
-                        # We try to update the counters by using the currently read status.
-                        PyFunceble.INTERN["counter"]["number"].update(
-                            {string: self.backup_content[file_to_restore][string]}
-                        )
-                    except KeyError:
-                        # But if the status is not present, we try with the older index
-                        # we mapped previously.
-                        PyFunceble.INTERN["counter"]["number"].update(
-                            {
-                                string: self.backup_content[file_to_restore][
-                                    alternatives[string]
-                                ]
-                            }
-                        )
+            # And we save the current database state.
+            Dict(self.database).to_json(self.database_file)

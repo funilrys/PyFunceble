@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 
 import urllib3.exceptions as urllib3_exceptions
 from urllib3 import disable_warnings
@@ -183,6 +180,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         :return: The matched and formatted status code.
         :rtype: str|int|None
         """
+
         if PyFunceble.HTTP_CODE["active"]:
             # The http status code extraction is activated.
 

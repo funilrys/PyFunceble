@@ -10,8 +10,13 @@ omit =
     */distutils/*
 
     # omit the following file
+    PyFunceble/api_core.py
+    PyFunceble/auto_save.py
     PyFunceble/config.py
+    PyFunceble/dispatcher.py
     PyFunceble/production.py
+    PyFunceble/simple_core.py
+    PyFunceble/whois.py
 
 [report]
 # This should be False one we move into production
@@ -21,6 +26,9 @@ skip_covered = True
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover
+
+    # Never cover __init__
+    def __init__
 
     # Don't complain about missing debug-only code:
     def __repr__

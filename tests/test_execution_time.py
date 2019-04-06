@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -65,7 +65,6 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout
-from PyFunceble.config import Load
 from PyFunceble.execution_time import ExecutionTime
 
 
@@ -79,7 +78,8 @@ class TestExecutionTime(BaseStdout):
         Setup everything needed for the tests
         """
 
-        Load(PyFunceble.CURRENT_DIRECTORY)
+        PyFunceble.load_config(generate_directory_structure=False)
+
         BaseStdout.setUp(self)
         PyFunceble.CONFIGURATION["show_execution_time"] = True
         PyFunceble.INTERN["start"] = int(PyFunceble.time())

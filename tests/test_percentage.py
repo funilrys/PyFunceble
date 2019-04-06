@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long,protected-access,ungrouped-imports
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -59,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation,protected-access,ungrouped-imports
 
 from unittest import main as launch_tests
 
@@ -78,7 +77,7 @@ class TestPercentage(BaseStdout):
         Setup everything needed for the tests.
         """
 
-        PyFunceble.load_config(True)
+        PyFunceble.load_config(generate_directory_structure=False)
 
     def test_count(self):
         """
@@ -165,6 +164,7 @@ class TestPercentage(BaseStdout):
         """
 
         BaseStdout.setUp(self)
+        PyFunceble.CONFIGURATION["quiet"] = False
 
         expected = """
 

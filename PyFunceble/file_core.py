@@ -1,0 +1,493 @@
+# pylint: disable=line-too-long
+"""
+The tool to check the availability or syntax of domains, IPv4 or URL.
+
+::
+
+
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+
+Provide the logic for a file test from the CLI.
+
+Author:
+    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
+
+Special thanks:
+    https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+
+Contributors:
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
+
+Project link:
+    https://github.com/funilrys/PyFunceble
+
+Project documentation:
+    https://pyfunceble.readthedocs.io/en/dev/
+
+Project homepage:
+    https://funilrys.github.io/PyFunceble/
+
+License:
+::
+
+
+    MIT License
+
+    Copyright (c) 2017, 2018, 2019 Nissar Chababy
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+"""
+# pylint: enable=line-too-long
+
+from itertools import chain
+
+from domain2idna import get as domain2idna
+
+import PyFunceble
+from PyFunceble.adblock import AdBlock
+from PyFunceble.auto_continue import AutoContinue
+from PyFunceble.auto_save import AutoSave
+from PyFunceble.check import Check
+from PyFunceble.cli_core import CLICore
+from PyFunceble.directory_structure import DirectoryStructure
+from PyFunceble.generate import Generate
+from PyFunceble.helpers import Download, List, Regex
+from PyFunceble.inactive_db import InactiveDB
+from PyFunceble.mining import Mining
+from PyFunceble.sort import Sort
+from PyFunceble.status import Status, SyntaxStatus, URLStatus
+from PyFunceble.whois_db import WhoisDB
+
+
+class FileCore:  # pylint: disable=too-many-instance-attributes
+    """
+    Brain of PyFunceble for file testing.
+
+    :param file: The file we are testing.
+    :type file: str
+
+    :param file_type:
+        The file type.
+        Should be one of the following.
+
+            - :code:`domain`
+
+            - :code:`url`
+    :type file_type: str
+    """
+
+    # We set a regex of element to delete.
+    # Understand with this variable that we don't want to test those.
+    regex_ignore = r"localhost$|localdomain$|local$|broadcasthost$|0\.0\.0\.0$|allhosts$|allnodes$|allrouters$|localnet$|loopback$|mcastprefix$|ip6-mcastprefix$|ip6-localhost$|ip6-loopback$|ip6-allnodes$|ip6-allrouters$|ip6-localnet$"  # pylint: disable=line-too-long
+
+    def __init__(self, file, file_type="domain"):
+        # We share the file we are working with.
+        self.file = file
+        # We share the file/test type.
+        self.file_type = file_type
+
+        # We construct the list of UP statuses.
+        self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
+        self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
+
+        # We get/initiate the preset class.
+        self.preset = PyFunceble.Preset()
+        # We get/initiate the autosave database/subsyste..
+        self.autosave = AutoSave(start_time=PyFunceble.INTERN["start"])
+        # We get/initiate the inactive database.
+        self.inactive_db = InactiveDB(self.file)
+        # We get/initiate the whois database.
+        self.whois_db = WhoisDB()
+        # We get/initiate the mining subsystem.
+        self.mining = Mining(self.file)
+        # We get/initiate the autocontinue subsystem.
+        self.autocontinue = AutoContinue(self.file)
+
+        # We download the file if it is a list.
+        self.download_link()
+
+        # We generate the directory structure.
+        DirectoryStructure()
+
+    def download_link(self):  # pragma: no cover
+        """
+        Download the file if it is an URL.
+        """
+
+        if self.file and self.autocontinue.is_empty() and Check(self.file).is_url():
+            # The given file is an URL.
+
+            # We get the destination.
+            destination = self.file.split("/")[-1]
+
+            if (
+                not PyFunceble.path.isfile(destination)
+                or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
+            ):
+                # The filename does not exist in the current directory
+                # or the currently number of tested is equal to 0.
+
+                # We download the content of the link.
+                Download(self.file, destination).text()
+
+            # We update the global file with the destination.
+            self.file = destination
+
+    def domain(self, subject):  # pragma: no cover
+        """
+        Handle the test of a single domain.
+
+        :param subject: The subject we are testing.
+        :type subject: str
+        """
+
+        if subject:
+            # The given subject is not empty nor None.
+
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # The syntax mode is activated.
+
+                # We get the status from SyntaxStatus.
+                status = SyntaxStatus(
+                    subject, subject_type="file_domain", filename=self.file
+                ).get()["status"]
+            else:
+                # We test and get the status of the domain.
+                status = Status(
+                    subject,
+                    subject_type="file_domain",
+                    filename=self.file,
+                    whois_db=self.whois_db,
+                ).get()["status"]
+
+            if PyFunceble.CONFIGURATION["simple"]:
+                # The simple mode is activated.
+
+                # We print the domain and the status.
+                print(subject, status)
+
+            if status.lower() in self.list_of_up_statuses:
+                # The status is in the list of UP status.
+
+                # We mine if needed.
+                self.mining.mine(subject, "domain")
+
+                if subject in self.inactive_db:
+                    # the subject is in the inactive database.
+
+                    # We generate the suspicious file.
+                    Generate(
+                        subject, "file_domain", PyFunceble.STATUS["official"]["up"]
+                    ).analytic_file("suspicious")
+
+                    # And we remove it the current subject from
+                    # the inactive database.
+                    self.inactive_db.remove(subject)
+            else:
+                # The status is not in the list of UP status.
+
+                # We add the current subject into the
+                # inactive database.
+                self.inactive_db.add(subject)
+
+            # We return the status.
+            return status
+
+        # We return None, there is nothing to test.
+        return None
+
+    def url(self, subject):  # pragma: no cover
+        """
+        Handle the simple URL testing.
+
+        :param subject: The subject we are testing.
+        :type subject: str
+        """
+
+        if subject:
+            # The given subject is not empty nor None.
+
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # The syntax mode is activated.
+
+                # We get the status from SyntaxStatus.
+                status = SyntaxStatus(
+                    subject, subject_type="file_url", filename=self.file
+                ).get()["status"]
+            else:
+                # We test and get the status of the domain.
+                status = URLStatus(
+                    subject, subject_type="file_url", filename=self.file
+                ).get()["status"]
+
+            if PyFunceble.CONFIGURATION["simple"]:
+                # The simple mode is activated.
+
+                # We print the domain and the status.
+                print(subject, status)
+
+            if status.lower() in self.list_of_up_statuses:
+                # The status is in the list of UP status.
+
+                # We mine if necessary.
+                self.mining.mine(subject, "url")
+
+                if subject in self.inactive_db:
+                    # The subject is in the inactive database.
+
+                    # We generate the suspicous file.
+                    Generate(
+                        subject, "file_domain", PyFunceble.STATUS["official"]["up"]
+                    ).analytic_file("suspicious")
+
+                    # And we remove the current subject from
+                    # the inactive database.
+                    self.inactive_db.remove(subject)
+            else:
+                # The status is not in the list of UP status.
+
+                # We add the current subject into the
+                # inactive database.
+                self.inactive_db.add(subject)
+
+            # We retunr the status.
+            return status
+
+        # We return None, there is nothing to test.
+        return None
+
+    @classmethod
+    def _format_line(cls, line):
+        """
+        Format the extracted line before passing it to the system.
+
+        :param line: The extracted line.
+        :type line: str
+
+        :return: The formatted line with only the element to test.
+        :rtype: str
+
+        .. note:
+            Understand by formating the fact that we get rid
+            of all the noises around the element we want to test.
+        """
+
+        if not line.startswith("#"):
+            # The line is not a commented line.
+
+            if "#" in line:
+                # There is a comment at the end of the line.
+
+                # We delete the comment from the line.
+                line = line[: line.find("#")].strip()
+
+            if " " in line or "\t" in line:
+                # A space or a tabs is in the line.
+
+                # We remove all whitestring from the extracted line.
+                splited_line = line.split()
+
+                # As there was a space or a tab in the string, we consider
+                # that we are working with the hosts file format which means
+                # that the domain we have to test is after the first string.
+                # So we set the index to 1.
+                index = 1
+
+                while index < len(splited_line):
+                    # We loop until the index is greater than the length of
+                    #  the splited line.
+
+                    if splited_line[index]:
+                        # The element at the current index is not an empty string.
+
+                        # We break the loop.
+                        break
+
+                    # The element at the current index is an empty string.
+
+                    # We increase the index number.
+                    index += 1  # pragma: no cover
+
+                # We return the last read element.
+                return splited_line[index]
+
+            # We return the extracted line.
+            return line
+
+        # The extracted line is a comment line.
+
+        # We return an empty string as we do not want to work with commented line.
+        return ""
+
+    def __process_test(self, line):  # pragma: no cover
+        """
+        Given a line, we perform its test.
+        """
+
+        if self.file_type == "domain":
+            # We are testing for domains.
+
+            if PyFunceble.CONFIGURATION["idna_conversion"]:
+                # We have to convert to IDNA:
+
+                # We get and return the status of the IDNA
+                # domain.
+                return self.domain(domain2idna(line))
+
+            # We get and return the status of the domain.
+            return self.domain(line)
+
+        if self.file_type == "url":
+            # We are testing for urls.
+
+            # We get and return the status of the URL.
+            return self.url(line)
+
+        # We raise an exception, we could not understand the
+        # given file type.
+        raise Exception("Unknown file type.")
+
+    def _test_line(self, line):  # pragma: no cover
+        """
+        Given a line, we test it.
+        """
+
+        # We remove cariage from the given line.
+        line = line.strip()
+
+        if line[0] == "#":
+            # We line is a comment line.
+
+            # We return None, there is nothing to test.
+            return None
+
+        if Regex(line, self.regex_ignore, escape=False, return_data=False).match():
+            # The line match our list of elemenet
+            # to ignore.
+
+            # We return None, there is nothing to test.
+            return None
+
+        # We format the line, it's the last
+        # rush before starting to filter and test.
+        line = self._format_line(line)
+
+        if line in self.autocontinue:
+            # The line is in the autocontinue database.
+
+            # We return None, thre is nothing to test.
+            return None
+
+        if line in self.inactive_db:
+            # The line is in the inactive database.
+
+            # We return None, there is nothing to test.
+            return None
+        if PyFunceble.CONFIGURATION["filter"]:
+            # We have to filter.
+
+            if Regex(
+                line, PyFunceble.CONFIGURATION["filter"], return_data=False
+            ).match():
+                # The line match the given filter.
+
+                # We get the status of the current line.
+                status = self.__process_test(line)
+            else:
+                # The line does not match the given filter.
+
+                # We return None.
+                return None
+        else:
+            # We do not have to filter.
+
+            # We get the status of the current line.
+            status = self.__process_test(line)
+
+        # We add the line into the auto continue database.
+        self.autocontinue.add(line, status)
+
+        # We process the autosaving if it is necessary.
+        self.autosave.process(test_completed=False)
+
+        # We return None.
+        return None
+
+    def read_and_test_file_content(self):  # pragma: no cover
+        """
+        Read a file block by block and test its content.
+        """
+
+        # We print the CLI header.
+        CLICore.print_header()
+
+        with open(self.file, "r", encoding="utf-8") as file:
+            # We open the file we have to test.
+
+            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                # We do not have to sort hierarchicaly.
+
+                # We sort the lines standarly.
+                file = List(file).custom_format(Sort.standard)
+            else:
+                # We do have to sort hierarchicaly.
+
+                # We sort the lines hierarchicaly.
+                file = List(file).custom_format(Sort.hierarchical)
+
+            if not PyFunceble.CONFIGURATION["adblock"]:
+                # We do not have to adblock decode the content
+                # of the file.
+
+                for line in chain(file, self.inactive_db["to_test"]):
+                    # We loop through the file content and the
+                    # inactive dataset to retest.
+
+                    # We test the line.
+                    self._test_line(line)
+            else:
+                # We do have to decode the content of the file.
+
+                for line in chain(AdBlock(file).decode(), self.inactive_db["to_test"]):
+                    # We loop through the file decoded file
+                    # content.
+
+                    # We test the line.
+                    self._test_line(line)
+
+        for index, line in self.mining.list_of_mined():
+            # We loop through the list of mined domains
+            # (if the mining subystem is activated.)
+
+            # We test the line.
+            self._test_line(line)
+            # and remove the currently tested line
+            # from the mining database.
+            self.mining.remove(index, line)
+
+        # We clean the autocontinue subsystem, we finished
+        # the test.
+        self.autocontinue.clean()
+        # We process the autosaving if necessary.
+        self.autosave.process(test_completed=True)

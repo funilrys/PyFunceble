@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -79,6 +79,8 @@ class TestExpirationDate(TestCase):
 
         load_config(True)
 
+        self.expiration_date = ExpirationDate(None, None, None)
+
     def test_convert_or_shorten_month(self):
         """
         Test ExpirationDate()._convert_or_shorten_month().
@@ -87,12 +89,12 @@ class TestExpirationDate(TestCase):
         expected = "jan"
 
         for element in ["1", "01", "Jan", "January"]:
-            actual = ExpirationDate()._convert_or_shorten_month(element)
+            actual = self.expiration_date._convert_or_shorten_month(element)
 
             self.assertEqual(expected, actual)
 
         expected = "Hello"
-        actual = ExpirationDate()._convert_or_shorten_month("Hello")
+        actual = self.expiration_date._convert_or_shorten_month("Hello")
 
         self.assertEqual(expected, actual)
 
@@ -104,7 +106,7 @@ class TestExpirationDate(TestCase):
         expected = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"]
 
         for index, number in enumerate(expected):
-            actual = ExpirationDate()._convert_1_to_2_digits(index + 1)
+            actual = self.expiration_date._convert_1_to_2_digits(index + 1)
 
             self.assertEqual(number, actual)
 
@@ -155,7 +157,7 @@ class TestExpirationDate(TestCase):
         ]
 
         for date in to_test:
-            actual = ExpirationDate()._format(date)
+            actual = self.expiration_date._format(date)
 
             self.assertEqual(expected, actual, msg="Error for %s" % repr(date))
 
@@ -167,7 +169,7 @@ class TestExpirationDate(TestCase):
         }
 
         for data in special_case:
-            actual = ExpirationDate()._format(special_case[data][0])
+            actual = self.expiration_date._format(special_case[data][0])
             expected = special_case[data][-1]
 
             self.assertEqual(

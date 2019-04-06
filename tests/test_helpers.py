@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long, protected-access
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -59,13 +59,11 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error, protected-access, bad-continuation
 from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import (Command, Dict, Directory, File, Hash, List,
-                                Regex)
+from PyFunceble.helpers import Command, Dict, Directory, File, Hash, List, Regex
 
 
 class TestHash(TestCase):

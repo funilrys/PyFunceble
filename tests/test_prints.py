@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long,protected-access,ungrouped-imports
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -59,25 +59,24 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation,protected-access,ungrouped-imports
 
 import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout
-from PyFunceble.core import Prints
 from PyFunceble.helpers import File
+from PyFunceble.prints import Prints
 
 
 class TestPrints(BaseStdout):
     """
     This class will partially test PyFunceble.prints.
     Indeed, we use the word partially as the whole printing method depends on `print`
-    which is a well know keyworkd but also PyFunceble.helpers.File().
+    which is a well know keyworkd along with PyFunceble.helpers.File().
 
     So we do prefer to test all helpers and make sure they are working proprely instead
-    if test all the logic.
+    of testing all the logic.
 
     We assume the lack of tests here but this class will be completed over time.
     """
@@ -87,7 +86,7 @@ class TestPrints(BaseStdout):
         Setup everything needed for the tests.
         """
 
-        PyFunceble.load_config(True)
+        PyFunceble.load_config(generate_directory_structure=False)
 
         self.file = "this_file_is_a_ghost"
         self.to_print = {

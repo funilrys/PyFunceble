@@ -1,10 +1,10 @@
 Status
-------
+======
 
 There's 3 possible output for this column.
 
 ACTIVE
-^^^^^^
+------
 
 This status is returned when **one of the following cases** is met:
 
@@ -19,7 +19,7 @@ This status is returned when **one of the following cases** is met:
 - :code:`HTTPCode().get()` return one the following code :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
 
 INACTIVE
-^^^^^^^^
+--------
 
 This status is returned when **all the following cases** are met:
 
@@ -27,7 +27,7 @@ This status is returned when **all the following cases** are met:
 - :code:`Lookup().nslookup()` don't return an error.
 
 INVALID
-^^^^^^^
+-------
 
 This status is returned when **all the following cases** are met:
 
@@ -41,6 +41,6 @@ This status is returned when **all the following cases** are met:
 .. _IANA: https://www.iana.org/domains/root/db
 
 VALID
-^^^^^
+-----
 
 This status is returned when we are checking for syntax. It is the equivalent of :code:`ACTIVE` but for syntax checking.

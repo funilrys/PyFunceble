@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long, too-many-lines
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation,too-many-lines
 import hashlib
 from json import decoder, dump, loads
 from os import remove
@@ -251,13 +248,13 @@ class Command:  # pylint: disable=too-few-public-methods
     """
     Shell command execution.
 
-    :param command: The command to execute
-    :type command: str
+    :param str command: The command to execute.
+    :param str encoding: The encoding to use to decode the shell output.
     """
 
-    def __init__(self, command):  # pragma: no cover
+    def __init__(self, command, encoding="utf-8"):  # pragma: no cover
         # We set the default decoding type.
-        self.decode_type = "utf-8"
+        self.decode_type = encoding
 
         if isinstance(command, list):
             # The given command is a list.
@@ -278,8 +275,7 @@ class Command:  # pylint: disable=too-few-public-methods
         """
         Decode the output of a shell command in order to be readable.
 
-        :param to_decode: Output of a command to decode.
-        :type: bytes
+        :param bytes to_decode: Output of a command to decode.
 
         :return: The decoded output.
         :rtype: str
@@ -317,9 +313,10 @@ class Command:  # pylint: disable=too-few-public-methods
         Run the given command and yield each line(s) one by one.
 
         .. note::
-            The difference between this method and :code:`self.execute()`
-            is that :code:`self.execute()` wait for the process to end
-            in order to return its output.
+            The difference between this method and :func:`~PyFunceble.helpers.Command.execute`
+            is that :func:`~PyFunceble.helpers.Command.execute` wait for the process to end
+            in order to return its output while this method return each line one by one
+            - as they are outputed.
         """
 
         with Popen(self.command, stdout=PIPE, shell=True) as process:
@@ -350,22 +347,12 @@ class Dict:
     """
     Dictionary manipulations.
 
-    :param main_dictionnary: The dict we are working with.
-    :type main_dictionnary: dict
+    :param dict main_dictionnary: The dict we are working with.
     """
 
     def __init__(self, main_dictionnary=None):  # pragma: no cover
-
-        if main_dictionnary is None:
-            # A dictionnary is not parsed.
-
-            # We set the main dictionnary as an empty dictionnary.
-            self.main_dictionnary = {}
-        else:
-            # A dictionnary is parsed.
-
-            # We set the main dictionnary as the parsed dictionnary.
-            self.main_dictionnary = main_dictionnary
+        # We set the main dictionnary as the parsed dictionnary.
+        self.main_dictionnary = main_dictionnary
 
     def remove_key(self, key_to_remove):
         """
@@ -410,12 +397,12 @@ class Dict:
         """
         Rename the given keys from the given dictionary.
 
-        :param key_to_rename:
+        :param dict key_to_rename:
             The key(s) to rename.
-            Expected format: :code:`{old:new}`
-        :type key_to_rename: dict
 
-        :param strict:
+            Expected format: :code:`{old:new}`
+
+        :param bool strict:
             Tell us if we have to rename the exact index or
             the index which looks like the given key(s)
 
@@ -472,17 +459,15 @@ class Dict:
 
     def merge(self, to_merge, strict=True):
         """
-        Merge the content of to_merge into the given main dictionnary.
+        Merge the content of :code:`to_merge` into the main dictionnary.
 
-        :param to_merge: The dictionnary to merge.
-        :type to_merge: dict
+        :param dict to_merge: The dictionnary to merge.
 
-        :param strict:
+        :param bool strict:
             Tell us if we have to strictly merge lists.
 
-            :code:`True`: We follow index
-            :code`False`: We follow element (content)
-        :type strict: bool
+            - :code:`True`: We follow index.
+            - :code:`False`: We follow element (content/value)
 
         :return: The merged dict.
         :rtype: dict
@@ -545,10 +530,9 @@ class Dict:
         """
         Save a dictionnary into a JSON file.
 
-        :param destination:
+        :param str destination:
             A path to a file where we're going to
             write the converted dict into a JSON format.
-        :type destination: str
         """
 
         try:
@@ -582,10 +566,9 @@ class Dict:
         """
         Save a dictionnary into a YAML file.
 
-        :param destination:
+        :param str destination:
             A path to a file where we're going to write the
             converted dict into a JSON format.
-        :type destination: str
         """
 
         with open(destination, "w") as file:
@@ -607,8 +590,7 @@ class Dict:
         """
         Convert a JSON formatted string into a dictionary.
 
-        :param data: A JSON formatted string to convert to dict format.
-        :type data: str
+        :param str data: A JSON formatted string to convert to dict format.
 
         :return: The dict representation of the JSON formatted string.
         :rtype: dict
@@ -628,8 +610,7 @@ class Dict:
         """
         Convert a YAML formatted string into a dictionary.
 
-        :param data: A YAML formatted string to convert to dict format.
-        :type data: str
+        :param str data: A YAML formatted string to convert to dict format.
 
         :return: The dict representation of the YAML formatted string.
         :rtype: dict
@@ -655,8 +636,11 @@ class Directory:  # pylint: disable=too-few-public-methods
         """
         Fix the path of the given path.
 
-        :param splited_path: A list to convert to the right path.
-        :type splited_path: list
+        .. note::
+            We consider a path as fixed if it ends with the right
+            directory separator.
+
+        :param list splited_path: A list to convert to the right path.
 
         :return: The fixed path.
         :rtype: str
@@ -694,8 +678,7 @@ class File:
     """
     File treatment/manipulations.
 
-    :param file: A path to the file to manipulate.
-    :type file: str
+    :param str file: A path to the file to manipulate.
     """
 
     def __init__(self, file):
@@ -706,13 +689,11 @@ class File:
         """
         Write or append data into the given file path.
 
-        :param data_to_write: The data to write.
-        :type data_to_write: str
+        :param str data_to_write: The data to write.
 
-        :param overwrite:
+        :param bool overwrite:
             Tell us if we have to overwrite the
             content of the file we are working with.
-        :type overwrite: bool
         """
 
         if overwrite or not path.isfile(self.file):
@@ -772,7 +753,7 @@ class File:
 
     def delete(self):
         """
-        Delete a given file path.
+        Delete the given file path.
         """
 
         try:
@@ -784,10 +765,9 @@ class File:
 
     def copy(self, destination):
         """
-        Copy the given file to the destination.
+        Copy the given file to the given destination.
 
-        :param destination: The destination of the copy.
-        :type destination: str
+        :param str destination: The destination of the copy.
         """
 
         shutil_copy(self.file, destination)
@@ -797,21 +777,12 @@ class List:  # pylint: disable=too-few-public-methods
     """
     List manipulation.
 
-    :param main_list: The list to manipulate.
-    :type main_list: list
+    :param list main_list: The list to manipulate.
     """
 
     def __init__(self, main_list=None):  # pragma: no cover
-        if main_list is None:
-            # The main list is not given.
-
-            # We initiate an empty list.
-            self.main_list = []
-        else:
-            # The main list is given.
-
-            # We get the given list.
-            self.main_list = [x for x in main_list if x is None or x]
+        # We get the given list.
+        self.main_list = [x for x in main_list if x is None or x]
 
     def format(self):
         """
@@ -837,8 +808,7 @@ class List:  # pylint: disable=too-few-public-methods
             readed element before sorting.
         :type key_method: function|method
 
-        :param reverse: Tell us if we have to reverse the list.
-        :type reverse: bool
+        :param bool reverse: Tell us if we have to reverse the list.
 
         :return: A sorted list.
         :rtype: list
@@ -853,13 +823,11 @@ class List:  # pylint: disable=too-few-public-methods
         """
         Merge to_merge into the given main list.
 
-        :param to_merge: The list to merge.
-        :type to_merge: list
+        :param list to_merge: The list to merge.
 
-        :param strict:
-            Tell us if we have to respect index (True)
-            or not (False).
-        :type strict: bool
+        :param bool strict:
+            Tell us if we have to respect index (:code:`True`)
+            or not (:code:`False`).
 
         :return: The merged list.
         :rtype: list
@@ -930,31 +898,25 @@ class Regex:  # pylint: disable=too-few-public-methods
     """
     A simple implementation ot the python.re package
 
-    :param data: The data to check.
-    :type data: str
+    :param str data: The data to check.
 
-    :param regex: The regex to match.
-    :type regex: str
+    :param str regex: The regex to match.
 
-    :param group: The group to return.
-    :type group: int
+    :param int group: The group to return.
 
-    :param rematch:
+    :param bool rematch:
         Allow to return the matched groups into a formatted list.
 
         .. note::
             This is an implementation of Bash :code:`${BASH_REMATCH}`
-    :type rematch: bool
 
-    :param replace_with: The value to replace the matched regex with.
-    :type replace_with: str
+    :param str replace_with: The value to replace the matched regex with.
 
-    :param occurences: The number of occurence(s) to replace.
-    :type occurences: int
+    :param int occurences: The number of occurence(s) to replace.
 
     :param return_type:
         Tell us if we have to return the matched data or simply check
-        if we matched (True) or not (False)
+        if we matched (:code:`True`) or not (:code:`False`)
     """
 
     def __init__(self, data, regex, **args):  # pragma: no cover
@@ -1004,7 +966,7 @@ class Regex:  # pylint: disable=too-few-public-methods
 
     def match(self):
         """
-        Used to get exploitable result of re.search
+        Used to get exploitable result of :code:`re.search`
 
         :return: The data of the match status.
         :rtype: mixed
@@ -1069,21 +1031,20 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
     """
     Download or return the content of the given link.
 
-    :param link: The link to download.
-    :type link: str
+    :param str link: The link to download.
 
-    :param destination:
+    :param str destination:
         The location where we should save the downloaded content.
-    :type destination: str
 
-    :param return_data:
+        .. note::
+            If :code:`None` is given, we return the downloaded document.
+
+    :param bool return_data:
         Tell us if we need to return the page content
         or write its content into the given destination.
-    :type return_data: bool
 
-    :param verify_certificate:
+    :param bool verify_certificate:
         Tell us if we need to verify the SSL/TLS certificate.
-    :type verify_certificate: bool
     """
 
     def __init__(

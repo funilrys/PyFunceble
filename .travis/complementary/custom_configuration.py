@@ -19,7 +19,7 @@ DOMAINS = ["google.com", "github.com"]
 print("Start with global custom configuration.")
 for DOMAIN in DOMAINS:
     # This should return None
-    print(DOMAIN, PyFuncebleTest(domain=DOMAIN, complete=True)["whois_record"])
+    print(DOMAIN, PyFuncebleTest(subject=DOMAIN, complete=True)["whois_record"])
 print("End with global custom configuration.\n")
 
 print("Start with local custom configuration.")
@@ -36,7 +36,7 @@ for DOMAIN in DOMAINS:
     # update the configuration data with the one you give.
     print(
         PyFuncebleTest(
-            domain=DOMAIN, complete=True, config=CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET
+            subject=DOMAIN, complete=True, config=CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET
         )["whois_record"]
     )
     print("\n\nEnd of WHOIS record of %s" % DOMAIN)

@@ -21,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -76,7 +76,7 @@ class TestAdblockDecode(TestCase):
         Setup everything needed for the test.
         """
 
-        PyFunceble.load_config(True)
+        PyFunceble.load_config(generate_directory_structure=False)
         self.lines = [
             '##[href^="https://funceble.funilrys.com/"]',
             '##div[href^="http://funilrys.com/"]',

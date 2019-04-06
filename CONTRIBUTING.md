@@ -26,7 +26,7 @@ $ PyFunceble --production
 ## The commit
 
 ```shell
-$ # There paragraph is optional if your changes/commits are obvious.
+$ # The paragraph is optional if your changes/commits are obvious.
 $ git commit -S -m "A summary of the commit" -m "A paragraph
 > or a sentence explaining what changed, why and its impact."
 ```

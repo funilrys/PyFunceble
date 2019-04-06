@@ -10,6 +10,7 @@ env:
     - PYTHON_VERSION="3.7.0"
     - PYTHON_VERSION="3.7.1"
     - PYTHON_VERSION="3.7.2"
+    - PYTHON_VERSION="3.7.3"
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 

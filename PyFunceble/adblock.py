@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 
 from PyFunceble.check import Check
 from PyFunceble.helpers import List, Regex
@@ -71,8 +68,17 @@ class AdBlock:  # pylint: disable=too-few-public-methods
     """
     Provide the adblock decoding logic.
 
-    :param list_from_file: The file in list format.
-    :type list_from_file: list
+    :param list list_from_file: The file in list format.
+    :param bool aggressive:
+        Activate the extration of all domains present into
+        the given adbloack filter list.
+
+        .. warning::
+            This is for now for testing purpose.
+
+            It may be one day accessible to the public
+            but please if you read this, think twice
+            before using it.
     """
 
     def __init__(self, list_from_file, aggressive=False):
@@ -89,9 +95,8 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
         Removed the ignored element from the given list.
 
-        :param list_from_file:
+        :param list list_from_file:
             The list which represent the file we are decoding.
-        :type list_from_list: list
 
         :return: The filtered list.
         :rtype: list
@@ -104,8 +109,11 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
         Check if we have to ignore the given line.
 
-        :param line: The line from the file.
-        :type line: str
+        :param str line: The line from the file.
+
+
+        :return: The result of the check.
+        :rtype: bool
         """
 
         # We set the list of regex to match to be
@@ -129,8 +137,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
         Handle the data from the options.
 
-        :param options: The list of options from the rule.
-        :type options: list
+        :param list options: The list of options from the rule.
 
         :return: The list of domains to return globally.
         :rtype: list
@@ -176,8 +183,8 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
         Extract the base of the given element.
 
-        .. example:
-            given "hello/world?world=beautiful" return "hello"
+        As an example:
+            given :code:`"hello.world/?is=beautiful"` returns :code:`"hello.world"`
 
         :param element: The element we are working with.
         :type element: str|list
@@ -190,7 +197,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
             return [self._extract_base(x) for x in element]
 
         # We get the base if it is an URL.
-        base = Check(element).is_url_valid(return_base=True)
+        base = Check(element).is_url(return_base=True)
 
         if base:
             # It is an URL.
@@ -307,11 +314,9 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         """
         Format the exctracted adblock line before passing it to the system.
 
-        :param to_format: The extracted line from the file.
-        :type to_format: str
+        :param str to_format: The extracted line from the file.
 
-        :param result: A list of the result of this method.
-        :type result: list
+        :param list result: A list of the result of this method.
 
         :return: The list of domains or IP to test.
         :rtype: list
@@ -372,7 +377,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                     # We create an instance of the checker.
                     checker = Check(data)
 
-                    if data and (checker.is_domain_valid() or checker.is_ip_valid()):
+                    if data and (checker.is_domain() or checker.is_ipv4()):
                         # The extraced base is not empty.
                         # and
                         # * The currently read line is a valid domain.
@@ -387,7 +392,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         # * The currently read line is not a valid IP.
 
                         # We try to get the url base.
-                        url_base = checker.is_url_valid(return_base=True)
+                        url_base = checker.is_url(return_base=True)
 
                         if url_base:
                             # The url_base is not empty or equal to False or None.

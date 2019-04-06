@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,7 +59,6 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation
 import PyFunceble
 from PyFunceble.logs import Logs
 
@@ -210,7 +207,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
             if not self.domain_extension and subject.endswith("."):
                 self.domain_extension = [x for x in subject.split(".") if x][-1]
-        except ValueError:
+        except (ValueError, IndexError):
             # There was not point, so no extension to work with.
             self.domain_extension = None
 
@@ -219,10 +216,13 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
         Return the referer aka the WHOIS server of the current domain extension.
 
         :return:
+
             - :code:`None` if there is no referer.
 
             - :code:`False` if the extension is unknown which implicitly means
-            that the subject is :code:`INVALID`
+               that the subject is :code:`INVALID`
+
+        :rtype: None|False|str
         """
 
         if not PyFunceble.CONFIGURATION["local"]:

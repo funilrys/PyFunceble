@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long, too-many-lines
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -23,7 +21,7 @@ Special thanks:
     https://pyfunceble.readthedocs.io/en/dev/special-thanks.html
 
 Contributors:
-    http://pyfunceble.readthedocs.io/en/dev/special-thanks.html
+    http://pyfunceble.readthedocs.io/en/dev/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -61,10 +59,9 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=bad-continuation, too-many-lines
 import PyFunceble
 from PyFunceble import directory_separator
-from PyFunceble.database import Inactive
+from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
@@ -775,7 +772,15 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         :rtype: bool
         """
 
-        if Inactive(self.filename).is_present(self.subject) and self.status in [
+        if PyFunceble.CONFIGURATION["no_files"]:
+            return True
+
+        if self.filename:
+            inactive_db = InactiveDB(self.filename)
+        else:
+            inactive_db = []
+
+        if self.subject in inactive_db and self.status in [
             PyFunceble.STATUS["official"]["down"],
             PyFunceble.STATUS["official"]["invalid"],
         ]:

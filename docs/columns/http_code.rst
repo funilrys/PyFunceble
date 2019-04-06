@@ -1,5 +1,5 @@
 HTTP Code
----------
+=========
 
 .. note::
   This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
@@ -24,7 +24,7 @@ We have categorized the HTTP Code into 3 parts.
 
 
 As active
-^^^^^^^^^
+---------
 
 - 100 - Continue
 - 101 - Switching Protocols
@@ -37,7 +37,7 @@ As active
 - 206 - Partial Content
 
 As potentially active
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 - 000
 - 300 - Multiple Choices
@@ -63,7 +63,7 @@ As potentially active
 - 505 - HTTP Version Not Supported
 
 As inactive or potentially inactive
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------
 
 - 400 - Bad Request
 - 401 - Unauthorized
