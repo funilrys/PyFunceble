@@ -186,16 +186,8 @@ class WhoisDB:
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
-                Dict(
-                    Dict(self.database).merge(
-                        Dict.from_json(File(self.database_file).read())
-                    )
-                ).to_json(self.database_file)
-
-            else:
-                # We save the current state of the datbase.
-                Dict(self.database).to_json(self.database_file)
+            # We save the current state of the datbase.
+            Dict(self.database).to_json(self.database_file)
 
     def is_time_older(self, subject):
         """

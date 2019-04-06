@@ -583,7 +583,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         initiate(autoreset=True)
 
         # We load the configuration and the directory structure.
-        load_config(generate_directory_structure=True)
+        load_config(generate_directory_structure=False)
         try:
             # The following handle the command line argument.
 

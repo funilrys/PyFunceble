@@ -322,15 +322,8 @@ class InactiveDB:
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
-                Dict(
-                    Dict(self.database).merge(
-                        Dict.from_json(File(self.database_file).read())
-                    )
-                ).to_json(self.database_file)
-            else:
-                # We save the current database state into the database file.
-                Dict(self.database).to_json(self.database_file)
+            # We save the current database state into the database file.
+            Dict(self.database).to_json(self.database_file)
 
     def _add_to_test(self, to_add):
         """
@@ -364,7 +357,7 @@ class InactiveDB:
         Initiate the databse.
         """
 
-        if self.authorized and self.filename in self.database:
+        if self.authorized:
             # * We are authorized to operate.
             # and
             # * The filename is already in the database.
@@ -380,30 +373,31 @@ class InactiveDB:
             # We load the database.
             self.load()
 
-            for data in [x for x in self.database[self.filename] if x.isdigit()]:
-                # We loop through the database content related to the file we
-                # are testing.
+            if self.filename in self.database:
+                for data in [x for x in self.database[self.filename] if x.isdigit()]:
+                    # We loop through the database content related to the file we
+                    # are testing.
 
-                if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
-                    # The currently read index is older than the excepted time
-                    # for retesting.
+                    if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
+                        # The currently read index is older than the excepted time
+                        # for retesting.
 
-                    # We extend our result variable with the content from the
-                    # currently read index.
-                    result.extend(self.database[self.filename][data])
+                        # We extend our result variable with the content from the
+                        # currently read index.
+                        result.extend(self.database[self.filename][data])
 
-                    # And we append the currently read index into the list of
-                    # index to delete.
-                    to_delete.append(data)
+                        # And we append the currently read index into the list of
+                        # index to delete.
+                        to_delete.append(data)
 
-            # We remove all indexes which are present into the list of index to delete.
-            Dict(self.database[self.filename]).remove_key(to_delete)
+                # We remove all indexes which are present into the list of index to delete.
+                Dict(self.database[self.filename]).remove_key(to_delete)
 
-            # And we append our list of element to retest into the `to_test` index.s
-            self._add_to_test(result)
+                # And we append our list of element to retest into the `to_test` index.s
+                self._add_to_test(result)
 
-            # And we finally save the database.
-            self.save()
+                # And we finally save the database.
+                self.save()
 
     def _timestamp(self):
         """

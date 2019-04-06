@@ -101,7 +101,7 @@ class AutoContinue:
             self.load()
 
     def __contains__(self, index):
-        if index in self.database[self.filename]:
+        if self.filename in self.database and index in self.database[self.filename]:
             if self.database[self.filename][index] in [
                 PyFunceble.STATUS["official"]["up"],
                 PyFunceble.STATUS["official"]["valid"],
@@ -171,22 +171,8 @@ class AutoContinue:
         if self.authorized:
             # We are authoried to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
-                # The database file exists.
-
-                # We merge the current content of the
-                # database file with the current state
-                # of the database.
-                Dict(
-                    Dict(self.database).merge(
-                        Dict.from_json(File(self.database_file).read())
-                    )
-                ).to_json(self.database_file)
-            else:
-                # The database file do not exists.
-
-                # We save the current database state.
-                Dict(self.database).to_json(self.database_file)
+            # We save the current database state.
+            Dict(self.database).to_json(self.database_file)
 
     def load(self):
         """

@@ -89,6 +89,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         url_to_test=None,
     ):
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
+            PyFunceble.DirectoryStructure()
+
             ExecutionTime("start")
 
             if domain_or_ip:
