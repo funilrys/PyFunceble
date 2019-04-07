@@ -160,10 +160,11 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             return req.status_code
 
         except (
-            PyFunceble.requests.exceptions.InvalidURL,
-            PyFunceble.socket.timeout,
-            PyFunceble.requests.exceptions.Timeout,
             PyFunceble.requests.ConnectionError,
+            PyFunceble.requests.exceptions.InvalidSchema,
+            PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.requests.exceptions.Timeout,
+            PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
