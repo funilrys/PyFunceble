@@ -39,9 +39,14 @@ The usage of `PyFunceble --production` update `version.yaml` and `directory_stru
 
 # Coding conventions
 
-- We make sure that a method, a function, and a class **has a doctring**.
-- One line should not exceed 79 characters for docstring and 100 characters for long declaration/assignment.
-  - Exception granted for regular expressions or long string assignment.
-- We use [`Black`](https://github.com/ambv/black), _The uncompromising Python code formatter_ , to format our code.
-- Our code should pass `pylint PyFunceble && pylint tests/*.py` with at least a score of 10.00/10.00
-- We do not forget to follow the steps before commits.
+  - We make sure that a method, a function, and a class **has a doctring**.
+
+  - One line should not exceed 79 characters for docstring and 100 characters for long declaration/assignment.
+
+    - Exception granted for regular expressions or long string assignment.
+
+  - We use [`Black`](https://github.com/ambv/black), _The uncompromising Python code formatter_ , to format our code.
+
+  - Our code should pass `pylint PyFunceble && pylint tests/*.py` with at least a score of 10.00/10.00
+
+  - We do not forget to follow the steps before commits.
