@@ -582,7 +582,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         # We initiate the end of the coloration at the end of each line.
         initiate(autoreset=True)
 
-        # We load the configuration and the directory structure.
+        # We load the configuration.
         load_config(generate_directory_structure=False)
         try:
             # The following handle the command line argument.
