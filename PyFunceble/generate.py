@@ -191,6 +191,38 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
         return output_dir
 
+    def ___info_files_authorization(self):
+        """
+        Provide the authorization for the generation
+        of info files.
+
+        Basicaly here is what we check:
+
+        * We are not testing as an imported module.
+
+        and
+
+        * The hosts file generation is activated.
+
+        or
+
+        * The plain list generation is activated.
+        or
+
+        * The "api_file_generation" was set into the CONFIGURATION.
+        """
+
+        return (
+            self.subject_type.startswith("file_")
+            and (
+                PyFunceble.CONFIGURATION["generate_hosts"]
+                or PyFunceble.CONFIGURATION["plain_list_domain"]
+                or PyFunceble.CONFIGURATION["generate_json"]
+            )
+            or "api_file_generation" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION["api_file_generation"]
+        )
+
     def info_files(self):  # pylint: disable=inconsistent-return-statements
         """
         Generate the hosts file, the plain list and the splitted lists.
@@ -202,17 +234,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             # We return false.
             return False
 
-        if self.subject_type.startswith("file_") and (
-            PyFunceble.CONFIGURATION["generate_hosts"]
-            or PyFunceble.CONFIGURATION["plain_list_domain"]
-            or PyFunceble.CONFIGURATION["generate_json"]
-        ):
-            # * We are not testing as an imported module.
-            # and
-            # * The hosts file generation is activated.
-            # or
-            # * The plain list generation is activated.
-
+        if self.___info_files_authorization():
             # We initiate a variable which whill save the splited testination.
             splited_destination = ""
 

@@ -564,13 +564,16 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         # We save that the configuration was loaded.
         INTERN.update({"config_loaded": True})
 
-        if custom and isinstance(custom, dict):
-            # The given configuration is not None or empty.
-            # and
-            # It is a dict.
+    if custom and isinstance(custom, dict):
+        # The given configuration is not None or empty.
+        # and
+        # It is a dict.
 
-            # We update the configuration index.
-            CONFIGURATION.update(custom)
+        # We update the configuration index.
+        CONFIGURATION.update(custom)
+
+        # We save the fact the the custom was loaded.
+        INTERN.update({"custom_loaded": True, "custom_config_loaded": custom})
 
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements

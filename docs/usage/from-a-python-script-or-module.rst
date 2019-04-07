@@ -187,7 +187,7 @@ Custom Configuration
 """"""""""""""""""""
 
 Sometime you may want to change **PyFunceble**'s configuration information from within your code.
-Here are way to do it.
+Here are ways to do it.
 
 ::
 

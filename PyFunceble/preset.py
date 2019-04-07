@@ -67,12 +67,14 @@ class Preset:
     Check or update the global configuration based on some events.
     """
 
-    def __init__(self):
-        if PyFunceble.CONFIGURATION["syntax"]:
-            # We are checking for syntax.
+    # List all index which can be superset.
+    # In other words if an index which is listed here
+    # is also listed into PyFunceble.INTERN["custom_config_loaded"],
+    # We do not update it.
+    do_not_overwrite_if_customized = ["no_files", "whois_database"]
 
-            # We deactivate the http status code.
-            PyFunceble.HTTP_CODE["active"] = False
+    def __init__(self):
+        self.syntax_test()
 
     @classmethod
     def switch(
@@ -144,8 +146,18 @@ class Preset:
         Set the given configuration index to :code:`False`.
         """
 
-        if PyFunceble.CONFIGURATION[index]:
+        if (
+            index in cls.do_not_overwrite_if_customized
+            and "custom_loaded" in PyFunceble.INTERN
+            and PyFunceble.INTERN["custom_loaded"]
+            and index in PyFunceble.INTERN["custom_config_loaded"]
+        ):
+            return None
+
+        if index not in PyFunceble.CONFIGURATION or PyFunceble.CONFIGURATION[index]:
             PyFunceble.CONFIGURATION[index] = False
+
+        return None
 
     @classmethod
     def enable(cls, index):  # pragma: no cover
@@ -153,8 +165,18 @@ class Preset:
         Set the given configuration index to :code:`True`.
         """
 
-        if not PyFunceble.CONFIGURATION[index]:
+        if (
+            index in cls.do_not_overwrite_if_customized
+            and "custom_loaded" in PyFunceble.INTERN
+            and PyFunceble.INTERN["custom_loaded"]
+            and index in PyFunceble.INTERN["custom_config_loaded"]
+        ):
+            return None
+
+        if index not in PyFunceble.CONFIGURATION or not PyFunceble.CONFIGURATION[index]:
             PyFunceble.CONFIGURATION[index] = True
+
+        return None
 
     @classmethod
     def reset_counters(cls):
@@ -168,6 +190,19 @@ class Preset:
             # And we set the counter of the currently read status to 0.
             PyFunceble.INTERN["counter"]["number"][status] = 0
             PyFunceble.INTERN["counter"]["percentage"][status] = 0
+
+    @classmethod
+    def syntax_test(cls):  # pragma: no cover
+        """
+        Disable the HTTP status code if we are
+        testing for syntax
+        """
+
+        if PyFunceble.CONFIGURATION["syntax"]:
+            # We are checking for syntax.
+
+            # We deactivate the http status code.
+            PyFunceble.HTTP_CODE["active"] = False
 
     def simple_domain(self):  # pragma: no cover
         """

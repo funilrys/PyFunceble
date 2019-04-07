@@ -97,35 +97,16 @@ class APICore:
 
         # We load the global configuration
         # if it was not alreay done.
-        PyFunceble.load_config(generate_directory_structure=False)
-
-        # We create an instance of the whois database.
-        self.whois_db = WhoisDB()
+        PyFunceble.load_config(
+            generate_directory_structure=False, custom=self.configuration
+        )
 
         # We update the configuration with the given
         # configuration.
         PyFunceble.Preset().api()
-        self.__update_configuration()
 
-    def __update_configuration(self):
-        """
-        Update the configuration with the given one.
-        """
-
-        if self.configuration and isinstance(self.configuration, dict):
-            # * The user gave use some complementary configuration.
-            # and
-            # * The user input is a dict.
-
-            # We update the global configuration with the given one.
-            PyFunceble.CONFIGURATION.update(self.configuration)
-
-        # We update the local configuration with the global one.
-        #
-        # Note: The pupose of this is to allow (in the future)
-        # a better way to reuse this class and this whole
-        # infrastructure.
-        self.configuration = PyFunceble.CONFIGURATION
+        # We create an instance of the whois database.
+        self.whois_db = WhoisDB()
 
     def domain_and_ip(self):
         """
