@@ -8,7 +8,7 @@ The `master` branch is used only for releasing a new **stable** version of the c
 
 In order to gain sometime and also understand what you are working on, your pull requests submission as long as your commit descriptions should be clear and complete as much as possible. We do an exception for commit with minor changed but big changes should have a complete description. Please ensure to use the following method before commiting.
 
-## Steps before commits
+# Steps before commits
 
 _Note: The following do not apply if you do not touch the `PyFunceble` nor the `tests` directory._
 
@@ -23,7 +23,7 @@ $ # Prepare our files, `version.yaml` and code for pushing.
 $ PyFunceble --production
 ```
 
-## The commit
+# The commit
 
 ```shell
 $ # The paragraph is optional if your changes/commits are obvious.
