@@ -103,16 +103,22 @@ class TestNSLookup(TestCase):
 
         self.assertIsInstance(actual, dict)
 
-        assert "addr_info" in actual, actual
+        if "addr_info" not in actual:
+            raise AssertionError()
 
         PyFunceble.INTERN["to_test"] = "172.217.22.14"
         actual = NSLookup("172.217.22.14").request()
 
         self.assertIsInstance(actual, dict)
 
-        assert "hostname" in actual, actual
-        assert "aliases" in actual, actual
-        assert "ips" in actual, actual
+        if "hostname" not in actual:
+            raise AssertionError()
+
+        if "aliases" not in actual:
+            raise AssertionError()
+
+        if "ips" not in actual:
+            raise AssertionError()
 
 
 if __name__ == "__main__":
