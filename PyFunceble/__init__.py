@@ -725,7 +725,8 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
-                    "A complement is for example `example.org` if `www.example.org` is given and vice-versa. %s"
+                    "A complement is for example `example.org` if `www.example.org` "
+                    "is given and vice-versa. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["generate_complements"])

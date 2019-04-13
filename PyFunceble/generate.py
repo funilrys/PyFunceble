@@ -216,7 +216,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
 
         return (
-            self.subject_type.startswith("file_")
+            not self._do_not_produce_file()
+            and self.subject_type.startswith("file_")
             and (
                 PyFunceble.CONFIGURATION["generate_hosts"]
                 or PyFunceble.CONFIGURATION["plain_list_domain"]
@@ -371,12 +372,6 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
         Generate the hosts file, the plain list, the JSON file and the splitted files.
         """
-
-        if self._do_not_produce_file():
-            # We do not have to produce file.
-
-            # We return false.
-            return False
 
         if self.___info_files_authorization():
             # We initiate a variable which whill save the splited testination.
