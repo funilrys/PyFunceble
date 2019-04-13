@@ -100,6 +100,18 @@ class AutoContinue:
             # We load the backup (if existant).
             self.load()
 
+            if not self.database[self.filename]:
+                # The database of the file we are
+                # currently testing is empty.
+
+                # We clean the output directory.
+                PyFunceble.Clean(None)
+        else:
+            # We are not authorized to operate.
+
+            # We clean the output directory.
+            PyFunceble.Clean(None)
+
     def __contains__(self, index):
         if self.filename in self.database and index in self.database[self.filename]:
             if self.database[self.filename][index] in [
