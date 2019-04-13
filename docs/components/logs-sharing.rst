@@ -36,4 +36,4 @@ to
 
    share_logs:                   True
 
-into your personal `.PyFunceble.yaml` or use the `--share-logs` argument from the CLI. 
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--share-logs` argument from the CLI.
