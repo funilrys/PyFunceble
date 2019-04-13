@@ -97,6 +97,7 @@ outputs:
   hosts:
     directory: hosts
     filename: hosts
+    ip_filename: ips
 
   json:
     directory: json

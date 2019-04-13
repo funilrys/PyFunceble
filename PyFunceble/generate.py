@@ -70,29 +70,27 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
     """
     Generate different sort of files.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param subject_type: The type of the subject.
-    :type subject_type: str
+    :param str subject_type: The type of the subject.
 
-    :param status: The catched status.
-    :type status: str
+    :param str status: The catched status.
 
-    :param source: The source of the given status.
-    :type source: str
+    :param str source: The source of the given status.
 
-    :param expiration_date: The expiration date of the domain (if catched).
-    :type expiration_date: str
+    :param str expiration_date:
+        The expiration date of the domain (if catched).
 
     :param http_status_code: The HTTP status code.
     :type http_status_code: str|int
 
-    :param whois_server: The whois server.
-    :type whois_server: str
+    :param str whois_server: The whois server.
 
-    :param filename: The name of the file we are testing.
-    :type filename: str
+    :param str filename:
+        The name of the file we are testing.
+
+    :param str ip_validation:
+        The IP validation check of the currently written subject.
     """
 
     def __init__(
@@ -105,6 +103,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         http_status_code="***",
         whois_server="Unknown",
         filename=None,
+        ip_validation=None,
     ):
         # We share the subject.
         self.subject = subject
@@ -118,6 +117,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         self.status_code = http_status_code
         # We share the file name.
         self.filename = filename
+        # We share the IP validation.
+        self.ip_validation = ip_validation
 
         if not whois_server:
             whois_server = "Unknown"
@@ -225,7 +226,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             and PyFunceble.CONFIGURATION["api_file_generation"]
         )
 
-    def info_files(self):  # pylint: disable=inconsistent-return-statements
+    def info_files(  # pylint: disable=inconsistent-return-statements,too-many-branches
+        self
+    ):
         """
         Generate the hosts file, the plain list and the splitted lists.
         """
@@ -273,6 +276,18 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 + directory_separator
                 + PyFunceble.OUTPUTS["json"]["filename"]
             )
+
+            if self.ip_validation:
+                # The element is an IP.
+
+                # We construct the output file.
+                output_hosts = (
+                    self.output_parent_dir
+                    + PyFunceble.OUTPUTS["hosts"]["directory"]
+                    + "%s"
+                    + directory_separator
+                    + PyFunceble.OUTPUTS["hosts"]["ip_filename"]
+                )
 
             if self.status.lower() in PyFunceble.STATUS["list"]["up"]:
                 # The status is in the list of up list.
@@ -494,6 +509,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
                     filename=self.filename,
+                    ip_validation=self.ip_validation,
                 ).info_files()
             elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
                 # The new status is in the list of down status.
@@ -514,6 +530,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
                     filename=self.filename,
+                    ip_validation=self.ip_validation,
                 ).info_files()
             elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
                 # The new status is in the list of suspicious status.
@@ -534,6 +551,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
                     filename=self.filename,
+                    ip_validation=self.ip_validation,
                 ).info_files()
             else:
                 # The new status is in the list of up and down status.
@@ -554,6 +572,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                     http_status_code=self.status_code,
                     whois_server=self.whois_server,
                     filename=self.filename,
+                    ip_validation=self.ip_validation,
                 ).info_files()
 
             # We print the information on file.

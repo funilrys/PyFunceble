@@ -157,29 +157,41 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             http_status_code=self.output["http_status_code"],
                             whois_server=self.output["whois_server"],
                             filename=self.filename,
+                            ip_validation=self.output["ipv4_syntax_validation"],
                         ).status_file()
                     else:
                         self.output["_status_source"] = "NSLOOKUP"
-                        self.handle(status="inactive")
+                        self.handle(
+                            status="inactive",
+                            ip_validation_status=self.output["ipv4_syntax_validation"],
+                        )
                 else:
                     self.output["_status_source"] = "NSLOOKUP"
-                    self.handle(status="inactive")
+                    self.handle(
+                        status="inactive",
+                        ip_validation_status=self.output["ipv4_syntax_validation"],
+                    )
             else:
                 self.output["_status_source"] = "IANA"
                 self.output["_status"] = PyFunceble.STATUS["official"]["invalid"]
 
-                self.handle(status="invalid")
+                self.handle(
+                    status="invalid",
+                    ip_validation_status=self.output["ipv4_syntax_validation"],
+                )
 
             return self.output
 
         raise ValueError("Subject should be given.")
 
-    def handle(self, status):
+    def handle(self, status, ip_validation_status):
         """
         Handle the lack of WHOIS and expiration date. :smile_cat:
 
-        :param matched_status: The status that we have to handle.
-        :type status: str
+        :param str matched_status: The status that we have to handle.
+
+        :param str ip_validation_status:
+            The IP syntax validation.
 
         :return:
             The status of the domain after generating the files desired
@@ -224,6 +236,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             http_status_code=self.output["http_status_code"],
             whois_server=self.output["whois_server"],
             filename=self.filename,
+            ip_validation=ip_validation_status,
         ).status_file()
 
 
@@ -830,4 +843,5 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.output["status"],
             source=self.output["status_source"],
             filename=self.filename,
+            ip_validation=self.output["ipv4_syntax_validation"],
         ).status_file()
