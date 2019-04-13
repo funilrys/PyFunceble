@@ -125,7 +125,6 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             if PyFunceble.CONFIGURATION["local"] or (
                 self.output["domain_syntax_validation"]
                 or self.output["ipv4_syntax_validation"]
-                and self.output["whois_server"] is not False
             ):
                 self.output["http_status_code"] = HTTPCode(
                     self.subject, self.subject_type
