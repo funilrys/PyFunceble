@@ -71,7 +71,7 @@ class Preset:
     # In other words if an index which is listed here
     # is also listed into PyFunceble.INTERN["custom_config_loaded"],
     # We do not update it.
-    do_not_overwrite_if_customized = ["no_files", "whois_database"]
+    do_not_overwrite_if_customized = ["no_files", "whois_database", "inactive_database"]
 
     def __init__(self):
         self.syntax_test()

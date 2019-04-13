@@ -62,6 +62,7 @@ License:
 
 import PyFunceble
 from PyFunceble.check import Check
+from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.status import Status, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -108,6 +109,30 @@ class APICore:
         # We create an instance of the whois database.
         self.whois_db = WhoisDB()
 
+        # We create an instance of the inactive database.
+        self.inactive_db = InactiveDB("api_call")
+
+    def __inactive_database_management(self, subject, status):
+        """
+        Given the subject and status, we add or remove the subject
+        from the inactive database.
+        """
+
+        if self.inactive_db.authorized:
+            # We are authorized to operate with the
+            # inactive database.s
+
+            if status.lower() in PyFunceble.STATUS["list"]["up"]:
+                # The status is in the list of UP status.
+
+                # We remove it from the database.
+                self.inactive_db.remove(subject)
+            else:
+                # The status is not in the list of UP status.
+
+                # We add it into the database.
+                self.inactive_db.add(subject)
+
     def domain_and_ip(self):
         """
         Run a domain/IP avaibility check over the given subject.
@@ -139,11 +164,15 @@ class APICore:
                     # We only set the status.
                     result[subject] = data["status"]
 
+                self.__inactive_database_management(subject, data["status"])
+
             # We return our local result.
             return result
 
         # We get the status of the given subject.
         data = Status(self.subject, subject_type="domain", whois_db=self.whois_db).get()
+
+        self.__inactive_database_management(self.subject, data["status"])
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -239,11 +268,15 @@ class APICore:
                     # We only set the status.
                     result[subject] = data["status"]
 
+                self.__inactive_database_management(subject, data["status"])
+
             # We return the result of each subjects.
             return result
 
         # We get the complete data about the status of the subject.
         data = URLStatus(self.subject, subject_type="url").get()
+
+        self.__inactive_database_management(self.subject, data["status"])
 
         if self.complete:
             # The user want a complete copy of the data.
