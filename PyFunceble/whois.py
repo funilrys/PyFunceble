@@ -78,7 +78,7 @@ class Whois:
         The WHOIS server we are working with.
 
         .. note::
-            If none is given, we look for the best one.
+            If :code:`None` is given, we look for the best one.
 
     :param int timeout:
         The timeout to apply.
