@@ -43,7 +43,7 @@ def _get_version(full=False):
 # -- Project information -----------------------------------------------------
 
 project = "PyFunceble"
-copyright = "2017-2019, Nissar Chababy (@funilrys)"
+copyright = "2017, 2018, 2019, Nissar Chababy (@funilrys)"
 author = "Nissar Chababy (@funilrys)"
 
 # The short X.Y version
