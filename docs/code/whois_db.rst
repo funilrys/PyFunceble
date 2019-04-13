@@ -1,5 +1,5 @@
-Inactive Database
-=================
+Whois Database
+==============
 
 Problematic
 -----------
