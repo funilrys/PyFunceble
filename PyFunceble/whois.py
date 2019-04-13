@@ -191,7 +191,7 @@ class Whois:
                     # And we return the result.
                     return result
 
-                # Wverythin goes right.
+                # Eerything goes right.
 
                 # We append the data to the response.
                 response += data
