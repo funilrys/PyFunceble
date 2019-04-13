@@ -36,6 +36,36 @@
                 "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
             }
         },
+        "complements/": {
+            ".gitignore": {
+                "content": "*@@@!.gitignore@@@!/ACTIVE/@@@!/INACTIVE/@@@!/INVALID/@@@!/VALID/",
+                "sha512": "7204dc4062a3e1df2c99dd671e10cb24bc07a897c496e56deeb8e40d1693ccd9a1da4aec302c8f6647dd1bab5750a1473c9eda1ff1898a4253eee67efb1be315"
+            }
+        },
+        "complements/ACTIVE/": {
+            ".gitignore": {
+                "content": "*@@@!.gitignore",
+                "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+            }
+        },
+        "complements/INACTIVE/": {
+            ".gitignore": {
+                "content": "*@@@!.gitignore",
+                "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+            }
+        },
+        "complements/INVALID/": {
+            ".gitignore": {
+                "content": "*@@@!.gitignore",
+                "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+            }
+        },
+        "complements/VALID/": {
+            ".gitignore": {
+                "content": "*@@@!.gitignore",
+                "sha512": "68fbcbebe57013e70f798ec673d6c554cf0b118f41a56baf92d53686f8d24fda670ed6dda23c6cbab630dfaf8cbf6d6a52a6815ac3680b24dad99b1305de6279"
+            }
+        },
         "domains/": {
             ".gitignore": {
                 "content": "*@@@!.gitignore@@@!/ACTIVE/@@@!/INACTIVE/@@@!/INVALID/@@@!/VALID/",

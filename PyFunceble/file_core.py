@@ -124,6 +124,10 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We get/initiate the autocontinue subsystem.
         self.autocontinue = AutoContinue(self.file)
 
+        # We initiate a variable which will tell us when
+        # we start testing for complements.
+        self.complements_test_started = False
+
         # We download the file if it is a list.
         self.download_link()
 
@@ -211,6 +215,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # inactive database.
                 self.inactive_db.add(subject)
 
+            if self.complements_test_started:
+                # We started to test the complements.
+
+                # We generate the complement file(s).
+                Generate(subject, "file_domain", status).complements_file()
+
             # We return the status.
             return status
 
@@ -270,6 +280,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # We add the current subject into the
                 # inactive database.
                 self.inactive_db.add(subject)
+
+            if self.complements_test_started:
+                # We started to test the complements.
+
+                # We generate the complement file(s).
+                Generate(subject, "file_url", status).complements_file()
 
             # We retunr the status.
             return status
@@ -429,6 +445,22 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We add the line into the auto continue database.
         self.autocontinue.add(line, status)
 
+        if self.complements_test_started:
+            # We started the test of the complements.
+
+            if "complements" in self.autocontinue.database:
+                # The complement index is present.
+
+                while line in self.autocontinue.database["complements"]:
+                    # We loop untill the line is not present into the
+                    # database.
+
+                    # We remove the currently tested element.
+                    self.autocontinue.database["complements"].remove(line)
+
+                    # We save the current state.
+                    self.autocontinue.save()
+
         # We process the autosaving if it is necessary.
         self.autosave.process(test_completed=False)
 
@@ -486,6 +518,60 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # and remove the currently tested line
             # from the mining database.
             self.mining.remove(index, line)
+
+        if (
+            PyFunceble.CONFIGURATION["generate_complements"]
+            and self.autocontinue.authorized
+        ):
+            # * The user want us to generate and test the list
+            # of all complements.
+            # and
+            # * The autocontinue subsystem is activated.
+
+            # We inform all subsystem that we are testing for complements.
+            self.complements_test_started = True
+
+            if "complements" not in self.autocontinue.database[self.file].keys():
+                # The complements are not saved,
+
+                # We get the list of domains we are going to work with.
+                complements = [
+                    x
+                    for x in self.autocontinue.database[self.file].keys()
+                    if not Check(x).is_subdomain() and Check(x).is_domain()
+                ]
+
+                # We generate the one without "www." if "www." is given.
+                complements.extend([x[4:] for x in complements if x.startswith("www.")])
+                # We generate the one with "www." if "www." is not given.
+                complements.extend(
+                    [
+                        "www.{0}".format(x)
+                        for x in complements
+                        if not x.startswith("www.")
+                    ]
+                )
+
+                # We remove the already tested subjects.
+                complements = set(List(complements).format()) - set(
+                    self.autocontinue.database[self.file].keys()
+                )
+
+                # We save the constructed list of complements
+                self.autocontinue.database[self.file]["complements"] = list(complements)
+                self.autocontinue.save()
+            else:
+                # We get the complements we still have to test.
+                complements = self.autocontinue.database[self.file]["complements"]
+
+            for subject in complements:
+                # We loop through the list of complements.
+
+                # We test the complement.
+                self._test_line(subject)
+
+            # We inform all subsystem that we are not testing for complements anymore.
+            self.complements_test_started = False
 
         # We clean the autocontinue subsystem, we finished
         # the test.

@@ -25,6 +25,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   speedmann - `@speedmann`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
+-   ZeroDot1 - `@ZeroDot1`_
 
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
@@ -37,5 +38,6 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
+.. _@ZeroDot1: https://github.com/ZeroDot1
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble

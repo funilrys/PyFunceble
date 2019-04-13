@@ -107,6 +107,19 @@
 .. note::
     This index should be initiated with a regular expression.
 
+:code:`generate_complements`
+----------------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the generation and test of the complements.
+
+.. note::
+    A complement is for example :code:`example.org` if :code:`www.example.org` is given and vice-versa.
+
+
 :code:`generate_hosts`
 ----------------------
 

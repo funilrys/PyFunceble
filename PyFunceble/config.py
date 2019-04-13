@@ -135,7 +135,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We load the installed configuration.
                 self._load_config_file()
 
-        for main_key in ["domains", "hosts", "splited", "json"]:
+        for main_key in ["domains", "hosts", "splited", "json", "complements"]:
             # We loop through the key which contain paths under the `outputs` index.
 
             # And we fix the path.

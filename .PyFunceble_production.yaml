@@ -14,6 +14,8 @@ days_between_db_retest: 1
 debug: False
 # Set the element to filter.
 filter: ""
+# Enable / disable the generation of complements.
+generate_complements: False
 # Enable / disable the generation of the hosts file(s).
 generate_hosts: True
 # Enable / Disable the generation of a JSON format for the output
@@ -115,6 +117,9 @@ outputs:
       potentially_up: potentially_up
       up: active_and_merged_in_results
       suspicious: suspicious_and_merged_in_results
+
+  complements:
+    directory: complements
 
   logs:
     directories:

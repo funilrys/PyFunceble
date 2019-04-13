@@ -722,6 +722,18 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
+                    "--complements",
+                    action="store_true",
+                    help="Switch the value of the generation and test of the complements. "
+                    "A complement is for example `example.org` if `www.example.org` is given and vice-versa. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["generate_complements"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
                     "-d", "--domain", type=str, help="Set and test the given domain."
                 )
 
@@ -1198,6 +1210,15 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.commit_results_message:
                     CONFIGURATION.update(
                         {"travis_autosave_final_commit": ARGS.commit_results_message}
+                    )
+
+                if ARGS.complements:
+                    CONFIGURATION.update(
+                        {
+                            "generate_complements": Preset().switch(
+                                "generate_complements"
+                            )
+                        }
                     )
 
                 if ARGS.database:

@@ -89,7 +89,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
     :param str filename:
         The name of the file we are testing.
 
-    :param str ip_validation:
+    :param bool ip_validation:
         The IP validation check of the currently written subject.
     """
 
@@ -103,7 +103,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         http_status_code="***",
         whois_server="Unknown",
         filename=None,
-        ip_validation=None,
+        ip_validation=False,
     ):
         # We share the subject.
         self.subject = subject
@@ -226,11 +226,150 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             and PyFunceble.CONFIGURATION["api_file_generation"]
         )
 
+    def ___get_info_files_destinations(self, output_hosts, output_domains, output_json):
+        """
+        Given the output directory, this method return several paths.
+
+        .. note::
+            The given output directories have to be partially completed.
+
+            Indeed, we only do :code:`output % final_location`.
+
+        :return:
+            ::
+                (
+                    hosts_destination,
+                    plain_destination,
+                    json_destination,
+                    splited_destination
+                )
+        :rtype: tuple
+        """
+
+        # We present the splited destination.
+        splited_destination = None
+
+        # We initiate the list of all analytic related statuses.
+        http_list = []
+        http_list.extend(PyFunceble.STATUS["list"]["potentially_up"])
+        http_list.extend(PyFunceble.STATUS["list"]["potentially_down"])
+        http_list.extend(PyFunceble.STATUS["list"]["http_active"])
+        http_list.extend(PyFunceble.STATUS["list"]["suspicious"])
+
+        if self.status.lower() in PyFunceble.STATUS["list"]["up"]:
+            # The status is in the list of up list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["up"]
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS["official"]["up"]
+        elif self.status.lower() in PyFunceble.STATUS["list"]["valid"]:
+            # The status is in the list of valid list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["valid"]
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS["official"]["valid"]
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS["official"]["valid"]
+        elif self.status.lower() in PyFunceble.STATUS["list"]["down"]:
+            # The status is in the list of down list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["down"]
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS["official"]["down"]
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS["official"]["down"]
+        elif self.status.lower() in PyFunceble.STATUS["list"]["invalid"]:
+            # The status is in the list of invalid list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["invalid"]
+
+            # We complete the path to the plain list file.
+            plain_destination = (
+                output_domains % PyFunceble.STATUS["official"]["invalid"]
+            )
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS["official"]["invalid"]
+        elif self.status.lower() in http_list:
+            # The status is in the list of analytic status.
+
+            # We construct the path to the analytic directory.
+            output_dir = self._analytic_host_file_directory()
+
+            if not output_dir.endswith(directory_separator):
+                # The output directory does not ends with the directory separator.
+
+                # We append the directory separator at the end of the output directory.
+                output_dir += directory_separator
+
+            # We initiate the hosts file path.
+            hosts_destination = output_dir + PyFunceble.OUTPUTS["hosts"]["filename"]
+
+            # We initiate the plain list file path.
+            plain_destination = output_dir + PyFunceble.OUTPUTS["domains"]["filename"]
+
+            # We complete the path to the json list file.
+            json_destination = output_dir + PyFunceble.OUTPUTS["json"]["filename"]
+
+            # We initiate the path to the http code file.
+            # Note: We generate the http code file so that
+            # we can have each domain in a file which is the
+            # extracted http code.
+            splited_destination = output_dir + str(self.status_code)
+        elif self.status.lower().startswith("complements_"):
+            # The status is in the list of complements status.
+
+            # We convert the status to lower case.
+            status = self.status.lower()
+            # We get the status type.
+            status_type = status[status.find("_") + 1 :]
+
+            # We construct the path to the complements directory.
+            output_dir = (
+                self.output_parent_dir
+                + PyFunceble.OUTPUTS["complements"]["directory"]
+                + PyFunceble.STATUS["official"][status_type]
+            )
+
+            if not output_dir.endswith(directory_separator):
+                # The output directory does not ends with the directory separator.
+
+                # We append the directory separator at the end of the output directory.
+                output_dir += directory_separator
+
+            # We initiate the hosts file path.
+            hosts_destination = output_dir + PyFunceble.OUTPUTS["hosts"]["filename"]
+
+            # We initiate the plain list file path.
+            plain_destination = output_dir + PyFunceble.OUTPUTS["domains"]["filename"]
+
+            # We complete the path to the json list file.
+            json_destination = output_dir + PyFunceble.OUTPUTS["json"]["filename"]
+
+        return (
+            hosts_destination,
+            plain_destination,
+            json_destination,
+            splited_destination,
+        )
+
     def info_files(  # pylint: disable=inconsistent-return-statements,too-many-branches
         self
     ):
         """
-        Generate the hosts file, the plain list and the splitted lists.
+        Generate the hosts file, the plain list, the JSON file and the splitted files.
         """
 
         if self._do_not_produce_file():
@@ -242,13 +381,6 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         if self.___info_files_authorization():
             # We initiate a variable which whill save the splited testination.
             splited_destination = ""
-
-            # We initiate the list of all analytic related statuses.
-            http_list = []
-            http_list.extend(PyFunceble.STATUS["list"]["potentially_up"])
-            http_list.extend(PyFunceble.STATUS["list"]["potentially_down"])
-            http_list.extend(PyFunceble.STATUS["list"]["http_active"])
-            http_list.extend(PyFunceble.STATUS["list"]["suspicious"])
 
             # We partially initiate the path to the hosts file.
             output_hosts = (
@@ -289,90 +421,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                     + PyFunceble.OUTPUTS["hosts"]["ip_filename"]
                 )
 
-            if self.status.lower() in PyFunceble.STATUS["list"]["up"]:
-                # The status is in the list of up list.
-
-                # We complete the path to the hosts file.
-                hosts_destination = output_hosts % PyFunceble.STATUS["official"]["up"]
-
-                # We complete the path to the plain list file.
-                plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
-
-                # We complete the path to the json list file.
-                json_destination = output_json % PyFunceble.STATUS["official"]["up"]
-            elif self.status.lower() in PyFunceble.STATUS["list"]["valid"]:
-                # The status is in the list of valid list.
-
-                # We complete the path to the hosts file.
-                hosts_destination = (
-                    output_hosts % PyFunceble.STATUS["official"]["valid"]
-                )
-
-                # We complete the path to the plain list file.
-                plain_destination = (
-                    output_domains % PyFunceble.STATUS["official"]["valid"]
-                )
-
-                # We complete the path to the json list file.
-                json_destination = output_json % PyFunceble.STATUS["official"]["valid"]
-            elif self.status.lower() in PyFunceble.STATUS["list"]["down"]:
-                # The status is in the list of down list.
-
-                # We complete the path to the hosts file.
-                hosts_destination = output_hosts % PyFunceble.STATUS["official"]["down"]
-
-                # We complete the path to the plain list file.
-                plain_destination = (
-                    output_domains % PyFunceble.STATUS["official"]["down"]
-                )
-
-                # We complete the path to the json list file.
-                json_destination = output_json % PyFunceble.STATUS["official"]["down"]
-            elif self.status.lower() in PyFunceble.STATUS["list"]["invalid"]:
-                # The status is in the list of invalid list.
-
-                # We complete the path to the hosts file.
-                hosts_destination = (
-                    output_hosts % PyFunceble.STATUS["official"]["invalid"]
-                )
-
-                # We complete the path to the plain list file.
-                plain_destination = (
-                    output_domains % PyFunceble.STATUS["official"]["invalid"]
-                )
-
-                # We complete the path to the json list file.
-                json_destination = (
-                    output_json % PyFunceble.STATUS["official"]["invalid"]
-                )
-            elif self.status.lower() in http_list:
-                # The status is in the list of analytic status.
-
-                # We construct the path to the analytic directory.
-                output_dir = self._analytic_host_file_directory()
-
-                if not output_dir.endswith(directory_separator):
-                    # The output directory does not ends with the directory separator.
-
-                    # We append the directory separator at the end of the output directory.
-                    output_dir += directory_separator
-
-                # We initiate the hosts file path.
-                hosts_destination = output_dir + PyFunceble.OUTPUTS["hosts"]["filename"]
-
-                # We initiate the plain list file path.
-                plain_destination = (
-                    output_dir + PyFunceble.OUTPUTS["domains"]["filename"]
-                )
-
-                # We complete the path to the json list file.
-                json_destination = output_dir + PyFunceble.OUTPUTS["json"]["filename"]
-
-                # We initiate the path to the http code file.
-                # Note: We generate the http code file so that
-                # we can have each domain in a file which is the
-                # extracted http code.
-                splited_destination = output_dir + str(self.status_code)
+            # We get the destination of the different files.
+            hosts_destination, plain_destination, json_destination, splited_destination = self.___get_info_files_destinations(  # pylint: disable=line-too-long
+                output_hosts, output_domains, output_json
+            )
 
             if PyFunceble.CONFIGURATION["generate_hosts"]:
                 # The hosts file generation is activated.
@@ -462,6 +514,43 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 # And we print the information on file.
                 Prints(to_print, "Generic_File", output, True).data()
 
+    def complements_file(self):
+        """
+        Generate :code:`complements` files base on the current status.
+        """
+
+        if self.subject_type.startswith("file_"):
+            # We are testing files.
+
+            status_map = {
+                "up": "complements_UP",
+                "down": "complements_DOWN",
+                "invalid": "complements_INVALID",
+                "valid": "complements_VALID",
+            }
+
+            for status, generate_status in status_map.items():
+                # We loop through the list of status.
+
+                if self.status.lower() in PyFunceble.STATUS["list"][status]:
+                    # The status is found.
+
+                    # We generate the different files.
+                    Generate(
+                        self.subject,
+                        self.subject_type,
+                        generate_status,
+                        source=self.source,
+                        expiration_date=self.expiration_date,
+                        http_status_code=self.status_code,
+                        whois_server=self.whois_server,
+                        filename=self.filename,
+                        ip_validation=self.ip_validation,
+                    ).info_files()
+
+                    # We break the loop.
+                    break
+
     def analytic_file(self, new_status, old_status=None):
         """
         Generate :code:`Analytic/*` files based on the given old and
@@ -481,7 +570,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             old_status = self.status
 
         if self.subject_type.startswith("file_"):
-            # We are not testing as an imported module.
+            # We are testing files.
 
             # We partially construct the path to the file to write/print.
             output = (

@@ -27,18 +27,18 @@ If this argument is activated the system will extract all domains or IP from the
 
 ::
 
-   
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code  
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ---------- 
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302        
+
+    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
+    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
 
 **When deactivated:**
 
 ::
 
-    Domain                                                                                               Status      HTTP Code  
-    ---------------------------------------------------------------------------------------------------- ----------- ---------- 
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302        
+    Domain                                                                                               Status      HTTP Code
+    ---------------------------------------------------------------------------------------------------- ----------- ----------
+    pyfunceble.readthedocs.io                                                                            ACTIVE      302
 
 
 :code:`-c` | :code:`--auto-continue` | :code:`--continue`
@@ -48,7 +48,7 @@ If this argument is activated the system will extract all domains or IP from the
 
     **Default value:** :code:`True`
 
-This argument activates or deactivates the auto-continue subsystem. 
+This argument activates or deactivates the auto-continue subsystem.
 Indeed, as we can automatically continue if the script has been stopped, this switch allows us to disable or enable the usage of that specific subsystem.
 
 :code:`--clean`
@@ -126,6 +126,14 @@ This argument allows us to set a custom commit message which is going to be used
 .. note::
     This argument is only used if we reached the end of the list we are or have to test.
 
+:code:`--complements`
+^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the value of the generation and test of the complements.
+    A complement is for example :code:`example.org` if :code:`www.example.org` is given and vice-versa.
+
+    **Default value:** :code:`False`
+
 :code:`-d "something"` | :code:`--domain "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -142,7 +150,7 @@ This argument will test and give the results of the tests of the given domain.
 
     Switch the value of the usage of a database to store inactive domains of the currently tested list.
 
-    **Default value:** :code:`True`   
+    **Default value:** :code:`True`
 
 This argument will disable or enable the usage of a database which saves all `INACTIVE` and `INVALID` domain of the given file over time.
 
@@ -291,18 +299,18 @@ This argument allows the conversion of the domains using `domain2idna`_
 
 ::
 
-    Domain                                                                                               Status      HTTP Code  
-    ---------------------------------------------------------------------------------------------------- ----------- ---------- 
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302        
+    Domain                                                                                               Status      HTTP Code
+    ---------------------------------------------------------------------------------------------------- ----------- ----------
+    pyfunceble.readthedocs.io                                                                            ACTIVE      302
 
 **When deactivated:**
 
 ::
 
-   
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code  
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ---------- 
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302        
+
+    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
+    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
 
 :code:`--local`
 ^^^^^^^^^^^^^^^
@@ -421,7 +429,7 @@ You prefer to run a program silently? This argument is for you!
 
     Switch the value of the sharing of logs.
 
-    **Default value:** :code:`True`
+    **Default value:** :code:`False`
 
 Want to make PyFunceble a better tool? Share your logs with our API which collect all logs!
 
@@ -436,7 +444,7 @@ Want as less as possible data on screen? This argument returns as less as possib
 
 :code:`--split`
 ^^^^^^^^^^^^^^^
-    
+
     Switch the value of the split of the generated output
 
     **Default value:** :code:`True`
@@ -456,7 +464,7 @@ Want to get the logs (copy of what you see on screen) on different files? This a
     Switch the value of the timeout.
 
     **Default value:** :code:`3`
-    
+
 This argument will set the default timeout to apply everywhere it is possible to set a timeout.
 
 :code:`--travis`
@@ -529,7 +537,8 @@ Global overview
                     [--cmd-before-end CMD_BEFORE_END]
                     [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
                     [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                    [-d DOMAIN] [-db] [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
+                    [--complements] [-d DOMAIN] [-db]
+                    [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
                     [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
                     [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
                     [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
@@ -568,6 +577,10 @@ Global overview
                                 Replace the default results (final) commit message.
                                 Configured value: 'PyFunceble -
                                 Results'
+        --complements         Switch the value of the generation and test of the
+                                complements. A complement is for example `example.org`
+                                if `www.example.org` is given and vice-versa.
+                                Configured value: False
         -d DOMAIN, --domain DOMAIN
                                 Set and test the given domain.
         -db, --database       Switch the value of the usage of a database to store
@@ -633,7 +646,7 @@ Global overview
         -q, --quiet           Run the script in quiet mode. Configured
                                 value: False
         --share-logs          Switch the value of the sharing of logs.
-                                Configured value: True
+                                Configured value: False
         -s, --simple          Switch the value of the simple output mode.
                                 Configured value: False
         --split               Switch the value of the split of the generated output

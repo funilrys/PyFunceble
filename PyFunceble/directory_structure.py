@@ -238,6 +238,25 @@ class DirectoryStructure:  # pragma: no cover
                 "parent"
             ]
             + PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
+            # We get the replacement of the complements directory from the
+            # configuration file.
+            "complements/": PyFunceble.OUTPUTS["complements"]["directory"],
+            # We get the replacement of the complements/ACTIVE directory from the
+            # configuration file.
+            "complements/ACTIVE/": PyFunceble.OUTPUTS["complements"]["directory"]
+            + PyFunceble.STATUS["official"]["up"],
+            # We get the replacement of the complements/INACTIVE directory from the
+            # configuration file.
+            "complements/INACTIVE/": PyFunceble.OUTPUTS["complements"]["directory"]
+            + PyFunceble.STATUS["official"]["down"],
+            # We get the replacement of the complements/INVALID directory from the
+            # configuration file.
+            "complements/INVALID/": PyFunceble.OUTPUTS["complements"]["directory"]
+            + PyFunceble.STATUS["official"]["invalid"],
+            # We get the replacement of the complements/VALID directory from the
+            # configuration file.
+            "complements/VALID/": PyFunceble.OUTPUTS["complements"]["directory"]
+            + PyFunceble.STATUS["official"]["valid"],
             # We get the replacement of the domains directory from the
             # configuration file.
             "domains/": PyFunceble.OUTPUTS["domains"]["directory"],
