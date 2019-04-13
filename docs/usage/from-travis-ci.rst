@@ -1,14 +1,14 @@
-From Travis CI
----------------
+From a Travis CI container
+==========================
 
 As we offer an argument named :code:`--travis` to activate the usage of PyFunceble in a Travis CI instance, we document here what you need to know!
 
 Configuration
-"""""""""""""
+-------------
 
 .. note::
-   This part only present a commented :code:`.travis.yml` so that you can understand where to start. 
-   
+   This part only present a commented :code:`.travis.yml` so that you can understand where to start.
+
    If you need more practical examples, feel free to report to one of `Dead-Hosts`_ repositories which use PyFunceble with Travis CI.
 
 .. _Dead-Hosts: https://github.com/dead-hosts
@@ -69,7 +69,7 @@ Configuration
         on_failure:   always
 
 Getting a GitHub token
-""""""""""""""""""""""
+----------------------
 
 For the :code:`secure` index of the :code:`.travis.yml` file, you have to generate a `new GitHub token`_.
 
@@ -80,8 +80,8 @@ After you got your token, please write it or save it in a safe place as you're g
 
 .. _new GitHub token: https://github.com/settings/tokens/new
 
-Encrypting the token for Travis CI usage
-""""""""""""""""""""""""""""""""""""""""
+Encrypting the token future usage under the Travis CI container
+---------------------------------------------------------------
 
 To encrypt the token simply replace and execute the following according to your personal case.
 

@@ -43,7 +43,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
    special-thanks
    issues
    faq
-   logs-sharing
    supporting-the-project
    license
    code-of-conduct
@@ -85,9 +84,9 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Usage
 
-   usage/from-a-python-script-or-module
    usage/from-a-terminal
    usage/from-travis-ci
+   usage/with-our-python-api
 
 .. toctree::
    :maxdepth: 3
@@ -104,6 +103,12 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: API documentation
 
    api
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Components
+
+   components/logs-sharing
 
 .. toctree::
    :maxdepth: 3
