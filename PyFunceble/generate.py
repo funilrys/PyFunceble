@@ -517,6 +517,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         if self.subject_type.startswith("file_"):
             # We are testing files.
 
+            # We map the way we are going to work.
             status_map = {
                 "up": "complements_UP",
                 "down": "complements_DOWN",
@@ -567,6 +568,16 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         if self.subject_type.startswith("file_"):
             # We are testing files.
 
+            # We map the way we are going to work with the status.
+            status_map = {
+                "up": "HTTP_Active",
+                "potentially_up": "potentially_up",
+                "suspicious": "suspicious",
+            }
+
+            # We keep a track of the map usage.
+            map_used = False
+
             # We partially construct the path to the file to write/print.
             output = (
                 self.output_parent_dir
@@ -574,71 +585,40 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 + "%s%s"
             )
 
-            if new_status.lower() in PyFunceble.STATUS["list"]["up"]:
-                # The new status is in the list of up status.
+            for status, generate_status in status_map.items():
+                # We loop through our map.
 
-                # We complete the output directory.
-                output = output % (
-                    PyFunceble.OUTPUTS["analytic"]["directories"]["up"],
-                    PyFunceble.OUTPUTS["analytic"]["filenames"]["up"],
-                )
+                if new_status.lower() in PyFunceble.STATUS["list"][status]:
+                    # The status is found into our map.
 
-                # We generate the hosts file.
-                Generate(
-                    self.subject,
-                    self.subject_type,
-                    "HTTP_Active",
-                    source=self.source,
-                    expiration_date=self.expiration_date,
-                    http_status_code=self.status_code,
-                    whois_server=self.whois_server,
-                    filename=self.filename,
-                    ip_validation=self.ip_validation,
-                ).info_files()
-            elif new_status.lower() in PyFunceble.STATUS["list"]["potentially_up"]:
-                # The new status is in the list of down status.
+                    # We conmplete the output directory.
+                    output = output % (
+                        PyFunceble.OUTPUTS["analytic"]["directories"][status],
+                        PyFunceble.OUTPUTS["analytic"]["filenames"][status],
+                    )
 
-                # We complete the output directory.
-                output = output % (
-                    PyFunceble.OUTPUTS["analytic"]["directories"]["potentially_up"],
-                    PyFunceble.OUTPUTS["analytic"]["filenames"]["potentially_up"],
-                )
+                    # We generate the different file(s).
+                    Generate(
+                        self.subject,
+                        self.subject_type,
+                        generate_status,
+                        source=self.source,
+                        expiration_date=self.expiration_date,
+                        http_status_code=self.status_code,
+                        whois_server=self.whois_server,
+                        filename=self.filename,
+                        ip_validation=self.ip_validation,
+                    ).info_files()
 
-                # We generate the hosts file.
-                Generate(
-                    self.subject,
-                    self.subject_type,
-                    "potentially_up",
-                    source=self.source,
-                    expiration_date=self.expiration_date,
-                    http_status_code=self.status_code,
-                    whois_server=self.whois_server,
-                    filename=self.filename,
-                    ip_validation=self.ip_validation,
-                ).info_files()
-            elif new_status.lower() in PyFunceble.STATUS["list"]["suspicious"]:
-                # The new status is in the list of suspicious status.
+                    # We update the map usage.
+                    map_used = True
 
-                # We complete the output directory.
-                output = output % (
-                    PyFunceble.OUTPUTS["analytic"]["directories"]["suspicious"],
-                    PyFunceble.OUTPUTS["analytic"]["filenames"]["suspicious"],
-                )
+                    # And we break the loop.
+                    break
 
-                # We generate the hosts file.
-                Generate(
-                    self.subject,
-                    self.subject_type,
-                    "suspicious",
-                    source=self.source,
-                    expiration_date=self.expiration_date,
-                    http_status_code=self.status_code,
-                    whois_server=self.whois_server,
-                    filename=self.filename,
-                    ip_validation=self.ip_validation,
-                ).info_files()
-            else:
-                # The new status is in the list of up and down status.
+            if not map_used:
+                # The map was not user, that means that
+                # we are working with potentially inactive domains.
 
                 # We complete the output directory.
                 output = output % (
