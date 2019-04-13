@@ -207,9 +207,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         or
 
         * The plain list generation is activated.
+
         or
 
         * The "api_file_generation" was set into the CONFIGURATION.
+
         """
 
         return (
