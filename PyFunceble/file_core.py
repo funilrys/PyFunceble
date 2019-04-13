@@ -404,6 +404,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
             # We return None, there is nothing to test.
             return None
+
         if PyFunceble.CONFIGURATION["filter"]:
             # We have to filter.
 
