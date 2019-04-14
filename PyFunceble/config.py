@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble.helpers import Dict, Directory, Download, File
-from PyFunceble.publicsuffix import PublicSuffix
 
 
 class Load:  # pylint: disable=too-few-public-methods
@@ -182,7 +181,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         )
 
         # We load the PSL database.
-        PublicSuffix().load()
+        PyFunceble.PublicSuffix().load()
 
         # We load the IANA database.
         PyFunceble.IANA().load()
