@@ -100,7 +100,7 @@ class AutoContinue:
             # We load the backup (if existant).
             self.load()
 
-            if not self.database[self.filename]:
+            if self.filename not in self.database or not self.database[self.filename]:
                 # The database of the file we are
                 # currently testing is empty.
 
