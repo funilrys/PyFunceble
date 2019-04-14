@@ -355,3 +355,75 @@ class Check:
             # * False: It's not an IPv4 range.
             return Regex(self.subject, regex_ipv4_range, return_data=False).match()
         return False
+
+    # pylint: disable=line-too-long
+    def is_reserved_ipv4(self):
+        """
+        Check if the given subject is a reserved IPv4.
+
+        .. note::
+            This method has been written on basis of the following links:
+
+            * https://en.wikipedia.org/wiki/Reserved_IP_addresses
+
+            * https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        if self.is_ipv4():
+            # We are working with an IPv4.
+
+            # We list the regex which matched everything.
+            reserved = [
+                # Match 0.0.0.0–0.255.255.255
+                r"(0\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 10.0.0.0–10.255.255.255
+                r"(10\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 100.64.0.0–100.127.255.255
+                r"(100\.(0?6[4-9]|0?[7-9][0-9]|1[0-1][0-9]|12[0-7])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 127.0.0.0–127.255.255.255
+                r"(127\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 169.254.0.0–169.254.255.255
+                r"(169\.254\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 172.16.0.0–172.31.255.255
+                r"(172\.(0?1[6-9]|0?2[0-9]|0?3[0-1])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.0.0.0–192.0.0.255
+                r"(192\.0\.0\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.0.2.0–192.0.2.255
+                r"(192\.0\.2\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.31.196.0–192.31.196.255
+                r"(192\.31\.196\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.52.193.0–192.52.193.255
+                r"(192\.52\.193\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.88.99.0–192.88.99.255
+                r"(192\.88\.99\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.168.0.0–192.168.255.255
+                r"(192\.168\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 192.175.48.0-192.175.48.255
+                r"(192\.175\.48\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))",
+                # Match 198.18.0.0–198.19.255.255
+                r"(198\.(0?1[8-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 198.51.100.0–198.51.100.255
+                r"(198\.51\.100\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 203.0.113.0–203.0.113.255
+                r"(203\.0\.113\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 224.0.0.0–239.255.255.255
+                r"((22[4-9]|23[0-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 240.0.0.0–255.255.255.254
+                r"((24[0-9]|25[0-5])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,}))",  # pylint: disable=line-too-long
+                # Match 255.255.255.255
+                r"(255\.255\.255\.255)",  # pylint: disable=line-too-long
+            ]
+
+            # We get a single regex out of the list of regex.
+            reserved_regex = "({0})".format("|".join(reserved))
+
+            # We check if it passes our regex.
+            # * True: It's reserved.
+            # * False: It's not reserved.
+            return Regex(self.subject, reserved_regex, return_data=False).match()
+
+        # We return False, we are not working with an IPv4
+        return False

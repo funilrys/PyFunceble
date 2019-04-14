@@ -430,6 +430,48 @@ class TestCheck(TestCase):
 
             self.assertEqual(expected, actual, msg="%s is an IP range." % given_ip)
 
+    def test_is_reserved_ipv4(self):
+        """
+        Test Check().is_reserved_ipv4().
+        """
+
+        reserved = [
+            "0.45.23.59",
+            "10.39.93.13",
+            "100.64.35.85",
+            "127.57.91.13",
+            "169.254.98.65",
+            "172.16.17.200",
+            "192.0.0.145",
+            "192.0.2.39",
+            "192.168.21.99",
+            "192.175.48.25",
+            "192.31.196.176",
+            "192.52.193.245",
+            "192.88.99.30",
+            "198.18.145.234",
+            "198.51.100.212",
+            "203.0.113.103",
+            "224.134.13.24",
+            "240.214.30.11",
+            "255.255.255.255",
+        ]
+        not_reserved = ["hello.world", "::1", "45.34.29.15"]
+
+        for subject in reserved:
+            expected = True
+            actual = Check(subject).is_reserved_ipv4()
+
+            self.assertEqual(
+                expected, actual, "{0} is not reserved.".format(repr(subject))
+            )
+
+        for subject in not_reserved:
+            expected = False
+            actual = Check(subject).is_reserved_ipv4()
+
+            self.assertEqual(expected, actual, "{0} is reserved.".format(repr(subject)))
+
 
 if __name__ == "__main__":
     launch_tests()

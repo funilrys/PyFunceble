@@ -410,14 +410,21 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # rush before starting to filter and test.
         line = self._format_line(line)
 
-        if line in self.autocontinue:
-            # The line is in the autocontinue database.
+        if line in self.autocontinue or line in self.inactive_db:
+            # * The line is in the autocontinue database.
+            # or
+            # * We return None, there is nothing to test.
 
             # We return None, thre is nothing to test.
             return None
 
-        if line in self.inactive_db:
-            # The line is in the inactive database.
+        if (
+            not PyFunceble.CONFIGURATION["local"]
+            and PyFunceble.Check(line).is_reserved_ipv4()
+        ):
+            # * We are not testing for local components.
+            # and
+            # * The subject is a reserved IPv4.
 
             # We return None, there is nothing to test.
             return None

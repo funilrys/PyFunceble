@@ -344,7 +344,9 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the HTML of the home page.
-            blogger_content_request = PyFunceble.requests.get(url_to_get, headers=self.headers)
+            blogger_content_request = PyFunceble.requests.get(
+                url_to_get, headers=self.headers
+            )
 
             for regx in regex_blogger:
                 # We loop through the list of regex to match.
