@@ -68,7 +68,6 @@ import PyFunceble
 from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
-from PyFunceble.check import Check
 from PyFunceble.cli_core import CLICore
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.generate import Generate
@@ -139,7 +138,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         Download the file if it is an URL.
         """
 
-        if self.file and self.autocontinue.is_empty() and Check(self.file).is_url():
+        if self.file and self.autocontinue.is_empty() and PyFunceble.Check(self.file).is_url():
             # The given file is an URL.
 
             # We get the destination.
@@ -538,7 +537,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 complements = [
                     x
                     for x in self.autocontinue.database[self.file].keys()
-                    if not Check(x).is_subdomain() and Check(x).is_domain()
+                    if not PyFunceble.Check(x).is_subdomain() and PyFunceble.Check(x).is_domain()
                 ]
 
                 # We generate the one without "www." if "www." is given.

@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.check import Check
 from PyFunceble.helpers import Regex
 
 
@@ -133,7 +132,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         element = element.lower().strip()
 
         # We try to get the url base.
-        url_base = Check(element).is_url(return_base=True)
+        url_base = PyFunceble.Check(element).is_url(return_base=True)
 
         if not isinstance(url_base, str):
             # The url base is not found.

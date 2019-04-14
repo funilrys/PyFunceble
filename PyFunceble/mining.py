@@ -62,7 +62,6 @@ License:
 import urllib3.exceptions as urllib3_exceptions
 
 import PyFunceble
-from PyFunceble.check import Check
 from PyFunceble.helpers import Dict, File
 
 
@@ -290,12 +289,12 @@ class Mining:
 
                     # We validate and get the base of the URL we
                     # are working with.
-                    local_result = Check(url).is_url(return_base=True)
+                    local_result = PyFunceble.Check(url).is_url(return_base=True)
                 elif subject_type == "url":
                     # We are working with URLs.
 
                     # We validate and get the full URL.
-                    local_result = Check(url).is_url(
+                    local_result = PyFunceble.Check(url).is_url(
                         return_base=False, return_formatted=True
                     )
 

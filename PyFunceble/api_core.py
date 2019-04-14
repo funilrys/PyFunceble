@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.check import Check
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.status import Status, URLStatus
 from PyFunceble.whois_db import WhoisDB
@@ -192,10 +191,10 @@ class APICore:
             # The given subject is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: Check(subject).is_domain() for subject in self.subject}
+            return {subject: PyFunceble.Check(subject).is_domain() for subject in self.subject}
 
         # We return the validity of the the given subject.
-        return Check(self.subject).is_domain()
+        return PyFunceble.Check(self.subject).is_domain()
 
     def subdomain_syntax(self):
         """
@@ -206,10 +205,10 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: Check(subject).is_subdomain() for subject in self.subject}
+            return {subject: PyFunceble.Check(subject).is_subdomain() for subject in self.subject}
 
         # We return the validity of the given subject.
-        return Check(self.subject).is_subdomain()
+        return PyFunceble.Check(self.subject).is_subdomain()
 
     def ipv4_syntax(self):
         """
@@ -220,10 +219,10 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: Check(subject).is_ipv4() for subject in self.subject}
+            return {subject: PyFunceble.Check(subject).is_ipv4() for subject in self.subject}
 
         # We return the validity of the given subject.
-        return Check(self.subject).is_ipv4()
+        return PyFunceble.Check(self.subject).is_ipv4()
 
     def ipv4_range_syntax(self):
         """
@@ -234,10 +233,10 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: Check(subject).is_ipv4_range() for subject in self.subject}
+            return {subject: PyFunceble.Check(subject).is_ipv4_range() for subject in self.subject}
 
         # We return the validity of the given subject.
-        return Check(self.subject).is_ipv4_range()
+        return PyFunceble.Check(self.subject).is_ipv4_range()
 
     def url(self):
         """
@@ -296,7 +295,7 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: Check(subject).is_url() for subject in self.subject}
+            return {subject: PyFunceble.Check(subject).is_url() for subject in self.subject}
 
         # We return the validity of the subject.
-        return Check(self.subject).is_url()
+        return PyFunceble.Check(self.subject).is_url()

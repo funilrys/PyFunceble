@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble import requests
-from PyFunceble.check import Check
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
@@ -100,7 +99,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         self.filename = filename
 
         self.whois_db = whois_db
-        self.checker = Check(self.subject)
+        self.checker = PyFunceble.Check(self.subject)
 
     def get(self):
         """
@@ -564,7 +563,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple|None
         """
 
-        if not PyFunceble.CONFIGURATION["no_special"] and Check().is_ipv4_range():
+        if not PyFunceble.CONFIGURATION["no_special"] and PyFunceble.Check().is_ipv4_range():
             # * We can run/check the special rule.
             # and
             # * The element we are currently testing is an IPv4 with range.
@@ -680,7 +679,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         # We share the filename.
         self.filename = filename
 
-        self.checker = Check(self.subject)
+        self.checker = PyFunceble.Check(self.subject)
 
         # We initiate what we are going to return.
         self.output = {
@@ -775,7 +774,7 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         # We share the filename.
         self.filename = filename
 
-        self.checker = Check(self.subject)
+        self.checker = PyFunceble.Check(self.subject)
 
         # We initiate what we are going to return.
         self.output = {
