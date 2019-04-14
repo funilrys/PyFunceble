@@ -38,15 +38,25 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
    what-can-we-do
    in-action
-   they-use-it
    contributors
    special-thanks
-   issues
-   faq
    supporting-the-project
-   license
-   code-of-conduct
-   contact
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Respect
+
+   respect/license
+   respect/code-of-conduct
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Facts
+
+   facts/they-use-it
+   facts/faq
+   facts/known_issues
+   facts/contact
 
 .. toctree::
    :maxdepth: 3
@@ -90,7 +100,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Our columns
+   :caption: Our (CLI) columns
 
    columns/subject
    columns/status
