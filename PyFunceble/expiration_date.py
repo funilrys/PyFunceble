@@ -62,7 +62,6 @@ License:
 import PyFunceble
 from PyFunceble.helpers import Regex
 from PyFunceble.logs import Logs
-from PyFunceble.whois import Whois as WhoisLookup
 
 
 class ExpirationDate:  # pylint: disable=too-few-public-methods
@@ -473,7 +472,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         else:
 
             # We get the whois record.
-            self.whois_record = WhoisLookup(
+            self.whois_record = PyFunceble.Whois(
                 self.subject,
                 self.whois_server,
                 timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
