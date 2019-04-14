@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.cli_core import CLICore
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.file_core import FileCore
 from PyFunceble.percentage import Percentage
@@ -109,6 +108,6 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
 
             ExecutionTime("stop")
 
-            CLICore.stay_safe()
+            PyFunceble.CLICore.stay_safe()
         else:
-            CLICore.print_nothing_to_test()
+            PyFunceble.CLICore.print_nothing_to_test()

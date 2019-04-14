@@ -68,7 +68,6 @@ import PyFunceble
 from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
-from PyFunceble.cli_core import CLICore
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Download, List, Regex
@@ -472,7 +471,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         """
 
         # We print the CLI header.
-        CLICore.print_header()
+        PyFunceble.CLICore.print_header()
 
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.

@@ -63,7 +63,6 @@ License:
 from domain2idna import get as domain2idna
 
 import PyFunceble
-from PyFunceble.cli_core import CLICore
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -94,7 +93,7 @@ class SimpleCore:
         # We run the preset specific to this method.
         self.preset.simple_domain()
         # We print the header if it was not done yet.
-        CLICore.print_header()
+        PyFunceble.CLICore.print_header()
 
         if self.subject:
             if PyFunceble.CONFIGURATION["syntax"]:
@@ -112,7 +111,7 @@ class SimpleCore:
                 # We print the domain and the status.
                 print(self.subject, status)
         else:
-            CLICore.print_nothing_to_test()
+            PyFunceble.CLICore.print_nothing_to_test()
 
     def url(self):
         """
@@ -122,7 +121,7 @@ class SimpleCore:
         # We run the preset specific to this method.
         self.preset.simple_url()
         # We print the header if it was not done yet.
-        CLICore.print_header()
+        PyFunceble.CLICore.print_header()
 
         if self.subject:
             if PyFunceble.CONFIGURATION["syntax"]:
@@ -140,4 +139,4 @@ class SimpleCore:
                 # We print the domain and the status.
                 print(self.subject, status)
         else:
-            CLICore.print_nothing_to_test()
+            PyFunceble.CLICore.print_nothing_to_test()
