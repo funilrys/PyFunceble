@@ -62,7 +62,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.clean import Clean
 from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Command, Dict, File, Regex
@@ -112,7 +111,7 @@ class Production:  # pylint: disable=too-few-public-methods
                 # upstream one.
 
                 # We clean the output directory.
-                Clean(None)
+                PyFunceble.Clean(None)
 
                 # We generate the productive directory structure file.
                 DirectoryStructure(production=True)
