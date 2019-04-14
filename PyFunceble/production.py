@@ -62,7 +62,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.config import Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Command, Dict, File, Regex
 
@@ -93,16 +92,16 @@ class Production:  # pylint: disable=too-few-public-methods
 
             # We split the version in oder to get only the list of digits from
             # the local version.
-            self.version_yaml = Version(True).split_versions(
+            self.version_yaml = PyFunceble.Version(True).split_versions(
                 self.data_version_yaml["current_version"]
             )
 
             # We we get the full version with the non-digits and the digits.
-            self.current_version = Version(True).split_versions(
+            self.current_version = PyFunceble.Version(True).split_versions(
                 PyFunceble.VERSION, True
             )
 
-            if self._is_version_greater() or not Version(True).check_versions_literally(
+            if self._is_version_greater() or not PyFunceble.Version(True).check_versions_literally(
                 PyFunceble.VERSION, self.data_version_yaml["current_version"]
             ):
                 # * The local version is greater than the older one.
@@ -319,7 +318,7 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         # we compare the 2 versions.
-        checked = Version(True).check_versions(
+        checked = PyFunceble.Version(True).check_versions(
             self.current_version[0], self.version_yaml
         )
 

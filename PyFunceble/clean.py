@@ -60,7 +60,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble.config import Load
 from PyFunceble.helpers import File
 
 
@@ -252,4 +251,4 @@ class Clean:
             File(file).delete()
 
         if clean_all:  # pragma: no cover
-            Load(PyFunceble.CURRENT_DIRECTORY)
+            PyFunceble.Load(PyFunceble.CURRENT_DIRECTORY)

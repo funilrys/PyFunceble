@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble.auto_save import Travis
-from PyFunceble.config import Version
 from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Regex
 
 
@@ -92,7 +91,7 @@ class DirectoryStructure:  # pragma: no cover
             self.base + PyFunceble.OUTPUTS["default_files"]["dir_structure"]
         )
 
-        if production and Version(True).is_cloned():
+        if production and PyFunceble.Version(True).is_cloned():
             # We are preparing the repository for production.
 
             # We backup the directory structure.
