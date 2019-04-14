@@ -562,7 +562,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple|None
         """
 
-        if not PyFunceble.CONFIGURATION["no_special"] and PyFunceble.Check().is_ipv4_range():
+        if (
+            not PyFunceble.CONFIGURATION["no_special"]
+            and PyFunceble.Check().is_ipv4_range()
+        ):
             # * We can run/check the special rule.
             # and
             # * The element we are currently testing is an IPv4 with range.

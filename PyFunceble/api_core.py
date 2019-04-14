@@ -191,7 +191,10 @@ class APICore:
             # The given subject is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: PyFunceble.Check(subject).is_domain() for subject in self.subject}
+            return {
+                subject: PyFunceble.Check(subject).is_domain()
+                for subject in self.subject
+            }
 
         # We return the validity of the the given subject.
         return PyFunceble.Check(self.subject).is_domain()
@@ -205,7 +208,10 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: PyFunceble.Check(subject).is_subdomain() for subject in self.subject}
+            return {
+                subject: PyFunceble.Check(subject).is_subdomain()
+                for subject in self.subject
+            }
 
         # We return the validity of the given subject.
         return PyFunceble.Check(self.subject).is_subdomain()
@@ -219,7 +225,9 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: PyFunceble.Check(subject).is_ipv4() for subject in self.subject}
+            return {
+                subject: PyFunceble.Check(subject).is_ipv4() for subject in self.subject
+            }
 
         # We return the validity of the given subject.
         return PyFunceble.Check(self.subject).is_ipv4()
@@ -233,7 +241,10 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: PyFunceble.Check(subject).is_ipv4_range() for subject in self.subject}
+            return {
+                subject: PyFunceble.Check(subject).is_ipv4_range()
+                for subject in self.subject
+            }
 
         # We return the validity of the given subject.
         return PyFunceble.Check(self.subject).is_ipv4_range()
@@ -295,7 +306,9 @@ class APICore:
             # The given subjet is a list of subject.
 
             # We return the validity of each subjects.
-            return {subject: PyFunceble.Check(subject).is_url() for subject in self.subject}
+            return {
+                subject: PyFunceble.Check(subject).is_url() for subject in self.subject
+            }
 
         # We return the validity of the subject.
         return PyFunceble.Check(self.subject).is_url()
