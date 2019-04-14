@@ -27,7 +27,7 @@ Just a list of tool/repository/code/infrastructure which uses or used PyFunceble
 * `Stop.Google.Analytics.Ghost.Spam.HOWTO`_
 * `The-Big-List-of-Hacked-Malware-Web-Sites`_
 * `Top-Attacking-IP-Addresses-Against-Wordpress-Sites`_
-* `Ultimate.Hosts.Blacklist`_
+* `Ultimate.Hosts.Blacklist`_ // `Ultimate-Hosts-Blacklist`_
 * `UncheckyAds`_
 
 .. _.pl-host-file : https://github.com/xxcriticxx/.pl-host-file
@@ -55,4 +55,5 @@ Just a list of tool/repository/code/infrastructure which uses or used PyFunceble
 .. _The-Big-List-of-Hacked-Malware-Web-Sites : https://github.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites
 .. _Top-Attacking-IP-Addresses-Against-Wordpress-Sites : https://github.com/mitchellkrogza/Top-Attacking-IP-Addresses-Against-Wordpress-Sites
 .. _Ultimate.Hosts.Blacklist : https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist
+.. _Ultimate-Hosts-Blacklist : https://github.com/Ultimate-Hosts-Blacklist
 .. _UncheckyAds : https://github.com/FadeMind/hosts.extras/tree/master/UncheckyAds
