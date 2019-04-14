@@ -88,6 +88,7 @@ from PyFunceble.nslookup import NSLookup
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
+from PyFunceble.whois import Whois
 
 # We set our project name.
 NAME = "PyFunceble"
@@ -342,6 +343,34 @@ def nslookup(subject):  # pragma: no cover
 
         # We return the lookup.
         return NSLookup(subject).request()
+
+    # We return None, there is nothing to work with.
+    return None
+
+
+def whois(subject, server=None, timeout=3):  # pragma: no cover
+    """
+    Request the WHOIS record of the given subject.
+
+    :param str subject: The subject we are working with.
+
+    :param str server:
+        The WHOIS server to communicate with.
+
+        .. note::
+            If :code:`None` is given, we look for the best one.
+
+    :param int timeout: The timeout to apply to the request.
+
+    :return: None or the WHOIS record.
+    :rtype: None|str
+    """
+
+    if subject:
+        # The subject is not empty nor None.
+
+        # We return the whois record.
+        return Whois(subject, server=server, timeout=timeout).request()
 
     # We return None, there is nothing to work with.
     return None
