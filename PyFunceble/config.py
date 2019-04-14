@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble.helpers import Dict, Directory, Download, File
-from PyFunceble.iana import IANA
 from PyFunceble.publicsuffix import PublicSuffix
 
 
@@ -186,7 +185,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         PublicSuffix().load()
 
         # We load the IANA database.
-        IANA().load()
+        PyFunceble.IANA().load()
 
     @classmethod
     def _set_path_to_configs(cls, path_to_config):
