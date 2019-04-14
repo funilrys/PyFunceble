@@ -12,6 +12,9 @@ which remains or became :code:`ACTIVE`.
 In addition, if needed, we can set up a list of GitHub username
 to @ping once a new test is finished.
 
+Want your/a list to be tested at `Dead-Hosts`_ ? You can `request it`_ !
+
 .. _Funceble: https://github.com/funilrys/funceble
 
 .. _Dead-Hosts: https://github.com/dead-hosts
+.. _request it: https://github.com/dead-hosts/dev-center/issues/new?template=inclusion-request.md
