@@ -65,7 +65,6 @@ from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
 from PyFunceble.http_code import HTTPCode, urllib3_exceptions
-from PyFunceble.nslookup import NSLookup
 from PyFunceble.referer import Referer
 
 
@@ -201,7 +200,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             # The matched status is not in the list of invalid status.
 
             # We get the nslookup state.
-            self.output["nslookup"] = NSLookup(self.subject).request()
+            self.output["nslookup"] = PyFunceble.NSLookup(self.subject).request()
 
             if self.output["nslookup"]:
                 # We could execute the nslookup logic.
