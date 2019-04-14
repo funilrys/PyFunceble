@@ -60,7 +60,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble import requests
 from PyFunceble.expiration_date import ExpirationDate
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Regex
@@ -345,7 +344,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the HTML of the home page.
-            blogger_content_request = requests.get(url_to_get, headers=self.headers)
+            blogger_content_request = PyFunceble.requests.get(url_to_get, headers=self.headers)
 
             for regx in regex_blogger:
                 # We loop through the list of regex to match.
@@ -393,7 +392,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         does_not_exist = "doesn&#8217;t&nbsp;exist"
 
         # We get the content of the page.
-        wordpress_com_content = requests.get(
+        wordpress_com_content = PyFunceble.requests.get(
             "http://{}:80".format(self.subject), headers=self.headers
         )
 
