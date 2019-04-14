@@ -43,7 +43,7 @@ So I introduced the SPECIAL source.
 .. warning::
     Do not want those rules ? You can use following to disable them.
 
-    * :code:`-ns`|:code`--no-special` arguments from the CLI.
+    * :code:`-ns`|:code:`--no-special` arguments from the CLI.
     * :code:`no_special: True` into your local configuration file.
 
 :code:`*.blogspot.*`
