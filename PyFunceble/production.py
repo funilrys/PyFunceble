@@ -62,7 +62,6 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Command, Dict, File, Regex
 
 
@@ -113,7 +112,7 @@ class Production:  # pylint: disable=too-few-public-methods
                 PyFunceble.Clean(None)
 
                 # We generate the productive directory structure file.
-                DirectoryStructure(production=True)
+                PyFunceble.DirectoryStructure(production=True)
 
                 if self._does_require_deprecation():
                     # We have to put the previous version into the list of deprecated list.

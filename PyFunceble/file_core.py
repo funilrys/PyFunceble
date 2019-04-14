@@ -68,7 +68,6 @@ import PyFunceble
 from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
-from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Download, List, Regex
 from PyFunceble.inactive_db import InactiveDB
@@ -130,7 +129,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.download_link()
 
         # We generate the directory structure.
-        DirectoryStructure()
+        PyFunceble.DirectoryStructure()
 
     def download_link(self):  # pragma: no cover
         """

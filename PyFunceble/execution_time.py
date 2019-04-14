@@ -60,7 +60,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.helpers import Dict, File
 
 
@@ -239,7 +238,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 # The directory was not found.
 
                 # We construct the output directory
-                DirectoryStructure()
+                PyFunceble.DirectoryStructure()
 
                 # And we retry to save the whole data at its final location.
                 Dict(content).to_json(self.file)
