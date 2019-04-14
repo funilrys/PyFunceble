@@ -123,7 +123,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Code documentation
 
-   logic-representation
+   code/logic-representation
    code/helpers
    code/adblock
    code/api_core
