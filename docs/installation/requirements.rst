@@ -47,7 +47,7 @@ As our configuration file is written in :code:`.yaml`, :code:`PyYAML` is require
 :code:`requests`
 ----------------
 
-As we use :code:`requests` when calling all :code:`Lookup()` methods, :code:`requests` is required.
+As we use :code:`requests` multiple times to communicate with webservices, :code:`requests` is required.
 
 :code:`setuptools`
 ------------------

@@ -8,23 +8,23 @@ ACTIVE
 
 This status is returned when **one of the following cases** is met:
 
-- We can extract the expiration date from :code:`Lookup().whois()`.
+- We can extract the expiration date from :func:`PyFunceble.whois.Whois.request`.
 
   - *Please note that we don't check if the date is in the past.*
 
-- :code:`Lookup().nslookup()` don't return an error.
+- :func:`PyFunceble.nslookup.NSLookup.request` don't return an error.
 
   - *Please note that we don't read the returned value.*
 
-- :code:`HTTPCode().get()` return one the following code :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
+- :func:`PyFunceble.http_code.HTTPCode.get` return one the following code :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
 
 INACTIVE
 --------
 
 This status is returned when **all the following cases** are met:
 
-- We can't extract the expiration date from :code:`Lookup().whois()`.
-- :code:`Lookup().nslookup()` don't return an error.
+- We could not extract the expiration date from :func:`PyFunceble.whois.Whois.request`.
+- :func:`PyFunceble.nslookup.NSLookup.request` returns nothing.
 
 INVALID
 -------
