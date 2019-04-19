@@ -176,6 +176,34 @@ class Percentage:
             # We calculate the percentage of each statuses.
             self._calculate()
 
+            # We construct the different lines/data to print on screen and file.
+            lines_to_print = [
+                [
+                    PyFunceble.STATUS["official"]["up"],
+                    str(PyFunceble.INTERN["counter"]["percentage"]["up"]) + "%",
+                    PyFunceble.INTERN["counter"]["number"]["up"],
+                ],
+                [
+                    PyFunceble.STATUS["official"]["down"],
+                    str(PyFunceble.INTERN["counter"]["percentage"]["down"]) + "%",
+                    PyFunceble.INTERN["counter"]["number"]["down"],
+                ],
+                [
+                    PyFunceble.STATUS["official"]["invalid"],
+                    str(PyFunceble.INTERN["counter"]["percentage"]["invalid"]) + "%",
+                    PyFunceble.INTERN["counter"]["number"]["invalid"],
+                ],
+            ]
+
+            if PyFunceble.CONFIGURATION["syntax"]:
+                # We are checking for syntax.
+
+                # We update the denomination of the UP.
+                lines_to_print[0][0] = PyFunceble.STATUS["official"]["valid"]
+
+                # And we unset the INACTIVE line.
+                del lines_to_print[1]
+
             if not PyFunceble.CONFIGURATION["quiet"]:
                 # The quiet mode is not activated.
 
@@ -185,41 +213,24 @@ class Percentage:
                 # We print the percentage header on file and screen.
                 Prints(None, "Percentage", output).header()
 
-                # We construct the different lines/data to print on screen and file.
-                lines_to_print = [
-                    [
-                        PyFunceble.STATUS["official"]["up"],
-                        str(PyFunceble.INTERN["counter"]["percentage"]["up"]) + "%",
-                        PyFunceble.INTERN["counter"]["number"]["up"],
-                    ],
-                    [
-                        PyFunceble.STATUS["official"]["down"],
-                        str(PyFunceble.INTERN["counter"]["percentage"]["down"]) + "%",
-                        PyFunceble.INTERN["counter"]["number"]["down"],
-                    ],
-                    [
-                        PyFunceble.STATUS["official"]["invalid"],
-                        str(PyFunceble.INTERN["counter"]["percentage"]["invalid"])
-                        + "%",
-                        PyFunceble.INTERN["counter"]["number"]["invalid"],
-                    ],
-                ]
-
-                if PyFunceble.CONFIGURATION["syntax"]:
-                    # We are checking for syntax.
-
-                    # We update the denomination of the UP.
-                    lines_to_print[0][0] = PyFunceble.STATUS["official"]["valid"]
-
-                    # And we unset the INACTIVE line.
-                    del lines_to_print[1]
-
                 for to_print in lines_to_print:
                     # We loop throught the different line to print.
                     # (one line for each status.)
 
                     # And we print the current status line on file and screen.
                     Prints(to_print, "Percentage", output).data()
+            else:  # pragma: no cover
+                # The quiet mode is activated.
+
+                # We print the percentage header on file.
+                Prints(None, "Percentage", output, only_on_file=True).header()
+
+                for to_print in lines_to_print:
+                    # We loop throught the different line to print.
+                    # (one line for each status.)
+
+                    # And we print the current status line on file.
+                    Prints(to_print, "Percentage", output, only_on_file=True).data()
 
         elif PyFunceble.INTERN["counter"]["number"]["tested"] > 0:
             # * We are not allowed to show the percentage on screen.

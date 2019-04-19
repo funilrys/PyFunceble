@@ -64,6 +64,7 @@ from unittest import main as launch_tests
 
 import PyFunceble
 from helpers import BaseStdout, sys
+from PyFunceble.helpers import File
 from PyFunceble.percentage import Percentage
 
 
@@ -199,6 +200,48 @@ INVALID     1%%           2%s
         actual = PyFunceble.INTERN["counter"]["percentage"]
         expected = {"up": 36, "down": 62, "invalid": 1}
         self.assertEqual(expected, actual)
+
+    def test_log_quiet(self):
+        """
+        Test the log system for the case that we quiet mode is activated.
+        """
+
+        output = (
+            PyFunceble.OUTPUT_DIRECTORY
+            + PyFunceble.OUTPUTS["parent_directory"]
+            + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+            + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]
+            + PyFunceble.OUTPUTS["logs"]["filenames"]["percentage"]
+        )
+
+        PyFunceble.CONFIGURATION["quiet"] = True
+
+        expected = """
+
+Status      Percentage   Numbers%s
+----------- ------------ ------------
+ACTIVE      36%%          45%s
+INACTIVE    62%%          78%s
+INVALID     1%%           2%s
+""" % (
+            " " * 5,
+            " " * 10,
+            " " * 10,
+            " " * 11,
+        )
+
+        PyFunceble.INTERN["counter"]["number"].update(
+            {"up": 45, "down": 78, "invalid": 2, "tested": 125}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+        actual = "\n" + "\n".join(
+            [x for x in File(output).read().split("\n") if not x.startswith("#")]
+        )
+
+        self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION["quiet"] = False
 
     def test_log_syntax(self):
         """
