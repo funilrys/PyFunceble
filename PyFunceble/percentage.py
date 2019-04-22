@@ -68,11 +68,12 @@ class Percentage:
     """
     Calculation of the percentage of each status.
 
-    :param domain_status: The status to increment.
-    :type domain_status: str
+    :param str domain_status: The status to increment.
+    :param dict init:
+        The data from a previous session we are continuing.
 
-    :param init: The data from a previous session we are continuing.
-    :type init: dict
+        .. warning::
+            We expect the numbers and not the percentages.
     """
 
     def __init__(self, domain_status=None, init=None):
@@ -84,11 +85,10 @@ class Percentage:
             # and
             # * It is a dictionnary.
 
-            for data in init:
-                # We loop through the index of the data to initiate.
-
-                # And we update the counter from the currently read data.
-                PyFunceble.INTERN["counter"]["percentage"].update({data: init[data]})
+            # We update the counter from the currently read data.
+            PyFunceble.INTERN["counter"]["number"].update(
+                {x: y for x, y in init.items()}
+            )
 
     def count(self):
         """

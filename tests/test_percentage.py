@@ -137,9 +137,9 @@ class TestPercentage(BaseStdout):
 
         Percentage(domain_status=None, init=expected)
 
-        self.assertEqual(expected, PyFunceble.INTERN["counter"]["percentage"])
+        self.assertEqual(expected, PyFunceble.INTERN["counter"]["number"])
 
-        PyFunceble.INTERN["counter"]["percentage"] = {}
+        PyFunceble.INTERN["counter"]["number"] = {}
 
     def test_calculate(self):
         """
