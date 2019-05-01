@@ -195,11 +195,11 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
+        # We get the nslookup state.
+        self.output["nslookup"] = PyFunceble.NSLookup(self.subject).request()
+
         if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
             # The matched status is not in the list of invalid status.
-
-            # We get the nslookup state.
-            self.output["nslookup"] = PyFunceble.NSLookup(self.subject).request()
 
             if self.output["nslookup"]:
                 # We could execute the nslookup logic.
@@ -217,6 +217,14 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.subject, self.subject_type, self.output["http_status_code"]
             ).handle(self.output["_status"], self.output["_status_source"])
         else:
+            if self.output["nslookup"]:
+                # We could execute the nslookup logic.
+
+                # We set the status we got.
+                self.output["_status"] = PyFunceble.STATUS["official"]["up"]
+                # We set the status source.
+                self.output["_status_source"] = "NSLOOKUP"
+
             self.output["status"], self.output["status_source"] = (
                 self.output["_status"],
                 self.output["_status_source"],
