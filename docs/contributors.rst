@@ -14,7 +14,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                      __/ |
                                                     |___/
 
--   dnmTX - `@dnmTX`_
+-   Daniel - `@dnmTX`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
