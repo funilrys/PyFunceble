@@ -112,25 +112,21 @@ class AutoContinue:
             # We clean the output directory.
             PyFunceble.Clean(None)
 
-    def __contains__(self, index):
-        if self.filename in self.database and index in self.database[self.filename]:
-            if self.database[self.filename][index] in [
-                PyFunceble.STATUS["official"]["up"],
-                PyFunceble.STATUS["official"]["valid"],
-            ]:
-                PyFunceble.INTERN["counter"]["number"]["up"] += 1
-            elif self.database[self.filename][index] in [
-                PyFunceble.STATUS["official"]["down"]
-            ]:
-                PyFunceble.INTERN["counter"]["number"]["down"] += 1
-            elif self.database[self.filename][index] in [
-                PyFunceble.STATUS["official"]["invalid"]
-            ]:
-                PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
+    def __contains__(self, index):  # pragma: no cover
+        if self.filename in self.database:
+            for status, status_data in self.database.items():
+                if index in status_data:
+                    if status in [
+                        PyFunceble.STATUS["official"]["up"],
+                        PyFunceble.STATUS["official"]["valid"],
+                    ]:
+                        PyFunceble.INTERN["counter"]["number"]["up"] += 1
+                    elif status in [PyFunceble.STATUS["official"]["down"]]:
+                        PyFunceble.INTERN["counter"]["number"]["down"] += 1
+                    elif status in [PyFunceble.STATUS["official"]["invalid"]]:
+                        PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
 
-            PyFunceble.INTERN["counter"]["number"]["tested"] += 1
-            return True
-
+                    return True
         return False
 
     @classmethod
@@ -154,9 +150,9 @@ class AutoContinue:
             return True
         return False
 
-    def add(self, element, status):
+    def add(self, subject, status):
         """
-        Add the given element into the database.
+        Add the given subject into the database.
         """
 
         if self.authorized:
@@ -166,11 +162,20 @@ class AutoContinue:
                 # We already have something related
                 # to the file we are testing.
 
-                # We set the new data.
-                self.database[self.filename][element] = status
+                if status in self.database[self.filename]:
+                    # The status is already registered.
+
+                    # We set the new data.
+                    self.database[self.filename][status].append(subject)
+                else:
+                    # We set the new data.
+                    self.database[self.filename][status] = [subject]
             else:
-                # We set the new data.
-                self.database[self.filename] = {element: status}
+                # We have nothing related to the file
+                # we are testing.
+
+                # We initiate the file index.
+                self.database[self.filename] = {status: [subject]}
 
             # We save everything.
             self.save()
@@ -218,3 +223,40 @@ class AutoContinue:
 
             # And we save the current database state.
             Dict(self.database).to_json(self.database_file)
+
+    def update_counters(self):  # pragma: no cover
+        """
+        Update the counters.
+        """
+
+        if self.authorized:
+            # We are authorized to operate.
+
+            # We create a list of all status we are working with.
+            statuses = ["up", "down", "invalid"]
+            # We preset the number of tested.
+            tested = 0
+
+            for status in statuses:
+                # We loop through the list of status.
+
+                try:
+                    # We get the number of tested of the currently read
+                    # status.
+                    tested_for_status = len(
+                        self.database[self.filename][
+                            PyFunceble.STATUS["official"][status]
+                        ]
+                    )
+
+                    # We then update/transfert it to its global place.
+                    PyFunceble.INTERN["counter"]["number"][status] = tested_for_status
+
+                    # We finally increate the number of tested.
+                    tested += tested_for_status
+                except KeyError:
+                    PyFunceble.INTERN["counter"]["number"][status] = 0
+                    continue
+
+            # We update/transfert the number of tested globally.
+            PyFunceble.INTERN["counter"]["number"]["tested"] = tested

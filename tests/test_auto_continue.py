@@ -226,15 +226,19 @@ class TestsAutoContinue(TestCase):
         self.auto_continue.database = {}
 
         self.auto_continue.add("hello.world", "ACTIVE")
+        self.auto_continue.add("world.hello", "ACTIVE")
 
-        expected = {self.file_to_test: {"hello.world": "ACTIVE"}}
+        expected = {self.file_to_test: {"ACTIVE": ["hello.world", "world.hello"]}}
 
         self.assertEqual(expected, self.auto_continue.database)
 
-        self.auto_continue.add("world.hello", "INACTIVE")
+        self.auto_continue.add("hello.world.hello", "INACTIVE")
 
         expected = {
-            self.file_to_test: {"hello.world": "ACTIVE", "world.hello": "INACTIVE"}
+            self.file_to_test: {
+                "ACTIVE": ["hello.world", "world.hello"],
+                "INACTIVE": ["hello.world.hello"],
+            }
         }
 
         self.assertEqual(expected, self.auto_continue.database)

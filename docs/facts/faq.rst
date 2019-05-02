@@ -6,6 +6,15 @@ Frequently Asked Questions
 How to speed up a bit the process/test?
 ----------------------------------------
 
+I have multiple CPU
+^^^^^^^^^^^^^^^^^^^
+
+Simply use the :code:`--multiprocess` argument to activate the usage of multiple processes.
+You can in addition of that use the :code:`--processes` argument to tell us the number of simultaneous process to run.
+
+I do not have multiple CPU
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 For now, we only invite you to disable the usage/request of the WHOIS record.
 
 

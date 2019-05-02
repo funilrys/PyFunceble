@@ -328,14 +328,23 @@ Want to run a test over a local or private network? This argument will disable t
 
 Want to test a raw link? This argument will download and test the given raw link.
 
-:code:`-m` | :code:`--mining`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`--mining`
+^^^^^^^^^^^^^^^^
 
     Switch the value of the mining subsystem usage.
 
     **Default value:** :code:`False`
 
 Want to find domain or URL linked to a domain in your list? This argument will exactly do that.
+
+:code:`-m` | :code:`--multiprocess`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the value of the usage of multiple process.
+
+    **Default value:** :code:`False`
+
+Want to speed up the test time? This argument will allow the usage of multiple processes for testing.
 
 :code:`-n` | :code:`--no-files`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -382,8 +391,8 @@ This argument disables the generation of `result.txt`.
 
 Don't want to use or take in consideration the results from :code:`whois`? This argument allows you to disable it!
 
-:code:`-p` | :code:`--percentage`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`--percentage`
+^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the percentage output mode.
 
@@ -399,6 +408,16 @@ This argument will disable or enable the generation of the percentage of each st
     **Default value:** :code:`False:`
 
 Want to get a list with all domain for each status? The activation of this argument does the work while testing!
+
+:code:`-p` | :code:`--processes`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Set the number of simultaneous processes to use while using multiple processes.
+
+    **Default value:** :code:`25`
+
+.. warning::
+    Think about your CPU before increasing this.
 
 :code:`--production`
 ^^^^^^^^^^^^^^^^^^^^
@@ -541,9 +560,10 @@ Global overview
                     [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
                     [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
                     [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
-                    [-ip IP] [--json] [--less] [--local] [--link LINK] [-m] [-n]
-                    [-nl] [-ns] [-nu] [-nw] [-p] [--plain] [--production] [-psl]
-                    [-q] [--share-logs] [-s] [--split] [--syntax] [-t TIMEOUT]
+                    [-ip IP] [--json] [--less] [--local] [--link LINK]
+                    [--mining] [-m] [-n] [-nl] [-ns] [-nu] [-nw] [--percentage]
+                    [--plain] [-p PROCESSES] [--production] [-psl] [-q]
+                    [--share-logs] [-s] [--split] [--syntax] [-t TIMEOUT]
                     [--travis] [--travis-branch TRAVIS_BRANCH] [-u URL]
                     [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
@@ -622,7 +642,9 @@ Global overview
         --local               Switch the value of the local network testing.
                                 Configured value: True
         --link LINK           Download and test the given file.
-        -m, --mining          Switch the value of the mining subsystem usage.
+        --mining              Switch the value of the mining subsystem usage.
+                                Configured value: False
+        -m, --multiprocess    Switch the value of the usage of multiple process.
                                 Configured value: False
         -n, --no-files        Switch the value of the production of output files.
                                 Configured value: False
@@ -636,10 +658,14 @@ Global overview
                                 False
         -nw, --no-whois       Switch the value the usage of whois to test domain's
                                 status. Configured value: False
-        -p, --percentage      Switch the value of the percentage output mode.
+        --percentage          Switch the value of the percentage output mode.
                                 Configured value: True
         --plain               Switch the value of the generation of the plain list
                                 of domains. Configured value: False
+        -p PROCESSES, --processes PROCESSES
+                                Set the number of simultaneous processes to use while
+                                using multiple processes. Configured value:
+                                25
         --production          Prepare the repository for production.
         -psl, --public-suffix
                                 Update/Generate `public-suffix.json`.

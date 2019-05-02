@@ -218,7 +218,7 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {}
 
-        expected = {}
+        expected = {self.file_to_test: {"to_test": []}}
 
         self.inactive_db.initiate()
 

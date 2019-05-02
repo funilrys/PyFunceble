@@ -63,6 +63,7 @@ License:
 import PyFunceble
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.file_core import FileCore
+from PyFunceble.file_multiprocess_core import FileMultiprocessCore
 from PyFunceble.percentage import Percentage
 from PyFunceble.simple_core import SimpleCore
 
@@ -86,7 +87,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         link_to_test=None,
         url_file_path=None,
         url_to_test=None,
-    ):
+    ):  # pylint: disable=too-many-branches
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
             PyFunceble.DirectoryStructure()
 
@@ -95,12 +96,28 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             if domain_or_ip:
                 SimpleCore(domain_or_ip).domain()
             elif file_path:
-                FileCore(file_path, "domain").read_and_test_file_content()
+                if PyFunceble.CONFIGURATION["multiprocess"]:
+                    FileMultiprocessCore(
+                        file_path, "domain"
+                    ).read_and_test_file_content()
+                else:
+                    FileCore(file_path, "domain").read_and_test_file_content()
             elif link_to_test:
-                FileCore(link_to_test, "domain").read_and_test_file_content()
+                if PyFunceble.CONFIGURATION["multiprocess"]:
+                    FileMultiprocessCore(
+                        link_to_test, "domain"
+                    ).read_and_test_file_content()
+                else:
+                    FileCore(link_to_test, "domain").read_and_test_file_content()
             elif url_file_path:
                 PyFunceble.Preset().file_url()
-                FileCore(url_file_path, "url").read_and_test_file_content()
+
+                if PyFunceble.CONFIGURATION["multiprocess"]:
+                    FileMultiprocessCore(
+                        url_file_path, "url"
+                    ).read_and_test_file_content()
+                else:
+                    FileCore(url_file_path, "url").read_and_test_file_content()
             elif url_to_test:
                 SimpleCore(url_to_test).url()
 

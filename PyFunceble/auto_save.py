@@ -80,16 +80,53 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     :type is_bypass: bool
     """
 
+    # We set the varible which will save the global authorization to operate.
+    authorized = None
     # We set the variable which will save the travis instance.
     travis = None
     # We set the variable which will save the starting time.
     start_time = None
+    # We set the variable which will save the end time.
+    endtime = None
+    # We set the variable which will process as a chache for the
+    # time exceeed value.
+    time_exceed = False
 
     def __init__(self, start_time=None):
         self.travis = Travis()
         self.travis.bypass()
 
-        self.start_time = start_time
+        self.authorized = self.authorization()
+
+        self.start_time = int(start_time)
+        self.end_time = self.start_time + (
+            int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
+        )
+
+    def authorization(self):
+        """
+        Provide the authorization to operate.
+        """
+
+        return self.travis.authorized
+
+    def is_time_exceed(self):
+        """
+        Check if the end time is exceed.
+        """
+
+        if self.authorized:
+            # We are authorized to operate.
+
+            if not self.time_exceed and int(PyFunceble.time()) >= self.end_time:
+                # * We did not tested previously if the time exceed.
+                # and
+                # * The time exceed.
+
+                # We update the time exceed marker.
+                self.time_exceed = True
+
+        return self.time_exceed
 
     def process(self, test_completed=False):
         """
@@ -98,7 +135,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         :param bool test_completed: Tell us if we finished the test.
         """
 
-        if self.travis.authorized:
+        if self.authorized:
             # We are authorized to operate with Travis.
 
             if test_completed:
@@ -106,9 +143,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
                 # We run the end commit.
                 self.travis.end_commit()
-            elif int(PyFunceble.time()) >= int(self.start_time) + (
-                int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
-            ):
+            elif self.is_time_exceed():
                 # The current time excessed the minimal time for autosaving.
 
                 # We run the not end commit.

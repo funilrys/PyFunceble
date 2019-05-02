@@ -227,6 +227,15 @@
 
     **Description:** Enable / Disable the output of all logs.
 
+:code:`maximal_processes`
+-------------------------
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`25`
+
+    **Description:** Set the number of maximal simultaneous processes to use/create/run.
+
 :code:`mining`
 --------------
 
@@ -235,6 +244,15 @@
     **Default value:** :code:`True`
 
     **Description:** Enable / Disable the mining subsystem.
+
+:code:`multiprocess`
+--------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the usage of multiple processes instead of the default single process.
 
 :code:`no_files`
 ----------------

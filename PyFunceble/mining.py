@@ -212,9 +212,18 @@ class Mining:
         # We initiate a variable which will return the result.
         result = []
 
-        for subject in self.database[self.filename].keys():
-            for element in self[subject]:
-                result.append((subject, element))
+        if self.authorized:
+            # We are authorized to operate.
+
+            for subject in self.database[self.filename].keys():
+                # We loop through the available list of status
+                # from the database.
+
+                for element in self[subject]:
+                    # We then loop through the data associatied to
+                    # the currently read status.
+
+                    result.append((subject, element))
 
         # We return the result.
         return result

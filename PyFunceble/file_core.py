@@ -192,30 +192,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # We print the domain and the status.
                 print(subject, status)
 
-            if status.lower() in self.list_of_up_statuses:
-                # The status is in the list of UP status.
-
-                # We mine if needed.
-                self.mining.mine(subject, "domain")
-
-                if subject in self.inactive_db:
-                    # the subject is in the inactive database.
-
-                    # We generate the suspicious file.
-                    Generate(
-                        subject, "file_domain", PyFunceble.STATUS["official"]["up"]
-                    ).analytic_file("suspicious")
-
-                    # And we remove it the current subject from
-                    # the inactive database.
-                    self.inactive_db.remove(subject)
-            else:
-                # The status is not in the list of UP status.
-
-                # We add the current subject into the
-                # inactive database.
-                self.inactive_db.add(subject)
-
             if self.complements_test_started:
                 # We started to test the complements.
 
@@ -257,30 +233,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We print the domain and the status.
                 print(subject, status)
-
-            if status.lower() in self.list_of_up_statuses:
-                # The status is in the list of UP status.
-
-                # We mine if necessary.
-                self.mining.mine(subject, "url")
-
-                if subject in self.inactive_db:
-                    # The subject is in the inactive database.
-
-                    # We generate the suspicous file.
-                    Generate(
-                        subject, "file_domain", PyFunceble.STATUS["official"]["up"]
-                    ).analytic_file("suspicious")
-
-                    # And we remove the current subject from
-                    # the inactive database.
-                    self.inactive_db.remove(subject)
-            else:
-                # The status is not in the list of UP status.
-
-                # We add the current subject into the
-                # inactive database.
-                self.inactive_db.add(subject)
 
             if self.complements_test_started:
                 # We started to test the complements.
@@ -357,9 +309,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We return an empty string as we do not want to work with commented line.
         return ""
 
-    def __process_test(self, line):  # pragma: no cover
+    def __process_test(self, subject):  # pragma: no cover
         """
-        Given a line, we perform its test.
+        Given a subject, we perform its test.
+
+        :param str subject: The subjet we have to test.
         """
 
         if self.file_type == "domain":
@@ -370,25 +324,106 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We get and return the status of the IDNA
                 # domain.
-                return self.domain(domain2idna(line))
+                return self.domain(domain2idna(subject))
 
             # We get and return the status of the domain.
-            return self.domain(line)
+            return self.domain(subject)
 
         if self.file_type == "url":
             # We are testing for urls.
 
             # We get and return the status of the URL.
-            return self.url(line)
+            return self.url(subject)
 
         # We raise an exception, we could not understand the
         # given file type.
         raise Exception("Unknown file type.")
 
-    def _test_line(self, line):  # pragma: no cover
+    def get_complements(self):  # pragma: no cover
+        """
+        Generate a list of complements to test.
+        """
+
+        # We initiate an empty list of complements.
+        complements = []
+
+        if (
+            PyFunceble.CONFIGURATION["generate_complements"]
+            and self.autocontinue.authorized
+        ):
+            # * The user want us to generate and test the list
+            # of all complements.
+            # and
+            # * The autocontinue subsystem is activated.
+
+            # We inform all subsystem that we are testing for complements.
+            self.complements_test_started = True
+
+            if "complements" not in self.autocontinue.database[self.file].keys():
+                # The complements are not saved,
+
+                # We get the list of domains we are going to work with.
+                complements = [
+                    z
+                    for x, y in self.autocontinue.database[self.file].items()
+                    for z in y
+                    if not PyFunceble.Check(z).is_subdomain()
+                    and PyFunceble.Check(z).is_domain()
+                ]
+
+                # We generate the one without "www." if "www." is given.
+                complements.extend([x[4:] for x in complements if x.startswith("www.")])
+                # We generate the one with "www." if "www." is not given.
+                complements.extend(
+                    [
+                        "www.{0}".format(x)
+                        for x in complements
+                        if not x.startswith("www.")
+                    ]
+                )
+
+                # We remove the already tested subjects.
+                complements = set(List(complements).format()) - set(
+                    self.autocontinue.database[self.file].keys()
+                )
+
+                # We save the constructed list of complements
+                self.autocontinue.database[self.file]["complements"] = list(complements)
+                self.autocontinue.save()
+            else:
+                # We get the complements we still have to test.
+                complements = self.autocontinue.database[self.file]["complements"]
+
+        return complements
+
+    def _test_line(
+        self, line, manager_data=None
+    ):  # pylint: disable=too-many-branches  # pragma: no cover
         """
         Given a line, we test it.
+
+        :param str line: A line to work with.
+        :param multiprocessing.Manager.list manager_data: A Server process.
         """
+
+        if manager_data is not None:
+            # We are in a mulitiprocess environment.
+
+            # We create a new autocontinue instance.
+            autocontinue = AutoContinue(self.file)
+            # We create a new inactive database instance.
+            inactive_db = InactiveDB(self.file)
+            # We create a new mining instance.
+            mining = Mining(self.file)
+        else:
+            # We are not in a multiprocess environment.
+
+            # We use the previously initiated autocontinue instance.
+            autocontinue = self.autocontinue
+            # We use the previously initiated inactive database instance.
+            inactive_db = self.inactive_db
+            # We use the previously initiated mining instance.
+            mining = self.mining
 
         # We remove cariage from the given line.
         line = line.strip()
@@ -408,19 +443,19 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         # We format the line, it's the last
         # rush before starting to filter and test.
-        line = self._format_line(line)
+        subject = self._format_line(line)
 
-        if line in self.autocontinue or line in self.inactive_db:
-            # * The line is in the autocontinue database.
+        if subject in autocontinue or subject in inactive_db:
+            # * The subject is in the autocontinue database.
             # or
-            # * We return None, there is nothing to test.
+            # * The subject is in the inactive database.
 
             # We return None, thre is nothing to test.
             return None
 
         if (
             not PyFunceble.CONFIGURATION["local"]
-            and PyFunceble.Check(line).is_reserved_ipv4()
+            and PyFunceble.Check(subject).is_reserved_ipv4()
         ):
             # * We are not testing for local components.
             # and
@@ -433,12 +468,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We have to filter.
 
             if Regex(
-                line, PyFunceble.CONFIGURATION["filter"], return_data=False
+                subject, PyFunceble.CONFIGURATION["filter"], return_data=False
             ).match():
                 # The line match the given filter.
 
                 # We get the status of the current line.
-                status = self.__process_test(line)
+                status = self.__process_test(subject)
             else:
                 # The line does not match the given filter.
 
@@ -448,29 +483,67 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We do not have to filter.
 
             # We get the status of the current line.
-            status = self.__process_test(line)
+            status = self.__process_test(subject)
 
         # We add the line into the auto continue database.
-        self.autocontinue.add(line, status)
+        autocontinue.add(subject, status)
+
+        if status.lower() in self.list_of_up_statuses:
+            # The status is in the list of UP status.
+
+            # We mine if necessary.
+            mining.mine(subject, self.file_type)
+
+            if subject in inactive_db:
+                # The subject is in the inactive database.
+
+                # We generate the suspicous file.
+                Generate(
+                    subject, "file_domain", PyFunceble.STATUS["official"]["up"]
+                ).analytic_file("suspicious")
+
+                # And we remove the current subject from
+                # the inactive database.
+                inactive_db.remove(subject)
+        else:
+            # The status is not in the list of UP status.
+
+            # We add the current subject into the
+            # inactive database.
+            inactive_db.add(subject)
 
         if self.complements_test_started:
             # We started the test of the complements.
 
-            if "complements" in self.autocontinue.database:
+            if "complements" in autocontinue.database:
                 # The complement index is present.
 
-                while line in self.autocontinue.database["complements"]:
+                while subject in autocontinue.database["complements"]:
                     # We loop untill the line is not present into the
                     # database.
 
                     # We remove the currently tested element.
-                    self.autocontinue.database["complements"].remove(line)
+                    autocontinue.database["complements"].remove(subject)
 
                     # We save the current state.
-                    self.autocontinue.save()
+                    autocontinue.save()
 
-        # We process the autosaving if it is necessary.
-        self.autosave.process(test_completed=False)
+        if manager_data is None:
+            # We are not in a multiprocess environment.
+
+            # We process the autosaving if it is necessary.
+            self.autosave.process(test_completed=False)
+        else:
+            # We are in a multiprocess environment.
+
+            # We save everything we initiated into the server process
+            manager_data.append(
+                {
+                    "autocontinue": autocontinue.database,
+                    "inactive_db": inactive_db.database,
+                    "mining": mining.database,
+                }
+            )
 
         # We return None.
         return None
@@ -527,51 +600,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # from the mining database.
             self.mining.remove(index, line)
 
-        if (
-            PyFunceble.CONFIGURATION["generate_complements"]
-            and self.autocontinue.authorized
-        ):
-            # * The user want us to generate and test the list
-            # of all complements.
-            # and
-            # * The autocontinue subsystem is activated.
-
-            # We inform all subsystem that we are testing for complements.
-            self.complements_test_started = True
-
-            if "complements" not in self.autocontinue.database[self.file].keys():
-                # The complements are not saved,
-
-                # We get the list of domains we are going to work with.
-                complements = [
-                    x
-                    for x in self.autocontinue.database[self.file].keys()
-                    if not PyFunceble.Check(x).is_subdomain()
-                    and PyFunceble.Check(x).is_domain()
-                ]
-
-                # We generate the one without "www." if "www." is given.
-                complements.extend([x[4:] for x in complements if x.startswith("www.")])
-                # We generate the one with "www." if "www." is not given.
-                complements.extend(
-                    [
-                        "www.{0}".format(x)
-                        for x in complements
-                        if not x.startswith("www.")
-                    ]
-                )
-
-                # We remove the already tested subjects.
-                complements = set(List(complements).format()) - set(
-                    self.autocontinue.database[self.file].keys()
-                )
-
-                # We save the constructed list of complements
-                self.autocontinue.database[self.file]["complements"] = list(complements)
-                self.autocontinue.save()
-            else:
-                # We get the complements we still have to test.
-                complements = self.autocontinue.database[self.file]["complements"]
+            # We get the list of complements.
+            complements = self.get_complements()
 
             for subject in complements:
                 # We loop through the list of complements.

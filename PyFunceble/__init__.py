@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.24.1.detached-future (Blue Bontebok: Beetle)"
+VERSION = "1.25.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -943,13 +943,24 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
-                    "-m",
                     "--mining",
                     action="store_true",
                     help="Switch the value of the mining subsystem usage. %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["mining"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
+                    "-m",
+                    "--multiprocess",
+                    action="store_true",
+                    help="Switch the value of the usage of multiple process. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["multiprocess"])
                         + Style.RESET_ALL
                     ),
                 )
@@ -1017,7 +1028,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
-                    "-p",
                     "--percentage",
                     action="store_true",
                     help="Switch the value of the percentage output mode. %s"
@@ -1036,6 +1046,19 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["plain_list_domain"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
+                    "-p",
+                    "--processes",
+                    type=int,
+                    help="Set the number of simultaneous processes to use while "
+                    "using multiple processes. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["maximal_processes"])
                         + Style.RESET_ALL
                     ),
                 )
@@ -1316,6 +1339,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.mining:
                     CONFIGURATION.update({"mining": Preset().switch("mining")})
 
+                if ARGS.multiprocess:
+                    CONFIGURATION.update(
+                        {"multiprocess": Preset().switch("multiprocess")}
+                    )
+
                 if ARGS.no_files:
                     CONFIGURATION.update({"no_files": Preset().switch("no_files")})
 
@@ -1340,6 +1368,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     CONFIGURATION.update(
                         {"plain_list_domain": Preset().switch("plain_list_domain")}
                     )
+
+                if ARGS.processes and ARGS.processes >= 2:
+                    CONFIGURATION.update({"maximal_processes": ARGS.processes})
 
                 if ARGS.production:
                     Production()

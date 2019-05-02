@@ -457,7 +457,7 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge)
+        actual = Dict(origin).merge(to_merge, strict=True)
 
         self.assertEqual(expected, actual)
 
@@ -466,7 +466,40 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge, False)
+        actual = Dict(origin).merge(to_merge, strict=False)
+
+        self.assertEqual(expected, actual)
+
+    def test_merge_multilevel(self):
+        """
+        Test of Dict().merge() for the case that we have a multi level dict/list.
+        """
+
+        origin = {
+            "hello": {"world": ["This is PyFunceble!", "Uhh!"]},
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "funilrys", "name": "Fun"},
+        }
+        to_merge = {
+            "hello": {"world": ["hello", "Uhh"]},
+            "hello_world": {"author": "nobody", "surname": "body"},
+        }
+
+        expected = {
+            "hello": {"world": ["hello", "Uhh"]},
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+        }
+        actual = Dict(origin).merge(to_merge, strict=True)
+
+        self.assertEqual(expected, actual)
+
+        expected = {
+            "hello": {"world": ["This is PyFunceble!", "Uhh!", "hello", "Uhh"]},
+            "world": "Fun Ilrys",
+            "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+        }
+        actual = Dict(origin).merge(to_merge, strict=False)
 
         self.assertEqual(expected, actual)
 

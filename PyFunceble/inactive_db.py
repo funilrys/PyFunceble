@@ -106,9 +106,6 @@ class InactiveDB:
         # We share the filename.
         self.filename = filename
 
-        # We create the current file namepace
-        self.database[self.filename] = {"to_test": []}
-
         # We initiate the database.
         self.initiate()
 
@@ -174,70 +171,6 @@ class InactiveDB:
         """
 
         return PyFunceble.CONFIGURATION["inactive_database"]
-
-    def _reformat_historical_formating_error(self):  # pragma: no cover
-        """
-        Format the old format so it can be merged into the newer format.
-        """
-
-        if self.authorized:
-            # We are authorized to operate.
-
-            # We construct the possible path to an older version of the database.
-            historical_formating_error = "{0}{1}".format(
-                PyFunceble.CURRENT_DIRECTORY, "inactive-db.json"
-            )
-
-            if PyFunceble.path.isfile(historical_formating_error):
-                # The histortical file already exists.
-
-                # We get its content.
-                data = Dict().from_json(File(historical_formating_error).read())
-
-                # We initiate a variable which will save the data that is going
-                # to be merged.
-                data_to_parse = {}
-
-                # We get the database keybase.
-                top_keys = data.keys()
-
-                for top_key in top_keys:
-                    # We loop through the list of upper keys.
-
-                    # We get the lowest keys.
-                    low_keys = data[top_key].keys()
-
-                    # We initiate the data to parse.
-                    data_to_parse[top_key] = {}
-
-                    for low_key in low_keys:
-                        # We loop through the list of lower keys.
-
-                        if low_key.isdigit():
-                            # The current low key is a digit.
-
-                            # We parse its content (from the old) into the new format.
-                            # In between, we remove 30 days from the low_key so that
-                            # it become in the past. This way they will be retested
-                            # automatically.
-                            data_to_parse[top_key][
-                                int(low_key) - (self.one_day_in_seconds * 30)
-                            ] = data[top_key][low_key]
-                        else:
-                            # The current low key is not a digit.
-
-                            # We parse its content (from the old) into the new format.
-                            # In between, we remove 30 days from the current time so that
-                            # it become in the past. This way they will be retested
-                            # automatically.
-                            data_to_parse[top_key][
-                                int(PyFunceble.time()) - (self.one_day_in_seconds * 30)
-                            ] = data[top_key][low_key]
-
-                self.database.update(data_to_parse)
-
-                # We delete the old database file.
-                File(historical_formating_error).delete()
 
     def _merge(self):
         """
@@ -305,14 +238,15 @@ class InactiveDB:
         if self.authorized:
             # We are authorized to operate.
 
-            # We get, format and initiate the historical database file.
-            self._reformat_historical_formating_error()
-
             if PyFunceble.path.isfile(self.database_file):
-                # The database file exist.
+                # The database file exists.
 
-                # We merge our current database into already initiated one.
                 self._merge()
+            else:
+                # The database file do not exists.
+
+                # We initiate an empty database.
+                self.database = {self.filename: {"to_test": []}}
 
     def save(self):
         """
@@ -398,6 +332,9 @@ class InactiveDB:
 
                 # And we finally save the database.
                 self.save()
+            else:  # pragma: no cover
+                # We create the current file namepace
+                self.database[self.filename] = {"to_test": []}
 
     def _timestamp(self):
         """

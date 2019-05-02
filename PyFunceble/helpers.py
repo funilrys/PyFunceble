@@ -476,52 +476,49 @@ class Dict:
         # We initiate a variable which will save our result.
         result = {}
 
-        for element in to_merge:
-            # We loop throught the given dict to merge.
+        for index, data in to_merge.items():
+            # We loop through the given dict to merge.
 
-            if element in self.main_dictionnary:
-                # The currently read element is in the main dict.
+            if index in self.main_dictionnary:
+                # The currently read index is in the main dict.
 
-                if isinstance(to_merge[element], dict) and isinstance(
-                    self.main_dictionnary[element], dict
+                if isinstance(data, dict) and isinstance(
+                    self.main_dictionnary[index], dict
                 ):
-                    # They are in both side dict.
+                    # They are dict in both sides.
 
-                    # We merge the dict tree and save into result.
-                    result[element] = Dict(self.main_dictionnary[element]).merge(
-                        to_merge[element]
+                    # We merge the dict tree and save into the local result.
+                    result[index] = Dict(self.main_dictionnary[index]).merge(
+                        data, strict=strict
                     )
-
-                elif isinstance(to_merge[element], list) and isinstance(
-                    self.main_dictionnary[element], list
+                elif isinstance(data, list) and isinstance(
+                    self.main_dictionnary[index], list
                 ):
-                    # They are in both side list.
+                    # They are list in both sides.
 
-                    # We merge the lists and save into result.
-                    result[element] = List(self.main_dictionnary[element]).merge(
-                        to_merge[element], strict
+                    # We merge the lists and save into the local result.
+                    result[index] = List(self.main_dictionnary[index]).merge(
+                        data, strict=strict
                     )
                 else:
-                    # They are not list, not dict.
+                    # They are not list nor dict.
 
-                    # We append the currently read element to the result.
-                    result.update({element: to_merge[element]})
+                    result[index] = data
             else:
-                # The currently read element is not into the main
-                # dict.
+                # The currently read index is not in the main dict.
 
-                # We append the currently read element to the result.
-                result.update({element: to_merge[element]})
+                # We create it.
+                result[index] = data
 
-        for element in self.main_dictionnary:
+        for index, data in self.main_dictionnary.items():
             # We loop through each element of the main dict.
 
-            if element not in result:
-                # The currently read element is not into
+            if index not in result:
+                # The currently read index is not into
                 # the result.
 
                 # We append it to the result.
-                result[element] = self.main_dictionnary[element]
+                result[index] = data
 
         # We return the result.
         return result
