@@ -163,6 +163,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
                                                       __/ |
                                                      |___/
 
+-   asciinema - `@asciinema`_
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
@@ -220,6 +221,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@asciinema: https://github.com/asciinema
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft

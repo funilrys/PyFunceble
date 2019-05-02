@@ -28,6 +28,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
+-   asciinema - `@asciinema`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
@@ -54,6 +55,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@asciinema: https://github.com/asciinema
 .. _@faressoft: https://github.com/faressoft
 .. _@kennethreitz: https://github.com/kennethreitz
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
