@@ -28,6 +28,8 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
+-   Jonathan Hartley - `@tartley`_ (`colorama`_)
+-   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Mohammad Fares - `@faressoft`_ (`Terminalizer`_)
 -   Pi-Hole - `@pi-hole`_
@@ -35,23 +37,31 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
--   `IANA`_ - `ICANN`_
+-   The YAML Project - `@yaml`_ (`pyyaml`_)
+-   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   `yEd Graph Editor`_ - `yWorks`_
 
 
+.. _colorama: https://github.com/tartley/colorama
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _pyyaml: https://github.com/yaml/pyyaml
+.. _requests: https://github.com/kennethreitz/requests
+.. _Root Zone Database: https://www.iana.org/domains/root/db
 .. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@faressoft: https://github.com/faressoft
+.. _@kennethreitz: https://github.com/kennethreitz
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
+.. _@tartley: https://github.com/tartley
+.. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza

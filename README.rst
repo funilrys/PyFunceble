@@ -165,6 +165,8 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
+-   Jonathan Hartley - `@tartley`_ (`colorama`_)
+-   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Mohammad Fares - `@faressoft`_ (`Terminalizer`_)
 -   Pi-Hole - `@pi-hole`_
@@ -172,7 +174,8 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
--   `IANA`_ - `ICANN`_
+-   The YAML Project - `@yaml`_ (`pyyaml`_)
+-   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   `yEd Graph Editor`_ - `yWorks`_
 
 ___________________________________________
@@ -203,11 +206,15 @@ License
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
+.. _colorama: https://github.com/tartley/colorama
 .. _Dead-Hosts: https://github.com/dead-hosts
 .. _Funceble: https://github.com/funilrys/funceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _pyyaml: https://github.com/yaml/pyyaml
+.. _requests: https://github.com/kennethreitz/requests
+.. _Root Zone Database: https://www.iana.org/domains/root/db
 .. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company
@@ -218,6 +225,7 @@ License
 .. _@faressoft: https://github.com/faressoft
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
+.. _@kennethreitz: https://github.com/kennethreitz
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
@@ -226,8 +234,10 @@ License
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
 .. _@speedmann: https://github.com/speedmann
+.. _@tartley: https://github.com/tartley
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
+.. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
