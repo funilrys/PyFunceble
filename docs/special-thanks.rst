@@ -39,7 +39,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   SMed79 - `@SMed79`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
 -   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
--   `yEd Graph Editor`_ - `yWorks`_
+-   `yWorks`_ - (`yEd Graph Editor`_)
 
 
 .. _colorama: https://github.com/tartley/colorama
