@@ -29,7 +29,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
 -   Mitchell Krog - `@mitchellkrogza`_
--   Mohammad Fares - `@faressoft`_
+-   Mohammad Fares - `@faressoft`_ (`Terminalizer`_)
 -   Pi-Hole - `@pi-hole`_
 -   Public Suffix List - `@publicsuffix`_
 -   Reza Rizqullah - `@ybreza`_
@@ -42,6 +42,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company
 
