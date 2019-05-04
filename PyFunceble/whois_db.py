@@ -140,21 +140,23 @@ class WhoisDB:
         # We initiate a local place to save our results.
         result = {}
 
-        for element in old:
-            # We loop through all indexes of the database.
+        for index, data in old.items():
+            # We loop through all indexes and data of the database.
 
-            if "epoch" in old[element]:
+            if "epoch" in data:
                 # The epoch index is present into the currently
                 # read dataset.
 
                 # We create the copy of the dataset for our result.
-                result[element] = old[element]
+                result[index] = data
 
                 continue
+            elif isinstance(data, dict):
+                # The read data is a dict.
 
-            # We save the content of of the currently read dataset
-            # into the upstream index.
-            result.update(old[element])
+                # We save the content of of the currently read dataset
+                # into the upstream index.
+                result.update(data)
 
         # We return the result.
         return result
