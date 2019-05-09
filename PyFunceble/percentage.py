@@ -204,8 +204,13 @@ class Percentage:
                 # And we unset the INACTIVE line.
                 del lines_to_print[1]
 
-            if not PyFunceble.CONFIGURATION["quiet"]:
-                # The quiet mode is not activated.
+            if (
+                not PyFunceble.CONFIGURATION["quiet"]
+                or PyFunceble.CONFIGURATION["simple"]
+            ):
+                # * The quiet mode is not activated.
+                # or
+                # * We are testing in simple mode.
 
                 # We print a new line.
                 print("\n")
