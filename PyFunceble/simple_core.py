@@ -63,6 +63,7 @@ License:
 from domain2idna import get as domain2idna
 
 import PyFunceble
+from PyFunceble.file_core import FileCore
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -109,7 +110,11 @@ class SimpleCore:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
-                print(self.subject, status)
+                print(
+                    "{0} {1}".format(
+                        FileCore.get_simple_coloration(status) + self.subject, status
+                    )
+                )
         else:
             PyFunceble.CLICore.print_nothing_to_test()
 
@@ -137,6 +142,10 @@ class SimpleCore:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
-                print(self.subject, status)
+                print(
+                    "{0} {1}".format(
+                        FileCore.get_simple_coloration(status) + self.subject, status
+                    )
+                )
         else:
             PyFunceble.CLICore.print_nothing_to_test()

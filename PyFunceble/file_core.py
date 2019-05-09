@@ -132,7 +132,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         PyFunceble.DirectoryStructure()
 
     @classmethod
-    def _get_simple_coloration(cls, status):
+    def get_simple_coloration(cls, status):
         """
         Given a status we give the coloration for the simple mode.
 
@@ -220,7 +220,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # We print the domain and the status.
                 print(
                     "{0} {1}".format(
-                        self._get_simple_coloration(status) + subject, status
+                        self.get_simple_coloration(status) + subject, status
                     )
                 )
 
@@ -264,7 +264,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # The simple mode is activated.
 
                 # We print the domain and the status.
-                print(subject, status)
+                print(
+                    "{0} {1}".format(
+                        self.get_simple_coloration(status) + subject, status
+                    )
+                )
 
             if self.complements_test_started:
                 # We started to test the complements.
