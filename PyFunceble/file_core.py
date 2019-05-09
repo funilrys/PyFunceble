@@ -131,6 +131,34 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We generate the directory structure.
         PyFunceble.DirectoryStructure()
 
+    @classmethod
+    def _get_simple_coloration(cls, status):
+        """
+        Given a status we give the coloration for the simple mode.
+
+        :param str status: An official status output.
+        """
+
+        if status in [
+            PyFunceble.STATUS["official"]["up"],
+            PyFunceble.STATUS["official"]["valid"],
+        ]:
+            # The status is in the list of UP status.
+
+            # We return the green coloration.
+            return PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
+
+        if status == PyFunceble.STATUS["official"]["down"]:
+            # The status is in the list of DOWN status.
+
+            # We return the red coloration.
+            return PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT
+
+        # The status is not in the list of UP nor DOWN status.
+
+        # We return the cyam coloration.
+        return PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
+
     def download_link(self):  # pragma: no cover
         """
         Download the file if it is an URL.
@@ -190,7 +218,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # The simple mode is activated.
 
                 # We print the domain and the status.
-                print(subject, status)
+                print(
+                    "{0} {1}".format(
+                        self._get_simple_coloration(status) + subject, status
+                    )
+                )
 
             if self.complements_test_started:
                 # We started to test the complements.

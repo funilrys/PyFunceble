@@ -69,7 +69,7 @@ from PyFunceble.file_core import FileCore
 
 class TestsFormatLine(TestCase):
     """
-    Test PyFunceble.file.FileCore._format_line()
+    Test PyFunceble.file_core.FileCore._format_line()
     """
 
     def setUp(self):
@@ -215,6 +215,71 @@ class TestsFormatLine(TestCase):
             actual = FileCore._format_line(data)
 
             self.assertEqual(expected, actual)
+
+
+class TestSimpleColoration(TestCase):
+    """
+    Test PyFunceble.file_core.__get_simple_coloration().
+    """
+
+    def setUp(self):
+        """
+        Setup everything that is needed for the tests.
+        """
+
+        PyFunceble.load_config(generate_directory_structure=False)
+
+    def test_green_up(self):
+        """
+        Test the case that we give the UP status.
+        """
+
+        expected = PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
+        actual = FileCore._get_simple_coloration(PyFunceble.STATUS["official"]["up"])
+
+        self.assertEqual(expected, actual)
+
+    def test_green_valid(self):
+        """
+        Test the case that we give the VALID status.
+        """
+
+        expected = PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
+        actual = FileCore._get_simple_coloration(PyFunceble.STATUS["official"]["up"])
+
+        self.assertEqual(expected, actual)
+
+    def test_red_inactive(self):
+        """
+        Test the case that we give the INACTIVE status.
+        """
+
+        expected = PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT
+        actual = FileCore._get_simple_coloration(PyFunceble.STATUS["official"]["down"])
+
+        self.assertEqual(expected, actual)
+
+    def test_cyan_invalid(self):
+        """
+        Test the case that we give the INVALID status.
+        """
+
+        expected = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
+        actual = FileCore._get_simple_coloration(
+            PyFunceble.STATUS["official"]["invalid"]
+        )
+
+        self.assertEqual(expected, actual)
+
+    def test_cyan_other(self):
+        """
+        Test the case that we give something ellse status.
+        """
+
+        expected = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
+        actual = FileCore._get_simple_coloration("funilrys")
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
