@@ -552,20 +552,22 @@ Global overview
 ::
 
     usage: PyFunceble [-ad] [-a] [-c] [--autosave-minutes AUTOSAVE_MINUTES]
-                    [--clean] [--clean-all] [--cmd CMD]
-                    [--cmd-before-end CMD_BEFORE_END]
-                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
-                    [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                    [--complements] [-d DOMAIN] [-db]
-                    [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
-                    [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
-                    [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
-                    [-ip IP] [--json] [--less] [--local] [--link LINK]
-                    [--mining] [-m] [-n] [-nl] [-ns] [-nu] [-nw] [--percentage]
-                    [--plain] [-p PROCESSES] [--production] [-psl] [-q]
-                    [--share-logs] [-s] [--split] [--syntax] [-t TIMEOUT]
-                    [--travis] [--travis-branch TRAVIS_BRANCH] [-u URL]
-                    [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
+                  [--clean] [--clean-all] [--cmd CMD]
+                  [--cmd-before-end CMD_BEFORE_END]
+                  [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
+                  [--commit-results-message COMMIT_RESULTS_MESSAGE]
+                  [--complements] [-d DOMAIN] [-db]
+                  [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
+                  [--directory-structure] [-ex] [-f FILE] [--filter FILTER]
+                  [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
+                  [-ip IP] [--json] [--less] [--local] [--link LINK]
+                  [--mining] [-m] [-n] [-nl] [-ns] [-nu] [-nw] [--percentage]
+                  [--plain] [-p PROCESSES] [--production] [-psl] [-q]
+                  [--share-logs] [-s] [--split] [--syntax] [-t TIMEOUT]
+                  [--travis] [--travis-branch TRAVIS_BRANCH] [-u URL]
+                  [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
+
+    The tool to check the availability or syntax of domains, IPv4 or URL.
 
     optional arguments:
         -ad, --adblock        Switch the decoding of the adblock format.
