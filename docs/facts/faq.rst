@@ -1,8 +1,6 @@
 Frequently Asked Questions
 ==========================
 
-.. include:: dead-hosts/global-note.rst
-
 How to speed up a bit the process/test?
 ----------------------------------------
 
@@ -15,7 +13,7 @@ You can in addition of that use the :code:`--processes` argument to tell us the 
 I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For now, we only invite you to disable the usage/request of the WHOIS record.
+We invite you to disable the usage/request of the WHOIS record.
 
 
 This action will let the script speed up because we only use the equivalent of :code:`nslookup` and the HTTP status code to determine the status.

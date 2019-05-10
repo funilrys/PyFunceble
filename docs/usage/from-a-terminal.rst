@@ -338,7 +338,7 @@ Want to test a raw link? This argument will download and test the given raw link
 Want to find domain or URL linked to a domain in your list? This argument will exactly do that.
 
 :code:`-m` | :code:`--multiprocess`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value of the usage of multiple process.
 

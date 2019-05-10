@@ -237,13 +237,17 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             Indeed, we only do :code:`output % final_location`.
 
         :return:
+            The following paths:
+
             ::
+
                 (
                     hosts_destination,
                     plain_destination,
                     json_destination,
                     splited_destination
                 )
+
         :rtype: tuple
         """
 
