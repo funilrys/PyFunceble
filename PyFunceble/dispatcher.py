@@ -61,6 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
+from PyFunceble.cli_core import CLICore
 from PyFunceble.execution_time import ExecutionTime
 from PyFunceble.file_core import FileCore
 from PyFunceble.file_multiprocess_core import FileMultiprocessCore
@@ -90,6 +91,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
     ):  # pylint: disable=too-many-branches
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
             PyFunceble.DirectoryStructure()
+            CLICore.logs_sharing()
 
             ExecutionTime("start")
 

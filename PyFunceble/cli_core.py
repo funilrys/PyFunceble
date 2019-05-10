@@ -208,3 +208,23 @@ class CLICore:
                     + PyFunceble.Fore.YELLOW
                     + "!"
                 )
+
+    @classmethod
+    def logs_sharing(cls):  # pragma: no cover
+        """
+        Print an information message when the logs sharing
+        is activated.
+        """
+
+        if PyFunceble.CONFIGURATION["share_logs"]:
+            print(
+                PyFunceble.Fore.GREEN
+                + PyFunceble.Style.BRIGHT
+                + "You are sharing your logs!"
+            )
+            print(
+                PyFunceble.Fore.MAGENTA
+                + PyFunceble.Style.BRIGHT
+                + "Please find more about it at "
+                "https://pyfunceble.readthedocs.io/en/dev/logs-sharing.html !"
+            )
