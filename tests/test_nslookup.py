@@ -62,7 +62,6 @@ License:
 from unittest import TestCase
 from unittest import main as launch_tests
 
-import PyFunceble
 from PyFunceble.nslookup import NSLookup
 
 
@@ -106,7 +105,6 @@ class TestNSLookup(TestCase):
         if "addr_info" not in actual:
             raise AssertionError()
 
-        PyFunceble.INTERN["to_test"] = "172.217.22.14"
         actual = NSLookup("172.217.22.14").request()
 
         self.assertIsInstance(actual, dict)

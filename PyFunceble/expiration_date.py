@@ -158,7 +158,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             self._extract()
 
         # We log our whois record if the debug mode is activated.
-        Logs().whois(self.whois_record)
+        Logs().whois(self.subject, self.whois_record)
 
         # And we return the expiration date and the whois record.
         return self.expiration_date, self.whois_record
@@ -449,7 +449,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                             # The formatted expiration date does not match our unified format.
 
                             # We log the problem.
-                            Logs().expiration_date(self.expiration_date)
+                            Logs().expiration_date(self.subject, self.expiration_date)
 
                         # We save the whois record into the database.
                         self.whois_db.add(self.subject, self.expiration_date)

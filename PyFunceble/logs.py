@@ -112,12 +112,12 @@ class Logs:  # pragma: no cover
 
             Dict(content).to_json(file)
 
-    def whois(self, record):
+    def whois(self, subject, record):
         """
         Logs the WHOIS record if needed.
 
-        :param record: The record to log.
-        :type record: str
+        :param str subject: The currently tested subject.
+        :param str record: The record to log.
         """
 
         if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
@@ -130,7 +130,7 @@ class Logs:  # pragma: no cover
 
             to_write = {
                 self.current_time: {
-                    "domain": PyFunceble.INTERN["to_test"],
+                    "domain": subject,
                     "record": record,
                     "referer": referer,
                 }
@@ -149,12 +149,12 @@ class Logs:  # pragma: no cover
 
             self._write_content(current_content, output)
 
-    def expiration_date(self, extracted):
+    def expiration_date(self, subject, extracted):
         """
         Logs the extracted expiration date.
 
-        :param extracted: The extracted expiration date (from WHOIS record).
-        :type extracted: str
+        :param str subject: The currently tested subject.
+        :param str extracted: The extracted expiration date (from WHOIS record).
         """
 
         if PyFunceble.CONFIGURATION["logs"]:
@@ -167,7 +167,7 @@ class Logs:  # pragma: no cover
 
             to_write = {
                 self.current_time: {
-                    "domain": PyFunceble.INTERN["to_test"],
+                    "domain": subject,
                     "expiration_date": extracted,
                     "whois_server": referer,
                 }
@@ -195,23 +195,18 @@ class Logs:  # pragma: no cover
                     data=to_write[self.current_time],
                 )
 
-    def referer_not_found(self, extension):
+    def referer_not_found(self, subject, extension):
         """
         Logs the case that the referer was not found.
 
-        :param extension: The extension of the domain we are testing.
-        :type extension: str
+        :param str subject: The currently tested subject.
+        :param str extension: The extension of the domain we are testing.
         """
 
         if PyFunceble.CONFIGURATION["logs"]:
             # The logs subsystem is activated.
 
-            to_write = {
-                self.current_time: {
-                    "domain": PyFunceble.INTERN["to_test"],
-                    "extension": extension,
-                }
-            }
+            to_write = {self.current_time: {"domain": subject, "extension": extension}}
 
             if self.output:
                 output = self.output

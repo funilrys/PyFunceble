@@ -197,6 +197,8 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
         if subject:
             if not isinstance(subject, str):
                 raise ValueError("`subject` must be a string.")
+
+            self.subject = subject
         else:
             raise ValueError("`subject` must be given.")
 
@@ -245,7 +247,9 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                             # The referer is not filled.
 
                             # We log the case of the current extension.
-                            Logs().referer_not_found(self.domain_extension)
+                            Logs().referer_not_found(
+                                self.subject, self.domain_extension
+                            )
 
                             # And we handle and return None status.
                             return None
