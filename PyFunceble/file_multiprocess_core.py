@@ -66,7 +66,7 @@ from multiprocessing import Manager, Process
 import PyFunceble
 from PyFunceble.adblock import AdBlock
 from PyFunceble.file_core import FileCore
-from PyFunceble.helpers import Dict, List
+from PyFunceble.helpers import Dict, File, List
 from PyFunceble.sort import Sort
 
 
@@ -86,6 +86,59 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
     def __init__(self, file, file_type="domain"):
         super(FileMultiprocessCore, self).__init__(file, file_type=file_type)
+
+    @classmethod
+    def __sort_generated_files(cls):
+        """
+        Sort the content of all files we generated.
+        """
+
+        for root, _, files in PyFunceble.walk(
+            PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+        ):
+            # We loop through the list of directories of the output directory.
+
+            for file in files:
+                # We loop through the list of file of the
+                # currently read directory.
+
+                if file.endswith(".json"):
+                    # The currently read filename ends
+                    # with .json.
+
+                    # We continue the loop.
+                    continue
+
+                if file in [".keep", ".gitignore"]:
+                    # The currently read filename is
+                    # into a list of filename that are not relevant
+                    # for us.
+
+                    # We continue the loop.
+                    continue
+
+                # We create an instance of our File().
+                file_instance = File(
+                    "{0}{1}{2}".format(root, PyFunceble.directory_separator, file)
+                )
+                # We get the content of the current file.
+                file_content = file_instance.read().splitlines()
+
+                if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                    # We do not have to sort hierarchicaly.
+
+                    # We sort the lines of the file standarly.
+                    formatted = List(file_content[3:]).custom_format(Sort.standard)
+                else:
+                    # We do have to sort hierarchicaly.
+
+                    # We sort the lines of the file hierarchicaly.
+                    formatted = List(file_content[3:]).custom_format(Sort.hierarchical)
+
+                # We finally put the formatted data in place.
+                file_instance.write(
+                    "\n".join(file_content[:3] + formatted), overwrite=True
+                )
 
     def __run_multiprocess_test(self, to_test, manager_data):
         """
@@ -235,6 +288,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         self.inactive_db.save()
         # We save the mining database.
         self.mining.save()
+        # We sort the content of all files we generated.
+        self.__sort_generated_files()
 
         if self.autosave.is_time_exceed():
             # The operation end time was exceeded.
