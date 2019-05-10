@@ -12,7 +12,7 @@ Get the availability of domains or IP
 -------------------------------------
 
 .. note::
-    This example can be found at `our examples repository`_.
+    This example can be found in `our examples repository`_.
 
 .. todo::
     Add IPs in the loop.
@@ -81,7 +81,7 @@ Get the availability of URL
 ---------------------------
 
 .. note::
-    This example can be found at `our examples repository`_.
+    This example can be found in `our examples repository`_.
 
 ::
 
@@ -217,13 +217,11 @@ As example, you can do it like follow:
     ## We can then manipulate the status and/or other business logic ...
 
 
-
-
 Check the syntax of domains
 ---------------------------
 
 .. note::
-    This example can be found at `our examples repository`_.
+    This example can be found in `our examples repository`_.
 
 ::
 
@@ -289,7 +287,7 @@ Check the syntax of IPv4s
 -------------------------
 
 .. note::
-    This example can be found at `our examples repository`_.
+    This example can be found in `our examples repository`_.
 
 ::
 
@@ -347,7 +345,7 @@ Check the syntax of URLs
 ------------------------
 
 .. note::
-    This example can be found at `our examples repository`_.
+    This example can be found in `our examples repository`_.
 
 ::
 
