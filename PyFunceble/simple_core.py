@@ -72,8 +72,7 @@ class SimpleCore:
     """
     Brain of PyFunceble for simple test.
 
-    :param subject: The subject we are testing.
-    :type subject: str
+    :param str subject: The subject we are testing.
     """
 
     def __init__(self, subject):

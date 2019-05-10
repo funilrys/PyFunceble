@@ -69,8 +69,7 @@ class Logs:  # pragma: no cover
     Provide a clean and unique way to work with logs.
     Indeed, it's not good to have logs spread around the code :smile:
 
-    :param output: A path to the JSON file we are going to write.
-    :type output: str
+    :param str output: A path to the JSON file we are going to write.
     """
 
     def __init__(self, output=None):
@@ -82,8 +81,7 @@ class Logs:  # pragma: no cover
         """
         Get and return the content of the given log file.
 
-        :param file: The file we have to get the content from.
-        :type file: str
+        :param str file: The file we have to get the content from.
 
         :return The content of the given file.
         :rtype: dict
@@ -99,11 +97,9 @@ class Logs:  # pragma: no cover
         """
         Write the content into the given file.
 
-        :param content: The dict to write.
-        :type content: dict
+        :param str content: The dict to write.
 
-        :param file: The file to write.
-        :type file: str
+        :param str file: The file to write.
         """
 
         if not PyFunceble.CONFIGURATION["no_files"]:

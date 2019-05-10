@@ -69,10 +69,9 @@ class Prints:
     Print data on screen and into a file if needed.
     Template Possibilities: Percentage, Less, HTTP and any status you want.
 
-    :param to_print: The list of data to print.
-    :type to_pritn: list
+    :param list to_print: The list of data to print.
 
-    :param template:
+    :param str template:
         The template to use.
 
         .. note::
@@ -83,14 +82,10 @@ class Prints:
                 - :code:`HTTP`
                 - any of the official status.
 
-    :type template: str
+    :param str output_file: The path to the file to write.
 
-    :param output_file: The path to the file to write.
-    :type output_file: str
-
-    :param only_on_file:
+    :param bool only_on_file:
         Tell us if we only have to print on file and not on screen.
-    :type only_on_file: bool
     """
 
     def __init__(self, to_print, template, output_file=None, only_on_file=False):
@@ -236,16 +231,13 @@ class Prints:
         """
         Construct header of the table according to template.
 
-        :param data_to_print:
+        :param list data_to_print:
             The list of data to print into the header of the table.
-        :type data_to_print: list
 
-        :param header_separator:
+        :param str header_separator:
             The separator to use between the table header and our data.
-        :type header_separator: str
 
-        :param colomn_separator: The separator to use between each colomns.
-        :type colomn_separator: str
+        :param str colomn_separator: The separator to use between each colomns.
 
         :return: The data to print in a list format.
         :rtype: list
@@ -328,9 +320,8 @@ class Prints:
         Management and creation of templates of header.
         Please consider as "header" the title of each columns.
 
-        :param do_not_print:
+        :param bool do_not_print:
             Tell us if we have to print the header or not.
-        :type do_not_print: bool
         """
 
         if (
@@ -441,8 +432,7 @@ class Prints:
         """
         Construct the table of data according to given size.
 
-        :param size: The maximal length of each string in the table.
-        :type size: list
+        :param list size: The maximal length of each string in the table.
 
         :return:
             A dict with all information about the data and how to which what
@@ -482,9 +472,8 @@ class Prints:
         """
         Get the size of each columns from the header.
 
-        :param header:
+        :param dict header:
             The header template we have to get the size from.
-        :type header: dict
 
         :return: The maximal size of the each data to print.
         :rtype: list
@@ -506,8 +495,7 @@ class Prints:
         """
         Retun colored string.
 
-        :param data: The string to colorify.
-        :type data: str
+        :param str data: The string to colorify.
 
         :return: A colored string.
         :rtype: str

@@ -68,20 +68,17 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
     """
     Get, format and return the expiration date of a domain, if exist.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param whois_server:
+    :param str whois_server:
         The whois server we are trying to get get the expiration
         date from.
-    :type whois_server: str
 
     :param whois_db:
         An instance of the whois database.
-    :type whois_db: :func:`~PyFunceble.whois_db.WhoisDB`
+    :type whois_db: :func:`PyFunceble.whois_db.WhoisDB`
 
-    :param filename: The name of the file we are working with.
-    :type filename: str
+    :param str filename: The name of the file we are working with.
     """
 
     # We initiate a variable which will save the extracted expiration date.
@@ -182,8 +179,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         """
         Convert a given month into our unified format.
 
-        :param data: The month to convert or shorten.
-        :type data: str
+        :param str data: The month to convert or shorten.
 
         :return: The unified month name.
         :rtype: str
@@ -232,11 +228,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             in format :code:`2017-01-02` where
             :code:`01` is the month.
 
-        :param regex_number: The identifiant of the regex.
-        :type regex_number: int
+        :param int regex_number: The identifiant of the regex.
 
-        :param matched_result: The matched result to format.
-        :type matched_result: list
+        :param list matched_result: The matched result to format.
 
         :return:
             A list representing the expiration date.
@@ -283,9 +277,8 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
         """
         Format the expiration date into an unified format (01-jan-1970).
 
-        :param date_to_convert:
+        :param str date_to_convert:
             The date to convert. In other words, the extracted date.
-        :type date_to_convert: str
 
         :return: The formatted expiration date.
         :rtype: str

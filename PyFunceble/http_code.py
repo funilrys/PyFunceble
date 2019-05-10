@@ -70,8 +70,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
     """
     Get and return the HTTP code status of a given domain.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
     :param subject _type:
         The type of the subject we are working with.

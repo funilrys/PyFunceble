@@ -556,11 +556,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         Generate :code:`Analytic/*` files based on the given old and
         new statuses.
 
-        :param new_status: The new status of the domain.
-        :type new_status: str
+        :param str new_status: The new status of the domain.
 
-        :param old_status: The old status of the domain.
-        :type old_status: str
+        :param str old_status: The old status of the domain.
         """
 
         if not old_status:

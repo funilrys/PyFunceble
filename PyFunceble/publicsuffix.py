@@ -102,8 +102,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Extract the extension from the given line.
 
-        :param line: The line from the official public suffix repository.
-        :type line: str
+        :param str line: The line from the official public suffix repository.
         """
 
         # We strip the parsed line.

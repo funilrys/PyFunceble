@@ -79,8 +79,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         """
         Implement the standard and alphabetical sorting.
 
-        :param element: The element we are currently reading.
-        :type element: str
+        :param str element: The element we are currently reading.
 
         :return: The formatted element.
         :rtype: str
@@ -98,8 +97,7 @@ class Sort:  # pylint: disable=too-few-public-methods
         """
         The idea behind this method is to sort a list of domain hierarchicaly.
 
-        :param element: The element we are currently reading.
-        :type element: str
+        :param str element: The element we are currently reading.
 
         :return: The formatted element.
         :rtype: str

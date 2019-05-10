@@ -394,8 +394,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         """
         Return the referer for the given extension.
 
-        :param extension: A valid domain extension.
-        :type extension: str
+        :param str extension: A valid domain extension.
 
         :return: The whois server to use to get the WHOIS record.
         :rtype: str

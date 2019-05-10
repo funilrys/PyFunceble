@@ -68,8 +68,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
     Get the WHOIS server (referer) of the current domain extension according to
     the IANA database.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
     """
 
     # We create a list of ignored extension.

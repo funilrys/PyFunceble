@@ -81,17 +81,15 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
     """
     Brain of PyFunceble for file testing.
 
-    :param file: The file we are testing.
-    :type file: str
+    :param str file: The file we are testing.
 
-    :param file_type:
+    :param str file_type:
         The file type.
         Should be one of the following.
 
             - :code:`domain`
 
             - :code:`url`
-    :type file_type: str
     """
 
     # We set a regex of element to delete.
@@ -191,8 +189,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         """
         Handle the test of a single domain.
 
-        :param subject: The subject we are testing.
-        :type subject: str
+        :param str subject: The subject we are testing.
         """
 
         if subject:
@@ -240,8 +237,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         """
         Handle the simple URL testing.
 
-        :param subject: The subject we are testing.
-        :type subject: str
+        :param str subject: The subject we are testing.
         """
 
         if subject:
@@ -287,8 +283,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         """
         Format the extracted line before passing it to the system.
 
-        :param line: The extracted line.
-        :type line: str
+        :param str line: The extracted line.
 
         :return: The formatted line with only the element to test.
         :rtype: str

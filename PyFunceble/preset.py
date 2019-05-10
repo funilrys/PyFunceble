@@ -90,10 +90,9 @@ class Preset:
             it here.
         :type variable: str|bool
 
-        :param custom:
+        :param bool custom:
             Let us know if have to switch the parsed variable instead
             of our configuration index.
-        :type custom: bool
 
         :return:
             The opposite of the configuration index or the given variable.

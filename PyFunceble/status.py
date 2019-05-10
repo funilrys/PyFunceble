@@ -83,7 +83,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
 
     :param whois_db:
         An instance of the whois database.
-    :type whois_db: :func:`~PyFunceble.whois_db.WhoisDB`
+    :type whois_db: :func:`PyFunceble.whois_db.WhoisDB`
 
 
     :param str filename: The name of the file we are working with.
@@ -248,16 +248,14 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
     """
     Manage some extra rules.,
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param subject_type:
+    :param str subject_type:
         The type of the subject we are working with.
         Should be one of the following.
 
             - :code:`domain`
             - :code:`url`
-    :type subject_tpe: str
 
     :param http_status_code: The extracted status code.
     :type http_status_code: str|int
@@ -419,8 +417,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
         Handle the potentially inactive case.
 
-        :param previous_state: The previously catched status.
-        :type previous_state: str
+        :param str previous_state: The previously catched status.
 
         :return:
             :code:`(new status, new source)` or :code:`None` if there is any
@@ -516,8 +513,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
         Handle the HTTP Code status escalation.
 
-        :param previous_state: The previously catched status.
-        :type previous_state: str
+        :param str previous_state: The previously catched status.
 
         :return:
             :code:`(new status, new source)` or :code:`None` if there is any
@@ -672,14 +668,11 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Generate everything around the catched status when testing for URL.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param subject_type: The type of the subject.
-    :type subject_type: str
+    :param str subject_type: The type of the subject.
 
-    :param filename: The name of the file we are working with.
-    :type filename: str
+    :param str filename: The name of the file we are working with.
     """
 
     def __init__(self, subject, subject_type="url", filename=None):
@@ -767,14 +760,11 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Generate everything around the catched status when testing for Syntax.
 
-    :param subject: The subject we are working with.
-    :type subject: str
+    :param str subject: The subject we are working with.
 
-    :param subject_type: The type of the subject.
-    :type subject_type: str
+    :param str subject_type: The type of the subject.
 
-    :param filename: The name of the file we are working with.
-    :type filename: str
+    :param str filename: The name of the file we are working with.
     """
 
     def __init__(self, subject, subject_type="domain", filename=None):

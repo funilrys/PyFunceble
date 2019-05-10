@@ -76,8 +76,7 @@ class CLICore:
         """
         Print the colored logo based on global results.
 
-        :param home: Tell us if we have to print the initial coloration.
-        :type home: bool
+        :param bool home: Tell us if we have to print the initial coloration.
         """
 
         if not PyFunceble.CONFIGURATION["quiet"]:

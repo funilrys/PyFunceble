@@ -68,8 +68,7 @@ class InactiveDB:
     """
     Provide the inactive database logic and interface.
 
-    :param filename: The name of the file we are processing.
-    :type filename: str
+    :param str filename: The name of the file we are processing.
     """
 
     # We initiate a variable which will save the
@@ -393,8 +392,7 @@ class InactiveDB:
         """
         Add the given subject into the database.
 
-        :param subject: The subject we are working with.
-        :type subject: str
+        :param str subject: The subject we are working with.
         """
 
         if self.authorized:
@@ -432,8 +430,7 @@ class InactiveDB:
         """
         Remove all occurence of the given subject from the database.
 
-        :param subject: The subject we are working with.
-        :type subject: str
+        :param str subject: The subject we are working with.
         """
 
         if self.authorized:

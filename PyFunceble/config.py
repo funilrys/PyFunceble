@@ -67,8 +67,7 @@ class Load:  # pylint: disable=too-few-public-methods
     """
     Help us load the configuration(s) file(s).
 
-    :param path_to_config: The possible path to the configuration to load.
-    :type path_to_config: str
+    :param str path_to_config: The possible path to the configuration to load.
     """
 
     def __init__(self, path_to_config):
@@ -191,8 +190,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         """
         Set the paths to the configuration files.
 
-        :param path_to_config: The possible path to the config to load.
-        :type path_to_config: str
+        :param str path_to_config: The possible path to the config to load.
 
         :return:
             The path to the config to read (0), the path to the default
@@ -382,8 +380,7 @@ class Merge:  # pylint: disable=too-few-public-methods
     """
     Merge the old into the new configuration file.
 
-    :param configuration_path: The path to the configuration file to update.
-    :type configuration_path: str
+    :param str configuration_path: The path to the configuration file to update.
     """
 
     def __init__(self, configuration_path):
@@ -490,10 +487,9 @@ class Version:
     """
     Compare the local with the upstream version.
 
-    :param used:
+    :param bool used:
         True: Version is configured for simple usage.
         False: Version compare local with upstream.
-    :type used: bool
     """
 
     def __init__(self, used=False):
@@ -524,13 +520,11 @@ class Version:
         """
         Convert the versions to a shorter one.
 
-        :param version: The version to split.
-        :type version: str
+        :param str version: The version to split.
 
-        :param return_non_digits:
+        :param bool return_non_digits:
             Activate the return of the non-digits parts of the splitted
             version.
-        :type return_non_digits: bool
 
         :return: The splitted version name/numbers.
         :rtype: list
@@ -561,11 +555,9 @@ class Version:
         """
         Compare the given versions literally.
 
-        :param local: The local version converted by split_versions().
-        :type local: str
+        :param str local: The local version converted by split_versions().
 
-        :param upstream: The upstream version converted by split_versions().
-        :type upstream: str
+        :param str upstream: The upstream version converted by split_versions().
 
         :return:
             - True: local == upstream
@@ -580,11 +572,9 @@ class Version:
         """
         Compare the given versions.
 
-        :param local: The local version converted by split_versions().
-        :type local: list
+        :param list local: The local version converted by split_versions().
 
-        :param upstream: The upstream version converted by split_versions().
-        :type upstream: list
+        :param list upstream: The upstream version converted by split_versions().
 
         :return:
             - True: local < upstream
@@ -878,8 +868,7 @@ class Version:
         Convert the GitHub URL to the right one depending of the
         branch or version we are working with.
 
-        :param url: The URL to convert.
-        :type url: str
+        :param str url: The URL to convert.
 
         :return: The converted URL.
         :rtype: str

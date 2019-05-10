@@ -81,16 +81,13 @@ class Hash:  # pylint: disable=too-few-public-methods
     """
     Get and return the hash a file with the given algorithm.
 
-    :param file_path: The path to the file we have to hash.
-    :type file_path: str
+    :param str file_path: The path to the file we have to hash.
 
-    :param algorithm: The algorithm to use.
-    :type algorithm: str
+    :param str algorithm: The algorithm to use.
 
-    :param only_hash:
+    :param bool only_hash:
         Tell us if we only have to return the desired algorithm
         instead of the dummy dict format.
-    :type hash_only: bool
 
     .. note::
         The original version can be found at https://git.io/vFQrK.
@@ -123,8 +120,7 @@ class Hash:  # pylint: disable=too-few-public-methods
     def _hash_file(self, algo):
         """Get the hash of the given file
 
-        :param algo: The algorithm to use.
-        :type algo: str
+        :param str algo: The algorithm to use.
 
         :return: The hexdigest of the data.
         :rtype: str
@@ -149,8 +145,7 @@ class Hash:  # pylint: disable=too-few-public-methods
         """
         Get hash of the given data.
 
-        :param algo: The algorithm to use.
-        :type algo: str
+        :param str algo: The algorithm to use.
         """
 
         # We het the algorithm function.
@@ -621,8 +616,7 @@ class Directory:  # pylint: disable=too-few-public-methods
     """
     Directory manipulation.
 
-    :param directory: A path to the directory to manipulate.
-    :type directory: str
+    :param str directory: A path to the directory to manipulate.
     """
 
     def __init__(self, directory):  # pragma: no cover

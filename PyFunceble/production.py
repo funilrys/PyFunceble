@@ -69,10 +69,9 @@ class Production:  # pylint: disable=too-few-public-methods
     """
     Manage and provide the production preparation logic.
 
-    :param extern:
+    :param bool extern:
         Tell us if we do not have to execute the logic automatically.
         This allow method to be called.
-    :type extern: bool
     """
 
     def __init__(self, extern=False):
@@ -429,8 +428,7 @@ class Production:  # pylint: disable=too-few-public-methods
         .. note::
             This only apply to :code:`dev` and :code:`master` branch.
 
-        :param file_to_update: The file to update.
-        :type file_to_update: str
+        :param str file_to_update: The file to update.
         """
 
         if self.is_dev_version():

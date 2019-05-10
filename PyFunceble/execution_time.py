@@ -67,14 +67,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     """
     Set and return the exection time of the program.
 
-    :param action:
+    :param str action:
         The action related the execution time.
         Can be `start` or `stop`.
-    :type action: str
 
-    :param last:
+    :param bool last:
         Tell the subsystem if we are at the very end of the file testing.
-    :type last: bool
     """
 
     authorized = False
@@ -134,9 +132,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
         Save the current time to the file.
 
-        :param last:
+        :param bool last:
             Tell us if we are at the very end of the file testing.
-        :type last: bool
         """
 
         if (

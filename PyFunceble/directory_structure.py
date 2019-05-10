@@ -68,11 +68,10 @@ class DirectoryStructure:  # pragma: no cover
     """
     Basically a backup/reconstructor of our :code:`output` directory.
 
-    :param production:
+    :param bool production:
         Tell the subsystem if we are preparing for production which
         imply the execution of the backup insteam of of the
         "reconstructore" mode.
-    :type production: bool
     """
 
     def __init__(self, production=False):
@@ -178,8 +177,7 @@ class DirectoryStructure:  # pragma: no cover
         """
         Update the paths according to configs.
 
-        :param structure: The read structure.
-        :type structure: dict
+        :param dict structure: The read structure.
         """
 
         # We initiate a variable which will map what we have to replace `ouput` to.
@@ -455,11 +453,9 @@ class DirectoryStructure:  # pragma: no cover
         """
         Creates the given directory if it does not exists.
 
-        :param directory: The directory to create.
-        :type directory: str
+        :param str directory: The directory to create.
 
-        :param loop: Tell us if we are in the creation loop or not.
-        :type loop: bool
+        :param bool loop: Tell us if we are in the creation loop or not.
         """
 
         if not loop and PyFunceble.directory_separator in directory:

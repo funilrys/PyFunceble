@@ -71,13 +71,11 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     """
     Provide the autosave logic.
 
-    :param is_last_domain:
+    :param bool is_last_domain:
         Tell this subsystem if we are at the very end of the file testing.
-    :type is_last_domain: bool
 
-    :param is_bypass:
+    :param bool is_bypass:
         Tell this subsystem if we are in bypassing mode.
-    :type is_bypass: bool
     """
 
     # We set the varible which will save the global authorization to operate.
