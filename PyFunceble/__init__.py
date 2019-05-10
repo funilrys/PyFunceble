@@ -74,7 +74,7 @@ from time import mktime, strftime, strptime, time
 
 import requests
 from colorama import Back, Fore, Style
-from colorama import init as initiate
+from colorama import init as initiate_colorama
 
 from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.29.0.detached-future (Blue Bontebok: Beetle)"
+VERSION = "1.30.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -612,7 +612,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
     if __name__ == "PyFunceble":
         # We initiate the end of the coloration at the end of each line.
-        initiate(autoreset=True)
+        initiate_colorama(autoreset=True)
 
         # We load the configuration.
         load_config(generate_directory_structure=False)

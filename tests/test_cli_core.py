@@ -78,7 +78,7 @@ class TestsColoredLogo(BaseStdout):
         Setup everything needed.
         """
 
-        PyFunceble.initiate(True)
+        PyFunceble.initiate_colorama(True)
         PyFunceble.load_config(generate_directory_structure=False)
 
         BaseStdout.setUp(self)
@@ -182,7 +182,7 @@ class TestNothing(BaseStdout):
         Setup everything needed for the test.
         """
 
-        PyFunceble.initiate(True)
+        PyFunceble.initiate_colorama(True)
         BaseStdout.setUp(self)
 
     def test_nothing_to_test(self):

@@ -26,7 +26,7 @@ Get the availability of domains or IP
     """
 
     # We want some coloration so we import the tool do to that :)
-    from PyFunceble import initiate, Fore, Style
+    from PyFunceble import initiate_colorama, Fore, Style
     # We import the tool to print the colored CLI logo.
     from PyFunceble.cli_core import CLICore
     # We import the configuration loader.
@@ -45,7 +45,7 @@ Get the availability of domains or IP
     ]
 
     # We initiate colorama.
-    initiate(True)
+    initiate_colorama(True)
 
     # We load our configuration.
     #
@@ -92,7 +92,7 @@ Get the availability of URL
     """
 
     # We want some coloration so we import the tool do to that :)
-    from PyFunceble import initiate, Fore, Style
+    from PyFunceble import initiate_colorama, Fore, Style
     # We import the tool to print the colored CLI logo.
     from PyFunceble.cli_core import CLICore
     # We import the configuration loader.
@@ -110,7 +110,7 @@ Get the availability of URL
     ]
 
     # We initiate colorama.
-    initiate(True)
+    initiate_colorama(True)
 
     # We load our configuration.
     #
@@ -234,7 +234,7 @@ Check the syntax of domains
     """
 
     # We want some coloration so we import the tool do to that :)
-    from PyFunceble import initiate, Fore, Style
+    from PyFunceble import initiate_colorama, Fore, Style
     # We import the tool to print the colored CLI logo.
     from PyFunceble.cli_core import CLICore
     # We import the configuration loader.
@@ -254,7 +254,7 @@ Check the syntax of domains
 
 
     # We initiate colorama.
-    initiate(True)
+    initiate_colorama(True)
 
     # We load our configuration.
     #
@@ -300,7 +300,7 @@ Check the syntax of IPv4s
     """
 
     # We want some coloration so we import the tool do to that :)
-    from PyFunceble import initiate, Fore, Style
+    from PyFunceble import initiate_colorama, Fore, Style
     # We import the tool to print the colored CLI logo.
     from PyFunceble.cli_core import CLICore
     # We import the configuration loader.
@@ -313,7 +313,7 @@ Check the syntax of IPv4s
 
 
     # We initiate colorama.
-    initiate(True)
+    initiate_colorama(True)
 
     # We load our configuration.
     #
@@ -358,7 +358,7 @@ Check the syntax of URLs
     """
 
     # We want some coloration so we import the tool do to that :)
-    from PyFunceble import initiate, Fore, Style
+    from PyFunceble import initiate_colorama, Fore, Style
     # We import the tool to print the colored CLI logo.
     from PyFunceble.cli_core import CLICore
     # We import the configuration loader.
@@ -378,7 +378,7 @@ Check the syntax of URLs
 
 
     # We initiate colorama.
-    initiate(True)
+    initiate_colorama(True)
 
     # We load our configuration.
     #
