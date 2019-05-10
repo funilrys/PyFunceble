@@ -143,7 +143,7 @@ class WhoisDB:
         for index, data in old.items():
             # We loop through all indexes and data of the database.
 
-            if "epoch" in data:
+            if isinstance(data, dict) and "epoch" in data:
                 # The epoch index is present into the currently
                 # read dataset.
 

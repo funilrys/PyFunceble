@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.31.0.detached-future (Blue Bontebok: Beetle)"
+VERSION = "1.32.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -621,7 +621,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
             try:
                 PARSER = argparse.ArgumentParser(
-                    description="The tool to check the availability or syntax of domains, IPv4 or URL.",
+                    description="The tool to check the availability or syntax of domains, IPv4 or URL.",  # pylint: disable=line-too-long
                     epilog="Crafted with %s by %s"
                     % (
                         Fore.RED + "♥" + Fore.RESET,
