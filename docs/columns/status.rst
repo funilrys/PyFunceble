@@ -12,7 +12,7 @@ This status is returned when **one of the following cases** is met:
 
   - *Please note that we don't check if the date is in the past.*
 
-- :func:`PyFunceble.nslookup.NSLookup.request` don't return an error.
+- :func:`PyFunceble.dns_lookup.DNSLookup.request` don't return an error.
 
   - *Please note that we don't read the returned value.*
 
@@ -24,7 +24,7 @@ INACTIVE
 This status is returned when **all the following cases** are met:
 
 - We could not extract the expiration date from :func:`PyFunceble.whois.Whois.request`.
-- :func:`PyFunceble.nslookup.NSLookup.request` returns nothing.
+- :func:`PyFunceble.dns_lookup.DNSLookup.request` returns nothing.
 
 INVALID
 -------

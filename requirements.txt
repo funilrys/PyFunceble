@@ -4,3 +4,4 @@ PyYAML>=3.13
 requests>=2.19.1
 setuptools>=40.4.3
 urllib3>=1.23
+dnspython>=1.16.0

@@ -145,6 +145,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    code/config
    code/directory_structure
    code/dispatcher
+   code/dns_lookup
    code/execution_time
    code/expiration_date
    code/file_core
@@ -154,7 +155,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
    code/inactive_db
    code/logs
    code/mining
-   code/nslookup
    code/percentage
    code/preset
    code/prints

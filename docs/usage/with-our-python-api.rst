@@ -159,7 +159,7 @@ You'll then get the following :code:`dict` as output.
         "expiration_date": None, # The expiration date of the tested subject (if found).
         "http_status_code": None, # The status code of the tested subejct.
         "ip4_syntax_validation": None, # The IPv4 syntax validation status.
-        "nslookup": [], # The NSLookup output.
+        "dns_lookup": [], # The DNS Lookup output.
         "status_source": None, # The (final) source which gave us the status.
         "status": None, # The (final) status returned by PyFunceble.
         "tested": None, # The tested subject.

@@ -83,8 +83,8 @@ from PyFunceble.cli_core import CLICore
 from PyFunceble.config import Load, Merge, Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
+from PyFunceble.dns_lookup import DNSLookup
 from PyFunceble.iana import IANA
-from PyFunceble.nslookup import NSLookup
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.34.0.detached-future (Blue Bontebok: Beetle)"
+VERSION = "1.35.0.detached-future (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -252,7 +252,7 @@ def test(subject, complete=False, config=None):  # pragma: no cover
                 "expiration_date": None,
                 "http_status_code": None,
                 "ip4_syntax_validation": None,
-                "nslookup": [],
+                "dns_lookup": [],
                 "status_source": None,
                 "status": None,
                 "tested": None,
@@ -310,29 +310,36 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
     return None
 
 
-def nslookup(subject):  # pragma: no cover
+def dns_lookup(subject, dns_server=None):  # pragma: no cover
     """
     Make a DNS lookup of the given subject.
 
     :param str subject: The subject we are working with.
+    :param dns_server: A (or list of) DNS server to use while resolving.
+    :type dns_server: str|int
 
     :return:
-        A dict with following index if an IPv4 is given.
+        A dict with following index if the given subject is not registered into the
+        given DNS server. (More likely local subjects).
 
             ::
 
                 {
-                    "addr_info" : []
-                }
-
-        A dict with following index for everything else.
-
-            ::
-
-                {
-                    "hostname": "xx",
+                    "hostname": "",
                     "aliases": [],
                     "ips": []
+                }
+
+        A dict with following index for everything else (and if found).
+
+            ::
+
+                {
+                    "A": [],
+                    "MX": [],
+                    "NS": [],
+                    "TXT": [],
+                    "PTR": []
                 }
 
     :rtype: dict
@@ -342,7 +349,7 @@ def nslookup(subject):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the lookup.
-        return NSLookup(subject).request()
+        return DNSLookup(subject, dns_server=dns_server).request()
 
     # We return None, there is nothing to work with.
     return None
@@ -353,13 +360,11 @@ def whois(subject, server=None, timeout=3):  # pragma: no cover
     Request the WHOIS record of the given subject.
 
     :param str subject: The subject we are working with.
-
     :param str server:
         The WHOIS server to communicate with.
 
         .. note::
             If :code:`None` is given, we look for the best one.
-
     :param int timeout: The timeout to apply to the request.
 
     :return: None or the WHOIS record.
@@ -813,6 +818,19 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     action="store_true",
                     help="Generate the directory and files that are needed and which does "
                     "not exist in the current directory.",
+                )
+
+                PARSER.add_argument(
+                    "--dns",
+                    nargs="+",
+                    help="Set the DNS server(s) we have to work with. "
+                    "Multiple space separated DNS server can be given. %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(", ".join(CONFIGURATION["dns_server"]))
+                        if CONFIGURATION["dns_server"]
+                        else CURRENT_VALUE_FORMAT + "Follow OS DNS" + Style.RESET_ALL
+                    ),
                 )
 
                 PARSER.add_argument(
@@ -1293,6 +1311,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.directory_structure:
                     DirectoryStructure()
+
+                if ARGS.dns:
+                    print(ARGS.dns)
+                    CONFIGURATION.update({"dns_server": ARGS.dns})
 
                 if ARGS.execution:
                     CONFIGURATION.update(

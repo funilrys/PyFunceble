@@ -156,13 +156,13 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             ip_validation=self.output["ipv4_syntax_validation"],
                         ).status_file()
                     else:
-                        self.output["_status_source"] = "NSLOOKUP"
+                        self.output["_status_source"] = "DNSLOOKUP"
                         self.handle(
                             status="inactive",
                             ip_validation_status=self.output["ipv4_syntax_validation"],
                         )
                 else:
-                    self.output["_status_source"] = "NSLOOKUP"
+                    self.output["_status_source"] = "DNSLOOKUP"
                     self.handle(
                         status="inactive",
                         ip_validation_status=self.output["ipv4_syntax_validation"],
@@ -195,14 +195,16 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        # We get the nslookup state.
-        self.output["nslookup"] = PyFunceble.NSLookup(self.subject).request()
+        # We get the dns_lookup state.
+        self.output["dns_lookup"] = PyFunceble.DNSLookup(
+            self.subject, dns_server=PyFunceble.CONFIGURATION["dns_server"]
+        ).request()
 
         if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
             # The matched status is not in the list of invalid status.
 
-            if self.output["nslookup"]:
-                # We could execute the nslookup logic.
+            if self.output["dns_lookup"]:
+                # We could execute the dns_lookup logic.
 
                 # We set the status we got.
                 self.output["_status"] = PyFunceble.STATUS["official"]["up"]
@@ -217,13 +219,13 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.subject, self.subject_type, self.output["http_status_code"]
             ).handle(self.output["_status"], self.output["_status_source"])
         else:
-            if self.output["nslookup"]:
-                # We could execute the nslookup logic.
+            if self.output["dns_lookup"]:
+                # We could execute the dns_lookup logic.
 
                 # We set the status we got.
                 self.output["_status"] = PyFunceble.STATUS["official"]["up"]
                 # We set the status source.
-                self.output["_status_source"] = "NSLOOKUP"
+                self.output["_status_source"] = "DNSLOOKUP"
 
             self.output["status"], self.output["status_source"] = (
                 self.output["_status"],
@@ -696,7 +698,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             "url_syntax_validation": self.checker.is_url(),
             "whois_server": None,
             "http_status_code": HTTPCode(self.subject, "url").get(),
-            "nslookup": None,
+            "dns_lookup": None,
         }
 
     def get(self):

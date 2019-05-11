@@ -6,7 +6,7 @@ from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
 
 CONFIG = {"no_whois": True}
-DOMAIN = "google.com"
+DOMAIN = "172.217.169.78"
 
 DOMAIN_RESULT_FROM_API = PyFunceble(subject=DOMAIN, complete=True, config=CONFIG)
 URL_RESULT_FROM_API = PyFuncebleURL(
@@ -14,11 +14,11 @@ URL_RESULT_FROM_API = PyFuncebleURL(
 )
 
 print("Start of information from API for {}.".format(DOMAIN))
-print("nslookup", DOMAIN_RESULT_FROM_API["nslookup"])
+print("dns_lookup", DOMAIN_RESULT_FROM_API["dns_lookup"])
 print("domain_syntax_validation", DOMAIN_RESULT_FROM_API["domain_syntax_validation"])
 print(DOMAIN_RESULT_FROM_API["tested"], DOMAIN_RESULT_FROM_API["status"])
 
-print("nslookup", URL_RESULT_FROM_API["nslookup"])
+print("dns_lookup", URL_RESULT_FROM_API["dns_lookup"])
 print("domain_syntax_validation", URL_RESULT_FROM_API["domain_syntax_validation"])
 print("url_syntax_validation", URL_RESULT_FROM_API["url_syntax_validation"])
 print(URL_RESULT_FROM_API["tested"], DOMAIN_RESULT_FROM_API["status"])

@@ -95,6 +95,28 @@
 .. warning::
     Do not touch this index unless you have been invited to.
 
+:code:`dns_server`
+------------------
+
+    **Type:** :code:`None` or :code:`list`
+
+    **Default value:** :code:`null`
+
+    **Description:** Set the DNS server(s) to work with.
+
+.. note::
+    When a list is given the following format is expected.
+
+    ::
+
+        dns_server:
+          - dns1.example.org
+          - dns2.example.org
+
+.. warning::
+    We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
+    as :code:`INACTIVE`.
+
 :code:`filter`
 --------------
 

@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.lookup.
+This submodule will test PyFunceble.dns_lookup.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -62,61 +62,58 @@ License:
 from unittest import TestCase
 from unittest import main as launch_tests
 
-from PyFunceble.nslookup import NSLookup
+from PyFunceble.dns_lookup import DNSLookup
 
 
-class TestNSLookup(TestCase):
+class TestDNSLookup(TestCase):
     """
-    Try to test PyFunceble.nslookup.
+    Try to test PyFunceble.dns_nslookup
     Indeed, we use try because it's impossible to know if a domain is always up
     but we try to keep it simple.
     """
 
-    def test_nslookup_domain_down(self):
+    def test_dns_lookup_domain_down(self):
         """
         Test of NSLookup() for the case a domain is down or non
         existant.
         """
 
         expected = {}
-        actual = NSLookup("thisdoes-not-workdnfhfep.de").request()
+        actual = DNSLookup("thisdoes-not-workdnfhfep.de").request()
 
         self.assertEqual(expected, actual)
 
-    def test_nslookup_domain_invalid(self):
+    def test_dns_lookup_domain_invalid(self):
         """
         Test of NSLookup() for the case a domain is invalid.
         """
 
         expected = {}
-        actual = NSLookup("helloworld-.com").request()
+        actual = DNSLookup("helloworld-.com").request()
 
         self.assertEqual(expected, actual)
 
-    def test_nslookup_domain_up(self):
+    def test_dns_lookup_domain_up(self):
         """
-        Test of Lookup().nslookup() for the case a domain is up.
+        Test of Lookup().request() for the case a domain is up.
         """
 
-        actual = NSLookup("google.com").request()
+        actual = DNSLookup("google.com").request()
 
         self.assertIsInstance(actual, dict)
 
-        if "addr_info" not in actual:
-            raise AssertionError()
+        if "A" not in actual:
+            raise AssertionError(actual)
 
-        actual = NSLookup("172.217.22.14").request()
+        actual = DNSLookup("172.217.22.14").request()
 
         self.assertIsInstance(actual, dict)
 
-        if "hostname" not in actual:
-            raise AssertionError()
+        if "PTR" not in actual:
+            raise AssertionError(actual)
 
-        if "aliases" not in actual:
-            raise AssertionError()
-
-        if "ips" not in actual:
-            raise AssertionError()
+        if "A" not in actual:
+            raise AssertionError(actual)
 
 
 if __name__ == "__main__":

@@ -148,6 +148,7 @@ if __name__ == "__main__":
             "PyFunceble",
             "WHOIS",
             "nslookup",
+            "dns"
         ],
         classifiers=[
             "Environment :: Console",

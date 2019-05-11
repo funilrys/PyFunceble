@@ -25,10 +25,10 @@ This source is always returned when the domain has the status :code:`INVALID` or
 The usage of this source comes from the comparison of the element against our domain, IP or URL syntax validation system.
 
 
-NSLOOKUP
---------
+DNSLOOKUP
+---------
 
-This source is always returned when the taken decision of the status of the domain/IP comes from :func:`PyFunceble.nslookup.NSLookup.request` outputs.
+This source is always returned when the taken decision of the status of the domain/IP comes from :func:`PyFunceble.dns_lookup.DNSLookup.request` outputs.
 
 SPECIAL
 -------

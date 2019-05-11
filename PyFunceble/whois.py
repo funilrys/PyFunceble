@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide the nslookup interface.
+This submodule will provide the whois record request interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
