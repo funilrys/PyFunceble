@@ -166,6 +166,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   asciinema - `@asciinema`_
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
+-   Daniel - `@dnmTX`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
