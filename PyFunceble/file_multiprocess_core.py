@@ -61,13 +61,62 @@ License:
 # pylint: enable=line-too-long
 
 from itertools import chain
-from multiprocessing import Manager, Process
+from multiprocessing import Manager, Pipe, Process
+from traceback import format_exc
 
 import PyFunceble
 from PyFunceble.adblock import AdBlock
 from PyFunceble.file_core import FileCore
 from PyFunceble.helpers import Dict, File, List
 from PyFunceble.sort import Sort
+
+
+class OurProcessWrapper(Process):  # pragma: no cover
+    """
+    Wrapper of Process.
+    The object of this class is just to overwrite :code:`Process.run()`
+    in order to catch exceptions.
+
+    .. note::
+        This class takes the same arguments as :code:`Process`.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(OurProcessWrapper, self).__init__(*args, **kwargs)
+
+        self.conn1, self.conn2 = Pipe()
+        self._exception_receiver = None
+
+    def run(self):
+        """
+        Overwrites :code:`Process.run()`.
+        """
+
+        try:
+            # We run a normal process.
+            Process.run(self)
+
+            # We send None as message as there was no exception.
+            self.conn2.send(None)
+        except Exception as exception:  # pylint: disable= broad-except
+            # We get the traceback.
+            traceback = format_exc()
+            # We send the exception and its traceback to the pipe.
+            self.conn2.send((exception, traceback))
+
+    @property
+    def exception(self):
+        """
+        Provide a way to check if an exception was send.
+        """
+
+        if self.conn1.poll():
+            # There is something to read.
+
+            # We get and save the exception.
+            self._exception_receiver = self.conn1.recv()
+
+        return self._exception_receiver
 
 
 class FileMultiprocessCore(FileCore):  # pragma: no cover
@@ -176,8 +225,10 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We spread the index from the subject.
                     index, subject = subject
 
-                # We innitiate a process.
-                process = Process(target=self._test_line, args=(subject, manager_data))
+                # We initiate a process.
+                process = OurProcessWrapper(
+                    target=self._test_line, args=(subject, manager_data)
+                )
                 # We save it into our list of process.
                 processes.append(process)
                 # We then start the job.
@@ -201,14 +252,43 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 # We break the loop
                 break
 
-        for process in processes:
-            # We loop through the list of processes.
+        # We check if an exception is present into one process
+        # and we then save the process index.
+        exception_present = [x for x, y in enumerate(processes) if y.exception]
 
-            # We then wait until all processes are done.
-            process.join()
+        if exception_present:
+            # One or more exception is present.
 
-            # We continue the loop
-            continue
+            for process in processes:
+                # We loop through the list of processes.
+
+                if process.exception:
+                    # There in an exception in the currently
+                    # read process.
+
+                    # We get the traceback
+                    _, traceback = process.exception
+
+                    # We print the traceback.
+                    print(traceback)
+
+                # We kill the process.
+                process.kill()
+
+            # We finally exit.
+            exit(1)
+
+        else:
+            # There was no exception.
+
+            for process in processes:
+                # We loop through the list of processes.
+
+                # We then wait until all processes are done.
+                process.join()
+
+                # We continue the loop
+                continue
 
         return finished
 
