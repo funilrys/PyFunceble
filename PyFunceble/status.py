@@ -571,7 +571,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         if (
             not PyFunceble.CONFIGURATION["no_special"]
-            and PyFunceble.Check().is_ipv4_range()
+            and PyFunceble.Check(self.subject).is_ipv4_range()
         ):
             # * We can run/check the special rule.
             # and

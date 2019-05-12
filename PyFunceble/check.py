@@ -73,7 +73,7 @@ class Check:
     :param str subject: The subject (URL, IP or domain) to check.
     """
 
-    def __init__(self, subject=None):
+    def __init__(self, subject):
         self.subject = subject
 
     def is_url(self, return_base=False, return_formatted=False):
