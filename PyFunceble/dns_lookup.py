@@ -206,17 +206,19 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject:
             subject = self.subject
 
-        if reverse_name:
-            # We get the reverse name we are going to request.
-            to_request = dns.reversename.from_address(subject)
-        else:  # pragma: no cover
-            to_request = subject
-
         try:
+            if reverse_name:
+                # We get the reverse name we are going to request.
+                to_request = dns.reversename.from_address(subject)
+            else:  # pragma: no cover
+                to_request = subject
+
             # We get the PTR record of the currently read A record.
             return [str(x) for x in dns.resolver.query(to_request, "PTR")]
         except DNSException:  # pragma: no cover
             pass
+
+        return None  # pragma: no cover
 
     def get_addr_info(self, subject=None):
         """
