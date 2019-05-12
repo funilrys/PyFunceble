@@ -1,7 +1,7 @@
 Special Thanks
 ==============
 
-Thanks to those awesome organization(s), tools and or people(s) for
+Thanks to those awesome organization(s), tool(s) and or people(s) for
 
 *   Their awesome documentation
 *   Their awesome repository
@@ -30,7 +30,9 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Adblock Plus - `@adblockplus`_
 -   asciinema - `@asciinema`_
 -   Daniel - `@dnmTX`_
+-   Bob Halley - `@rthalley`_ (`DNSPython`_)
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
+-   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Mohammad Fares - `@faressoft`_ (`Terminalizer`_)
@@ -40,11 +42,11 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
--   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   `yWorks`_ - (`yEd Graph Editor`_)
 
 
 .. _colorama: https://github.com/tartley/colorama
+.. _DNSPython: https://github.com/rthalley/dnspython
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
@@ -64,6 +66,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
+.. _@rthalley: https://github.com/rthalley
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
 .. _@tartley: https://github.com/tartley
