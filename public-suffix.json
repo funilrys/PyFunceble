@@ -146,7 +146,12 @@
         "org.al"
     ],
     "am": [
-        "blogspot.am"
+        "blogspot.am",
+        "co.am",
+        "com.am",
+        "commune.am",
+        "net.am",
+        "org.am"
     ],
     "ao": [
         "co.ao",
@@ -670,6 +675,9 @@
         "sk.ca",
         "yk.ca"
     ],
+    "casa": [
+        "ui.nabu.casa"
+    ],
     "cc": [
         "cloudns.cc",
         "fantasyleague.cc",
@@ -728,6 +736,7 @@
     "cloud": [
         "linkyard.cloud",
         "magentosite.cloud",
+        "on-rancher.cloud",
         "sensiosite.cloud",
         "statics.cloud",
         "trafficplex.cloud",
@@ -1344,6 +1353,13 @@
     "design": [
         "bss.design"
     ],
+    "dev": [
+        "workers.dev"
+    ],
+    "digital": [
+        "cloudapps.digital",
+        "london.cloudapps.digital"
+    ],
     "direct": [
         "fastpanel.direct"
     ],
@@ -1401,6 +1417,9 @@
         "net.ec",
         "org.ec",
         "pro.ec"
+    ],
+    "edu": [
+        "git-pages.rit.edu"
     ],
     "education": [
         "co.education"
@@ -1495,7 +1514,6 @@
     ],
     "fr": [
         "aeroport.fr",
-        "assedic.fr",
         "asso.fr",
         "avocat.fr",
         "avoues.fr",
@@ -1521,7 +1539,6 @@
         "pharmacien.fr",
         "port.fr",
         "prd.fr",
-        "presse.fr",
         "tm.fr",
         "veterinaire.fr"
     ],
@@ -1597,6 +1614,9 @@
         "net.gr",
         "nym.gr",
         "org.gr"
+    ],
+    "group": [
+        "discourse.group"
     ],
     "gt": [
         "com.gt",
@@ -1821,6 +1841,7 @@
     "io": [
         "2038.io",
         "apigee.io",
+        "app.banzaicloud.io",
         "applicationcloud.io",
         "apps.lair.io",
         "azurecontainer.io",
@@ -1847,6 +1868,7 @@
         "ngrok.io",
         "nid.io",
         "nodum.io",
+        "on-rio.io",
         "pantheonsite.io",
         "protonet.io",
         "readthedocs.io",
@@ -1859,6 +1881,7 @@
         "stage.nodeart.io",
         "stolos.io",
         "telebit.io",
+        "uk0.bigv.io",
         "utwente.io",
         "vaporcloud.io",
         "wedeploy.io"
@@ -2184,6 +2207,7 @@
         "ss.it",
         "suedtirol.it",
         "sv.it",
+        "syncloud.it",
         "ta.it",
         "taa.it",
         "taranto.it",
@@ -5183,6 +5207,7 @@
         "gets-it.net",
         "global.prod.fastly.net",
         "global.ssl.fastly.net",
+        "go-vip.net",
         "ham-radio-op.net",
         "hicam.net",
         "homeftp.net",
@@ -6072,7 +6097,8 @@
         "merseine.nu",
         "mine.nu",
         "nom.nu",
-        "shacknet.nu"
+        "shacknet.nu",
+        "site.builder.nu"
     ],
     "nz": [
         "ac.nz",
@@ -7116,6 +7142,7 @@
         "org.tr",
         "pol.tr",
         "tel.tr",
+        "tsk.tr",
         "tv.tr",
         "web.tr"
     ],
