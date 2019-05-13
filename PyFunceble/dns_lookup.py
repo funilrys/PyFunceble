@@ -239,7 +239,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
             # We format the addr infos.
             return [x[-1][0] for x in req]
-        except (gaierror, OSError, herror):
+        except (gaierror, OSError, herror, UnicodeError):
             pass
 
         return None
