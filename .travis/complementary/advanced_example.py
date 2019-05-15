@@ -6,7 +6,7 @@ from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
 
 CONFIG = {"no_whois": True}
-DOMAIN = "172.217.169.78"
+DOMAIN = "google.com"
 
 DOMAIN_RESULT_FROM_API = PyFunceble(subject=DOMAIN, complete=True, config=CONFIG)
 URL_RESULT_FROM_API = PyFuncebleURL(

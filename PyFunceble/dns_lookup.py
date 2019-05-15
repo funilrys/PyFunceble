@@ -130,6 +130,27 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
+    def cname_record(self, subject=None):
+        """
+        Return the CNAME record of the given subject (if found).
+
+        :param str subject: The subject we are working with.
+
+        :return: A list of CNAME record(s).
+        :rtype: list
+        """
+
+        if not subject:
+            subject = self.subject
+
+        try:
+            # We get the A record of the given subject.
+            return [str(x) for x in self.dns_resolver.query(subject, "CNAME")]
+        except DNSException:
+            pass
+
+        return None
+
     def mx_record(self, subject=None):
         """
         Return the MX record of the given subject (if found).
@@ -288,6 +309,9 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         # We get the A record of the given subject.
         result["A"] = self.a_record()
+
+        # We get the CNAME record of the given subject.
+        result["CNAME"] = self.cname_record()
 
         # We get the MX record of the given subject.
         result["MX"] = self.mx_record()
