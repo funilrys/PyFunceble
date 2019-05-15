@@ -228,8 +228,11 @@ class WhoisDB:
             # and
             # * The expiration date is in the future.
 
-            # We return the expiration date.
-            return self[subject]["expiration_date"]
+            try:
+                # We return the expiration date.
+                return self[subject]["expiration_date"]
+            except KeyError:  # pragma: no cover
+                pass
 
         # We return None, there is no data to work with.
         return None
