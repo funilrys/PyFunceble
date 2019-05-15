@@ -162,6 +162,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             PyFunceble.requests.ConnectionError,
             PyFunceble.requests.exceptions.InvalidSchema,
             PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.requests.exceptions.MissingSchema,
             PyFunceble.requests.exceptions.Timeout,
             PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
