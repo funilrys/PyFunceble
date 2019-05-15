@@ -435,6 +435,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
                     {
                         "A": [],
+                        "CNAME": [],
                         "MX": [],
                         "NS": [],
                         "TXT": [],
