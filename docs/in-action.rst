@@ -4,40 +4,40 @@ PyFunceble in action
 Domain testing
 --------------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
 
 URL testing
 -----------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/url.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/url.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/url.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/url.gif
 
 
 Domain and URL testing with simple output
 ------------------------------------------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/simple.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/simple.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/simple.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/simple.gif
 
 
 File content testing
 --------------------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/file.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/file.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/file.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/file.gif
 
 
 File content testing with IDNA/Punycode conversion
 --------------------------------------------------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/file_idna.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/file_idna.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/file_idna.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/file_idna.gif
 
 
 Generated files/outputs
 -----------------------
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/outputs.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/outputs.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/outputs.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/outputs.gif
