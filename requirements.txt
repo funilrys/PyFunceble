@@ -2,6 +2,6 @@ colorama>=0.4.0
 dnspython>=1.16.0
 domain2idna>=1.6.1
 PyYAML>=3.13
-requests>=2.21.0
+requests
 setuptools>=40.4.3
 urllib3>=1.23
