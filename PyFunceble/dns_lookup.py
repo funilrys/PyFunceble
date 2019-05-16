@@ -109,11 +109,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
             self.dns_resolver = dns.resolver
 
-    def a_record(self, subject=None):
+    def a_record(self, subject=None, lifetime=3.0):
         """
         Return the A record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
 
         :return: A list of A record(s).
         :rtype: list
@@ -124,17 +125,20 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         try:
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "A")]
+            return [
+                str(x) for x in self.dns_resolver.query(subject, "A", lifetime=lifetime)
+            ]
         except DNSException:
             pass
 
         return None
 
-    def cname_record(self, subject=None):
+    def cname_record(self, subject=None, lifetime=1.0):
         """
         Return the CNAME record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
 
         :return: A list of CNAME record(s).
         :rtype: list
@@ -145,17 +149,21 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         try:
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "CNAME")]
+            return [
+                str(x)
+                for x in self.dns_resolver.query(subject, "CNAME", lifetime=lifetime)
+            ]
         except DNSException:
             pass
 
         return None
 
-    def mx_record(self, subject=None):
+    def mx_record(self, subject=None, lifetime=1.0):
         """
         Return the MX record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
 
         :return: A list of MX record(s).
         :rtype: list
@@ -166,17 +174,21 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         try:
             # We get the MX record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "MX")]
+            return [
+                str(x)
+                for x in self.dns_resolver.query(subject, "MX", lifetime=lifetime)
+            ]
         except DNSException:
             pass
 
         return None
 
-    def ns_record(self, subject=None):
+    def ns_record(self, subject=None, lifetime=2.0):
         """
         Return the NS record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+         :param float lifetime: The number of second before timeout.
 
         :return: A list of NS record(s).
         :rtype: list
@@ -187,17 +199,21 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         try:
             # We get the NS record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "NS")]
+            return [
+                str(x)
+                for x in self.dns_resolver.query(subject, "NS", lifetime=lifetime)
+            ]
         except DNSException:
             pass
 
         return None
 
-    def txt_record(self, subject=None):
+    def txt_record(self, subject=None, lifetime=1.0):
         """
         Return the TXT record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
 
         :return: A list of TXT record(s).
         :rtype: list
@@ -208,17 +224,21 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         try:
             # We get the TXT record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "TXT")]
+            return [
+                str(x)
+                for x in self.dns_resolver.query(subject, "TXT", lifetime=lifetime)
+            ]
         except DNSException:
             pass
 
         return None
 
-    def ptr_record(self, subject=None, reverse_name=True):
+    def ptr_record(self, subject=None, reverse_name=True, lifetime=4.0):
         """
         Return the PTR record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
 
         :return: A list of PTR record(s).
         :rtype: list
@@ -235,7 +255,9 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 to_request = subject
 
             # We get the PTR record of the currently read A record.
-            return [str(x) for x in dns.resolver.query(to_request, "PTR")]
+            return [
+                str(x) for x in dns.resolver.query(to_request, "PTR", lifetime=lifetime)
+            ]
         except DNSException:  # pragma: no cover
             pass
 
