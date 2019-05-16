@@ -183,7 +183,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def ns_record(self, subject=None, lifetime=2.0):
+    def ns_record(self, subject=None, lifetime=1.0):
         """
         Return the NS record of the given subject (if found).
 
@@ -233,7 +233,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def ptr_record(self, subject=None, reverse_name=True, lifetime=4.0):
+    def ptr_record(self, subject=None, reverse_name=True, lifetime=3.0):
         """
         Return the PTR record of the given subject (if found).
 
