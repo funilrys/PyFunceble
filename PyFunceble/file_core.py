@@ -290,7 +290,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             of all the noises around the element we want to test.
         """
 
-        if not line.startswith("#"):
+        if line and not line.startswith("#"):
             # The line is not a commented line.
 
             if "#" in line:
@@ -456,7 +456,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We remove cariage from the given line.
         line = line.strip()
 
-        if line[0] == "#":
+        if not line or line[0] == "#":
             # We line is a comment line.
 
             # We return None, there is nothing to test.
