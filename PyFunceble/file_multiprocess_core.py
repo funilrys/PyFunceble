@@ -284,8 +284,11 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             for process in processes:
                 # We loop through the list of processes.
 
-                # We then wait until all processes are done.
-                process.join()
+                if process.is_alive():
+                    # The process is still running.
+
+                    # We then wait until all processes are done.
+                    process.join()
 
                 # We continue the loop
                 continue
