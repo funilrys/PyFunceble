@@ -129,6 +129,7 @@ if __name__ == "__main__":
     setup(
         name="PyFunceble-dev",
         version=_get_version(),
+        python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
         description="The tool to check the availability or syntax of domains, IPv4 or URL.",
         long_description=_get_long_description(),
@@ -148,7 +149,7 @@ if __name__ == "__main__":
             "PyFunceble",
             "WHOIS",
             "nslookup",
-            "dns"
+            "dns",
         ],
         classifiers=[
             "Environment :: Console",
