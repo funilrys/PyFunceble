@@ -114,7 +114,7 @@ class AutoContinue:
 
     def __contains__(self, index):  # pragma: no cover
         if self.filename in self.database:
-            for status, status_data in self.database.items():
+            for status, status_data in self.database[self.filename].items():
                 if index in status_data:
                     if status in [
                         PyFunceble.STATUS["official"]["up"],

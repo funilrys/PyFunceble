@@ -171,13 +171,7 @@ class TestsAutoContinue(TestCase):
         self.auto_continue.authorized = True
 
         for status in ["ACTIVE", "INACTIVE", "INVALID"]:
-            self.auto_continue.database = {
-                self.file_to_test: {
-                    "hello": status,
-                    "world": "INACTIVE",
-                    "hehe": "INVALID",
-                }
-            }
+            self.auto_continue.database = {self.file_to_test: {status: ["hello"]}}
 
             expected = True
             actual = "hello" in self.auto_continue
