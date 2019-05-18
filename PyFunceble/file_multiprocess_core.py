@@ -295,12 +295,13 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
         return finished
 
-    def __loop_test(self, to_test, manager_data):
+    def __loop_test(self, to_test, manager_data, manager):
         """
         Process the test of each subject of the list to test.
 
         :param list to_test: The list of subjects we have to test.
         :param multiprocessing.Manager.list manager_data: A Server process.
+        :param multiprocessing.Manager manager: A manager instance.
         """
 
         if self.autosave.authorized:
@@ -311,6 +312,13 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                 if not self.__run_multiprocess_test(to_test, manager_data):
                     # Untill the test is completly done, we continue the loop.
+
+                    # We process the autosave.
+                    self.__auto_save_process(manager_data)
+
+                    # We create a new manager data.
+                    manager_data = manager.list()
+
                     continue
                 else:
                     # Otherwise we break the loop as the test is finished.
@@ -320,6 +328,12 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
             while not self.__run_multiprocess_test(to_test, manager_data):
                 # We test untill the test is finished.
+
+                # We process the autosave.
+                self.__auto_save_process(manager_data)
+
+                # We create a new manager data.
+                manager_data = manager.list()
 
                 continue
 
@@ -371,14 +385,21 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         self.inactive_db.save()
         # We save the mining database.
         self.mining.save()
-        # We sort the content of all files we generated.
-        self.__sort_generated_files()
 
         if self.autosave.is_time_exceed():
             # The operation end time was exceeded.
 
+            # We sort the content of all files we generated.
+            self.__sort_generated_files()
+
             # We process the saving of everything.
             self.autosave.process()
+
+        if not self.autosave.authorized:
+            # We are not auto saving.
+
+            # We sort the content of all files we generated.
+            self.__sort_generated_files()
 
     def read_and_test_file_content(self):  # pragma: no cover
         """
@@ -418,15 +439,13 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 manager_data = manager.list()
 
                 # We process the test/save of the original list to test.
-                self.__loop_test(to_test, manager_data)
-                self.__auto_save_process(manager_data)
+                self.__loop_test(to_test, manager_data, manager)
 
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())
 
                 # We process the test/save of the mined data to test.
-                self.__loop_test(to_test, manager_data)
-                self.__auto_save_process(manager_data)
+                self.__loop_test(to_test, manager_data, manager)
 
                 # We get the list of complements to test.
                 complements = self.get_complements()
@@ -435,8 +454,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We process the test/save of the original list to test.
                     to_test = chain(complements)
 
-                    self.__loop_test(to_test, manager_data)
-                    self.__auto_save_process(manager_data)
+                    self.__loop_test(to_test, manager_data, manager)
 
                     # We inform all subsystem that we are not testing for complements anymore.
                     self.complements_test_started = False
