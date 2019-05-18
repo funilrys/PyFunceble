@@ -405,27 +405,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         # We get the PTR record of the given subject.
         result["PTR"] = self.ptr_record()
 
-        if "PTR" in result and result["PTR"]:
-            # We could get the PTR record.
-
-            # We initiate an A entry.
-            result["A"] = []
-
-            for ptr in result["PTR"]:
-                # We loop through the list of PTR record(s).
-
-                try:
-                    # We get the A record of the currently read PTR record.
-                    result["A"].extend(self.a_record(ptr))
-                except TypeError:  # pragma: no cover
-                    pass
-
-            if not all(result["A"]):  # pragma: no cover
-                # There was no A record.
-
-                # We delere the A entry.
-                del result["A"]
-        else:  # pragma: no cover
+        if "PTR" not in result or not result["PTR"]:  # pragma: no cover
             del result["PTR"]
 
         if not result:  # pragma: no cover

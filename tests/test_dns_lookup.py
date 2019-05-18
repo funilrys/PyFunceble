@@ -112,9 +112,6 @@ class TestDNSLookup(TestCase):
         if "PTR" not in actual:
             raise AssertionError(actual)
 
-        if "A" not in actual:
-            raise AssertionError(actual)
-
 
 if __name__ == "__main__":
     launch_tests()
