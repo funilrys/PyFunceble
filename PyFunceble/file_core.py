@@ -102,6 +102,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We share the file/test type.
         self.file_type = file_type
 
+        # We download the file if it is a list.
+        self.download_link()
+
         # We construct the list of UP statuses.
         self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
         self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
@@ -117,14 +120,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We get/initiate the mining subsystem.
         self.mining = Mining(self.file)
         # We get/initiate the autocontinue subsystem.
-        self.autocontinue = AutoContinue(self.file)
+        self.autocontinue = AutoContinue(self.file, parent_process=True)
 
         # We initiate a variable which will tell us when
         # we start testing for complements.
         self.complements_test_started = False
-
-        # We download the file if it is a list.
-        self.download_link()
 
         # We generate the directory structure.
         PyFunceble.DirectoryStructure()
@@ -162,25 +162,22 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         Download the file if it is an URL.
         """
 
-        if (
-            self.file
-            and self.autocontinue.is_empty()
-            and PyFunceble.Check(self.file).is_url()
-        ):
-            # The given file is an URL.
-
+        if PyFunceble.Check(self.file).is_url():
             # We get the destination.
             destination = self.file.split("/")[-1]
 
-            if (
-                not PyFunceble.path.isfile(destination)
-                or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
-            ):
-                # The filename does not exist in the current directory
-                # or the currently number of tested is equal to 0.
+            if self.file and AutoContinue(destination, parent_process=False).is_empty():
+                # The given file is an URL.
 
-                # We download the content of the link.
-                Download(self.file, destination).text()
+                if (
+                    not PyFunceble.path.isfile(destination)
+                    or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
+                ):
+                    # The filename does not exist in the current directory
+                    # or the currently number of tested is equal to 0.
+
+                    # We download the content of the link.
+                    Download(self.file, destination).text()
 
             # We update the global file with the destination.
             self.file = destination
@@ -441,7 +438,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We are in a mulitiprocess environment.
 
             # We create a new autocontinue instance.
-            autocontinue = AutoContinue(self.file)
+            autocontinue = AutoContinue(self.file, parent_process=False)
             # We create a new inactive database instance.
             inactive_db = InactiveDB(self.file)
             # We create a new mining instance.

@@ -203,6 +203,15 @@ class Preset:
             # We deactivate the http status code.
             PyFunceble.HTTP_CODE["active"] = False
 
+    @classmethod
+    def maximal_processes(cls):  # pragma: no cover
+        """
+        Ensure that the number of maximal processes is alway >= 1.
+        """
+
+        if PyFunceble.CONFIGURATION["maximal_processes"] < 1:
+            PyFunceble.CONFIGURATION["maximal_processes"] = 1
+
     def simple_domain(self):  # pragma: no cover
         """
         Prepare the global configuration for a domain
@@ -255,3 +264,18 @@ class Preset:
 
         for index in should_be_enabled:
             self.enable(index)
+
+    def multiprocess(self):  # pragma: no cover
+        """
+        Prepare the global configuration for a test with multiple processes.
+        """
+
+        if PyFunceble.CONFIGURATION["multiprocess"]:
+            should_be_disabled = []
+            should_be_enabled = ["auto_continue"]
+
+            for index in should_be_disabled:
+                self.disable(index)
+
+            for index in should_be_enabled:
+                self.enable(index)

@@ -313,8 +313,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 if not self.__run_multiprocess_test(to_test, manager_data):
                     # Untill the test is completly done, we continue the loop.
 
-                    # We process the autosave.
-                    self.__auto_save_process(manager_data)
+                    # We process the merge of the data and eventually the auto
+                    # save.
+                    self.__merge_processes_data(manager_data)
 
                     # We create a new manager data.
                     manager_data = manager.list()
@@ -322,22 +323,30 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     continue
                 else:
                     # Otherwise we break the loop as the test is finished.
+
                     break
+
+            # We process the merge of the data and eventually the auto
+            # save.
+            self.__merge_processes_data(manager_data)
         else:
             # We do not have to save at one point.
 
             while not self.__run_multiprocess_test(to_test, manager_data):
                 # We test untill the test is finished.
 
-                # We process the autosave.
-                self.__auto_save_process(manager_data)
+                # We process the merge of the data.
+                self.__merge_processes_data(manager_data)
 
                 # We create a new manager data.
                 manager_data = manager.list()
 
                 continue
 
-    def __auto_save_process(self, manager_data):
+            # We process the merge of the data.
+            self.__merge_processes_data(manager_data)
+
+    def __merge_processes_data(self, manager_data):
         """
         Assemble the data saved into the server process.
 

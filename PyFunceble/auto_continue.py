@@ -79,13 +79,16 @@ class AutoContinue:
     # Save the filename we are working with.
     filename = None
 
-    def __init__(self, filename):
+    def __init__(self, filename, parent_process=False):
         # We get the operation authorization.
         self.authorized = self.authorization()
         # We share the filename.
         self.filename = filename
         # We preset the filename namespace.
         self.database[self.filename] = {}
+
+        # We share if we are under the parent process.
+        self.parent = parent_process
 
         if self.authorized:
             # We are authorized to operate.
@@ -100,13 +103,15 @@ class AutoContinue:
             # We load the backup (if existant).
             self.load()
 
-            if self.filename not in self.database or not self.database[self.filename]:
+            if self.parent and (
+                self.filename not in self.database or not self.database[self.filename]
+            ):
                 # The database of the file we are
                 # currently testing is empty.
 
                 # We clean the output directory.
                 PyFunceble.Clean(None)
-        else:
+        elif self.parent:
             # We are not authorized to operate.
 
             # We clean the output directory.
@@ -116,15 +121,18 @@ class AutoContinue:
         if self.filename in self.database:
             for status, status_data in self.database[self.filename].items():
                 if index in status_data:
-                    if status in [
-                        PyFunceble.STATUS["official"]["up"],
-                        PyFunceble.STATUS["official"]["valid"],
-                    ]:
-                        PyFunceble.INTERN["counter"]["number"]["up"] += 1
-                    elif status in [PyFunceble.STATUS["official"]["down"]]:
-                        PyFunceble.INTERN["counter"]["number"]["down"] += 1
-                    elif status in [PyFunceble.STATUS["official"]["invalid"]]:
-                        PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
+                    if not PyFunceble.CONFIGURATION["multiprocess"]:
+                        if status in [
+                            PyFunceble.STATUS["official"]["up"],
+                            PyFunceble.STATUS["official"]["valid"],
+                        ]:
+                            PyFunceble.INTERN["counter"]["number"]["up"] += 1
+                        elif status in [PyFunceble.STATUS["official"]["down"]]:
+                            PyFunceble.INTERN["counter"]["number"]["down"] += 1
+                        elif status in [PyFunceble.STATUS["official"]["invalid"]]:
+                            PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
+
+                        PyFunceble.INTERN["counter"]["number"]["tested"] += 1
 
                     return True
         return False
@@ -229,7 +237,7 @@ class AutoContinue:
         Update the counters.
         """
 
-        if self.authorized:
+        if self.authorized and self.parent:
             # We are authorized to operate.
 
             # We create a list of all status we are working with.
