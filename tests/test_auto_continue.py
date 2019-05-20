@@ -244,6 +244,36 @@ class TestsAutoContinue(TestCase):
 
         self.test_delete_file()
 
+    def test_get_already_tested(self):
+        """
+        Test the fact that we need an accurate list of tested.
+        """
+
+        self.test_delete_file()
+        self.auto_continue.authorized = True
+
+        self.auto_continue.database = {}
+
+        self.auto_continue.add("hello.world", "ACTIVE")
+        self.auto_continue.add("world.hello", "ACTIVE")
+
+        expected = {"hello.world", "world.hello"}
+
+        self.assertEqual(expected, self.auto_continue.get_already_tested())
+
+        self.auto_continue.add("hello.world.hello", "INACTIVE")
+
+        expected = {"hello.world", "world.hello", "hello.world.hello"}
+
+        self.assertEqual(expected, self.auto_continue.get_already_tested())
+
+        expected = set()
+
+        self.auto_continue.clean()
+        self.assertEqual(expected, self.auto_continue.get_already_tested())
+
+        self.test_delete_file()
+
 
 if __name__ == "__main__":
     launch_tests()

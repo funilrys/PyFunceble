@@ -268,3 +268,10 @@ class AutoContinue:
 
             # We update/transfert the number of tested globally.
             PyFunceble.INTERN["counter"]["number"]["tested"] = tested
+
+    def get_already_tested(self):
+        """
+        Return the list of subjects which were already tested as a set.
+        """
+
+        return {y for _, x in self.database[self.filename].items() for y in x}

@@ -425,11 +425,23 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 # We do not have to adblock decode the content
                 # of the file.
 
-                to_test = chain(file, self.inactive_db["to_test"])
+                to_test = chain(
+                    list(
+                        {self._format_line(x) for x in file}
+                        - self.autocontinue.get_already_tested()
+                    ),
+                    self.inactive_db["to_test"],
+                )
             else:
                 # We do have to decode the content of the file.
 
-                to_test = chain(AdBlock(file).decode(), self.inactive_db["to_test"])
+                to_test = chain(
+                    list(
+                        set(AdBlock(file).decode())
+                        - self.autocontinue.get_already_tested()
+                    ),
+                    self.inactive_db["to_test"],
+                )
 
             with Manager() as manager:
                 # We initiate a server process.
