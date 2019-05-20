@@ -102,7 +102,7 @@ class TestDNSLookup(TestCase):
 
         self.assertIsInstance(actual, dict)
 
-        if "A" not in actual:
+        if "NS" not in actual:
             raise AssertionError(actual)
 
         actual = DNSLookup("172.217.22.14").request()

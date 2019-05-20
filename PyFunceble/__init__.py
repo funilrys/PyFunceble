@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.52.0.dev -- 2_0_0_rc9 -- (Blue Bontebok: Beetle)"
+VERSION = "1.53.0.dev -- 2_0_0_rc10 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -310,13 +310,15 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
     return None
 
 
-def dns_lookup(subject, dns_server=None):  # pragma: no cover
+def dns_lookup(subject, dns_server=None, complete=False):  # pragma: no cover
     """
     Make a DNS lookup of the given subject.
 
     :param str subject: The subject we are working with.
     :param dns_server: A (or list of) DNS server to use while resolving.
     :type dns_server: str|int
+    :param bool complete:
+        Tell us to look for everything instead of :code:`NS` only.
 
     :return:
         A dict with following index if the given subject is not registered into the
@@ -336,6 +338,7 @@ def dns_lookup(subject, dns_server=None):  # pragma: no cover
 
                 {
                     "A": [],
+                    "AAAA": [],
                     "CNAME": [],
                     "MX": [],
                     "NS": [],
@@ -350,7 +353,7 @@ def dns_lookup(subject, dns_server=None):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the lookup.
-        return DNSLookup(subject, dns_server=dns_server).request()
+        return DNSLookup(subject, dns_server=dns_server, complete=complete).request()
 
     # We return None, there is nothing to work with.
     return None

@@ -78,7 +78,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
     :type dns_server: list|tuple|str
     """
 
-    def __init__(self, subject, dns_server=None):
+    def __init__(self, subject, dns_server=None, complete=False):
         if subject:
             if isinstance(subject, str):
                 self.subject = subject
@@ -108,8 +108,9 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 dns.resolver.default_resolver = dns.resolver.Resolver()
 
             self.dns_resolver = dns.resolver
+            self.complete = complete
 
-    def a_record(self, subject=None, lifetime=3.0):
+    def a_record(self, subject=None, lifetime=3.0):  # pragma: no cover
         """
         Return the A record of the given subject (if found).
 
@@ -133,7 +134,32 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def cname_record(self, subject=None, lifetime=1.0):
+    def aaaa_record(self, subject=None, lifetime=3.0):  # pragma: no cover
+        """
+        Return the AAAA record of the given subject (if found).
+
+        :param str subject: The subject we are working with.
+        :param float lifetime: The number of second before timeout.
+
+        :return: A list of A record(s).
+        :rtype: list
+        """
+
+        if not subject:
+            subject = self.subject
+
+        try:
+            # We get the A record of the given subject.
+            return [
+                str(x)
+                for x in self.dns_resolver.query(subject, "AAAA", lifetime=lifetime)
+            ]
+        except DNSException:
+            pass
+
+        return None
+
+    def cname_record(self, subject=None, lifetime=3.0):  # pragma: no cover
         """
         Return the CNAME record of the given subject (if found).
 
@@ -158,7 +184,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def mx_record(self, subject=None, lifetime=1.0):
+    def mx_record(self, subject=None, lifetime=3.0):  # pragma: no cover
         """
         Return the MX record of the given subject (if found).
 
@@ -183,7 +209,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def ns_record(self, subject=None, lifetime=1.0):
+    def ns_record(self, subject=None, lifetime=3.0):
         """
         Return the NS record of the given subject (if found).
 
@@ -208,7 +234,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def txt_record(self, subject=None, lifetime=1.0):
+    def txt_record(self, subject=None, lifetime=3.0):  # pragma: no cover
         """
         Return the TXT record of the given subject (if found).
 
@@ -329,48 +355,53 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         result = {}
 
-        # We get the A record of the given subject.
-        result["A"] = self.a_record()
-
-        # We get the CNAME record of the given subject.
-        result["CNAME"] = self.cname_record()
-
-        # We get the MX record of the given subject.
-        result["MX"] = self.mx_record()
-
         # We get the NS record of the given subject.
         result["NS"] = self.ns_record()
 
-        # We get the TXT record of the given subject.
-        result["TXT"] = self.txt_record()
+        if self.complete:  # pragma: no cover
 
-        if "A" in result and result["A"]:
-            # We could get some A record(s).
+            # We get the A record of the given subject.
+            result["A"] = self.a_record()
 
-            # We initiate the PTR.
-            result["PTR"] = []
+            # We get the AAAA record of the given subject.
+            result["AAAA"] = self.aaaa_record()
 
-            for a_result in result["A"]:
-                # We loop through the list of A records.
+            # We get the CNAME record of the given subject.
+            result["CNAME"] = self.cname_record()
 
-                if "." not in a_result:  # pragma: no cover
-                    # There is no "." in the currently
-                    # read A record.
+            # We get the MX record of the given subject.
+            result["MX"] = self.mx_record()
 
-                    # We continue the loop.
-                    continue
+            # We get the TXT record of the given subject.
+            result["TXT"] = self.txt_record()
 
-                try:
-                    # We get the PTR record of the currently read A record.
-                    result["PTR"].extend(self.ptr_record(a_result))
-                except TypeError:  # pragma: no cover
-                    pass
+            if "A" in result and result["A"]:
+                # We could get some A record(s).
 
-            if not all(result["PTR"]):  # pragma: no cover
-                # No PTR record was found.
+                # We initiate the PTR.
+                result["PTR"] = []
 
-                # We delete the PTR entry.
-                del result["PTR"]
+                for a_result in result["A"]:
+                    # We loop through the list of A records.
+
+                    if "." not in a_result:  # pragma: no cover
+                        # There is no "." in the currently
+                        # read A record.
+
+                        # We continue the loop.
+                        continue
+
+                    try:
+                        # We get the PTR record of the currently read A record.
+                        result["PTR"].extend(self.ptr_record(a_result))
+                    except TypeError:  # pragma: no cover
+                        pass
+
+                if not all(result["PTR"]):  # pragma: no cover
+                    # No PTR record was found.
+
+                    # We delete the PTR entry.
+                    del result["PTR"]
 
         # We get the list of index to delete.
         to_delete = [x for x in result if not result[x]]
@@ -437,6 +468,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
                     {
                         "A": [],
+                        "AAAA": [],
                         "CNAME": [],
                         "MX": [],
                         "NS": [],
