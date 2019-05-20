@@ -421,17 +421,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.
 
-            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
-                # We do not have to sort hierarchicaly.
-
-                # We sort the lines standarly.
-                file = List(file).custom_format(Sort.standard)
-            else:
-                # We do have to sort hierarchicaly.
-
-                # We sort the lines hierarchicaly.
-                file = List(file).custom_format(Sort.hierarchical)
-
             if not PyFunceble.CONFIGURATION["adblock"]:
                 # We do not have to adblock decode the content
                 # of the file.
