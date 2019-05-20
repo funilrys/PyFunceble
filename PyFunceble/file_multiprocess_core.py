@@ -452,6 +452,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())
+                manager_data = manager.list()
 
                 # We process the test/save of the mined data to test.
                 self.__loop_test(to_test, manager_data, manager)
@@ -462,6 +463,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 if complements:
                     # We process the test/save of the original list to test.
                     to_test = chain(complements)
+                    manager_data = manager.list()
 
                     self.__loop_test(to_test, manager_data, manager)
 
