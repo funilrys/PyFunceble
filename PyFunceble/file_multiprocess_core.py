@@ -356,6 +356,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         for data in manager_data:
             # We loop through the server process list members.
 
+            print("Merging process data ...")
+
             if self.autocontinue.authorized:
                 # We are authorized to operate with the
                 # autocontinue subsystem.
