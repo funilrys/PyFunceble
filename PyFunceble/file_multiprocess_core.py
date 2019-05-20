@@ -388,8 +388,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     data["mining"], strict=False
                 )
 
-        # We update all counters.
-        self.autocontinue.update_counters()
         # We save the autocontinue database.
         self.autocontinue.save()
         # We save the inactive database.
@@ -400,6 +398,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         if self.autosave.is_time_exceed():
             # The operation end time was exceeded.
 
+            # We update all counters.
+            self.autocontinue.update_counters()
+
             # We sort the content of all files we generated.
             self.__sort_generated_files()
 
@@ -408,6 +409,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
         if not self.autosave.authorized:
             # We are not auto saving.
+
+            # We update all counters.
+            self.autocontinue.update_counters()
 
             # We sort the content of all files we generated.
             self.__sort_generated_files()
