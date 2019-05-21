@@ -289,6 +289,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                     # We then wait until all processes are done.
                     process.join()
+                else:
+                    self.__merge_processes_data(manager_data)
 
                 # We continue the loop
                 continue
@@ -313,10 +315,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 if not self.__run_multiprocess_test(to_test, manager_data):
                     # Untill the test is completly done, we continue the loop.
 
-                    # We process the merge of the data and eventually the auto
-                    # save.
-                    self.__merge_processes_data(manager_data)
-
                     # We create a new manager data.
                     manager_data = manager.list()
 
@@ -325,26 +323,16 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # Otherwise we break the loop as the test is finished.
 
                     break
-
-            # We process the merge of the data and eventually the auto
-            # save.
-            self.__merge_processes_data(manager_data)
         else:
             # We do not have to save at one point.
 
             while not self.__run_multiprocess_test(to_test, manager_data):
                 # We test untill the test is finished.
 
-                # We process the merge of the data.
-                self.__merge_processes_data(manager_data)
-
                 # We create a new manager data.
                 manager_data = manager.list()
 
                 continue
-
-            # We process the merge of the data.
-            self.__merge_processes_data(manager_data)
 
     def __merge_processes_data(self, manager_data):
         """
@@ -355,8 +343,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
         for data in manager_data:
             # We loop through the server process list members.
-
-            print("Merging process data ...")
 
             if self.autocontinue.authorized:
                 # We are authorized to operate with the
