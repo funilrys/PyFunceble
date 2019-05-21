@@ -284,27 +284,24 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             for process in processes:
                 # We loop through the list of processes.
 
-                if process.is_alive():
-                    # The process is still running.
-
-                    # We then wait until all processes are done.
-                    process.join()
-                else:
-                    self.__merge_processes_data(manager_data)
+                # We then wait until all processes are done.
+                process.join()
 
                 # We continue the loop
                 continue
 
         return finished
 
-    def __loop_test(self, to_test, manager_data, manager):
+    def __loop_test(self, to_test, manager):
         """
         Process the test of each subject of the list to test.
 
         :param list to_test: The list of subjects we have to test.
-        :param multiprocessing.Manager.list manager_data: A Server process.
         :param multiprocessing.Manager manager: A manager instance.
         """
+
+        # We create a new manager data.
+        manager_data = manager.list()
 
         if self.autosave.authorized:
             # We have to save at one point.
@@ -315,12 +312,21 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 if not self.__run_multiprocess_test(to_test, manager_data):
                     # Untill the test is completly done, we continue the loop.
 
+                    # we merge the data.
+                    self.__merge_processes_data(manager_data)
+
                     # We create a new manager data.
                     manager_data = manager.list()
 
                     continue
                 else:
                     # Otherwise we break the loop as the test is finished.
+
+                    # we merge the data.
+                    self.__merge_processes_data(manager_data)
+
+                    # We create a new manager data.
+                    manager_data = manager.list()
 
                     break
         else:
@@ -329,10 +335,16 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             while not self.__run_multiprocess_test(to_test, manager_data):
                 # We test untill the test is finished.
 
+                # we merge the data.
+                self.__merge_processes_data(manager_data)
+
                 # We create a new manager data.
                 manager_data = manager.list()
 
                 continue
+
+        # we merge the data.
+        self.__merge_processes_data(manager_data)
 
     def __merge_processes_data(self, manager_data):
         """
@@ -374,8 +386,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     data["mining"], strict=False
                 )
 
-        # We update all counters.
-        self.autocontinue.update_counters()
         # We save the autocontinue database.
         self.autocontinue.save()
         # We save the inactive database.
@@ -386,6 +396,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         if self.autosave.is_time_exceed():
             # The operation end time was exceeded.
 
+            # We update all counters.
+            self.autocontinue.update_counters()
+
             # We sort the content of all files we generated.
             self.__sort_generated_files()
 
@@ -394,6 +407,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
         if not self.autosave.authorized:
             # We are not auto saving.
+
+            # We update all counters.
+            self.autocontinue.update_counters()
 
             # We sort the content of all files we generated.
             self.__sort_generated_files()
@@ -434,17 +450,14 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             with Manager() as manager:
                 # We initiate a server process.
 
-                manager_data = manager.list()
-
                 # We process the test/save of the original list to test.
-                self.__loop_test(to_test, manager_data, manager)
+                self.__loop_test(to_test, manager)
 
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())
-                manager_data = manager.list()
 
                 # We process the test/save of the mined data to test.
-                self.__loop_test(to_test, manager_data, manager)
+                self.__loop_test(to_test, manager)
 
                 # We get the list of complements to test.
                 complements = self.get_complements()
@@ -452,9 +465,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 if complements:
                     # We process the test/save of the original list to test.
                     to_test = chain(complements)
-                    manager_data = manager.list()
 
-                    self.__loop_test(to_test, manager_data, manager)
+                    self.__loop_test(to_test, manager)
 
                     # We inform all subsystem that we are not testing for complements anymore.
                     self.complements_test_started = False
