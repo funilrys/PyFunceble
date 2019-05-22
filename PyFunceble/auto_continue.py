@@ -274,4 +274,7 @@ class AutoContinue:
         Return the list of subjects which were already tested as a set.
         """
 
-        return {y for _, x in self.database[self.filename].items() for y in x}
+        try:
+            return {y for _, x in self.database[self.filename].items() for y in x}
+        except KeyError:  # pragma: no cover
+            return set()

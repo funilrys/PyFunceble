@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.58.0.dev -- 2_0_0_rc11 -- (Blue Bontebok: Beetle)"
+VERSION = "1.59.0.dev -- 2_0_0_rc12 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]

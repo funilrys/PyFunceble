@@ -61,7 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 from itertools import chain
-from multiprocessing import Manager, Pipe, Process
+from multiprocessing import Manager, Pipe, Process, active_children
 from traceback import format_exc
 
 import PyFunceble
@@ -101,6 +101,7 @@ class OurProcessWrapper(Process):  # pragma: no cover
         except Exception as exception:  # pylint: disable= broad-except
             # We get the traceback.
             traceback = format_exc()
+
             # We send the exception and its traceback to the pipe.
             self.conn2.send((exception, traceback))
 
@@ -189,22 +190,52 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     "\n".join(file_content[:3] + formatted), overwrite=True
                 )
 
-    def __run_multiprocess_test(self, to_test, manager_data):
+    def __process_exception(self, processes, manager_data):
+        """
+        Check if an exception is present into the given pool of processes.
+
+        :param list processes: A list of processes.
+        """
+
+        exception_present = False
+
+        for process in processes:
+            # We loop through the list of processes.
+
+            if exception_present:
+                # We kill the process.
+                process.terminate()
+
+            if process.exception:
+                # There in an exception in the currently
+                # read process.
+
+                # We get the traceback
+                _, traceback = process.exception
+
+                # We print the traceback.
+                print(traceback)
+
+                exception_present = True
+
+        if exception_present:
+            # We finally exit.
+            self.__merge_processes_data(manager_data)
+
+            exit(1)
+
+    def __run_multiprocess_test(self, to_test, manager):
         """
         Test the given list to test with multiple process.
 
         :param itertools.chain to_test: A chain representing a list of subject to test.
-        :param multiprocessing.Manager.list manager_data: A Server process.
+        :param multiprocessing.Manager manager: A Server process.
         """
 
-        # We initiate the process counter.
-        i = 1
         # We initiate a variable which will tell us if we
         # finished to test every subject of the given list
         # to test.
         finished = False
-        # We initiate a variable which will save the process which are still running.
-        processes = []
         # We initiate a variable for the case that no list of tuple is
         # given.
         #
@@ -212,139 +243,68 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         # this is needed.
         index = "funilrys"
 
-        while i <= PyFunceble.CONFIGURATION["maximal_processes"]:
-            # We loop untill we reach the maximal number of processes.
-
-            try:
-                # We get the subject we are going to work with..
-                subject = next(to_test)
-
-                if isinstance(subject, tuple):
-                    # The subject is a tuple.
-
-                    # We spread the index from the subject.
-                    index, subject = subject
-
-                # We initiate a process.
-                process = OurProcessWrapper(
-                    target=self._test_line, args=(subject, manager_data)
-                )
-                # We save it into our list of process.
-                processes.append(process)
-                # We then start the job.
-                process.start()
-
-                if index != "funilrys":
-                    # An index was given, we remove the index and subject from
-                    # the mining database.
-                    self.mining.remove(index, subject)
-
-                # We increase the process number.
-                i += 1
-                # And we continue the loop.
-                continue
-            except StopIteration:
-                # There is no subject into the list to test.
-
-                # We update the finished "flag"
-                finished = True
-
-                # We break the loop
-                break
-
-        # We check if an exception is present into one process
-        # and we then save the process index.
-        exception_present = [x for x, y in enumerate(processes) if y.exception]
-
-        if exception_present:
-            # One or more exception is present.
-
-            for process in processes:
-                # We loop through the list of processes.
-
-                if process.exception:
-                    # There in an exception in the currently
-                    # read process.
-
-                    # We get the traceback
-                    _, traceback = process.exception
-
-                    # We print the traceback.
-                    print(traceback)
-
-                # We kill the process.
-                process.kill()
-
-            # We finally exit.
-            exit(1)
-
-        else:
-            # There was no exception.
-
-            for process in processes:
-                # We loop through the list of processes.
-
-                # We then wait until all processes are done.
-                process.join()
-
-                # We continue the loop
-                continue
-
-        return finished
-
-    def __loop_test(self, to_test, manager):
-        """
-        Process the test of each subject of the list to test.
-
-        :param list to_test: The list of subjects we have to test.
-        :param multiprocessing.Manager manager: A manager instance.
-        """
-
-        # We create a new manager data.
+        # We create the manager data.
         manager_data = manager.list()
 
-        if self.autosave.authorized:
-            # We have to save at one point.
+        while True:
+            # We get the list of active process.
+            active = active_children()
+            # We initiate a variable which will save the process which are still running.
+            processes = []
 
-            while not self.autosave.is_time_exceed():
-                # We loop untill the end time is not exceed.
+            while (
+                len(active) <= PyFunceble.CONFIGURATION["maximal_processes"]
+                and len(processes) <= PyFunceble.CONFIGURATION["maximal_processes"]
+                and not self.autosave.is_time_exceed()
+            ):
+                # We loop untill we reach the maximal number of processes.
 
-                if not self.__run_multiprocess_test(to_test, manager_data):
-                    # Untill the test is completly done, we continue the loop.
+                try:
+                    # We get the subject we are going to work with..
+                    subject = next(to_test)
 
-                    # we merge the data.
-                    self.__merge_processes_data(manager_data)
+                    if isinstance(subject, tuple):
+                        # The subject is a tuple.
 
-                    # We create a new manager data.
-                    manager_data = manager.list()
+                        # We spread the index from the subject.
+                        index, subject = subject
 
+                    # We initiate a process.
+                    process = OurProcessWrapper(
+                        target=self._test_line, args=(subject, manager_data)
+                    )
+                    # # We save it into our list of process.
+                    processes.append(process)
+                    # We then start the job.
+                    process.start()
+
+                    if index != "funilrys":
+                        # An index was given, we remove the index and subject from
+                        # the mining database.
+                        self.mining.remove(index, subject)
+
+                    # We increase the process number.
+                    active = active_children()
+                    # And we continue the loop.
                     continue
-                else:
-                    # Otherwise we break the loop as the test is finished.
+                except StopIteration:
+                    # There is no subject into the list to test.
 
-                    # we merge the data.
-                    self.__merge_processes_data(manager_data)
+                    finished = True
+                    active = active_children()
 
-                    # We create a new manager data.
-                    manager_data = manager.list()
-
+                    # We break the loop
                     break
-        else:
-            # We do not have to save at one point.
 
-            while not self.__run_multiprocess_test(to_test, manager_data):
-                # We test untill the test is finished.
+            while len(active) != 1:
+                active = active_children()
 
-                # we merge the data.
+            if finished or self.autosave.is_time_exceed():
+
                 self.__merge_processes_data(manager_data)
+                break
 
-                # We create a new manager data.
-                manager_data = manager.list()
-
-                continue
-
-        # we merge the data.
-        self.__merge_processes_data(manager_data)
+        self.__process_exception(processes, manager_data)
 
     def __merge_processes_data(self, manager_data):
         """
@@ -353,8 +313,22 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
+        if not self.autosave.authorized:
+            print(
+                PyFunceble.Fore.MAGENTA
+                + PyFunceble.Style.BRIGHT
+                + "\nMerging cross processes data... This process might take some time."
+            )
+
         for data in manager_data:
             # We loop through the server process list members.
+
+            if self.autosave.authorized:
+                print(
+                    PyFunceble.Fore.MAGENTA
+                    + PyFunceble.Style.BRIGHT
+                    + "Merging process data ..."
+                )
 
             if self.autocontinue.authorized:
                 # We are authorized to operate with the
@@ -451,13 +425,13 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 # We initiate a server process.
 
                 # We process the test/save of the original list to test.
-                self.__loop_test(to_test, manager)
+                self.__run_multiprocess_test(to_test, manager)
 
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())
 
                 # We process the test/save of the mined data to test.
-                self.__loop_test(to_test, manager)
+                self.__run_multiprocess_test(to_test, manager)
 
                 # We get the list of complements to test.
                 complements = self.get_complements()
@@ -466,7 +440,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We process the test/save of the original list to test.
                     to_test = chain(complements)
 
-                    self.__loop_test(to_test, manager)
+                    self.__run_multiprocess_test(to_test, manager)
 
                     # We inform all subsystem that we are not testing for complements anymore.
                     self.complements_test_started = False
