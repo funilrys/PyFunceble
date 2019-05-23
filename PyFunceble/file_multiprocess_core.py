@@ -378,8 +378,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
             # We process the saving of everything.
             self.autosave.process()
-
-        if not self.autosave.authorized:
+        else:
             # We are not auto saving.
 
             # We update all counters.
