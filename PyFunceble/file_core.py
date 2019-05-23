@@ -473,7 +473,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # rush before starting to filter and test.
         subject = self._format_line(line)
 
-        if subject in autocontinue or subject in inactive_db:
+        if manager_data is None and (subject in autocontinue or subject in inactive_db):
             # * The subject is in the autocontinue database.
             # or
             # * The subject is in the inactive database.

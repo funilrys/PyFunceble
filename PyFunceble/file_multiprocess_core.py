@@ -398,29 +398,33 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.
 
-            with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
+            already_tested_continue = self.autocontinue.get_already_tested()
+            already_tested_inactive_db = self.inactive_db.get_already_tested()
 
-                if not PyFunceble.CONFIGURATION["adblock"]:
-                    # We do not have to adblock decode the content
-                    # of the file.
+            if not PyFunceble.CONFIGURATION["adblock"]:
+                # We do not have to adblock decode the content
+                # of the file.
 
+                with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
                     to_test = chain(
                         list(
                             set(pool.map(self._format_line, file))
-                            - self.autocontinue.get_already_tested()
+                            - already_tested_continue
+                            - already_tested_inactive_db
                         ),
                         self.inactive_db["to_test"],
                     )
-                else:
-                    # We do have to decode the content of the file.
+            else:
+                # We do have to decode the content of the file.
 
-                    to_test = chain(
-                        list(
-                            set(AdBlock(file).decode())
-                            - self.autocontinue.get_already_tested()
-                        ),
-                        self.inactive_db["to_test"],
-                    )
+                to_test = chain(
+                    list(
+                        set(AdBlock(file).decode())
+                        - already_tested_continue
+                        - already_tested_inactive_db
+                    ),
+                    self.inactive_db["to_test"],
+                )
 
             with Manager() as manager:
                 # We initiate a server process.

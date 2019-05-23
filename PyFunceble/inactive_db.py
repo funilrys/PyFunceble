@@ -447,3 +447,19 @@ class InactiveDB:
 
             # And we save the data into the database.
             self.save()
+
+    def get_already_tested(self):  # pragma: no cover
+        """
+        Return a set of already tested subjects.
+        """
+
+        try:
+            return {
+                z
+                for x, y in self.database[self.filename].items()
+                if x.isdigit()
+                and int(PyFunceble.time()) < int(x) + self.days_in_seconds
+                for z in y
+            }
+        except KeyError:
+            return set()
