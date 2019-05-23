@@ -6,6 +6,7 @@ Here is the list of requirements:
 -   Python 3.6+
 -   :code:`colorama`
 -   :code:`domain2idna`
+-   :code:`dnspython`
 -   :code:`PyYAML`
 -   :code:`requests`
 -   :code:`setuptools`
@@ -38,6 +39,11 @@ As we propose the conversion of domains to IDNA, :code:`domain2idna` is required
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
 .. _on GitHub: https://github.com/funilrys/domain2idna
+
+:code:`dnspython`
+-----------------
+
+As we use it to do the DNS lookups, :code:`dnspython` is required.
 
 :code:`PyYAML`
 --------------
