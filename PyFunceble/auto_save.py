@@ -246,7 +246,8 @@ class Travis:
 
                 self.permissions()
 
-            Command(command).execute()
+            for line in Command(command).run():
+                sys_stdout.write("{}\n".format(line))
             self.push()
 
     def not_end_commit(self):
@@ -268,5 +269,7 @@ class Travis:
 
                 self.permissions()
 
-            Command(command).execute()
+            for line in Command(command).run():
+                sys_stdout.write("{}\n".format(line))
+
             self.push()
