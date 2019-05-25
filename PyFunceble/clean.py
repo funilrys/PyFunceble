@@ -175,7 +175,7 @@ class Clean:
         """
 
         # We initiate the directory we have to look for.
-        directory = PyFunceble.CURRENT_DIRECTORY
+        directory = PyFunceble.CONFIG_DIRECTORY
 
         # We initate the result variable.
         result = []
@@ -251,4 +251,4 @@ class Clean:
             File(file).delete()
 
         if clean_all:  # pragma: no cover
-            PyFunceble.Load(PyFunceble.CURRENT_DIRECTORY)
+            PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)

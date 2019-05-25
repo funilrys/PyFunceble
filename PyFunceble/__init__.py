@@ -93,20 +93,20 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.62.0.dev -- 2_0_0_rc14 -- (Blue Bontebok: Beetle)"
+VERSION = "1.63.0.dev -- 2_0_0_rc15 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
 
-if "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
-    # We handle the case that the `PYFUNCEBLE_OUTPUT_DIR` environnement variable is set.
-    CURRENT_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
+if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
+    # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
+    CONFIG_DIRECTORY = environ["PYFUNCEBLE_CONFIG_DIR"]
 elif Version(True).is_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
-    CURRENT_DIRECTORY = getcwd() + directory_separator
+    CONFIG_DIRECTORY = getcwd() + directory_separator
 elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
     # We handle the case that we are under Travis CI.
-    CURRENT_DIRECTORY = getcwd() + directory_separator
+    CONFIG_DIRECTORY = getcwd() + directory_separator
 else:  # pragma: no cover
     # We handle all other case and distributions specific cases.
 
@@ -122,7 +122,7 @@ else:  # pragma: no cover
             # Everything went right:
             #   * `~/.config` exists.
             # We set our configuration location path as the directory we are working with.
-            CURRENT_DIRECTORY = config_dir_path
+            CONFIG_DIRECTORY = config_dir_path
         elif path.isdir(path.expanduser("~")):
             # Something went wrong:
             #   * `~/.config` does not exists.
@@ -131,7 +131,7 @@ else:  # pragma: no cover
             #
             # Note: The `.` at the end is because we want to hide the directory we are
             # going to create.
-            CURRENT_DIRECTORY = (
+            CONFIG_DIRECTORY = (
                 path.expanduser("~") + directory_separator + "."
             )  # pylint: disable=line-too-long
         else:
@@ -139,7 +139,7 @@ else:  # pragma: no cover
             #   * `~/.config` does not exists.
             #   * `~` soes not exists.
             # We set the current directory as the directory we are working with.
-            CURRENT_DIRECTORY = getcwd() + directory_separator
+            CONFIG_DIRECTORY = getcwd() + directory_separator
     elif system().lower() in WINDOWS_PLATFORMS:
         # We are under Windows or CygWin.
 
@@ -147,29 +147,29 @@ else:  # pragma: no cover
             # Everything went right:
             #   * `APPDATA` is into the environnement variables.
             # We set it as the directory we are working with.
-            CURRENT_DIRECTORY = environ["APPDATA"]
+            CONFIG_DIRECTORY = environ["APPDATA"]
         else:
             # Everything went wrong:
             #   * `APPDATA` is not into the environnement variables.
             # We set the current directory as the directory we are working with.
-            CURRENT_DIRECTORY = getcwd() + directory_separator
+            CONFIG_DIRECTORY = getcwd() + directory_separator
 
-    if not CURRENT_DIRECTORY.endswith(directory_separator):
+    if not CONFIG_DIRECTORY.endswith(directory_separator):
         # If the directory we are working with does not ends with the directory
         # separator, we append it to the end.
-        CURRENT_DIRECTORY += directory_separator
+        CONFIG_DIRECTORY += directory_separator
 
     # We append the name of the project to the directory we are working with.
-    CURRENT_DIRECTORY += NAME + directory_separator
+    CONFIG_DIRECTORY += NAME + directory_separator
 
-    if not path.isdir(CURRENT_DIRECTORY):
+    if not path.isdir(CONFIG_DIRECTORY):
         # If the directory does not exist we create it.
-        mkdir(CURRENT_DIRECTORY)
+        mkdir(CONFIG_DIRECTORY)
 
-if not CURRENT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
+if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
     # Again for safety, if the directory we are working with does not ends with
     # the directory separator, we append it to the end.
-    CURRENT_DIRECTORY += directory_separator
+    CONFIG_DIRECTORY += directory_separator
 
 # We set the location of the `output` directory which should always be in the current
 # directory.
@@ -592,7 +592,7 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
 
         # We load and download the different configuration file if they are non
         # existant.
-        Load(CURRENT_DIRECTORY)
+        Load(CONFIG_DIRECTORY)
 
         if generate_directory_structure:
             # If we are not under test which means that we want to save informations,
@@ -1466,7 +1466,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     # We are not into the cloned version.
 
                     # We merge the local with the upstream configuration.
-                    Merge(CURRENT_DIRECTORY)
+                    Merge(CONFIG_DIRECTORY)
                 else:
                     # We are in the cloned version.
 

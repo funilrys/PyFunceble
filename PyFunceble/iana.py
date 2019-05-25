@@ -364,7 +364,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     def __init__(self):
         # We get the destination of the constructed IANA database.
         self.destination = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
         )
 
         if PyFunceble.path.isfile(self.destination):

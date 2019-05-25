@@ -83,7 +83,7 @@ class TestInactiveDB(TestCase):
         self.file_to_test = "this_file_is_a_ghost"
 
         self.file = (
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
         )
 

@@ -71,7 +71,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     def __init__(self):
         # We initiate the destination of our database.
         self.destination = (
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
         )
 

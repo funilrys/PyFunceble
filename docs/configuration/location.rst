@@ -26,7 +26,7 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
     We don't care about the distribution, as long as the :code:`TRAVIS_BUILD_DIR` environment variable is set, we search or initiate the configuration in the current directory.
 
 .. note::
-    If you want to force the directory where we should work, you can initiate the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable with the path where we should work.
+    If you want to force the directory where we should work, you can initiate the :code:`PYFUNCEBLE_CONFIG_DIR` environment variable with the path where we should work.
 
 .. _Travis CI: https://travis-ci.org/
 
@@ -73,4 +73,4 @@ Custom location
 
 Sometimes, you may find yourself in a position where you absolutely do not want PyFunceble to use its default configuration location.
 
-For that reason, if you set your desired configuration location along with the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable, we take that location as the (default) configuration location.
+For that reason, if you set your desired configuration location along with the :code:`PYFUNCEBLE_CONFIG_DIR` environment variable, we take that location as the (default) configuration location.

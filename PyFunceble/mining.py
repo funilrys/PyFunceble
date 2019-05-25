@@ -98,7 +98,7 @@ class Mining:
 
             # We get the file we are going to save our data.
             self.database_file = (
-                PyFunceble.CURRENT_DIRECTORY
+                PyFunceble.CONFIG_DIRECTORY
                 + PyFunceble.OUTPUTS["default_files"]["mining"]
             )
 

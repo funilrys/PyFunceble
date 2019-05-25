@@ -147,19 +147,19 @@ class Production:  # pylint: disable=too-few-public-methods
                 )
 
                 # We fix the urls in the README file.
-                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "README.rst")
+                self._update_docs(PyFunceble.CONFIG_DIRECTORY + "README.rst")
 
                 # We fix the urls in the configuration file.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY + ".PyFunceble_production.yaml"
+                    PyFunceble.CONFIG_DIRECTORY + ".PyFunceble_production.yaml"
                 )
 
                 # We fix the urls in the setup.py file.
-                self._update_docs(PyFunceble.CURRENT_DIRECTORY + "setup.py")
+                self._update_docs(PyFunceble.CONFIG_DIRECTORY + "setup.py")
 
                 # We fix the urls in the documentation index.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY
+                    PyFunceble.CONFIG_DIRECTORY
                     + PyFunceble.directory_separator
                     + "docs"
                     + PyFunceble.directory_separator
@@ -168,7 +168,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We fix the urls in the documentation logic representation.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY
+                    PyFunceble.CONFIG_DIRECTORY
                     + PyFunceble.directory_separator
                     + "docs"
                     + PyFunceble.directory_separator
@@ -179,7 +179,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We fix the urls in the documentation in action page.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY
+                    PyFunceble.CONFIG_DIRECTORY
                     + PyFunceble.directory_separator
                     + "docs"
                     + PyFunceble.directory_separator
@@ -188,7 +188,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We fix the urls in the usage documentation.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY
+                    PyFunceble.CONFIG_DIRECTORY
                     + PyFunceble.directory_separator
                     + "docs"
                     + PyFunceble.directory_separator
@@ -199,7 +199,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We fix the urls in the links configuration documentation.
                 self._update_docs(
-                    PyFunceble.CURRENT_DIRECTORY
+                    PyFunceble.CONFIG_DIRECTORY
                     + PyFunceble.directory_separator
                     + "docs"
                     + PyFunceble.directory_separator
@@ -219,7 +219,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We save our version data into our `version.yaml` file.
                 Dict(self.data_version_yaml).to_yaml(
-                    PyFunceble.CURRENT_DIRECTORY + "version.yaml", flow_style=None
+                    PyFunceble.CONFIG_DIRECTORY + "version.yaml", flow_style=None
                 )
 
                 # We prepare the message we are going to print on screen.
@@ -259,7 +259,7 @@ class Production:  # pylint: disable=too-few-public-methods
         to_ignore = [".gitignore", ".keep"]
 
         for root, _, files in PyFunceble.walk(
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.directory_separator
             + "PyFunceble"
             + PyFunceble.directory_separator
@@ -287,7 +287,7 @@ class Production:  # pylint: disable=too-few-public-methods
                         self._update_docs(root + PyFunceble.directory_separator + file)
 
         for root, _, files in PyFunceble.walk(
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.directory_separator
             + "tests"
             + PyFunceble.directory_separator
@@ -320,7 +320,7 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         return Dict().from_yaml(
-            File(PyFunceble.CURRENT_DIRECTORY + "version.yaml").read()
+            File(PyFunceble.CONFIG_DIRECTORY + "version.yaml").read()
         )
 
     def _is_version_greater(self):
@@ -485,7 +485,7 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         # We initiate the path to the file we have to filter.
-        setup_py_path = PyFunceble.CURRENT_DIRECTORY + "setup.py"
+        setup_py_path = PyFunceble.CONFIG_DIRECTORY + "setup.py"
 
         if self.is_dev_version():
             # The current version is the `dev` version.
@@ -530,7 +530,7 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         # We initiate the file we have to filter/update.
-        travis_yml_path = PyFunceble.CURRENT_DIRECTORY + ".travis.yml"
+        travis_yml_path = PyFunceble.CONFIG_DIRECTORY + ".travis.yml"
 
         if self.is_dev_version():
             # The current version is the `dev` version.

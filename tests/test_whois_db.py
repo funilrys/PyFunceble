@@ -80,7 +80,7 @@ class TestWhoisDB(TestCase):
         PyFunceble.load_config(generate_directory_structure=False)
 
         self.file = (
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.OUTPUTS["default_files"]["whois_db"]
         )
 

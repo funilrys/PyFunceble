@@ -80,8 +80,7 @@ class WhoisDB:
 
         # We set the location of the database file.
         self.database_file = "{0}{1}".format(
-            PyFunceble.CURRENT_DIRECTORY,
-            PyFunceble.OUTPUTS["default_files"]["whois_db"],
+            PyFunceble.CONFIG_DIRECTORY, PyFunceble.OUTPUTS["default_files"]["whois_db"]
         )
 
         # We load the configuration.

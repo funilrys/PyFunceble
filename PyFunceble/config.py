@@ -297,7 +297,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         iana_link = Version(True).right_url_from_version(iana_link)
 
         # We set the destination of the downloaded file.
-        destination = PyFunceble.CURRENT_DIRECTORY + "iana-domains-db.json"
+        destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
         if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
@@ -326,7 +326,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         # We set the destination of the downloaded file.
         destination = (
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
         )
 
@@ -357,7 +357,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         # We set the destination of the downloaded file.
         destination = (
-            PyFunceble.CURRENT_DIRECTORY
+            PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"]
         )
 

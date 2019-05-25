@@ -86,7 +86,7 @@ class TestMining(TestCase):
         self.file_to_test = "this_file_is_a_ghost"
 
         self.file = (
-            PyFunceble.CURRENT_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["mining"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["mining"]
         )
 
         self.excepted_content = {

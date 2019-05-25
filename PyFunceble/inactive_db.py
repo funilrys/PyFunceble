@@ -98,7 +98,7 @@ class InactiveDB:
 
         # We set the path to the inactive database file.
         self.database_file = "{0}{1}".format(
-            PyFunceble.CURRENT_DIRECTORY,
+            PyFunceble.CONFIG_DIRECTORY,
             PyFunceble.OUTPUTS["default_files"]["inactive_db"],
         )
 
