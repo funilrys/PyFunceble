@@ -219,14 +219,6 @@ class Clean:
             )
         )
 
-        # We append the whois database file.
-        result.append(
-            "{0}{1}".format(
-                directory,
-                PyFunceble.CONFIGURATION["outputs"]["default_files"]["whois_db"],
-            )
-        )
-
         return result
 
     def almost_everything(self, clean_all=False):
