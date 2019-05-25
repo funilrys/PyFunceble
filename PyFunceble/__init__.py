@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.63.1.dev -- 2_0_0_rc15 -- (Blue Bontebok: Beetle)"
+VERSION = "1.64.0.dev -- 2_0_0_rc16 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -101,7 +101,7 @@ WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
 if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
     CONFIG_DIRECTORY = environ["PYFUNCEBLE_CONFIG_DIR"]
-elif "PYFUNCEBLE_OUTPUT_DIR" in environ: # pragma: no cover
+elif "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     # We hande the retro compatibility.
     CONFIG_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
 elif Version(True).is_cloned():  # pragma: no cover

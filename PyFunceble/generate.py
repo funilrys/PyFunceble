@@ -453,8 +453,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 # We print on file.
                 Prints([self.subject], "PlainDomain", splited_destination).data()
 
-            if PyFunceble.CONFIGURATION["generate_json"]:
-                # The jsaon list generation is activated.
+            if (
+                PyFunceble.CONFIGURATION["generate_json"]
+                and not PyFunceble.CONFIGURATION["multiprocess"]
+            ):
+                # The json list generation is activated.
 
                 # We generate/append the currently tested element in its
                 # final location. (the json format)

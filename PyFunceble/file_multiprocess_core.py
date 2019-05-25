@@ -387,6 +387,29 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             # We sort the content of all files we generated.
             self.__sort_generated_files()
 
+    def generate_json_format(self):
+        """
+        Generate the JSON formatted file.
+
+        .. note::
+            This is needed because otherwise we might get a format issue.
+        """
+
+        if PyFunceble.CONFIGURATION["generate_json"]:
+            # We have to generate the JSON format.
+
+            for status, data in self.autocontinue.database[self.file].items():
+                # We loop through the autocontinue data.
+
+                # We save the data at their final location.
+                Dict(data).to_json(
+                    PyFunceble.OUTPUT_DIRECTORY
+                    + PyFunceble.OUTPUTS["parent_directory"]
+                    + PyFunceble.OUTPUTS["json"]["directory"]
+                    + status
+                    + PyFunceble.OUTPUTS["json"]["filename"]
+                )
+
     def read_and_test_file_content(self):  # pragma: no cover
         """
         Read a file block by block and test its content.
@@ -450,6 +473,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We inform all subsystem that we are not testing for complements anymore.
                     self.complements_test_started = False
 
+        # We generate the JSON formatted files if needed.
+        self.generate_json_format()
         # We clean the autocontinue subsystem, we finished
         # the test.
         self.autocontinue.clean()
