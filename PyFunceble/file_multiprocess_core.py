@@ -313,59 +313,60 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if not self.autosave.authorized:
-            print(
-                PyFunceble.Fore.MAGENTA
-                + PyFunceble.Style.BRIGHT
-                + "\nMerging cross processes data... This process might take some time."
-            )
-
-        for data in manager_data:
-            # We loop through the server process list members.
-
-            if self.autosave.authorized:
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if not self.autosave.authorized:
                 print(
                     PyFunceble.Fore.MAGENTA
                     + PyFunceble.Style.BRIGHT
-                    + "Merging process data ..."
+                    + "\nMerging cross processes data... This process might take some time."
                 )
 
-            if self.autocontinue.authorized:
-                # We are authorized to operate with the
-                # autocontinue subsystem.
+            for data in manager_data:
+                # We loop through the server process list members.
 
-                # We assemble the currenlty read data with the data of the current
-                # session.
-                self.autocontinue.database = Dict(self.autocontinue.database).merge(
-                    data["autocontinue"], strict=False
-                )
+                if self.autosave.authorized:
+                    print(
+                        PyFunceble.Fore.MAGENTA
+                        + PyFunceble.Style.BRIGHT
+                        + "Merging process data ..."
+                    )
 
-            if self.inactive_db.authorized:
-                # We are authorized to operate with the
-                # inactive database subsystem.
+                if self.autocontinue.authorized:
+                    # We are authorized to operate with the
+                    # autocontinue subsystem.
 
-                # We assemble the currenlty read data with the data of the current
-                # session.
-                self.inactive_db.database = Dict(self.inactive_db.database).merge(
-                    data["inactive_db"], strict=False
-                )
+                    # We assemble the currenlty read data with the data of the current
+                    # session.
+                    self.autocontinue.database = Dict(self.autocontinue.database).merge(
+                        data["autocontinue"], strict=False
+                    )
 
-            if self.mining.authorized:
-                # We are authorized to operate with the
-                # mining subsystem.
+                if self.inactive_db.authorized:
+                    # We are authorized to operate with the
+                    # inactive database subsystem.
 
-                # We assemble the currenlty read data with the data of the current
-                # session.
-                self.mining.database = Dict(self.mining.database).merge(
-                    data["mining"], strict=False
-                )
+                    # We assemble the currenlty read data with the data of the current
+                    # session.
+                    self.inactive_db.database = Dict(self.inactive_db.database).merge(
+                        data["inactive_db"], strict=False
+                    )
 
-        # We save the autocontinue database.
-        self.autocontinue.save()
-        # We save the inactive database.
-        self.inactive_db.save()
-        # We save the mining database.
-        self.mining.save()
+                if self.mining.authorized:
+                    # We are authorized to operate with the
+                    # mining subsystem.
+
+                    # We assemble the currenlty read data with the data of the current
+                    # session.
+                    self.mining.database = Dict(self.mining.database).merge(
+                        data["mining"], strict=False
+                    )
+
+            # We save the autocontinue database.
+            self.autocontinue.save()
+            # We save the inactive database.
+            self.inactive_db.save()
+            # We save the mining database.
+            self.mining.save()
 
         if self.autosave.is_time_exceed():
             # The operation end time was exceeded.
@@ -435,7 +436,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                             - already_tested_continue
                             - already_tested_inactive_db
                         ),
-                        self.inactive_db["to_test"],
+                        self.inactive_db.get_to_retest(),
                     )
             else:
                 # We do have to decode the content of the file.
@@ -446,7 +447,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                         - already_tested_continue
                         - already_tested_inactive_db
                     ),
-                    self.inactive_db["to_test"],
+                    self.inactive_db.get_to_retest(),
                 )
 
             with Manager() as manager:

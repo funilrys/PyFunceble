@@ -106,24 +106,25 @@ class TestsAutoContinue(TestCase):
         Test AutoContinue().backup().
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        self.auto_continue.database = {
-            self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}
-        }
-        self.auto_continue.save()
+            self.auto_continue.database = {
+                self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}
+            }
+            self.auto_continue.save()
 
-        expected = True
-        actual = PyFunceble.path.isfile(self.file_to_work_with)
-        self.assertEqual(expected, actual)
+            expected = True
+            actual = PyFunceble.path.isfile(self.file_to_work_with)
+            self.assertEqual(expected, actual)
 
-        expected = {self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}}
+            expected = {self.file_to_test: {"Hello": "INVALID", "world": "INVALID"}}
 
-        actual = Dict().from_json(File(self.file_to_work_with).read())
+            actual = Dict().from_json(File(self.file_to_work_with).read())
 
-        self.assertEqual(expected, actual)
-        self.test_delete_file()
+            self.assertEqual(expected, actual)
+            self.test_delete_file()
 
     def test_save_not_activated(self):
         """
@@ -131,148 +132,154 @@ class TestsAutoContinue(TestCase):
         activated the backup system.
         """
 
-        self.test_delete_file()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
 
-        self.auto_continue.authorized = False
-        self.auto_continue.database = {"hello": "world"}
+            self.auto_continue.authorized = False
+            self.auto_continue.database = {"hello": "world"}
 
-        self.auto_continue.save()
+            self.auto_continue.save()
 
-        expected = False
-        actual = PyFunceble.path.isfile(self.file_to_work_with)
+            expected = False
+            actual = PyFunceble.path.isfile(self.file_to_work_with)
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.test_delete_file()
+            self.test_delete_file()
 
     def test_load(self):
         """
         Test AutoContinue().restore().
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        Dict({"hello": "world"}).to_json(self.file_to_work_with)
+            Dict({"hello": "world"}).to_json(self.file_to_work_with)
 
-        expected = {"hello": "world"}
-        self.auto_continue.load()
+            expected = {"hello": "world"}
+            self.auto_continue.load()
 
-        self.assertEqual(expected, self.auto_continue.database)
+            self.assertEqual(expected, self.auto_continue.database)
 
-        self.test_delete_file()
+            self.test_delete_file()
 
     def test_is_present(self):
         """
         Test the presence of elements.
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        for status in ["ACTIVE", "INACTIVE", "INVALID"]:
-            self.auto_continue.database = {self.file_to_test: {status: ["hello"]}}
+            for status in ["ACTIVE", "INACTIVE", "INVALID"]:
+                self.auto_continue.database = {self.file_to_test: {status: ["hello"]}}
 
-            expected = True
-            actual = "hello" in self.auto_continue
+                expected = True
+                actual = "hello" in self.auto_continue
+
+                self.assertEqual(expected, actual)
+
+            expected = False
+            actual = "hello.world" in self.auto_continue
 
             self.assertEqual(expected, actual)
 
-        expected = False
-        actual = "hello.world" in self.auto_continue
-
-        self.assertEqual(expected, actual)
-
-        self.test_delete_file()
+            self.test_delete_file()
 
     def test_is_empty(self):
         """
         Test if the databse if empty.
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        self.auto_continue.database = {}
+            self.auto_continue.database = {}
 
-        expected = True
-        actual = self.auto_continue.is_empty()
+            expected = True
+            actual = self.auto_continue.is_empty()
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.auto_continue.database = {self.file_to_test: {"hello": "world"}}
+            self.auto_continue.database = {self.file_to_test: {"hello": "world"}}
 
-        expected = False
-        actual = self.auto_continue.is_empty()
+            expected = False
+            actual = self.auto_continue.is_empty()
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.test_delete_file()
+            self.test_delete_file()
 
     def test_add(self):
         """
         Test the addition of an element.
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        self.auto_continue.database = {}
+            self.auto_continue.database = {}
 
-        self.auto_continue.add("hello.world", "ACTIVE")
-        self.auto_continue.add("world.hello", "ACTIVE")
+            self.auto_continue.add("hello.world", "ACTIVE")
+            self.auto_continue.add("world.hello", "ACTIVE")
 
-        expected = {self.file_to_test: {"ACTIVE": ["hello.world", "world.hello"]}}
+            expected = {self.file_to_test: {"ACTIVE": ["hello.world", "world.hello"]}}
 
-        self.assertEqual(expected, self.auto_continue.database)
+            self.assertEqual(expected, self.auto_continue.database)
 
-        self.auto_continue.add("hello.world.hello", "INACTIVE")
+            self.auto_continue.add("hello.world.hello", "INACTIVE")
 
-        expected = {
-            self.file_to_test: {
-                "ACTIVE": ["hello.world", "world.hello"],
-                "INACTIVE": ["hello.world.hello"],
+            expected = {
+                self.file_to_test: {
+                    "ACTIVE": ["hello.world", "world.hello"],
+                    "INACTIVE": ["hello.world.hello"],
+                }
             }
-        }
 
-        self.assertEqual(expected, self.auto_continue.database)
+            self.assertEqual(expected, self.auto_continue.database)
 
-        expected = {self.file_to_test: {}}
+            expected = {self.file_to_test: {}}
 
-        self.auto_continue.clean()
-        self.assertEqual(expected, self.auto_continue.database)
+            self.auto_continue.clean()
+            self.assertEqual(expected, self.auto_continue.database)
 
-        self.test_delete_file()
+            self.test_delete_file()
 
     def test_get_already_tested(self):
         """
         Test the fact that we need an accurate list of tested.
         """
 
-        self.test_delete_file()
-        self.auto_continue.authorized = True
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_delete_file()
+            self.auto_continue.authorized = True
 
-        self.auto_continue.database = {}
+            self.auto_continue.database = {}
 
-        self.auto_continue.add("hello.world", "ACTIVE")
-        self.auto_continue.add("world.hello", "ACTIVE")
+            self.auto_continue.add("hello.world", "ACTIVE")
+            self.auto_continue.add("world.hello", "ACTIVE")
 
-        expected = {"hello.world", "world.hello"}
+            expected = {"hello.world", "world.hello"}
 
-        self.assertEqual(expected, self.auto_continue.get_already_tested())
+            self.assertEqual(expected, self.auto_continue.get_already_tested())
 
-        self.auto_continue.add("hello.world.hello", "INACTIVE")
+            self.auto_continue.add("hello.world.hello", "INACTIVE")
 
-        expected = {"hello.world", "world.hello", "hello.world.hello"}
+            expected = {"hello.world", "world.hello", "hello.world.hello"}
 
-        self.assertEqual(expected, self.auto_continue.get_already_tested())
+            self.assertEqual(expected, self.auto_continue.get_already_tested())
 
-        expected = set()
+            expected = set()
 
-        self.auto_continue.clean()
-        self.assertEqual(expected, self.auto_continue.get_already_tested())
+            self.auto_continue.clean()
+            self.assertEqual(expected, self.auto_continue.get_already_tested())
 
-        self.test_delete_file()
+            self.test_delete_file()
 
 
 if __name__ == "__main__":

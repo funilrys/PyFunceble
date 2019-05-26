@@ -17,6 +17,7 @@ omit =
     PyFunceble/production.py
     PyFunceble/simple_core.py
     PyFunceble/whois.py
+    PyFunceble/sqlite.py
 
 [report]
 # This should be False one we move into production
@@ -40,6 +41,9 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
+
+    # Don't complain for those blocks
+    PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"
 
 
 ignore_errors = True

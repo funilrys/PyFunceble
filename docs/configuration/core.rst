@@ -77,6 +77,26 @@
 .. note::
     This index has no effect if :code:`inactive_database` is set to :code:`False`.
 
+:code:`db_type`
+---------------
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`json`
+
+    **Available values:** :code:`json`, :code:`sqlite`
+
+    **Description:** Set the database type to use everytime we create a database.
+
+
+.. note::
+    This feature is applied to the following subsystems:
+
+    * Autocontinue physically located (JSON) at :code:`output/continue.json`.
+    * InactiveDB physically located (JSON) at :code:`[config_dir]/inactive_db.json`.
+    * Mining physically located (JSON) at :code:`[config_dir]/mining.json`.
+    * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json.
+
 :code:`debug`
 -------------
 

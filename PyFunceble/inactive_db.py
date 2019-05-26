@@ -86,7 +86,7 @@ class InactiveDB:
     # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename):
+    def __init__(self, filename, sqlite_db=None):
         # We get the authorization status.
         self.authorized = self.authorization()
 
@@ -105,6 +105,9 @@ class InactiveDB:
         # We share the filename.
         self.filename = filename
 
+        # We get the sqlite db instance.
+        self.sqlite_db = sqlite_db
+
         # We initiate the database.
         self.initiate()
 
@@ -112,56 +115,76 @@ class InactiveDB:
         if self.authorized:
             # We are authorized to operate.
 
-            if subject not in self.is_present_cache:
-                for element in [
-                    x for x in self.database[self.filename].keys() if x.isdigit()
-                ]:
-                    if subject in self[element]:
-                        self.is_present_cache[subject] = True
-                        break
-                    else:  # pragma: no cover
-                        self.is_present_cache[subject] = False
-                        continue
-
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
                 if subject not in self.is_present_cache:
-                    self.is_present_cache[subject] = False
+                    for element in [
+                        x for x in self.database[self.filename].keys() if x.isdigit()
+                    ]:
+                        if subject in self[element]:
+                            self.is_present_cache[subject] = True
+                            break
+                        else:  # pragma: no cover
+                            self.is_present_cache[subject] = False
+                            continue
 
-            return self.is_present_cache[subject]
+                    if subject not in self.is_present_cache:
+                        self.is_present_cache[subject] = False
+
+                return self.is_present_cache[subject]
+
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = (
+                    "SELECT COUNT(*) "
+                    "FROM inactive "
+                    "WHERE subject = :subject AND file_path = :file"
+                )
+
+                try:
+                    output = self.sqlite_db.cursor.execute(
+                        query, {"subject": subject, "file": self.filename}
+                    )
+                except self.sqlite_db.locked_errors:
+                    PyFunceble.sleep(0.3)
+                    output = self.sqlite_db.cursor.execute(
+                        query, {"subject": subject, "file": self.filename}
+                    )
+                fetched = output.fetchone()
+
+                return fetched[0] != 0
+
         return False  # pragma: no cover
 
     def __getitem__(self, index):
-        if (
-            self.authorized
-            and self.filename in self.database
-            and index in self.database[self.filename]
-        ):
-            return self.database[self.filename][index]
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+            if self.filename in self.database and index in self.database[self.filename]:
+                return self.database[self.filename][index]
         return []
 
     def __setitem__(self, index, value):
-        actual_state = self[index]
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            actual_state = self[index]
 
-        if actual_state:
-            if isinstance(actual_state, dict):
-                if isinstance(value, dict):  # pragma: no cover
-                    self.database[self.filename][index].update(value)
+            if actual_state:
+                if isinstance(actual_state, dict):
+                    if isinstance(value, dict):  # pragma: no cover
+                        self.database[self.filename][index].update(value)
+                    else:  # pragma: no cover
+                        self.database[self.filename][index] = value
+                elif isinstance(actual_state, list):
+                    if isinstance(value, list):
+                        self.database[self.filename][index].extend(value)
+                    else:  # pragma: no cover
+                        self.database[self.filename][index].append(value)
                 else:  # pragma: no cover
                     self.database[self.filename][index] = value
-            elif isinstance(actual_state, list):
-                if isinstance(value, list):
-                    self.database[self.filename][index].extend(value)
-                else:  # pragma: no cover
-                    self.database[self.filename][index].append(value)
-            else:  # pragma: no cover
+            else:
+                if self.filename not in self.database:
+                    self.database[self.filename] = {index: value}
                 self.database[self.filename][index] = value
-        else:
-            if self.filename not in self.database:
-                self.database[self.filename] = {index: value}
-            self.database[self.filename][index] = value
 
-        self.database[self.filename][index] = List(
-            self.database[self.filename][index]
-        ).format()
+            self.database[self.filename][index] = List(
+                self.database[self.filename][index]
+            ).format()
 
     @classmethod
     def authorization(cls):
@@ -177,7 +200,7 @@ class InactiveDB:
         has already been set into the database.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             # We get the content of the database.
@@ -234,7 +257,7 @@ class InactiveDB:
         Load the content of the database file.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             if PyFunceble.path.isfile(self.database_file):
@@ -252,7 +275,7 @@ class InactiveDB:
         Save the current database into the database file.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             # We save the current database state into the database file.
@@ -267,7 +290,7 @@ class InactiveDB:
         :type to_add: str|list
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             if not isinstance(to_add, list):
@@ -306,34 +329,37 @@ class InactiveDB:
             # We load the database.
             self.load()
 
-            if self.filename in self.database:
-                for data in [x for x in self.database[self.filename] if x.isdigit()]:
-                    # We loop through the database content related to the file we
-                    # are testing.
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                if self.filename in self.database:
+                    for data in [
+                        x for x in self.database[self.filename] if x.isdigit()
+                    ]:
+                        # We loop through the database content related to the file we
+                        # are testing.
 
-                    if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
-                        # The currently read index is older than the excepted time
-                        # for retesting.
+                        if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
+                            # The currently read index is older than the excepted time
+                            # for retesting.
 
-                        # We extend our result variable with the content from the
-                        # currently read index.
-                        result.extend(self.database[self.filename][data])
+                            # We extend our result variable with the content from the
+                            # currently read index.
+                            result.extend(self.database[self.filename][data])
 
-                        # And we append the currently read index into the list of
-                        # index to delete.
-                        to_delete.append(data)
+                            # And we append the currently read index into the list of
+                            # index to delete.
+                            to_delete.append(data)
 
-                # We remove all indexes which are present into the list of index to delete.
-                Dict(self.database[self.filename]).remove_key(to_delete)
+                    # We remove all indexes which are present into the list of index to delete.
+                    Dict(self.database[self.filename]).remove_key(to_delete)
 
-                # And we append our list of element to retest into the `to_test` index.s
-                self._add_to_test(result)
+                    # And we append our list of element to retest into the `to_test` index.s
+                    self._add_to_test(result)
 
-                # And we finally save the database.
-                self.save()
-            else:  # pragma: no cover
-                # We create the current file namepace
-                self.database[self.filename] = {"to_test": []}
+                    # And we finally save the database.
+                    self.save()
+                else:  # pragma: no cover
+                    # We create the current file namepace
+                    self.database[self.filename] = {"to_test": []}
 
     def _timestamp(self):
         """
@@ -343,7 +369,11 @@ class InactiveDB:
         :rtype: int|str
         """
 
-        if self.authorized and self.filename in self.database:
+        if (
+            PyFunceble.CONFIGURATION["db_type"] == "json"
+            and self.authorized
+            and self.filename in self.database
+        ):
             # * We are authorized to operate.
             # and
             # * The currently tested file is already in the database.
@@ -398,33 +428,59 @@ class InactiveDB:
         if self.authorized:
             # We are authorized to operate.
 
-            # We get the timestamp to use as index.
-            timestamp = str(self._timestamp())
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                # We get the timestamp to use as index.
+                timestamp = str(self._timestamp())
 
-            if self.filename in self.database:
-                # * The file path is not into the database.
+                if self.filename in self.database:
+                    # * The file path is not into the database.
 
-                # We append the index and the database element into the databse
-                # related to the file we are testing.
-                self[timestamp] = [subject]
+                    # We append the index and the database element into the databse
+                    # related to the file we are testing.
+                    self[timestamp] = [subject]
 
-                if self["to_test"] and subject in self["to_test"]:
-                    # * The `to_test` index is into the database related to the file we
-                    #   are testing.
-                    # and
-                    # * The element we are testing is into the `to_test` index related to
-                    #   the file we are testing.
+                    if self["to_test"] and subject in self["to_test"]:
+                        # * The `to_test` index is into the database related to the file we
+                        #   are testing.
+                        # and
+                        # * The element we are testing is into the `to_test` index related to
+                        #   the file we are testing.
 
-                    # We remove the element from the list of element to test.
-                    self["to_test"].remove(subject)
-            else:
-                # The file path is not into the database.
+                        # We remove the element from the list of element to test.
+                        self["to_test"].remove(subject)
+                else:
+                    # The file path is not into the database.
 
-                # We initiate the file path and its content into the database.
-                self[timestamp] = [subject]
+                    # We initiate the file path and its content into the database.
+                    self[timestamp] = [subject]
+                # And we save the database.
+                self.save()
+            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = (
+                    "INSERT INTO inactive "
+                    "(file_path, subject) "
+                    "VALUES (:file, :subject)"
+                )
 
-            # And we save the database.
-            self.save()
+                try:
+                    # We execute the query.
+                    self.sqlite_db.cursor.execute(
+                        query, {"subject": subject, "file": self.filename}
+                    )
+                except self.sqlite_db.errors:
+                    query = (
+                        "UPDATE inactive "
+                        "SET subject = :subject "
+                        "WHERE file_path = :file AND subject = :subject"
+                    )
+
+                    # We execute the query.
+                    self.sqlite_db.cursor.execute(
+                        query, {"subject": subject, "file": self.filename}
+                    )
+
+                # And we commit the changes.
+                self.sqlite_db.connection.commit()
 
     def remove(self, subject):
         """
@@ -436,30 +492,94 @@ class InactiveDB:
         if self.authorized:
             # We are authorized to operate.
 
-            for data in self.database[self.filename]:
-                # We loop through the index of the file database.
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                for data in self.database[self.filename]:
+                    # We loop through the index of the file database.
 
-                if subject in self[data]:
-                    # The currently tested element into the currently read index.
+                    if subject in self[data]:
+                        # The currently tested element into the currently read index.
 
-                    # We remove the currently tested element from the read index.
-                    self[data].remove(subject)
+                        # We remove the currently tested element from the read index.
+                        self[data].remove(subject)
 
-            # And we save the data into the database.
-            self.save()
+                # And we save the data into the database.
+                self.save()
+            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                # We construct the query we are going to execute.
+                query = (
+                    "DELTE FROM inactive "
+                    "WHERE file_path = :file "
+                    "AND subject = :subject"
+                )
+                # We execute it.
+                self.sqlite_db.cursor.execute(
+                    query, {"file": self.filename, "subject": subject}
+                )
+                # We commit everything.
+                self.sqlite_db.connection.commit()
+
+    def get_to_retest(self):  # pylint: pragma: no cover
+        """
+        Return a set of subject to restest.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            try:
+                return [
+                    z
+                    for x, y in self.database[self.filename].items()
+                    if x.isdigit()
+                    and int(PyFunceble.time()) > int(x) + self.days_in_seconds
+                    for z in y
+                ]
+            except KeyError:
+                return []
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = (
+                "SELECT * FROM inactive WHERE file_path=:file "
+                "AND CAST(strftime('%s', 'now') AS INTEGER) "
+                "> (CAST(strftime('%s',modified) AS INTEGER) + CAST(:days AS INTEGER))"
+            )
+
+            output = self.sqlite_db.cursor.execute(
+                query, {"file": self.filename, "days": self.days_in_seconds}
+            )
+            fetched = output.fetchall()
+
+            if fetched:
+                return [x["subject"] for x in fetched]
+        return []
 
     def get_already_tested(self):  # pragma: no cover
         """
         Return a set of already tested subjects.
         """
 
-        try:
-            return {
-                z
-                for x, y in self.database[self.filename].items()
-                if x.isdigit()
-                and int(PyFunceble.time()) < int(x) + self.days_in_seconds
-                for z in y
-            }
-        except KeyError:
-            return set()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            try:
+                return {
+                    z
+                    for x, y in self.database[self.filename].items()
+                    if x.isdigit()
+                    and int(PyFunceble.time()) < int(x) + self.days_in_seconds
+                    for z in y
+                }
+            except KeyError:
+                return set()
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = (
+                "SELECT * FROM inactive WHERE file_path=:file "
+                "AND CAST(strftime('%s', 'now') AS INTEGER) "
+                "< (CAST(strftime('%s',modified) AS INTEGER) + CAST(:days AS INTEGER))"
+            )
+
+            output = self.sqlite_db.cursor.execute(
+                query, {"file": self.filename, "days": self.days_in_seconds}
+            )
+            fetched = output.fetchall()
+
+            if fetched:
+                return {x["subject"] for x in fetched}
+        return set()

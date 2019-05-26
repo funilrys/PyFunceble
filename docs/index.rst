@@ -163,6 +163,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    code/referer
    code/simple_core
    code/sort
+   code/sqlite
    code/status
    code/whois_db
    code/whois

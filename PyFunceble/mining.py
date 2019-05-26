@@ -78,13 +78,15 @@ class Mining:
     filename = None
     headers = {}
 
-    def __init__(self, filename):  # pragma: no cover
+    def __init__(self, filename, sqlite_db=None):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
         # We save the file we are working with.
         self.filename = filename
         # Se create the current file namespace.
         self.database[self.filename] = {}
+
+        self.sqlite_db = sqlite_db
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -104,55 +106,83 @@ class Mining:
 
             self.load()
 
-    def __contains__(self, subject):
-        if self.authorized:
-            if subject not in self.is_subject_present_cache:
-                for element in self.database[self.filename].keys():
-                    if subject in self[element]:
-                        self.is_subject_present_cache[subject] = True
-                        break
-                    else:
-                        self.is_subject_present_cache[subject] = False
-                        continue
-
-                if subject not in self.is_subject_present_cache:  # pragma: no cover
-                    self.is_subject_present_cache[subject] = False
-
-            return self.is_subject_present_cache[subject]
-        return False  # pragma: no covers
-
     def __getitem__(self, index):
-        if index in self.database[self.filename]:
-            return self.database[self.filename][index]
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if index in self.database[self.filename]:
+                return self.database[self.filename][index]
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = (
+                "SELECT * "
+                "FROM mining "
+                "WHERE file_path=:file "
+                "AND subject = :subject "
+            )
+
+            output = self.sqlite_db.cursor.execute(
+                query, {"file": self.filename, "subject": index}
+            )
+            fetched = output.fetchall()
+
+            if fetched:
+                return [x["mined"] for x in fetched]
+
         return None
 
-    def __setitem__(self, index, value):
-        actual_value = self[index]
+    def __setitem__(self, index, value):  # pylint: disable=too-many-branches
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            actual_value = self[index]
 
-        if actual_value:
-            if isinstance(actual_value, dict):
-                if isinstance(value, dict):  # pragma: no cover
-                    self.database[self.filename][index].update(value)
+            if actual_value:
+                if isinstance(actual_value, dict):
+                    if isinstance(value, dict):  # pragma: no cover
+                        self.database[self.filename][index].update(value)
+                    else:  # pragma: no cover
+                        self.database[self.filename][index] = value
+                elif isinstance(actual_value, list):
+                    if isinstance(value, list):
+                        self.database[self.filename][index].extend(value)
+                    else:  # pragma: no cover
+                        self.database[self.filename][index].append(value)
                 else:  # pragma: no cover
                     self.database[self.filename][index] = value
-            elif isinstance(actual_value, list):
-                if isinstance(value, list):
-                    self.database[self.filename][index].extend(value)
-                else:  # pragma: no cover
-                    self.database[self.filename][index].append(value)
-            else:  # pragma: no cover
-                self.database[self.filename][index] = value
-        else:
-            if self.filename not in self.database:  # pragma: no cover
-                self.database[self.filename] = {}
+            else:
+                if self.filename not in self.database:  # pragma: no cover
+                    self.database[self.filename] = {}
 
-            self.database[self.filename][index] = value
+                self.database[self.filename][index] = value
+        elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = (
+                "INSERT INTO mining "
+                "(file_path, subject, mined) "
+                "VALUES (:file, :subject, :mined)"
+            )
+
+            for val in value:
+                try:
+                    # We execute the query.
+                    self.sqlite_db.cursor.execute(
+                        query, {"subject": index, "file": self.filename, "mined": val}
+                    )
+                    # And we commit the changes.
+                    self.sqlite_db.connection.commit()
+                except self.sqlite_db.errors:
+                    pass
 
     def __delitem__(self, index):  # pragma: no cover
-        actual_value = self[index]
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            actual_value = self[index]
 
-        if actual_value:
-            del self.database[self.filename][index]
+            if actual_value:
+                del self.database[self.filename][index]
+        elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = "DELTE FROM mining WHERE file_path = :file AND :subject = :subject "
+
+            # We execute the query.
+            self.sqlite_db.cursor.execute(
+                query, {"subject": index, "file": self.filename}
+            )
+            # And we commit the changes.
+            self.sqlite_db.connection.commit()
 
     @classmethod
     def authorization(cls):
@@ -215,15 +245,25 @@ class Mining:
         if self.authorized:
             # We are authorized to operate.
 
-            for subject in self.database[self.filename].keys():
-                # We loop through the available list of status
-                # from the database.
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
 
-                for element in self[subject]:
-                    # We then loop through the data associatied to
-                    # the currently read status.
+                for subject in self.database[self.filename].keys():
+                    # We loop through the available list of status
+                    # from the database.
 
-                    result.append((subject, element))
+                    for element in self[subject]:
+                        # We then loop through the data associatied to
+                        # the currently read status.
+
+                        result.append((subject, element))
+            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = "SELECT * " "FROM mining " "WHERE file_path=:file "
+
+                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
+                fetched = output.fetchall()
+
+                if fetched:
+                    result = [(x["subject"], x["mined"]) for x in fetched]
 
         # We return the result.
         return result
@@ -233,7 +273,7 @@ class Mining:
         Load the content of the database file.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             if PyFunceble.path.isfile(self.database_file):
@@ -247,7 +287,7 @@ class Mining:
         Save the content of the database into the database file.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             # We save the database into the file.
@@ -347,10 +387,29 @@ class Mining:
             actual_value = self[subject]
 
             if isinstance(actual_value, list) and history_member in actual_value:
-                try:
-                    actual_value.remove(history_member)
-                except ValueError:  # pragma: no cover
-                    pass
+
+                if PyFunceble.CONFIGURATION["db_type"] == "json":
+                    try:
+                        actual_value.remove(history_member)
+                    except ValueError:  # pragma: no cover
+                        pass
+                elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                    # We construct the query string.
+                    query = (
+                        "DELETE FROM mining "
+                        "WHERE file_path = :file AND subject = :subject AND mined =: mined"
+                    )
+                    # We execute the query.
+                    self.sqlite_db.cursor.execute(
+                        query,
+                        {
+                            "subject": subject,
+                            "file": self.filename,
+                            "mined": history_member,
+                        },
+                    )
+                    # And we commit the changes.
+                    self.sqlite_db.connection.commit()
             else:
                 break
 

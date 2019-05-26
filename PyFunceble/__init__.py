@@ -70,7 +70,7 @@ from os import sep as directory_separator
 from os import walk
 from platform import system
 from shutil import copy, rmtree
-from time import mktime, strftime, strptime, time
+from time import mktime, sleep, strftime, strptime, time
 
 import requests
 from colorama import Back, Fore, Style
@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.65.0.dev -- 2_0_0_rc17 -- (Blue Bontebok: Beetle)"
+VERSION = "1.66.0.dev -- 2_0_0_rc18 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -797,6 +797,18 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
+                    "--database-type",
+                    type=str,
+                    help="Tell us the type of database to use. "
+                    "You can choose between the following: `json|sqlite` %s"
+                    % (
+                        CURRENT_VALUE_FORMAT
+                        + repr(CONFIGURATION["db_type"])
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                PARSER.add_argument(
                     "-dbr",
                     "--days-between-db-retest",
                     type=int,
@@ -1307,6 +1319,19 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     CONFIGURATION.update(
                         {"inactive_database": Preset().switch("inactive_database")}
                     )
+
+                if ARGS.database_type:
+                    if ARGS.database_type.lower() in ["json", "sqlite"]:
+                        CONFIGURATION.update({"db_type": ARGS.database_type.lower()})
+                    else:
+                        print(
+                            Style.BRIGHT
+                            + Fore.RED
+                            + "Unknown database type: {0}".format(
+                                repr(ARGS.database_type)
+                            )
+                        )
+                        exit(1)
 
                 if ARGS.days_between_db_retest:
                     CONFIGURATION.update(

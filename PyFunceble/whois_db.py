@@ -74,7 +74,7 @@ class WhoisDB:
     database_file = None
     authorized = False
 
-    def __init__(self):
+    def __init__(self, sqlite_db=None):
         # Get the authorization.
         self.authorized = self.authorization()
 
@@ -83,35 +83,86 @@ class WhoisDB:
             PyFunceble.CONFIG_DIRECTORY, PyFunceble.OUTPUTS["default_files"]["whois_db"]
         )
 
+        self.sqlite_db = sqlite_db
+
         # We load the configuration.
         self.load()
 
     def __contains__(self, index):
-        if index in self.database:
-            return True
-        return False
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if index in self.database:
+                return True
+            return False
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = "SELECT COUNT(*) " "FROM whois " "WHERE subject = :subject"
+            output = self.sqlite_db.cursor.execute(query, {"subject": index})
+            fetched = output.fetchone()
+
+            return fetched[0] != 0
+
+        return False  # pragma: no cover
 
     def __getitem__(self, index):
-        if index in self.database:
-            return self.database[index]
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if index in self.database:
+                return self.database[index]
 
-        return None
+            return None
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = "SELECT * FROM whois WHERE subject=:subject"
+
+            output = self.sqlite_db.cursor.execute(query, {"subject": index})
+            fetched = output.fetchone()
+
+            if fetched:
+                return {
+                    "epoch": fetched["expiration_date_epoch"],
+                    "expiration_date": fetched["expiration_date"],
+                    "state": fetched["state"],
+                }
+
+        return None  # pragma: no cover
 
     def __setitem__(self, index, value):
-        actual_value = self[index]
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            actual_value = self[index]
 
-        if isinstance(actual_value, dict):
-            if isinstance(value, dict):
-                self.database[index].update(value)
-            else:  # pragma: no cover
+            if isinstance(actual_value, dict):
+                if isinstance(value, dict):
+                    self.database[index].update(value)
+                else:  # pragma: no cover
+                    self.database[index] = value
+            elif isinstance(actual_value, list):
+                if isinstance(value, list):  # pragma: no cover
+                    self.database[index].extend(value)
+                else:  # pragma: no cover
+                    self.database[index].append(value)
+            else:
                 self.database[index] = value
-        elif isinstance(actual_value, list):
-            if isinstance(value, list):  # pragma: no cover
-                self.database[index].extend(value)
-            else:  # pragma: no cover
-                self.database[index].append(value)
-        else:
-            self.database[index] = value
+        elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            query = (
+                "INSERT INTO whois "
+                "(subject, expiration_date, expiration_date_epoch, state) "
+                "VALUES (:subject, :expiration_date, :epoch, :state)"
+            )
+
+            try:
+                # We execute the query.
+                self.sqlite_db.cursor.execute(
+                    query,
+                    {
+                        "subject": index,
+                        "expiration_date": value["expiration_date"],
+                        "epoch": value["epoch"],
+                        "state": value["state"],
+                    },
+                )
+                # And we commit the changes.
+                self.sqlite_db.connection.commit()
+            except self.sqlite_db.errors:
+                pass
 
     @classmethod
     def authorization(cls):
@@ -139,23 +190,24 @@ class WhoisDB:
         # We initiate a local place to save our results.
         result = {}
 
-        for index, data in old.items():
-            # We loop through all indexes and data of the database.
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            for index, data in old.items():
+                # We loop through all indexes and data of the database.
 
-            if isinstance(data, dict) and "epoch" in data:
-                # The epoch index is present into the currently
-                # read dataset.
+                if isinstance(data, dict) and "epoch" in data:
+                    # The epoch index is present into the currently
+                    # read dataset.
 
-                # We create the copy of the dataset for our result.
-                result[index] = data
+                    # We create the copy of the dataset for our result.
+                    result[index] = data
 
-                continue
-            elif isinstance(data, dict):
-                # The read data is a dict.
+                    continue
+                elif isinstance(data, dict):
+                    # The read data is a dict.
 
-                # We save the content of of the currently read dataset
-                # into the upstream index.
-                result.update(data)
+                    # We save the content of of the currently read dataset
+                    # into the upstream index.
+                    result.update(data)
 
         # We return the result.
         return result
@@ -165,7 +217,11 @@ class WhoisDB:
         Load the database file into the database.
         """
 
-        if self.authorized and PyFunceble.path.isfile(self.database_file):
+        if (
+            self.authorized
+            and PyFunceble.path.isfile(self.database_file)
+            and PyFunceble.CONFIGURATION["db_type"] == "json"
+        ):
             # * We are authorized to operate.
             # and
             # * The database file exists.
@@ -184,7 +240,7 @@ class WhoisDB:
         Save the database into the database file.
         """
 
-        if self.authorized:
+        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are authorized to operate.
 
             # We save the current state of the datbase.

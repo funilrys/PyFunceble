@@ -159,106 +159,111 @@ class TestWhoisDB(TestCase):
         Test the case that we want to load the database file that exist.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        Dict(self.expected_content).to_json(self.file)
-        self.whois_db.load()
+            Dict(self.expected_content).to_json(self.file)
+            self.whois_db.load()
 
-        self.assertEqual(self.expected_content, self.whois_db.database)
+            self.assertEqual(self.expected_content, self.whois_db.database)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
     def test_save(self):
         """
         Test the saving of the database.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        self.whois_db.database = self.expected_content
-        self.whois_db.save()
+            self.whois_db.database = self.expected_content
+            self.whois_db.save()
 
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-        self.assertEqual(expected, actual)
+            expected = True
+            actual = PyFunceble.path.isfile(self.file)
+            self.assertEqual(expected, actual)
 
-        self.whois_db.database = {}
-        self.whois_db.load()
+            self.whois_db.database = {}
+            self.whois_db.load()
 
-        self.assertEqual(self.expected_content, self.whois_db.database)
+            self.assertEqual(self.expected_content, self.whois_db.database)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
     def test_is_in_database(self):
         """
         Test the check.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        self.whois_db.database = self.expected_content
+            self.whois_db.database = self.expected_content
 
-        expected = True
-        actual = "google.com" in self.whois_db
+            expected = True
+            actual = "google.com" in self.whois_db
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        expected = False
-        actual = "hello.google.com" in self.whois_db
+            expected = False
+            actual = "hello.google.com" in self.whois_db
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
     def test_is_time_older(self):
         """
         Test if a time is older or not than the current date.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        self.whois_db.database = self.expected_content
+            self.whois_db.database = self.expected_content
 
-        self.whois_db.database["google.com"]["epoch"] = PyFunceble.time() - (
-            15 * (60 * 60 * 24)
-        )
+            self.whois_db.database["google.com"]["epoch"] = PyFunceble.time() - (
+                15 * (60 * 60 * 24)
+            )
 
-        expected = True
-        actual = self.whois_db.is_time_older("google.com")
+            expected = True
+            actual = self.whois_db.is_time_older("google.com")
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.whois_db.database["google.com"]["epoch"] = PyFunceble.time() + (
-            15 * (60 * 60 * 24)
-        )
+            self.whois_db.database["google.com"]["epoch"] = PyFunceble.time() + (
+                15 * (60 * 60 * 24)
+            )
 
-        expected = False
-        actual = self.whois_db.is_time_older("google.com")
+            expected = False
+            actual = self.whois_db.is_time_older("google.com")
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
     def test_get_expiration_date(self):
         """
         Test the way we get the expiration date from the database.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        self.whois_db.database = self.expected_content
+            self.whois_db.database = self.expected_content
 
-        expected = "14-sep-2020"
-        actual = self.whois_db.get_expiration_date("google.com")
+            expected = "14-sep-2020"
+            actual = self.whois_db.get_expiration_date("google.com")
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        expected = None
-        actual = self.whois_db.get_expiration_date("hello.google.com")
+            expected = None
+            actual = self.whois_db.get_expiration_date("hello.google.com")
 
-        self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
     def test_add(self):
         """
@@ -266,42 +271,47 @@ class TestWhoisDB(TestCase):
         the database.
         """
 
-        self.test_file_not_exist()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            self.test_file_not_exist()
 
-        self.whois_db.database = {}
+            self.whois_db.database = {}
 
-        epoch = int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2022", "%d-%b-%Y")))
+            epoch = int(
+                PyFunceble.mktime(PyFunceble.strptime("25-dec-2022", "%d-%b-%Y"))
+            )
 
-        expected = {
-            "microsoft.google.com": {
-                "epoch": epoch,
-                "expiration_date": "25-dec-2022",
-                "state": "future",
+            expected = {
+                "microsoft.google.com": {
+                    "epoch": epoch,
+                    "expiration_date": "25-dec-2022",
+                    "state": "future",
+                }
             }
-        }
 
-        self.whois_db.add("microsoft.google.com", "25-dec-2022")
-        self.assertEqual(expected, self.whois_db.database)
+            self.whois_db.add("microsoft.google.com", "25-dec-2022")
+            self.assertEqual(expected, self.whois_db.database)
 
-        self.whois_db.database["microsoft.google.com"]["state"] = "hello"
+            self.whois_db.database["microsoft.google.com"]["state"] = "hello"
 
-        self.whois_db.add("microsoft.google.com", "25-dec-2022")
-        self.assertEqual(expected, self.whois_db.database)
+            self.whois_db.add("microsoft.google.com", "25-dec-2022")
+            self.assertEqual(expected, self.whois_db.database)
 
-        epoch = int(PyFunceble.mktime(PyFunceble.strptime("25-dec-2007", "%d-%b-%Y")))
+            epoch = int(
+                PyFunceble.mktime(PyFunceble.strptime("25-dec-2007", "%d-%b-%Y"))
+            )
 
-        expected = {
-            "microsoft.google.com": {
-                "epoch": epoch,
-                "expiration_date": "25-dec-2007",
-                "state": "past",
+            expected = {
+                "microsoft.google.com": {
+                    "epoch": epoch,
+                    "expiration_date": "25-dec-2007",
+                    "state": "past",
+                }
             }
-        }
 
-        self.whois_db.add("microsoft.google.com", "25-dec-2007")
-        self.assertEqual(expected, self.whois_db.database)
+            self.whois_db.add("microsoft.google.com", "25-dec-2007")
+            self.assertEqual(expected, self.whois_db.database)
 
-        self.test_file_not_exist()
+            self.test_file_not_exist()
 
 
 if __name__ == "__main__":

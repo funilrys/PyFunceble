@@ -61,7 +61,6 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble import directory_separator
-from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
@@ -152,6 +151,21 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
             # We initiate an empty header to use with our request.
             self.headers = {}
+
+    @classmethod
+    def _do_not_produce_file(cls):
+        """
+        Check if we are allowed to produce a file based from the given
+        information.
+
+        :return:
+            The state of the production.
+            True: We do not produce file.
+            False: We do produce file.
+        :rtype: bool
+        """
+
+        return PyFunceble.CONFIGURATION["no_files"]
 
     def _analytic_host_file_directory(self):
         """
@@ -871,30 +885,3 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
             # We print or generate the unified files.
             self.unified_file()
-
-    def _do_not_produce_file(self):
-        """
-        Check if we are allowed to produce a file based from the given
-        information.
-
-        :return:
-            The state of the production.
-            True: We do not produce file.
-            False: We do produce file.
-        :rtype: bool
-        """
-
-        if PyFunceble.CONFIGURATION["no_files"]:
-            return True
-
-        if self.filename:
-            inactive_db = InactiveDB(self.filename)
-        else:
-            inactive_db = []
-
-        if self.subject in inactive_db and self.status in [
-            PyFunceble.STATUS["official"]["down"],
-            PyFunceble.STATUS["official"]["invalid"],
-        ]:
-            return True
-        return False

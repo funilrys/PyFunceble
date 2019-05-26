@@ -91,12 +91,20 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
 
     output = {}
 
-    def __init__(self, subject, subject_type="domain", filename=None, whois_db=None):
+    def __init__(
+        self,
+        subject,
+        subject_type="domain",
+        filename=None,
+        whois_db=None,
+        inactive_db=None,
+    ):  # pylint: disable=too-many-arguments
         self.subject = subject
         self.subject_type = subject_type.lower()
         self.filename = filename
 
         self.whois_db = whois_db
+        self.inactive_db = inactive_db
         self.checker = PyFunceble.Check(self.subject)
 
     def get(self):
@@ -232,18 +240,22 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.output["_status_source"],
             )
 
-        # We generate the status file with the invalid status.
-        Generate(
-            self.subject,
-            self.subject_type,
-            self.output["status"],
-            source=self.output["status_source"],
-            expiration_date=self.output["expiration_date"],
-            http_status_code=self.output["http_status_code"],
-            whois_server=self.output["whois_server"],
-            filename=self.filename,
-            ip_validation=ip_validation_status,
-        ).status_file()
+        if self.subject not in self.inactive_db or self.output["status"] not in [
+            PyFunceble.STATUS["official"]["down"],
+            PyFunceble.STATUS["official"]["invalid"],
+        ]:
+            # We generate the status file with the invalid status.
+            Generate(
+                self.subject,
+                self.subject_type,
+                self.output["status"],
+                source=self.output["status_source"],
+                expiration_date=self.output["expiration_date"],
+                http_status_code=self.output["http_status_code"],
+                whois_server=self.output["whois_server"],
+                filename=self.filename,
+                ip_validation=ip_validation_status,
+            ).status_file()
 
 
 class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
@@ -677,7 +689,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     :param str filename: The name of the file we are working with.
     """
 
-    def __init__(self, subject, subject_type="url", filename=None):
+    def __init__(self, subject, subject_type="url", filename=None, inactive_db=None):
         # We share the subject.
         self.subject = subject
         # We share the subject type.
@@ -686,6 +698,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         self.filename = filename
 
         self.checker = PyFunceble.Check(self.subject)
+        self.inactive_db = inactive_db
 
         # We initiate what we are going to return.
         self.output = {
@@ -747,15 +760,19 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         Handle the backend of the given status.
         """
 
-        # We generate the status file with the catched status.
-        Generate(
-            self.subject,
-            self.subject_type,
-            self.output["status"],
-            source=self.output["status_source"],
-            http_status_code=self.output["http_status_code"],
-            filename=self.filename,
-        ).status_file()
+        if self.subject not in self.inactive_db or self.output["status"] not in [
+            PyFunceble.STATUS["official"]["down"],
+            PyFunceble.STATUS["official"]["invalid"],
+        ]:
+            # We generate the status file with the catched status.
+            Generate(
+                self.subject,
+                self.subject_type,
+                self.output["status"],
+                source=self.output["status_source"],
+                http_status_code=self.output["http_status_code"],
+                filename=self.filename,
+            ).status_file()
 
 
 class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods

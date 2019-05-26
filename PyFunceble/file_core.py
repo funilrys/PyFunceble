@@ -73,6 +73,7 @@ from PyFunceble.helpers import Download, List, Regex
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mining import Mining
 from PyFunceble.sort import Sort
+from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -109,18 +110,23 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
         self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
 
+        # We get/initiate the sqlite.
+        self.sqlite_db = SQLite()
+
         # We get/initiate the preset class.
         self.preset = PyFunceble.Preset()
         # We get/initiate the autosave database/subsyste..
         self.autosave = AutoSave(start_time=PyFunceble.INTERN["start"])
         # We get/initiate the inactive database.
-        self.inactive_db = InactiveDB(self.file)
+        self.inactive_db = InactiveDB(self.file, sqlite_db=self.sqlite_db)
         # We get/initiate the whois database.
-        self.whois_db = WhoisDB()
+        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db)
         # We get/initiate the mining subsystem.
         self.mining = Mining(self.file)
         # We get/initiate the autocontinue subsystem.
-        self.autocontinue = AutoContinue(self.file, parent_process=True)
+        self.autocontinue = AutoContinue(
+            self.file, parent_process=True, sqlite_db=self.sqlite_db
+        )
 
         # We initiate a variable which will tell us when
         # we start testing for complements.
@@ -206,6 +212,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                     subject_type="file_domain",
                     filename=self.file,
                     whois_db=self.whois_db,
+                    inactive_db=self.inactive_db,
                 ).get()["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
@@ -250,7 +257,10 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             else:
                 # We test and get the status of the domain.
                 status = URLStatus(
-                    subject, subject_type="file_url", filename=self.file
+                    subject,
+                    subject_type="file_url",
+                    filename=self.file,
+                    inactive_db=self.inactive_db,
                 ).get()["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
@@ -434,22 +444,17 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if manager_data is not None:
-            # We are in a mulitiprocess environment.
-
-            # We create a new autocontinue instance.
+        if PyFunceble.CONFIGURATION["db_type"] == "json" and manager_data is not None:
             autocontinue = AutoContinue(self.file, parent_process=False)
-            # We create a new inactive database instance.
             inactive_db = InactiveDB(self.file)
-            # We create a new mining instance.
             mining = Mining(self.file)
         else:
-            # We are not in a multiprocess environment.
-
             # We use the previously initiated autocontinue instance.
             autocontinue = self.autocontinue
+
             # We use the previously initiated inactive database instance.
             inactive_db = self.inactive_db
+
             # We use the previously initiated mining instance.
             mining = self.mining
 
@@ -559,9 +564,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if manager_data is None:
             # We are not in a multiprocess environment.
 
+            # We update the counters
+            autocontinue.update_counters()
+
             # We process the autosaving if it is necessary.
             self.autosave.process(test_completed=False)
-        else:
+        elif PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are in a multiprocess environment.
 
             # We save everything we initiated into the server process
@@ -602,7 +610,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # We do not have to adblock decode the content
                 # of the file.
 
-                for line in chain(file, self.inactive_db["to_test"]):
+                for line in chain(file, self.inactive_db.get_to_retest()):
                     # We loop through the file content and the
                     # inactive dataset to retest.
 
@@ -611,7 +619,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             else:
                 # We do have to decode the content of the file.
 
-                for line in chain(AdBlock(file).decode(), self.inactive_db["to_test"]):
+                for line in chain(
+                    AdBlock(file).decode(), self.inactive_db.get_to_retest()
+                ):
                     # We loop through the file decoded file
                     # content.
 
@@ -640,8 +650,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We inform all subsystem that we are not testing for complements anymore.
             self.complements_test_started = False
 
+        # We update the counters
+        self.autocontinue.update_counters()
         # We clean the autocontinue subsystem, we finished
         # the test.
         self.autocontinue.clean()
         # We process the autosaving if necessary.
         self.autosave.process(test_completed=True)
+        # We close the database connection
+        self.sqlite_db.connection.close()

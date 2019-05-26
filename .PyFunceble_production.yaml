@@ -10,6 +10,8 @@ command_before_end: ""
 custom_ip: "0.0.0.0"
 # Set the number of day(s) between each retest of the INACTIVE and INVALID elements which are present into inactive_db.json
 days_between_db_retest: 1
+# Set the db type to use.
+db_type: json
 # Enable / disable the generation of debug file(s).
 debug: False
 # Set the DNS server to use. If None is given we use the one given by the OS.
@@ -103,6 +105,12 @@ outputs:
     public_suffix: public-suffix.json
     mining: mining.json
     whois_db: whois_db.json
+    sqlite: pyfunceble.db
+
+  db_type:
+    directory: db_types
+    files:
+      sqlite: sqlite.sql
 
   domains:
     directory: domains
@@ -244,3 +252,4 @@ links:
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"
   psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
+  sqlite: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/sqlite.sql"

@@ -132,7 +132,14 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We load the installed configuration.
                 self._load_config_file()
 
-        for main_key in ["domains", "hosts", "splited", "json", "complements"]:
+        for main_key in [
+            "domains",
+            "hosts",
+            "splited",
+            "json",
+            "complements",
+            "db_type",
+        ]:
             # We loop through the key which contain paths under the `outputs` index.
 
             # And we fix the path.
@@ -237,6 +244,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We install the latest directory structure file.
             self._install_directory_structure_file()
+
+            # We install the db types files.
+            self._install_db_type_files()
         except FileNotFoundError as exception:
             # But if the configuration file is not found.
 
@@ -281,6 +291,44 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         # And we download the link content and return the download status.
         return Download(production_config_link, self.path_to_config).text()
+
+    @classmethod
+    def _install_db_type_files(cls):
+        """
+        Create the .db_type directory if it does not exists and update
+        its content.
+        """
+
+        destination_dir = (
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.CONFIGURATION["outputs"]["db_type"]["directory"]
+        )
+
+        if not Version(True).is_cloned():
+            # The current version is not the cloned version.
+
+            if not PyFunceble.path.isdir(destination_dir):
+                PyFunceble.mkdir(destination_dir)
+
+            # We set the list of index to download.
+            index_to_download = ["sqlite"]
+
+            for index in index_to_download:
+                # We loop through the list of indexes.
+
+                # We create the right link.
+                link_to_download = Version(True).right_url_from_version(
+                    PyFunceble.CONFIGURATION["links"][index]
+                )
+
+                # We create the destination.
+                destination = (
+                    destination_dir
+                    + PyFunceble.CONFIGURATION["outputs"]["db_type"]["files"][index]
+                )
+
+                # We finally download the file.
+                Download(link_to_download, destination).text()
 
     @classmethod
     def _install_iana_config(cls):

@@ -64,6 +64,67 @@
 
     **Description:** Set the default filename of the file which will save the mirror of what is shown on screen.
 
+:code:`outputs[default_files][mining]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`mining.json`
+
+    **Description:** Set the default filename of the file which will save the temporary list of mined subject to test.
+
+
+:code:`outputs[default_files][whois_db`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`whois_db.json`
+
+    **Description:** Set the default filename of the file which will save the whois information for caching.
+
+:code:`outputs[default_files][sqlite]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`pyfunceble.db`
+
+    **Description:** Set the default filename of the file which will save all database in sqlite format.
+
+:code:`outputs[db_type]`
+""""""""""""""""""""""""
+
+    **Type:** :code:`dict`
+
+    **Description:** Set the default name of some important files related to the :code:`db_type` index.
+
+:code:`outputs[db_type][directory]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`.db_type/`
+
+    **Description:** Set the default directory where we have to save the SQL files which we are later going to be used for database generation/creation.
+
+:code:`outputs[db_type][files]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`dict`
+
+    **Description:** Set the default name of some important files related to the :code:`db_type` index.
+
+
+:code:`outputs[db_type][files][sqlite]`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`sqlite.sql`
+
+    **Description:** Set the default name of the file to call when we have to construct the SQLite database.
+
 :code:`outputs[domains]`
 """"""""""""""""""""""""
 
