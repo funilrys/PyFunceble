@@ -302,6 +302,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         destination_dir = (
             PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.CONFIGURATION["outputs"]["db_type"]["directory"]
+            + PyFunceble.directory_separator
         )
 
         if not Version(True).is_cloned():
