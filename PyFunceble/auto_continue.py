@@ -338,7 +338,14 @@ class AutoContinue:
                     query = (
                         "SELECT COUNT(*) "
                         "FROM auto_continue "
-                        "WHERE status=:status and file_path=:file"
+                        "WHERE status=:status and file_path=:file "
+                        "AND subject "
+                        "NOT IN ("
+                        "SELECT subject "
+                        "FROM inactive "
+                        "WHERE created != modified "
+                        "AND file_path = :file "
+                        ")"
                     )
 
                     output = self.sqlite_db.cursor.execute(
