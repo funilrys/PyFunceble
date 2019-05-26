@@ -101,13 +101,29 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # and
             # * The given action is stop.
 
+            formatted_time = self.format_execution_time()
+
             # We print the execution time.
             print(
                 PyFunceble.Fore.MAGENTA
                 + PyFunceble.Style.BRIGHT
                 + "\nExecution time: "
-                + self.format_execution_time()
+                + formatted_time
             )
+
+            percentage_output = (
+                PyFunceble.OUTPUT_DIRECTORY
+                + PyFunceble.OUTPUTS["parent_directory"]
+                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+                + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]
+                + PyFunceble.OUTPUTS["logs"]["filenames"]["percentage"]
+            )
+
+            if PyFunceble.CONFIGURATION["show_percentage"] and PyFunceble.path.isfile(
+                percentage_output
+            ):
+                with open(percentage_output, "a", encoding="utf-8") as file_stream:
+                    file_stream.write("\nExecution time: {0}".format(formatted_time))
 
         self._save(last=last)
 
