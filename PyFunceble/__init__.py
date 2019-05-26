@@ -93,7 +93,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.67.0.dev -- 2_0_0_rc19 -- (Blue Bontebok: Beetle)"
+VERSION = "1.67.1.dev -- 2_0_0_rc19 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -626,12 +626,13 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
         # We initiate the end of the coloration at the end of each line.
         initiate_colorama(autoreset=True)
 
-        # We load the configuration.
-        load_config(generate_directory_structure=False)
         try:
             # The following handle the command line argument.
 
             try:
+                # We load the configuration.
+                load_config(generate_directory_structure=False)
+
                 PARSER = argparse.ArgumentParser(
                     description="The tool to check the availability or syntax of domains, IPv4 or URL.",  # pylint: disable=line-too-long
                     epilog="Crafted with %s by %s"
