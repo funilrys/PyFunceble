@@ -157,6 +157,23 @@ This argument will disable or enable the usage of a database which saves all `IN
 .. note::
     The database is retested every x day(s), where x is the number set in :code:`-dbr "something"`.
 
+:code:`--database-type`
+^^^^^^^^^^^^^^^^^^^^^^^
+
+    Tell us the type of database to use. You can choose between the following: :code:`json|sqlite`.
+
+    **Default value:** :code:`json`
+
+This argument let us use different types of database.
+
+.. note::
+    This feature is applied to the following subsystems:
+
+    * Autocontinue physically located (JSON) at :code:`output/continue.json`.
+    * InactiveDB physically located (JSON) at :code:`[config_dir]/inactive_db.json`.
+    * Mining physically located (JSON) at :code:`[config_dir]/mining.json`.
+    * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json`.
+
 :code:`-dbr "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -571,6 +588,7 @@ Global overview
                     [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
                     [--commit-results-message COMMIT_RESULTS_MESSAGE]
                     [--complements] [-d DOMAIN] [-db]
+                    [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
                     [--directory-structure] [--dns DNS [DNS ...]] [-ex]
                     [-f FILE] [--filter FILTER] [--help] [--hierarchical] [-h]
@@ -623,6 +641,10 @@ Global overview
         -db, --database       Switch the value of the usage of a database to store
                                 inactive domains of the currently tested list.
                                 Configured value: True
+        --database-type DATABASE_TYPE
+                                Tell us the type of database to use. You can choose
+                                between the following: `json|sqlite`
+                                Configured value: 'json'
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of days between each retest of domains
                                 present into inactive-db.json. Configured

@@ -95,7 +95,7 @@
     * Autocontinue physically located (JSON) at :code:`output/continue.json`.
     * InactiveDB physically located (JSON) at :code:`[config_dir]/inactive_db.json`.
     * Mining physically located (JSON) at :code:`[config_dir]/mining.json`.
-    * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json.
+    * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json`.
 
 :code:`debug`
 -------------
