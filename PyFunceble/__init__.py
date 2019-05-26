@@ -75,6 +75,7 @@ from time import mktime, sleep, strftime, strptime, time
 import requests
 from colorama import Back, Fore, Style
 from colorama import init as initiate_colorama
+from dotenv import load_dotenv
 
 from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
@@ -93,7 +94,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.68.0.dev -- 2_0_0_rc20 -- (Blue Bontebok: Beetle)"
+VERSION = "1.69.0.dev -- 2_0_0_rc21 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -204,6 +205,10 @@ INTERN = {
         "percentage": {"down": 0, "invalid": 0, "up": 0},
     }
 }
+
+load_dotenv()
+load_dotenv(CONFIG_DIRECTORY + ".env")
+load_dotenv(CONFIG_DIRECTORY + ".pyfunceble-env")
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """

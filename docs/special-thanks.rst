@@ -39,6 +39,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Pi-Hole - `@pi-hole`_
 -   Public Suffix List - `@publicsuffix`_
 -   Reza Rizqullah - `@ybreza`_
+-   Saurabh Kumar - `@theskumar`_ (`python-dotenv`_)
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
@@ -50,6 +51,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
+.. _python-dotenv: https://github.com/theskumar/python-dotenv
 .. _pyyaml: https://github.com/yaml/pyyaml
 .. _requests: https://github.com/kennethreitz/requests
 .. _Root Zone Database: https://www.iana.org/domains/root/db
@@ -70,5 +72,6 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
 .. _@tartley: https://github.com/tartley
+.. _@theskumar: https://github.com/theskumar
 .. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza

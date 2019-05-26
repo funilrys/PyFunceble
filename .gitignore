@@ -104,9 +104,10 @@ venv.bak/
 .mypy_cache/
 
 # Project related
+.pyfunceble-env
 .PyFunceble.yaml
 dir_structure.json
 inactive_db.json
 mining.json
-whois_db.json
 pyfunceble.db
+whois_db.json
