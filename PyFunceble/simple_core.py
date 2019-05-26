@@ -64,6 +64,7 @@ from domain2idna import get as domain2idna
 
 import PyFunceble
 from PyFunceble.file_core import FileCore
+from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -83,7 +84,8 @@ class SimpleCore:
         else:
             self.subject = subject
 
-        self.whois_db = WhoisDB()
+        self.sqlite_db = SQLite()
+        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db)
 
     def domain(self):
         """

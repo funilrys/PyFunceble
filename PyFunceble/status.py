@@ -240,10 +240,24 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.output["_status_source"],
             )
 
-        if self.subject not in self.inactive_db or self.output["status"] not in [
-            PyFunceble.STATUS["official"]["down"],
-            PyFunceble.STATUS["official"]["invalid"],
-        ]:
+        if self.subject_type.startswith("file_"):
+            if self.subject not in self.inactive_db or self.output["status"] not in [
+                PyFunceble.STATUS["official"]["down"],
+                PyFunceble.STATUS["official"]["invalid"],
+            ]:
+                # We generate the status file with the invalid status.
+                Generate(
+                    self.subject,
+                    self.subject_type,
+                    self.output["status"],
+                    source=self.output["status_source"],
+                    expiration_date=self.output["expiration_date"],
+                    http_status_code=self.output["http_status_code"],
+                    whois_server=self.output["whois_server"],
+                    filename=self.filename,
+                    ip_validation=ip_validation_status,
+                ).status_file()
+        else:
             # We generate the status file with the invalid status.
             Generate(
                 self.subject,
@@ -760,10 +774,22 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         Handle the backend of the given status.
         """
 
-        if self.subject not in self.inactive_db or self.output["status"] not in [
-            PyFunceble.STATUS["official"]["down"],
-            PyFunceble.STATUS["official"]["invalid"],
-        ]:
+        if self.subject_type.startswith("file_"):
+            if self.subject not in self.inactive_db or self.output["status"] not in [
+                PyFunceble.STATUS["official"]["down"],
+                PyFunceble.STATUS["official"]["invalid"],
+            ]:
+
+                # We generate the status file with the catched status.
+                Generate(
+                    self.subject,
+                    self.subject_type,
+                    self.output["status"],
+                    source=self.output["status_source"],
+                    http_status_code=self.output["http_status_code"],
+                    filename=self.filename,
+                ).status_file()
+        else:
             # We generate the status file with the catched status.
             Generate(
                 self.subject,

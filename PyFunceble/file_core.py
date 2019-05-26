@@ -103,9 +103,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We share the file/test type.
         self.file_type = file_type
 
-        # We download the file if it is a list.
-        self.download_link()
-
         # We construct the list of UP statuses.
         self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
         self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
@@ -122,7 +119,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We get/initiate the whois database.
         self.whois_db = WhoisDB(sqlite_db=self.sqlite_db)
         # We get/initiate the mining subsystem.
-        self.mining = Mining(self.file)
+        self.mining = Mining(self.file, sqlite_db=self.sqlite_db)
         # We get/initiate the autocontinue subsystem.
         self.autocontinue = AutoContinue(
             self.file, parent_process=True, sqlite_db=self.sqlite_db
@@ -131,6 +128,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We initiate a variable which will tell us when
         # we start testing for complements.
         self.complements_test_started = False
+
+        # We download the file if it is a list.
+        self.download_link()
 
         # We generate the directory structure.
         PyFunceble.DirectoryStructure()
@@ -172,7 +172,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We get the destination.
             destination = self.file.split("/")[-1]
 
-            if self.file and AutoContinue(destination, parent_process=False).is_empty():
+            if self.file and self.autocontinue.is_empty():
                 # The given file is an URL.
 
                 if (

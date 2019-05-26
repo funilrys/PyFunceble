@@ -62,6 +62,7 @@ License:
 
 import PyFunceble
 from PyFunceble.inactive_db import InactiveDB
+from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -105,11 +106,14 @@ class APICore:
         # configuration.
         PyFunceble.Preset().api()
 
+        # We get an instance of the SQLite connection.
+        self.sqlite_db = SQLite()
+
         # We create an instance of the whois database.
-        self.whois_db = WhoisDB()
+        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db)
 
         # We create an instance of the inactive database.
-        self.inactive_db = InactiveDB("api_call")
+        self.inactive_db = InactiveDB("api_call", sqlite_db=self.sqlite_db)
 
     def __inactive_database_management(self, subject, status):
         """
