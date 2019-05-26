@@ -432,6 +432,10 @@ class Merge:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, configuration_path):
+        config_link = Version(True).right_url_from_version(
+            "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"
+        )
+
         self.path_to_config = configuration_path
 
         if not self.path_to_config.endswith(PyFunceble.directory_separator):
@@ -439,13 +443,16 @@ class Merge:  # pylint: disable=too-few-public-methods
 
         self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
 
+        self.local_config = Dict().from_yaml(File(self.path_to_config).read())
         self.upstream_config = Dict().from_yaml(
-            Download(PyFunceble.LINKS["config"], return_data=True).text()
+            Download(config_link, return_data=True).text()
         )
 
-        if self.upstream_config["links"]["config"] != PyFunceble.LINKS["config"]:
+        if self.upstream_config["links"]["config"] != config_link:
             self.upstream_config = Dict().from_yaml(
-                Download(self.upstream_config["links"]["repo"], return_data=True).text()
+                Download(
+                    self.upstream_config["links"]["config"], return_data=True
+                ).text()
             )
 
         self.new_config = {}
@@ -460,7 +467,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         to_remove = []
 
         self.new_config = Dict(
-            Dict(self.upstream_config).merge(PyFunceble.CONFIGURATION)
+            Dict(self.upstream_config).merge(self.local_config)
         ).remove_key(to_remove)
 
     def _save(self):
