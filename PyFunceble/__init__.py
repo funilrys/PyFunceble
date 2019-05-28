@@ -94,7 +94,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.72.1.dev -- 2_0_0_rc23 -- (Blue Bontebok: Beetle)"
+VERSION = "1.72.2.dev -- 2_0_0_rc23 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -1327,7 +1327,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if ARGS.database_type:
-                    if ARGS.database_type.lower() in ["json", "sqlite"]:
+                    if ARGS.database_type.lower() in ["json", "sqlite", "mysql"]:
                         CONFIGURATION.update({"db_type": ARGS.database_type.lower()})
                     else:
                         print(
