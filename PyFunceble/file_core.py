@@ -72,6 +72,7 @@ from PyFunceble.generate import Generate
 from PyFunceble.helpers import Download, List, Regex
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mining import Mining
+from PyFunceble.mysql import MySQL
 from PyFunceble.sort import Sort
 from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
@@ -107,22 +108,30 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
         self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
 
-        # We get/initiate the sqlite.
+        # We get/initiate the db.
         self.sqlite_db = SQLite()
+        self.mysql_db = MySQL()
 
         # We get/initiate the preset class.
         self.preset = PyFunceble.Preset()
         # We get/initiate the autosave database/subsyste..
         self.autosave = AutoSave(start_time=PyFunceble.INTERN["start"])
         # We get/initiate the inactive database.
-        self.inactive_db = InactiveDB(self.file, sqlite_db=self.sqlite_db)
+        self.inactive_db = InactiveDB(
+            self.file, sqlite_db=self.sqlite_db, mysql_db=self.mysql_db
+        )
         # We get/initiate the whois database.
-        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db)
+        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db, mysql_db=self.mysql_db)
         # We get/initiate the mining subsystem.
-        self.mining = Mining(self.file, sqlite_db=self.sqlite_db)
+        self.mining = Mining(
+            self.file, sqlite_db=self.sqlite_db, mysql_db=self.mysql_db
+        )
         # We get/initiate the autocontinue subsystem.
         self.autocontinue = AutoContinue(
-            self.file, parent_process=True, sqlite_db=self.sqlite_db
+            self.file,
+            parent_process=True,
+            sqlite_db=self.sqlite_db,
+            mysql_db=self.mysql_db,
         )
 
         # We initiate a variable which will tell us when
@@ -659,3 +668,4 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.autosave.process(test_completed=True)
         # We close the database connection
         self.sqlite_db.connection.close()
+        self.mysql_db.get_connection().close()

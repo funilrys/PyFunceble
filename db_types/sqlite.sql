@@ -1,11 +1,11 @@
 
-CREATE TABLE auto_continue (
+CREATE TABLE IF NOT EXISTS auto_continue (
     id INTEGER PRIMARY KEY,
     file_path TEXT NOT NULL,
     subject TEXT NOT NULL,
     status TEXT NOT NULL,
-    created timestamp DEFAULT CURRENT_TIMESTAMP,
-    modified timestamp DEFAULT CURRENT_TIMESTAMP,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(file_path, subject)
 );
 
@@ -15,15 +15,15 @@ CREATE TRIGGER updateAutoContinueDates
     FOR EACH ROW
     WHEN NEW.modified <= old.modified
 BEGIN
-    UPDATE auto_continue SET modified=CURRENT_TIMESTAMP where id=OLD.id;
+    UPDATE auto_continue SET modified=CURRENT_TIMESTAMP WHERE id=OLD.id;
 END;
 
-CREATE TABLE inactive (
+CREATE TABLE IF NOT EXISTS inactive (
     id INTEGER PRIMARY KEY,
     file_path TEXT NOT NULL,
     subject TEXT NOT NULL,
-    created timestamp DEFAULT CURRENT_TIMESTAMP,
-    modified timestamp DEFAULT CURRENT_TIMESTAMP,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(file_path, subject)
 );
 
@@ -33,16 +33,16 @@ CREATE TRIGGER updateInactiveDates
     FOR EACH ROW
     WHEN NEW.modified <= old.modified
 BEGIN
-    UPDATE inactive SET modified=CURRENT_TIMESTAMP where id=OLD.id;
+    UPDATE inactive SET modified=CURRENT_TIMESTAMP WHERE id=OLD.id;
 END;
 
-CREATE TABLE mining (
+CREATE TABLE IF NOT EXISTS mining (
     id INTEGER PRIMARY KEY,
     file_path TEXT NOT NULL,
     subject TEXT NOT NULL,
     mined TEXT NOT NULL,
-    created timestamp DEFAULT CURRENT_TIMESTAMP,
-    modified timestamp DEFAULT CURRENT_TIMESTAMP,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(file_path, subject, mined)
 );
 
@@ -52,17 +52,17 @@ CREATE TRIGGER updateMiningDates
     FOR EACH ROW
     WHEN NEW.modified <= old.modified
 BEGIN
-    UPDATE mining SET modified=CURRENT_TIMESTAMP where id=OLD.id;
+    UPDATE mining SET modified=CURRENT_TIMESTAMP WHERE id=OLD.id;
 END;
 
-CREATE TABLE whois (
+CREATE TABLE IF NOT EXISTS whois (
     id INTEGER PRIMARY KEY,
     subject TEXT NOT NULL,
     expiration_date TEXT NOT NULL,
     expiration_date_epoch INTEGER NOT NULL,
     state TEXT NOT NULL,
-    created timestamp DEFAULT CURRENT_TIMESTAMP,
-    modified timestamp DEFAULT CURRENT_TIMESTAMP,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(subject)
 );
 
@@ -72,5 +72,5 @@ CREATE TRIGGER updateWhoisDates
     FOR EACH ROW
     WHEN NEW.modified <= old.modified
 BEGIN
-    UPDATE whois SET modified=CURRENT_TIMESTAMP where id=OLD.id;
+    UPDATE whois SET modified=CURRENT_TIMESTAMP WHERE id=OLD.id;
 END;

@@ -60,6 +60,8 @@ License:
 """
 # pylint: disable=line-too-long
 
+from hashlib import sha256
+
 import PyFunceble
 from PyFunceble.helpers import Dict, File
 
@@ -74,7 +76,7 @@ class WhoisDB:
     database_file = None
     authorized = False
 
-    def __init__(self, sqlite_db=None):
+    def __init__(self, sqlite_db=None, mysql_db=None):
         # Get the authorization.
         self.authorized = self.authorization()
 
@@ -84,6 +86,9 @@ class WhoisDB:
         )
 
         self.sqlite_db = sqlite_db
+        self.mysql_db = mysql_db
+
+        self.table_name = self.get_table_name()
 
         # We load the configuration.
         self.load()
@@ -95,11 +100,26 @@ class WhoisDB:
             return False
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT COUNT(*) " "FROM whois " "WHERE subject = :subject"
+            query = "SELECT COUNT(*) FROM {0} WHERE subject = :subject".format(
+                self.table_name
+            )
+
             output = self.sqlite_db.cursor.execute(query, {"subject": index})
             fetched = output.fetchone()
 
             return fetched[0] != 0
+
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
+                self.table_name
+            )
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(query, {"subject": index})
+
+                fetched = cursor.fetchone()
+
+                return fetched["COUNT(*)"] != 0
 
         return False  # pragma: no cover
 
@@ -110,11 +130,26 @@ class WhoisDB:
 
             return None
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT * FROM whois WHERE subject=:subject"
+        if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mysql"]:
+            fetched = None
 
-            output = self.sqlite_db.cursor.execute(query, {"subject": index})
-            fetched = output.fetchone()
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = "SELECT * FROM {0} WHERE subject = :subject".format(
+                    self.table_name
+                )
+
+                output = self.sqlite_db.cursor.execute(query, {"subject": index})
+                fetched = output.fetchone()
+
+            if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
+                    self.table_name
+                )
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"subject": index})
+
+                    fetched = cursor.fetchone()
 
             if fetched:
                 return {
@@ -143,10 +178,10 @@ class WhoisDB:
                 self.database[index] = value
         elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
-                "INSERT INTO whois "
+                "INSERT INTO {0} "
                 "(subject, expiration_date, expiration_date_epoch, state) "
                 "VALUES (:subject, :expiration_date, :epoch, :state)"
-            )
+            ).format(self.table_name)
 
             try:
                 # We execute the query.
@@ -163,6 +198,37 @@ class WhoisDB:
                 self.sqlite_db.connection.commit()
             except self.sqlite_db.errors:
                 pass
+        elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = (
+                "INSERT INTO {0} "
+                "(subject, expiration_date, expiration_date_epoch, state, digest) "
+                "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(digest)s)"
+            ).format(self.table_name)
+
+            digest = sha256(
+                bytes(
+                    index
+                    + value["expiration_date"]
+                    + str(value["epoch"])
+                    + value["state"],
+                    "utf-8",
+                )
+            ).hexdigest()
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                try:
+                    cursor.execute(
+                        query,
+                        {
+                            "subject": index,
+                            "expiration_date": value["expiration_date"],
+                            "epoch": value["epoch"],
+                            "state": value["state"],
+                            "digest": digest,
+                        },
+                    )
+                except self.mysql_db.errors:
+                    pass
 
     @classmethod
     def authorization(cls):
@@ -211,6 +277,17 @@ class WhoisDB:
 
         # We return the result.
         return result
+
+    def get_table_name(self):
+        """
+        Return the name of the table to use.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            return self.sqlite_db.tables["whois"]
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            return self.mysql_db.tables["whois"]
+        return "whois"
 
     def load(self):
         """

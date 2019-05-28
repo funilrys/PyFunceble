@@ -60,11 +60,13 @@ License:
 """
 # pylint: enable=line-too-long
 
+from hashlib import sha256
+
 import PyFunceble
 from PyFunceble.helpers import Dict, File
 
 
-class AutoContinue:
+class AutoContinue:  # pylint: disable=too-many-instance-attributes
     """
     Provide the auto-continue subsystem.
     """
@@ -79,15 +81,20 @@ class AutoContinue:
     # Save the filename we are working with.
     filename = None
 
-    def __init__(self, filename, parent_process=False, sqlite_db=None):
+    def __init__(self, filename, parent_process=False, sqlite_db=None, mysql_db=None):
         # We get the operation authorization.
         self.authorized = self.authorization()
         # We share the filename.
         self.filename = filename
         # We preset the filename namespace.
         self.database[self.filename] = {}
-        # We preset the sqlite connetion.
+
+        # We get the sqlite connection.
         self.sqlite_db = sqlite_db
+        # We get the mysql connection.
+        self.mysql_db = mysql_db
+
+        self.table_name = self.get_table_name()
 
         # We share if we are under the parent process.
         self.parent = parent_process
@@ -131,15 +138,31 @@ class AutoContinue:
             if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 query = (
                     "SELECT COUNT(*) "
-                    "FROM auto_continue "
+                    "FROM {0} "
                     "WHERE subject = :subject AND file_path = :file"
-                )
+                ).format(self.table_name)
+
                 output = self.sqlite_db.cursor.execute(
                     query, {"subject": index, "file": self.filename}
                 )
                 fetched = output.fetchone()
 
                 return fetched[0] != 0
+
+            if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                query = (
+                    "SELECT COUNT(*) "
+                    "FROM {0} "
+                    "WHERE subject = %(subject)s AND file_path = %(file)s"
+                ).format(self.table_name)
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"subject": index, "file": self.filename})
+
+                    fetched = cursor.fetchone()
+
+                return fetched["COUNT(*)"] != 0
+
         return False
 
     @classmethod
@@ -153,6 +176,17 @@ class AutoContinue:
             and not PyFunceble.CONFIGURATION["no_files"]
         )
 
+    def get_table_name(self):
+        """
+        Return the name of the table to use.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            return self.sqlite_db.tables["auto_continue"]
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            return self.mysql_db.tables["auto_continue"]
+        return "auto_continue"
+
     def is_empty(self):
         """
         Check if the database related to the currently tested
@@ -165,11 +199,26 @@ class AutoContinue:
             return False
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT COUNT(*) from auto_continue where file_path = :file"
+            query = "SELECT COUNT(*) from {0} where file_path = :file".format(
+                self.table_name
+            )
             output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
             fetched = output.fetchone()
 
             return fetched[0] == 0
+
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
+                self.table_name
+            )
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(query, {"file": self.filename})
+
+                fetched = cursor.fetchone()
+
+            return fetched["COUNT(*)"] == 0
+
         return False  # pragma: no cover
 
     def add(self, subject, status):
@@ -205,19 +254,20 @@ class AutoContinue:
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 # We construct the query string.
                 query = (
-                    "INSERT INTO auto_continue "
+                    "INSERT INTO {0} "
                     "(file_path, subject, status) "
                     "VALUES (:file, :subject, :status)"
-                )
+                ).format(self.table_name)
+
                 try:
                     try:
                         # We execute the query.
                         self.sqlite_db.cursor.execute(
                             query,
                             {
+                                "file": self.filename,
                                 "subject": subject,
                                 "status": status,
-                                "file": self.filename,
                             },
                         )
                     except self.sqlite_db.locked_errors:
@@ -226,25 +276,67 @@ class AutoContinue:
                         self.sqlite_db.cursor.execute(
                             query,
                             {
+                                "file": self.filename,
                                 "subject": subject,
                                 "status": status,
-                                "file": self.filename,
                             },
                         )
                 except self.sqlite_db.errors:
                     query = (
-                        "UPDATE auto_continue "
+                        "UPDATE {0} "
                         "SET status = :status "
                         "WHERE file_path = :file AND subject = :subject"
-                    )
+                    ).format(self.table_name)
 
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
                         query,
-                        {"subject": subject, "status": status, "file": self.filename},
+                        {"status": status, "file": self.filename, "subject": subject},
                     )
                 # And we commit the changes.
                 self.sqlite_db.connection.commit()
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                # We construct the query string.
+
+                digest = sha256(
+                    bytes(self.filename + subject + status, "utf-8")
+                ).hexdigest()
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+
+                    query = (
+                        "INSERT INTO {0} "
+                        "(file_path, subject, status, digest) "
+                        "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
+                    ).format(self.table_name)
+
+                    try:
+                        cursor.execute(
+                            query,
+                            {
+                                "file": self.filename,
+                                "subject": subject,
+                                "status": status,
+                                "digest": digest,
+                            },
+                        )
+                    except self.mysql_db.errors:
+                        query = (
+                            "UPDATE {0} "
+                            "SET subject = %(subject)s "
+                            "WHERE file_path = %(file)s "
+                            "AND subject = %(subject)s "
+                            "AND digest = %(digest)s"
+                        ).format(self.table_name)
+
+                        cursor.execute(
+                            query,
+                            {
+                                "file": self.filename,
+                                "subject": subject,
+                                "digest": digest,
+                            },
+                        )
 
     def save(self):
         """
@@ -292,11 +384,21 @@ class AutoContinue:
                 Dict(self.database).to_json(self.database_file)
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 # We construct the query we are going to execute.
-                query = "DELETE FROM auto_continue WHERE file_path=:file"
+                query = "DELETE FROM {0} WHERE file_path = :file".format(
+                    self.table_name
+                )
                 # We execute it.
                 self.sqlite_db.cursor.execute(query, {"file": self.filename})
                 # We commit everything.
                 self.sqlite_db.connection.commit()
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                # We construct the query we are going to execute.
+                query = "DELETE FROM {0} WHERE file_path = %(file)s".format(
+                    self.table_name
+                )
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"file": self.filename})
 
     def update_counters(self):  # pragma: no cover
         """
@@ -335,24 +437,33 @@ class AutoContinue:
                         PyFunceble.INTERN["counter"]["number"][status] = 0
                         continue
                 elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                    query = (
-                        "SELECT COUNT(*) "
-                        "FROM auto_continue "
-                        "WHERE status=:status and file_path=:file "
-                        "AND subject "
-                        "NOT IN ("
-                        "SELECT subject "
-                        "FROM inactive "
-                        "WHERE created != modified "
-                        "AND file_path = :file "
-                        ")"
-                    )
+                    if PyFunceble.CONFIGURATION["inactive_database"]:
+                        query = (
+                            "SELECT COUNT(*) "
+                            "FROM {0} "
+                            "WHERE status = :status "
+                            "AND file_path = :file "
+                            "AND subject "
+                            "NOT IN ("
+                            "SELECT subject "
+                            "FROM {1}"
+                            "WHERE created != modified "
+                            "AND file_path = :file "
+                            ")"
+                        ).format(self.table_name, self.sqlite_db.tables["inactive"])
+                    else:
+                        query = (
+                            "SELECT COUNT(*) "
+                            "FROM {0} "
+                            "WHERE status = :status "
+                            "AND file_path = :file "
+                        ).format(self.table_name)
 
                     output = self.sqlite_db.cursor.execute(
                         query,
                         {
-                            "file": self.filename,
                             "status": PyFunceble.STATUS["official"][status],
+                            "file": self.filename,
                         },
                     )
                     fetched = output.fetchone()
@@ -361,6 +472,44 @@ class AutoContinue:
 
                     # We then update/transfert it to its global place.
                     tested += fetched[0]
+                elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                    if PyFunceble.CONFIGURATION["inactive_database"]:
+                        query = (
+                            "SELECT COUNT(*) "
+                            "FROM {0} "
+                            "WHERE status = %(status)s "
+                            "AND file_path = %(file)s "
+                            "AND subject "
+                            "NOT IN ("
+                            "SELECT subject "
+                            "FROM {1} "
+                            "WHERE created != modified "
+                            "AND file_path = %(file)s "
+                            ")"
+                        ).format(self.table_name, self.mysql_db.tables["inactive"])
+                    else:
+                        query = (
+                            "SELECT COUNT(*) "
+                            "FROM {0} "
+                            "WHERE status = %(status)s "
+                            "AND file_path = %(file)s "
+                        ).format(self.table_name)
+
+                    with self.mysql_db.get_connection().cursor() as cursor:
+                        cursor.execute(
+                            query,
+                            {
+                                "status": PyFunceble.STATUS["official"][status],
+                                "file": self.filename,
+                            },
+                        )
+
+                        fetched = cursor.fetchone()["COUNT(*)"]
+
+                        PyFunceble.INTERN["counter"]["number"][status] = fetched
+
+                        # We then update/transfert it to its global place.
+                        tested += fetched
 
             # We update/transfert the number of tested globally.
             PyFunceble.INTERN["counter"]["number"]["tested"] = tested
@@ -376,11 +525,23 @@ class AutoContinue:
             except KeyError:  # pragma: no cover
                 pass
         elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT * FROM auto_continue WHERE file_path=:file"
+            query = "SELECT * FROM {0} WHERE file_path = :file".format(self.table_name)
 
             output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
             fetched = output.fetchall()
 
             if fetched:
                 return {x["subject"] for x in fetched}
+        elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
+                self.table_name
+            )
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(query, {"file": self.filename})
+
+                fetched = cursor.fetchall()
+
+                if fetched:
+                    return {x["subject"] for x in fetched}
         return set()  # pragma: no cover

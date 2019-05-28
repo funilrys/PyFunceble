@@ -73,6 +73,13 @@ class SQLite:
     errors = sqlite3.IntegrityError
     locked_errors = sqlite3.OperationalError
 
+    tables = {
+        "auto_continue": "pyfunceble_auto_continue",
+        "inactive": "pyfunceble_inactive",
+        "mining": "pyfunceble_mining",
+        "whois": "pyfunceble_whois",
+    }
+
     def __init__(self):
         self.authorized = self.authorization
 

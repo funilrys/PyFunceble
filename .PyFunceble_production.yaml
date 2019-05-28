@@ -111,6 +111,7 @@ outputs:
     directory: db_types
     files:
       sqlite: sqlite.sql
+      mysql: mysql.sql
 
   domains:
     directory: domains

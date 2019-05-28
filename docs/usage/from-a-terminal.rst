@@ -160,7 +160,7 @@ This argument will disable or enable the usage of a database which saves all `IN
 :code:`--database-type`
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-    Tell us the type of database to use. You can choose between the following: :code:`json|sqlite`.
+    Tell us the type of database to use. You can choose between the following: :code:`json`, :code:`mysql`, :code:`sqlite`.
 
     **Default value:** :code:`json`
 
@@ -643,7 +643,7 @@ Global overview
                                 Configured value: True
         --database-type DATABASE_TYPE
                                 Tell us the type of database to use. You can choose
-                                between the following: `json|sqlite`
+                                between the following: `json|mysql|sqlite`
                                 Configured value: 'json'
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of days between each retest of domains

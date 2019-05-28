@@ -18,6 +18,7 @@ omit =
     PyFunceble/simple_core.py
     PyFunceble/whois.py
     PyFunceble/sqlite.py
+    PyFunceble/mysql.py
 
 [report]
 # This should be False one we move into production
@@ -44,6 +45,8 @@ exclude_lines =
 
     # Don't complain for those blocks
     PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"
+    PyFunceble\.CONFIGURATION\["db_type"\] == "mysql"
+    PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mysql"\]
 
 
 ignore_errors = True

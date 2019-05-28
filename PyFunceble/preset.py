@@ -272,7 +272,7 @@ class Preset:
 
         if PyFunceble.CONFIGURATION["multiprocess"]:
             should_be_disabled = []
-            should_be_enabled = ["auto_continue"]
+            should_be_enabled = ["auto_continue", "whois_database"]
 
             for index in should_be_disabled:
                 self.disable(index)

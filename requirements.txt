@@ -1,6 +1,7 @@
 colorama>=0.4.0
 dnspython>=1.16.0
 domain2idna>=1.6.1
+PyMySQL
 python-dotenv
 PyYAML>=3.13
 requests

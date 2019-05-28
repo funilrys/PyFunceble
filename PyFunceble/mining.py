@@ -58,6 +58,8 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+from hashlib import sha256
+
 # pylint: enable=line-too-long
 import urllib3.exceptions as urllib3_exceptions
 
@@ -65,7 +67,7 @@ import PyFunceble
 from PyFunceble.helpers import Dict, File
 
 
-class Mining:
+class Mining:  # pylint: disable=too-many-instance-attributes
     """
     Manage the minig subsystem.
     """
@@ -78,7 +80,7 @@ class Mining:
     filename = None
     headers = {}
 
-    def __init__(self, filename, sqlite_db=None):  # pragma: no cover
+    def __init__(self, filename, sqlite_db=None, mysql_db=None):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
         # We save the file we are working with.
@@ -87,6 +89,9 @@ class Mining:
         self.database[self.filename] = {}
 
         self.sqlite_db = sqlite_db
+        self.mysql_db = mysql_db
+
+        self.table_name = self.get_table_name()
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -113,10 +118,10 @@ class Mining:
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
                 "SELECT * "
-                "FROM mining "
-                "WHERE file_path=:file "
+                "FROM {0} "
+                "WHERE file_path = :file "
                 "AND subject = :subject "
-            )
+            ).format(self.table_name)
 
             output = self.sqlite_db.cursor.execute(
                 query, {"file": self.filename, "subject": index}
@@ -125,6 +130,22 @@ class Mining:
 
             if fetched:
                 return [x["mined"] for x in fetched]
+
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = (
+                "SELECT * "
+                "FROM {0} "
+                "WHERE file_path = %(file)s "
+                "AND subject = %(subject)s "
+            ).format(self.table_name)
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(query, {"file": self.filename, "subject": index})
+
+                fetched = cursor.fetchall()
+
+                if fetched:
+                    return [x["mined"] for x in fetched]
 
         return None
 
@@ -152,21 +173,44 @@ class Mining:
                 self.database[self.filename][index] = value
         elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
-                "INSERT INTO mining "
+                "INSERT INTO {0} "
                 "(file_path, subject, mined) "
                 "VALUES (:file, :subject, :mined)"
-            )
+            ).format(self.table_name)
 
             for val in value:
                 try:
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
-                        query, {"subject": index, "file": self.filename, "mined": val}
+                        query, {"file": self.filename, "subject": index, "mined": val}
                     )
                     # And we commit the changes.
                     self.sqlite_db.connection.commit()
                 except self.sqlite_db.errors:
                     pass
+        elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = (
+                "INSERT INTO {0} "
+                "(file_path, subject, mined, digest) "
+                "VALUES (%(file)s, %(subject)s, %(mined)s, %(digest)s)"
+            ).format(self.table_name)
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                digest = sha256(bytes(self.filename + index + val, "utf-8")).hexdigest()
+
+                for val in value:
+                    try:
+                        cursor.execute(
+                            query,
+                            {
+                                "file": self.filename,
+                                "subject": index,
+                                "mined": val,
+                                "digest": digest,
+                            },
+                        )
+                    except self.mysql_db.errors:
+                        pass
 
     def __delitem__(self, index):  # pragma: no cover
         if PyFunceble.CONFIGURATION["db_type"] == "json":
@@ -175,14 +219,23 @@ class Mining:
             if actual_value:
                 del self.database[self.filename][index]
         elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "DELTE FROM mining WHERE file_path = :file AND :subject = :subject "
+            query = "DELETE FROM {0} WHERE file_path = :file AND subject = :subject ".format(
+                self.table_name
+            )
 
             # We execute the query.
             self.sqlite_db.cursor.execute(
-                query, {"subject": index, "file": self.filename}
+                query, {"file": self.filename, "subject": index}
             )
             # And we commit the changes.
             self.sqlite_db.connection.commit()
+        elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = "DELETE FROM {0} WHERE file_path = %(file)s AND subject = %(subject)s ".format(
+                self.table_name
+            )
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(query, {"file": self.filename, "subject": index})
 
     @classmethod
     def authorization(cls):
@@ -218,6 +271,17 @@ class Mining:
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
             return []
+
+    def get_table_name(self):
+        """
+        Return the name of the table to use.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            return self.sqlite_db.tables["mining"]
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            return self.mysql_db.tables["mining"]
+        return "mining"
 
     def list_of_mined(self):
         """
@@ -257,13 +321,22 @@ class Mining:
 
                         result.append((subject, element))
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT * " "FROM mining " "WHERE file_path=:file "
+                query = "SELECT * FROM {0} WHERE file_path = :file ".format(
+                    self.table_name
+                )
 
                 output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
                 fetched = output.fetchall()
 
                 if fetched:
                     result = [(x["subject"], x["mined"]) for x in fetched]
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
+                    self.table_name
+                )
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"file": self.filename})
 
         # We return the result.
         return result
@@ -396,20 +469,37 @@ class Mining:
                 elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                     # We construct the query string.
                     query = (
-                        "DELETE FROM mining "
-                        "WHERE file_path = :file AND subject = :subject AND mined =: mined"
-                    )
+                        "DELETE FROM {0} "
+                        "WHERE file_path = :file AND subject = :subject AND mined = :mined"
+                    ).format(self.table_name)
+
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
                         query,
                         {
-                            "subject": subject,
                             "file": self.filename,
+                            "subject": subject,
                             "mined": history_member,
                         },
                     )
                     # And we commit the changes.
                     self.sqlite_db.connection.commit()
+                elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                    # We construct the query string.
+                    query = (
+                        "DELETE FROM {0} "
+                        "WHERE file_path = %(file)s AND subject = %(subject)s AND mined = %(mined)s"
+                    ).format(self.table_name)
+
+                    with self.mysql_db.get_connection().cursor() as cursor:
+                        cursor.execute(
+                            query,
+                            {
+                                "file": self.filename,
+                                "subject": subject,
+                                "mined": history_member,
+                            },
+                        )
             else:
                 break
 

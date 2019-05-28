@@ -60,11 +60,13 @@ License:
 """
 # pylint: enable=line-too-long
 
+from hashlib import sha256
+
 import PyFunceble
 from PyFunceble.helpers import Dict, File, List
 
 
-class InactiveDB:
+class InactiveDB:  # pylint: disable=too-many-instance-attributes
     """
     Provide the inactive database logic and interface.
 
@@ -86,7 +88,7 @@ class InactiveDB:
     # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename, sqlite_db=None):
+    def __init__(self, filename, sqlite_db=None, mysql_db=None):
         # We get the authorization status.
         self.authorized = self.authorization()
 
@@ -105,8 +107,11 @@ class InactiveDB:
         # We share the filename.
         self.filename = filename
 
-        # We get the sqlite db instance.
+        # We get the db instance.
         self.sqlite_db = sqlite_db
+        self.mysql_db = mysql_db
+
+        self.table_name = self.get_table_name()
 
         # We initiate the database.
         self.initiate()
@@ -135,9 +140,9 @@ class InactiveDB:
             if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 query = (
                     "SELECT COUNT(*) "
-                    "FROM inactive "
+                    "FROM {0} "
                     "WHERE subject = :subject AND file_path = :file"
-                )
+                ).format(self.table_name)
 
                 try:
                     output = self.sqlite_db.cursor.execute(
@@ -151,6 +156,20 @@ class InactiveDB:
                 fetched = output.fetchone()
 
                 return fetched[0] != 0
+
+            if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                query = (
+                    "SELECT COUNT(*) "
+                    "FROM {0} "
+                    "WHERE subject = %(subject)s AND file_path = %(file)s"
+                ).format(self.table_name)
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"subject": subject, "file": self.filename})
+
+                    fetched = cursor.fetchone()
+
+                return fetched["COUNT(*)"]
 
         return False  # pragma: no cover
 
@@ -193,6 +212,17 @@ class InactiveDB:
         """
 
         return PyFunceble.CONFIGURATION["inactive_database"]
+
+    def get_table_name(self):
+        """
+        Return the name of the table to use.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+            return self.sqlite_db.tables["inactive"]
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            return self.mysql_db.tables["inactive"]
+        return "inactive"
 
     def _merge(self):
         """
@@ -457,22 +487,22 @@ class InactiveDB:
                 self.save()
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 query = (
-                    "INSERT INTO inactive "
+                    "INSERT INTO {0} "
                     "(file_path, subject) "
                     "VALUES (:file, :subject)"
-                )
+                ).format(self.table_name)
 
                 try:
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
-                        query, {"subject": subject, "file": self.filename}
+                        query, {"file": self.filename, "subject": subject}
                     )
                 except self.sqlite_db.errors:
                     query = (
-                        "UPDATE inactive "
+                        "UPDATE {0} "
                         "SET subject = :subject "
                         "WHERE file_path = :file AND subject = :subject"
-                    )
+                    ).format(self.table_name)
 
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
@@ -481,6 +511,43 @@ class InactiveDB:
 
                 # And we commit the changes.
                 self.sqlite_db.connection.commit()
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
+
+                query = (
+                    "INSERT INTO {0} "
+                    "(file_path, subject, digest) "
+                    "VALUES (%(file)s, %(subject)s, %(digest)s)"
+                ).format(self.table_name)
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+
+                    try:
+                        cursor.execute(
+                            query,
+                            {
+                                "file": self.filename,
+                                "subject": subject,
+                                "digest": digest,
+                            },
+                        )
+                    except self.mysql_db.errors:
+                        query = (
+                            "UPDATE {0} "
+                            "SET subject = %(subject)s "
+                            "WHERE file_path = %(file)s "
+                            "AND %(subject)s = %(subject)s "
+                            "AND digest = %(digest)s"
+                        ).format(self.table_name)
+
+                        cursor.execute(
+                            query,
+                            {
+                                "subject": subject,
+                                "file": self.filename,
+                                "digest": digest,
+                            },
+                        )
 
     def remove(self, subject):
         """
@@ -507,16 +574,27 @@ class InactiveDB:
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 # We construct the query we are going to execute.
                 query = (
-                    "DELTE FROM inactive "
+                    "DELETE FROM {0} "
                     "WHERE file_path = :file "
                     "AND subject = :subject"
-                )
+                ).format(self.table_name)
+
                 # We execute it.
                 self.sqlite_db.cursor.execute(
                     query, {"file": self.filename, "subject": subject}
                 )
                 # We commit everything.
                 self.sqlite_db.connection.commit()
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                # We construct the query we are going to execute.
+                query = (
+                    "DELETE FROM {0} "
+                    "WHERE file_path = %(file)s "
+                    "AND subject = %(subject)s"
+                ).format(self.table_name)
+
+                with self.mysql_db.get_connection().cursor() as cursor:
+                    cursor.execute(query, {"file": self.filename, "subject": subject})
 
     def get_to_retest(self):  # pylint: pragma: no cover
         """
@@ -537,10 +615,10 @@ class InactiveDB:
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
-                "SELECT * FROM inactive WHERE file_path=:file "
+                "SELECT * FROM {0} WHERE file_path = :file "
                 "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                "> (CAST(strftime('%s',modified) AS INTEGER) + CAST(:days AS INTEGER))"
-            )
+                "> (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
+            ).format(self.table_name)
 
             output = self.sqlite_db.cursor.execute(
                 query, {"file": self.filename, "days": self.days_in_seconds}
@@ -549,6 +627,23 @@ class InactiveDB:
 
             if fetched:
                 return [x["subject"] for x in fetched]
+
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = (
+                "SELECT * FROM {0} WHERE file_path = %(file)s "
+                "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "
+                "> (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
+            ).format(self.table_name)
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(
+                    query, {"file": self.filename, "days": self.days_in_seconds}
+                )
+                fetched = cursor.fetchall()
+
+                if fetched:
+                    return [x["subject"] for x in fetched]
+
         return []
 
     def get_already_tested(self):  # pragma: no cover
@@ -570,10 +665,10 @@ class InactiveDB:
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
-                "SELECT * FROM inactive WHERE file_path=:file "
+                "SELECT * FROM {0} WHERE file_path = :file "
                 "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                "< (CAST(strftime('%s',modified) AS INTEGER) + CAST(:days AS INTEGER))"
-            )
+                "< (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
+            ).format(self.table_name)
 
             output = self.sqlite_db.cursor.execute(
                 query, {"file": self.filename, "days": self.days_in_seconds}
@@ -582,4 +677,20 @@ class InactiveDB:
 
             if fetched:
                 return {x["subject"] for x in fetched}
+
+        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            query = (
+                "SELECT * FROM {0} WHERE file_path= %(file)s "
+                "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "
+                "< (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
+            ).format(self.table_name)
+
+            with self.mysql_db.get_connection().cursor() as cursor:
+                cursor.execute(
+                    query, {"file": self.filename, "days": self.days_in_seconds}
+                )
+                fetched = cursor.fetchall()
+
+                if fetched:
+                    return {x["subject"] for x in fetched}
         return set()
