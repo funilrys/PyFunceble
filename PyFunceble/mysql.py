@@ -90,7 +90,7 @@ class MySQL:
     errors = pymysql.err.IntegrityError
 
     def __init__(self):
-        self.authorized = self.authorization
+        self.authorized = self.authorization()
 
         if self.authorized:
             self.initiated = False
