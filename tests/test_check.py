@@ -153,7 +153,6 @@ class TestCheck(TestCase):
             "hello-.world",
             "hello-world",
             "hello.-hello-world_.abuse.co.za",
-            "hello.com:443",
             "hello@world.com",
             "httpWd",
             "test.-hello-world_all-mine_.abuse.co.za",
@@ -173,6 +172,12 @@ class TestCheck(TestCase):
 
         for domain in self.valid_domain:
             to_test = "http://{0}/helloworld".format(domain)
+
+            actual = Check(to_test).is_url()
+
+            self.assertEqual(expected, actual)
+
+            to_test = "http://{0}:8080/helloworld".format(domain)
 
             actual = Check(to_test).is_url()
 

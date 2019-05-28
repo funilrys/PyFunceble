@@ -667,5 +667,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We process the autosaving if necessary.
         self.autosave.process(test_completed=True)
         # We close the database connection
-        self.sqlite_db.connection.close()
-        self.mysql_db.get_connection().close()
+        if self.sqlite_db.authorized:
+            self.sqlite_db.connection.close()
+        if self.mysql_db.authorized:
+            self.mysql_db.get_connection().close()

@@ -76,7 +76,9 @@ class Check:
     def __init__(self, subject):
         self.subject = subject
 
-    def is_url(self, return_base=False, return_formatted=False):
+    def is_url(
+        self, return_base=False, return_formatted=False
+    ):  # pylint: disable=too-many-branches
         """
         Check if the given subject is a valid URL.
 
@@ -115,16 +117,34 @@ class Check:
                     # We convert the initial base to IDNA.
                     base = domain2idna(base)
 
-                # We check if the url base is a valid domain.
-                domain_status = Check(base).is_domain()
+                if ":" in base:
+                    # The port is explicitly given.
 
-                # We check if the url base is a valid IP.
-                ip_status = Check(base).is_ipv4()
+                    # We remove it from the base.
+                    splited_base = base.split(":")
+                else:
+                    splited_base = None
+
+                if splited_base:
+                    # We check if the url base is a valid domain.
+                    domain_status = Check(splited_base[0]).is_domain()
+
+                    # We check if the url base is a valid IP.
+                    ip_status = Check(splited_base[0]).is_ipv4()
+                else:
+                    # We check if the url base is a valid domain.
+                    domain_status = Check(base).is_domain()
+
+                    # We check if the url base is a valid IP.
+                    ip_status = Check(base).is_ipv4()
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.
                     # and
                     # * The url base is a valid IP.
+
+                    if splited_base:
+                        initial_base = base = splited_base[0]
 
                     if PyFunceble.CONFIGURATION["idna_conversion"] and return_formatted:
                         # * We have to convert to IDNA.
