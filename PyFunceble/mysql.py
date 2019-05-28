@@ -91,15 +91,13 @@ class MySQL:
 
     def __init__(self):
         self.authorized = self.authorization
-        self.initiated = False
 
         if self.authorized:
+            self.initiated = False
             self.connection = self.get_connection()
             self.initiated = True
 
             if not self.are_tables_present():
-                # self.create_database()
-
                 self.create_tables()
 
     @classmethod
