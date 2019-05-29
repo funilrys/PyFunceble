@@ -94,14 +94,13 @@ class MySQL:
         self.authorized = self.authorization()
 
         pyfunceble_env_location = PyFunceble.CONFIG_DIRECTORY + PyFunceble.ENV_FILENAME
-        self.env_content, backup = self.parse_env_file(pyfunceble_env_location)
+        self.env_content = self.parse_env_file(pyfunceble_env_location)
 
         if self.authorized:
             self.initiated = False
             self.connection = self.get_connection()
 
-            if self.env_content != backup:
-                self.save_to_env_file(self.env_content, pyfunceble_env_location)
+            self.save_to_env_file(self.env_content, pyfunceble_env_location)
 
             self.initiated = True
 
@@ -189,7 +188,7 @@ class MySQL:
                     splited = line.split("=")
                     result[splited[0]] = splited[1]
 
-        return result, result
+        return result
 
     @classmethod
     def save_to_env_file(cls, envs, env_file_location):
@@ -201,19 +200,29 @@ class MySQL:
         """
 
         file_instance = File(env_file_location)
-        content = file_instance.read()
 
-        for environment_variable, value in envs.items():
-            regex = r"{0}=.*".format(environment_variable)
-            to_write = "{0}={1}".format(environment_variable, value)
+        try:
+            content = file_instance.read()
+        except FileNotFoundError:
+            content = ""
 
-            if Regex(content, regex, return_data=False).match():
-                content = Regex(content, regex, replace_with=to_write)
-            else:
-                if not content.endswith("\n"):
-                    content += "\n{0}\n".format(to_write)
+        if content:
+            for environment_variable, value in envs.items():
+                to_write = "{0}={1}".format(environment_variable, value)
+
+                regex = r"{0}=.*".format(environment_variable)
+
+                if Regex(content, regex, return_data=False).match():
+                    content = Regex(content, regex, replace_with=to_write).replace()
                 else:
-                    content += "{0}\n".format(to_write)
+                    if not content.endswith("\n"):
+                        content += "\n{0}\n".format(to_write)
+                    else:
+                        content += "{0}\n".format(to_write)
+        else:
+            for environment_variable, value in envs.items():
+                to_write = "{0}={1}".format(environment_variable, value)
+                content += "{0}\n".format(to_write)
 
         file_instance.write(content, overwrite=True)
 
