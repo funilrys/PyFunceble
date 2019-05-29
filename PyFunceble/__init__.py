@@ -94,7 +94,7 @@ from PyFunceble.whois import Whois
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.73.3.dev -- 2_0_0_rc23 -- (Blue Bontebok: Beetle)"
+VERSION = "1.74.0.dev -- 2_0_0_rc23 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -183,6 +183,8 @@ OUTPUT_DIRECTORY = getcwd() + directory_separator
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
 # We set the filename of the configuration file we are actually using.
 CONFIGURATION_FILENAME = ".PyFunceble.yaml"
+# We set the filename of our env file.
+ENV_FILENAME = ".pyfunceble-env"
 
 # We set the current time (return the current time) in a specific format.
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
@@ -208,7 +210,7 @@ INTERN = {
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
-load_dotenv(CONFIG_DIRECTORY + ".pyfunceble-env")
+load_dotenv(CONFIG_DIRECTORY + ENV_FILENAME)
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """

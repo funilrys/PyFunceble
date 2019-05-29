@@ -64,6 +64,7 @@ from getpass import getpass
 import pymysql
 
 import PyFunceble
+from PyFunceble.helpers import File, Regex
 
 
 class MySQL:
@@ -71,13 +72,13 @@ class MySQL:
     Provide our way to work with our sqlite database.
     """
 
-    environment_variables = {
-        "host": "PYFUNCEBLE_DB_HOST",
-        "port": "PYFUNCEBLE_DB_PORT",
-        "name": "PYFUNCEBLE_DB_NAME",
-        "username": "PYFUNCEBLE_DB_USERNAME",
-        "password": "PYFUNCEBLE_DB_PASSWORD",
-        "charset": "PYFUNCEBLE_DB_CHARSET",
+    variables = {
+        "host": {"env": "PYFUNCEBLE_DB_HOST", "default": "localhost"},
+        "port": {"env": "PYFUNCEBLE_DB_PORT", "default": 3306},
+        "name": {"env": "PYFUNCEBLE_DB_NAME", "default": "pyfunceble"},
+        "username": {"env": "PYFUNCEBLE_DB_USERNAME", "default": "pyfunceble"},
+        "password": {"env": "PYFUNCEBLE_DB_PASSWORD", "default": "PyFunceble:15_93le"},
+        "charset": {"env": "PYFUNCEBLE_DB_CHARSET", "default": "utf8mb4"},
     }
 
     tables = {
@@ -92,9 +93,16 @@ class MySQL:
     def __init__(self):
         self.authorized = self.authorization()
 
+        pyfunceble_env_location = PyFunceble.CONFIG_DIRECTORY + PyFunceble.ENV_FILENAME
+        self.env_content, backup = self.parse_env_file(pyfunceble_env_location)
+
         if self.authorized:
             self.initiated = False
             self.connection = self.get_connection()
+
+            if self.env_content != backup:
+                self.save_to_env_file(self.env_content, pyfunceble_env_location)
+
             self.initiated = True
 
             if not self.are_tables_present():
@@ -154,6 +162,61 @@ class MySQL:
 
         return statements
 
+    @classmethod
+    def parse_env_file(cls, env_file_location):
+        """
+        Parse the environment file into something we understand.
+
+        :param str env_file_location: The location of the file we have to parse.
+        """
+
+        result = {}
+        content = ""
+
+        if PyFunceble.path.isfile(env_file_location):
+            content = File(env_file_location).read()
+
+            for line in content.splitlines():
+                line = line.strip()
+
+                if line.startswith("#"):
+                    continue
+
+                if "#" in line:
+                    line = line[: line.find("#")]
+
+                if "=" in line:
+                    splited = line.split("=")
+                    result[splited[0]] = splited[1]
+
+        return result, result
+
+    @classmethod
+    def save_to_env_file(cls, envs, env_file_location):
+        """
+        Save the given dict of environment variable into our environment file.
+
+        :param dict envs: A dict of environment variables to save.
+        :param str env_file_location: The location of the file we have to update.
+        """
+
+        file_instance = File(env_file_location)
+        content = file_instance.read()
+
+        for environment_variable, value in envs.items():
+            regex = r"{0}=.*".format(environment_variable)
+            to_write = "{0}={1}".format(environment_variable, value)
+
+            if Regex(content, regex, return_data=False).match():
+                content = Regex(content, regex, replace_with=to_write)
+            else:
+                if not content.endswith("\n"):
+                    content += "\n{0}\n".format(to_write)
+                else:
+                    content += "{0}\n".format(to_write)
+
+        file_instance.write(content, overwrite=True)
+
     def get_connection(self):
         """
         Provide the connection to the database.
@@ -161,25 +224,29 @@ class MySQL:
 
         if self.authorized:
             if not self.initiated:
-                for (
-                    description,
-                    environment_variable,
-                ) in self.environment_variables.items():
-                    if environment_variable in PyFunceble.environ:
+                for (description, data) in self.variables.items():
+                    if data["env"] in PyFunceble.environ:
                         setattr(
                             self,
                             "_{0}".format(description),
-                            PyFunceble.environ[environment_variable],
+                            PyFunceble.environ[data["env"]],
                         )
                     else:
-                        message = "[MySQL/MariaDB] Please give us your DB {0}: ".format(
-                            description.capitalize()
+                        message = "[MySQL/MariaDB] Please give us your DB {0} ({1}): ".format(
+                            description.capitalize(), repr(data["default"])
                         )
 
                         if description != "password":
-                            setattr(self, "_{0}".format(description), input(message))
+                            user_input = input(message)
                         else:
-                            setattr(self, "_{0}".format(description), getpass(message))
+                            user_input = getpass(message)
+
+                        if user_input:
+                            setattr(self, "_{0}".format(description), user_input)
+                            self.env_content[data["env"]] = user_input
+                        else:
+                            setattr(self, "_{0}".format(description), data["default"])
+                            self.env_content[data["env"]] = data["default"]
 
                 self._port = int(self._port)
 
