@@ -74,10 +74,10 @@ class SQLite:
     locked_errors = sqlite3.OperationalError
 
     tables = {
-        "auto_continue": "pyfunceble_auto_continue",
-        "inactive": "pyfunceble_inactive",
-        "mining": "pyfunceble_mining",
-        "whois": "pyfunceble_whois",
+        "auto_continue": "auto_continue",
+        "inactive": "inactive",
+        "mining": "mining",
+        "whois": "whois",
     }
 
     def __init__(self):

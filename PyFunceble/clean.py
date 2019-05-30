@@ -60,6 +60,7 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
+from PyFunceble.config import Version
 from PyFunceble.helpers import File
 
 
@@ -174,50 +175,56 @@ class Clean:
         Set the databases files to delete.
         """
 
-        # We initiate the directory we have to look for.
-        directory = PyFunceble.CONFIG_DIRECTORY
-
         # We initate the result variable.
         result = []
 
-        # We append the dir_structure file.
-        result.append(
-            "{0}{1}".format(
-                directory,
-                PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"],
-            )
-        )
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            # We initiate the directory we have to look for.
+            directory = PyFunceble.CONFIG_DIRECTORY
 
-        # We append the iana file.
-        result.append(
-            "{0}{1}".format(
-                directory, PyFunceble.CONFIGURATION["outputs"]["default_files"]["iana"]
+            # We append the dir_structure file.
+            result.append(
+                "{0}{1}".format(
+                    directory,
+                    PyFunceble.CONFIGURATION["outputs"]["default_files"][
+                        "dir_structure"
+                    ],
+                )
             )
-        )
 
-        # We append the public suffix file.
-        result.append(
-            "{0}{1}".format(
-                directory,
-                PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"],
+            # We append the iana file.
+            result.append(
+                "{0}{1}".format(
+                    directory,
+                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["iana"],
+                )
             )
-        )
 
-        # We append the inactive database file.
-        result.append(
-            "{0}{1}".format(
-                directory,
-                PyFunceble.CONFIGURATION["outputs"]["default_files"]["inactive_db"],
+            # We append the public suffix file.
+            result.append(
+                "{0}{1}".format(
+                    directory,
+                    PyFunceble.CONFIGURATION["outputs"]["default_files"][
+                        "public_suffix"
+                    ],
+                )
             )
-        )
 
-        # We append the mining database file.
-        result.append(
-            "{0}{1}".format(
-                directory,
-                PyFunceble.CONFIGURATION["outputs"]["default_files"]["mining"],
+            # We append the inactive database file.
+            result.append(
+                "{0}{1}".format(
+                    directory,
+                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["inactive_db"],
+                )
             )
-        )
+
+            # We append the mining database file.
+            result.append(
+                "{0}{1}".format(
+                    directory,
+                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["mining"],
+                )
+            )
 
         return result
 
@@ -232,8 +239,9 @@ class Clean:
 
         # We get the list of file to delete.
         to_delete = self.file_to_delete()
+        version = Version(True)
 
-        if clean_all:  # pragma: no cover
+        if not version.is_cloned() and clean_all:  # pragma: no cover
             to_delete.extend(self.databases_to_delete())
 
         for file in to_delete:
@@ -242,5 +250,27 @@ class Clean:
             # And we delete the currently read file.
             File(file).delete()
 
-        if clean_all:  # pragma: no cover
+        if clean_all:
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                from PyFunceble.sqlite import SQLite
+
+                sqlite_db = SQLite()
+
+                for database_name in sqlite_db.tables.values():
+                    query = "DELETE FROM {0}".format(database_name)
+
+                    sqlite_db.cursor.execute(query)
+                    sqlite_db.connection.commit()
+            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+                from PyFunceble.mysql import MySQL
+
+                mysql_db = MySQL()
+
+                for database_name in mysql_db.tables.values():
+                    query = "DELETE FROM {0}".format(database_name)
+
+                    with mysql_db.get_connection() as cursor:
+                        cursor.execute(query)
+
+        if not version.is_cloned() and clean_all:  # pragma: no cover
             PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
