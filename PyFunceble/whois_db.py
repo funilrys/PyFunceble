@@ -114,7 +114,7 @@ class WhoisDB:
                 self.table_name
             )
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(query, {"subject": index})
 
                 fetched = cursor.fetchone()
@@ -146,7 +146,7 @@ class WhoisDB:
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"subject": index})
 
                     fetched = cursor.fetchone()
@@ -215,7 +215,7 @@ class WhoisDB:
                 )
             ).hexdigest()
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 try:
                     cursor.execute(
                         query,

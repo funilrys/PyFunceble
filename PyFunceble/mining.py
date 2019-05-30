@@ -139,7 +139,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 "AND subject = %(subject)s "
             ).format(self.table_name)
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(query, {"file": self.filename, "subject": index})
 
                 fetched = cursor.fetchall()
@@ -195,7 +195,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 "VALUES (%(file)s, %(subject)s, %(mined)s, %(digest)s)"
             ).format(self.table_name)
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 digest = sha256(bytes(self.filename + index + val, "utf-8")).hexdigest()
 
                 for val in value:
@@ -234,7 +234,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 self.table_name
             )
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(query, {"file": self.filename, "subject": index})
 
     @classmethod
@@ -335,7 +335,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
         # We return the result.
@@ -491,7 +491,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         "WHERE file_path = %(file)s AND subject = %(subject)s AND mined = %(mined)s"
                     ).format(self.table_name)
 
-                    with self.mysql_db.get_connection().cursor() as cursor:
+                    with self.mysql_db.get_connection() as cursor:
                         cursor.execute(
                             query,
                             {

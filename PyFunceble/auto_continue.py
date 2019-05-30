@@ -156,7 +156,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     "WHERE subject = %(subject)s AND file_path = %(file)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"subject": index, "file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -212,7 +212,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 self.table_name
             )
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(query, {"file": self.filename})
 
                 fetched = cursor.fetchone()
@@ -302,7 +302,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     bytes(self.filename + subject + status, "utf-8")
                 ).hexdigest()
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
 
                     query = (
                         "INSERT INTO {0} "
@@ -397,7 +397,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
     def update_counters(self):  # pragma: no cover
@@ -495,7 +495,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                             "AND file_path = %(file)s "
                         ).format(self.table_name)
 
-                    with self.mysql_db.get_connection().cursor() as cursor:
+                    with self.mysql_db.get_connection() as cursor:
                         cursor.execute(
                             query,
                             {
@@ -537,7 +537,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 self.table_name
             )
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(query, {"file": self.filename})
 
                 fetched = cursor.fetchall()

@@ -164,7 +164,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "WHERE subject = %(subject)s AND file_path = %(file)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"subject": subject, "file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -520,7 +520,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "VALUES (%(file)s, %(subject)s, %(digest)s)"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
 
                     try:
                         cursor.execute(
@@ -593,7 +593,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "AND subject = %(subject)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection().cursor() as cursor:
+                with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": subject})
 
     def get_to_retest(self):  # pylint: pragma: no cover
@@ -635,7 +635,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 "> (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
             ).format(self.table_name)
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
                     query, {"file": self.filename, "days": self.days_in_seconds}
                 )
@@ -685,7 +685,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 "< (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
             ).format(self.table_name)
 
-            with self.mysql_db.get_connection().cursor() as cursor:
+            with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
                     query, {"file": self.filename, "days": self.days_in_seconds}
                 )

@@ -299,14 +299,19 @@ Install and load the default configuration at the mentioned location? [y/n] "
         its content.
         """
 
-        destination_dir = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.CONFIGURATION["outputs"]["db_type"]["directory"]
-            + PyFunceble.directory_separator
-        )
+        if (
+            not Version(True).is_cloned()
+            and PyFunceble.CONFIGURATION["db_type"] != "json"
+        ):
+            # * The current version is not the cloned version.
+            # and
+            # * The database type is not JSON.
 
-        if not Version(True).is_cloned():
-            # The current version is not the cloned version.
+            destination_dir = (
+                PyFunceble.CONFIG_DIRECTORY
+                + PyFunceble.CONFIGURATION["outputs"]["db_type"]["directory"]
+                + PyFunceble.directory_separator
+            )
 
             if not PyFunceble.path.isdir(destination_dir):
                 PyFunceble.mkdir(destination_dir)
