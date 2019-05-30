@@ -79,6 +79,8 @@ class Load:  # pylint: disable=too-few-public-methods
             path_to_config
         )
 
+        self.version = Version(True)
+
         try:
             # We try to load the configuration.
             self._load_config_file()
@@ -276,11 +278,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
         production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
-        production_config_link = Version(True).right_url_from_version(
+        production_config_link = self.version.right_url_from_version(
             production_config_link
         )
 
-        if not Version(True).is_cloned():
+        if not self.version.is_cloned():
             # The current version is not the cloned one.
 
             # We download the link content and save it inside the default location.
@@ -292,15 +294,14 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # And we download the link content and return the download status.
         return Download(production_config_link, self.path_to_config).text()
 
-    @classmethod
-    def _install_db_type_files(cls):
+    def _install_db_type_files(self):
         """
         Create the .db_type directory if it does not exists and update
         its content.
         """
 
         if (
-            not Version(True).is_cloned()
+            not self.version.is_cloned()
             and PyFunceble.CONFIGURATION["db_type"] != "json"
         ):
             # * The current version is not the cloned version.
@@ -323,7 +324,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We loop through the list of indexes.
 
                 # We create the right link.
-                link_to_download = Version(True).right_url_from_version(
+                link_to_download = self.version.right_url_from_version(
                     PyFunceble.CONFIGURATION["links"][index]
                 )
 
@@ -336,8 +337,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We finally download the file.
                 Download(link_to_download, destination).text()
 
-    @classmethod
-    def _install_iana_config(cls):
+    def _install_iana_config(self):
         """
         Download `iana-domains-db.json` if not present.
         """
@@ -348,12 +348,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
         iana_link = PyFunceble.CONFIGURATION["links"]["iana"]
 
         # We update the link according to our current version.
-        iana_link = Version(True).right_url_from_version(iana_link)
+        iana_link = self.version.right_url_from_version(iana_link)
 
         # We set the destination of the downloaded file.
         destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
-        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -364,8 +364,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We do not need to download the file, so we are returning None.
         return None
 
-    @classmethod
-    def _install_psl_config(cls):
+    def _install_psl_config(self):
         """
         Download `public-suffix.json` if not present.
         """
@@ -376,7 +375,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         psl_link = PyFunceble.CONFIGURATION["links"]["psl"]
 
         # We update the link according to our current version.
-        psl_link = Version(True).right_url_from_version(psl_link)
+        psl_link = self.version.right_url_from_version(psl_link)
 
         # We set the destination of the downloaded file.
         destination = (
@@ -384,7 +383,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["public_suffix"]
         )
 
-        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -395,8 +394,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We do not need to download the file, so we are returning None.
         return None
 
-    @classmethod
-    def _install_directory_structure_file(cls):
+    def _install_directory_structure_file(self):
         """
         Download the latest version of `dir_structure_production.json`.
         """
@@ -407,7 +405,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         dir_structure_link = PyFunceble.CONFIGURATION["links"]["dir_structure"]
 
         # We update the link according to our current version.
-        dir_structure_link = Version(True).right_url_from_version(dir_structure_link)
+        dir_structure_link = self.version.right_url_from_version(dir_structure_link)
 
         # We set the destination of the downloaded file.
         destination = (
@@ -415,7 +413,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + PyFunceble.CONFIGURATION["outputs"]["default_files"]["dir_structure"]
         )
 
-        if not Version(True).is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -568,7 +566,7 @@ class Version:
             )  # pylint: disable=line-too-long
 
             # We update the link according to our current version.
-            upstream_link = Version(True).right_url_from_version(upstream_link)
+            upstream_link = self.right_url_from_version(upstream_link)
 
             # We get the link content and convert it to a dict which is more
             # usable.
