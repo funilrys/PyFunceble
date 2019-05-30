@@ -144,12 +144,15 @@ Install and load the default configuration at the mentioned location? [y/n] "
         ]:
             # We loop through the key which contain paths under the `outputs` index.
 
-            # And we fix the path.
-            # Which means: If they do not end with the directory separator, we append
-            # it to the end.
-            PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
-                PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
-            ).fix_path()
+            try:
+                # And we fix the path.
+                # Which means: If they do not end with the directory separator, we append
+                # it to the end.
+                PyFunceble.CONFIGURATION["outputs"][main_key]["directory"] = Directory(
+                    PyFunceble.CONFIGURATION["outputs"][main_key]["directory"]
+                ).fix_path()
+            except KeyError:
+                pass
 
         for main_key in ["analytic", "logs"]:
             # We loop through the key which are more deeper under the `outputs` index.
