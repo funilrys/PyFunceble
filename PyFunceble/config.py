@@ -447,13 +447,15 @@ class Merge:  # pylint: disable=too-few-public-methods
 
         self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
 
-        self.local_config = Dict().from_yaml(File(self.path_to_config).read())
-        self.upstream_config = Dict().from_yaml(
+        dict_instance = Dict()
+
+        self.local_config = dict_instance.from_yaml(File(self.path_to_config).read())
+        self.upstream_config = dict_instance.from_yaml(
             Download(config_link, return_data=True).text()
         )
 
         if self.upstream_config["links"]["config"] != config_link:
-            self.upstream_config = Dict().from_yaml(
+            self.upstream_config = dict_instance.from_yaml(
                 Download(
                     self.upstream_config["links"]["config"], return_data=True
                 ).text()

@@ -481,16 +481,18 @@ class DirectoryStructure:  # pragma: no cover
         if not PyFunceble.path.isdir(directory):
             # The given directory does not exist.
 
+            travis = Travis()
+
             # We update the permission.
             # (Only if we are under Travis CI.)
-            Travis().permissions()
+            travis.permissions()
 
             # We create the directory.
             PyFunceble.mkdir(directory)
 
             # We update the permission.
             # (Only if we are under Travis CI.)
-            Travis().permissions()
+            travis.permissions()
 
     def restore(self):
         """

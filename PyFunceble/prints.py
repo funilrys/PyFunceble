@@ -169,6 +169,9 @@ class Prints:
         # We initiate a variable which will save the currently in use header.
         self.currently_used_header = {}
 
+        # We initate a instance of the file output.
+        self.file_output_instance = File(self.output)
+
     def _before_header(self):
         """
         Print informations about PyFunceble and the date of generation of a file
@@ -217,12 +220,12 @@ class Prints:
             try:
                 # We try to print the link, the date of generation and the header in the
                 # given file.
-                File(self.output).write(link + date_of_generation + header)
+                self.file_output_instance.write(link + date_of_generation + header)
             except UnboundLocalError:
                 # We don't have any header.
 
                 # We print the link and the date in the given file.
-                File(self.output).write(link + date_of_generation)
+                self.file_output_instance.write(link + date_of_generation)
 
     @classmethod
     def _header_constructor(
@@ -426,7 +429,7 @@ class Prints:
                         # An output destination is given.
 
                         # We write the file with the formatted header template.
-                        File(self.output).write(formatted_template + "\n")
+                        self.file_output_instance.write(formatted_template + "\n")
 
     def _data_constructor(self, size):
         """
@@ -538,7 +541,7 @@ class Prints:
                 # The given output already exist.
 
                 # We get the content of the output.
-                content = Dict().from_json(File(self.output).read())
+                content = Dict().from_json(self.file_output_instance.read())
 
                 if isinstance(content, list):
                     # The content is a list.
@@ -670,7 +673,7 @@ class Prints:
                     # * The output is given.
 
                     # We write our data into the printed file.
-                    File(self.output).write(data + "\n")
+                    self.file_output_instance.write(data + "\n")
         else:
             # This should never happend. If it's happens then there's a big issue
             # around data_to_print.

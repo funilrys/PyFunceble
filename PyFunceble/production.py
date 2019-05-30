@@ -466,8 +466,10 @@ class Production:  # pylint: disable=too-few-public-methods
             # for production.
             raise Exception("Please switch to `dev` or `master` branch.")
 
+        file_instance = File(file_to_update)
+
         # We get the content of the file to fix.
-        to_update = File(file_to_update).read()
+        to_update = file_instance.read()
 
         for replacement, regex in regexes.items():
             # We loop through reach element of the map.
@@ -477,7 +479,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
         # We finally overwrite the file to fix with the filtered.
         # content.
-        File(file_to_update).write(to_update, overwrite=True)
+        file_instance.write(to_update, overwrite=True)
 
     def _update_setup_py(self):
         """
@@ -511,8 +513,10 @@ class Production:  # pylint: disable=too-few-public-methods
             # production.
             raise Exception("Please switch to `dev` or `master` branch.")
 
+        file_instance = File(setup_py_path)
+
         # We get the file content.
-        to_update = File(setup_py_path).read()
+        to_update = file_instance.read()
 
         for replacement, regex in regexes.items():
             # We loop through our map.
@@ -522,7 +526,7 @@ class Production:  # pylint: disable=too-few-public-methods
 
         # We finally replace the content of the file with the filtered
         # version.
-        File(setup_py_path).write(to_update, overwrite=True)
+        file_instance.write(to_update, overwrite=True)
 
     def _update_travis_yml(self):
         """
@@ -555,8 +559,10 @@ class Production:  # pylint: disable=too-few-public-methods
             # We raise an exception, the current branch is not meant for production.
             raise Exception("Please switch to `dev` or `master` branch.")
 
+        file_instance = File(travis_yml_path)
+
         # We get the file content.
-        to_update = File(travis_yml_path).read()
+        to_update = file_instance.read()
 
         for replacement, regex in regexes.items():
             # We loop through the map.
@@ -566,4 +572,4 @@ class Production:  # pylint: disable=too-few-public-methods
 
         # We finaly replace the file content with the filtered
         # content.
-        File(travis_yml_path).write(to_update, overwrite=True)
+        file_instance.write(to_update, overwrite=True)
