@@ -112,6 +112,7 @@ outputs:
     files:
       sqlite: sqlite.sql
       mariadb: mariadb.sql
+      mysql: mysql.sql
 
   domains:
     directory: domains
@@ -251,6 +252,7 @@ links:
   dir_structure: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/dir_structure_production.json"
   iana: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/iana-domains-db.json"
   mariadb: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mariadb.sql"
+  mysql: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mysql.sql"
   psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"

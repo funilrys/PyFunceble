@@ -55,6 +55,35 @@
 
     **Description:** Set the upstream link to the IANA zone file configuration file.
 
+:code:`links[mariadb]`
+""""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mariadb.sql`
+
+    **Description:** Set the upstream link to the MariaDB table constructor file.
+
+
+:code:`links[mysql]`
+""""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mysql.sql`
+
+    **Description:** Set the upstream link to the MySQL table constructor file.
+
+:code:`links[psl]`
+""""""""""""""""""
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json`
+
+    **Description:** Set the upstream link to the public suffix database file.
+
+
 :code:`links[repo]`
 """""""""""""""""""
 
@@ -73,11 +102,11 @@
 
     **Description:** Set the upstream link to the :code:`requirements.txt` file.
 
-:code:`links[psl]`
-""""""""""""""""""
+:code:`links[sqlite]`
+"""""""""""""""""""""
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/sqlite.sql`
 
-    **Description:** Set the upstream link to the public suffix database file.
+    **Description:** Set the upstream link to the SQLite table constructor file.

@@ -149,7 +149,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 return fetched[0] != 0
 
-            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "SELECT COUNT(*) "
                     "FROM {0} "
@@ -183,7 +183,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             return self.sqlite_db.tables["auto_continue"]
-        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["auto_continue"]
         return "auto_continue"
 
@@ -207,7 +207,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             return fetched[0] == 0
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
                 self.table_name
             )
@@ -295,7 +295,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     )
                 # And we commit the changes.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query string.
 
                 digest = sha256(
@@ -391,7 +391,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 self.sqlite_db.cursor.execute(query, {"file": self.filename})
                 # We commit everything.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = "DELETE FROM {0} WHERE file_path = %(file)s".format(
                     self.table_name
@@ -472,7 +472,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                     # We then update/transfert it to its global place.
                     tested += fetched[0]
-                elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+                elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                     if PyFunceble.CONFIGURATION["inactive_database"]:
                         query = (
                             "SELECT COUNT(*) "
@@ -532,7 +532,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             if fetched:
                 return {x["subject"] for x in fetched}
-        elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
                 self.table_name
             )

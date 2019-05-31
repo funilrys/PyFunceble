@@ -157,7 +157,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 return fetched[0] != 0
 
-            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "SELECT COUNT(*) "
                     "FROM {0} "
@@ -220,7 +220,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             return self.sqlite_db.tables["inactive"]
-        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["inactive"]
         return "inactive"
 
@@ -511,7 +511,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we commit the changes.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
 
                 query = (
@@ -585,7 +585,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 )
                 # We commit everything.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = (
                     "DELETE FROM {0} "
@@ -628,12 +628,17 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if fetched:
                 return [x["subject"] for x in fetched]
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+                cast_type = "INTEGER"
+            else:
+                cast_type = "UNSIGNED"
+
             query = (
                 "SELECT * FROM {0} WHERE file_path = %(file)s "
-                "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "
-                "> (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
-            ).format(self.table_name)
+                "AND CAST(UNIX_TIMESTAMP() AS {1}) "
+                "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
+            ).format(self.table_name, cast_type)
 
             with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
@@ -678,12 +683,17 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if fetched:
                 return {x["subject"] for x in fetched}
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+                cast_type = "INTEGER"
+            else:
+                cast_type = "UNSIGNED"
+
             query = (
                 "SELECT * FROM {0} WHERE file_path= %(file)s "
-                "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "
-                "< (CAST(UNIX_TIMESTAMP(modified) AS INTEGER) + CAST(%(days)s AS INTEGER))"
-            ).format(self.table_name)
+                "AND CAST(UNIX_TIMESTAMP() AS {1}) "
+                "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
+            ).format(self.table_name, cast_type)
 
             with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
