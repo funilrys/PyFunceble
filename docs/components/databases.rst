@@ -23,7 +23,7 @@ Databases types
 ===============
 
 Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble :code:`>=1.18.0`),
-we offer multiple database types which are (as per configuration) :code:`json` (default), :code:`sqlite` and :code:`mysql`.
+we offer multiple database types which are (as per configuration) :code:`json` (default), :code:`sqlite`, :code:`mariadb` and :code:`mysql`.
 
 Why different database types?
 -----------------------------
