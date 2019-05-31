@@ -113,7 +113,7 @@ class MySQL:
         Provide the authorization to operate.
         """
 
-        return PyFunceble.CONFIGURATION["db_type"] == "mysql"
+        return PyFunceble.CONFIGURATION["db_type"] == "mariadb"
 
     @classmethod
     def parse_mysql_sql_file(cls):
@@ -124,7 +124,7 @@ class MySQL:
         source = (
             PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.OUTPUTS["db_type"]["directory"]
-            + PyFunceble.OUTPUTS["db_type"]["files"]["mysql"]
+            + PyFunceble.OUTPUTS["db_type"]["files"]["mariadb"]
         )
 
         statements = []

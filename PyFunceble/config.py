@@ -322,7 +322,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 PyFunceble.mkdir(destination_dir)
 
             # We set the list of index to download.
-            index_to_download = ["sqlite", "mysql"]
+            index_to_download = ["sqlite", "mariadb"]
 
             for index in index_to_download:
                 # We loop through the list of indexes.

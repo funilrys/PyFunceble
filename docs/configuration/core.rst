@@ -84,7 +84,7 @@
 
     **Default value:** :code:`json`
 
-    **Available values:** :code:`json`, :code:`sqlite`
+    **Available values:** :code:`json`, :code:`mariadb`, :code:`sqlite`
 
     **Description:** Set the database type to use everytime we create a database.
 

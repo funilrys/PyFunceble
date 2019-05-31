@@ -45,8 +45,8 @@ exclude_lines =
 
     # Don't complain for those blocks
     PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"
-    PyFunceble\.CONFIGURATION\["db_type"\] == "mysql"
-    PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mysql"\]
+    PyFunceble\.CONFIGURATION\["db_type"\] == "mariadb"
+    PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mariadb"\]
 
 
 ignore_errors = True

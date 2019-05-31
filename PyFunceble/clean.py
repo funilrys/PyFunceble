@@ -261,7 +261,7 @@ class Clean:
 
                     sqlite_db.cursor.execute(query)
                     sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                 from PyFunceble.mysql import MySQL
 
                 mysql_db = MySQL()

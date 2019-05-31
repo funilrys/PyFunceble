@@ -157,7 +157,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 return fetched[0] != 0
 
-            if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                 query = (
                     "SELECT COUNT(*) "
                     "FROM {0} "
@@ -220,7 +220,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             return self.sqlite_db.tables["inactive"]
-        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             return self.mysql_db.tables["inactive"]
         return "inactive"
 
@@ -511,7 +511,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we commit the changes.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                 digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
 
                 query = (
@@ -585,7 +585,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 )
                 # We commit everything.
                 self.sqlite_db.connection.commit()
-            elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                 # We construct the query we are going to execute.
                 query = (
                     "DELETE FROM {0} "
@@ -628,7 +628,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if fetched:
                 return [x["subject"] for x in fetched]
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             query = (
                 "SELECT * FROM {0} WHERE file_path = %(file)s "
                 "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "
@@ -678,7 +678,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if fetched:
                 return {x["subject"] for x in fetched}
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             query = (
                 "SELECT * FROM {0} WHERE file_path= %(file)s "
                 "AND CAST(UNIX_TIMESTAMP() AS INTEGER) "

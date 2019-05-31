@@ -109,7 +109,7 @@ class WhoisDB:
 
             return fetched[0] != 0
 
-        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
                 self.table_name
             )
@@ -130,7 +130,7 @@ class WhoisDB:
 
             return None
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mysql"]:
+        if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mariadb"]:
             fetched = None
 
             if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
@@ -141,7 +141,7 @@ class WhoisDB:
                 output = self.sqlite_db.cursor.execute(query, {"subject": index})
                 fetched = output.fetchone()
 
-            if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                 query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
                     self.table_name
                 )
@@ -198,7 +198,7 @@ class WhoisDB:
                 self.sqlite_db.connection.commit()
             except self.sqlite_db.errors:
                 pass
-        elif PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        elif PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             query = (
                 "INSERT INTO {0} "
                 "(subject, expiration_date, expiration_date_epoch, state, digest) "
@@ -285,7 +285,7 @@ class WhoisDB:
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             return self.sqlite_db.tables["whois"]
-        if PyFunceble.CONFIGURATION["db_type"] == "mysql":
+        if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
             return self.mysql_db.tables["whois"]
         return "whois"
 
