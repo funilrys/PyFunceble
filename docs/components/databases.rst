@@ -38,8 +38,8 @@ How to use the :code:`sqlite` format?
 
 Simply switch the :code:`db_type` index of your configuration file to :code:`sqlite`. That's it.
 
-How to use the :code:`mysql` format?
-------------------------------------
+How to use the :code:`mysql` or :code:`mariadb` format?
+-------------------------------------------------------
 
 1. Create a new user, password and database (optional) for PyFunceble to work with.
 2. Create a :code:`.pyfunceble-env` file at the root of your configuration directory.
@@ -54,7 +54,7 @@ How to use the :code:`mysql` format?
     PYFUNCEBLE_DB_PORT=3306
     PYFUNCEBLE_DB_USERNAME=pyfunceble
 
-4. Switch the :code:`db_type` index of your configuration file to :code:`mysql`.
+4. Switch the :code:`db_type` index of your configuration file to :code:`mysql` or :code:`mariadb`.
 5. Play with PyFunceble!
 
 .. note::
