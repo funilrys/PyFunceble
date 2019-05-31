@@ -425,30 +425,21 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             already_tested_continue = self.autocontinue.get_already_tested()
             already_tested_inactive_db = self.inactive_db.get_already_tested()
 
-            if not PyFunceble.CONFIGURATION["adblock"]:
-                # We do not have to adblock decode the content
-                # of the file.
+            with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
+                if not PyFunceble.CONFIGURATION["adblock"]:
+                    formatted_subjects = set(pool.map(self._format_line, file))
+                else:
+                    formatted_subjects = {x for x in AdBlock(file).decode()}
 
-                with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
-                    to_test = chain(
-                        list(
-                            set(pool.map(self._format_line, file))
-                            - already_tested_continue
-                            - already_tested_inactive_db
-                        ),
-                        self.inactive_db.get_to_retest(),
-                    )
-            else:
-                # We do have to decode the content of the file.
+                subjects_to_test = formatted_subjects - already_tested_continue
+                subjects_to_test -= already_tested_inactive_db
 
-                to_test = chain(
-                    list(
-                        set(AdBlock(file).decode())
-                        - already_tested_continue
-                        - already_tested_inactive_db
-                    ),
-                    self.inactive_db.get_to_retest(),
-                )
+                if not subjects_to_test:
+                    subjects_to_test = list(formatted_subjects)
+                else:
+                    subjects_to_test = list(subjects_to_test)
+
+                to_test = chain(subjects_to_test, self.inactive_db.get_to_retest())
 
             with Manager() as manager:
                 # We initiate a server process.

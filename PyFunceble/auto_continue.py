@@ -437,27 +437,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.INTERN["counter"]["number"][status] = 0
                         continue
                 elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                    if PyFunceble.CONFIGURATION["inactive_database"]:
-                        query = (
-                            "SELECT COUNT(*) "
-                            "FROM {0} "
-                            "WHERE status = :status "
-                            "AND file_path = :file "
-                            "AND subject "
-                            "NOT IN ("
-                            "SELECT subject "
-                            "FROM {1}"
-                            "WHERE created != modified "
-                            "AND file_path = :file "
-                            ")"
-                        ).format(self.table_name, self.sqlite_db.tables["inactive"])
-                    else:
-                        query = (
-                            "SELECT COUNT(*) "
-                            "FROM {0} "
-                            "WHERE status = :status "
-                            "AND file_path = :file "
-                        ).format(self.table_name)
+                    query = (
+                        "SELECT COUNT(*) "
+                        "FROM {0} "
+                        "WHERE status = :status "
+                        "AND file_path = :file "
+                    ).format(self.table_name)
 
                     output = self.sqlite_db.cursor.execute(
                         query,
@@ -473,27 +458,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     # We then update/transfert it to its global place.
                     tested += fetched[0]
                 elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-                    if PyFunceble.CONFIGURATION["inactive_database"]:
-                        query = (
-                            "SELECT COUNT(*) "
-                            "FROM {0} "
-                            "WHERE status = %(status)s "
-                            "AND file_path = %(file)s "
-                            "AND subject "
-                            "NOT IN ("
-                            "SELECT subject "
-                            "FROM {1} "
-                            "WHERE created != modified "
-                            "AND file_path = %(file)s "
-                            ")"
-                        ).format(self.table_name, self.mysql_db.tables["inactive"])
-                    else:
-                        query = (
-                            "SELECT COUNT(*) "
-                            "FROM {0} "
-                            "WHERE status = %(status)s "
-                            "AND file_path = %(file)s "
-                        ).format(self.table_name)
+                    query = (
+                        "SELECT COUNT(*) "
+                        "FROM {0} "
+                        "WHERE status = %(status)s "
+                        "AND file_path = %(file)s "
+                    ).format(self.table_name)
 
                     with self.mysql_db.get_connection() as cursor:
                         cursor.execute(

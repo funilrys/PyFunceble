@@ -309,6 +309,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             of all the noises around the element we want to test.
         """
 
+        line = line.strip()
+
         if line and not line.startswith("#"):
             # The line is not a commented line.
 
@@ -487,14 +489,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # rush before starting to filter and test.
         subject = self._format_line(line)
 
-        if manager_data is None and (subject in autocontinue or subject in inactive_db):
-            # * The subject is in the autocontinue database.
-            # or
-            # * The subject is in the inactive database.
-
-            # We return None, thre is nothing to test.
-            return None
-
         if (
             not PyFunceble.CONFIGURATION["local"]
             and PyFunceble.Check(subject).is_reserved_ipv4()
@@ -604,38 +598,41 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.
 
+            already_tested_continue = self.autocontinue.get_already_tested()
+            already_tested_inactive_db = self.inactive_db.get_already_tested()
+
+            if not PyFunceble.CONFIGURATION["adblock"]:
+                formatted_subjects = {self._format_line(x) for x in file}
+            else:
+                formatted_subjects = {x for x in AdBlock(file).decode()}
+
+            subjects_to_test = formatted_subjects - already_tested_continue
+            subjects_to_test -= already_tested_inactive_db
+
+            if not subjects_to_test:
+                subjects_to_test = list(formatted_subjects)
+            else:
+                subjects_to_test = list(subjects_to_test)
+
             if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
                 # We do not have to sort hierarchicaly.
 
                 # We sort the lines standarly.
-                file = List(file).custom_format(Sort.standard)
+                subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
             else:
                 # We do have to sort hierarchicaly.
 
                 # We sort the lines hierarchicaly.
-                file = List(file).custom_format(Sort.hierarchical)
+                subjects_to_test = List(subjects_to_test).custom_format(
+                    Sort.hierarchical
+                )
 
-            if not PyFunceble.CONFIGURATION["adblock"]:
-                # We do not have to adblock decode the content
-                # of the file.
+            for line in chain(subjects_to_test, self.inactive_db.get_to_retest()):
+                # We loop through the file decoded file
+                # content.
 
-                for line in chain(file, self.inactive_db.get_to_retest()):
-                    # We loop through the file content and the
-                    # inactive dataset to retest.
-
-                    # We test the line.
-                    self._test_line(line)
-            else:
-                # We do have to decode the content of the file.
-
-                for line in chain(
-                    AdBlock(file).decode(), self.inactive_db.get_to_retest()
-                ):
-                    # We loop through the file decoded file
-                    # content.
-
-                    # We test the line.
-                    self._test_line(line)
+                # We test the line.
+                self._test_line(line)
 
         for index, line in self.mining.list_of_mined():
             # We loop through the list of mined domains
