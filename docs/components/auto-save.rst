@@ -1,9 +1,8 @@
-
 Autosave
 ========
 
-Why autosaving?
----------------
+Why do we need it?
+------------------
 
 This component comes along with the auto-continue one. 
 Indeed, after constructing the logic to auto-continue we needed something to autosave. 

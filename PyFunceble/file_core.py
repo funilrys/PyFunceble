@@ -141,9 +141,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We download the file if it is a list.
         self.download_link()
 
-        # We generate the directory structure.
-        PyFunceble.DirectoryStructure()
-
     @classmethod
     def get_simple_coloration(cls, status):
         """

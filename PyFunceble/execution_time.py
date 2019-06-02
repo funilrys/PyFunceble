@@ -248,13 +248,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 # We try to save the whole data at its final location.
                 Dict(content).to_json(self.file)
             except FileNotFoundError:
-                # The directory was not found.
-
-                # We construct the output directory
-                PyFunceble.DirectoryStructure()
-
-                # And we retry to save the whole data at its final location.
-                Dict(content).to_json(self.file)
+                pass
 
     @classmethod
     def _starting_time(cls):  # pragma: no cover

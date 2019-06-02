@@ -1,8 +1,8 @@
 Cleaning
 ========
 
-Why cleaning?
--------------
+Why do we need it?
+------------------
 
 Because we constantly need to clean files which are not needed before starting a new test,
 we embedded our cleaning logic.

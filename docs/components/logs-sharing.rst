@@ -1,7 +1,7 @@
 Logs Sharing
 ============
 
-Why logs sharing?
+Why do we need it?
 ------------------
 
 We chose to initiate the logs sharing as some actions can really be random when working with millions of domains.

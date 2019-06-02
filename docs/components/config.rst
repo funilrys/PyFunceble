@@ -1,8 +1,8 @@
 Configuration
 =============
 
-Why do we need configuration?
------------------------------
+Why do we need it?
+------------------
 
 As we wanted to be hybrid and allow different modes and option, we introduced the configuration logic.
 

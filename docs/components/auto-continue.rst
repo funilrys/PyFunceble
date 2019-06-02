@@ -1,7 +1,7 @@
 Autocontinue
 =============
 
-Why auto-continue?
+Why do we need it?
 ------------------
 
 We chose to create the auto-continue logic mainly for one purpose: Testing long files into Travis CI. 

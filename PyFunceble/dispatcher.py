@@ -92,7 +92,6 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
             preset = PyFunceble.Preset()
 
-            PyFunceble.DirectoryStructure()
             CLICore.logs_sharing()
 
             ExecutionTime("start")
@@ -100,6 +99,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             if domain_or_ip:
                 SimpleCore(domain_or_ip).domain()
             elif file_path:
+                PyFunceble.DirectoryStructure()
+
                 if PyFunceble.CONFIGURATION["multiprocess"]:
                     preset.maximal_processes()
                     preset.multiprocess()
@@ -110,6 +111,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
                 else:
                     FileCore(file_path, "domain").read_and_test_file_content()
             elif link_to_test:
+                PyFunceble.DirectoryStructure()
+
                 if PyFunceble.CONFIGURATION["multiprocess"]:
                     preset.maximal_processes()
                     preset.multiprocess()
@@ -120,6 +123,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
                 else:
                     FileCore(link_to_test, "domain").read_and_test_file_content()
             elif url_file_path:
+                PyFunceble.DirectoryStructure()
                 preset.file_url()
 
                 if PyFunceble.CONFIGURATION["multiprocess"]:
