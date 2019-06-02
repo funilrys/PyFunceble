@@ -79,7 +79,9 @@ class TestMining(TestCase):
         Setup everything needeed for the test.
         """
 
-        PyFunceble.load_config(generate_directory_structure=False)
+        PyFunceble.load_config(
+            generate_directory_structure=False, custom={"db_type": "json"}
+        )
 
         PyFunceble.CONFIGURATION["mining"] = True
 
@@ -109,176 +111,168 @@ class TestMining(TestCase):
         Test the case that we want to retrieve a file that does not exist.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            actual = PyFunceble.path.isfile(self.file)
-            expected = False
+        actual = PyFunceble.path.isfile(self.file)
+        expected = False
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            self.mining.load()
+        self.mining.load()
 
-            excepted = {self.file_to_test: {}}
-            self.assertEqual(excepted, self.mining.database)
+        excepted = {self.file_to_test: {}}
+        self.assertEqual(excepted, self.mining.database)
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_load_file_exist(self):
         """
         Test the case that we want to retrieve a file that exist.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            Dict(self.excepted_content).to_json(self.file)
+        Dict(self.excepted_content).to_json(self.file)
 
-            self.mining.load()
+        self.mining.load()
 
-            self.assertEqual(self.excepted_content, self.mining.database)
+        self.assertEqual(self.excepted_content, self.mining.database)
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_add(self):
         """
         Test the addition subsystem.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            expected = {
-                self.file_to_test: {
-                    "www.google.com": ["facebook.com", "www.facebook.com"]
-                }
-            }
+        expected = {
+            self.file_to_test: {"www.google.com": ["facebook.com", "www.facebook.com"]}
+        }
 
-            self.mining["www.google.com"] = ["facebook.com", "www.facebook.com"]
+        self.mining["www.google.com"] = ["facebook.com", "www.facebook.com"]
 
-            self.assertEqual(expected, self.mining.database)
+        self.assertEqual(expected, self.mining.database)
 
-            self.mining["www.google.com"] = ["github.com"]
+        self.mining["www.google.com"] = ["github.com"]
 
-            expected[self.file_to_test]["www.google.com"].append("github.com")
+        expected[self.file_to_test]["www.google.com"].append("github.com")
 
-            self.assertEqual(expected, self.mining.database)
+        self.assertEqual(expected, self.mining.database)
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_remove(self):
         """
         Test the deletion subsystem.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            expected = {
-                self.file_to_test: {
-                    "myètherwället.com": ["www.facebook.com", "facebook.com"],
-                    "example.org": ["facebook.com"],
-                }
+        expected = {
+            self.file_to_test: {
+                "myètherwället.com": ["www.facebook.com", "facebook.com"],
+                "example.org": ["facebook.com"],
             }
-            self.mining.database = {self.file_to_test: {}}
+        }
+        self.mining.database = {self.file_to_test: {}}
 
-            self.mining["myètherwället.com"] = ["www.facebook.com", "facebook.com"]
-            self.mining["example.org"] = ["www.facebook.com", "facebook.com"]
+        self.mining["myètherwället.com"] = ["www.facebook.com", "facebook.com"]
+        self.mining["example.org"] = ["www.facebook.com", "facebook.com"]
 
-            self.mining.remove("example.org", "www.facebook.com")
-            self.assertEqual(expected, self.mining.database)
+        self.mining.remove("example.org", "www.facebook.com")
+        self.assertEqual(expected, self.mining.database)
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
     def test_list_of_mined(self):
         """
         Test Mining.list_of_mined
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            self.mining.database = self.excepted_content
+        self.mining.database = self.excepted_content
 
-            expected = [
-                ("myètherwället.com", "www.google.com"),
-                ("myètherwället.com", "www.facebook.com"),
-            ]
+        expected = [
+            ("myètherwället.com", "www.google.com"),
+            ("myètherwället.com", "www.facebook.com"),
+        ]
 
-            self.assertEqual(expected, self.mining.list_of_mined())
+        self.assertEqual(expected, self.mining.list_of_mined())
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
     def test_save(self):
         """
         Test the saving system.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            File(self.file).delete()
+        File(self.file).delete()
 
-            expected = False
-            actual = PyFunceble.path.isfile(self.file)
+        expected = False
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
-            self.mining.database = self.excepted_content
-            self.mining.save()
+        self.mining.database = self.excepted_content
+        self.mining.save()
 
-            expected = True
-            actual = PyFunceble.path.isfile(self.file)
+        expected = True
+        actual = PyFunceble.path.isfile(self.file)
 
-            self.assertEqual(
-                self.excepted_content, Dict().from_json(File(self.file).read())
-            )
+        self.assertEqual(
+            self.excepted_content, Dict().from_json(File(self.file).read())
+        )
 
-            File(self.file).delete()
+        File(self.file).delete()
 
-            actual = PyFunceble.path.isfile(self.file)
-            expected = False
+        actual = PyFunceble.path.isfile(self.file)
+        expected = False
 
-            self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
