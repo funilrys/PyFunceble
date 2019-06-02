@@ -15,6 +15,8 @@ The tool to check the availability or syntax of domains, IPv4 or URL
     :target: https://github.com/funilrys/PyFunceble/issues
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
+.. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
+    :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
