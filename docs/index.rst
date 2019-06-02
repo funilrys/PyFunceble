@@ -120,6 +120,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Components
 
+   components/auto-continue
    components/databases
    components/environment-variables
    components/logs-sharing
