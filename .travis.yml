@@ -37,11 +37,12 @@ install:
   - source activate test-environment
   - python -VV
   - pip --version
-  - pip install pylint coverage coveralls
+  - pip install pylint coverage coveralls codacy-coverage
 
 script:
   - python setup.py install
   - coverage run setup.py test
+  - coverage xml # Needed for codacy.
   - echo "Lint PyFunceble" && pylint PyFunceble
   - echo "Lint tests" && pylint tests/*.py
   - PyFunceble -v
@@ -64,6 +65,7 @@ script:
   - python .travis/complementary/custom_configuration.py
 
 after_success:
+  - python-codacy-coverage -r coverage.xml
   - coveralls
 
 deploy:
