@@ -9,7 +9,7 @@ As it is always nice to see how long we worked, we added this logic!
 How does it work?
 -----------------
 
-It shows the exection time on screen (:code:`stdout`) and into the :code:`output/logs/percentage/percentage.txt` if :code:`show_percentage` is activated.
+It shows the exection time on screen (:code:`stdout`) and at the end of the :code:`output/logs/percentage/percentage.txt` file if :code:`show_percentage` is activated.
 
 How to use it?
 --------------
