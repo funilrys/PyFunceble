@@ -122,6 +122,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
    components/auto-continue
    components/auto-save
+   components/clean
    components/databases
    components/environment-variables
    components/logs-sharing
