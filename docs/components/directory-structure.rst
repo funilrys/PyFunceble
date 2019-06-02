@@ -12,12 +12,12 @@ How does it work?
 -----------------
 
 After each version, the maintainer does a :code:`--production` which will prepare the repository
-for production. 
-That has the side effect to map the maintainer version of the :code:`output/` 
+for production.
+That has the side effect to map the maintainer version of the :code:`output/`
 directory into a file called :code:`dir_structure_production.json`.
 
 Once pushed, on the end-user side, when testing for file, that file is downloaded into
-a file called :code:`dir_structure.json` which is then used to restore/create a 
+a file called :code:`dir_structure.json` which is then used to restore/create a
 a perfect copy of the output directory the maintainer had when pushing the new
 version.
 
@@ -29,4 +29,4 @@ version.
 How to generate it manually?
 ----------------------------
 
-You can't. But using the :code:`--dir-structure` will do the job on purpose.
+You can't. But using the :code:`--dir-structure` argument will do the job on purpose.
