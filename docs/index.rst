@@ -121,6 +121,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Components
 
    components/auto-continue
+   components/auto-save
    components/databases
    components/environment-variables
    components/logs-sharing
