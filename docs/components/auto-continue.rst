@@ -33,4 +33,4 @@ to
     auto_continue: True
 
 
-into your personal :code:`.PyFunceble.yaml` or use the `--auto-continue` argument from the CLI to reactivate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--auto-continue` argument from the CLI to reactivate it.
