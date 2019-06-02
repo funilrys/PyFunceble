@@ -17,8 +17,8 @@ After a given amount of minutes, we stop the tool, generate the percentage,
 run a given command (if found), commit all the changes we made to the repository 
 and finally, push to the git repository.
 
-How to autosave?
-----------------
+How to use it?
+--------------
 
 For Travis CI
 ^^^^^^^^^^^^^

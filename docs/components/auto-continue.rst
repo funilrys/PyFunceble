@@ -17,8 +17,8 @@ How does it work?
 We log every subject already tested previously and remove them when the same file path
 is given again.
 
-How to auto-continue?
----------------------
+How to use it?
+--------------
 
 It is activated by default but if not simply change
 
