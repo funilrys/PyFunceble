@@ -10,24 +10,18 @@ HTTP Code
 .. note::
   The Status Codes we give to PyFunceble to test with can be fully customized in your own :code:`.PyFunceble.yaml`.
 
-We have categorized the HTTP Code into 3 parts.
-
-- Active
-
-  - Consider those ones like the one that influences HTTP source logic.
-  - Please note that the domain is automatically introduced into the official outputs but we keep a record of it :code:`output/Analytic/ACTIVE`.
-
-- Potentially Active
-
-  - If the domain status returned by other methods are different from :code:`INACTIVE` or :code:`INVALID` and the HTTP status code is into that list, we save the domain into :code:`output/Analytic/POTENTIALLY_ACTIVE`
-
-- Inactive or potentially inactive
-
-  - If the domain status returned by other methods are different from :code:`ACTIVE` and the HTTP status code is on that list, we save the domain into :code:`output/Analytic/POTENTIALLY_INACTIVE`
-
-
 As active
 ---------
+
+.. note::
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
+
+.. warning::
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
+  updated to :code:`ACTIVE`.
+
+.. warning::
+  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
 
 - 100 - Continue
 - 101 - Switching Protocols
@@ -41,6 +35,16 @@ As active
 
 As potentially active
 ---------------------
+
+.. note::
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/POTENTIALLY_ACTIVE` directory.
+
+.. warning::
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
+  updated to :code:`ACTIVE`.
+
+.. warning::
+  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
 
 - 000
 - 300 - Multiple Choices
@@ -67,6 +71,12 @@ As potentially active
 
 As inactive or potentially inactive
 -----------------------------------
+
+.. note::
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/POTENTIALLY_INACTIVE` directory.
+
+.. warning::
+  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`INACTIVE`.
 
 - 400 - Bad Request
 - 401 - Unauthorized

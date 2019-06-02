@@ -540,8 +540,9 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     PyFunceble.STATUS["official"]["up"]
                 )
 
-                # And we return the new status and source
-                return self.__http_status_code_up()
+                if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
+                    # And we return the new status and source
+                    return self.__http_status_code_up()
 
             if self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]:
                 # The extracted http status code is in the list of potentially up status.
@@ -551,10 +552,14 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     "potentially_up"
                 )
 
+                if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
+                    # And we return the new status and source
+                    return self.__http_status_code_up()
+
             if (
-                previous_state.lower() in PyFunceble.STATUS["list"]["invalid"]
-                and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]
-            ):
+                previous_state.lower() not in PyFunceble.STATUS["list"]["down"]
+                or previous_state.lower() not in PyFunceble.STATUS["list"]["invalid"]
+            ) and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]:
                 # The extracted http code is in the list of potentially down status code.
 
                 # We generate the analytics files.
