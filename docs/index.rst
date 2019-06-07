@@ -133,6 +133,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/iana
    components/logs-sharing
    components/mining
+   components/output-files
    components/percentage
    components/public-suffix
    components/sorting
