@@ -9,6 +9,9 @@ We use it to check if an extension is valid/exists.
 How does it work?
 -----------------
 
+.. note::
+    Want to read the parser code ? It's here :func:`PyFunceble.iana.IANA`!
+
 The root zone database is saved into the :code:`iana-domains-db.json` file.
 It is formatted like below and is automatically merged for the end-user before
 each test run.

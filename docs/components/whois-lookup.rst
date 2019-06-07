@@ -13,6 +13,9 @@ to determine it.
 How does it work?
 -----------------
 
+.. note::
+    Want to read the code ? It's here :func:`PyFunceble.whois_lookup.WhoisLookup`!
+
 For us the only relevant part is the extraction of the expiration date. Indeed, it's an indicator if a domains
 is still owned by someone, we use it first to get the availability of domains.
 

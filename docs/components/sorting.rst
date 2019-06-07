@@ -17,12 +17,12 @@ How does it work?
     Want to read the code ? It's here: :func:`PyFunceble.sort.Sort`!
 
 Alphabetically
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 This is the default one. The default python :code:`sorted()` function is used for that purpose.
 
 Hierarchically
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 The objective of this is to provide sorting by service/domains.
 

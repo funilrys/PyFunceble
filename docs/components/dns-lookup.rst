@@ -10,6 +10,9 @@ to determine it.
 How does it work?
 -----------------
 
+.. note::
+    Want to read the code ? It's here :func:`PyFunceble.dns_lookup.DNSLookup`!
+
 For domains
 ^^^^^^^^^^^
 

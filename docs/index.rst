@@ -120,6 +120,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Components
 
+   components/adblock
    components/auto-continue
    components/auto-save
    components/clean
@@ -135,7 +136,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/percentage
    components/public-suffix
    components/sorting
-   components/whois_lookup
+   components/whois-lookup
 
 .. toctree::
    :maxdepth: 3
@@ -183,7 +184,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    code/sqlite
    code/status
    code/whois_db
-   code/whois
+   code/whois_lookup
 
 
 Indices and tables

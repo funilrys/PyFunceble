@@ -11,6 +11,9 @@ with our code.
 How does it work?
 -----------------
 
+.. note::
+    Want to read the code ? It's here :func:`PyFunceble.directory_structure.DirectoryStructure`!
+
 After each version, the maintainer does a :code:`--production` which will prepare the repository
 for production.
 That has the side effect to map the maintainer version of the :code:`output/`
