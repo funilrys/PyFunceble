@@ -125,6 +125,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/auto-save
    components/clean
    components/config
+   components/custom-dns-server
    components/databases
    components/directory-structure
    components/dns-lookup
