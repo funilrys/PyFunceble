@@ -133,6 +133,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/logs-sharing
    components/mining
    components/percentage
+   components/public-suffix
 
 .. toctree::
    :maxdepth: 3
