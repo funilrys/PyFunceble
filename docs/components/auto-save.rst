@@ -38,3 +38,8 @@ The following (from the configuration) or their equivalent from the CLI are requ
     travis_autosave_final_commit: "Your awesome final commit message"
     travis_autosave_minutes: 15
     travis_branch: master
+
+.. note::
+    If you give the :code:`command` index something, we will run it at the end of each commits except the last one.
+
+    The command on the last commit is executed based on the given :code:`command_before_end` index.
