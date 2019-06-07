@@ -35,4 +35,4 @@ to
     mining: True
 
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--mining` argument from the CLI to reactivate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--mining` argument from the CLI to activate it.
