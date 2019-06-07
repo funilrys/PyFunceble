@@ -10,7 +10,7 @@ How does it work?
 -----------------
 
 The root zone database is saved into the :code:`iana-domains-db.json` file.
-It is formatted like below and is automatically merge for the end-user before
+It is formatted like below and is automatically merged for the end-user before
 each test run.
 
 ::
