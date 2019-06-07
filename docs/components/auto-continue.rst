@@ -1,10 +1,10 @@
 Autocontinue
-=============
+============
 
 Why do we need it?
 ------------------
 
-We chose to create the auto-continue logic mainly for one purpose: Testing long files into Travis CI. 
+We chose to create the auto-continue logic mainly for one purpose: Testing long files into Travis CI.
 As Travis CI has a time limit of 45 minutes, it became vital for us to be able to stop and continue
 the test from where we were under those 45 minutes. That's how it started.
 
