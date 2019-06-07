@@ -134,6 +134,8 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/mining
    components/percentage
    components/public-suffix
+   components/sorting
+   components/whois_lookup
 
 .. toctree::
    :maxdepth: 3

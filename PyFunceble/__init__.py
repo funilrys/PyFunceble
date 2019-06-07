@@ -89,12 +89,12 @@ from PyFunceble.iana import IANA
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
-from PyFunceble.whois import Whois
+from PyFunceble.whois_lookup import WhoisLookup
 
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.80.0.dev -- 2_0_0_rc25 -- (Blue Bontebok: Beetle)"
+VERSION = "1.81.0.dev -- 2_0_0_rc26 -- (Blue Bontebok: Beetle)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -389,7 +389,7 @@ def whois(subject, server=None, timeout=3):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the whois record.
-        return Whois(subject, server=server, timeout=timeout).request()
+        return WhoisLookup(subject, server=server, timeout=timeout).request()
 
     # We return None, there is nothing to work with.
     return None

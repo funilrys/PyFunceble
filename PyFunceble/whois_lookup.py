@@ -68,7 +68,7 @@ from socket import timeout as socket_timeout
 from PyFunceble.referer import Referer
 
 
-class Whois:
+class WhoisLookup:
     """
     Implementation of the UNIX `whois` command.
 

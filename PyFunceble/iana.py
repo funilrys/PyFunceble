@@ -405,7 +405,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We get the  whois record related to the domain extension we are currently
         # working with.
-        iana_record = PyFunceble.Whois(
+        iana_record = PyFunceble.WhoisLookup(
             "hello.{}".format(extension), PyFunceble.CONFIGURATION["iana_whois_server"]
         ).request()
 
