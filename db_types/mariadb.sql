@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_auto_continue (
     file_path LONGTEXT NOT NULL,
     subject LONGTEXT NOT NULL,
     status VARCHAR(12) NOT NULL,
+    is_complement TINYINT(1) NOT NULL,
     digest VARCHAR(64) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

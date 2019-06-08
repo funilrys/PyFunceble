@@ -405,40 +405,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We inform all subsystem that we are testing for complements.
             self.complements_test_started = True
 
-            if "complements" not in self.autocontinue.database[self.file].keys():
-                # The complements are not saved,
-
-                # We get the list of domains we are going to work with.
-                complements = [
-                    z
-                    for x, y in self.autocontinue.database[self.file].items()
-                    for z in y
-                    if not PyFunceble.Check(z).is_subdomain()
-                    and PyFunceble.Check(z).is_domain()
-                ]
-
-                # We generate the one without "www." if "www." is given.
-                complements.extend([x[4:] for x in complements if x.startswith("www.")])
-                # We generate the one with "www." if "www." is not given.
-                complements.extend(
-                    [
-                        "www.{0}".format(x)
-                        for x in complements
-                        if not x.startswith("www.")
-                    ]
-                )
-
-                # We remove the already tested subjects.
-                complements = set(List(complements).format()) - set(
-                    self.autocontinue.database[self.file].keys()
-                )
-
-                # We save the constructed list of complements
-                self.autocontinue.database[self.file]["complements"] = list(complements)
-                self.autocontinue.save()
-            else:
-                # We get the complements we still have to test.
-                complements = self.autocontinue.database[self.file]["complements"]
+            # We get/generate the complements.
+            complements = self.autocontinue.get_or_generate_complements()
 
         return complements
 
@@ -545,7 +513,10 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # inactive database.
             inactive_db.add(subject)
 
-        if self.complements_test_started:
+        if (
+            self.complements_test_started
+            and PyFunceble.CONFIGURATION["db_type"] == "json"
+        ):
             # We started the test of the complements.
 
             if "complements" in autocontinue.database:

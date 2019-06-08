@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS auto_continue (
     file_path TEXT NOT NULL,
     subject TEXT NOT NULL,
     status TEXT NOT NULL,
+    is_complement INTEGER NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(file_path, subject)

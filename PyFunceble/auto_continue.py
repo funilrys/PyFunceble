@@ -63,7 +63,7 @@ License:
 from hashlib import sha256
 
 import PyFunceble
-from PyFunceble.helpers import Dict, File
+from PyFunceble.helpers import Dict, File, List
 
 
 class AutoContinue:  # pylint: disable=too-many-instance-attributes
@@ -256,7 +256,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 query = (
                     "INSERT INTO {0} "
                     "(file_path, subject, status) "
-                    "VALUES (:file, :subject, :status)"
+                    "VALUES (:file, :subject, :is_complement, :status)"
                 ).format(self.table_name)
 
                 try:
@@ -267,6 +267,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                             {
                                 "file": self.filename,
                                 "subject": subject,
+                                "is_complement": int(False),
                                 "status": status,
                             },
                         )
@@ -278,6 +279,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                             {
                                 "file": self.filename,
                                 "subject": subject,
+                                "is_complement": int(False),
                                 "status": status,
                             },
                         )
@@ -306,8 +308,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                     query = (
                         "INSERT INTO {0} "
-                        "(file_path, subject, status, digest) "
-                        "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
+                        "(file_path, subject, status, is_complement, digest) "
+                        "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)s, %(digest)s)"
                     ).format(self.table_name)
 
                     try:
@@ -317,6 +319,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                                 "file": self.filename,
                                 "subject": subject,
                                 "status": status,
+                                "is_complement": int(False),
                                 "digest": digest,
                             },
                         )
@@ -515,3 +518,191 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 if fetched:
                     return {x["subject"] for x in fetched}
         return set()  # pragma: no cover
+
+    def __generate_complements(self):
+        """
+        Generate the complements from the given list of tested.
+        """
+
+        # We get the list of domains we are going to work with.
+        result = [
+            z
+            for x, y in self.get_already_tested()
+            for z in y
+            if not PyFunceble.Check(z).is_subdomain()
+            and PyFunceble.Check(z).is_domain()
+        ]
+
+        # We generate the one without "www." if "www." is given.
+        result.extend([x[4:] for x in result if x.startswith("www.")])
+        # We generate the one with "www." if "www." is not given.
+        result.extend(["www.{0}".format(x) for x in result if not x.startswith("www.")])
+
+        # We remove the already tested subjects.
+        return set(List(result).format()) - self.get_already_tested()
+
+    def __get_or_generate_complements_json(self):
+        """
+        Get or generate the complements while working with
+        as JSON formatted database.
+        """
+
+        result = []
+
+        if "complements" not in self.database[self.filename].keys():
+            # The complements are not saved,
+
+            # We get the list of domains we are going to work with.
+            result = [
+                z
+                for x, y in self.get_already_tested()
+                for z in y
+                if not PyFunceble.Check(z).is_subdomain()
+                and PyFunceble.Check(z).is_domain()
+            ]
+
+            # We generate the one without "www." if "www." is given.
+            result.extend([x[4:] for x in result if x.startswith("www.")])
+            # We generate the one with "www." if "www." is not given.
+            result.extend(
+                ["www.{0}".format(x) for x in result if not x.startswith("www.")]
+            )
+
+            # We remove the already tested subjects.
+            result = set(List(result).format()) - self.get_already_tested()
+
+            # We save the constructed list of complements
+            self.database[self.filename]["complements"] = list(result)
+            self.save()
+        else:
+            # We get the complements we still have to test.
+            result = self.database[self.filename]["complements"]
+
+        return result
+
+    def __get_or_generate_complements_sqlite(self):
+        """
+        Get or generate the complements while working with
+        as SQLite formatted database.
+        """
+
+        result = []
+
+        query = (
+            "SELECT * "
+            "FROM {0} "
+            "WHERE file_path = :file "
+            "AND is_complement = :is_complement".format(self.table_name)
+        )
+
+        output = self.sqlite_db.cursor.execute(
+            query, {"file": self.filename, "is_complement": int(True)}
+        )
+        fetched = output.fetchall()
+
+        if fetched:
+            result = [x["subject"] for x in fetched]
+        else:
+            result = self.__generate_complements()
+
+        query = (
+            "INSERT INTO {0} "
+            "(file_path, subject, status, is_complement, digest) "
+            "VALUES (:file, :subject, :status, :is_complement, :digest)".format(
+                self.table_name
+            )
+        )
+
+        for subject in result:
+            try:
+                # We execute the query.
+                self.sqlite_db.cursor.execute(
+                    query,
+                    {
+                        "file": self.filename,
+                        "subject": subject,
+                        "status": "",
+                        "is_complement": int(True),
+                        "digest": "",
+                    },
+                )
+            except self.sqlite_db.locked_errors:
+                PyFunceble.sleep(0.3)
+                # We execute the query.
+                self.sqlite_db.cursor.execute(
+                    query,
+                    {
+                        "file": self.filename,
+                        "subject": subject,
+                        "status": "",
+                        "is_complement": int(True),
+                        "digest": "",
+                    },
+                )
+
+        return result
+
+    def __get_or_generate_complements_mysql(self):
+        """
+        Get or generate the complements while working with
+        as MySQL/MariaDB formatted database.
+        """
+
+        result = []
+
+        query = (
+            "SELECT * "
+            "FROM {0} "
+            "WHERE file_path = %(file)s "
+            "AND is_complement = %(is_complement)d".format(self.table_name)
+        )
+
+        with self.mysql_db.get_connection() as cursor:
+            cursor.execute(query, {"file": self.filename})
+            fetched = cursor.fetchall()
+
+            if fetched:
+                result = [x["subject"] for x in fetched]
+            else:
+                result = self.__generate_complements()
+
+        query = (
+            "INSERT INTO {0} "
+            "(file_path, subject, status, is_complement, digest) "
+            "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)d, %(digest)s".format(
+                self.table_name
+            )
+        )
+
+        to_execute = [
+            {
+                "file": self.filename,
+                "subject": subject,
+                "status": "",
+                "is_complement": int(True),
+                "digest": "",
+            }
+            for subject in result
+        ]
+
+        with self.mysql_db.get_connection() as cursor:
+            cursor.executemany(query, to_execute)
+
+        return result
+
+    def get_or_generate_complements(self):
+        """
+        Get or generate the complements.
+        """
+
+        if self.authorized and PyFunceble.CONFIGURATION["generate_complements"]:
+            # We aer authorized to operate.
+
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                return self.__get_or_generate_complements_json()
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                return self.__get_or_generate_complements_sqlite()
+            if PyFunceble.CONFIGURATION["db_type"] in ["mysql", "mariadb"]:
+                return self.__get_or_generate_complements_mysql()
+
+        return list()
