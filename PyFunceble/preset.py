@@ -140,40 +140,54 @@ class Preset:
         )
 
     @classmethod
-    def disable(cls, index):  # pragma: no cover
+    def disable(cls, indexes):  # pragma: no cover
         """
         Set the given configuration index to :code:`False`.
         """
 
         if (
-            index in cls.do_not_overwrite_if_customized
+            indexes in cls.do_not_overwrite_if_customized
             and "custom_loaded" in PyFunceble.INTERN
             and PyFunceble.INTERN["custom_loaded"]
-            and index in PyFunceble.INTERN["custom_config_loaded"]
+            and indexes in PyFunceble.INTERN["custom_config_loaded"]
         ):
             return None
 
-        if index not in PyFunceble.CONFIGURATION or PyFunceble.CONFIGURATION[index]:
-            PyFunceble.CONFIGURATION[index] = False
+        if isinstance(indexes, list):
+            for index in indexes:
+                cls.disable(index)
+        else:
+            if (
+                indexes not in PyFunceble.CONFIGURATION
+                or PyFunceble.CONFIGURATION[indexes]
+            ):
+                PyFunceble.CONFIGURATION[indexes] = False
 
         return None
 
     @classmethod
-    def enable(cls, index):  # pragma: no cover
+    def enable(cls, indexes):  # pragma: no cover
         """
         Set the given configuration index to :code:`True`.
         """
 
         if (
-            index in cls.do_not_overwrite_if_customized
+            indexes in cls.do_not_overwrite_if_customized
             and "custom_loaded" in PyFunceble.INTERN
             and PyFunceble.INTERN["custom_loaded"]
-            and index in PyFunceble.INTERN["custom_config_loaded"]
+            and indexes in PyFunceble.INTERN["custom_config_loaded"]
         ):
             return None
 
-        if index not in PyFunceble.CONFIGURATION or not PyFunceble.CONFIGURATION[index]:
-            PyFunceble.CONFIGURATION[index] = True
+        if isinstance(indexes, list):
+            for index in indexes:
+                cls.enable(index)
+        else:
+            if (
+                indexes not in PyFunceble.CONFIGURATION
+                or not PyFunceble.CONFIGURATION[indexes]
+            ):
+                PyFunceble.CONFIGURATION[indexes] = True
 
         return None
 
@@ -230,8 +244,16 @@ class Preset:
 
         should_be_disabled = ["show_percentage", "whois_database"]
 
-        for index in should_be_disabled:
-            self.enable(index)
+        self.disable(should_be_disabled)
+
+    def complements(self):  # pragma: no cover
+        """
+        Prepare the global configuration for a complements generation.
+        """
+
+        should_be_enabled = ["auto_continue"]
+
+        self.enable(should_be_enabled)
 
     def file_url(self):  # pragma: no cover
         """
@@ -241,11 +263,8 @@ class Preset:
         should_be_disabled = ["generate_hosts"]
         should_be_enabled = ["no_whois", "plain_list_domain", "split"]
 
-        for index in should_be_disabled:
-            self.disable(index)
-
-        for index in should_be_enabled:
-            self.enable(index)
+        self.disable(should_be_disabled)
+        self.enable(should_be_enabled)
 
     def api(self):  # pragma: no cover
         """
@@ -259,11 +278,8 @@ class Preset:
         ]
         should_be_enabled = ["simple", "quiet", "whois_database", "no_files"]
 
-        for index in should_be_disabled:
-            self.disable(index)
-
-        for index in should_be_enabled:
-            self.enable(index)
+        self.disable(should_be_disabled)
+        self.enable(should_be_enabled)
 
     def multiprocess(self):  # pragma: no cover
         """
@@ -271,11 +287,6 @@ class Preset:
         """
 
         if PyFunceble.CONFIGURATION["multiprocess"]:
-            should_be_disabled = []
             should_be_enabled = ["auto_continue", "whois_database"]
 
-            for index in should_be_disabled:
-                self.disable(index)
-
-            for index in should_be_enabled:
-                self.enable(index)
+            self.enable(should_be_enabled)
