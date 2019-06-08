@@ -131,6 +131,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/dns-lookup
    components/environment-variables
    components/execution-time
+   components/filter
    components/iana
    components/logs-sharing
    components/mining
