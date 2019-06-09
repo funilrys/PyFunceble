@@ -63,6 +63,7 @@ from multiprocessing import Pool
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble.helpers import Dict, Download, File, Regex
+from PyFunceble.whois_lookup import WhoisLookup
 
 
 class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -441,6 +442,22 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         return None
 
     @classmethod
+    def _check_referer(cls, extension, referer):
+        """
+        Check if the given referer is reachable
+
+        :param str extension: The extension the referer refers to.
+        :param str referer: The referer to check.
+
+        :rtype: bool
+        """
+
+        return (
+            WhoisLookup("hello.{0}".format(extension), server=referer).request()
+            is not None
+        )
+
+    @classmethod
     def _get_extension_and_referer_from_block(cls, block):
         """
         Extract the extention from the given HTML block.
@@ -466,10 +483,15 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We get the referer.
                 referer = cls._get_referer(matched)
 
-                # We yield the matched extension and its referer.
-                return matched, referer
+                if not referer:
+                    referer = "whois.nic.{0}".format(matched)
 
-        return None, None
+                if cls._check_referer(matched, referer):
+                    return matched, referer, True
+
+                return matched, referer, False
+
+        return None, None, None
 
     def update(self):
         """
@@ -492,16 +514,21 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         )
 
         with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
-            for extension, referer in pool.map(
+            already_checked = []
+            for extension, referer, referer_checked in pool.map(
                 self._get_extension_and_referer_from_block, upstream_lines
             ):
-                if extension is not None:
+                if (extension is not None and referer) and (
+                    referer_checked or referer in already_checked
+                ):
                     if (
                         extension not in self.iana_db
                         or self.iana_db[extension] != referer
                     ):
                         # We add the extension to the databae.
                         self.iana_db[extension] = referer
+
+                already_checked.append(referer)
 
         # We save the content of the constructed database.
         Dict(self.iana_db).to_json(self.destination)
