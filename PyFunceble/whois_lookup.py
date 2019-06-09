@@ -146,7 +146,7 @@ class WhoisLookup:
                 # We eaise an exception.
                 raise ValueError("`timeout` must be an integer or digit string.")
 
-    def request(self):
+    def request(self):  # pragma: no cover
         """
         Perform the WHOIS request.
         """

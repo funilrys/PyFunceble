@@ -519,7 +519,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     return {x["subject"] for x in fetched}
         return set()  # pragma: no cover
 
-    def __generate_complements(self):
+    def __generate_complements(self):  # pragma: no cover
         """
         Generate the complements from the given list of tested.
         """
@@ -541,7 +541,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         # We remove the already tested subjects.
         return set(List(result).format()) - self.get_already_tested()
 
-    def __get_or_generate_complements_json(self):
+    def __get_or_generate_complements_json(self):  # pragma: no cover
         """
         Get or generate the complements while working with
         as JSON formatted database.
@@ -580,7 +580,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         return result
 
-    def __get_or_generate_complements_sqlite(self):
+    def __get_or_generate_complements_sqlite(self):  # pragma: no cover
         """
         Get or generate the complements while working with
         as SQLite formatted database.
@@ -642,7 +642,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         return result
 
-    def __get_or_generate_complements_mysql(self):
+    def __get_or_generate_complements_mysql(self):  # pragma: no cover
         """
         Get or generate the complements while working with
         as MySQL/MariaDB formatted database.
@@ -690,7 +690,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         return result
 
-    def get_or_generate_complements(self):
+    def get_or_generate_complements(self):  # pragma: no cover
         """
         Get or generate the complements.
         """
