@@ -424,6 +424,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
             already_tested_continue = self.autocontinue.get_already_tested()
             already_tested_inactive_db = self.inactive_db.get_already_tested()
+            to_retest_inactive_db = self.inactive_db.get_to_retest()
 
             with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
                 if not PyFunceble.CONFIGURATION["adblock"]:
@@ -433,13 +434,14 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                 subjects_to_test = formatted_subjects - already_tested_continue
                 subjects_to_test -= already_tested_inactive_db
+                subjects_to_test -= to_retest_inactive_db
 
                 if not subjects_to_test:
                     subjects_to_test = list(formatted_subjects)
                 else:
                     subjects_to_test = list(subjects_to_test)
 
-                to_test = chain(subjects_to_test, self.inactive_db.get_to_retest())
+                to_test = chain(subjects_to_test, to_retest_inactive_db)
 
             with Manager() as manager:
                 # We initiate a server process.

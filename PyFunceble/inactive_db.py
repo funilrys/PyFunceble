@@ -603,15 +603,15 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if PyFunceble.CONFIGURATION["db_type"] == "json":
             try:
-                return [
+                return {
                     z
                     for x, y in self.database[self.filename].items()
                     if x.isdigit()
                     and int(PyFunceble.time()) > int(x) + self.days_in_seconds
                     for z in y
-                ]
+                }
             except KeyError:
-                return []
+                return set()
 
         if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
             query = (
@@ -626,7 +626,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             fetched = output.fetchall()
 
             if fetched:
-                return [x["subject"] for x in fetched]
+                return {x["subject"] for x in fetched}
 
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
@@ -647,9 +647,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 fetched = cursor.fetchall()
 
                 if fetched:
-                    return [x["subject"] for x in fetched]
+                    return {x["subject"] for x in fetched}
 
-        return []
+        return set()
 
     def get_already_tested(self):  # pragma: no cover
         """
