@@ -139,6 +139,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/local
    components/logs-sharing
    components/mining
+   components/multiprocessing
    components/output-files
    components/percentage
    components/public-suffix
