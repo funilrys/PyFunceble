@@ -1,6 +1,9 @@
 Certificate verification
 ========================
 
+.. warning::
+    This component is not activated by default.
+
 Why do we need it?
 ------------------
 

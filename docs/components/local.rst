@@ -1,6 +1,9 @@
 Test in/for local hostnames, IPs, components
 ============================================
 
+.. warning::
+    This component is not activated by default.
+
 Why do we need it?
 ------------------
 
