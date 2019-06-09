@@ -136,6 +136,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/execution-time
    components/filter
    components/iana
+   components/local
    components/logs-sharing
    components/mining
    components/output-files
