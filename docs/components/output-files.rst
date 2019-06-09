@@ -20,7 +20,7 @@ Host format
 This is the default output file.
 
 A line is formatted like :code:`0.0.0.0 example.org`.
-.
+
 .. note::
     A custom IP can be set with the help of the :code:`custom_ip` index or the :code:`-ip` argument from the CLI.
 
