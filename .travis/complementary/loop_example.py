@@ -7,8 +7,11 @@ Note:
 * You should always use PyFunceble().test() as it's the method which is especially
     suited for `__name__ != '__main__'` usage.
 """
+from PyFunceble import load_config
 from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
+
+load_config(custom={"db_type": "json"})
 
 DOMAINS = ["twitter.com", "google.com", "github.com", "github.comcomcom", "funilrys.co"]
 

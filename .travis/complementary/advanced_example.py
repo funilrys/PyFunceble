@@ -2,24 +2,36 @@
 This is an advanced example which get more information about the tested element.
 """
 
+from json import dumps
+
 from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
 
-CONFIG = {"no_whois": True}
-DOMAIN = "google.com"
+CONFIG = {"no_whois": True, "db_type": "json"}
+SUBJECTS = ["google.com", "github.com", "example.org", "1.1.1.1", "1.0.0.1"]
 
-DOMAIN_RESULT_FROM_API = PyFunceble(subject=DOMAIN, complete=True, config=CONFIG)
-URL_RESULT_FROM_API = PyFuncebleURL(
-    subject="https://{}".format(DOMAIN), complete=True, config=CONFIG
-)
+for subject in SUBJECTS:
+    output = PyFunceble(subject=subject, complete=True, config=CONFIG)
+    url_output = PyFuncebleURL(
+        subject="https://{}".format(subject), complete=True, config=CONFIG
+    )
 
-print("Start of information from API for {}.".format(DOMAIN))
-print("dns_lookup", DOMAIN_RESULT_FROM_API["dns_lookup"])
-print("domain_syntax_validation", DOMAIN_RESULT_FROM_API["domain_syntax_validation"])
-print(DOMAIN_RESULT_FROM_API["tested"], DOMAIN_RESULT_FROM_API["status"])
+    print("============== COMPLETE DATA: {0} ==============".format(output["tested"]))
 
-print("dns_lookup", URL_RESULT_FROM_API["dns_lookup"])
-print("domain_syntax_validation", URL_RESULT_FROM_API["domain_syntax_validation"])
-print("url_syntax_validation", URL_RESULT_FROM_API["url_syntax_validation"])
-print(URL_RESULT_FROM_API["tested"], DOMAIN_RESULT_FROM_API["status"])
-print(f"End of information from API for {DOMAIN}.")
+    print(dumps(output, indent=4, ensure_ascii=False, sort_keys=True))
+    print(
+        "=============================={0}===============".format(
+            "=" * len(output["tested"])
+        )
+    )
+
+    print(
+        "============== COMPLETE DATA: {0} ==============".format(url_output["tested"])
+    )
+
+    print(dumps(output, indent=4, ensure_ascii=False, sort_keys=True))
+    print(
+        "=============================={0}===============".format(
+            "=" * len(url_output["tested"])
+        )
+    )

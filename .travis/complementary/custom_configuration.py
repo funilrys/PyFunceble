@@ -6,7 +6,7 @@ import PyFunceble
 from PyFunceble import test as PyFuncebleTest
 
 # We preset the indexes (from .PyFunceble.yaml) that we want to update.
-CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET = {"no_whois": True}
+CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET = {"no_whois": True, "db_type": "json"}
 
 # We parse our custom indexes to PyFunceble before starting to use it.
 PyFunceble.load_config(custom=CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET)
@@ -36,7 +36,9 @@ for DOMAIN in DOMAINS:
     # update the configuration data with the one you give.
     print(
         PyFuncebleTest(
-            subject=DOMAIN, complete=True, config=CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET
+            subject=DOMAIN,
+            complete=True,
+            config=CUSTOM_CONFIGURATION_INDEX_VALUE_TO_SET,
         )["whois_record"]
     )
     print("\n\nEnd of WHOIS record of %s" % DOMAIN)

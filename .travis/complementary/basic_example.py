@@ -6,8 +6,11 @@ the given domain and URL.
     Official output: ACTIVE, INACTIVE, INVALID
 """
 
+from PyFunceble import load_config
 from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
+
+load_config(custom={"db_type": "json"})
 
 print("Start of basic example.")
 DOMAIN = "github.com"
