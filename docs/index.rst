@@ -123,6 +123,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    components/adblock
    components/auto-continue
    components/auto-save
+   components/certificate-verification
    components/clean
    components/complements
    components/config
