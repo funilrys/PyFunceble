@@ -61,6 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 from itertools import chain
+from multiprocessing import Pool
 
 from domain2idna import get as domain2idna
 
@@ -555,6 +556,49 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We return None.
         return None
 
+    def _get_list_to_of_subjects_to_test_from_file(
+        self, file_object
+    ):  # pragma: no cover
+        """
+        Give a file object, we construct/get the list of subject to test.
+        """
+
+        to_retest_inactive_db = self.inactive_db.get_to_retest()
+
+        if PyFunceble.CONFIGURATION["multiprocess"]:
+            with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
+                if not PyFunceble.CONFIGURATION["adblock"]:
+                    formatted_subjects = set(pool.map(self._format_line, file_object))
+                else:
+                    formatted_subjects = {x for x in AdBlock(file_object).decode()}
+        else:
+            if not PyFunceble.CONFIGURATION["adblock"]:
+                formatted_subjects = {self._format_line(x) for x in file_object}
+            else:
+                formatted_subjects = {x for x in AdBlock(file_object).decode()}
+
+        subjects_to_test = (
+            formatted_subjects
+            - self.autocontinue.get_already_tested()
+            - self.inactive_db.get_already_tested()
+            - to_retest_inactive_db
+        )
+
+        if not subjects_to_test:
+            subjects_to_test = list(formatted_subjects)
+        else:
+            subjects_to_test = list(subjects_to_test)
+
+        if not PyFunceble.CONFIGURATION["multiprocess"]:
+            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
+            else:
+                subjects_to_test = List(subjects_to_test).custom_format(
+                    Sort.hierarchical
+                )
+
+        return chain(subjects_to_test, to_retest_inactive_db)
+
     def read_and_test_file_content(self):  # pragma: no cover
         """
         Read a file block by block and test its content.
@@ -566,36 +610,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.
 
-            already_tested_continue = self.autocontinue.get_already_tested()
-            already_tested_inactive_db = self.inactive_db.get_already_tested()
-
-            if not PyFunceble.CONFIGURATION["adblock"]:
-                formatted_subjects = {self._format_line(x) for x in file}
-            else:
-                formatted_subjects = {x for x in AdBlock(file).decode()}
-
-            subjects_to_test = formatted_subjects - already_tested_continue
-            subjects_to_test -= already_tested_inactive_db
-
-            if not subjects_to_test:
-                subjects_to_test = list(formatted_subjects)
-            else:
-                subjects_to_test = list(subjects_to_test)
-
-            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
-                # We do not have to sort hierarchicaly.
-
-                # We sort the lines standarly.
-                subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
-            else:
-                # We do have to sort hierarchicaly.
-
-                # We sort the lines hierarchicaly.
-                subjects_to_test = List(subjects_to_test).custom_format(
-                    Sort.hierarchical
-                )
-
-            for line in chain(subjects_to_test, self.inactive_db.get_to_retest()):
+            for line in self._get_list_to_of_subjects_to_test_from_file(file):
                 # We loop through the file decoded file
                 # content.
 
@@ -612,17 +627,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # from the mining database.
             self.mining.remove(index, line)
 
-            # We get the list of complements.
-            complements = self.get_complements()
+        for subject in self.get_complements():
+            # We loop through the list of complements.
 
-            for subject in complements:
-                # We loop through the list of complements.
+            # We test the complement.
+            self._test_line(subject)
 
-                # We test the complement.
-                self._test_line(subject)
-
-            # We inform all subsystem that we are not testing for complements anymore.
-            self.complements_test_started = False
+        # We inform all subsystem that we are not testing for complements anymore.
+        self.complements_test_started = False
 
         # We update the counters
         self.autocontinue.update_counters()

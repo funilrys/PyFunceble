@@ -61,11 +61,10 @@ License:
 # pylint: enable=line-too-long
 
 from itertools import chain
-from multiprocessing import Manager, Pipe, Pool, Process, active_children
+from multiprocessing import Manager, Pipe, Process, active_children
 from traceback import format_exc
 
 import PyFunceble
-from PyFunceble.adblock import AdBlock
 from PyFunceble.file_core import FileCore
 from PyFunceble.helpers import Dict, File, List
 from PyFunceble.sort import Sort
@@ -422,32 +421,13 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         with open(self.file, "r", encoding="utf-8") as file:
             # We open the file we have to test.
 
-            already_tested_continue = self.autocontinue.get_already_tested()
-            already_tested_inactive_db = self.inactive_db.get_already_tested()
-            to_retest_inactive_db = self.inactive_db.get_to_retest()
-
-            with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
-                if not PyFunceble.CONFIGURATION["adblock"]:
-                    formatted_subjects = set(pool.map(self._format_line, file))
-                else:
-                    formatted_subjects = {x for x in AdBlock(file).decode()}
-
-                subjects_to_test = formatted_subjects - already_tested_continue
-                subjects_to_test -= already_tested_inactive_db
-                subjects_to_test -= to_retest_inactive_db
-
-                if not subjects_to_test:
-                    subjects_to_test = list(formatted_subjects)
-                else:
-                    subjects_to_test = list(subjects_to_test)
-
-                to_test = chain(subjects_to_test, to_retest_inactive_db)
-
             with Manager() as manager:
                 # We initiate a server process.
 
                 # We process the test/save of the original list to test.
-                self.__run_multiprocess_test(to_test, manager)
+                self.__run_multiprocess_test(
+                    self._get_list_to_of_subjects_to_test_from_file(file), manager
+                )
 
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())

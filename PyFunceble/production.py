@@ -177,15 +177,6 @@ class Production:  # pylint: disable=too-few-public-methods
                     + "logic-representation.rst"
                 )
 
-                # We fix the urls in the documentation in action page.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.directory_separator
-                    + "docs"
-                    + PyFunceble.directory_separator
-                    + "in-action.rst"
-                )
-
                 # We fix the urls in the usage documentation.
                 self._update_docs(
                     PyFunceble.CONFIG_DIRECTORY
