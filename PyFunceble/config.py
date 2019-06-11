@@ -303,11 +303,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         its content.
         """
 
-        if (
-            not self.version.is_cloned()
-            and "db_type" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["db_type"] != "json"
-        ):
+        if not self.version.is_cloned():
             # * The current version is not the cloned version.
             # and
             # * The database type is not JSON.
