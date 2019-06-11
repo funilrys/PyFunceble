@@ -39,7 +39,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Preface
 
    what-can-we-do
-   in-action
    contributors
    special-thanks
    supporting-the-project
