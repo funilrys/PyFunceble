@@ -94,55 +94,24 @@ class WhoisDB:
         self.load()
 
     def __contains__(self, index):
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            if index in self.database:
-                return True
-            return False
-
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT COUNT(*) FROM {0} WHERE subject = :subject".format(
-                self.table_name
-            )
-
-            output = self.sqlite_db.cursor.execute(query, {"subject": index})
-            fetched = output.fetchone()
-
-            return fetched[0] != 0
-
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
-                self.table_name
-            )
-
-            with self.mysql_db.get_connection() as cursor:
-                cursor.execute(query, {"subject": index})
-
-                fetched = cursor.fetchone()
-
-                return fetched["COUNT(*)"] != 0
-
-        return False  # pragma: no cover
-
-    def __getitem__(self, index):
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            if index in self.database:
-                return self.database[index]
-
-            return None
-
-        if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mariadb", "mysql"]:
-            fetched = None
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                if index in self.database:
+                    return True
+                return False
 
             if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT * FROM {0} WHERE subject = :subject".format(
+                query = "SELECT COUNT(*) FROM {0} WHERE subject = :subject".format(
                     self.table_name
                 )
 
                 output = self.sqlite_db.cursor.execute(query, {"subject": index})
                 fetched = output.fetchone()
 
+                return fetched[0] != 0
+
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-                query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
+                query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
                     self.table_name
                 )
 
@@ -151,84 +120,124 @@ class WhoisDB:
 
                     fetched = cursor.fetchone()
 
-            if fetched:
-                return {
-                    "epoch": fetched["expiration_date_epoch"],
-                    "expiration_date": fetched["expiration_date"],
-                    "state": fetched["state"],
-                }
+                    return fetched["COUNT(*)"] != 0
+
+        return False  # pragma: no cover
+
+    def __getitem__(self, index):
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                if index in self.database:
+                    return self.database[index]
+
+                return None
+
+            if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mariadb", "mysql"]:
+                fetched = None
+
+                if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                    query = "SELECT * FROM {0} WHERE subject = :subject".format(
+                        self.table_name
+                    )
+
+                    output = self.sqlite_db.cursor.execute(query, {"subject": index})
+                    fetched = output.fetchone()
+
+                if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                    query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
+                        self.table_name
+                    )
+
+                    with self.mysql_db.get_connection() as cursor:
+                        cursor.execute(query, {"subject": index})
+
+                        fetched = cursor.fetchone()
+
+                if fetched:
+                    return {
+                        "epoch": fetched["expiration_date_epoch"],
+                        "expiration_date": fetched["expiration_date"],
+                        "state": fetched["state"],
+                    }
 
         return None  # pragma: no cover
 
-    def __setitem__(self, index, value):
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            actual_value = self[index]
+    def __setitem_json(self, index, value):
+        actual_value = self[index]
 
-            if isinstance(actual_value, dict):
-                if isinstance(value, dict):
-                    self.database[index].update(value)
-                else:  # pragma: no cover
-                    self.database[index] = value
-            elif isinstance(actual_value, list):
-                if isinstance(value, list):  # pragma: no cover
-                    self.database[index].extend(value)
-                else:  # pragma: no cover
-                    self.database[index].append(value)
-            else:
+        if isinstance(actual_value, dict):
+            if isinstance(value, dict):
+                self.database[index].update(value)
+            else:  # pragma: no cover
                 self.database[index] = value
-        elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = (
-                "INSERT INTO {0} "
-                "(subject, expiration_date, expiration_date_epoch, state) "
-                "VALUES (:subject, :expiration_date, :epoch, :state)"
-            ).format(self.table_name)
+        elif isinstance(actual_value, list):
+            if isinstance(value, list):  # pragma: no cover
+                self.database[index].extend(value)
+            else:  # pragma: no cover
+                self.database[index].append(value)
+        else:
+            self.database[index] = value
 
+    def __setitem_sqlite(self, index, value):
+        query = (
+            "INSERT INTO {0} "
+            "(subject, expiration_date, expiration_date_epoch, state) "
+            "VALUES (:subject, :expiration_date, :epoch, :state)"
+        ).format(self.table_name)
+
+        try:
+            # We execute the query.
+            self.sqlite_db.cursor.execute(
+                query,
+                {
+                    "subject": index,
+                    "expiration_date": value["expiration_date"],
+                    "epoch": value["epoch"],
+                    "state": value["state"],
+                },
+            )
+            # And we commit the changes.
+            self.sqlite_db.connection.commit()
+        except self.sqlite_db.errors:
+            pass
+
+    def __setitem_mysql(self, index, value):
+        query = (
+            "INSERT INTO {0} "
+            "(subject, expiration_date, expiration_date_epoch, state, digest) "
+            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(digest)s)"
+        ).format(self.table_name)
+
+        digest = sha256(
+            bytes(
+                index + value["expiration_date"] + str(value["epoch"]) + value["state"],
+                "utf-8",
+            )
+        ).hexdigest()
+
+        with self.mysql_db.get_connection() as cursor:
             try:
-                # We execute the query.
-                self.sqlite_db.cursor.execute(
+                cursor.execute(
                     query,
                     {
                         "subject": index,
                         "expiration_date": value["expiration_date"],
                         "epoch": value["epoch"],
                         "state": value["state"],
+                        "digest": digest,
                     },
                 )
-                # And we commit the changes.
-                self.sqlite_db.connection.commit()
-            except self.sqlite_db.errors:
+            except self.mysql_db.errors:
                 pass
-        elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            query = (
-                "INSERT INTO {0} "
-                "(subject, expiration_date, expiration_date_epoch, state, digest) "
-                "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(digest)s)"
-            ).format(self.table_name)
 
-            digest = sha256(
-                bytes(
-                    index
-                    + value["expiration_date"]
-                    + str(value["epoch"])
-                    + value["state"],
-                    "utf-8",
-                )
-            ).hexdigest()
-
-            with self.mysql_db.get_connection() as cursor:
-                try:
-                    cursor.execute(
-                        query,
-                        {
-                            "subject": index,
-                            "expiration_date": value["expiration_date"],
-                            "epoch": value["epoch"],
-                            "state": value["state"],
-                            "digest": digest,
-                        },
-                    )
-                except self.mysql_db.errors:
-                    pass
+    def __setitem__(self, index, value):
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                self.__setitem_json(index, value)
+            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                self.__setitem_sqlite(index, value)
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                self.__setitem_mysql(index, value)
 
     @classmethod
     def authorization(cls):

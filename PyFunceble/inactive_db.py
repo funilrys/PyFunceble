@@ -400,8 +400,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if (
-            PyFunceble.CONFIGURATION["db_type"] == "json"
-            and self.authorized
+            self.authorized
+            and PyFunceble.CONFIGURATION["db_type"] == "json"
             and self.filename in self.database
         ):
             # * We are authorized to operate.
@@ -601,54 +601,54 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return a set of subject to restest.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            try:
-                return {
-                    z
-                    for x, y in self.database[self.filename].items()
-                    if x.isdigit()
-                    and int(PyFunceble.time()) > int(x) + self.days_in_seconds
-                    for z in y
-                }
-            except KeyError:
-                return set()
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                try:
+                    return {
+                        z
+                        for x, y in self.database[self.filename].items()
+                        if x.isdigit()
+                        and int(PyFunceble.time()) > int(x) + self.days_in_seconds
+                        for z in y
+                    }
+                except KeyError:
+                    return set()
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = (
-                "SELECT * FROM {0} WHERE file_path = :file "
-                "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                "> (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
-            ).format(self.table_name)
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = (
+                    "SELECT * FROM {0} WHERE file_path = :file "
+                    "AND CAST(strftime('%s', 'now') AS INTEGER) "
+                    "> (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
+                ).format(self.table_name)
 
-            output = self.sqlite_db.cursor.execute(
-                query, {"file": self.filename, "days": self.days_in_seconds}
-            )
-            fetched = output.fetchall()
-
-            if fetched:
-                return {x["subject"] for x in fetched}
-
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
-                cast_type = "INTEGER"
-            else:
-                cast_type = "UNSIGNED"
-
-            query = (
-                "SELECT * FROM {0} WHERE file_path = %(file)s "
-                "AND CAST(UNIX_TIMESTAMP() AS {1}) "
-                "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-            ).format(self.table_name, cast_type)
-
-            with self.mysql_db.get_connection() as cursor:
-                cursor.execute(
+                output = self.sqlite_db.cursor.execute(
                     query, {"file": self.filename, "days": self.days_in_seconds}
                 )
-                fetched = cursor.fetchall()
+                fetched = output.fetchall()
 
                 if fetched:
                     return {x["subject"] for x in fetched}
 
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+                    cast_type = "INTEGER"
+                else:
+                    cast_type = "UNSIGNED"
+
+                query = (
+                    "SELECT * FROM {0} WHERE file_path = %(file)s "
+                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
+                    "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
+                ).format(self.table_name, cast_type)
+
+                with self.mysql_db.get_connection() as cursor:
+                    cursor.execute(
+                        query, {"file": self.filename, "days": self.days_in_seconds}
+                    )
+                    fetched = cursor.fetchall()
+
+                    if fetched:
+                        return {x["subject"] for x in fetched}
         return set()
 
     def get_already_tested(self):  # pragma: no cover
@@ -656,51 +656,52 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return a set of already tested subjects.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            try:
-                return {
-                    z
-                    for x, y in self.database[self.filename].items()
-                    if x.isdigit()
-                    and int(PyFunceble.time()) < int(x) + self.days_in_seconds
-                    for z in y
-                }
-            except KeyError:
-                return set()
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                try:
+                    return {
+                        z
+                        for x, y in self.database[self.filename].items()
+                        if x.isdigit()
+                        and int(PyFunceble.time()) < int(x) + self.days_in_seconds
+                        for z in y
+                    }
+                except KeyError:
+                    return set()
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = (
-                "SELECT * FROM {0} WHERE file_path = :file "
-                "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                "< (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
-            ).format(self.table_name)
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = (
+                    "SELECT * FROM {0} WHERE file_path = :file "
+                    "AND CAST(strftime('%s', 'now') AS INTEGER) "
+                    "< (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
+                ).format(self.table_name)
 
-            output = self.sqlite_db.cursor.execute(
-                query, {"file": self.filename, "days": self.days_in_seconds}
-            )
-            fetched = output.fetchall()
-
-            if fetched:
-                return {x["subject"] for x in fetched}
-
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
-                cast_type = "INTEGER"
-            else:
-                cast_type = "UNSIGNED"
-
-            query = (
-                "SELECT * FROM {0} WHERE file_path= %(file)s "
-                "AND CAST(UNIX_TIMESTAMP() AS {1}) "
-                "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-            ).format(self.table_name, cast_type)
-
-            with self.mysql_db.get_connection() as cursor:
-                cursor.execute(
+                output = self.sqlite_db.cursor.execute(
                     query, {"file": self.filename, "days": self.days_in_seconds}
                 )
-                fetched = cursor.fetchall()
+                fetched = output.fetchall()
 
                 if fetched:
                     return {x["subject"] for x in fetched}
+
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+                    cast_type = "INTEGER"
+                else:
+                    cast_type = "UNSIGNED"
+
+                query = (
+                    "SELECT * FROM {0} WHERE file_path= %(file)s "
+                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
+                    "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
+                ).format(self.table_name, cast_type)
+
+                with self.mysql_db.get_connection() as cursor:
+                    cursor.execute(
+                        query, {"file": self.filename, "days": self.days_in_seconds}
+                    )
+                    fetched = cursor.fetchall()
+
+                    if fetched:
+                        return {x["subject"] for x in fetched}
         return set()

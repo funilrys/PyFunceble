@@ -49,6 +49,11 @@ exclude_lines =
     PyFunceble\.CONFIGURATION\["db_type"\] in \["mariadb", "mysql"\]
     PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mariadb", "mysql"\]
 
+    # Don't complain about those.
+    _json
+    _mysql
+    _sqlite
+
 
 ignore_errors = True
 

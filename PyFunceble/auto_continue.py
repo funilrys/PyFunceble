@@ -193,31 +193,35 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         file is emtpy.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            if self.filename not in self.database or not self.database[self.filename]:
-                return True
-            return False
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                if (
+                    self.filename not in self.database
+                    or not self.database[self.filename]
+                ):
+                    return True
+                return False
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT COUNT(*) from {0} where file_path = :file".format(
-                self.table_name
-            )
-            output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
-            fetched = output.fetchone()
+            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = "SELECT COUNT(*) from {0} where file_path = :file".format(
+                    self.table_name
+                )
+                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
+                fetched = output.fetchone()
 
-            return fetched[0] == 0
+                return fetched[0] == 0
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
-                self.table_name
-            )
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
+                    self.table_name
+                )
 
-            with self.mysql_db.get_connection() as cursor:
-                cursor.execute(query, {"file": self.filename})
+                with self.mysql_db.get_connection() as cursor:
+                    cursor.execute(query, {"file": self.filename})
 
-                fetched = cursor.fetchone()
+                    fetched = cursor.fetchone()
 
-            return fetched["COUNT(*)"] == 0
+                return fetched["COUNT(*)"] == 0
 
         return False  # pragma: no cover
 
@@ -492,31 +496,36 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         Return the list of subjects which were already tested as a set.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
-            try:
-                return {y for _, x in self.database[self.filename].items() for y in x}
-            except KeyError:  # pragma: no cover
-                pass
-        elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            query = "SELECT * FROM {0} WHERE file_path = :file".format(self.table_name)
+        if self.authorized:
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                try:
+                    return {
+                        y for _, x in self.database[self.filename].items() for y in x
+                    }
+                except KeyError:  # pragma: no cover
+                    pass
+            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
+                query = "SELECT * FROM {0} WHERE file_path = :file".format(
+                    self.table_name
+                )
 
-            output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
-            fetched = output.fetchall()
-
-            if fetched:
-                return {x["subject"] for x in fetched}
-        elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-            query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
-                self.table_name
-            )
-
-            with self.mysql_db.get_connection() as cursor:
-                cursor.execute(query, {"file": self.filename})
-
-                fetched = cursor.fetchall()
+                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
+                fetched = output.fetchall()
 
                 if fetched:
                     return {x["subject"] for x in fetched}
+            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
+                    self.table_name
+                )
+
+                with self.mysql_db.get_connection() as cursor:
+                    cursor.execute(query, {"file": self.filename})
+
+                    fetched = cursor.fetchall()
+
+                    if fetched:
+                        return {x["subject"] for x in fetched}
         return set()  # pragma: no cover
 
     def __generate_complements(self):  # pragma: no cover
