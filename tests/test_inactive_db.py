@@ -90,10 +90,7 @@ class TestInactiveDB(TestCase):
         )
 
         self.expected_content = {
-            self.file_to_test: {
-                "0": ["mÿethèrwallét.com", "||google.com^"],
-                "to_test": ["myètherwället.com"],
-            }
+            self.file_to_test: {"0": ["mÿethèrwallét.com", "||google.com^"]}
         }
 
         self.time_past = str(int(PyFunceble.time()) - (365 * 24 * 3600))
@@ -123,7 +120,7 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.load()
 
-        expected = {self.file_to_test: {"to_test": []}}
+        expected = {self.file_to_test: {}}
 
         self.assertEqual(expected, self.inactive_db.database)
 
@@ -160,57 +157,6 @@ class TestInactiveDB(TestCase):
 
         self.test_file_not_exist()
 
-    def test_add_to_test__path_not_exist(self):  # pylint: disable=invalid-name
-        """
-        Test Inactive._add_to_test() for the case that the currently tested
-        path is not present into the Inactive.
-        """
-
-        self.test_file_not_exist()
-
-        self.inactive_db.database = {}
-        self.inactive_db._add_to_test("hello.world")
-
-        expected = {self.file_to_test: {"to_test": ["hello.world"]}}
-
-        self.assertEqual(expected, self.inactive_db.database)
-
-        self.test_file_not_exist()
-
-    def test_add_to_test__path_exist(self):  # pylint: disable=invalid-name
-        """
-        Test Inactive._add_to_test() for the case that the path exist
-        in the Inactive.
-        """
-
-        self.test_file_not_exist()
-
-        self.inactive_db.database = {self.file_to_test: {"to_test": ["hello.world"]}}
-
-        expected = {self.file_to_test: {"to_test": ["hello.world", "world.hello"]}}
-
-        self.inactive_db._add_to_test("world.hello")
-
-        self.assertEqual(expected, self.inactive_db.database)
-        self.test_file_not_exist()
-
-    def test_add_to_test__path_exist_not_test(self):  # pylint: disable=invalid-name
-        """
-        Test Inactive._add_to_test() for the case that the path exist
-        in the database but the not `to_test` index.
-        """
-
-        self.test_file_not_exist()
-
-        self.inactive_db.database = {self.file_to_test: {}}
-
-        expected = {self.file_to_test: {"to_test": ["hello.world"]}}
-
-        self.inactive_db._add_to_test("hello.world")
-
-        self.assertEqual(expected, self.inactive_db.database)
-        self.test_file_not_exist()
-
     def test_initiate__path_not_exist(self):  # pylint: disable=invalid-name
         """
         Test Inactive.initiate() for the case that the path does not exist.
@@ -220,7 +166,7 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {}
 
-        expected = {self.file_to_test: {"to_test": []}}
+        expected = {self.file_to_test: {}}
 
         self.inactive_db.initiate()
 
@@ -236,6 +182,10 @@ class TestInactiveDB(TestCase):
 
         self.test_file_not_exist()
 
+        new_time = str(
+            int(PyFunceble.time()) - self.inactive_db.one_day_in_seconds - 100
+        )
+
         self.inactive_db.database = {
             self.file_to_test: {
                 self.time_past: ["hello.world", "world.hello"],
@@ -244,7 +194,10 @@ class TestInactiveDB(TestCase):
         }
 
         expected = {
-            self.file_to_test: {"to_test": ["github.com", "hello.world", "world.hello"]}
+            self.file_to_test: {
+                self.time_past: ["hello.world", "world.hello"],
+                new_time: ["github.com"],
+            }
         }
 
         self.inactive_db.save()
@@ -266,10 +219,7 @@ class TestInactiveDB(TestCase):
         }
 
         expected = {
-            self.file_to_test: {
-                self.time_future: ["hello.world", "world.hello"],
-                "to_test": [],
-            }
+            self.file_to_test: {self.time_future: ["hello.world", "world.hello"]}
         }
 
         self.inactive_db.save()
@@ -375,7 +325,7 @@ class TestInactiveDB(TestCase):
 
         timestamp = str(self.inactive_db._timestamp())
         subject = "hello.world"
-        expected = {self.file_to_test: {timestamp: ["hello.world"], "to_test": []}}
+        expected = {self.file_to_test: {timestamp: ["hello.world"]}}
 
         self.inactive_db.add(subject)
 

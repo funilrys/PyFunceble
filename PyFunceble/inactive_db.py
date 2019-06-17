@@ -294,11 +294,24 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # The database file exists.
 
                 self._merge()
+
+                if (
+                    self.filename in self.database
+                    and "to_test" in self.database[self.filename]
+                ):
+                    new_time = str(
+                        int(PyFunceble.time()) - self.one_day_in_seconds - 100
+                    )
+                    self.database[self.filename][new_time] = self.database[
+                        self.filename
+                    ]["to_test"]
+
+                    del self.database[self.filename]["to_test"]
             else:
                 # The database file do not exists.
 
                 # We initiate an empty database.
-                self.database = {self.filename: {"to_test": []}}
+                self.database = {self.filename: {}}
 
     def save(self):
         """
@@ -311,33 +324,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We save the current database state into the database file.
             Dict(self.database).to_json(self.database_file)
 
-    def _add_to_test(self, to_add):
-        """
-        Add an element or a list of element into the list of element
-        to test on the next session.
-
-        :param to_add: The domain, IP or URL to add.
-        :type to_add: str|list
-        """
-
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
-            # We are authorized to operate.
-
-            if not isinstance(to_add, list):
-                # The element to add is not a list.
-
-                # We set it into a list.
-                to_add = [to_add]
-
-            # We set the list to test
-            self["to_test"] = to_add
-
-            # We format the list to test in order to avoid duplicate.
-            self.database[self.filename]["to_test"] = List(self["to_test"]).format()
-
-            # And we finally save the database.
-            self.save()
-
     def initiate(self):
         """
         Initiate the databse.
@@ -348,48 +334,17 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # and
             # * The filename is already in the database.
 
-            # We initiate a variable which is going to save what we are going
-            # to return.
-            result = []
-
-            # We initiate a variable which is going to save the key to remove
-            # once they are merged into the `to_test` index.
-            to_delete = []
-
             # We load the database.
             self.load()
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
-                if self.filename in self.database:
-                    for data in [
-                        x for x in self.database[self.filename] if x.isdigit()
-                    ]:
-                        # We loop through the database content related to the file we
-                        # are testing.
+            if (
+                PyFunceble.CONFIGURATION["db_type"] == "json"
+                and self.filename not in self.database
+            ):  # pragma: no cover
+                # We create the current file namepace
+                self.database[self.filename] = {}
 
-                        if int(PyFunceble.time()) > int(data) + self.days_in_seconds:
-                            # The currently read index is older than the excepted time
-                            # for retesting.
-
-                            # We extend our result variable with the content from the
-                            # currently read index.
-                            result.extend(self.database[self.filename][data])
-
-                            # And we append the currently read index into the list of
-                            # index to delete.
-                            to_delete.append(data)
-
-                    # We remove all indexes which are present into the list of index to delete.
-                    Dict(self.database[self.filename]).remove_key(to_delete)
-
-                    # And we append our list of element to retest into the `to_test` index.s
-                    self._add_to_test(result)
-
-                    # And we finally save the database.
-                    self.save()
-                else:  # pragma: no cover
-                    # We create the current file namepace
-                    self.database[self.filename] = {"to_test": []}
+            self.save()
 
     def _timestamp(self):
         """
@@ -465,19 +420,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 if self.filename in self.database:
                     # * The file path is not into the database.
 
+                    self.remove(subject)
+
                     # We append the index and the database element into the databse
                     # related to the file we are testing.
                     self[timestamp] = [subject]
-
-                    if self["to_test"] and subject in self["to_test"]:
-                        # * The `to_test` index is into the database related to the file we
-                        #   are testing.
-                        # and
-                        # * The element we are testing is into the `to_test` index related to
-                        #   the file we are testing.
-
-                        # We remove the element from the list of element to test.
-                        self["to_test"].remove(subject)
                 else:
                     # The file path is not into the database.
 

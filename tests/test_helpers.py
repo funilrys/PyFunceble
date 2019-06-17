@@ -337,6 +337,17 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_remove_keys(self):
+        """
+        Test Dict().remove_key().
+        """
+
+        expected = {"Hello": "world", "World": {"world", "hello"}}
+
+        actual = Dict(self.to_test).remove_key(["pyfunceble", "Py", "funilrys"])
+
+        self.assertEqual(expected, actual)
+
     def test_remove_key_not_found(self):
         """
         Test Dict().remove_key() for the case that
