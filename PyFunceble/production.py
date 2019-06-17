@@ -146,58 +146,8 @@ class Production:  # pylint: disable=too-few-public-methods
                     self.current_version[0]
                 )
 
-                # We fix the urls in the README file.
-                self._update_docs(PyFunceble.CONFIG_DIRECTORY + "README.rst")
-
-                # We fix the urls in the configuration file.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY + ".PyFunceble_production.yaml"
-                )
-
-                # We fix the urls in the setup.py file.
-                self._update_docs(PyFunceble.CONFIG_DIRECTORY + "setup.py")
-
-                # We fix the urls in the documentation index.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.directory_separator
-                    + "docs"
-                    + PyFunceble.directory_separator
-                    + "index.rst"
-                )
-
-                # We fix the urls in the documentation logic representation.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.directory_separator
-                    + "docs"
-                    + PyFunceble.directory_separator
-                    + "code"
-                    + PyFunceble.directory_separator
-                    + "logic-representation.rst"
-                )
-
-                # We fix the urls in the usage documentation.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.directory_separator
-                    + "docs"
-                    + PyFunceble.directory_separator
-                    + "usage"
-                    + PyFunceble.directory_separator
-                    + "from-a-terminal.rst"
-                )
-
-                # We fix the urls in the links configuration documentation.
-                self._update_docs(
-                    PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.directory_separator
-                    + "docs"
-                    + PyFunceble.directory_separator
-                    + "configuration"
-                    + PyFunceble.directory_separator
-                    + "links.rst"
-                )
+                # We fix the urls everywhere needed.
+                self._update_urls()
 
                 # We fix the urls in the code.
                 self._update_code_urls()
@@ -241,6 +191,65 @@ class Production:  # pylint: disable=too-few-public-methods
 
                 # We exit the process.
                 exit(1)
+
+    def _update_urls(self):
+        """
+        Read the file/dir and update all links.
+        """
+
+        to_fix = [
+            # We fix the urls in the README file.
+            PyFunceble.CONFIG_DIRECTORY + "README.rst",
+            # We fix the urls in the configuration file.
+            PyFunceble.CONFIG_DIRECTORY + ".PyFunceble_production.yaml",
+            # We fix the urls in the setup.py file.
+            PyFunceble.CONFIG_DIRECTORY + "setup.py",
+            # We fix the urls in the documentation index.
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.directory_separator
+            + "docs"
+            + PyFunceble.directory_separator
+            + "index.rst",
+            # We fix the urls in the documentation logic representation.
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.directory_separator
+            + "docs"
+            + PyFunceble.directory_separator
+            + "code"
+            + PyFunceble.directory_separator
+            + "logic-representation.rst",
+            # We fix the urls in the usage documentation.
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.directory_separator
+            + "docs"
+            + PyFunceble.directory_separator
+            + "usage"
+            + PyFunceble.directory_separator
+            + "from-a-terminal.rst",
+            # We fix the urls in the links configuration documentation.
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.directory_separator
+            + "docs"
+            + PyFunceble.directory_separator
+            + "configuration"
+            + PyFunceble.directory_separator
+            + "links.rst",
+            # We fix the urls in the db_types directory.
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.directory_separator
+            + "db_types"
+            + PyFunceble.directory_separator,
+        ]
+
+        for fix_it in to_fix:
+            if PyFunceble.path.isfile(fix_it):
+                self._update_docs(fix_it)
+            elif PyFunceble.path.isdir(fix_it):
+                for root, _, files in PyFunceble.walk(fix_it):
+                    for file in files:
+                        self._update_docs(root + PyFunceble.directory_separator + file)
+            else:
+                raise FileNotFoundError(fix_it)
 
     def _update_code_urls(self):
         """
