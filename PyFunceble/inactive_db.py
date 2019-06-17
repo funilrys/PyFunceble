@@ -186,24 +186,29 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if actual_state:
                 if isinstance(actual_state, dict):
                     if isinstance(value, dict):  # pragma: no cover
-                        self.database[self.filename][index].update(value)
+                        self.database[self.filename][index] = Dict(
+                            self.database[self.filename][index]
+                        ).merge(value, strict=True)
                     else:  # pragma: no cover
                         self.database[self.filename][index] = value
-                elif isinstance(actual_state, list):
+                elif isinstance(actual_state, list):  # pragma: no cover
                     if isinstance(value, list):
-                        self.database[self.filename][index].extend(value)
+                        self.database[self.filename][index] = List(
+                            self.database[self.filename][index]
+                        ).merge(value, strict=False)
                     else:  # pragma: no cover
                         self.database[self.filename][index].append(value)
+
+                    self.database[self.filename][index] = List(
+                        self.database[self.filename][index]
+                    ).format()
                 else:  # pragma: no cover
                     self.database[self.filename][index] = value
             else:
                 if self.filename not in self.database:
                     self.database[self.filename] = {index: value}
-                self.database[self.filename][index] = value
-
-            self.database[self.filename][index] = List(
-                self.database[self.filename][index]
-            ).format()
+                else:
+                    self.database[self.filename][index] = value
 
     @classmethod
     def authorization(cls):
@@ -237,50 +242,40 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             database_content = Dict().from_json(File(self.database_file).read())
 
             # We get the database top keys.
-            database_top_keys = database_content.keys()
+            database_top_keys = [
+                x for x in database_content.keys() if database_content[x]
+            ]
 
             for database_top_key in database_top_keys:
                 # We loop through the list of database top keys.
 
-                if database_top_key not in self.database:
-                    # The currently read top key is not already into the database.
+                # We get the list of lower indexes.
+                database_low_keys = database_content[database_top_key].keys()
 
-                    # We initiate the currently read key with the same key from
-                    # our database file.
-                    self.database[database_top_key] = database_content[database_top_key]
-                else:
-                    # The currently read top key is already into the database.
+                for database_low_key in database_low_keys:
+                    # We loop through the lower keys.
 
-                    # We get the list of lower indexes.
-                    database_low_keys = database_content[database_top_key].keys()
-
-                    for database_low_key in database_low_keys:
-                        # We loop through the lower keys.
-
-                        if (
-                            database_low_key not in self.database[database_top_key]
-                        ):  # pragma: no cover
-                            # The lower key is not already into the database.
-
-                            # We initiate the currently read low and top key with the
-                            # same combinaison from our database file.
-                            self.database[database_top_key][
+                    if isinstance(
+                        database_content[database_top_key][database_low_key], list
+                    ):  # pragma: no cover
+                        to_set = {
+                            x: ""
+                            for x in database_content[database_top_key][
                                 database_low_key
-                            ] = database_content[database_top_key][database_low_key]
-                        else:
-                            # The lower key is not already into the database.
+                            ]
+                        }
+                    else:
+                        to_set = database_content[database_top_key][database_low_key]
 
-                            # We exted the currently read low and top key combinaison
-                            # with the same combinaison from our database file.
-                            self.database[database_top_key][database_low_key].extend(
-                                database_content[database_top_key][database_low_key]
-                            )
-
-                            # And we format the list of element to ensure that there is no
-                            # duplicate into the database content.
-                            self.database[database_top_key][database_low_key] = List(
+                    if database_top_key not in self.database:
+                        self.database[database_top_key] = {database_low_key: to_set}
+                    else:
+                        if database_low_key in self.database[database_top_key]:
+                            self.database[database_top_key][database_low_key] = Dict(
                                 self.database[database_top_key][database_low_key]
-                            ).format()
+                            ).merge(to_set, strict=False)
+                        else:  # pragma: no cover
+                            self.database[database_top_key][database_low_key] = to_set
 
     def load(self):
         """
@@ -403,11 +398,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         # We return the current time.
         return int(PyFunceble.time())
 
-    def add(self, subject):
+    def add(self, subject, status):
         """
         Add the given subject into the database.
 
         :param str subject: The subject we are working with.
+        :param str status: The status of the given subject.
         """
 
         if self.authorized:
@@ -422,38 +418,35 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                     self.remove(subject)
 
-                    # We append the index and the database element into the databse
-                    # related to the file we are testing.
-                    self[timestamp] = [subject]
-                else:
-                    # The file path is not into the database.
+                # We initiate the file path and its content into the database.
+                self[timestamp] = {subject: status}
 
-                    # We initiate the file path and its content into the database.
-                    self[timestamp] = [subject]
                 # And we save the database.
                 self.save()
             elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
                 query = (
                     "INSERT INTO {0} "
-                    "(file_path, subject) "
-                    "VALUES (:file, :subject)"
+                    "(file_path, subject, status) "
+                    "VALUES (:file, :subject, :status)"
                 ).format(self.table_name)
 
                 try:
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
-                        query, {"file": self.filename, "subject": subject}
+                        query,
+                        {"file": self.filename, "subject": subject, "status": status},
                     )
                 except self.sqlite_db.errors:
                     query = (
                         "UPDATE {0} "
-                        "SET subject = :subject "
+                        "SET subject = :subject, status = :status "
                         "WHERE file_path = :file AND subject = :subject"
                     ).format(self.table_name)
 
                     # We execute the query.
                     self.sqlite_db.cursor.execute(
-                        query, {"subject": subject, "file": self.filename}
+                        query,
+                        {"subject": subject, "file": self.filename, "status": status},
                     )
 
                 # And we commit the changes.
@@ -463,8 +456,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 query = (
                     "INSERT INTO {0} "
-                    "(file_path, subject, digest) "
-                    "VALUES (%(file)s, %(subject)s, %(digest)s)"
+                    "(file_path, subject, status, digest) "
+                    "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
                 ).format(self.table_name)
 
                 with self.mysql_db.get_connection() as cursor:
@@ -475,13 +468,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                             {
                                 "file": self.filename,
                                 "subject": subject,
+                                "status": status,
                                 "digest": digest,
                             },
                         )
                     except self.mysql_db.errors:
                         query = (
                             "UPDATE {0} "
-                            "SET subject = %(subject)s "
+                            "SET subject = %(subject)s, status = %(status)s "
                             "WHERE file_path = %(file)s "
                             "AND %(subject)s = %(subject)s "
                             "AND digest = %(digest)s"
@@ -492,6 +486,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                             {
                                 "subject": subject,
                                 "file": self.filename,
+                                "status": status,
                                 "digest": digest,
                             },
                         )
@@ -513,8 +508,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     if subject in self[data]:
                         # The currently tested element into the currently read index.
 
-                        # We remove the currently tested element from the read index.
-                        self[data].remove(subject)
+                        self[data] = Dict(self[data]).remove_key(subject)
 
                 # And we save the data into the database.
                 self.save()
@@ -556,7 +550,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         for x, y in self.database[self.filename].items()
                         if x.isdigit()
                         and int(PyFunceble.time()) > int(x) + self.days_in_seconds
-                        for z in y
+                        for z in y.keys()
                     }
                 except KeyError:
                     return set()
@@ -611,7 +605,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         for x, y in self.database[self.filename].items()
                         if x.isdigit()
                         and int(PyFunceble.time()) < int(x) + self.days_in_seconds
-                        for z in y
+                        for z in y.keys()
                     }
                 except KeyError:
                     return set()

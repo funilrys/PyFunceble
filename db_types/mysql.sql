@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_auto_continue (
 );
 
 DELIMITER ///
-CREATE TRIGGER updatePyFuncebleAutoContinueDates
+CREATE TRIGGER IF NOT EXISTS updatePyFuncebleAutoContinueDates
     BEFORE UPDATE ON pyfunceble_auto_continue FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_inactive (
     id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     file_path LONGTEXT NOT NULL,
     subject LONGTEXT NOT NULL,
+    status VARCHAR(12) NOT NULL,
     digest VARCHAR(64) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_inactive (
 );
 
 DELIMITER ///
-CREATE TRIGGER updatePyFuncebleInactiveDates
+CREATE TRIGGER IF NOT EXISTS updatePyFuncebleInactiveDates
     BEFORE UPDATE ON pyfunceble_inactive FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -53,7 +54,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_mining (
 );
 
 DELIMITER ///
-CREATE TRIGGER updatePyFuncebleMiningDates
+CREATE TRIGGER IF NOT EXISTS updatePyFuncebleMiningDates
     BEFORE UPDATE ON pyfunceble_mining FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -75,7 +76,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_whois (
 );
 
 DELIMITER ///
-CREATE TRIGGER updatePyFuncebleWhoisDates
+CREATE TRIGGER IF NOT EXISTS updatePyFuncebleWhoisDates
     BEFORE UPDATE ON pyfunceble_whois FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN

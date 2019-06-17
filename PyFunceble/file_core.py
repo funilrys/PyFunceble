@@ -512,7 +512,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
             # We add the current subject into the
             # inactive database.
-            inactive_db.add(subject)
+            inactive_db.add(subject, status)
 
         if (
             self.complements_test_started

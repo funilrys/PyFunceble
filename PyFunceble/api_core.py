@@ -138,7 +138,7 @@ class APICore:
                 # The status is not in the list of UP status.
 
                 # We add it into the database.
-                self.inactive_db.add(subject)
+                self.inactive_db.add(subject, status)
 
     def domain_and_ip(self):
         """

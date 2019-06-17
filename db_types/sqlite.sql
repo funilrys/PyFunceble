@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS auto_continue (
     UNIQUE(file_path, subject)
 );
 
-CREATE TRIGGER updateAutoContinueDates
+CREATE TRIGGER IF NOT EXISTS updateAutoContinueDates
     AFTER UPDATE
     ON auto_continue
     FOR EACH ROW
@@ -23,12 +23,13 @@ CREATE TABLE IF NOT EXISTS inactive (
     id INTEGER PRIMARY KEY,
     file_path TEXT NOT NULL,
     subject TEXT NOT NULL,
+    status INTEGER NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(file_path, subject)
 );
 
-CREATE TRIGGER updateInactiveDates
+CREATE TRIGGER IF NOT EXISTS updateInactiveDates
     AFTER UPDATE
     ON inactive
     FOR EACH ROW
@@ -47,7 +48,7 @@ CREATE TABLE IF NOT EXISTS mining (
     UNIQUE(file_path, subject, mined)
 );
 
-CREATE TRIGGER updateMiningDates
+CREATE TRIGGER IF NOT EXISTS updateMiningDates
     AFTER UPDATE
     ON mining
     FOR EACH ROW
@@ -67,7 +68,7 @@ CREATE TABLE IF NOT EXISTS whois (
     UNIQUE(subject)
 );
 
-CREATE TRIGGER updateWhoisDates
+CREATE TRIGGER IF NOT EXISTS updateWhoisDates
     AFTER UPDATE
     ON whois
     FOR EACH ROW
