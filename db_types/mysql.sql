@@ -68,8 +68,9 @@ CREATE TABLE IF NOT EXISTS pyfunceble_auto_continue (
     UNIQUE(digest)
 );
 
+DROP TRIGGER IF EXISTS updatePyFuncebleAutoContinueDates;
 DELIMITER ///
-CREATE TRIGGER IF NOT EXISTS updatePyFuncebleAutoContinueDates
+CREATE TRIGGER updatePyFuncebleAutoContinueDates
     BEFORE UPDATE ON pyfunceble_auto_continue FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -89,8 +90,9 @@ CREATE TABLE IF NOT EXISTS pyfunceble_inactive (
     UNIQUE(digest)
 );
 
+DROP TRIGGER IF EXISTS updatePyFuncebleInactiveDates;
 DELIMITER ///
-CREATE TRIGGER IF NOT EXISTS updatePyFuncebleInactiveDates
+CREATE TRIGGER updatePyFuncebleInactiveDates
     BEFORE UPDATE ON pyfunceble_inactive FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -110,8 +112,9 @@ CREATE TABLE IF NOT EXISTS pyfunceble_mining (
     UNIQUE(digest)
 );
 
+DROP TRIGGER IF EXISTS updatePyFuncebleMiningDates;
 DELIMITER ///
-CREATE TRIGGER IF NOT EXISTS updatePyFuncebleMiningDates
+CREATE TRIGGER updatePyFuncebleMiningDates
     BEFORE UPDATE ON pyfunceble_mining FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
@@ -132,8 +135,9 @@ CREATE TABLE IF NOT EXISTS pyfunceble_whois (
     UNIQUE(digest)
 );
 
+DROP TRIGGER IF EXISTS updatePyFuncebleWhoisDates;
 DELIMITER ///
-CREATE TRIGGER IF NOT EXISTS updatePyFuncebleWhoisDates
+CREATE TRIGGER updatePyFuncebleWhoisDates
     BEFORE UPDATE ON pyfunceble_whois FOR EACH ROW
 BEGIN
     IF NEW.modified <= OLD.modified THEN
