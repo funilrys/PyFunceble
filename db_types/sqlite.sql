@@ -120,6 +120,7 @@ CREATE TABLE IF NOT EXISTS whois (
     expiration_date TEXT NOT NULL,
     expiration_date_epoch INTEGER NOT NULL,
     state TEXT NOT NULL,
+    record TEXT NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(subject)

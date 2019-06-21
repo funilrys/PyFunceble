@@ -165,6 +165,9 @@ class WhoisDB:
     def __setitem_json(self, index, value):
         actual_value = self[index]
 
+        if "record" in value:
+            del value["record"]
+
         if isinstance(actual_value, dict):
             if isinstance(value, dict):
                 self.database[index].update(value)
@@ -181,8 +184,8 @@ class WhoisDB:
     def __setitem_sqlite(self, index, value):
         query = (
             "INSERT INTO {0} "
-            "(subject, expiration_date, expiration_date_epoch, state) "
-            "VALUES (:subject, :expiration_date, :epoch, :state)"
+            "(subject, expiration_date, expiration_date_epoch, state, record) "
+            "VALUES (:subject, :expiration_date, :epoch, :state, :record)"
         ).format(self.table_name)
 
         try:
@@ -194,6 +197,7 @@ class WhoisDB:
                     "expiration_date": value["expiration_date"],
                     "epoch": value["epoch"],
                     "state": value["state"],
+                    "record": value["record"],
                 },
             )
             # And we commit the changes.
@@ -204,8 +208,8 @@ class WhoisDB:
     def __setitem_mysql(self, index, value):
         query = (
             "INSERT INTO {0} "
-            "(subject, expiration_date, expiration_date_epoch, state, digest) "
-            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(digest)s)"
+            "(subject, expiration_date, expiration_date_epoch, state, record, digest) "
+            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(record)s, %(digest)s)"
         ).format(self.table_name)
 
         digest = sha256(
@@ -224,6 +228,7 @@ class WhoisDB:
                         "expiration_date": value["expiration_date"],
                         "epoch": value["epoch"],
                         "state": value["state"],
+                        "record": value["record"],
                         "digest": digest,
                     },
                 )
@@ -378,12 +383,13 @@ class WhoisDB:
         # We return None, there is no data to work with.
         return None
 
-    def add(self, subject, expiration_date):
+    def add(self, subject, expiration_date, record=None):
         """
         Add the given subject and expiration date to the database.
 
         :param str subject: The subject we are working with.
         :param str expiration_date: The extracted expiration date.
+        :param str record: The WHOIS record.
         """
 
         if self.authorized and expiration_date:
@@ -398,6 +404,11 @@ class WhoisDB:
                 ),
                 "expiration_date": expiration_date,
             }
+
+            if record:  # pragma: no cover
+                data["record"] = str(record)
+            else:
+                data["record"] = str(None)
 
             if data["epoch"] < int(PyFunceble.time()):
                 # We compare the epoch with the current time.

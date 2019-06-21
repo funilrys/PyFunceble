@@ -259,7 +259,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # We construct the query string.
                 query = (
                     "INSERT INTO {0} "
-                    "(file_path, subject, status) "
+                    "(file_path, subject, is_complement, status) "
                     "VALUES (:file, :subject, :is_complement, :status)"
                 ).format(self.table_name)
 

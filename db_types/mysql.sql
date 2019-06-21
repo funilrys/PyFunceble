@@ -129,6 +129,7 @@ CREATE TABLE IF NOT EXISTS pyfunceble_whois (
     expiration_date VARCHAR(12) NOT NULL,
     expiration_date_epoch INTEGER(11) NOT NULL,
     state VARCHAR(12) NOT NULL,
+    record LONGTEXT NOT NULL,
     digest VARCHAR(64) NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
