@@ -4,6 +4,18 @@ Frequently Asked Questions
 How to speed up a bit the process/test?
 ----------------------------------------
 
+.. warning::
+    Beware, when talking about speed a lot a thing have to be taken in consideration.
+    Indeed here is a non exaustive list of things which fluctuate testing speed.
+
+    * Internet speed.
+    * DNS Server response time.
+    * CPU.
+    * ISP blocking a big amount of connection to the outside world.
+    * Our databases management (do not apply for MySQL and MariaDB format).
+    * Amount of data to test.
+    * ...
+
 I have multiple CPU
 ^^^^^^^^^^^^^^^^^^^
 
