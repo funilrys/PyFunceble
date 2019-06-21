@@ -113,7 +113,8 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: API documentation
 
-   api
+   api/endpoints
+   api/file_generation
 
 .. toctree::
    :maxdepth: 3
