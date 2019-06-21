@@ -185,18 +185,6 @@ This argument let us use different types of database.
     This argument is only used if :code:`-db` or :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are activated.
 
 
-:code:`--debug`
-^^^^^^^^^^^^^^^
-
-    Switch the value of the debug mode.
-
-    **Default value:** :code:`False`
-
-This argument activates the debug mode. Under the debug mode, everything caught by the whois subsystem is saved.
-
-.. warning::
-    Do not use this argument unless you have been told to.
-
 :code:`--directory-structure`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -449,14 +437,6 @@ Want to get a list with all domain for each status? The activation of this argum
 .. warning::
     Think about your CPU before increasing this.
 
-:code:`--production`
-^^^^^^^^^^^^^^^^^^^^
-
-    Prepare the repository for production.
-
-.. warning::
-    Do not use this argument unless you have been told to, you prepare a Pull Request or you want to distribute your modified version of PyFunceble.
-
 :code:`-psl` | :code:`--public-suffix`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -589,14 +569,13 @@ Global overview
                     [--commit-results-message COMMIT_RESULTS_MESSAGE]
                     [--complements] [-d DOMAIN] [-db]
                     [--database-type DATABASE_TYPE]
-                    [-dbr DAYS_BETWEEN_DB_RETEST] [--debug]
-                    [--directory-structure] [--dns DNS [DNS ...]] [-ex]
-                    [-f FILE] [--filter FILTER] [--help] [--hierarchical] [-h]
-                    [--http] [--iana] [--idna] [-ip IP] [--json] [--less]
-                    [--local] [--link LINK] [--mining] [-m] [-n] [-nl] [-ns]
-                    [-nu] [-nw] [--percentage] [--plain] [-p PROCESSES]
-                    [--production] [-psl] [-q] [--share-logs] [-s] [--split]
-                    [--syntax] [-t TIMEOUT] [--travis]
+                    [-dbr DAYS_BETWEEN_DB_RETEST] [--directory-structure]
+                    [--dns DNS [DNS ...]] [-ex] [-f FILE] [--filter FILTER]
+                    [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
+                    [-ip IP] [--json] [--less] [--local] [--link LINK]
+                    [--mining] [-m] [-n] [-nl] [-ns] [-nu] [-nw] [--percentage]
+                    [--plain] [-p PROCESSES] [-psl] [-q] [--share-logs] [-s]
+                    [--split] [--syntax] [-t TIMEOUT] [--travis]
                     [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
                     [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
@@ -649,8 +628,6 @@ Global overview
                                 Set the numbers of days between each retest of domains
                                 present into inactive-db.json. Configured
                                 value: 1
-        --debug               Switch the value of the debug mode.
-                                Configured value: False
         --directory-structure
                                 Generate the directory and files that are needed and
                                 which does not exist in the current directory.
@@ -708,7 +685,6 @@ Global overview
                                 Set the number of simultaneous processes to use while
                                 using multiple processes. Configured value:
                                 25
-        --production          Prepare the repository for production.
         -psl, --public-suffix
                                 Update/Generate `public-suffix.json`.
         -q, --quiet           Run the script in quiet mode. Configured

@@ -830,14 +830,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
-                    "--debug",
-                    action="store_true",
-                    help="Switch the value of the debug mode. %s"
-                    % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["debug"])
-                        + Style.RESET_ALL
-                    ),
+                    "--debug", action="store_true", help=argparse.SUPPRESS
                 )
 
                 PARSER.add_argument(
@@ -1113,9 +1106,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 PARSER.add_argument(
-                    "--production",
-                    action="store_true",
-                    help="Prepare the repository for production.",
+                    "--production", action="store_true", help=argparse.SUPPRESS
                 )
 
                 PARSER.add_argument(
