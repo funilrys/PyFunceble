@@ -176,7 +176,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                         ip_validation_status=self.output["ipv4_syntax_validation"],
                     )
             else:
-                self.output["_status_source"] = "IANA"
+                self.output["_status_source"] = "SYNTAX"
                 self.output["_status"] = PyFunceble.STATUS["official"]["invalid"]
 
                 self.handle(
