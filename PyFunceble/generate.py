@@ -120,7 +120,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         self.ip_validation = ip_validation
 
         if not whois_server:
-            whois_server = "Unknown"
+            self.whois_server = "Unknown"
         else:
             # We share the whois server.
             self.whois_server = whois_server

@@ -94,7 +94,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.0.0.dev (Green Galago)"
+VERSION = "2.1.0.dev (Green Galago: Spider)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
