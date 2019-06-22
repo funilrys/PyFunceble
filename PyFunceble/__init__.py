@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -94,7 +94,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "1.91.1.dev -- 2_0_0_rc36 -- (Blue Bontebok: Beetle)"
+VERSION = "2.0.0. (Green Galago)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
