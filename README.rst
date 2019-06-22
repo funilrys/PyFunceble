@@ -253,3 +253,7 @@ License
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
+
+.. image:: https://api.codacy.com/project/badge/Grade/edf2aca6914d4cf0b7a914a80d8b9237
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&utm_medium=referral&utm_content=funilrys/PyFunceble&utm_campaign=Badge_Grade_Settings
