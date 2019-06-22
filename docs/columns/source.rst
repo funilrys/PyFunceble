@@ -12,18 +12,11 @@ This source is returned when **all the following cases** are met:
 - The :code:`INACTIVE` status is the one returned by other methods.
 - :func:`PyFunceble.http_code.HTTPCode.get` outputs is one the following :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
 
-IANA
-----
-
-This source is always returned when the domain has the status :code:`INVALID`.
-The usage of this source comes from the comparison of the element extension against the `IANA`_ Root Zone Database.
-
 SYNTAX
 ------
 
 This source is always returned when the domain has the status :code:`INVALID` or in the case that we are only checking for syntax instead of availability.
 The usage of this source comes from the comparison of the element against our domain, IP or URL syntax validation system.
-
 
 DNSLOOKUP
 ---------
