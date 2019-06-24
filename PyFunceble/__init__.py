@@ -94,7 +94,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.1.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.2.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -1283,12 +1283,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                         {"travis_autosave_minutes": ARGS.autosave_minutes}
                     )
 
-                if ARGS.clean:
-                    Clean(None)
-
-                if ARGS.clean_all:
-                    Clean(None, ARGS.clean_all)
-
                 if ARGS.cmd:
                     CONFIGURATION.update({"command": ARGS.cmd})
 
@@ -1345,9 +1339,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.debug:
                     CONFIGURATION.update({"debug": Preset().switch("debug")})
 
-                if ARGS.directory_structure:
-                    DirectoryStructure()
-
                 if ARGS.dns:
                     CONFIGURATION.update({"dns_server": ARGS.dns})
 
@@ -1377,9 +1368,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     HTTP_CODE.update(
                         {"active": Preset().switch(HTTP_CODE["active"], True)}
                     )
-
-                if ARGS.iana:
-                    IANA().update()
 
                 if ARGS.idna:
                     CONFIGURATION.update(
@@ -1433,12 +1421,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.processes and ARGS.processes >= 2:
                     CONFIGURATION.update({"maximal_processes": ARGS.processes})
 
-                if ARGS.production:
-                    Production()
-
-                if ARGS.public_suffix:
-                    PublicSuffix().update()
-
                 if ARGS.quiet:
                     CONFIGURATION.update({"quiet": Preset().switch("quiet")})
 
@@ -1480,6 +1462,24 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if not CONFIGURATION["quiet"]:
                     CLICore.colorify_logo(home=True)
+
+                if ARGS.clean:
+                    Clean(None)
+
+                if ARGS.clean_all:
+                    Clean(None, ARGS.clean_all)
+
+                if ARGS.directory_structure:
+                    DirectoryStructure()
+
+                if ARGS.iana:
+                    IANA().update()
+
+                if ARGS.production:
+                    Production()
+
+                if ARGS.public_suffix:
+                    PublicSuffix().update()
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()

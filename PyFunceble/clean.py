@@ -256,7 +256,9 @@ class Clean:
 
                 sqlite_db = SQLite()
 
-                for database_name in sqlite_db.tables.values():
+                for database_name in [
+                    y for x, y in sqlite_db.tables.items() if x != "whois"
+                ]:
                     query = "DELETE FROM {0}".format(database_name)
 
                     sqlite_db.cursor.execute(query)
@@ -266,7 +268,9 @@ class Clean:
 
                 mysql_db = MySQL()
 
-                for database_name in mysql_db.tables.values():
+                for database_name in [
+                    y for x, y in mysql_db.tables.items() if x != "whois"
+                ]:
                     query = "DELETE FROM {0}".format(database_name)
 
                     with mysql_db.get_connection() as cursor:

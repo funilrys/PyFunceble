@@ -19,6 +19,18 @@ How do we manage them?
 
 They consist of simple JSON files which are read and updated on the fly.
 
+Warnings around Database (self) management
+------------------------------------------
+
+.. warning::
+    If you plan to delete everything and still manage to use PyFunceble in the future, please use the :code:`--clean-all` argument.
+
+    Indeed, it will delete everything which is related to what we generated except things like the whois database file/table
+    which saves (almost) static data which can be reused in the future.
+
+    Actually, deleting for example the whois database file/table will just make your test run for a much longer time if you
+    retest subject that used to be indexed into the whois database file/table.
+
 Databases types
 ===============
 
@@ -28,7 +40,7 @@ we offer multiple database types which are (as per configuration) :code:`json` (
 Why different database types?
 -----------------------------
 
-With the introduction of the multiprocessing logic, it became natural to introduce other database format as it's a nightmare to update a JSON formatted.
+With the introduction of the multiprocessing logic, it became natural to introduce other database format as it's a nightmare to update a JSON formatted file.
 
 Indeed in order to write or use a JSON formatted database, we have to load it and overwrite it completly.
 It's great while working with a single CPU/process but as soon as we get out of that scope it become unmanagable.

@@ -563,7 +563,9 @@ class Version:
             # We initiate the link to the upstream version file.
             # It is hard coded because we may not have the chance to have the
             # configuration file everytime we need it.
-            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"  # pylint: disable=line-too-long
+            upstream_link = (
+                "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+            )  # pylint: disable=line-too-long
 
             # We update the link according to our current version.
             upstream_link = self.right_url_from_version(upstream_link)
