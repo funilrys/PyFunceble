@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -278,7 +278,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We initiate the link to the production configuration.
         # It is not hard coded because this method is called only if we
         # are sure that the configuration file exist.
-        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
         production_config_link = self.version.right_url_from_version(
@@ -437,7 +437,7 @@ class Merge:  # pylint: disable=too-few-public-methods
 
     def __init__(self, configuration_path):
         config_link = Version(True).right_url_from_version(
-            "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+            "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
         )
 
         self.path_to_config = configuration_path
@@ -564,7 +564,7 @@ class Version:
             # It is hard coded because we may not have the chance to have the
             # configuration file everytime we need it.
             upstream_link = (
-                "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+                "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
             )  # pylint: disable=line-too-long
 
             # We update the link according to our current version.
