@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -225,5 +225,5 @@ class CLICore:
                 PyFunceble.Fore.MAGENTA
                 + PyFunceble.Style.BRIGHT
                 + "Please find more about it at "
-                "https://pyfunceble.readthedocs.io/en/dev/logs-sharing.html !"
+                "https://pyfunceble.readthedocs.io/en/master/logs-sharing.html !"
             )
