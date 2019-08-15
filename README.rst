@@ -1,16 +1,16 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
 The tool to check the availability or syntax of domains, IPv4 or URL
 --------------------------------------------------------------------
 
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
     :target: https://github.com/funilrys/PyFunceble/releases/latest
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -34,7 +34,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/master/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
 
 Want a local copy? We get you covered!
 
@@ -86,8 +86,8 @@ What can PyFunceble do?
 
 - ... and a lot more!
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
 Please report to the `documentation for more GIF`_.
 
@@ -254,4 +254,4 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
