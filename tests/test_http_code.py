@@ -89,7 +89,7 @@ class TestHTTPCode(TestCase):
         """
 
         PyFunceble.HTTP_CODE["active"] = False
-        expected = "***"
+        expected = PyFunceble.HTTP_CODE["not_found_default"]
         actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
@@ -119,7 +119,7 @@ class TestHTTPCode(TestCase):
         PyFunceble.HTTP_CODE["active"] = True
 
         access.return_value = 859
-        expected = "***"
+        expected = PyFunceble.HTTP_CODE["not_found_default"]
         actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)
@@ -134,7 +134,7 @@ class TestHTTPCode(TestCase):
         PyFunceble.HTTP_CODE["active"] = True
 
         access.return_value = None
-        expected = "***"
+        expected = PyFunceble.HTTP_CODE["not_found_default"]
         actual = HTTPCode(self.subject, self.subject_type).get()
 
         self.assertEqual(expected, actual)

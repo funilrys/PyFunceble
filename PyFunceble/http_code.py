@@ -85,8 +85,6 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         - :code:`file_domain`
     """
 
-    default = "*" * 3
-
     def __init__(self, subject, subject_type):  # pragma: no cover
         subject_type = subject_type.lower()
 
@@ -111,6 +109,9 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
 
         # We share the subject type.
         self.subject_type = subject_type
+
+        # We set the default status code.
+        self.default = PyFunceble.HTTP_CODE["not_found_default"]
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.

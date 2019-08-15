@@ -117,7 +117,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 {
                     "domain_syntax_validation": self.checker.is_domain(),
                     "expiration_date": None,
-                    "http_status_code": "***",
+                    "http_status_code": PyFunceble.HTTP_CODE["not_found_default"],
                     "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
                     "ipv4_syntax_validation": self.checker.is_ipv4(),
                     "subdomain_syntax_validation": self.checker.is_subdomain(),

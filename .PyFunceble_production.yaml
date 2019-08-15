@@ -199,6 +199,7 @@ status:
 
 http_codes:
   active: True
+  not_found_default: "XXX"
   list:
     up:
       - 100

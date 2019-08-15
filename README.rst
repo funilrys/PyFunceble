@@ -126,6 +126,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
+-   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
 -   Reza Rizqullah - `@ybreza`_
@@ -235,6 +236,7 @@ License
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@kennethreitz: https://github.com/kennethreitz
+.. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@pi-hole: https://github.com/pi-hole/pi-hole

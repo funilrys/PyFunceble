@@ -99,7 +99,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         status,
         source=None,
         expiration_date=None,
-        http_status_code="***",
+        http_status_code=None,
         whois_server="Unknown",
         filename=None,
         ip_validation=False,
@@ -112,12 +112,15 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         self.status = status
         # We get the source.
         self.source = source
-        # We share the status code.
-        self.status_code = http_status_code
         # We share the file name.
         self.filename = filename
         # We share the IP validation.
         self.ip_validation = ip_validation
+
+        if not http_status_code:
+            self.status_code = PyFunceble.HTTP_CODE["not_found_default"]
+        else:
+            self.status_code = http_status_code
 
         if not whois_server:
             self.whois_server = "Unknown"
