@@ -144,6 +144,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             table_name = mysql_db.tables["tested"]
 
+            if not filename:
+                filename = ""
+
             to_insert = (
                 "INSERT INTO {0} "
                 "(tested, file_path, _status, status, _status_source, status_source, "
@@ -652,7 +655,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         return chain(subjects_to_test, to_retest_inactive_db)
 
-    def generate_files_of_status(self, status): # pragma: no cover
+    def generate_files_of_status(self, status):  # pragma: no cover
         """
         Generate the status file of all subjects of the given status.
 
@@ -692,7 +695,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                         generate.prints_status_file()
                         generate.unified_file()
 
-    def generate_files(self): # pragma: no cover
+    def generate_files(self):  # pragma: no cover
         """
         Generate all needed files.
         """

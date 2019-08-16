@@ -219,7 +219,7 @@ class Clean:
 
         if not file_path:
             query = "DELETE FROM {0}"
-        else: # pragma: no cover
+        else:  # pragma: no cover
             query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
 
         if PyFunceble.CONFIGURATION["db_type"] in [

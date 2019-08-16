@@ -107,7 +107,7 @@ class SimpleCore:
                 status = data["status"]
             else:
                 # We test and get the status of the domain.
-                data = Status(self.subject).get()
+                data = Status(self.subject, whois_db=self.whois_db).get()
                 status = data["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
@@ -120,7 +120,7 @@ class SimpleCore:
                     )
                 )
 
-            FileCore.save_into_database(status, None, self.mysql_db)
+            FileCore.save_into_database(data, None, self.mysql_db)
         else:
             PyFunceble.CLICore.print_nothing_to_test()
 
@@ -156,6 +156,6 @@ class SimpleCore:
                     )
                 )
 
-            FileCore.save_into_database(status, None, self.mysql_db)
+            FileCore.save_into_database(data, None, self.mysql_db)
         else:
             PyFunceble.CLICore.print_nothing_to_test()

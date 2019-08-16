@@ -204,9 +204,7 @@ class Percentage:
                     str(PyFunceble.INTERN["counter"]["percentage"]["valid"]) + "%"
                 )
 
-                lines_to_print[0][2] = PyFunceble.INTERN["counter"]["number"][
-                    "valid"
-                ]
+                lines_to_print[0][2] = PyFunceble.INTERN["counter"]["number"]["valid"]
 
                 # And we unset the INACTIVE line.
                 del lines_to_print[1]

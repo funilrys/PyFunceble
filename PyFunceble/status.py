@@ -737,7 +737,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             # We initiate the list of inactive status code.
             inactive_list = []
             inactive_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_down"])
-            inactive_list.append("*" * 3)
+            inactive_list.append(PyFunceble.HTTP_CODE["not_found_default"])
 
             if self.output["http_status_code"] in active_list:
                 self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
@@ -747,6 +747,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
                     "official"
                 ]["down"]
+
         else:
             self.output["_status_source"] = self.output["status_source"] = "SYNTAX"
             self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
