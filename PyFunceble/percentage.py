@@ -130,9 +130,9 @@ class Percentage:
 
         # We map the current state/counters of the different status.
         percentages = {
-            "up": PyFunceble.INTERN["counter"]["number"]["up"],
-            "down": PyFunceble.INTERN["counter"]["number"]["down"],
-            "invalid": PyFunceble.INTERN["counter"]["number"]["invalid"],
+            x: PyFunceble.INTERN["counter"]["number"][x]
+            for x in PyFunceble.STATUS["official"].keys()
+            if x in PyFunceble.INTERN["counter"]["number"]
         }
 
         for percentage in percentages:
@@ -200,6 +200,13 @@ class Percentage:
 
                 # We update the denomination of the UP.
                 lines_to_print[0][0] = PyFunceble.STATUS["official"]["valid"]
+                lines_to_print[0][1] = (
+                    str(PyFunceble.INTERN["counter"]["percentage"]["valid"]) + "%"
+                )
+
+                lines_to_print[0][2] = PyFunceble.INTERN["counter"]["number"][
+                    "valid"
+                ]
 
                 # And we unset the INACTIVE line.
                 del lines_to_print[1]

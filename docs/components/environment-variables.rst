@@ -4,7 +4,7 @@ Environment variables
 Dotenv files
 ------------
 
-Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble :code:`>=1.18.0`), we load (thanks to `python-dotenv`_) the content of
+Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble-dev :code:`>=1.18.0`), we load (thanks to `python-dotenv`_) the content of
 the following files into the (local) list of environment variables.
 
 1. :code:`.env` (current directory)

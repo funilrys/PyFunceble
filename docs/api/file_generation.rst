@@ -32,6 +32,6 @@ Local configuration load
         "api_file_generation": True
     }
 
-    print(f"google.com is {PyFunceble(, config=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION)}")
+    print(f"google.com is {PyFunceble("google.com", config=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION)}")
 
     # The output directory is then generated, and the file(s) too.

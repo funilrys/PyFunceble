@@ -332,7 +332,6 @@ class DirectoryStructure:  # pragma: no cover
 
             # We fix the path of the declared.
             declared = Directory(declared).fix_path()
-            # print('dec', declared, 'map', mapped)
 
             # And we update our data.
             to_replace.update({mapped: declared})

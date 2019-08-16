@@ -24,22 +24,29 @@ For usage
 Using :code:`pip`
 ^^^^^^^^^^^^^^^^^
 
-Execute one of the following and enjoy PyFunceble!
-
 From PyPi
 """""""""
 
 ::
 
-   $ pip3 install --upgrade PyFunceble-dev
+   $ pip3 install --user --upgrade PyFunceble-dev
+
+.. note::
+   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+.. warning::
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 From GitHub
 """""""""""
 
 ::
 
-   $ pip3 install --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+   $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
+.. note::
+   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+.. warning::
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 Using the AUR (for Arch Linux users)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -73,7 +80,15 @@ Execute the following and enjoy PyFunceble!
 
    $ cd PyFunceble && git checkout dev
    $ git fetch origin && git merge origin/dev
-   $ python3 setup.py test && python3 setup.py install
+   $ python3 setup.py test
+   $ python3 setup.py install # Avoid this if you want to uninstall one day.
+   $ pip install --user --upgrade -e .
+
+.. note::
+   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+.. warning::
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers
+.. _pip documentation: https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user

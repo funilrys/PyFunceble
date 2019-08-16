@@ -83,15 +83,6 @@
 
     **Description:** Set the default filename of the file which will save the whois information for caching.
 
-:code:`outputs[default_files][sqlite]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`pyfunceble.db`
-
-    **Description:** Set the default filename of the file which will save all database in sqlite format.
-
 :code:`outputs[db_type]`
 """"""""""""""""""""""""
 
@@ -114,16 +105,6 @@
     **Type:** :code:`dict`
 
     **Description:** Set the default name of some important files related to the :code:`db_type` index.
-
-
-:code:`outputs[db_type][files][sqlite]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`sqlite.sql`
-
-    **Description:** Set the default name of the file to call when we have to construct the SQLite database.
 
 :code:`outputs[domains]`
 """"""""""""""""""""""""

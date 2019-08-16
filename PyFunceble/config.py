@@ -318,7 +318,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 PyFunceble.mkdir(destination_dir)
 
             # We set the list of index to download.
-            index_to_download = ["sqlite", "mariadb", "mysql"]
+            index_to_download = ["mariadb", "mysql"]
 
             for index in index_to_download:
                 # We loop through the list of indexes.
@@ -563,7 +563,9 @@ class Version:
             # We initiate the link to the upstream version file.
             # It is hard coded because we may not have the chance to have the
             # configuration file everytime we need it.
-            upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"  # pylint: disable=line-too-long
+            upstream_link = (
+                "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+            )  # pylint: disable=line-too-long
 
             # We update the link according to our current version.
             upstream_link = self.right_url_from_version(upstream_link)

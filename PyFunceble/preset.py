@@ -290,3 +290,10 @@ class Preset:
             should_be_enabled = ["auto_continue", "whois_database"]
 
             self.enable(should_be_enabled)
+
+            if PyFunceble.CONFIGURATION["db_type"] not in ["mysql", "mariadb"]:
+                print(
+                    f"{PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT}The "
+                    f"{repr(PyFunceble.CONFIGURATION['db_type'])} database type "
+                    "is not recommended with the multiprocessing mode."
+                )

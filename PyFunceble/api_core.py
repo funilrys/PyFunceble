@@ -61,9 +61,9 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
+from PyFunceble.file_core import FileCore
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mysql import MySQL
-from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -114,16 +114,13 @@ class APICore:
         PyFunceble.Preset().api()
 
         # We get an instance of the DB connection.
-        self.sqlite_db = SQLite()
         self.mysql_db = MySQL()
 
         # We create an instance of the whois database.
-        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db, mysql_db=self.mysql_db)
+        self.whois_db = WhoisDB(mysql_db=self.mysql_db)
 
         # We create an instance of the inactive database.
-        self.inactive_db = InactiveDB(
-            "api_call", sqlite_db=self.sqlite_db, mysql_db=self.mysql_db
-        )
+        self.inactive_db = InactiveDB("api_call", mysql_db=self.mysql_db)
 
     def __inactive_database_management(self, subject, status):
         """
@@ -179,6 +176,8 @@ class APICore:
 
                 self.__inactive_database_management(subject, data["status"])
 
+                FileCore.save_into_database(data, "api_call", self.mysql_db)
+
             # We return our local result.
             return result
 
@@ -186,6 +185,7 @@ class APICore:
         data = Status(self.subject, subject_type="domain", whois_db=self.whois_db).get()
 
         self.__inactive_database_management(self.subject, data["status"])
+        FileCore.save_into_database(data, "api_call", self.mysql_db)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -293,6 +293,7 @@ class APICore:
                     result[subject] = data["status"]
 
                 self.__inactive_database_management(subject, data["status"])
+                FileCore.save_into_database(data, "api_call", self.mysql_db)
 
             # We return the result of each subjects.
             return result
@@ -301,6 +302,7 @@ class APICore:
         data = URLStatus(self.subject, subject_type="url").get()
 
         self.__inactive_database_management(self.subject, data["status"])
+        FileCore.save_into_database(data, "api_call", self.mysql_db)
 
         if self.complete:
             # The user want a complete copy of the data.

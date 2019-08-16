@@ -88,7 +88,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename, sqlite_db=None, mysql_db=None):
+    def __init__(self, filename, mysql_db=None):
         # We get the authorization status.
         self.authorized = self.authorization()
 
@@ -108,7 +108,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         self.filename = filename
 
         # We get the db instance.
-        self.sqlite_db = sqlite_db
         self.mysql_db = mysql_db
 
         self.table_name = self.get_table_name()
@@ -136,26 +135,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         self.is_present_cache[subject] = False
 
                 return self.is_present_cache[subject]
-
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "SELECT COUNT(*) "
-                    "FROM {0} "
-                    "WHERE subject = :subject AND file_path = :file"
-                ).format(self.table_name)
-
-                try:
-                    output = self.sqlite_db.cursor.execute(
-                        query, {"subject": subject, "file": self.filename}
-                    )
-                except self.sqlite_db.locked_errors:
-                    PyFunceble.sleep(0.3)
-                    output = self.sqlite_db.cursor.execute(
-                        query, {"subject": subject, "file": self.filename}
-                    )
-                fetched = output.fetchone()
-
-                return fetched[0] != 0
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
@@ -223,8 +202,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            return self.sqlite_db.tables["inactive"]
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["inactive"]
         return "inactive"
@@ -423,34 +400,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the database.
                 self.save()
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "INSERT INTO {0} "
-                    "(file_path, subject, status) "
-                    "VALUES (:file, :subject, :status)"
-                ).format(self.table_name)
-
-                try:
-                    # We execute the query.
-                    self.sqlite_db.cursor.execute(
-                        query,
-                        {"file": self.filename, "subject": subject, "status": status},
-                    )
-                except self.sqlite_db.errors:
-                    query = (
-                        "UPDATE {0} "
-                        "SET subject = :subject, status = :status "
-                        "WHERE file_path = :file AND subject = :subject"
-                    ).format(self.table_name)
-
-                    # We execute the query.
-                    self.sqlite_db.cursor.execute(
-                        query,
-                        {"subject": subject, "file": self.filename, "status": status},
-                    )
-
-                # And we commit the changes.
-                self.sqlite_db.connection.commit()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
 
@@ -476,19 +425,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         query = (
                             "UPDATE {0} "
                             "SET subject = %(subject)s, status = %(status)s "
-                            "WHERE file_path = %(file)s "
-                            "AND %(subject)s = %(subject)s "
-                            "AND digest = %(digest)s"
+                            "WHERE digest = %(digest)s"
                         ).format(self.table_name)
 
                         cursor.execute(
                             query,
-                            {
-                                "subject": subject,
-                                "file": self.filename,
-                                "status": status,
-                                "digest": digest,
-                            },
+                            {"subject": subject, "status": status, "digest": digest},
                         )
 
     def remove(self, subject):
@@ -512,20 +454,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the data into the database.
                 self.save()
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                # We construct the query we are going to execute.
-                query = (
-                    "DELETE FROM {0} "
-                    "WHERE file_path = :file "
-                    "AND subject = :subject"
-                ).format(self.table_name)
-
-                # We execute it.
-                self.sqlite_db.cursor.execute(
-                    query, {"file": self.filename, "subject": subject}
-                )
-                # We commit everything.
-                self.sqlite_db.connection.commit()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = (
@@ -555,26 +483,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 except KeyError:
                     return set()
 
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "SELECT * FROM {0} WHERE file_path = :file "
-                    "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                    "> (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
-                ).format(self.table_name)
-
-                output = self.sqlite_db.cursor.execute(
-                    query, {"file": self.filename, "days": self.days_in_seconds}
-                )
-                fetched = output.fetchall()
-
-                if fetched:
-                    return {x["subject"] for x in fetched}
-
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                     cast_type = "INTEGER"
                 else:
-                    cast_type = "UNSIGNED"
+                    cast_type = "SIGNED"
 
                 query = (
                     "SELECT * FROM {0} WHERE file_path = %(file)s "
@@ -610,26 +523,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 except KeyError:
                     return set()
 
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "SELECT * FROM {0} WHERE file_path = :file "
-                    "AND CAST(strftime('%s', 'now') AS INTEGER) "
-                    "< (CAST(strftime('%s', modified) AS INTEGER) + CAST(:days AS INTEGER))"
-                ).format(self.table_name)
-
-                output = self.sqlite_db.cursor.execute(
-                    query, {"file": self.filename, "days": self.days_in_seconds}
-                )
-                fetched = output.fetchall()
-
-                if fetched:
-                    return {x["subject"] for x in fetched}
-
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
                     cast_type = "INTEGER"
                 else:
-                    cast_type = "UNSIGNED"
+                    cast_type = "SIGNED"
 
                 query = (
                     "SELECT * FROM {0} WHERE file_path= %(file)s "

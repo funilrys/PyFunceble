@@ -35,7 +35,7 @@ Databases types
 ===============
 
 Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble :code:`>=1.18.0`),
-we offer multiple database types which are (as per configuration) :code:`json` (default), :code:`sqlite`, :code:`mariadb` and :code:`mysql`.
+we offer multiple database types which are (as per configuration) :code:`json` (default), :code:`mariadb` and :code:`mysql`.
 
 Why different database types?
 -----------------------------
@@ -44,11 +44,6 @@ With the introduction of the multiprocessing logic, it became natural to introdu
 
 Indeed in order to write or use a JSON formatted database, we have to load it and overwrite it completly.
 It's great while working with a single CPU/process but as soon as we get out of that scope it become unmanagable.
-
-How to use the :code:`sqlite` format?
--------------------------------------
-
-Simply switch the :code:`db_type` index of your configuration file to :code:`sqlite`. That's it.
 
 How to use the :code:`mysql` or :code:`mariadb` format?
 -------------------------------------------------------

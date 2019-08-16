@@ -76,7 +76,7 @@ class WhoisDB:
     database_file = None
     authorized = False
 
-    def __init__(self, sqlite_db=None, mysql_db=None):
+    def __init__(self, mysql_db=None):
         # Get the authorization.
         self.authorized = self.authorization()
 
@@ -85,7 +85,6 @@ class WhoisDB:
             PyFunceble.CONFIG_DIRECTORY, PyFunceble.OUTPUTS["default_files"]["whois_db"]
         )
 
-        self.sqlite_db = sqlite_db
         self.mysql_db = mysql_db
 
         self.table_name = self.get_table_name()
@@ -99,16 +98,6 @@ class WhoisDB:
                 if index in self.database:
                     return True
                 return False
-
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT COUNT(*) FROM {0} WHERE subject = :subject".format(
-                    self.table_name
-                )
-
-                output = self.sqlite_db.cursor.execute(query, {"subject": index})
-                fetched = output.fetchone()
-
-                return fetched[0] != 0
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
@@ -132,16 +121,8 @@ class WhoisDB:
 
                 return None
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["sqlite", "mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 fetched = None
-
-                if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                    query = "SELECT * FROM {0} WHERE subject = :subject".format(
-                        self.table_name
-                    )
-
-                    output = self.sqlite_db.cursor.execute(query, {"subject": index})
-                    fetched = output.fetchone()
 
                 if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                     query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
@@ -181,30 +162,6 @@ class WhoisDB:
         else:
             self.database[index] = value
 
-    def __setitem_sqlite(self, index, value):
-        query = (
-            "INSERT INTO {0} "
-            "(subject, expiration_date, expiration_date_epoch, state, record) "
-            "VALUES (:subject, :expiration_date, :epoch, :state, :record)"
-        ).format(self.table_name)
-
-        try:
-            # We execute the query.
-            self.sqlite_db.cursor.execute(
-                query,
-                {
-                    "subject": index,
-                    "expiration_date": value["expiration_date"],
-                    "epoch": value["epoch"],
-                    "state": value["state"],
-                    "record": value["record"],
-                },
-            )
-            # And we commit the changes.
-            self.sqlite_db.connection.commit()
-        except self.sqlite_db.errors:
-            pass
-
     def __setitem_mysql(self, index, value):
         query = (
             "INSERT INTO {0} "
@@ -239,8 +196,6 @@ class WhoisDB:
         if self.authorized:
             if PyFunceble.CONFIGURATION["db_type"] == "json":
                 self.__setitem_json(index, value)
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                self.__setitem_sqlite(index, value)
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 self.__setitem_mysql(index, value)
 
@@ -297,8 +252,6 @@ class WhoisDB:
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            return self.sqlite_db.tables["whois"]
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["whois"]
         return "whois"

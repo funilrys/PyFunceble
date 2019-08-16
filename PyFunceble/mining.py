@@ -80,7 +80,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     filename = None
     headers = {}
 
-    def __init__(self, filename, sqlite_db=None, mysql_db=None):  # pragma: no cover
+    def __init__(self, filename, mysql_db=None):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
         # We save the file we are working with.
@@ -88,7 +88,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         # Se create the current file namespace.
         self.database[self.filename] = {}
 
-        self.sqlite_db = sqlite_db
         self.mysql_db = mysql_db
 
         self.table_name = self.get_table_name()
@@ -116,21 +115,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             if PyFunceble.CONFIGURATION["db_type"] == "json":
                 if index in self.database[self.filename]:
                     return self.database[self.filename][index]
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "SELECT * "
-                    "FROM {0} "
-                    "WHERE file_path = :file "
-                    "AND subject = :subject "
-                ).format(self.table_name)
-
-                output = self.sqlite_db.cursor.execute(
-                    query, {"file": self.filename, "subject": index}
-                )
-                fetched = output.fetchall()
-
-                if fetched:
-                    return [x["mined"] for x in fetched]
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
@@ -173,24 +157,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         self.database[self.filename] = {}
 
                     self.database[self.filename][index] = value
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "INSERT INTO {0} "
-                    "(file_path, subject, mined) "
-                    "VALUES (:file, :subject, :mined)"
-                ).format(self.table_name)
-
-                for val in value:
-                    try:
-                        # We execute the query.
-                        self.sqlite_db.cursor.execute(
-                            query,
-                            {"file": self.filename, "subject": index, "mined": val},
-                        )
-                        # And we commit the changes.
-                        self.sqlite_db.connection.commit()
-                    except self.sqlite_db.errors:
-                        pass
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "INSERT INTO {0} "
@@ -199,11 +165,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 ).format(self.table_name)
 
                 with self.mysql_db.get_connection() as cursor:
-                    digest = sha256(
-                        bytes(self.filename + index + val, "utf-8")
-                    ).hexdigest()
-
                     for val in value:
+                        digest = sha256(
+                            bytes(self.filename + index + val, "utf-8")
+                        ).hexdigest()
                         try:
                             cursor.execute(
                                 query,
@@ -224,19 +189,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 if actual_value:
                     del self.database[self.filename][index]
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "DELETE FROM {0} "
-                    "WHERE file_path = :file "
-                    "AND subject = :subject "
-                ).format(self.table_name)
-
-                # We execute the query.
-                self.sqlite_db.cursor.execute(
-                    query, {"file": self.filename, "subject": index}
-                )
-                # And we commit the changes.
-                self.sqlite_db.connection.commit()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "DELETE FROM {0} "
@@ -287,8 +239,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            return self.sqlite_db.tables["mining"]
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["mining"]
         return "mining"
@@ -330,16 +280,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         # the currently read status.
 
                         result.append((subject, element))
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT * FROM {0} WHERE file_path = :file ".format(
-                    self.table_name
-                )
-
-                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
-                fetched = output.fetchall()
-
-                if fetched:
-                    result = [(x["subject"], x["mined"]) for x in fetched]
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
                     self.table_name
@@ -477,26 +417,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             actual_value.remove(history_member)
                         except ValueError:  # pragma: no cover
                             pass
-                    elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                        # We construct the query string.
-                        query = (
-                            "DELETE FROM {0} "
-                            "WHERE file_path = :file "
-                            "AND subject = :subject "
-                            "AND mined = :mined"
-                        ).format(self.table_name)
-
-                        # We execute the query.
-                        self.sqlite_db.cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "mined": history_member,
-                            },
-                        )
-                        # And we commit the changes.
-                        self.sqlite_db.connection.commit()
                     elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                         # We construct the query string.
                         query = (

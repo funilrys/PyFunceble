@@ -8,7 +8,7 @@ We chose to create the auto-continue logic mainly for one purpose: Testing long 
 As Travis CI has a time limit of 45 minutes, it became vital for us to be able to stop and continue
 the test from where we were under those 45 minutes. That's how it started.
 
-Today, - and it might be controversial - it's is used by most people who aren't under a Travis CI container
+Today, - and it might be controversial - it is used by most people who aren't under a Travis CI container
 to continue when the machine or tool crashes.
 
 How does it work?

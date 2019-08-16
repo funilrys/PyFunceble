@@ -65,7 +65,6 @@ from domain2idna import get as domain2idna
 import PyFunceble
 from PyFunceble.file_core import FileCore
 from PyFunceble.mysql import MySQL
-from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -85,10 +84,9 @@ class SimpleCore:
         else:
             self.subject = subject
 
-        self.sqlite_db = SQLite()
         self.mysql_db = MySQL()
 
-        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db, mysql_db=self.mysql_db)
+        self.whois_db = WhoisDB(mysql_db=self.mysql_db)
 
     def domain(self):
         """
@@ -105,10 +103,12 @@ class SimpleCore:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
-                status = SyntaxStatus(self.subject).get()["status"]
+                data = SyntaxStatus(self.subject).get()
+                status = data["status"]
             else:
                 # We test and get the status of the domain.
-                status = Status(self.subject, whois_db=self.whois_db).get()["status"]
+                data = Status(self.subject).get()
+                status = data["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -119,6 +119,8 @@ class SimpleCore:
                         FileCore.get_simple_coloration(status) + self.subject, status
                     )
                 )
+
+            FileCore.save_into_database(status, None, self.mysql_db)
         else:
             PyFunceble.CLICore.print_nothing_to_test()
 
@@ -137,10 +139,12 @@ class SimpleCore:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
-                status = SyntaxStatus(self.subject, subject_type="url").get()["status"]
+                data = SyntaxStatus(self.subject, subject_type="url").get()
+                status = data["status"]
             else:
                 # We test and get the status of the domain.
-                status = URLStatus(self.subject, subject_type="url").get()["status"]
+                data = URLStatus(self.subject, subject_type="url").get()
+                status = data["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -151,5 +155,7 @@ class SimpleCore:
                         FileCore.get_simple_coloration(status) + self.subject, status
                     )
                 )
+
+            FileCore.save_into_database(status, None, self.mysql_db)
         else:
             PyFunceble.CLICore.print_nothing_to_test()

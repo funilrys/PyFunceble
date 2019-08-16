@@ -8,7 +8,7 @@ How to speed up a bit the process/test?
     Beware, when talking about speed a lot a thing have to be taken in consideration.
     Indeed here is a non exaustive list of things which fluctuate testing speed.
 
-    * Internet speed.
+    * Bandwidth.
     * DNS Server response time.
     * CPU.
     * ISP blocking a big amount of connection to the outside world.
@@ -21,6 +21,9 @@ I have multiple CPU
 
 Simply use the :code:`--multiprocess` argument to activate the usage of multiple processes.
 You can in addition of that use the :code:`--processes` argument to tell us the number of simultaneous process to run.
+
+.. warning::
+    Try not to exceed :code:`150` processes if you want to keep your machine somehow alive and healthy.
 
 I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -58,6 +58,8 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+import warnings
+
 # pylint: enable=line-too-long
 from getpass import getpass
 
@@ -69,7 +71,7 @@ from PyFunceble.helpers import File, Regex
 
 class MySQL:
     """
-    Provide our way to work with our sqlite database.
+    Provide our way to work with our mysql/mariadb database.
     """
 
     variables = {
@@ -86,23 +88,23 @@ class MySQL:
         "inactive": "pyfunceble_inactive",
         "mining": "pyfunceble_mining",
         "whois": "pyfunceble_whois",
+        "tested": "pyfunceble_tested",
     }
 
     errors = pymysql.err.IntegrityError
 
     def __init__(self):
+        warnings.simplefilter("ignore")
+
         self.authorized = self.authorization()
 
-        pyfunceble_env_location = PyFunceble.CONFIG_DIRECTORY + PyFunceble.ENV_FILENAME
-        self.env_content = self.parse_env_file(pyfunceble_env_location)
+        self.pyfunceble_env_location = (
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.ENV_FILENAME
+        )
+        self.env_content = self.parse_env_file(self.pyfunceble_env_location)
 
         if self.authorized:
             self.initiated = False
-            self.connection = self.get_connection()
-
-            self.save_to_env_file(self.env_content, pyfunceble_env_location)
-
-            self.initiated = True
 
             if not self.are_tables_present():
                 self.create_tables()
@@ -193,8 +195,7 @@ class MySQL:
 
         return result
 
-    @classmethod
-    def save_to_env_file(cls, envs, env_file_location):
+    def save_to_env_file(self, envs, env_file_location):
         """
         Save the given dict of environment variable into our environment file.
 
@@ -202,32 +203,30 @@ class MySQL:
         :param str env_file_location: The location of the file we have to update.
         """
 
-        file_instance = File(env_file_location)
+        if not self.initiated:
+            file_instance = File(env_file_location)
 
-        try:
-            content = file_instance.read()
-        except FileNotFoundError:
-            content = ""
+            try:
+                content = file_instance.read()
+            except FileNotFoundError:
+                content = ""
 
-        if content:
             for environment_variable, value in envs.items():
                 to_write = "{0}={1}".format(environment_variable, value)
-
                 regex = r"{0}=.*".format(environment_variable)
 
-                if Regex(content, regex, return_data=False).match():
-                    content = Regex(content, regex, replace_with=to_write).replace()
-                else:
-                    if not content.endswith("\n"):
-                        content += "\n{0}\n".format(to_write)
+                if content:
+                    if Regex(content.splitlines(), f"^{regex}").matching_list():
+                        content = Regex(content, regex, replace_with=to_write).replace()
                     else:
-                        content += "{0}\n".format(to_write)
-        else:
-            for environment_variable, value in envs.items():
-                to_write = "{0}={1}".format(environment_variable, value)
-                content += "{0}\n".format(to_write)
+                        if not content.endswith("\n"):
+                            content += "\n{0}\n".format(to_write)
+                        else:
+                            content += "{0}\n".format(to_write)
+                else:
+                    content += "{0}\n".format(to_write)
 
-        file_instance.write(content, overwrite=True)
+            file_instance.write(content, overwrite=True)
 
     def get_connection(self):
         """
@@ -260,7 +259,10 @@ class MySQL:
                             setattr(self, "_{0}".format(description), data["default"])
                             self.env_content[data["env"]] = data["default"]
 
+                # pylint: disable = attribute-defined-outside-init
                 self._port = int(self._port)
+                self.save_to_env_file(self.env_content, self.pyfunceble_env_location)
+                self.initiated = True
 
             return pymysql.connect(
                 host=self._host,  # pylint: disable=no-member
@@ -282,7 +284,7 @@ class MySQL:
 
         if self.authorized:
             for _, table_name in self.tables.items():
-                with self.connection.cursor() as cursor:
+                with self.get_connection() as cursor:
                     query = (
                         "SELECT COUNT(*) "
                         "FROM information_schema.tables "
@@ -310,6 +312,6 @@ class MySQL:
         """
 
         if self.authorized:
-            with self.connection.cursor() as cursor:
+            with self.get_connection() as cursor:
                 for statement in self.parse_mysql_sql_file():
                     cursor.execute(statement)

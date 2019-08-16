@@ -105,12 +105,10 @@ outputs:
     public_suffix: public-suffix.json
     mining: mining.json
     whois_db: whois_db.json
-    sqlite: pyfunceble.db
 
   db_type:
     directory: db_types
     files:
-      sqlite: sqlite.sql
       mariadb: mariadb.sql
       mysql: mysql.sql
 
@@ -257,4 +255,3 @@ links:
   psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/public-suffix.json"
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"
-  sqlite: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/sqlite.sql"

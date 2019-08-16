@@ -94,7 +94,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.3.3.dev (Green Galago: Skitterbug)"
+VERSION = "2.4.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -808,7 +808,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "--database-type",
                     type=str,
                     help="Tell us the type of database to use. "
-                    "You can choose between the following: `json|mariadb|mysql|sqlite` %s"
+                    "You can choose between the following: `json|mariadb|mysql` %s"
                     % (
                         CURRENT_VALUE_FORMAT
                         + repr(CONFIGURATION["db_type"])
@@ -1314,12 +1314,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     )
 
                 if ARGS.database_type:
-                    if ARGS.database_type.lower() in [
-                        "json",
-                        "sqlite",
-                        "mariadb",
-                        "mysql",
-                    ]:
+                    if ARGS.database_type.lower() in ["json", "mariadb", "mysql"]:
                         CONFIGURATION.update({"db_type": ARGS.database_type.lower()})
                     else:
                         print(
@@ -1464,10 +1459,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     CLICore.colorify_logo(home=True)
 
                 if ARGS.clean:
-                    Clean(None)
+                    Clean()
 
                 if ARGS.clean_all:
-                    Clean(None, ARGS.clean_all)
+                    Clean(ARGS.clean_all)
 
                 if ARGS.directory_structure:
                     DirectoryStructure()

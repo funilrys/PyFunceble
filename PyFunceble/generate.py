@@ -103,6 +103,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         whois_server="Unknown",
         filename=None,
         ip_validation=False,
+        end=False,
     ):
         # We share the subject.
         self.subject = subject
@@ -116,6 +117,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         self.filename = filename
         # We share the IP validation.
         self.ip_validation = ip_validation
+        # We share the end state.
+        self.end = end
 
         if not http_status_code:
             self.status_code = PyFunceble.HTTP_CODE["not_found_default"]
@@ -155,8 +158,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             # We initiate an empty header to use with our request.
             self.headers = {}
 
-    @classmethod
-    def _do_not_produce_file(cls):
+    def _do_not_produce_file(self):
         """
         Check if we are allowed to produce a file based from the given
         information.
@@ -167,6 +169,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             False: We do produce file.
         :rtype: bool
         """
+
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            return not self.end
 
         return PyFunceble.CONFIGURATION["no_files"]
 
@@ -240,7 +245,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 or PyFunceble.CONFIGURATION["plain_list_domain"]
                 or PyFunceble.CONFIGURATION["generate_json"]
             )
-            or "api_file_generation" in PyFunceble.CONFIGURATION
+        ) or (
+            "api_file_generation" in PyFunceble.CONFIGURATION
             and PyFunceble.CONFIGURATION["api_file_generation"]
         )
 
@@ -278,18 +284,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         http_list.extend(PyFunceble.STATUS["list"]["http_active"])
         http_list.extend(PyFunceble.STATUS["list"]["suspicious"])
 
-        if self.status.lower() in PyFunceble.STATUS["list"]["up"]:
-            # The status is in the list of up list.
-
-            # We complete the path to the hosts file.
-            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["up"]
-
-            # We complete the path to the plain list file.
-            plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
-
-            # We complete the path to the json list file.
-            json_destination = output_json % PyFunceble.STATUS["official"]["up"]
-        elif self.status.lower() in PyFunceble.STATUS["list"]["valid"]:
+        if self.status.lower() in PyFunceble.STATUS["list"]["valid"]:
             # The status is in the list of valid list.
 
             # We complete the path to the hosts file.
@@ -300,6 +295,17 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
             # We complete the path to the json list file.
             json_destination = output_json % PyFunceble.STATUS["official"]["valid"]
+        elif self.status.lower() in PyFunceble.STATUS["list"]["up"]:
+            # The status is in the list of up list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS["official"]["up"]
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS["official"]["up"]
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS["official"]["up"]
         elif self.status.lower() in PyFunceble.STATUS["list"]["down"]:
             # The status is in the list of down list.
 
@@ -470,10 +476,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 # We print on file.
                 Prints([self.subject], "PlainDomain", splited_destination).data()
 
-            if (
-                PyFunceble.CONFIGURATION["generate_json"]
-                and not PyFunceble.CONFIGURATION["multiprocess"]
-            ):
+            if PyFunceble.CONFIGURATION["generate_json"]:
                 # The json list generation is activated.
 
                 # We generate/append the currently tested element in its
@@ -489,8 +492,10 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
 
         if (
-            self.subject_type.startswith("file_")
+            not self._do_not_produce_file()
+            and self.subject_type.startswith("file_")
             and PyFunceble.CONFIGURATION["unified"]
+            and not PyFunceble.CONFIGURATION["split"]
         ):
             # * We are not testing as an imported module.
             # and
@@ -669,12 +674,16 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 True,
             ).data()
 
-    def _prints_status_file(self):  # pylint: disable=too-many-branches
+    def prints_status_file(self):  # pylint: disable=too-many-branches
         """
         Logic behind the printing (in file) when generating status file.
         """
 
-        if self.subject_type.startswith("file_"):
+        if (
+            not self._do_not_produce_file()
+            and self.subject_type.startswith("file_")
+            and PyFunceble.CONFIGURATION["split"]
+        ):
             # We are testing a file.
 
             output = (
@@ -860,31 +869,17 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         # We generate the hosts file.
         self.info_files()
 
-        # We are testing a file content.
+        if not self.end:
+            # We print on screen if needed.
+            self._prints_status_screen()
 
         # We increase the percentage count.
         Percentage(self.status).count()
 
-        # We print on screen if needed.
-        self._prints_status_screen()
-
         if self._do_not_produce_file():
             return None
 
-        if (
-            not PyFunceble.CONFIGURATION["no_files"]
-            and PyFunceble.CONFIGURATION["split"]
-        ):
-            # * The file non-generation of file is globaly deactivated.
-            # and
-            # * We have to split the outputs.
-
-            # We print or generate the files.
-            self._prints_status_file()
-        else:
-            # * The file non-generation of file is globaly activated.
-            # or
-            # * We do not have to split the outputs.
-
-            # We print or generate the unified files.
-            self.unified_file()
+        # We print or generate the  splitted files.
+        self.prints_status_file()
+        # We print or generate the unified files.
+        self.unified_file()

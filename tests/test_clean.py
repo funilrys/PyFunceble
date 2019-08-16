@@ -88,18 +88,6 @@ class TestClean(TestCase):
         )
         self.types = ["up", "down", "invalid", "tested"]
 
-    def set_counter(self, to_set=15):
-        """
-        Set the counters to the desired number.
-
-        Argument:
-            - to_set: int
-                The number to set to each counter
-        """
-
-        for string in self.types:
-            PyFunceble.INTERN["counter"]["number"].update({string: to_set})
-
     def test_clean_all(self):
         """
         Test the clean_all process.
@@ -114,7 +102,7 @@ class TestClean(TestCase):
             actual = PyFunceble.path.isfile(file)
 
             self.assertEqual(expected, actual)
-            Clean(None, clean_all=True)
+            Clean(clean_all=True)
 
             expected = False
             actual = PyFunceble.path.isfile(file)
@@ -139,103 +127,6 @@ class TestClean(TestCase):
         actual = PyFunceble.path.isfile(self.file)
 
         self.assertEqual(expected, actual)
-
-    def test_number_of_tested_null(self):
-        """
-        Test the cleaning process in the case that the number of tested
-        is null.
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-        self.set_counter()
-
-        expected = {"up": 15, "down": 15, "invalid": 15, "tested": 15}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-        PyFunceble.INTERN["counter"]["number"]["tested"] = 0
-
-        expected = {"up": 15, "down": 15, "invalid": 15, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-        Clean(["hello.world"])
-
-        expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-
-    def test_tested_out_of_index(self):
-        """
-        TTest the cleaning process in the case that the number of tested
-        is > len(list_to_test).
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-        self.set_counter()
-
-        expected = {"up": 15, "down": 15, "invalid": 15, "tested": 15}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-        Clean(["hello.world"])
-
-        expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-
-    def test_tested_same_last(self):
-        """
-        Test the cleaning process in the case that the number of tested
-        is = len(list_to_test).
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-        self.set_counter(3)
-
-        expected = {"up": 3, "down": 3, "invalid": 3, "tested": 3}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-        Clean(["hello.world", "world.hello", "hello-world.com"])
-
-        expected = {"up": 0, "down": 0, "invalid": 0, "tested": 0}
-        actual = PyFunceble.INTERN["counter"]["number"]
-
-        self.assertEqual(expected, actual)
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-
 
 if __name__ == "__main__":
     launch_tests()

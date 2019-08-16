@@ -60,6 +60,7 @@ License:
 """
 # pylint: enable=line-too-long
 
+from hashlib import sha256
 from itertools import chain
 from multiprocessing import Pool
 
@@ -70,12 +71,12 @@ from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.generate import Generate
-from PyFunceble.helpers import Download, List, Regex
+from PyFunceble.helpers import Dict, Download, List, Regex
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mining import Mining
 from PyFunceble.mysql import MySQL
+from PyFunceble.percentage import Percentage
 from PyFunceble.sort import Sort
-from PyFunceble.sqlite import SQLite
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
 
@@ -110,7 +111,6 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
 
         # We get/initiate the db.
-        self.sqlite_db = SQLite()
         self.mysql_db = MySQL()
 
         # We get/initiate the preset class.
@@ -118,21 +118,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We get/initiate the autosave database/subsyste..
         self.autosave = AutoSave(start_time=PyFunceble.INTERN["start"])
         # We get/initiate the inactive database.
-        self.inactive_db = InactiveDB(
-            self.file, sqlite_db=self.sqlite_db, mysql_db=self.mysql_db
-        )
+        self.inactive_db = InactiveDB(self.file, mysql_db=self.mysql_db)
         # We get/initiate the whois database.
-        self.whois_db = WhoisDB(sqlite_db=self.sqlite_db, mysql_db=self.mysql_db)
+        self.whois_db = WhoisDB(mysql_db=self.mysql_db)
         # We get/initiate the mining subsystem.
-        self.mining = Mining(
-            self.file, sqlite_db=self.sqlite_db, mysql_db=self.mysql_db
-        )
+        self.mining = Mining(self.file, mysql_db=self.mysql_db)
         # We get/initiate the autocontinue subsystem.
         self.autocontinue = AutoContinue(
-            self.file,
-            parent_process=True,
-            sqlite_db=self.sqlite_db,
-            mysql_db=self.mysql_db,
+            self.file, parent_process=True, mysql_db=self.mysql_db
         )
 
         # We initiate a variable which will tell us when
@@ -141,6 +134,60 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         # We download the file if it is a list.
         self.download_link()
+
+    @classmethod
+    def save_into_database(cls, output, filename, mysql_db):
+        """
+        Saves the current status inside the database.
+        """
+
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            table_name = mysql_db.tables["tested"]
+
+            to_insert = (
+                "INSERT INTO {0} "
+                "(tested, file_path, _status, status, _status_source, status_source, "
+                "domain_syntax_validation, expiration_date, http_status_code, "
+                "ipv4_range_syntax_validation, ipv4_syntax_validation, "
+                "subdomain_syntax_validation, url_syntax_validation, whois_server, digest) "
+                "VALUES (%(tested)s, %(file_path)s, %(_status)s, %(status)s, %(_status_source)s, "
+                "%(status_source)s, %(domain_syntax_validation)s, "
+                "%(expiration_date)s, %(http_status_code)s, "
+                "%(ipv4_range_syntax_validation)s, %(ipv4_syntax_validation)s, "
+                "%(subdomain_syntax_validation)s, "
+                "%(url_syntax_validation)s, %(whois_server)s, %(digest)s)"
+            ).format(table_name)
+
+            to_update = (
+                "UPDATE {0} SET _status = %(_status)s, status = %(status)s, "
+                "_status_source = %(_status_source)s, status_source = %(status_source)s, "
+                "domain_syntax_validation = %(domain_syntax_validation)s, "
+                "expiration_date = %(expiration_date)s, http_status_code = %(http_status_code)s, "
+                "ipv4_range_syntax_validation = %(ipv4_range_syntax_validation)s, "
+                "ipv4_syntax_validation = %(ipv4_syntax_validation)s, "
+                "subdomain_syntax_validation = %(subdomain_syntax_validation)s, "
+                "url_syntax_validation = %(url_syntax_validation)s, "
+                "whois_server = %(whois_server)s "
+                "WHERE digest = %(digest)s"
+            ).format(table_name)
+
+            with mysql_db.get_connection() as cursor:
+                to_set = Dict(output).merge({"file_path": filename})
+
+                to_set["digest"] = sha256(
+                    bytes(to_set["file_path"] + to_set["tested"], "utf-8")
+                ).hexdigest()
+
+                if (
+                    isinstance(to_set["http_status_code"], str)
+                    and not to_set["http_status_code"].isdigit()
+                ):
+                    to_set["http_status_code"] = None
+
+                try:
+                    cursor.execute(to_insert, to_set)
+                except mysql_db.errors:
+                    cursor.execute(to_update, to_set)
 
     @classmethod
     def get_simple_coloration(cls, status):
@@ -208,19 +255,22 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             if PyFunceble.CONFIGURATION["syntax"]:
                 # The syntax mode is activated.
 
-                # We get the status from SyntaxStatus.
-                status = SyntaxStatus(
+                data = SyntaxStatus(
                     subject, subject_type="file_domain", filename=self.file
-                ).get()["status"]
+                ).get()
+
+                # We get the status from SyntaxStatus.
+                status = data["status"]
             else:
                 # We test and get the status of the domain.
-                status = Status(
+                data = Status(
                     subject,
                     subject_type="file_domain",
                     filename=self.file,
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,
-                ).get()["status"]
+                ).get()
+                status = data["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -237,6 +287,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We generate the complement file(s).
                 Generate(subject, "file_domain", status).complements_file()
+
+            self.save_into_database(data, self.file, self.mysql_db)
 
             # We return the status.
             return status
@@ -258,17 +310,19 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
-                status = SyntaxStatus(
+                data = SyntaxStatus(
                     subject, subject_type="file_url", filename=self.file
-                ).get()["status"]
+                ).get()
+                status = data["status"]
             else:
                 # We test and get the status of the domain.
-                status = URLStatus(
+                data = URLStatus(
                     subject,
                     subject_type="file_url",
                     filename=self.file,
                     inactive_db=self.inactive_db,
-                ).get()["status"]
+                ).get()
+                status = data["status"]
 
             if PyFunceble.CONFIGURATION["simple"]:
                 # The simple mode is activated.
@@ -285,6 +339,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We generate the complement file(s).
                 Generate(subject, "file_url", status).complements_file()
+
+            self.save_into_database(data, self.file, self.mysql_db)
 
             # We retunr the status.
             return status
@@ -536,11 +592,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if manager_data is None:
             # We are not in a multiprocess environment.
 
-            # We update the counters
-            autocontinue.update_counters()
+            if self.autosave.is_time_exceed():
+                autocontinue.update_counters()
 
-            # We process the autosaving if it is necessary.
-            self.autosave.process(test_completed=False)
+                # We process the autosaving if it is necessary.
+                self.autosave.process(test_completed=False)
         elif PyFunceble.CONFIGURATION["db_type"] == "json":
             # We are in a multiprocess environment.
 
@@ -589,15 +645,67 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         else:
             subjects_to_test = list(subjects_to_test)
 
-        if not PyFunceble.CONFIGURATION["multiprocess"]:
-            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
-                subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
-            else:
-                subjects_to_test = List(subjects_to_test).custom_format(
-                    Sort.hierarchical
-                )
+        if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+            subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
+        else:
+            subjects_to_test = List(subjects_to_test).custom_format(Sort.hierarchical)
 
         return chain(subjects_to_test, to_retest_inactive_db)
+
+    def generate_files_of_status(self, status): # pragma: no cover
+        """
+        Generate the status file of all subjects of the given status.
+
+        :param str status: A status to filter.
+        """
+
+        to_select = (
+            "SELECT tested as subject, status, status_source, expiration_date, "
+            "http_status_code, whois_server, file_path, ipv4_syntax_validation "
+            "FROM {0} WHERE status = %(official_status)s "
+            "AND file_path = %(file_path)s ORDER BY subject ASC"
+        ).format(self.mysql_db.tables["tested"])
+
+        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            with self.mysql_db.get_connection() as cursor:
+                cursor.execute(
+                    to_select, {"official_status": status, "file_path": self.file}
+                )
+
+                fetched = cursor.fetchall()
+
+                if fetched:
+                    for data in fetched:
+                        generate = Generate(
+                            data["subject"],
+                            f"file_{self.file_type}",
+                            data["status"],
+                            source=data["status_source"],
+                            expiration_date=data["expiration_date"],
+                            http_status_code=data["http_status_code"],
+                            whois_server=data["whois_server"],
+                            filename=self.file,
+                            end=True,
+                        )
+
+                        generate.status_file()
+                        generate.prints_status_file()
+                        generate.unified_file()
+
+    def generate_files(self): # pragma: no cover
+        """
+        Generate all needed files.
+        """
+
+        Percentage({})
+
+        if PyFunceble.CONFIGURATION["syntax"]:
+            self.generate_files_of_status(PyFunceble.STATUS["official"]["valid"])
+        else:
+            self.generate_files_of_status(PyFunceble.STATUS["official"]["up"])
+
+        self.generate_files_of_status(PyFunceble.STATUS["official"]["down"])
+        self.generate_files_of_status(PyFunceble.STATUS["official"]["invalid"])
 
     def read_and_test_file_content(self):  # pragma: no cover
         """
@@ -636,15 +744,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We inform all subsystem that we are not testing for complements anymore.
         self.complements_test_started = False
 
+        # We generate the files if they were not previously generated.
+        self.generate_files()
+
         # We update the counters
         self.autocontinue.update_counters()
+
         # We clean the autocontinue subsystem, we finished
         # the test.
         self.autocontinue.clean()
         # We process the autosaving if necessary.
         self.autosave.process(test_completed=True)
-        # We close the database connection
-        if self.sqlite_db.authorized:
-            self.sqlite_db.connection.close()
-        if self.mysql_db.authorized:
-            self.mysql_db.get_connection().close()

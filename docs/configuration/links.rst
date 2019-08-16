@@ -101,12 +101,3 @@
     **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt`
 
     **Description:** Set the upstream link to the :code:`requirements.txt` file.
-
-:code:`links[sqlite]`
-"""""""""""""""""""""
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/sqlite.sql`
-
-    **Description:** Set the upstream link to the SQLite table constructor file.

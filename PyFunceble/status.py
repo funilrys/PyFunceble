@@ -58,6 +58,7 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble.expiration_date import ExpirationDate
@@ -816,7 +817,6 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         if self.subject_type in ["url", "file_url"]:
             # We are testing for URL syntax.
 
-            print(self.output)
             if self.output["url_syntax_validation"]:
                 self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
                     "official"

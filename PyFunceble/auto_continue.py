@@ -81,7 +81,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     # Save the filename we are working with.
     filename = None
 
-    def __init__(self, filename, parent_process=False, sqlite_db=None, mysql_db=None):
+    def __init__(self, filename, parent_process=False, mysql_db=None):
         # We get the operation authorization.
         self.authorized = self.authorization()
         # We share the filename.
@@ -89,8 +89,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         # We preset the filename namespace.
         self.database[self.filename] = {}
 
-        # We get the sqlite connection.
-        self.sqlite_db = sqlite_db
         # We get the mysql connection.
         self.mysql_db = mysql_db
 
@@ -119,12 +117,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # currently testing is empty.
 
                 # We clean the output directory.
-                PyFunceble.Clean(None)
+                PyFunceble.Clean(file_path=self.filename)
         elif self.parent:
             # We are not authorized to operate.
 
             # We clean the output directory.
-            PyFunceble.Clean(None)
+            PyFunceble.Clean(file_path=self.filename)
 
     def __contains__(self, index):  # pragma: no cover
         if self.authorized:
@@ -134,20 +132,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         if index in status_data:
                             return True
                 return False
-
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = (
-                    "SELECT COUNT(*) "
-                    "FROM {0} "
-                    "WHERE subject = :subject AND file_path = :file"
-                ).format(self.table_name)
-
-                output = self.sqlite_db.cursor.execute(
-                    query, {"subject": index, "file": self.filename}
-                )
-                fetched = output.fetchone()
-
-                return fetched[0] != 0
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
@@ -181,8 +165,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-            return self.sqlite_db.tables["auto_continue"]
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["auto_continue"]
         return "auto_continue"
@@ -201,15 +183,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 ):
                     return True
                 return False
-
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT COUNT(*) from {0} where file_path = :file".format(
-                    self.table_name
-                )
-                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
-                fetched = output.fetchone()
-
-                return fetched[0] == 0
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
@@ -255,52 +228,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # We save everything.
                 self.save()
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                # We construct the query string.
-                query = (
-                    "INSERT INTO {0} "
-                    "(file_path, subject, is_complement, status) "
-                    "VALUES (:file, :subject, :is_complement, :status)"
-                ).format(self.table_name)
-
-                try:
-                    try:
-                        # We execute the query.
-                        self.sqlite_db.cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "is_complement": int(False),
-                                "status": status,
-                            },
-                        )
-                    except self.sqlite_db.locked_errors:
-                        PyFunceble.sleep(0.3)
-                        # We execute the query.
-                        self.sqlite_db.cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "is_complement": int(False),
-                                "status": status,
-                            },
-                        )
-                except self.sqlite_db.errors:
-                    query = (
-                        "UPDATE {0} "
-                        "SET status = :status "
-                        "WHERE file_path = :file AND subject = :subject"
-                    ).format(self.table_name)
-
-                    # We execute the query.
-                    self.sqlite_db.cursor.execute(
-                        query,
-                        {"status": status, "file": self.filename, "subject": subject},
-                    )
-                # And we commit the changes.
-                self.sqlite_db.connection.commit()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query string.
 
@@ -331,19 +258,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         query = (
                             "UPDATE {0} "
                             "SET subject = %(subject)s "
-                            "WHERE file_path = %(file)s "
-                            "AND subject = %(subject)s "
-                            "AND digest = %(digest)s"
+                            "WHERE digest = %(digest)s"
                         ).format(self.table_name)
 
-                        cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "digest": digest,
-                            },
-                        )
+                        cursor.execute(query, {"subject": subject, "digest": digest})
 
     def save(self):
         """
@@ -389,15 +307,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the current database state.
                 Dict(self.database).to_json(self.database_file)
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                # We construct the query we are going to execute.
-                query = "DELETE FROM {0} WHERE file_path = :file".format(
-                    self.table_name
-                )
-                # We execute it.
-                self.sqlite_db.cursor.execute(query, {"file": self.filename})
-                # We commit everything.
-                self.sqlite_db.connection.commit()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = "DELETE FROM {0} WHERE file_path = %(file)s".format(
@@ -416,7 +325,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             # We create a list of all status we are working with.
-            statuses = ["up", "down", "invalid"]
+            statuses = PyFunceble.STATUS["official"].keys()
+
             # We preset the number of tested.
             tested = 0
 
@@ -443,27 +353,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     except KeyError:
                         PyFunceble.INTERN["counter"]["number"][status] = 0
                         continue
-                elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                    query = (
-                        "SELECT COUNT(*) "
-                        "FROM {0} "
-                        "WHERE status = :status "
-                        "AND file_path = :file "
-                    ).format(self.table_name)
-
-                    output = self.sqlite_db.cursor.execute(
-                        query,
-                        {
-                            "status": PyFunceble.STATUS["official"][status],
-                            "file": self.filename,
-                        },
-                    )
-                    fetched = output.fetchone()
-
-                    PyFunceble.INTERN["counter"]["number"][status] = fetched[0]
-
-                    # We then update/transfert it to its global place.
-                    tested += fetched[0]
                 elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                     query = (
                         "SELECT COUNT(*) "
@@ -504,16 +393,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     }
                 except KeyError:  # pragma: no cover
                     pass
-            elif PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                query = "SELECT * FROM {0} WHERE file_path = :file".format(
-                    self.table_name
-                )
-
-                output = self.sqlite_db.cursor.execute(query, {"file": self.filename})
-                fetched = output.fetchall()
-
-                if fetched:
-                    return {x["subject"] for x in fetched}
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
                     self.table_name
@@ -535,11 +414,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         # We get the list of domains we are going to work with.
         result = [
-            z
-            for x, y in self.get_already_tested()
-            for z in y
-            if not PyFunceble.Check(z).is_subdomain()
-            and PyFunceble.Check(z).is_domain()
+            x
+            for x in self.get_already_tested()
+            if not PyFunceble.Check(x).is_subdomain()
+            and PyFunceble.Check(x).is_domain()
         ]
 
         # We generate the one without "www." if "www." is given.
@@ -589,68 +467,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         return result
 
-    def __get_or_generate_complements_sqlite(self):  # pragma: no cover
-        """
-        Get or generate the complements while working with
-        as SQLite formatted database.
-        """
-
-        result = []
-
-        query = (
-            "SELECT * "
-            "FROM {0} "
-            "WHERE file_path = :file "
-            "AND is_complement = :is_complement".format(self.table_name)
-        )
-
-        output = self.sqlite_db.cursor.execute(
-            query, {"file": self.filename, "is_complement": int(True)}
-        )
-        fetched = output.fetchall()
-
-        if fetched:
-            result = [x["subject"] for x in fetched]
-        else:
-            result = self.__generate_complements()
-
-        query = (
-            "INSERT INTO {0} "
-            "(file_path, subject, status, is_complement, digest) "
-            "VALUES (:file, :subject, :status, :is_complement, :digest)".format(
-                self.table_name
-            )
-        )
-
-        for subject in result:
-            try:
-                # We execute the query.
-                self.sqlite_db.cursor.execute(
-                    query,
-                    {
-                        "file": self.filename,
-                        "subject": subject,
-                        "status": "",
-                        "is_complement": int(True),
-                        "digest": "",
-                    },
-                )
-            except self.sqlite_db.locked_errors:
-                PyFunceble.sleep(0.3)
-                # We execute the query.
-                self.sqlite_db.cursor.execute(
-                    query,
-                    {
-                        "file": self.filename,
-                        "subject": subject,
-                        "status": "",
-                        "is_complement": int(True),
-                        "digest": "",
-                    },
-                )
-
-        return result
-
     def __get_or_generate_complements_mysql(self):  # pragma: no cover
         """
         Get or generate the complements while working with
@@ -663,11 +479,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             "SELECT * "
             "FROM {0} "
             "WHERE file_path = %(file)s "
-            "AND is_complement = %(is_complement)d".format(self.table_name)
+            "AND is_complement = %(is_complement)s".format(self.table_name)
         )
 
         with self.mysql_db.get_connection() as cursor:
-            cursor.execute(query, {"file": self.filename})
+            cursor.execute(query, {"file": self.filename, "is_complement": int(True)})
             fetched = cursor.fetchall()
 
             if fetched:
@@ -678,7 +494,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         query = (
             "INSERT INTO {0} "
             "(file_path, subject, status, is_complement, digest) "
-            "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)d, %(digest)s".format(
+            "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)s, %(digest)s)".format(
                 self.table_name
             )
         )
@@ -689,7 +505,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 "subject": subject,
                 "status": "",
                 "is_complement": int(True),
-                "digest": "",
+                "digest": sha256(bytes(self.filename + subject, "utf-8")).hexdigest(),
             }
             for subject in result
         ]
@@ -709,8 +525,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION["db_type"] == "json":
                 return self.__get_or_generate_complements_json()
-            if PyFunceble.CONFIGURATION["db_type"] == "sqlite":
-                return self.__get_or_generate_complements_sqlite()
             if PyFunceble.CONFIGURATION["db_type"] in ["mysql", "mariadb"]:
                 return self.__get_or_generate_complements_mysql()
 

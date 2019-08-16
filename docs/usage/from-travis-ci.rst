@@ -80,8 +80,8 @@ After you got your token, please write it or save it in a safe place as you're g
 
 .. _new GitHub token: https://github.com/settings/tokens/new
 
-Encrypting the token future usage under the Travis CI container
----------------------------------------------------------------
+Encrypting the token for future usage under the Travis CIs' containers
+----------------------------------------------------------------------
 
 To encrypt the token simply replace and execute the following according to your personal case.
 
