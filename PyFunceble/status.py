@@ -410,16 +410,19 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # in order to be considered as inactive.
         does_not_exist = "doesn&#8217;t&nbsp;exist"
 
-        # We get the content of the page.
-        wordpress_com_content = PyFunceble.requests.get(
-            "http://{}:80".format(self.subject), headers=self.headers
-        )
+        try:
+            # We get the content of the page.
+            wordpress_com_content = PyFunceble.requests.get(
+                "http://{}:80".format(self.subject), headers=self.headers
+            )
 
-        if does_not_exist in wordpress_com_content.text:
-            # The marker is into the page content.
+            if does_not_exist in wordpress_com_content.text:
+                # The marker is into the page content.
 
-            # We return the new status and source.
-            return self.__special_down()
+                # We return the new status and source.
+                return self.__special_down()
+        except PyFunceble.requests.exceptions.SSLError:
+            pass
 
         # We return None, there is no changes.
         return None
