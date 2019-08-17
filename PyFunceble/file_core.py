@@ -480,7 +480,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json" and manager_data is not None:
+        if manager_data is not None:
             autocontinue = AutoContinue(self.file, parent_process=False)
             inactive_db = InactiveDB(self.file)
             mining = Mining(self.file)

@@ -242,8 +242,11 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         # this is needed.
         index = "funilrys"
 
-        # We create the manager data.
-        manager_data = manager.list()
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            # We create the manager data.
+            manager_data = manager.list()
+        else:
+            manager_data = None
 
         while True:
             # We get the list of active process.
@@ -312,7 +315,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if manager_data is not None and PyFunceble.CONFIGURATION["db_type"] == "json":
             if not self.autosave.authorized:
                 print(
                     PyFunceble.Fore.MAGENTA
@@ -401,11 +404,14 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     self._get_list_to_of_subjects_to_test_from_file(file), manager
                 )
 
+            with Manager() as manager:
                 # We get the list of mined data to test.
                 to_test = chain(self.mining.list_of_mined())
 
                 # We process the test/save of the mined data to test.
                 self.__run_multiprocess_test(to_test, manager)
+
+            with Manager() as manager:
 
                 # We get the list of complements to test.
                 complements = self.get_complements()
