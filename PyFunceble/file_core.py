@@ -648,7 +648,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         else:
             subjects_to_test = list(subjects_to_test)
 
-        if not PyFunceble.CONFIGURATION["multiprocessing"]:
+        if not PyFunceble.CONFIGURATION["multiprocess"]:
             if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
                 subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
             else:
