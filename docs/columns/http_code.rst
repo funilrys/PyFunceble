@@ -5,7 +5,7 @@ HTTP Code
   This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
 
 .. note::
-  A :code:`***` in this column means that it was impossible to catch the HTTP status code from the web server.
+  A :code:`XXX` in this column means that it was impossible to catch the HTTP status code from the web server.
 
 .. note::
   The Status Codes we give to PyFunceble to test with can be fully customized in your own :code:`.PyFunceble.yaml`.
