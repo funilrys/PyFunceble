@@ -92,28 +92,30 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         # We get the authorization status.
         self.authorized = self.authorization()
 
-        # We convert the number of days between the database retest
-        # to seconds.
-        self.days_in_seconds = (
-            PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
-        )
+        if self.authorized:
+            # We convert the number of days between the database retest
+            # to seconds.
+            self.days_in_seconds = (
+                PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
+            )
 
-        # We set the path to the inactive database file.
-        self.database_file = "{0}{1}".format(
-            PyFunceble.CONFIG_DIRECTORY,
-            PyFunceble.OUTPUTS["default_files"]["inactive_db"],
-        )
+            # We set the path to the inactive database file.
+            self.database_file = "{0}{1}".format(
+                PyFunceble.CONFIG_DIRECTORY,
+                PyFunceble.OUTPUTS["default_files"]["inactive_db"],
+            )
 
-        # We share the filename.
-        self.filename = filename
+            # We share the filename.
+            self.filename = filename
 
-        # We get the db instance.
-        self.mysql_db = mysql_db
+            # We get the db instance.
+            self.mysql_db = mysql_db
 
-        self.table_name = self.get_table_name()
+            self.table_name = self.get_table_name()
+            self.to_retest = self.get_to_retest()
 
-        # We initiate the database.
-        self.initiate()
+            # We initiate the database.
+            self.initiate()
 
     def __contains__(self, subject):
         if self.authorized:
@@ -285,6 +287,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # We initiate an empty database.
                 self.database = {self.filename: {}}
 
+            if self.filename not in self.database:  # pragma: no cover
+                # We create the current file namepace
+                self.database[self.filename] = {}
+
     def save(self):
         """
         Save the current database into the database file.
@@ -308,13 +314,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             # We load the database.
             self.load()
-
-            if (
-                PyFunceble.CONFIGURATION["db_type"] == "json"
-                and self.filename not in self.database
-            ):  # pragma: no cover
-                # We create the current file namepace
-                self.database[self.filename] = {}
 
             self.save()
 

@@ -108,6 +108,10 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         self.inactive_db = inactive_db
         self.checker = PyFunceble.Check(self.subject)
 
+        self.exclude_file_generation = (
+            self.inactive_db.authorized and self.subject in self.inactive_db.to_retest
+        )
+
     def get(self):
         """
         Get the status while testing for an IP or domain.
@@ -163,7 +167,14 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             whois_server=self.output["whois_server"],
                             filename=self.filename,
                             ip_validation=self.output["ipv4_syntax_validation"],
-                        ).status_file()
+                        ).status_file(
+                            exclude_file_generation=self.exclude_file_generation
+                            and self.output["status"]
+                            not in [
+                                PyFunceble.STATUS["official"]["up"],
+                                PyFunceble.STATUS["official"]["down"],
+                            ]
+                        )
                     else:
                         self.output["_status_source"] = "DNSLOOKUP"
                         self.handle(
@@ -252,7 +263,14 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             whois_server=self.output["whois_server"],
             filename=self.filename,
             ip_validation=ip_validation_status,
-        ).status_file()
+        ).status_file(
+            exclude_file_generation=self.exclude_file_generation
+            and self.output["status"]
+            not in [
+                PyFunceble.STATUS["official"]["up"],
+                PyFunceble.STATUS["official"]["down"],
+            ]
+        )
 
 
 class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
@@ -705,6 +723,10 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         self.checker = PyFunceble.Check(self.subject)
         self.inactive_db = inactive_db
 
+        self.exclude_file_generation = (
+            self.inactive_db.authorized and self.subject in self.inactive_db.to_retest
+        )
+
         # We initiate what we are going to return.
         self.output = {
             "domain_syntax_validation": None,
@@ -774,7 +796,14 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             source=self.output["status_source"],
             http_status_code=self.output["http_status_code"],
             filename=self.filename,
-        ).status_file()
+        ).status_file(
+            exclude_file_generation=self.exclude_file_generation
+            and self.output["status"]
+            not in [
+                PyFunceble.STATUS["official"]["up"],
+                PyFunceble.STATUS["official"]["down"],
+            ]
+        )
 
 
 class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods

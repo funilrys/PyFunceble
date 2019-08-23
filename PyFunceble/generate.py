@@ -158,6 +158,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             # We initiate an empty header to use with our request.
             self.headers = {}
 
+        self.file_production = not self._do_not_produce_file()
+
     def _do_not_produce_file(self):
         """
         Check if we are allowed to produce a file based from the given
@@ -238,7 +240,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
 
         return (
-            not self._do_not_produce_file()
+            self.file_production
             and self.subject_type.startswith("file_")
             and (
                 PyFunceble.CONFIGURATION["generate_hosts"]
@@ -492,7 +494,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
 
         if (
-            not self._do_not_produce_file()
+            self.file_production
             and self.subject_type.startswith("file_")
             and PyFunceble.CONFIGURATION["unified"]
             and not PyFunceble.CONFIGURATION["split"]
@@ -680,7 +682,7 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         """
 
         if (
-            not self._do_not_produce_file()
+            self.file_production
             and self.subject_type.startswith("file_")
             and PyFunceble.CONFIGURATION["split"]
         ):
@@ -861,10 +863,18 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 # We print the information on screen.
                 Prints(data_to_print, "Generic").data()
 
-    def status_file(self):  # pylint: disable=inconsistent-return-statements
+    def status_file(
+        self, exclude_file_generation=False
+    ):  # pylint: disable=inconsistent-return-statements
         """
         Generate a file according to the domain status.
+
+        :param bool exclude_file_generation:
+            A shorthand to disable any file generation.
         """
+
+        if exclude_file_generation:
+            self.file_production = False
 
         # We generate the hosts file.
         self.info_files()
@@ -873,13 +883,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             # We print on screen if needed.
             self._prints_status_screen()
 
-        # We increase the percentage count.
-        Percentage(self.status).count()
+        if self.file_production:
+            # We increase the percentage count.
+            Percentage(self.status).count()
 
-        if self._do_not_produce_file():
-            return None
-
-        # We print or generate the  splitted files.
-        self.prints_status_file()
-        # We print or generate the unified files.
-        self.unified_file()
+            # We print or generate the  splitted files.
+            self.prints_status_file()
+            # We print or generate the unified files.
+            self.unified_file()

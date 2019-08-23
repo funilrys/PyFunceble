@@ -622,7 +622,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         Give a file object, we construct/get the list of subject to test.
         """
 
-        to_retest_inactive_db = self.inactive_db.get_to_retest()
+        to_retest_inactive_db = self.inactive_db.to_retest
 
         if PyFunceble.CONFIGURATION["multiprocess"]:
             with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
@@ -694,7 +694,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                             end=True,
                         )
 
-                        generate.status_file()
+                        generate.status_file(
+                            exclude_file_generation=self.inactive_db.authorized
+                            and data["status"] not in self.list_of_up_statuses
+                            and data["subject"] in self.inactive_db.to_retest
+                        )
                         generate.prints_status_file()
                         generate.unified_file()
 
