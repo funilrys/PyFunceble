@@ -59,7 +59,6 @@ License:
     SOFTWARE.
 """
 import warnings
-
 # pylint: enable=line-too-long
 from getpass import getpass
 

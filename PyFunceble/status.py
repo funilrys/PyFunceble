@@ -109,7 +109,9 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         self.checker = PyFunceble.Check(self.subject)
 
         self.exclude_file_generation = (
-            self.inactive_db.authorized and self.subject in self.inactive_db.to_retest
+            self.inactive_db is not None
+            and self.inactive_db.authorized
+            and self.subject in self.inactive_db.to_retest
         )
 
     def get(self):
