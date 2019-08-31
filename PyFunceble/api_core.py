@@ -160,7 +160,10 @@ class APICore:
                 # We get the complete data related to the status
                 # of the subject.
                 data = Status(
-                    subject, subject_type="domain", whois_db=self.whois_db
+                    subject,
+                    subject_type="domain",
+                    whois_db=self.whois_db,
+                    inactive_db=self.inactive_db,
                 ).get()
 
                 if self.complete:
@@ -279,7 +282,9 @@ class APICore:
                 # We loop through the list of subjects.
 
                 # We get the complete data about the status.
-                data = URLStatus(subject, subject_type="url").get()
+                data = URLStatus(
+                    subject, subject_type="url", inactive_db=self.inactive_db
+                ).get()
 
                 if self.complete:
                     # The user want a complete copy of the data.

@@ -175,6 +175,9 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return not self.end
 
+        if "api_file_generation" in PyFunceble.CONFIGURATION:
+            return not PyFunceble.CONFIGURATION["api_file_generation"]
+
         return PyFunceble.CONFIGURATION["no_files"]
 
     def _analytic_host_file_directory(self):
@@ -247,9 +250,6 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 or PyFunceble.CONFIGURATION["plain_list_domain"]
                 or PyFunceble.CONFIGURATION["generate_json"]
             )
-        ) or (
-            "api_file_generation" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["api_file_generation"]
         )
 
     def ___get_info_files_destinations(self, output_hosts, output_domains, output_json):
