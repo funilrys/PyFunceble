@@ -625,7 +625,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if hasattr(self.inactive_db, "to_retest"):
             to_retest_inactive_db = self.inactive_db.to_retest
         else:
-            to_retest_inactive_db = []
+            to_retest_inactive_db = set()
 
         if PyFunceble.CONFIGURATION["multiprocess"]:
             with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:

@@ -726,7 +726,9 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         self.inactive_db = inactive_db
 
         self.exclude_file_generation = (
-            self.inactive_db.authorized and self.subject in self.inactive_db.to_retest
+            self.inactive_db is not None
+            and self.inactive_db.authorized
+            and self.subject in self.inactive_db.to_retest
         )
 
         # We initiate what we are going to return.
