@@ -548,7 +548,7 @@ class Prints:
                 if not content or isinstance(content, dict):
                     content = []
 
-                if content and isinstance(content, list):
+                if isinstance(content, list):
                     # The content is a list.
 
                     # We extend the content with our data to print.
