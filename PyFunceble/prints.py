@@ -545,7 +545,10 @@ class Prints:
                 # We get the content of the output.
                 content = Dict().from_json(self.file_output_instance.read())
 
-                if isinstance(content, list):
+                if not content or isinstance(content, dict):
+                    content = []
+
+                if content and isinstance(content, list):
                     # The content is a list.
 
                     # We extend the content with our data to print.
