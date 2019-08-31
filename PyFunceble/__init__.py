@@ -94,7 +94,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.5.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.6.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -676,6 +676,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                         + repr(CONFIGURATION["adblock"])
                         + Style.RESET_ALL
                     ),
+                )
+
+                PARSER.add_argument(
+                    "--aggressive", action="store_true", help=argparse.SUPPRESS
                 )
 
                 PARSER.add_argument(
@@ -1272,6 +1276,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if ARGS.adblock:
                     CONFIGURATION.update({"adblock": Preset().switch("adblock")})
+
+                if ARGS.aggressive:
+                    CONFIGURATION.update({"aggressive": Preset().switch("aggressive")})
 
                 if ARGS.auto_continue:
                     CONFIGURATION.update(

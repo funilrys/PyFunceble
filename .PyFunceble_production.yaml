@@ -1,5 +1,7 @@
 # Enable / disable the adblock format decoding.
 adblock: False
+# Enable / disable a more aggresive decoding of the adblock format (WARNING: This is experimental)
+aggressive: False
 # Enable / disable the auto continue system.
 auto_continue: True
 # Set the command to run before each commit (except the final one).

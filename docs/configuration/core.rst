@@ -17,6 +17,18 @@
 
     If this index is set to :code:`False`, every time we read a given file, we will consider one line as an element to test.
 
+:code:`aggressive`
+---------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable some aggressive settings.
+
+.. warning::
+    This option is available but please keep in mind that the some settings which it enable are experimental.
+
 :code:`auto_continue`
 ---------------------
 

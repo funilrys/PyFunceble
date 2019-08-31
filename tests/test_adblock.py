@@ -104,15 +104,19 @@ class TestAdblockDecode(TestCase):
             "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
             "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld",
             ".com",
+            "||ggggggggggg.gq^$all",
+            "||exaaaaaaample.org$document",
         ]
 
         self.expected = [
             "ad.google.co.uk",
             "api.funilrys.com",
             "api.google.com",
+            "exaaaaaaample.org",
             "funceble.funilrys.com",
             "funilrys.com",
             "funilrys.github.io",
+            "ggggggggggg.gq",
             "github.io",
             "google.com",
             "static.quantcast.mgr.consensu.org",

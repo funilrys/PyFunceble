@@ -42,6 +42,7 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
+    if self.aggressive
 
     # Don't complain for those blocks
     PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"

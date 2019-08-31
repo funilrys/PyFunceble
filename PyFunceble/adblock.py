@@ -102,7 +102,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         :rtype: list
         """
 
-        return [x for x in list_from_file if not self._is_to_ignore(x)]
+        return [x.strip() for x in list_from_file if not self._is_to_ignore(x)]
 
     @classmethod
     def _is_to_ignore(cls, line):
@@ -123,7 +123,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         for element in to_ignore:
             # We loop through the list of regex.
 
-            if Regex(line, element, return_data=False).match():
+            if Regex(line.strip(), element, return_data=False).match():
                 # The currently read line match the currently read
                 # regex.
 
@@ -242,6 +242,11 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # the element to format.
         regex_v4 = r"^\|(.*\..*)\|$"
 
+        if self.aggressive:
+            # We initiate the fifth regex we are going to use to get
+            # the element to format.
+            regex_v5 = r"^(.*?)(?:#{2}|#@#)"
+
         for line in self.to_format:
             # We loop through the different line.
 
@@ -265,6 +270,12 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                 line, regex_v3, return_data=True, rematch=True, group=0
             ).match()
 
+            if self.aggressive:
+                # We extract the different group from our fifth regex.
+                rematch_v5 = Regex(
+                    line, regex_v5, return_data=True, rematch=True, group=0
+                ).match()
+
             if rematch:
                 # The first extraction was successfull.
 
@@ -273,12 +284,15 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         self.option_separator
                     )
 
+                    # pylint: disable=too-many-boolean-expressions
                     if (
                         not options[-1]
                         or "third-party" in options
                         or "script" in options
                         or "popup" in options
                         or "xmlhttprequest" in options
+                        or "all" in options
+                        or "document" in options
                     ):
                         # We extend the result with the extracted elements.
                         result.extend(self._extract_base(rematch))
@@ -290,7 +304,6 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                         result.extend(self._extract_base(extra))
                     elif extra:
                         result.extend(self._extract_base(rematch))
-
                 else:
                     # We extend the result with the extracted elements.
                     result.extend(self._extract_base(rematch))
@@ -302,10 +315,16 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                 result.extend(List(self._format_decoded(rematch_v4)).format())
 
             if rematch_v3:
-                # The second extraction was successfull.
+                # The third extraction was successfull.
 
                 # We extend the formatted elements from the extracted elements.
                 result.extend(List(self._format_decoded(rematch_v3)).format())
+
+            if self.aggressive and rematch_v5:
+                # The fifth extraction was successfull.
+
+                # We extend the formatted element from the extracted elements.
+                result.extend(List(self._format_decoded(rematch_v5)).format())
 
         # We return the result.
         return List(result).format()
