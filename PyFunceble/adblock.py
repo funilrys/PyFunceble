@@ -242,10 +242,9 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         # the element to format.
         regex_v4 = r"^\|(.*\..*)\|$"
 
-        if self.aggressive:
-            # We initiate the fifth regex we are going to use to get
-            # the element to format.
-            regex_v5 = r"^(.*?)(?:#{2}|#@#)"
+        # We initiate the fifth regex we are going to use to get
+        # the element to format.
+        regex_v5 = r"^(.*?)(?:#{2}|#@#)"
 
         for line in self.to_format:
             # We loop through the different line.
@@ -270,11 +269,10 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                 line, regex_v3, return_data=True, rematch=True, group=0
             ).match()
 
-            if self.aggressive:
-                # We extract the different group from our fifth regex.
-                rematch_v5 = Regex(
-                    line, regex_v5, return_data=True, rematch=True, group=0
-                ).match()
+            # We extract the different group from our fifth regex.
+            rematch_v5 = Regex(
+                line, regex_v5, return_data=True, rematch=True, group=0
+            ).match()
 
             if rematch:
                 # The first extraction was successfull.
@@ -320,7 +318,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                 # We extend the formatted elements from the extracted elements.
                 result.extend(List(self._format_decoded(rematch_v3)).format())
 
-            if self.aggressive and rematch_v5:
+            if rematch_v5:
                 # The fifth extraction was successfull.
 
                 # We extend the formatted element from the extracted elements.
