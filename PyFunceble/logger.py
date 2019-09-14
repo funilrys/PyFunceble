@@ -188,7 +188,7 @@ class Logger:  # pragma: no cover
         stackback = [y for x in [x.split("\n") for x in format_stack()] for y in x if y]
         interest = stackback[-6].split(",")
 
-        complete_file = interest[0].strip()[6:-1].split("/")
+        complete_file = interest[0].strip()[6:-1].split(PyFunceble.directory_separator)
 
         if complete_file[-2] != PyFunceble.NAME:
             file = complete_file
