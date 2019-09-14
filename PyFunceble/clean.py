@@ -113,7 +113,9 @@ class Clean:
                 if file in [".gitignore", ".keep"]:
                     continue
 
-                if not all_files and "logs" in root and ".log" in file:
+                if (
+                    not all_files and "logs" in root and ".log" in file
+                ):  # pragma: no cover
                     continue
 
                 # The file is not into our list of file we do not have to delete.
