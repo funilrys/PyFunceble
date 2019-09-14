@@ -572,7 +572,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         z
                         for x, y in self.database[self.filename].items()
                         if x.isdigit()
-                        and PyFunceble.datetime.now().timestamp()
+                        and PyFunceble.datetime.now()
                         < PyFunceble.datetime.fromtimestamp(float(x)) + self.days
                         for z in y.keys()
                     }
