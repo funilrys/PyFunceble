@@ -257,7 +257,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the starting time as the current time.
-        PyFunceble.INTERN["start"] = int(PyFunceble.time())
+        PyFunceble.INTERN["start"] = PyFunceble.datetime.now().timestamp()
+
+        PyFunceble.Logger().debug(
+            f'Starting time: {PyFunceble.INTERN["start"]} '
+            f'| {PyFunceble.datetime.fromtimestamp(PyFunceble.INTERN["start"])}'
+        )
 
     @classmethod
     def _stoping_time(cls):  # pragma: no cover
@@ -266,7 +271,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the ending time as the current time.
-        PyFunceble.INTERN["end"] = int(PyFunceble.time())
+        PyFunceble.INTERN["end"] = PyFunceble.datetime.now().timestamp()
+
+        PyFunceble.Logger().debug(
+            f'Stoping time: {PyFunceble.INTERN["start"]} '
+            f'| { PyFunceble.datetime.fromtimestamp(PyFunceble.INTERN["end"])}'
+        )
 
     @classmethod
     def _calculate(cls, start=None, end=None):
@@ -295,7 +305,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # The start and end time is explicitly given.
 
             # We get the difference between the ending and the starting time.
-            time_difference = int(end) - int(start)
+            time_difference = float(end) - float(start)
         else:
             # The start and end time is not explicitly given.
 
@@ -310,16 +320,16 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         data = PyFunceble.OrderedDict()
 
         # We calculate and append the day to our data.
-        data["days"] = str(time_difference // (24 * 60 * 60)).zfill(2)
+        data["days"] = str(int(time_difference // (24 * 60 * 60))).zfill(2)
 
         # We calculate and append the hours to our data.
-        data["hours"] = str((time_difference // (60 * 60)) % 24).zfill(2)
+        data["hours"] = str(int((time_difference // (60 * 60)) % 24)).zfill(2)
 
         # We calculate and append the minutes to our data.
-        data["minutes"] = str((time_difference % 3600) // 60).zfill(2)
+        data["minutes"] = str(int((time_difference % 3600) // 60)).zfill(2)
 
         # We calculate and append the minutes to our data.
-        data["seconds"] = str(time_difference % 60).zfill(2)
+        data["seconds"] = str(round(time_difference % 60, 6)).zfill(2)
 
         # We finaly return our data.
         return data

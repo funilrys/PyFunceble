@@ -32,6 +32,10 @@ Here is the list of environment variables we use and how we use them if they are
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                     |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                            |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`    | Tell us to log everything to :code:`stdout`                                                                    |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MySQL charset to use.                                                                              |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host of the MySQL database.                                                                        |

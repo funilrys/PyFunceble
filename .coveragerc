@@ -54,6 +54,8 @@ exclude_lines =
     _json
     _mysql
     _sqlite
+    PyFunceble\.Logger\(\)
+    Logger\(\)
 
 
 ignore_errors = True

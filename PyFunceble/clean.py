@@ -85,7 +85,7 @@ class Clean:
         self.almost_everything(clean_all, file_path)
 
     @classmethod
-    def file_to_delete(cls):
+    def file_to_delete(cls, all_files=False):
         """
         Return the list of file to delete.
         """
@@ -110,23 +110,28 @@ class Clean:
                 # If there is files in the current sub-directory, we loop
                 # through the list of files.
 
-                if file not in [".gitignore", ".keep"]:
-                    # The file is not into our list of file we do not have to delete.
+                if file in [".gitignore", ".keep"]:
+                    continue
 
-                    if root.endswith(PyFunceble.directory_separator):
-                        # The root ends with the directory separator.
+                if not all_files and "logs" in root and ".log" in file:
+                    continue
 
-                        # We construct the path and append the full path to the result.
-                        result.append(root + file)
-                    else:
-                        # The root directory does not ends with the directory separator.
+                # The file is not into our list of file we do not have to delete.
 
-                        # We construct the path by appending the directory separator
-                        # between the root and the filename and append the full path to
-                        # the result.
-                        result.append(
-                            root + PyFunceble.directory_separator + file
-                        )  # pragma: no cover
+                if root.endswith(PyFunceble.directory_separator):
+                    # The root ends with the directory separator.
+
+                    # We construct the path and append the full path to the result.
+                    result.append(root + file)
+                else:
+                    # The root directory does not ends with the directory separator.
+
+                    # We construct the path by appending the directory separator
+                    # between the root and the filename and append the full path to
+                    # the result.
+                    result.append(
+                        root + PyFunceble.directory_separator + file
+                    )  # pragma: no cover
 
         # We return our list of file to delete.
         return result
@@ -200,7 +205,7 @@ class Clean:
         """
 
         # We get the list of file to delete.
-        to_delete = self.file_to_delete()
+        to_delete = self.file_to_delete(clean_all)
         version = Version(True)
 
         if not version.is_cloned() and clean_all:  # pragma: no cover
@@ -211,6 +216,8 @@ class Clean:
 
             # And we delete the currently read file.
             File(file).delete()
+
+            PyFunceble.Logger().info(f"Deleted: {file}")
 
         if clean_all:  # pragma: no cover
             to_avoid = ["whois"]
@@ -238,5 +245,12 @@ class Clean:
                 with mysql_db.get_connection() as cursor:
                     cursor.execute(lquery, {"file_path": file_path})
 
+                    PyFunceble.Logger().info(
+                        "Cleaned the data related to "
+                        f"{repr(file_path)} from the {database_name} table."
+                    )
+
         if not version.is_cloned() and clean_all:  # pragma: no cover
             PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
+
+            PyFunceble.Logger().info(f"Reloaded configuration.")

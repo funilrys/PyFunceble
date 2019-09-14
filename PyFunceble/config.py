@@ -288,11 +288,19 @@ Install and load the default configuration at the mentioned location? [y/n] "
         if not self.version.is_cloned():
             # The current version is not the cloned one.
 
+            PyFunceble.Logger().info(
+                f"Downloading {production_config_link} to {self.path_to_default_config}"
+            )
+
             # We download the link content and save it inside the default location.
             #
             # Note: We add this one in order to allow the enduser to always have
             # a copy of our upstream configuration file.
             Download(production_config_link, self.path_to_default_config).text()
+
+        PyFunceble.Logger().info(
+            f"Downloading {production_config_link} to {self.path_to_config}"
+        )
 
         # And we download the link content and return the download status.
         return Download(production_config_link, self.path_to_config).text()
@@ -337,6 +345,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We finally download the file.
                 Download(link_to_download, destination).text()
 
+                PyFunceble.Logger().info(
+                    f"Downloaded {index} from {link_to_download} to {destination}."
+                )
+
     def _install_iana_config(self):
         """
         Download `iana-domains-db.json` if not present.
@@ -355,6 +367,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
+
+            PyFunceble.Logger().info(f"Downloading {iana_link} to {destination}.")
 
             # We Download the link content and return the download status.
             return Download(iana_link, destination).text()
@@ -386,6 +400,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
         if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
 
+            PyFunceble.Logger().info(f"Downloading {psl_link} to {destination}.")
+
             # We Download the link content and return the download status.
             return Download(psl_link, destination).text()
 
@@ -415,6 +431,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
             # The current version is not the cloned version.
+
+            PyFunceble.Logger().info(
+                f"Downloading {dir_structure_link} to {destination}."
+            )
 
             # We Download the link content and return the download status.
             data = Download(dir_structure_link, destination, return_data=True).text()
@@ -476,12 +496,18 @@ class Merge:  # pylint: disable=too-few-public-methods
             Dict(self.upstream_config).merge(self.local_config)
         ).remove_key(to_remove)
 
+        PyFunceble.Logger().info(
+            f"Merged upstream configuration into local configuration."
+        )
+
     def _save(self):
         """
         Save the new configuration inside the configuration file.
         """
 
         Dict(self.new_config).to_yaml(self.path_to_config)
+
+        PyFunceble.Logger().info(f"Saved new version of the configuration file.")
 
     def _load(self):
         """
@@ -576,6 +602,8 @@ class Version:
                 Download(upstream_link, return_data=True).text()
             )
 
+            PyFunceble.Logger().info(f"Downloaded latest version of {upstream_link}.")
+
     @classmethod
     def split_versions(cls, version, return_non_digits=False):
         """
@@ -626,6 +654,9 @@ class Version:
         :rtype: bool
         """
 
+        PyFunceble.Logger().info(f"Checking {local} against {upstream}.")
+        PyFunceble.Logger().debug(f"Same version: {local == upstream}")
+
         return local == upstream
 
     @classmethod
@@ -643,6 +674,8 @@ class Version:
             - False: local > upstream
         :rtype: bool|None
         """
+
+        PyFunceble.Logger().info(f"Comparing {local} against {upstream}.")
 
         # A version should be in format [1,2,3] which is actually the version `1.2.3`
         # So as we only have 3 elements in the versioning,
@@ -671,16 +704,22 @@ class Version:
         if False in status:
             # There is a False in the status.
 
+            PyFunceble.Logger().info(f"{local} is more recent than {upstream}.")
+
             # We return False which means that we are in a more recent version.
             return False
 
         if True in status:
             # There is a True in the status.
 
+            PyFunceble.Logger().info(f"{local} is older than {upstream}.")
+
             # We return True which means that we are in a older version.
             return True
 
         # There is no True or False in the status.
+
+        PyFunceble.Logger().info(f"{local} is equal to {upstream}.")
 
         # We return None which means that we are in the same version as upstream.
         return None

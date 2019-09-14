@@ -212,6 +212,10 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
             # There was not point, so no extension to work with.
             self.domain_extension = None
 
+        PyFunceble.Logger().debug(
+            f"Extension to get the referer for: {self.domain_extension}"
+        )
+
     def get(self):
         """
         Return the referer aka the WHOIS server of the current domain extension.
@@ -254,6 +258,8 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                             return None
 
                         # The referer is into the database.
+
+                        PyFunceble.Logger().debug(f"Referer: {referer}")
 
                         # We return the extracted referer.
                         return referer

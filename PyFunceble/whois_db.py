@@ -79,15 +79,21 @@ class WhoisDB:
     def __init__(self, mysql_db=None):
         # Get the authorization.
         self.authorized = self.authorization()
+        self.database_file = ""
 
-        # We set the location of the database file.
-        self.database_file = "{0}{1}".format(
-            PyFunceble.CONFIG_DIRECTORY, PyFunceble.OUTPUTS["default_files"]["whois_db"]
-        )
+        if PyFunceble.CONFIGURATION["db_type"] == "json":
+            # We set the location of the database file.
+            self.database_file = "{0}{1}".format(
+                PyFunceble.CONFIG_DIRECTORY,
+                PyFunceble.OUTPUTS["default_files"]["whois_db"],
+            )
 
         self.mysql_db = mysql_db
-
         self.table_name = self.get_table_name()
+
+        PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
+        PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
+        PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
 
         # We load the configuration.
         self.load()
@@ -96,7 +102,10 @@ class WhoisDB:
         if self.authorized:
             if PyFunceble.CONFIGURATION["db_type"] == "json":
                 if index in self.database:
+                    PyFunceble.Logger().info(f"{index} is present into the database.")
                     return True
+
+                PyFunceble.Logger().info(f"{index} is not present into the database.")
                 return False
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -109,7 +118,15 @@ class WhoisDB:
 
                     fetched = cursor.fetchone()
 
-                    return fetched["COUNT(*)"] != 0
+                    if fetched["COUNT(*)"] != 0:
+                        PyFunceble.Logger().info(
+                            f"{index} is present into the database."
+                        )
+                        return True
+
+                    PyFunceble.Logger().info(
+                        f"{index} is not present into the database."
+                    )
 
         return False  # pragma: no cover
 
@@ -162,6 +179,10 @@ class WhoisDB:
         else:
             self.database[index] = value
 
+        PyFunceble.Logger().info(
+            f"Inserted {repr(value)} into the subset of {repr(index)}"
+        )
+
     def __setitem_mysql(self, index, value):
         query = (
             "INSERT INTO {0} "
@@ -177,18 +198,17 @@ class WhoisDB:
         ).hexdigest()
 
         with self.mysql_db.get_connection() as cursor:
+            playload = {
+                "subject": index,
+                "expiration_date": value["expiration_date"],
+                "epoch": value["epoch"],
+                "state": value["state"],
+                "record": value["record"],
+                "digest": digest,
+            }
             try:
-                cursor.execute(
-                    query,
-                    {
-                        "subject": index,
-                        "expiration_date": value["expiration_date"],
-                        "epoch": value["epoch"],
-                        "state": value["state"],
-                        "record": value["record"],
-                        "digest": digest,
-                    },
-                )
+                cursor.execute(query, playload)
+                PyFunceble.Logger().info(f"Inserted into the database: \n {playload}")
             except self.mysql_db.errors:
                 pass
 
@@ -275,6 +295,10 @@ class WhoisDB:
                 self.merge(Dict().from_json(File(self.database_file).read()))
             )
 
+            PyFunceble.Logger().info(
+                "Database content loaded in memory. (DATASET WONT BE LOGGED)"
+            )
+
             # As changes can happen because of the merging, we directly saved
             # the loaded data.
             self.save()
@@ -289,6 +313,8 @@ class WhoisDB:
 
             # We save the current state of the datbase.
             Dict(self.database).to_json(self.database_file)
+
+            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
 
     def is_time_older(self, subject):
         """

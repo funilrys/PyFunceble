@@ -74,7 +74,7 @@ class Logs:  # pragma: no cover
 
     def __init__(self, output=None):
         self.output = output
-        self.current_time = str(PyFunceble.time())
+        self.current_time = str(PyFunceble.datetime.now().timestamp())
 
     @classmethod
     def _get_content(cls, file):
@@ -119,18 +119,7 @@ class Logs:  # pragma: no cover
         if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
             # The debug and the logs subsystem are activated.
 
-            if PyFunceble.INTERN["referer"]:
-                referer = PyFunceble.INTERN["referer"]
-            else:
-                referer = None
-
-            to_write = {
-                self.current_time: {
-                    "domain": subject,
-                    "record": record,
-                    "referer": referer,
-                }
-            }
+            to_write = {self.current_time: {"domain": subject, "record": record}}
 
             if self.output:
                 output = self.output
@@ -142,6 +131,8 @@ class Logs:  # pragma: no cover
 
             current_content = self._get_content(output)
             current_content.update(to_write)
+
+            PyFunceble.Logger().debug(f"WHOIS Record of {repr(subject)}:\n{to_write}")
 
             self._write_content(current_content, output)
 
@@ -180,6 +171,10 @@ class Logs:  # pragma: no cover
             current_content = self._get_content(output)
             current_content.update(to_write)
 
+            PyFunceble.Logger().critical(
+                f"Wrong date format for {repr(subject)}:\n{to_write}"
+            )
+
             self._write_content(current_content, output)
 
             if PyFunceble.CONFIGURATION["share_logs"]:
@@ -214,6 +209,10 @@ class Logs:  # pragma: no cover
 
             current_content = self._get_content(output)
             current_content.update(to_write)
+
+            PyFunceble.Logger().critical(
+                f"Referer not found for {repr(subject)}:\n{to_write}"
+            )
 
             self._write_content(current_content, output)
 

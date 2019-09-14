@@ -83,6 +83,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __init__(self, filename, mysql_db=None):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
+        self.database_file = ""
         # We save the file we are working with.
         self.filename = filename
         # Se create the current file namespace.
@@ -91,6 +92,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         self.mysql_db = mysql_db
 
         self.table_name = self.get_table_name()
+
+        PyFunceble.Logger().debug(f"Authorization: {self.authorized}")
+        PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
+        PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
 
         if PyFunceble.CONFIGURATION["user_agent"]:
             # The user-agent is given.
@@ -102,11 +107,14 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         if self.authorized:
             # We are authorized to operate.
 
-            # We get the file we are going to save our data.
-            self.database_file = (
-                PyFunceble.CONFIG_DIRECTORY
-                + PyFunceble.OUTPUTS["default_files"]["mining"]
-            )
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                # We get the file we are going to save our data.
+                self.database_file = (
+                    PyFunceble.CONFIG_DIRECTORY
+                    + PyFunceble.OUTPUTS["default_files"]["mining"]
+                )
+
+            PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
 
             self.load()
 
@@ -157,6 +165,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         self.database[self.filename] = {}
 
                     self.database[self.filename][index] = value
+
+                PyFunceble.Logger().info(
+                    f"Inserted {repr(value)} into the subset of {repr(index)}"
+                )
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "INSERT INTO {0} "
@@ -169,15 +181,18 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         digest = sha256(
                             bytes(self.filename + index + val, "utf-8")
                         ).hexdigest()
+
+                        playload = {
+                            "file": self.filename,
+                            "subject": index,
+                            "mined": val,
+                            "digest": digest,
+                        }
                         try:
-                            cursor.execute(
-                                query,
-                                {
-                                    "file": self.filename,
-                                    "subject": index,
-                                    "mined": val,
-                                    "digest": digest,
-                                },
+                            cursor.execute(query, playload)
+
+                            PyFunceble.Logger().info(
+                                f"Inserted into the database: \n {playload}"
                             )
                         except self.mysql_db.errors:
                             pass
@@ -189,6 +204,12 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 if actual_value:
                     del self.database[self.filename][index]
+
+                    PyFunceble.Logger().info(
+                        "Cleaned the data related to "
+                        f"{repr(index)} and {repr(self.filename)} "
+                        f"from the database."
+                    )
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 query = (
                     "DELETE FROM {0} "
@@ -198,6 +219,12 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": index})
+
+                    PyFunceble.Logger().info(
+                        "Cleaned the data related to "
+                        f"{repr(index)} and {repr(self.filename)} "
+                        f"from the {repr(self.table_name)} table."
+                    )
 
     @classmethod
     def authorization(cls):
@@ -232,6 +259,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
+            PyFunceble.Logger().exception()
+
             return []
 
     def get_table_name(self):
@@ -262,6 +291,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     ]
         :rtype: list
         """
+
+        PyFunceble.Logger().info(
+            "Getting the list of previously mined data. (DATASET WONT BE LOGGED)"
+        )
 
         # We initiate a variable which will return the result.
         result = []
@@ -305,6 +338,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 # We update the database with the content of the file.
                 self.database.update(Dict().from_json(File(self.database_file).read()))
 
+                PyFunceble.Logger().info(
+                    "Database content loaded in memory. (DATASET WONT BE LOGGED)"
+                )
+
     def save(self):
         """
         Save the content of the database into the database file.
@@ -315,6 +352,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
             # We save the database into the file.
             Dict(self.database).to_json(self.database_file)
+
+            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
 
     def mine(self, subject, subject_type):  # pragma: no cover
         """
@@ -336,6 +375,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         if self.authorized and not self[subject]:
             # We are authorized to operate.
 
+            PyFunceble.Logger().info("Starting mining logic..")
+
             if subject_type == "domain":
                 to_get = "http://{0}:80".format(subject)
             elif subject_type == "url":
@@ -344,6 +385,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 raise ValueError("Unknown subject type {0}".format(repr(subject_type)))
 
             history = self.get_history(to_get)
+
+            PyFunceble.Logger().debug(f"(Not processed) Mined:\n{history}")
 
             for element in history:
                 # We loop through the list of requests history.
@@ -373,6 +416,11 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 if local_result:
                     # The subject type is domain.
 
+                    PyFunceble.Logger().debug(
+                        f"{local_result} was successfully validated. "
+                        "Removing possible Ports."
+                    )
+
                     if subject_type == "domain":
                         # We are working with domain.
 
@@ -390,6 +438,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     if local_result != subject:
                         # The local result is differnt from the
                         # subject we are working with.
+
+                        PyFunceble.Logger().debug(
+                            f"Saving {repr(local_result)} into the subset of {repr(subject)}."
+                        )
 
                         # We save into the database.
                         self[subject] = [local_result]
@@ -415,6 +467,11 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     if PyFunceble.CONFIGURATION["db_type"] == "json":
                         try:
                             actual_value.remove(history_member)
+
+                            PyFunceble.Logger().info(
+                                f"Removed {repr(history_member)} (mined) "
+                                f"From the subset of {repr(subject)}."
+                            )
                         except ValueError:  # pragma: no cover
                             pass
                     elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -434,6 +491,13 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                                     "subject": subject,
                                     "mined": history_member,
                                 },
+                            )
+
+                            PyFunceble.Logger().info(
+                                "Cleaned the data related to "
+                                f"{repr(subject)}, {repr(history_member)} (mined) and "
+                                f"{repr(self.filename)} and from "
+                                f"the {repr(self.table_name)} table."
                             )
                 else:
                     break

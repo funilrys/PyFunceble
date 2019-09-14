@@ -125,6 +125,9 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             # We return an empty header.
             self.headers = {}
 
+        PyFunceble.Logger().debug(f"Subject: {repr(self.subject)}")
+        PyFunceble.Logger().debug(f"Headers:\n{self.headers}")
+
     def _access(self):  # pragma: no cover
         """
         Get the HTTP code status.
@@ -156,6 +159,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                     headers=self.headers,
                 )
 
+            PyFunceble.Logger().debug(f"Status Code: {req.status_code}")
+
             # And we try to get the status code.
             return req.status_code
 
@@ -171,6 +176,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         ):
             # If one of the listed exception is matched, that means that something
             # went wrong and we were unable to extract the status code.
+
+            PyFunceble.Logger().exception()
 
             # We return None.
             return None
@@ -208,6 +215,11 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # * The extracted http code is not in the list of valid http code.
                 # or
                 # * The extracted http code is equal to `None`.
+
+                PyFunceble.Logger().info(
+                    "Could not find http status code. "
+                    f"Setting it it {repr(self.default)}"
+                )
 
                 # We return the default http code.
                 return self.default

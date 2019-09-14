@@ -67,6 +67,7 @@ import dns.reversename
 from dns.exception import DNSException
 
 from PyFunceble.check import Check
+from PyFunceble.logger import Logger
 
 
 class DNSLookup:  # pylint: disable=too-few-public-methods
@@ -88,26 +89,35 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             if dns_server:
                 # A dns server is given.
 
+                Logger().info(f"DNS Server explicitly given, using the given one.")
+                Logger().debug(f"Given DNS server: {dns_server}")
+
                 # We initiate the default resolver.
-                dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
+                self.dns_resolver = dns.resolver.Resolver(configure=False)
 
                 if isinstance(dns_server, (list, tuple)):
                     # We got a list of dns server.
 
                     # We parse them.
-                    dns.resolver.default_resolver.nameservers = dns_server
+                    self.dns_resolver.nameservers = dns_server
                 else:
                     # We got a dns server.
 
                     # We parse it.
-                    dns.resolver.default_resolver.nameservers = [dns_server]
+                    self.dns_resolver.nameservers = [dns_server]
+
             else:
                 # A dns server is not given.
 
-                # We configure everything with what the OS gives us.
-                dns.resolver.default_resolver = dns.resolver.Resolver()
+                Logger().info(
+                    f"DNS Server not explicitly given, using the systemwide one."
+                )
 
-            self.dns_resolver = dns.resolver
+                # We configure everything with what the OS gives us.
+                self.dns_resolver = dns.resolver.Resolver()
+
+            Logger().debug(f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}")
+
             self.complete = complete
 
     def a_record(self, subject=None, lifetime=3.0):  # pragma: no cover
@@ -353,6 +363,8 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         Handle the request for a subject which is not an IPv4.
         """
 
+        Logger().debug(f"{repr(self.subject)} is not IPv4. Requesting record.")
+
         result = {}
 
         # We get the NS record of the given subject.
@@ -424,12 +436,16 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 # We delete it.
                 del result["addr_info"]
 
+        Logger().debug(f"Records for {repr(self.subject)}:\n{result}")
+
         return result
 
     def __request_ipv4(self):
         """
         Handle the request for a subject which is IPv4.
         """
+
+        Logger().info(f"{repr(self.subject)} is IPv4. Requesting PTR record.")
 
         result = {}
 
@@ -439,10 +455,16 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if "PTR" not in result or not result["PTR"]:  # pragma: no cover
             del result["PTR"]
 
+            Logger().error(f"PTR record for {repr(self.subject)} not found.")
+
         if not result:  # pragma: no cover
             # We could not get DNS records about the given subject.
 
+            Logger().info(f"Getting hosts by addr for {repr(self.subject)}")
+
             result = self.get_host_by_addr()
+
+        Logger().debug(f"Request result: \n{result}")
 
         return result
 

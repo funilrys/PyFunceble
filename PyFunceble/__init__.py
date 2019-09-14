@@ -64,6 +64,7 @@ import argparse
 import socket
 import warnings
 from collections import OrderedDict
+from datetime import datetime, timedelta
 from inspect import getsourcefile
 from os import environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
@@ -86,6 +87,7 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.dns_lookup import DNSLookup
 from PyFunceble.iana import IANA
+from PyFunceble.logger import Logger
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
@@ -94,7 +96,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.6.6.dev (Green Galago: Skitterbug)"
+VERSION = "2.7.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -1483,6 +1485,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.public_suffix:
                     PublicSuffix().update()
 
+                Logger().info(f"ARGS:\n{ARGS}")
+                Logger().debug(f"CONFIGURATION:\n{CONFIGURATION}")
+
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()
 
@@ -1496,6 +1501,8 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     link_to_test=ARGS.link,
                 )
             except KeyError as e:
+                Logger().exception()
+
                 if not Version(True).is_cloned():
                     # We are not into the cloned version.
 
@@ -1509,5 +1516,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     # Note: The purpose of this is to avoid having
                     # to search for a mistake while developing.
                     raise e
+            except Exception as e:
+                Logger().exception()
+
+                raise e
+
         except KeyboardInterrupt:
             CLICore.stay_safe()

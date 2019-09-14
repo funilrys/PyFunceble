@@ -109,7 +109,7 @@ class TestExecutionTime(BaseStdout):
         fifty_hours_in_second = 60 * 60 * 50
 
         expected = PyFunceble.OrderedDict(
-            [("days", "03"), ("hours", "02"), ("minutes", "00"), ("seconds", "00")]
+            [("days", "03"), ("hours", "02"), ("minutes", "00"), ("seconds", "0.0")]
         )
 
         end = int(PyFunceble.time()) + day_in_second + fifty_hours_in_second

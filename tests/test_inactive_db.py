@@ -98,8 +98,16 @@ class TestInactiveDB(TestCase):
             }
         }
 
-        self.time_past = str(int(PyFunceble.time()) - (365 * 24 * 3600))
-        self.time_future = str(int(PyFunceble.time()) + (365 * 24 * 3600))
+        self.time_past = str(
+            int(
+                (PyFunceble.datetime.now() - PyFunceble.timedelta(days=365)).timestamp()
+            )
+        )
+        self.time_future = str(
+            int(
+                (PyFunceble.datetime.now() + PyFunceble.timedelta(days=365)).timestamp()
+            )
+        )
 
         self.inactive_db = InactiveDB(self.file_to_test)
 
@@ -188,7 +196,12 @@ class TestInactiveDB(TestCase):
         self.test_file_not_exist()
 
         new_time = str(
-            int(PyFunceble.time()) - self.inactive_db.one_day_in_seconds - 100
+            int(
+                (
+                    PyFunceble.datetime.now()
+                    - (self.inactive_db.one_day + PyFunceble.timedelta(seconds=100))
+                ).timestamp()
+            )
         )
 
         self.inactive_db.database = {
@@ -260,10 +273,10 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {}
 
-        expected = int(PyFunceble.time())
+        expected = int(PyFunceble.datetime.now().timestamp())
         actual = self.inactive_db._timestamp()
 
-        self.assertGreaterEqual(expected, actual)
+        self.assertLessEqual(expected, actual)
 
         self.test_file_not_exist()
 
@@ -279,10 +292,10 @@ class TestInactiveDB(TestCase):
             self.file_to_test: {self.time_past: ["hello.world", "world.hello"]}
         }
 
-        expected = int(PyFunceble.time())
+        expected = int(PyFunceble.datetime.now().timestamp())
         actual = self.inactive_db._timestamp()
 
-        self.assertGreaterEqual(expected, actual)
+        self.assertLessEqual(expected, actual)
 
         self.test_file_not_exist()
 
@@ -360,7 +373,10 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.add(subject, PyFunceble.STATUS["official"]["down"])
 
-        self.assertEqual(expected, self.inactive_db.database)
+        self.assertEqual(
+            [int(float(x)) for x in expected[self.file_to_test]],
+            [int(float(x)) for x in self.inactive_db.database[self.file_to_test]],
+        )
 
         self.test_file_not_exist()
 

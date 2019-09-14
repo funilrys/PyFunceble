@@ -96,10 +96,16 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
         self.authorized = self.authorization()
 
-        self.start_time = int(start_time)
-        self.end_time = self.start_time + (
-            int(PyFunceble.CONFIGURATION["travis_autosave_minutes"]) * 60
-        )
+        PyFunceble.Logger().info(f"Authorized: {self.authorized}")
+
+        if self.authorized:
+            self.start_time = PyFunceble.datetime.fromtimestamp(int(start_time))
+            self.end_time = self.start_time + PyFunceble.timedelta(
+                minutes=int(PyFunceble.CONFIGURATION["travis_autosave_minutes"])
+            )
+
+            PyFunceble.Logger().debug(f"Start Time: {self.start_time}")
+            PyFunceble.Logger().debug(f"End Time:  {self.end_time}")
 
     def authorization(self):
         """
@@ -116,13 +122,15 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         if self.authorized:
             # We are authorized to operate.
 
-            if not self.time_exceed and int(PyFunceble.time()) >= self.end_time:
+            if not self.time_exceed and PyFunceble.datetime.now() >= self.end_time:
                 # * We did not tested previously if the time exceed.
                 # and
                 # * The time exceed.
 
                 # We update the time exceed marker.
                 self.time_exceed = True
+
+        PyFunceble.Logger().debug(f"Time exceed: {self.time_exceed}")
 
         return self.time_exceed
 
@@ -194,6 +202,7 @@ class Travis:
 
             for command in commands:
                 Command(command).execute()
+                PyFunceble.Logger().debug(f"Executed: {command}")
 
             if Command("git config core.sharedRepository").execute() == "":
                 Command("git config core.sharedRepository group").execute()
@@ -211,6 +220,8 @@ class Travis:
             ).match()
         ):
 
+            PyFunceble.Logger().info(f"Bypass given. Ending process.")
+
             self.end_commit()
 
     def push(self):
@@ -219,9 +230,13 @@ class Travis:
         """
 
         if self.authorized:
-            Command(
-                "git push origin {0}".format(PyFunceble.CONFIGURATION["travis_branch"])
-            ).execute()
+
+            command = "git push origin {0}".format(
+                PyFunceble.CONFIGURATION["travis_branch"]
+            )
+
+            Command(command).execute()
+            PyFunceble.Logger().info(f"Executed: {command}")
 
             exit(0)
 
@@ -239,12 +254,18 @@ class Travis:
             )
 
             if PyFunceble.CONFIGURATION["command_before_end"]:
+                PyFunceble.Logger().info(
+                    f'Executing: {PyFunceble.CONFIGURATION["command_before_end"]}'
+                )
+
                 for line in Command(
                     PyFunceble.CONFIGURATION["command_before_end"]
                 ).run():
                     sys_stdout.write("{}\n".format(line))
 
                 self.permissions()
+
+            PyFunceble.Logger().info(f"Executing: {command}")
 
             for line in Command(command).run():
                 sys_stdout.write("{}\n".format(line))
@@ -264,10 +285,16 @@ class Travis:
             )
 
             if PyFunceble.CONFIGURATION["command"]:
+                PyFunceble.Logger().info(
+                    f'Executing: {PyFunceble.CONFIGURATION["command"]}'
+                )
+
                 for line in Command(PyFunceble.CONFIGURATION["command"]).run():
                     sys_stdout.write("{}\n".format(line))
 
                 self.permissions()
+
+            PyFunceble.Logger().info(f"Executing: {command}")
 
             for line in Command(command).run():
                 sys_stdout.write("{}\n".format(line))

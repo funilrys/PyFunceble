@@ -385,14 +385,25 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             if matched_result:
                 # The matched result is not None or an empty list.
 
+                PyFunceble.Logger().debug(
+                    f"{repr(date_to_convert)} matched {repr(regex_dates[regx])}. "
+                    "Making conversion..."
+                )
+
                 # We get the date.
                 date = self._cases_management(regx, matched_result)
 
                 if date:
                     # The date is given.
 
+                    date = "-".join(date)
+
+                    PyFunceble.Logger().debug(
+                        f"Could convert {repr(date_to_convert)} to {date}"
+                    )
+
                     # We return the formatted date.
-                    return "-".join(date)
+                    return date
 
         # We return an empty string as we were not eable to match the date format.
         return ""
@@ -443,6 +454,12 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
                             # We log the problem.
                             Logs().expiration_date(self.subject, self.expiration_date)
+
+                            PyFunceble.Logger().error(
+                                "Expiration date of "
+                                f"{repr(self.subject)} ({repr(self.expiration_date)}) "
+                                "was not converted proprely."
+                            )
 
                         # We save the whois record into the database.
                         self.whois_db.add(

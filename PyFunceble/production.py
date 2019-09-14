@@ -110,7 +110,7 @@ class Production:  # pylint: disable=too-few-public-methods
                 # upstream one.
 
                 # We clean the output directory.
-                PyFunceble.Clean()
+                PyFunceble.Clean(clean_all=True)
 
                 # We generate the productive directory structure file.
                 PyFunceble.DirectoryStructure(production=True)

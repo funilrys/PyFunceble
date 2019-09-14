@@ -1076,14 +1076,15 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
             if req.status_code == 200:
                 # The request http status code is equal to 200.
 
+                if self.destination:
+                    # We save the link content to the parsed destination.
+                    File(self.destination).write(req.text, overwrite=True)
+
                 if self.return_data:
                     # We have to return the data.
 
                     # We return the link content.
                     return req.text
-
-                # We save the link content to the parsed destination.
-                File(self.destination).write(req.text, overwrite=True)
 
                 # We return True.
                 return True

@@ -88,60 +88,78 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         link_to_test=None,
         url_file_path=None,
         url_to_test=None,
-    ):  # pylint: disable=too-many-branches
+    ):
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
-            preset = PyFunceble.Preset()
+            self.preset = PyFunceble.Preset()
 
             CLICore.logs_sharing()
-
             ExecutionTime("start")
 
             if domain_or_ip:
                 SimpleCore(domain_or_ip).domain()
             elif file_path:
-                PyFunceble.DirectoryStructure()
-
-                if PyFunceble.CONFIGURATION["multiprocess"]:
-                    preset.maximal_processes()
-                    preset.multiprocess()
-
-                    FileMultiprocessCore(
-                        file_path, "domain"
-                    ).read_and_test_file_content()
-                else:
-                    FileCore(file_path, "domain").read_and_test_file_content()
+                self.dispatch_file_test(file_path)
             elif link_to_test:
-                PyFunceble.DirectoryStructure()
-
-                if PyFunceble.CONFIGURATION["multiprocess"]:
-                    preset.maximal_processes()
-                    preset.multiprocess()
-
-                    FileMultiprocessCore(
-                        link_to_test, "domain"
-                    ).read_and_test_file_content()
-                else:
-                    FileCore(link_to_test, "domain").read_and_test_file_content()
+                self.dispatch_link_test(link_to_test)
             elif url_file_path:
-                PyFunceble.DirectoryStructure()
-                preset.file_url()
-
-                if PyFunceble.CONFIGURATION["multiprocess"]:
-                    preset.maximal_processes()
-                    preset.multiprocess()
-
-                    FileMultiprocessCore(
-                        url_file_path, "url"
-                    ).read_and_test_file_content()
-                else:
-                    FileCore(url_file_path, "url").read_and_test_file_content()
+                self.dispatch_url_file_test(url_file_path)
             elif url_to_test:
                 SimpleCore(url_to_test).url()
 
             Percentage().log()
-
             ExecutionTime("stop")
-
             PyFunceble.CLICore.stay_safe()
         else:
             PyFunceble.CLICore.print_nothing_to_test()
+
+    def dispatch_file_test(self, file_path):
+        """
+        Dispatch to the right file testing logic.
+
+        :param str file_path: The file path to test.
+        """
+
+        PyFunceble.DirectoryStructure()
+
+        if PyFunceble.CONFIGURATION["multiprocess"]:
+            self.preset.maximal_processes()
+            self.preset.multiprocess()
+
+            FileMultiprocessCore(file_path, "domain").read_and_test_file_content()
+        else:
+            FileCore(file_path, "domain").read_and_test_file_content()
+
+    def dispatch_link_test(self, link_to_test):
+        """
+        Dispatch to the right link testing logic.
+
+        :param str link_to_test: The link to test.
+        """
+
+        PyFunceble.DirectoryStructure()
+
+        if PyFunceble.CONFIGURATION["multiprocess"]:
+            self.preset.maximal_processes()
+            self.preset.multiprocess()
+
+            FileMultiprocessCore(link_to_test, "domain").read_and_test_file_content()
+        else:
+            FileCore(link_to_test, "domain").read_and_test_file_content()
+
+    def dispatch_url_file_test(self, url_file_path):
+        """
+        Dispatch to the right url file path testing logic.
+
+        :param str url_file_path: The file to test.
+        """
+
+        PyFunceble.DirectoryStructure()
+        self.preset.file_url()
+
+        if PyFunceble.CONFIGURATION["multiprocess"]:
+            self.preset.maximal_processes()
+            self.preset.multiprocess()
+
+            FileMultiprocessCore(url_file_path, "url").read_and_test_file_content()
+        else:
+            FileCore(url_file_path, "url").read_and_test_file_content()

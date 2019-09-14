@@ -163,6 +163,10 @@ class Preset:
             ):
                 PyFunceble.CONFIGURATION[indexes] = False
 
+                PyFunceble.Logger().debug(
+                    f"CONFIGURATION.{indexes} switched to {PyFunceble.CONFIGURATION[indexes]}"
+                )
+
         return None
 
     @classmethod
@@ -189,6 +193,10 @@ class Preset:
             ):
                 PyFunceble.CONFIGURATION[indexes] = True
 
+                PyFunceble.Logger().debug(
+                    f"CONFIGURATION.{indexes} switched to {PyFunceble.CONFIGURATION[indexes]}"
+                )
+
         return None
 
     @classmethod
@@ -203,6 +211,8 @@ class Preset:
             # And we set the counter of the currently read status to 0.
             PyFunceble.INTERN["counter"]["number"][status] = 0
             PyFunceble.INTERN["counter"]["percentage"][status] = 0
+
+        PyFunceble.Logger().debug(f"Counter resetted.")
 
     @classmethod
     def syntax_test(cls):  # pragma: no cover

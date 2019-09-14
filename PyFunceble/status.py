@@ -114,6 +114,11 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             and self.subject in self.inactive_db.to_retest
         )
 
+        PyFunceble.Logger().debug(f"[{self.subject}] File: {self.filename}")
+        PyFunceble.Logger().debug(
+            f"[{self.subject}] Exclude file generation: {self.exclude_file_generation}"
+        )
+
     def get(self):
         """
         Get the status while testing for an IP or domain.
@@ -236,6 +241,10 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We set the status we got.
                 self.output["_status"] = PyFunceble.STATUS["official"]["down"]
 
+            PyFunceble.Logger().debug(
+                f"[{self.subject}] State before extra rules:\n{self.output}"
+            )
+
             # We get the status and source after extra rules check.
             self.output["status"], self.output["status_source"] = ExtraRules(
                 self.subject, self.subject_type, self.output["http_status_code"]
@@ -273,6 +282,8 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 PyFunceble.STATUS["official"]["down"],
             ]
         )
+
+        PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")
 
 
 class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
@@ -318,6 +329,8 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             r"\.blogspot\.": self.__blogspot,
             r"\.wordpress\.com$": self.__wordpress_dot_com,
         }
+
+        PyFunceble.Logger().debug(f"[{self.subject}] Headers:\n{self.headers}")
 
     @classmethod
     def __special_down(cls):
@@ -401,6 +414,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     # or
                     # * Something in the document match the currently read regex.
 
+                    PyFunceble.Logger().info(
+                        "[{self.subject}] Switching status according to blogspot rule.."
+                    )
+
                     # We update the status and source.
                     return self.__special_down()
         except (
@@ -411,7 +428,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
-            pass
+            PyFunceble.Logger().exception()
 
         # We return None, there is no changes.
         return None
@@ -438,6 +455,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
             if does_not_exist in wordpress_com_content.text:
                 # The marker is into the page content.
+
+                PyFunceble.Logger().info(
+                    "[{self.subject}] Switching status according to wordpress_dot_com rule."
+                )
 
                 # We return the new status and source.
                 return self.__special_down()
@@ -566,6 +587,11 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                 if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
                     # And we return the new status and source
+
+                    PyFunceble.Logger().info(
+                        "[{self.subject}] Switching status according to status code rule."
+                    )
+
                     return self.__http_status_code_up()
 
             if self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]:
@@ -577,6 +603,11 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                 )
 
                 if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
+
+                    PyFunceble.Logger().info(
+                        "[{self.subject}] Switching status according to status code rule."
+                    )
+
                     # And we return the new status and source
                     return self.__http_status_code_up()
 
@@ -591,7 +622,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     "potentially_down"
                 )
         except KeyError:
-            pass
+            PyFunceble.Logger().exception()
 
         # We return None, there is no changes.
         return None
@@ -613,6 +644,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             # * We can run/check the special rule.
             # and
             # * The element we are currently testing is an IPv4 with range.
+
+            PyFunceble.Logger().info(
+                "[{self.subject}] Switching status according to IPv4 range rule."
+            )
 
             # We return the new status and source.
             return self.__special_up()
@@ -745,6 +780,11 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             "dns_lookup": None,
         }
 
+        PyFunceble.Logger().debug(f"[{self.subject}] File: {self.filename}")
+        PyFunceble.Logger().debug(
+            f"[{self.subject}] Exclude file generation: {self.exclude_file_generation}"
+        )
+
     def get(self):
         """
         Get the status of the subject.
@@ -809,6 +849,8 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             ]
         )
 
+        PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")
+
 
 class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
     """
@@ -843,6 +885,8 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             "url_syntax_validation": self.checker.is_url(),
             "whois_server": None,
         }
+
+        PyFunceble.Logger().debug(f"[{self.subject}] File: {self.filename}")
 
     def get(self):
         """
@@ -897,3 +941,5 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             filename=self.filename,
             ip_validation=self.output["ipv4_syntax_validation"],
         ).status_file()
+
+        PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")

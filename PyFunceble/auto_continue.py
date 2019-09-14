@@ -84,6 +84,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     def __init__(self, filename, parent_process=False, mysql_db=None):
         # We get the operation authorization.
         self.authorized = self.authorization()
+        self.database_file = ""
         # We share the filename.
         self.filename = filename
         # We preset the filename namespace.
@@ -97,15 +98,24 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         # We share if we are under the parent process.
         self.parent = parent_process
 
+        PyFunceble.Logger().debug(f"Authorization: {self.authorized}")
+        PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
+        PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
+
         if self.authorized:
             # We are authorized to operate.
 
-            # We set the location of the database file.
-            self.database_file = (
-                PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
-            )
+            PyFunceble.Logger().info("Process authorized.")
+
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                # We set the location of the database file.
+                self.database_file = (
+                    PyFunceble.OUTPUT_DIRECTORY
+                    + PyFunceble.OUTPUTS["parent_directory"]
+                    + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
+                )
+
+            PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
 
             # We load the backup (if existant).
             self.load()
@@ -116,10 +126,20 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # The database of the file we are
                 # currently testing is empty.
 
+                PyFunceble.Logger().info(
+                    "Process authorized, is the parent process and the file "
+                    "to test not indexed. Cleaning directory structure."
+                )
+
                 # We clean the output directory.
                 PyFunceble.Clean(file_path=self.filename)
         elif self.parent:
             # We are not authorized to operate.
+
+            PyFunceble.Logger().info(
+                "Process not authorized but is the parent process. "
+                "Cleaning directory structure."
+            )
 
             # We clean the output directory.
             PyFunceble.Clean(file_path=self.filename)
@@ -130,7 +150,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 if self.filename in self.database:
                     for _, status_data in self.database[self.filename].items():
                         if index in status_data:
+                            PyFunceble.Logger().info(
+                                f"{index} is present into the database."
+                            )
                             return True
+
+                PyFunceble.Logger().info(f"{index} is not present into the database.")
                 return False
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -145,8 +170,17 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                     fetched = cursor.fetchone()
 
-                return fetched["COUNT(*)"] != 0
+                if fetched["COUNT(*)"] != 0:
+                    PyFunceble.Logger().info(f"{index} is present into the database.")
+                    return True
 
+                PyFunceble.Logger().info(f"{index} is not present into the database.")
+                return False
+
+        PyFunceble.Logger().info(
+            f"Could not check if {index} is present into the database. "
+            "Unauthorized action."
+        )
         return False
 
     @classmethod
@@ -167,7 +201,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
             return self.mysql_db.tables["auto_continue"]
-        return "auto_continue"
+        return None
 
     def is_empty(self):
         """
@@ -181,7 +215,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.filename not in self.database
                     or not self.database[self.filename]
                 ):
+                    PyFunceble.Logger().info(
+                        f"File to test was not previously indexed."
+                    )
                     return True
+
+                PyFunceble.Logger().info(f"File to test was previously indexed.")
                 return False
 
             if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -194,8 +233,19 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                     fetched = cursor.fetchone()
 
-                return fetched["COUNT(*)"] == 0
+                if fetched["COUNT(*)"] == 0:
+                    PyFunceble.Logger().info(
+                        f"File to test was not previously indexed."
+                    )
+                    return True
 
+                PyFunceble.Logger().info(f"File to test was previously indexed.")
+                return False
+
+        PyFunceble.Logger().info(
+            f"Could not check if the file to test "
+            "was previously indexed. Unauthorized action."
+        )
         return False  # pragma: no cover
 
     def add(self, subject, status):
@@ -226,6 +276,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     # We initiate the file index.
                     self.database[self.filename] = {status: [subject]}
 
+                PyFunceble.Logger().info(
+                    f"Indexed {repr(subject)} with the status "
+                    f"{repr(status)} into {repr(self.filename)} database's."
+                )
+
                 # We save everything.
                 self.save()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -244,15 +299,17 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     ).format(self.table_name)
 
                     try:
-                        cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "status": status,
-                                "is_complement": int(False),
-                                "digest": digest,
-                            },
+                        playload = {
+                            "file": self.filename,
+                            "subject": subject,
+                            "status": status,
+                            "is_complement": int(False),
+                            "digest": digest,
+                        }
+                        cursor.execute(query, playload)
+
+                        PyFunceble.Logger().info(
+                            f"Inserted into the database: \n {playload}"
                         )
                     except self.mysql_db.errors:
                         query = (
@@ -262,6 +319,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         ).format(self.table_name)
 
                         cursor.execute(query, {"subject": subject, "digest": digest})
+
+                        PyFunceble.Logger().info(
+                            "Data already indexed, updated the modified "
+                            f"column of the row related to {repr(subject)}."
+                        )
 
     def save(self):
         """
@@ -273,6 +335,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             # We save the current database state.
             Dict(self.database).to_json(self.database_file)
+
+            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
 
     def load(self):
         """
@@ -293,6 +357,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # We initiate an empty database.
                 self.database = {self.filename: {}}
 
+            PyFunceble.Logger().info(f"Loaded {repr(self.database_file)} in memory.")
+
     def clean(self):
         """
         Clean the database.
@@ -307,6 +373,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the current database state.
                 Dict(self.database).to_json(self.database_file)
+
+                PyFunceble.Logger().info(
+                    "Cleaned the data related to "
+                    f"{repr(self.filename)} from {repr(self.database_file)}."
+                )
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = "DELETE FROM {0} WHERE file_path = %(file)s".format(
@@ -315,6 +386,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename})
+
+                    PyFunceble.Logger().info(
+                        "Cleaned the data related to "
+                        f"{repr(self.filename)} from the {repr(self.table_name)} table."
+                    )
 
     def update_counters(self):  # pragma: no cover
         """
@@ -348,6 +424,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                             status
                         ] = tested_for_status
 
+                        PyFunceble.Logger().debug(
+                            f"Counter of {repr(status)} set to {tested_for_status}."
+                        )
+
                         # We finally increate the number of tested.
                         tested += tested_for_status
                     except KeyError:
@@ -374,16 +454,25 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                         PyFunceble.INTERN["counter"]["number"][status] = fetched
 
+                        PyFunceble.Logger().debug(
+                            f"Counter of {repr(status)} set to {fetched}."
+                        )
+
                         # We then update/transfert it to its global place.
                         tested += fetched
 
             # We update/transfert the number of tested globally.
             PyFunceble.INTERN["counter"]["number"]["tested"] = tested
+            PyFunceble.Logger().debug(f"Totally tested set to {repr(tested)}.")
 
     def get_already_tested(self):
         """
         Return the list of subjects which were already tested as a set.
         """
+
+        PyFunceble.Logger().info(
+            "Getting the list of already tested (DATASET WONT BE LOGGED)"
+        )
 
         if self.authorized:
             if PyFunceble.CONFIGURATION["db_type"] == "json":
@@ -413,9 +502,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         """
 
         # We get the list of domains we are going to work with.
+        already_tested = self.get_already_tested()
         result = [
             x
-            for x in self.get_already_tested()
+            for x in already_tested
             if not PyFunceble.Check(x).is_subdomain()
             and PyFunceble.Check(x).is_domain()
         ]
@@ -426,7 +516,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         result.extend(["www.{0}".format(x) for x in result if not x.startswith("www.")])
 
         # We remove the already tested subjects.
-        return set(List(result).format()) - self.get_already_tested()
+        return set(List(result).format()) - already_tested
 
     def __get_or_generate_complements_json(self):  # pragma: no cover
         """
@@ -511,7 +601,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         ]
 
         with self.mysql_db.get_connection() as cursor:
-            cursor.executemany(query, to_execute)
+            try:
+                cursor.executemany(query, to_execute)
+            except self.mysql_db.errors:
+                pass
 
         return result
 
@@ -519,6 +612,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         """
         Get or generate the complements.
         """
+
+        PyFunceble.Logger().info("Generate/Get complements (DATASET WONT BE LOGGED)")
 
         if self.authorized and PyFunceble.CONFIGURATION["generate_complements"]:
             # We aer authorized to operate.

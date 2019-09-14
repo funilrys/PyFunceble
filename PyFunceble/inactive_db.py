@@ -83,27 +83,31 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     # Save the operation authorization.
     authorized = False
 
-    one_day_in_seconds = 1 * 24 * 3600
-
     # Save the filename we are operating.
     filename = None
 
     def __init__(self, filename, mysql_db=None):
+        self.one_day = PyFunceble.timedelta(days=1)
+        self.database_file = ""
+
         # We get the authorization status.
         self.authorized = self.authorization()
+
+        PyFunceble.Logger().debug(f"Authorization: {self.authorized}")
 
         if self.authorized:
             # We convert the number of days between the database retest
             # to seconds.
-            self.days_in_seconds = (
-                PyFunceble.CONFIGURATION["days_between_db_retest"] * 24 * 3600
+            self.days = PyFunceble.timedelta(
+                days=PyFunceble.CONFIGURATION["days_between_db_retest"]
             )
 
-            # We set the path to the inactive database file.
-            self.database_file = "{0}{1}".format(
-                PyFunceble.CONFIG_DIRECTORY,
-                PyFunceble.OUTPUTS["default_files"]["inactive_db"],
-            )
+            if PyFunceble.CONFIGURATION["db_type"] == "json":
+                # We set the path to the inactive database file.
+                self.database_file = "{0}{1}".format(
+                    PyFunceble.CONFIG_DIRECTORY,
+                    PyFunceble.OUTPUTS["default_files"]["inactive_db"],
+                )
 
             # We share the filename.
             self.filename = filename
@@ -113,6 +117,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             self.table_name = self.get_table_name()
             self.to_retest = self.get_to_retest()
+
+            PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
+            PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
+            PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
 
             # We initiate the database.
             self.initiate()
@@ -155,9 +163,13 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         return False  # pragma: no cover
 
     def __getitem__(self, index):
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
-            if self.filename in self.database and index in self.database[self.filename]:
-                return self.database[self.filename][index]
+        if (
+            self.authorized
+            and PyFunceble.CONFIGURATION["db_type"] == "json"
+            and self.filename in self.database
+            and index in self.database[self.filename]
+        ):
+            return self.database[self.filename][index]
         return []
 
     def __setitem__(self, index, value):
@@ -256,6 +268,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         else:  # pragma: no cover
                             self.database[database_top_key][database_low_key] = to_set
 
+            PyFunceble.Logger().info("Merged possible old to the new format")
+
     def load(self):
         """
         Load the content of the database file.
@@ -274,7 +288,13 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     and "to_test" in self.database[self.filename]
                 ):
                     new_time = str(
-                        int(PyFunceble.time()) - self.one_day_in_seconds - 100
+                        int(
+                            (
+                                PyFunceble.datetime.now()
+                                - self.one_day
+                                - PyFunceble.timedelta(seconds=100)
+                            ).timestamp()
+                        )
                     )
                     self.database[self.filename][new_time] = self.database[
                         self.filename
@@ -291,6 +311,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # We create the current file namepace
                 self.database[self.filename] = {}
 
+            PyFunceble.Logger().info(
+                "Database content loaded in memory. (DATASET WONT BE LOGGED)"
+            )
+
     def save(self):
         """
         Save the current database into the database file.
@@ -301,6 +325,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             # We save the current database state into the database file.
             Dict(self.database).to_json(self.database_file)
+
+            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
 
     def initiate(self):
         """
@@ -340,39 +366,39 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # We get the indexes of the current file (in the dabase).
                 database_keys = [
-                    x for x in self.database[self.filename].keys() if x.isdigit()
+                    float(x) for x in self.database[self.filename].keys() if x.isdigit()
                 ]
 
                 if database_keys:
                     # The list of keys is not empty.
 
                     # We get the most recent date.
-                    recent_date = max(database_keys)
+                    recent_date = PyFunceble.datetime.fromtimestamp(max(database_keys))
                 else:  # pragma: no cover
                     # The list of keys is empty.
 
                     # We return the current time.
-                    return int(PyFunceble.time())
+                    return int(PyFunceble.datetime.now().timestamp())
 
-                if int(PyFunceble.time()) > int(recent_date) + self.one_day_in_seconds:
+                if PyFunceble.datetime.now() > recent_date + self.one_day:
                     # The most recent time was in more than one day.
 
                     # We return the current time.
-                    return int(PyFunceble.time())
+                    return int(PyFunceble.datetime.now().timestamp())
 
                 # The most recent time was in less than one day.
 
-                if int(PyFunceble.time()) < int(recent_date) + self.days_in_seconds:
+                if PyFunceble.datetime.now() < recent_date + self.days:
                     # The most recent time was in less than the expected number of day for
                     # retesting.
 
                     # We return the most recent data.
-                    return int(recent_date)
+                    return int(recent_date.timestamp())
 
         # The database subsystem is not activated.
 
         # We return the current time.
-        return int(PyFunceble.time())
+        return int(PyFunceble.datetime.now().timestamp())
 
     def add(self, subject, status):
         """
@@ -397,6 +423,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # We initiate the file path and its content into the database.
                 self[timestamp] = {subject: status}
 
+                PyFunceble.Logger().info(
+                    f"Indexed {repr(subject)} with the status "
+                    f"{repr(status)} into {repr(self.filename)} database's."
+                )
+
                 # And we save the database.
                 self.save()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -410,15 +441,18 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 with self.mysql_db.get_connection() as cursor:
 
+                    playload = {
+                        "file": self.filename,
+                        "subject": subject,
+                        "status": status,
+                        "digest": digest,
+                    }
+
                     try:
-                        cursor.execute(
-                            query,
-                            {
-                                "file": self.filename,
-                                "subject": subject,
-                                "status": status,
-                                "digest": digest,
-                            },
+                        cursor.execute(query, playload)
+
+                        PyFunceble.Logger().info(
+                            f"Inserted into the database: \n {playload}"
                         )
                     except self.mysql_db.errors:
                         query = (
@@ -430,6 +464,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         cursor.execute(
                             query,
                             {"subject": subject, "status": status, "digest": digest},
+                        )
+
+                        PyFunceble.Logger().info(
+                            "Data already indexed, updated the modified "
+                            f"column of the row related to {repr(subject)}."
                         )
 
     def remove(self, subject):
@@ -451,6 +490,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                         self[data] = Dict(self[data]).remove_key(subject)
 
+                        PyFunceble.Logger().info(
+                            "Cleaned the data related to " f"{repr(subject)}."
+                        )
+
                 # And we save the data into the database.
                 self.save()
             elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
@@ -464,10 +507,20 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": subject})
 
+                    PyFunceble.Logger().info(
+                        "Cleaned the data related to "
+                        f"{repr(subject)} and {repr(self.filename)} from "
+                        "the {repr(self.table_name)} table."
+                    )
+
     def get_to_retest(self):  # pylint: pragma: no cover
         """
         Return a set of subject to restest.
         """
+
+        PyFunceble.Logger().info(
+            "Getting the list of subjects to retest (DATASET WONT BE LOGGED)"
+        )
 
         if self.authorized:
             if PyFunceble.CONFIGURATION["db_type"] == "json":
@@ -476,7 +529,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         z
                         for x, y in self.database[self.filename].items()
                         if x.isdigit()
-                        and int(PyFunceble.time()) > int(x) + self.days_in_seconds
+                        and PyFunceble.datetime.now()
+                        > PyFunceble.datetime.fromtimestamp(float(x)) + self.days
                         for z in y.keys()
                     }
                 except KeyError:
@@ -495,9 +549,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 ).format(self.table_name, cast_type)
 
                 with self.mysql_db.get_connection() as cursor:
-                    cursor.execute(
-                        query, {"file": self.filename, "days": self.days_in_seconds}
-                    )
+                    cursor.execute(query, {"file": self.filename, "days": self.days})
                     fetched = cursor.fetchall()
 
                     if fetched:
@@ -509,6 +561,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return a set of already tested subjects.
         """
 
+        PyFunceble.Logger().info(
+            "Getting the list of already tested (DATASET WONT BE LOGGED)"
+        )
+
         if self.authorized:
             if PyFunceble.CONFIGURATION["db_type"] == "json":
                 try:
@@ -516,7 +572,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         z
                         for x, y in self.database[self.filename].items()
                         if x.isdigit()
-                        and int(PyFunceble.time()) < int(x) + self.days_in_seconds
+                        and PyFunceble.datetime.now().timestamp()
+                        < PyFunceble.datetime.fromtimestamp(float(x)) + self.days
                         for z in y.keys()
                     }
                 except KeyError:
@@ -535,9 +592,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 ).format(self.table_name, cast_type)
 
                 with self.mysql_db.get_connection() as cursor:
-                    cursor.execute(
-                        query, {"file": self.filename, "days": self.days_in_seconds}
-                    )
+                    cursor.execute(query, {"file": self.filename, "days": self.days})
                     fetched = cursor.fetchall()
 
                     if fetched:
