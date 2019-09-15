@@ -92,13 +92,14 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     def __init__(self, start_time=None):
         self.travis = Travis()
-        self.travis.bypass()
-
         self.authorized = self.authorization()
 
         PyFunceble.Logger().info(f"Authorized: {self.authorized}")
 
         if self.authorized:
+            self.travis.init()
+            self.travis.bypass()
+
             self.start_time = PyFunceble.datetime.fromtimestamp(int(start_time))
             self.end_time = self.start_time + PyFunceble.timedelta(
                 minutes=int(PyFunceble.CONFIGURATION["travis_autosave_minutes"])
@@ -183,6 +184,58 @@ class Travis:
             return PyFunceble.CONFIGURATION["travis"]
         except KeyError:
             return False
+
+    @classmethod
+    def __get_remote_destination(cls):
+        """
+        Return the remote destination we are going to use.
+        """
+
+        regex = r"(?:[a-z]+(?:\s+|\t+))(.*)(?:(?:\s+|\t+)\([a-z]+\))"
+        remote_of_interest = [
+            x for x in Command("git remote -v").execute().splitlines() if "(push)" in x
+        ][0]
+
+        filtered = Regex(remote_of_interest, regex, return_data=True, group=1).match()
+
+        if filtered and "@" in filtered:
+            return filtered[filtered.find("@") + 1 :]
+        raise ValueError("Could not find remote.")
+
+    def init(self):
+        """
+        Init the TravisCI virtual machine.
+        """
+
+        if self.authorized:
+            remote = self.__get_remote_destination()
+
+            commands = [
+                ("git remote rm origin", True),
+                (
+                    "git remote add origin "
+                    f'https://{PyFunceble.environ["GH_TOKEN"]}@{remote}',  # pylint: disable=line-too-long
+                    False,
+                ),
+                (
+                    f'git config --global user.email "{PyFunceble.environ["GIT_EMAIL"]}"',
+                    True,
+                ),
+                (
+                    f'git config --global user.name "{PyFunceble.environ["GIT_NAME"]}"',
+                    True,
+                ),
+                ("git config --global push.default simple", True),
+                (f'git checkout "{PyFunceble.CONFIGURATION["travis_branch"]}"', True),
+            ]
+
+            for command, allow_stdout in commands:
+                if allow_stdout:
+                    PyFunceble.Logger().debug(f"Executing: {repr(command)}")
+                    for line in Command(command).run():
+                        sys_stdout.write("{}\n".format(line))
+                else:
+                    Command(command).execute()
 
     def permissions(self):
         """

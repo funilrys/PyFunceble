@@ -260,7 +260,7 @@ class Command:  # pylint: disable=too-few-public-methods
             # The given command is a string.
 
             # We set the command we are going to run.
-            self.command = command
+            self.command = command.strip()
         else:
             raise NotImplementedError(
                 "Unknown command type: `{}`".format(type(command))

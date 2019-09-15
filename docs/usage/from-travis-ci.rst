@@ -25,10 +25,6 @@ Configuration
             - GIT_NAME: Travis CI
             # This is the Git Email we have to set. (git config user.email)
             - GIT_EMAIL: dead-hosts@funilrys.com
-            # This is the full slug of the repository we are working with.
-            - TRAVIS_REPO_SLUG: dead-hosts/repository-structure
-            # This is the branch we have to checkout and push to.
-            - GIT_BRANCH: master
 
     # This is the language we use.
     language: python
