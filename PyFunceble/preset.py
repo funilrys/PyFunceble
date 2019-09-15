@@ -62,7 +62,7 @@ License:
 import PyFunceble
 
 
-class Preset:
+class Preset:  # pragma: no cover
     """
     Check or update the global configuration based on some events.
     """
@@ -71,15 +71,21 @@ class Preset:
     # In other words if an index which is listed here
     # is also listed into PyFunceble.INTERN["custom_config_loaded"],
     # We do not update it.
-    do_not_overwrite_if_customized = ["no_files", "whois_database", "inactive_database"]
+    do_not_overwrite_if_customized = [
+        "no_files",
+        "whois_database",
+        "inactive_database",
+        "timeout",
+    ]
 
     def __init__(self):
+        self.timeout()
         self.syntax_test()
 
     @classmethod
     def switch(
         cls, variable, custom=False
-    ):  # pylint: disable=inconsistent-return-statements # pragma: no cover
+    ):  # pylint: disable=inconsistent-return-statements
         """
         Switch PyFunceble.CONFIGURATION variables to their opposite.
 
@@ -140,17 +146,25 @@ class Preset:
         )
 
     @classmethod
-    def disable(cls, indexes):  # pragma: no cover
+    def __are_we_allowed_to_overwrite(cls, index):
+        """
+        Checks if we are allowed to overwrite an index.
+        """
+
+        return not (
+            index in cls.do_not_overwrite_if_customized
+            and "custom_loaded" in PyFunceble.INTERN
+            and PyFunceble.INTERN["custom_loaded"]
+            and index in PyFunceble.INTERN["custom_config_loaded"]
+        )
+
+    @classmethod
+    def disable(cls, indexes):
         """
         Set the given configuration index to :code:`False`.
         """
 
-        if (
-            indexes in cls.do_not_overwrite_if_customized
-            and "custom_loaded" in PyFunceble.INTERN
-            and PyFunceble.INTERN["custom_loaded"]
-            and indexes in PyFunceble.INTERN["custom_config_loaded"]
-        ):
+        if not cls.__are_we_allowed_to_overwrite(indexes):
             return None
 
         if isinstance(indexes, list):
@@ -170,17 +184,12 @@ class Preset:
         return None
 
     @classmethod
-    def enable(cls, indexes):  # pragma: no cover
+    def enable(cls, indexes):
         """
         Set the given configuration index to :code:`True`.
         """
 
-        if (
-            indexes in cls.do_not_overwrite_if_customized
-            and "custom_loaded" in PyFunceble.INTERN
-            and PyFunceble.INTERN["custom_loaded"]
-            and indexes in PyFunceble.INTERN["custom_config_loaded"]
-        ):
+        if not cls.__are_we_allowed_to_overwrite(indexes):
             return None
 
         if isinstance(indexes, list):
@@ -215,7 +224,7 @@ class Preset:
         PyFunceble.Logger().debug(f"Counter resetted.")
 
     @classmethod
-    def syntax_test(cls):  # pragma: no cover
+    def syntax_test(cls):
         """
         Disable the HTTP status code if we are
         testing for syntax
@@ -228,7 +237,7 @@ class Preset:
             PyFunceble.HTTP_CODE["active"] = False
 
     @classmethod
-    def maximal_processes(cls):  # pragma: no cover
+    def maximal_processes(cls):
         """
         Ensure that the number of maximal processes is alway >= 1.
         """
@@ -236,7 +245,7 @@ class Preset:
         if PyFunceble.CONFIGURATION["maximal_processes"] < 1:
             PyFunceble.CONFIGURATION["maximal_processes"] = 1
 
-    def simple_domain(self):  # pragma: no cover
+    def simple_domain(self):
         """
         Prepare the global configuration for a domain
         test.
@@ -247,7 +256,7 @@ class Preset:
         for index in should_be_disabled:
             self.disable(index)
 
-    def simple_url(self):  # pragma: no cover
+    def simple_url(self):
         """
         Prepare the global configuration for an URL test.
         """
@@ -256,7 +265,7 @@ class Preset:
 
         self.disable(should_be_disabled)
 
-    def complements(self):  # pragma: no cover
+    def complements(self):
         """
         Prepare the global configuration for a complements generation.
         """
@@ -265,7 +274,7 @@ class Preset:
 
         self.enable(should_be_enabled)
 
-    def file_url(self):  # pragma: no cover
+    def file_url(self):
         """
         Prepare the global configuration for a list of URL to test.
         """
@@ -276,7 +285,7 @@ class Preset:
         self.disable(should_be_disabled)
         self.enable(should_be_enabled)
 
-    def api(self):  # pragma: no cover
+    def api(self):
         """
         Prepare the global configuration for a test from the API.
         """
@@ -291,7 +300,7 @@ class Preset:
         self.disable(should_be_disabled)
         self.enable(should_be_enabled)
 
-    def multiprocess(self):  # pragma: no cover
+    def multiprocess(self):
         """
         Prepare the global configuration for a test with multiple processes.
         """
@@ -307,3 +316,19 @@ class Preset:
                     f"{repr(PyFunceble.CONFIGURATION['db_type'])} database type "
                     "is not recommended with the multiprocessing mode."
                 )
+
+    @classmethod
+    def timeout(cls):
+        """
+        Ensure that the timeout is always correct.
+        """
+
+        if cls.__are_we_allowed_to_overwrite("timeout") and (
+            not PyFunceble.CONFIGURATION["timeout"]
+            or PyFunceble.CONFIGURATION["timeout"] < 3
+        ):
+            PyFunceble.CONFIGURATION["timeout"] = 3
+
+            PyFunceble.Logger().debug(
+                f'CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION["timeout"]}'
+            )

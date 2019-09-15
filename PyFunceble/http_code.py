@@ -145,7 +145,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We get the head of the URL.
                 req = PyFunceble.requests.head(
                     self.subject,
-                    timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+                    timeout=PyFunceble.CONFIGURATION["timeout"],
                     headers=self.headers,
                     verify=PyFunceble.CONFIGURATION["verify_ssl_certificate"],
                 )
@@ -155,7 +155,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We get the head of the constructed URL.
                 req = PyFunceble.requests.head(
                     self.subject,
-                    timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
+                    timeout=PyFunceble.CONFIGURATION["timeout"],
                     headers=self.headers,
                 )
 

@@ -77,9 +77,10 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
     :param str subject: The subject we are working with.
     :param dns_server: The DNS server we are working with.
     :type dns_server: list|tuple|str
+    :param int lifetime: Set the lifetime of a query.
     """
 
-    def __init__(self, subject, dns_server=None, complete=False):
+    def __init__(self, subject, dns_server=None, complete=False, lifetime=3):
         if subject:
             if isinstance(subject, str):
                 self.subject = subject
@@ -116,7 +117,13 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 # We configure everything with what the OS gives us.
                 self.dns_resolver = dns.resolver.Resolver()
 
+            # We set the timeout
+            self.dns_resolver.timeout = lifetime
+            self.dns_resolver.lifetime = lifetime
+
             Logger().debug(f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}")
+            Logger().debug(f"DNS Resolver timeout: {self.dns_resolver.timeout}")
+            Logger().debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
 
             self.complete = complete
 

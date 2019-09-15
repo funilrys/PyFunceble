@@ -368,18 +368,6 @@
 .. warning::
     Do not touch this index unless you a have good reason to.
 
-:code:`seconds_before_http_timeout`
------------------------------------
-
-    **Type:** :code:`integer`
-
-    **Default value:** :code:`3`
-
-    **Description:** Set the timeout to apply to every HTTP status code request.
-
-.. note::
-    This index must be a multiple of :code:`3`.
-
 :code:`share_logs`
 ------------------
 
@@ -446,6 +434,15 @@
 
 .. warning::
     If this index is set to :code:`True`, we **ONLY** check for syntax, not availability.
+
+:code:`timeout`
+-----------------------------------
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`10`
+
+    **Description:** Set the timeout to apply everytime it's possible to set one.
 
 :code:`travis`
 --------------

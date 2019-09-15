@@ -247,9 +247,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
         try:
             return PyFunceble.requests.get(
-                url,
-                timeout=PyFunceble.CONFIGURATION["seconds_before_http_timeout"],
-                headers=cls.headers,
+                url, timeout=PyFunceble.CONFIGURATION["timeout"], headers=cls.headers
             ).history
         except (
             PyFunceble.requests.ConnectionError,

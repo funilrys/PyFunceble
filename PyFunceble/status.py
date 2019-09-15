@@ -224,7 +224,9 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We get the dns_lookup state.
         self.output["dns_lookup"] = PyFunceble.DNSLookup(
-            self.subject, dns_server=PyFunceble.CONFIGURATION["dns_server"]
+            self.subject,
+            dns_server=PyFunceble.CONFIGURATION["dns_server"],
+            lifetime=PyFunceble.CONFIGURATION["timeout"],
         ).request()
 
         if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:

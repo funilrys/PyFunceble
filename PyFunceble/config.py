@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long
+# pylint:disable=line-too-long,too-many-lines
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -576,6 +576,11 @@ class Version:
                 Download(upstream_link, return_data=True).text()
             )
 
+            # We get the local content.
+            self.local_data = Dict().from_yaml(
+                File(PyFunceble.CONFIG_DIRECTORY + "version.yaml").read()
+            )
+
     @classmethod
     def split_versions(cls, version, return_non_digits=False):
         """
@@ -664,80 +669,87 @@ class Version:
                 # We initiate its status to False which means that we are in
                 # a more recent version (for the current version part).
                 status[index] = False
+            else:
+                # The local version is eqal to the upstream version.
+
+                # We initiate its status to None which means that we are in
+                # the same version (for the current version part).
+                status[index] = None
 
             # Otherwise the status stay None which means that there is no change
             # between both local and upstream.
 
-        if False in status:
-            # There is a False in the status.
+        # We consider that the version is the same.
+        result = None
 
-            # We return False which means that we are in a more recent version.
-            return False
+        for data in status:
+            # We loop through the list of status.
+            # The purpose of this loop is only to
+            # get the first not None value.
 
-        if True in status:
-            # There is a True in the status.
+            if result is None:
+                # The result is None (no changes).
+                # We set the currently read one as the result.
+                result = data
 
-            # We return True which means that we are in a older version.
-            return True
+        # We return the result.
+        return result
 
-        # There is no True or False in the status.
-
-        # We return None which means that we are in the same version as upstream.
-        return None
-
-    def compare(self):
+    def __check_force_update(self):
         """
-        Compare the current version with the upstream saved version.
+        Check if we need to force the user to update.
         """
 
-        if self.upstream_data["force_update"]["status"]:
-            # The force_update status is set to True.
+        for minimal in self.upstream_data["force_update"]["minimal_version"]:
+            # We loop through the list of minimal version which trigger the
+            # the force update message.
 
-            for minimal in self.upstream_data["force_update"]["minimal_version"]:
-                # We loop through the list of minimal version which trigger the
-                # the force update message.
+            # We compare the local with the currently read minimal version.
+            checked = self.check_versions(
+                self.local_splited, self.split_versions(minimal)
+            )
 
-                # We compare the local with the currently read minimal version.
-                checked = self.check_versions(
-                    self.local_splited, self.split_versions(minimal)
+            if not PyFunceble.CONFIGURATION["quiet"]:
+                # The quiet mode is not activated.
+
+                if checked or checked is not False and not checked:
+                    # The current version is less or equal to
+                    # the minimal version.
+
+                    # We initiate the message we are going to return to
+                    # the user.
+                    message = (
+                        PyFunceble.Style.BRIGHT
+                        + PyFunceble.Fore.RED
+                        + "A critical issue has been fixed.\n"
+                        + PyFunceble.Style.RESET_ALL
+                    )  # pylint:disable=line-too-long
+                    message += (
+                        PyFunceble.Style.BRIGHT
+                        + PyFunceble.Fore.GREEN
+                        + "Please take the time to update PyFunceble!\n"
+                        + PyFunceble.Style.RESET_ALL
+                    )  # pylint:disable=line-too-long
+
+                    # We print the message on screen.
+                    print(message)
+
+                    # We exit PyFunceble with the code 1.
+                    exit(1)
+            elif checked or checked is not False and not checked:
+                # The quiet mode is activated and the current version
+                # is less or equal to the minimal version.
+
+                # We raise an exception telling the user to update their
+                # instance of PyFunceble.
+                raise Exception(
+                    "A critical issue has been fixed. Please take the time to update PyFunceble!"  # pylint:disable=line-too-long
                 )
 
-                if not PyFunceble.CONFIGURATION["quiet"]:
-                    # The quiet mode is not activated.
-
-                    if checked or checked is not False and not checked:
-                        # The current version is less or equal to
-                        # the minimal version.
-
-                        # We initiate the message we are going to return to
-                        # the user.
-                        message = (
-                            PyFunceble.Style.BRIGHT
-                            + PyFunceble.Fore.RED
-                            + "A critical issue has been fixed.\n"
-                            + PyFunceble.Style.RESET_ALL
-                        )  # pylint:disable=line-too-long
-                        message += (
-                            PyFunceble.Style.BRIGHT
-                            + PyFunceble.Fore.GREEN
-                            + "Please take the time to update PyFunceble!\n"
-                            + PyFunceble.Style.RESET_ALL
-                        )  # pylint:disable=line-too-long
-
-                        # We print the message on screen.
-                        print(message)
-
-                        # We exit PyFunceble with the code 1.
-                        exit(1)
-                elif checked or checked is not False and not checked:
-                    # The quiet mode is activated and the current version
-                    # is less or equal to the minimal version.
-
-                    # We raise an exception telling the user to update their
-                    # instance of PyFunceble.
-                    raise Exception(
-                        "A critical issue has been fixed. Please take the time to update PyFunceble!"  # pylint:disable=line-too-long
-                    )
+    def __check_deprecated(self):
+        """
+        Checks if the local version is deprecated.
+        """
 
         for version in self.upstream_data["deprecated"]:
             # We loop through the list of deprecated versions.
@@ -775,7 +787,7 @@ class Version:
 
                 # And we continue to the next logic. There is no need to
                 # shutdown PyFunceble as it's just for information.
-                return
+                return False
 
             # The quiet mode is activated.
 
@@ -786,83 +798,134 @@ class Version:
 
                 # And we continue to the next logic. There is no need to
                 # shutdown PyFunceble as it's just for information.
-                return
+                return False
+        return True
 
-        # We compare the local version with the upstream version.
-        status = self.check_versions(
-            self.local_splited,
-            self.split_versions(self.upstream_data["current_version"]),
-        )
+    def print_message(self):
+        """
+        Prints some message if needed.
+        """
 
-        if status is not None and not status and not PyFunceble.CONFIGURATION["quiet"]:
-            # The quiet mode is not activate and the current version is greater than
-            # the upstream version.
+        if "messages" in self.upstream_data:
+            messages = self.upstream_data["messages"]
 
-            # We initiate the message we are going to return to the user.
-            message = (
-                PyFunceble.Style.BRIGHT
-                + PyFunceble.Fore.CYAN
-                + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n"  # pylint:disable=line-too-long
-                + PyFunceble.Style.RESET_ALL
+            for minimal_version, data in messages.items():
+                comparison = self.check_versions(
+                    self.local_splited, self.split_versions(minimal_version)
+                )
+
+                for single_message in data:
+                    if "until" in single_message:
+                        until_comparison = self.check_versions(
+                            self.local_splited,
+                            self.split_versions(single_message["until"]),
+                        )
+                    else:
+                        until_comparison = True
+
+                    if "type" in single_message:
+                        if single_message["type"] == "info":
+                            coloration = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
+                        elif single_message["type"] == "warning":
+                            coloration = (
+                                PyFunceble.Fore.MAGENTA + PyFunceble.Style.BRIGHT
+                            )
+                        else:
+                            coloration = PyFunceble.Fore.BLUE + PyFunceble.Style.BRIGHT
+                    else:
+                        coloration = PyFunceble.Fore.BLUE + PyFunceble.Style.BRIGHT
+
+                    if (
+                        comparison is False or comparison is None
+                    ) and until_comparison is True:
+
+                        print(f"{coloration}{single_message['message']}")
+
+    def compare(self):
+        """
+        Compare the current version with the upstream saved version.
+        """
+
+        if self.upstream_data["force_update"]["status"]:
+            # The force_update status is set to True.
+            self.__check_force_update()
+
+        if self.__check_deprecated():
+            # We compare the local version with the upstream version.
+            status = self.check_versions(
+                self.local_splited,
+                self.split_versions(self.upstream_data["current_version"]),
             )
-            message += (
-                PyFunceble.Style.BRIGHT
-                + "Your version: "
-                + PyFunceble.Style.RESET_ALL
-                + PyFunceble.VERSION
-                + "\n"
-            )
-            message += (
-                PyFunceble.Style.BRIGHT
-                + "Upstream version: "
-                + PyFunceble.Style.RESET_ALL
-                + self.upstream_data["current_version"]
-                + "\n"
-            )
 
-            # We print the message.
-            print(message)
-        elif status:
-            # The current version is less that the upstream version.
-
-            if not PyFunceble.CONFIGURATION["quiet"]:
-                # The quiet mode is not activated.
+            if (
+                status is not None
+                and not status
+                and not PyFunceble.CONFIGURATION["quiet"]
+            ):
+                # The quiet mode is not activate and the current version is greater than
+                # the upstream version.
 
                 # We initiate the message we are going to return to the user.
                 message = (
                     PyFunceble.Style.BRIGHT
-                    + PyFunceble.Fore.YELLOW
-                    + "Please take the time to update PyFunceble!\n"
+                    + PyFunceble.Fore.CYAN
+                    + "Your version is more recent!\nYou should really think about sharing your changes with the community!\n"  # pylint:disable=line-too-long
                     + PyFunceble.Style.RESET_ALL
-                )  # pylint:disable=line-too-long
+                )
                 message += (
                     PyFunceble.Style.BRIGHT
                     + "Your version: "
                     + PyFunceble.Style.RESET_ALL
                     + PyFunceble.VERSION
                     + "\n"
-                )  # pylint:disable=line-too-long
+                )
                 message += (
                     PyFunceble.Style.BRIGHT
                     + "Upstream version: "
                     + PyFunceble.Style.RESET_ALL
-                    + self.upstream_data[  # pylint:disable=line-too-long
-                        "current_version"
-                    ]
+                    + self.upstream_data["current_version"]
                     + "\n"
                 )
 
                 # We print the message.
                 print(message)
-            else:
-                # The quiet mode is activated.
+            elif status:
+                # The current version is less that the upstream version.
 
-                # We print the message.
-                print("New version available.")
+                if not PyFunceble.CONFIGURATION["quiet"]:
+                    # The quiet mode is not activated.
 
-        # And we continue to the next app logic. There is no need to
-        # shutdown PyFunceble as it's just for information.
-        return
+                    # We initiate the message we are going to return to the user.
+                    message = (
+                        PyFunceble.Style.BRIGHT
+                        + PyFunceble.Fore.YELLOW
+                        + "Please take the time to update PyFunceble!\n"
+                        + PyFunceble.Style.RESET_ALL
+                    )  # pylint:disable=line-too-long
+                    message += (
+                        PyFunceble.Style.BRIGHT
+                        + "Your version: "
+                        + PyFunceble.Style.RESET_ALL
+                        + PyFunceble.VERSION
+                        + "\n"
+                    )  # pylint:disable=line-too-long
+                    message += (
+                        PyFunceble.Style.BRIGHT
+                        + "Upstream version: "
+                        + PyFunceble.Style.RESET_ALL
+                        + self.upstream_data[  # pylint:disable=line-too-long
+                            "current_version"
+                        ]
+                        + "\n"
+                    )
+
+                    # We print the message.
+                    print(message)
+                else:
+                    # The quiet mode is activated.
+
+                    # We print the message.
+                    print("New version available.")
 
     @classmethod
     def is_cloned(cls):

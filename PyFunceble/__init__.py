@@ -96,7 +96,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.8.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.9.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -322,7 +322,9 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
     return None
 
 
-def dns_lookup(subject, dns_server=None, complete=False):  # pragma: no cover
+def dns_lookup(
+    subject, dns_server=None, complete=False, lifetime=3
+):  # pragma: no cover
     """
     Make a DNS lookup of the given subject.
 
@@ -331,6 +333,7 @@ def dns_lookup(subject, dns_server=None, complete=False):  # pragma: no cover
     :type dns_server: str|int
     :param bool complete:
         Tell us to look for everything instead of :code:`NS` only.
+    :param int lifetime: The query lifetime.
 
     :return:
         A dict with following index if the given subject is not registered into the
@@ -365,7 +368,9 @@ def dns_lookup(subject, dns_server=None, complete=False):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the lookup.
-        return DNSLookup(subject, dns_server=dns_server, complete=complete).request()
+        return DNSLookup(
+            subject, dns_server=dns_server, complete=complete, lifetime=lifetime
+        ).request()
 
     # We return None, there is nothing to work with.
     return None
@@ -618,6 +623,12 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         # The given configuration is not None or empty.
         # and
         # It is a dict.
+
+        # @TODO: Delete this in the future.
+        # We update the index which was renamed.
+        if "seconds_before_http_timeout" in custom:
+            custom["timeout"] = custom["seconds_before_http_timeout"]
+            del custom["seconds_before_http_timeout"]
 
         # We update the configuration index.
         CONFIGURATION.update(custom)
@@ -1183,11 +1194,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-t",
                     "--timeout",
                     type=int,
-                    default=3,
+                    default=10,
                     help="Switch the value of the timeout. %s"
                     % (
                         CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["seconds_before_http_timeout"])
+                        + repr(CONFIGURATION["timeout"])
                         + Style.RESET_ALL
                     ),
                 )
@@ -1442,8 +1453,8 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if ARGS.syntax:
                     CONFIGURATION.update({"syntax": Preset().switch("syntax")})
 
-                if ARGS.timeout and ARGS.timeout % 3 == 0:
-                    CONFIGURATION.update({"seconds_before_http_timeout": ARGS.timeout})
+                if ARGS.timeout:
+                    CONFIGURATION.update({"timeout": ARGS.timeout})
 
                 if ARGS.travis:
                     CONFIGURATION.update({"travis": Preset().switch("travis")})
@@ -1490,6 +1501,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()
+                Version().print_message()
 
                 # We call our Core which will handle all case depending of the configuration or
                 # the used command line arguments.
