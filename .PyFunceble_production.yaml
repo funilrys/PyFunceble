@@ -78,7 +78,7 @@ split: True
 # In this mode we do not check for the availability. It's just syntax check.
 syntax: False
 # Set the timeout to apply when a timeout can be set.
-timeout: 10
+timeout: 5
 # Enable / disable the Travis CI autosave system.
 travis: False
 # Set the default commit message we have to use when have to save but we did not finished the test.
