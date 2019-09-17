@@ -40,7 +40,7 @@ install:
   - pip install pylint coverage coveralls codacy-coverage
 
 script:
-  - python setup.py install
+  - pip install -e .
   - coverage run setup.py test
   - coverage xml # Needed for codacy.
   - echo "Lint PyFunceble" && pylint PyFunceble
