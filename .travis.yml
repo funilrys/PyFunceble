@@ -49,15 +49,15 @@ script:
   - PyFunceble --clean
   - PyFunceble --clean-all
   - rm -R output && PyFunceble --directory-structure && ls -al output
-  - PyFunceble -ex -d github.com
-  - PyFunceble -ex -s -f .travis/lists/simple -m
-  - PyFunceble -ex --syntax -f .travis/lists/simple -m
-  - PyFunceble -ex -f .travis/lists/simple --json --plain -m
-  - PyFunceble -ex -f .travis/lists/simple -m  # Normally, all inactive are not tested anymore.
-  - PyFunceble -ex --database -f .travis/lists/simple  -m  # And they will be retested.
-  - PyFunceble -ex --database --filter ".info$" -f .travis/lists/simple -m  # Only .info domains should be tested.
-  - PyFunceble -ex --adblock -a -f .travis/lists/adblock -m
-  - PyFunceble -ex --link https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts -m
+  - PyFunceble -ex -d github.com --dns 1.1.1.1 1.0.0.1
+  - PyFunceble -ex -s -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1
+  - PyFunceble -ex --syntax -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1
+  - PyFunceble -ex -f .travis/lists/simple --json --plain -m --dns 1.1.1.1 1.0.0.1
+  - PyFunceble -ex -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1  # Normally, all inactive are not tested anymore.
+  - PyFunceble -ex --database -f .travis/lists/simple  -m  --dns 1.1.1.1 1.0.0.1 # And they will be retested.
+  - PyFunceble -ex --database --filter ".info$" -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1  # Only .info domains should be tested.
+  - PyFunceble -ex --adblock -a -f .travis/lists/adblock -m --dns 1.1.1.1 1.0.0.1
+  - PyFunceble -ex --link https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts -m --dns 1.1.1.1 1.0.0.1
   - python .travis/complementary/basic_example.py
   - python .travis/complementary/basic_example_syntax.py
   - python .travis/complementary/advanced_example.py
