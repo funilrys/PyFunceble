@@ -85,7 +85,9 @@ class Logger:  # pragma: no cover
     def __init__(self, debug=False, on_screen=False, output_directory=None):
         if "logger" not in PyFunceble.INTERN:
             self.on_screen = (
-                on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
+                on_screen
+                or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
+                or PyFunceble.CONFIGURATION.debug
             )
 
             self.authorized = self.authorization(debug)
@@ -111,7 +113,7 @@ class Logger:  # pragma: no cover
             or self.on_screen
             or "DEBUG_PYFUNCEBLE" in PyFunceble.environ
             or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
-            or PyFunceble.CONFIGURATION["debug"]
+            or PyFunceble.CONFIGURATION.debug
         )
 
     def __set_output_directory(self, output_directory):
@@ -130,8 +132,8 @@ class Logger:  # pragma: no cover
             else:
                 self.output_directory = (
                     PyFunceble.OUTPUT_DIRECTORY
-                    + PyFunceble.OUTPUTS["parent_directory"]
-                    + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
+                    + PyFunceble.OUTPUTS.parent_directory
+                    + PyFunceble.OUTPUTS.logs.directories.parent
                 )
 
             if not PyFunceble.path.isdir(self.output_directory):
@@ -191,7 +193,7 @@ class Logger:  # pragma: no cover
         complete_file = interest[0].strip()[6:-1].split(PyFunceble.directory_separator)
 
         if complete_file[-2] != PyFunceble.NAME:
-            file = complete_file
+            file = "/".join(complete_file)
         else:
             file = "/".join(complete_file[-2:])
         line = interest[1].strip().split()[-1].strip()

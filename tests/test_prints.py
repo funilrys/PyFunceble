@@ -115,7 +115,7 @@ class TestPrints(BaseStdout):
 """.format(
             PyFunceble.NAME,
             PyFunceble.VERSION.split()[0],
-            PyFunceble.LINKS["repo"],
+            PyFunceble.LINKS.repo,
             PyFunceble.CURRENT_TIME + " ",
         )
 
@@ -139,7 +139,7 @@ Hello World!
 """.format(
             PyFunceble.NAME,
             PyFunceble.VERSION.split()[0],
-            PyFunceble.LINKS["repo"],
+            PyFunceble.LINKS.repo,
             PyFunceble.CURRENT_TIME + " ",
         )
 
@@ -294,7 +294,7 @@ Hello World!
             + self.to_print["basic_string"]
         )
         actual = Prints(
-            ["This is a test", PyFunceble.STATUS["official"]["up"]],
+            ["This is a test", PyFunceble.STATUS.official.up],
             "Generic",
             output_file=None,
             only_on_file=False,
@@ -307,7 +307,7 @@ Hello World!
             PyFunceble.Fore.BLACK + PyFunceble.Back.RED + self.to_print["basic_string"]
         )
         actual = Prints(
-            ["This is a test", PyFunceble.STATUS["official"]["down"]],
+            ["This is a test", PyFunceble.STATUS.official.down],
             "Generic",
             output_file=None,
             only_on_file=False,
@@ -321,7 +321,7 @@ Hello World!
             PyFunceble.Fore.BLACK + PyFunceble.Back.CYAN + self.to_print["basic_string"]
         )
         actual = Prints(
-            ["This is a test", PyFunceble.STATUS["official"]["invalid"]],
+            ["This is a test", PyFunceble.STATUS.official.invalid],
             "Generic",
             output_file=None,
             only_on_file=False,

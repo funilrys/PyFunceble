@@ -79,7 +79,7 @@ class SimpleCore:
     def __init__(self, subject):
         self.preset = PyFunceble.Preset()
 
-        if PyFunceble.CONFIGURATION["idna_conversion"]:
+        if PyFunceble.CONFIGURATION.idna_conversion:
             self.subject = domain2idna(subject)
         else:
             self.subject = subject
@@ -99,7 +99,7 @@ class SimpleCore:
         PyFunceble.CLICore.print_header()
 
         if self.subject:
-            if PyFunceble.CONFIGURATION["syntax"]:
+            if PyFunceble.CONFIGURATION.syntax:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
@@ -110,7 +110,7 @@ class SimpleCore:
                 data = Status(self.subject, whois_db=self.whois_db).get()
                 status = data["status"]
 
-            if PyFunceble.CONFIGURATION["simple"]:
+            if PyFunceble.CONFIGURATION.simple:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
@@ -135,7 +135,7 @@ class SimpleCore:
         PyFunceble.CLICore.print_header()
 
         if self.subject:
-            if PyFunceble.CONFIGURATION["syntax"]:
+            if PyFunceble.CONFIGURATION.syntax:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
@@ -146,7 +146,7 @@ class SimpleCore:
                 data = URLStatus(self.subject, subject_type="url").get()
                 status = data["status"]
 
-            if PyFunceble.CONFIGURATION["simple"]:
+            if PyFunceble.CONFIGURATION.simple:
                 # The simple mode is activated.
 
                 # We print the domain and the status.

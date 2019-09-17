@@ -100,14 +100,9 @@ class APICore:
         # We load the global configuration
         # if it was not alreay done.
         PyFunceble.load_config(
-            generate_directory_structure=False, custom=self.configuration
+            generate_directory_structure=PyFunceble.CONFIGURATION.api_file_generation,
+            custom=self.configuration,
         )
-
-        if (
-            "api_file_generation" in PyFunceble.CONFIGURATION
-            and PyFunceble.CONFIGURATION["api_file_generation"]
-        ):
-            PyFunceble.load_config(generate_directory_structure=True)
 
         # We update the configuration with the given
         # configuration.
@@ -132,7 +127,7 @@ class APICore:
             # We are authorized to operate with the
             # inactive database.s
 
-            if status.lower() in PyFunceble.STATUS["list"]["up"]:
+            if status.lower() in PyFunceble.STATUS.list.up:
                 # The status is in the list of UP status.
 
                 # We remove it from the database.

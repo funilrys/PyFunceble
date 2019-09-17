@@ -84,8 +84,8 @@ class TestsAutoContinue(TestCase):
 
         self.file_to_work_with = (
             PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS["parent_directory"]
-            + PyFunceble.OUTPUTS["logs"]["filenames"]["auto_continue"]
+            + PyFunceble.OUTPUTS.parent_directory
+            + PyFunceble.OUTPUTS.logs.filenames.auto_continue
         )
 
         self.file_to_test = "hello.world"

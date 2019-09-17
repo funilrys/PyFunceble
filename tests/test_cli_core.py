@@ -160,7 +160,7 @@ class TestsColoredLogo(BaseStdout):
         Test if the logo is not printed when quiet is activated.
         """
 
-        PyFunceble.CONFIGURATION["quiet"] = True
+        PyFunceble.CONFIGURATION.quiet = True
 
         CLICore.colorify_logo()
 
@@ -169,7 +169,7 @@ class TestsColoredLogo(BaseStdout):
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["quiet"]
+        del PyFunceble.CONFIGURATION.quiet
 
 
 class TestNothing(BaseStdout):

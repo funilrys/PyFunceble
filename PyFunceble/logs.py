@@ -102,7 +102,7 @@ class Logs:  # pragma: no cover
         :param str file: The file to write.
         """
 
-        if not PyFunceble.CONFIGURATION["no_files"]:
+        if not PyFunceble.CONFIGURATION.no_files:
             if not isinstance(content, dict):
                 content = {}
 
@@ -116,7 +116,7 @@ class Logs:  # pragma: no cover
         :param str record: The record to log.
         """
 
-        if PyFunceble.CONFIGURATION["debug"] and PyFunceble.CONFIGURATION["logs"]:
+        if PyFunceble.CONFIGURATION.debug and PyFunceble.CONFIGURATION.logs:
             # The debug and the logs subsystem are activated.
 
             to_write = {self.current_time: {"domain": subject, "record": record}}
@@ -125,9 +125,9 @@ class Logs:  # pragma: no cover
                 output = self.output
             else:
                 output = PyFunceble.OUTPUT_DIRECTORY
-                output += PyFunceble.OUTPUTS["parent_directory"]
-                output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                output += PyFunceble.OUTPUTS["logs"]["filenames"]["whois"]
+                output += PyFunceble.OUTPUTS.parent_directory
+                output += PyFunceble.OUTPUTS.logs.directories.parent
+                output += PyFunceble.OUTPUTS.logs.filenames.whois
 
             current_content = self._get_content(output)
             current_content.update(to_write)
@@ -144,7 +144,7 @@ class Logs:  # pragma: no cover
         :param str extracted: The extracted expiration date (from WHOIS record).
         """
 
-        if PyFunceble.CONFIGURATION["logs"]:
+        if PyFunceble.CONFIGURATION.logs:
             # The logs subsystem is activated.
 
             if PyFunceble.INTERN["referer"]:
@@ -164,9 +164,9 @@ class Logs:  # pragma: no cover
                 output = self.output
             else:
                 output = PyFunceble.OUTPUT_DIRECTORY
-                output += PyFunceble.OUTPUTS["parent_directory"]
-                output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                output += PyFunceble.OUTPUTS["logs"]["filenames"]["date_format"]
+                output += PyFunceble.OUTPUTS.parent_directory
+                output += PyFunceble.OUTPUTS.logs.directories.parent
+                output += PyFunceble.OUTPUTS.logs.filenames.date_format
 
             current_content = self._get_content(output)
             current_content.update(to_write)
@@ -177,13 +177,12 @@ class Logs:  # pragma: no cover
 
             self._write_content(current_content, output)
 
-            if PyFunceble.CONFIGURATION["share_logs"]:
+            if PyFunceble.CONFIGURATION.share_logs:
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
                 PyFunceble.requests.post(
-                    PyFunceble.LINKS["api_date_format"],
-                    data=to_write[self.current_time],
+                    PyFunceble.LINKS.api_date_format, data=to_write[self.current_time]
                 )
 
     def referer_not_found(self, subject, extension):
@@ -194,7 +193,7 @@ class Logs:  # pragma: no cover
         :param str extension: The extension of the domain we are testing.
         """
 
-        if PyFunceble.CONFIGURATION["logs"]:
+        if PyFunceble.CONFIGURATION.logs:
             # The logs subsystem is activated.
 
             to_write = {self.current_time: {"domain": subject, "extension": extension}}
@@ -203,9 +202,9 @@ class Logs:  # pragma: no cover
                 output = self.output
             else:
                 output = PyFunceble.OUTPUT_DIRECTORY
-                output += PyFunceble.OUTPUTS["parent_directory"]
-                output += PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                output += PyFunceble.OUTPUTS["logs"]["filenames"]["no_referer"]
+                output += PyFunceble.OUTPUTS.parent_directory
+                output += PyFunceble.OUTPUTS.logs.directories.parent
+                output += PyFunceble.OUTPUTS.logs.filenames.no_referer
 
             current_content = self._get_content(output)
             current_content.update(to_write)
@@ -216,10 +215,10 @@ class Logs:  # pragma: no cover
 
             self._write_content(current_content, output)
 
-            if PyFunceble.CONFIGURATION["share_logs"]:
+            if PyFunceble.CONFIGURATION.share_logs:
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
                 PyFunceble.requests.post(
-                    PyFunceble.LINKS["api_no_referer"], data=to_write[self.current_time]
+                    PyFunceble.LINKS.api_no_referer, data=to_write[self.current_time]
                 )

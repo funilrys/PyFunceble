@@ -141,9 +141,7 @@ class Preset:  # pragma: no cover
         to_print = "Impossible to switch %s. Please post an issue to %s"
 
         # We raise an exception inviting the user to report an issue.
-        raise Exception(
-            to_print % (repr(variable), PyFunceble.LINKS["repo"] + "/issues.")
-        )
+        raise Exception(to_print % (repr(variable), PyFunceble.LINKS.repo + "/issues."))
 
     @classmethod
     def __are_we_allowed_to_overwrite(cls, index):
@@ -230,11 +228,11 @@ class Preset:  # pragma: no cover
         testing for syntax
         """
 
-        if PyFunceble.CONFIGURATION["syntax"]:
+        if PyFunceble.CONFIGURATION.syntax:
             # We are checking for syntax.
 
             # We deactivate the http status code.
-            PyFunceble.HTTP_CODE["active"] = False
+            PyFunceble.HTTP_CODE.active = False
 
     @classmethod
     def maximal_processes(cls):
@@ -242,8 +240,8 @@ class Preset:  # pragma: no cover
         Ensure that the number of maximal processes is alway >= 1.
         """
 
-        if PyFunceble.CONFIGURATION["maximal_processes"] < 1:
-            PyFunceble.CONFIGURATION["maximal_processes"] = 1
+        if PyFunceble.CONFIGURATION.maximal_processes < 1:
+            PyFunceble.CONFIGURATION.maximal_processes = 1
 
     def simple_domain(self):
         """
@@ -305,15 +303,15 @@ class Preset:  # pragma: no cover
         Prepare the global configuration for a test with multiple processes.
         """
 
-        if PyFunceble.CONFIGURATION["multiprocess"]:
+        if PyFunceble.CONFIGURATION.multiprocess:
             should_be_enabled = ["auto_continue", "whois_database"]
 
             self.enable(should_be_enabled)
 
-            if PyFunceble.CONFIGURATION["db_type"] not in ["mysql", "mariadb"]:
+            if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
                 print(
                     f"{PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT}The "
-                    f"{repr(PyFunceble.CONFIGURATION['db_type'])} database type "
+                    f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
                     "is not recommended with the multiprocessing mode."
                 )
 
@@ -324,11 +322,10 @@ class Preset:  # pragma: no cover
         """
 
         if cls.__are_we_allowed_to_overwrite("timeout") and (
-            not PyFunceble.CONFIGURATION["timeout"]
-            or PyFunceble.CONFIGURATION["timeout"] < 3
+            not PyFunceble.CONFIGURATION.timeout or PyFunceble.CONFIGURATION.timeout < 3
         ):
-            PyFunceble.CONFIGURATION["timeout"] = 3
+            PyFunceble.CONFIGURATION.timeout = 3
 
             PyFunceble.Logger().debug(
-                f'CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION["timeout"]}'
+                f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
             )

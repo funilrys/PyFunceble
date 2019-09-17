@@ -231,7 +231,7 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        PyFunceble.CONFIGURATION["idna_conversion"] = False
+        PyFunceble.CONFIGURATION.idna_conversion = False
 
         for domain in self.not_valid_domain:
             to_check = "http://{0}/hello_world".format(domain)
@@ -246,7 +246,7 @@ class TestCheck(TestCase):
         we have to convert to IDNA.
         """
 
-        PyFunceble.CONFIGURATION["idna_conversion"] = True
+        PyFunceble.CONFIGURATION.idna_conversion = True
 
         domains_to_test = {
             "bittréẋ.com": "xn--bittr-fsa6124c.com",
@@ -270,7 +270,7 @@ class TestCheck(TestCase):
         we do not have to convert to IDNA.
         """
 
-        PyFunceble.CONFIGURATION["idna_conversion"] = False
+        PyFunceble.CONFIGURATION.idna_conversion = False
 
         domains_to_test = [
             "bittréẋ.com",

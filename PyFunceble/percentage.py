@@ -102,14 +102,14 @@ class Percentage:
             PyFunceble.INTERN["counter"]["number"]["tested"] += 1
 
             if (
-                self.status.lower() in PyFunceble.STATUS["list"]["up"]
-                or self.status.lower() in PyFunceble.STATUS["list"]["valid"]
+                self.status.lower() in PyFunceble.STATUS.list.up
+                or self.status.lower() in PyFunceble.STATUS.list.valid
             ):
                 # The status is in the list of up status.
 
                 # We increase the number of up.
                 PyFunceble.INTERN["counter"]["number"]["up"] += 1
-            elif self.status.lower() in PyFunceble.STATUS["list"]["down"]:
+            elif self.status.lower() in PyFunceble.STATUS.list.down:
                 # The status is in the list of down status.
 
                 # We increase the number of down.
@@ -131,7 +131,7 @@ class Percentage:
         # We map the current state/counters of the different status.
         percentages = {
             x: PyFunceble.INTERN["counter"]["number"][x]
-            for x in PyFunceble.STATUS["official"].keys()
+            for x in PyFunceble.STATUS.official.keys()
             if x in PyFunceble.INTERN["counter"]["number"]
         }
 
@@ -154,7 +154,7 @@ class Percentage:
         """
 
         if (
-            PyFunceble.CONFIGURATION["show_percentage"]
+            PyFunceble.CONFIGURATION.show_percentage
             and PyFunceble.INTERN["counter"]["number"]["tested"] > 0
         ):
             # * We are allowed to show the percentage on screen.
@@ -164,10 +164,10 @@ class Percentage:
             # We initiate the output file.
             output = (
                 PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]
-                + PyFunceble.OUTPUTS["logs"]["filenames"]["percentage"]
+                + PyFunceble.OUTPUTS.parent_directory
+                + PyFunceble.OUTPUTS.logs.directories.parent
+                + PyFunceble.OUTPUTS.logs.directories.percentage
+                + PyFunceble.OUTPUTS.logs.filenames.percentage
             )
 
             # We delete the output file if it does exist.
@@ -179,27 +179,27 @@ class Percentage:
             # We construct the different lines/data to print on screen and file.
             lines_to_print = [
                 [
-                    PyFunceble.STATUS["official"]["up"],
+                    PyFunceble.STATUS.official.up,
                     str(PyFunceble.INTERN["counter"]["percentage"]["up"]) + "%",
                     PyFunceble.INTERN["counter"]["number"]["up"],
                 ],
                 [
-                    PyFunceble.STATUS["official"]["down"],
+                    PyFunceble.STATUS.official.down,
                     str(PyFunceble.INTERN["counter"]["percentage"]["down"]) + "%",
                     PyFunceble.INTERN["counter"]["number"]["down"],
                 ],
                 [
-                    PyFunceble.STATUS["official"]["invalid"],
+                    PyFunceble.STATUS.official.invalid,
                     str(PyFunceble.INTERN["counter"]["percentage"]["invalid"]) + "%",
                     PyFunceble.INTERN["counter"]["number"]["invalid"],
                 ],
             ]
 
-            if PyFunceble.CONFIGURATION["syntax"]:
+            if PyFunceble.CONFIGURATION.syntax:
                 # We are checking for syntax.
 
                 # We update the denomination of the UP.
-                lines_to_print[0][0] = PyFunceble.STATUS["official"]["valid"]
+                lines_to_print[0][0] = PyFunceble.STATUS.official.valid
                 lines_to_print[0][1] = (
                     str(PyFunceble.INTERN["counter"]["percentage"]["valid"]) + "%"
                 )
@@ -209,10 +209,7 @@ class Percentage:
                 # And we unset the INACTIVE line.
                 del lines_to_print[1]
 
-            if (
-                not PyFunceble.CONFIGURATION["quiet"]
-                or PyFunceble.CONFIGURATION["simple"]
-            ):
+            if not PyFunceble.CONFIGURATION.quiet or PyFunceble.CONFIGURATION.simple:
                 # * The quiet mode is not activated.
                 # or
                 # * We are testing in simple mode.

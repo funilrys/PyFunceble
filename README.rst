@@ -169,8 +169,9 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
 -   asciinema - `@asciinema`_
--   Daniel - `@dnmTX`_
 -   Bob Halley - `@rthalley`_ (`DNSPython`_)
+-   Chris Griffith - `@cdgriffith`_ (`Box`_)
+-   Daniel - `@dnmTX`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
 -   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
@@ -213,6 +214,7 @@ License
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
+.. _Box: https://github.com/cdgriffith/Box
 .. _colorama: https://github.com/tartley/colorama
 .. _Dead-Hosts: https://github.com/dead-hosts
 .. _DNSPython: https://github.com/rthalley/dnspython
@@ -230,6 +232,7 @@ License
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@asciinema: https://github.com/asciinema
+.. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft

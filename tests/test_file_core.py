@@ -235,7 +235,7 @@ class TestSimpleColoration(TestCase):
         """
 
         expected = PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
-        actual = FileCore.get_simple_coloration(PyFunceble.STATUS["official"]["up"])
+        actual = FileCore.get_simple_coloration(PyFunceble.STATUS.official.up)
 
         self.assertEqual(expected, actual)
 
@@ -245,7 +245,7 @@ class TestSimpleColoration(TestCase):
         """
 
         expected = PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
-        actual = FileCore.get_simple_coloration(PyFunceble.STATUS["official"]["up"])
+        actual = FileCore.get_simple_coloration(PyFunceble.STATUS.official.up)
 
         self.assertEqual(expected, actual)
 
@@ -255,7 +255,7 @@ class TestSimpleColoration(TestCase):
         """
 
         expected = PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT
-        actual = FileCore.get_simple_coloration(PyFunceble.STATUS["official"]["down"])
+        actual = FileCore.get_simple_coloration(PyFunceble.STATUS.official.down)
 
         self.assertEqual(expected, actual)
 
@@ -265,9 +265,7 @@ class TestSimpleColoration(TestCase):
         """
 
         expected = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
-        actual = FileCore.get_simple_coloration(
-            PyFunceble.STATUS["official"]["invalid"]
-        )
+        actual = FileCore.get_simple_coloration(PyFunceble.STATUS.official.invalid)
 
         self.assertEqual(expected, actual)
 

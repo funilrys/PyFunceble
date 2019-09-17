@@ -102,7 +102,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
             self.start_time = PyFunceble.datetime.fromtimestamp(int(start_time))
             self.end_time = self.start_time + PyFunceble.timedelta(
-                minutes=int(PyFunceble.CONFIGURATION["travis_autosave_minutes"])
+                minutes=int(PyFunceble.CONFIGURATION.travis_autosave_minutes)
             )
 
             PyFunceble.Logger().debug(f"Start Time: {self.start_time}")
@@ -181,7 +181,7 @@ class Travis:
         try:
             _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
 
-            return PyFunceble.CONFIGURATION["travis"]
+            return PyFunceble.CONFIGURATION.travis
         except KeyError:
             return False
 
@@ -226,7 +226,7 @@ class Travis:
                     True,
                 ),
                 ("git config --global push.default simple", True),
-                (f'git checkout "{PyFunceble.CONFIGURATION["travis_branch"]}"', True),
+                (f'git checkout "{PyFunceble.CONFIGURATION.travis_branch}"', True),
             ]
 
             for command, allow_stdout in commands:
@@ -285,7 +285,7 @@ class Travis:
         if self.authorized:
 
             command = "git push origin {0}".format(
-                PyFunceble.CONFIGURATION["travis_branch"]
+                PyFunceble.CONFIGURATION.travis_branch
             )
 
             Command(command).execute()
@@ -303,17 +303,15 @@ class Travis:
             self.permissions()
 
             command = 'git add --all && git commit -a -m "{0}"'.format(
-                PyFunceble.CONFIGURATION["travis_autosave_final_commit"] + " [ci skip]"
+                PyFunceble.CONFIGURATION.travis_autosave_final_commit + " [ci skip]"
             )
 
-            if PyFunceble.CONFIGURATION["command_before_end"]:
+            if PyFunceble.CONFIGURATION.command_before_end:
                 PyFunceble.Logger().info(
-                    f'Executing: {PyFunceble.CONFIGURATION["command_before_end"]}'
+                    f"Executing: {PyFunceble.CONFIGURATION.command_before_end}"
                 )
 
-                for line in Command(
-                    PyFunceble.CONFIGURATION["command_before_end"]
-                ).run():
+                for line in Command(PyFunceble.CONFIGURATION.command_before_end).run():
                     sys_stdout.write("{}\n".format(line))
 
                 self.permissions()
@@ -334,15 +332,15 @@ class Travis:
             self.permissions()
 
             command = 'git add --all && git commit -a -m "{0}"'.format(
-                PyFunceble.CONFIGURATION["travis_autosave_commit"]
+                PyFunceble.CONFIGURATION.travis_autosave_commit
             )
 
-            if PyFunceble.CONFIGURATION["command"]:
+            if PyFunceble.CONFIGURATION.command:
                 PyFunceble.Logger().info(
-                    f'Executing: {PyFunceble.CONFIGURATION["command"]}'
+                    f"Executing: {PyFunceble.CONFIGURATION.command}"
                 )
 
-                for line in Command(PyFunceble.CONFIGURATION["command"]).run():
+                for line in Command(PyFunceble.CONFIGURATION.command).run():
                     sys_stdout.write("{}\n".format(line))
 
                 self.permissions()

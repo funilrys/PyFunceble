@@ -107,8 +107,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         self.file_type = file_type
 
         # We construct the list of UP statuses.
-        self.list_of_up_statuses = PyFunceble.STATUS["list"]["up"]
-        self.list_of_up_statuses.extend(PyFunceble.STATUS["list"]["valid"])
+        self.list_of_up_statuses = PyFunceble.STATUS.list.up
+        self.list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
 
         # We get/initiate the db.
         self.mysql_db = MySQL()
@@ -141,7 +141,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         Saves the current status inside the database.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             table_name = mysql_db.tables["tested"]
 
             if not filename:
@@ -204,16 +204,13 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         :param str status: An official status output.
         """
 
-        if status in [
-            PyFunceble.STATUS["official"]["up"],
-            PyFunceble.STATUS["official"]["valid"],
-        ]:
+        if status in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.valid]:
             # The status is in the list of UP status.
 
             # We return the green coloration.
             return PyFunceble.Fore.GREEN + PyFunceble.Style.BRIGHT
 
-        if status == PyFunceble.STATUS["official"]["down"]:
+        if status == PyFunceble.STATUS.official.down:
             # The status is in the list of DOWN status.
 
             # We return the red coloration.
@@ -265,7 +262,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if subject:
             # The given subject is not empty nor None.
 
-            if PyFunceble.CONFIGURATION["syntax"]:
+            if PyFunceble.CONFIGURATION.syntax:
                 # The syntax mode is activated.
 
                 data = SyntaxStatus(
@@ -285,7 +282,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 ).get()
                 status = data["status"]
 
-            if PyFunceble.CONFIGURATION["simple"]:
+            if PyFunceble.CONFIGURATION.simple:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
@@ -319,7 +316,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if subject:
             # The given subject is not empty nor None.
 
-            if PyFunceble.CONFIGURATION["syntax"]:
+            if PyFunceble.CONFIGURATION.syntax:
                 # The syntax mode is activated.
 
                 # We get the status from SyntaxStatus.
@@ -337,7 +334,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 ).get()
                 status = data["status"]
 
-            if PyFunceble.CONFIGURATION["simple"]:
+            if PyFunceble.CONFIGURATION.simple:
                 # The simple mode is activated.
 
                 # We print the domain and the status.
@@ -435,7 +432,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if self.file_type == "domain":
             # We are testing for domains.
 
-            if PyFunceble.CONFIGURATION["idna_conversion"]:
+            if PyFunceble.CONFIGURATION.idna_conversion:
                 # We have to convert to IDNA:
 
                 # We get and return the status of the IDNA
@@ -464,7 +461,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         complements = []
 
         if (
-            PyFunceble.CONFIGURATION["generate_complements"]
+            PyFunceble.CONFIGURATION.generate_complements
             and self.autocontinue.authorized
         ):
             # * The user want us to generate and test the list
@@ -525,7 +522,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         subject = self._format_line(line)
 
         if (
-            not PyFunceble.CONFIGURATION["local"]
+            not PyFunceble.CONFIGURATION.local
             and PyFunceble.Check(subject).is_reserved_ipv4()
         ):
             # * We are not testing for local components.
@@ -535,11 +532,11 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We return None, there is nothing to test.
             return None
 
-        if PyFunceble.CONFIGURATION["filter"]:
+        if PyFunceble.CONFIGURATION.filter:
             # We have to filter.
 
             if Regex(
-                subject, PyFunceble.CONFIGURATION["filter"], return_data=False
+                subject, PyFunceble.CONFIGURATION.filter, return_data=False
             ).match():
                 # The line match the given filter.
 
@@ -570,7 +567,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We generate the suspicous file.
                 Generate(
-                    subject, "file_domain", PyFunceble.STATUS["official"]["up"]
+                    subject, "file_domain", PyFunceble.STATUS.official.up
                 ).analytic_file("suspicious")
 
                 # And we remove the current subject from
@@ -583,10 +580,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # inactive database.
             inactive_db.add(subject, status)
 
-        if (
-            self.complements_test_started
-            and PyFunceble.CONFIGURATION["db_type"] == "json"
-        ):
+        if self.complements_test_started and PyFunceble.CONFIGURATION.db_type == "json":
             # We started the test of the complements.
 
             if "complements" in autocontinue.database:
@@ -610,7 +604,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We process the autosaving if it is necessary.
                 self.autosave.process(test_completed=False)
-        elif PyFunceble.CONFIGURATION["db_type"] == "json":
+        elif PyFunceble.CONFIGURATION.db_type == "json":
             # We are in a multiprocess environment.
 
             # We save everything we initiated into the server process
@@ -637,26 +631,25 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         else:
             to_retest_inactive_db = set()
 
-        if PyFunceble.CONFIGURATION["multiprocess"]:
-            with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
-                if not PyFunceble.CONFIGURATION["adblock"]:
+        if PyFunceble.CONFIGURATION.multiprocess:
+            with Pool(PyFunceble.CONFIGURATION.maximal_processes) as pool:
+                if not PyFunceble.CONFIGURATION.adblock:
                     formatted_subjects = set(pool.map(self._format_line, file_object))
                 else:
                     formatted_subjects = {
                         x
                         for x in AdBlock(
-                            file_object,
-                            aggressive=PyFunceble.CONFIGURATION["aggressive"],
+                            file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
                         ).decode()
                     }
         else:
-            if not PyFunceble.CONFIGURATION["adblock"]:
+            if not PyFunceble.CONFIGURATION.adblock:
                 formatted_subjects = {self._format_line(x) for x in file_object}
             else:
                 formatted_subjects = {
                     x
                     for x in AdBlock(
-                        file_object, aggressive=PyFunceble.CONFIGURATION["aggressive"]
+                        file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
                     ).decode()
                 }
 
@@ -672,8 +665,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         else:
             subjects_to_test = list(subjects_to_test)
 
-        if not PyFunceble.CONFIGURATION["multiprocess"]:
-            if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+        if not PyFunceble.CONFIGURATION.multiprocess:
+            if not PyFunceble.CONFIGURATION.hierarchical_sorting:
                 subjects_to_test = List(subjects_to_test).custom_format(Sort.standard)
             else:
                 subjects_to_test = List(subjects_to_test).custom_format(
@@ -696,7 +689,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             "AND file_path = %(file_path)s ORDER BY subject ASC"
         ).format(self.mysql_db.tables["tested"])
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
                     to_select, {"official_status": status, "file_path": self.file}
@@ -733,13 +726,13 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         Percentage({})
 
-        if PyFunceble.CONFIGURATION["syntax"]:
-            self.generate_files_of_status(PyFunceble.STATUS["official"]["valid"])
+        if PyFunceble.CONFIGURATION.syntax:
+            self.generate_files_of_status(PyFunceble.STATUS.official.valid)
         else:
-            self.generate_files_of_status(PyFunceble.STATUS["official"]["up"])
+            self.generate_files_of_status(PyFunceble.STATUS.official.up)
 
-        self.generate_files_of_status(PyFunceble.STATUS["official"]["down"])
-        self.generate_files_of_status(PyFunceble.STATUS["official"]["invalid"])
+        self.generate_files_of_status(PyFunceble.STATUS.official.down)
+        self.generate_files_of_status(PyFunceble.STATUS.official.invalid)
 
     def read_and_test_file_content(self):  # pragma: no cover
         """

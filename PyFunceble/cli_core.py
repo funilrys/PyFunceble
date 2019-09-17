@@ -79,7 +79,7 @@ class CLICore:
         :param bool home: Tell us if we have to print the initial coloration.
         """
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
 
             to_print = []
@@ -129,8 +129,8 @@ class CLICore:
         """
 
         if (
-            not PyFunceble.CONFIGURATION["quiet"]
-            and not PyFunceble.CONFIGURATION["header_printed"]
+            not PyFunceble.CONFIGURATION.quiet
+            and not PyFunceble.CONFIGURATION.header_printed
         ):
             # * The quiet mode is not activated.
             # and
@@ -139,7 +139,7 @@ class CLICore:
             # We print a new line.
             print("\n")
 
-            if PyFunceble.CONFIGURATION["less"]:
+            if PyFunceble.CONFIGURATION.less:
                 # We have to show less informations on screen.
 
                 # We print the `Less` header.
@@ -153,7 +153,7 @@ class CLICore:
             # The header was printed.
 
             # We initiate the variable which say that the header has been printed to True.
-            PyFunceble.CONFIGURATION["header_printed"] = True
+            PyFunceble.CONFIGURATION.header_printed = True
 
     @classmethod
     def print_nothing_to_test(cls):
@@ -171,7 +171,7 @@ class CLICore:
 
         random = int(choice(str(int(PyFunceble.time()))))
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             print(
                 "\n"
                 + PyFunceble.Fore.GREEN
@@ -215,7 +215,7 @@ class CLICore:
         is activated.
         """
 
-        if PyFunceble.CONFIGURATION["share_logs"]:
+        if PyFunceble.CONFIGURATION.share_logs:
             print(
                 PyFunceble.Fore.GREEN
                 + PyFunceble.Style.BRIGHT

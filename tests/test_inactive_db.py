@@ -85,15 +85,14 @@ class TestInactiveDB(TestCase):
         self.file_to_test = "this_file_is_a_ghost"
 
         self.file = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["inactive_db"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.inactive_db
         )
 
         self.expected_content = {
             self.file_to_test: {
                 "0": {
-                    "mÿethèrwallét.com": PyFunceble.STATUS["official"]["invalid"],
-                    "||google.com^": PyFunceble.STATUS["official"]["invalid"],
+                    "mÿethèrwallét.com": PyFunceble.STATUS.official.invalid,
+                    "||google.com^": PyFunceble.STATUS.official.invalid,
                 }
             }
         }
@@ -207,8 +206,8 @@ class TestInactiveDB(TestCase):
         self.inactive_db.database = {
             self.file_to_test: {
                 self.time_past: {
-                    "hello.world": PyFunceble.STATUS["official"]["down"],
-                    "world.hello": PyFunceble.STATUS["official"]["down"],
+                    "hello.world": PyFunceble.STATUS.official.down,
+                    "world.hello": PyFunceble.STATUS.official.down,
                 },
                 "to_test": {"github.com": ""},
             }
@@ -217,8 +216,8 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 self.time_past: {
-                    "hello.world": PyFunceble.STATUS["official"]["down"],
-                    "world.hello": PyFunceble.STATUS["official"]["down"],
+                    "hello.world": PyFunceble.STATUS.official.down,
+                    "world.hello": PyFunceble.STATUS.official.down,
                 },
                 new_time: {"github.com": ""},
             }
@@ -241,8 +240,8 @@ class TestInactiveDB(TestCase):
         self.inactive_db.database = {
             self.file_to_test: {
                 self.time_future: {
-                    "hello.world": PyFunceble.STATUS["official"]["down"],
-                    "world.hello": PyFunceble.STATUS["official"]["down"],
+                    "hello.world": PyFunceble.STATUS.official.down,
+                    "world.hello": PyFunceble.STATUS.official.down,
                 }
             }
         }
@@ -250,8 +249,8 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 self.time_future: {
-                    "hello.world": PyFunceble.STATUS["official"]["down"],
-                    "world.hello": PyFunceble.STATUS["official"]["down"],
+                    "hello.world": PyFunceble.STATUS.official.down,
+                    "world.hello": PyFunceble.STATUS.official.down,
                 }
             }
         }
@@ -331,12 +330,12 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 str(self.inactive_db._timestamp()): {
-                    "hello.world": PyFunceble.STATUS["official"]["down"]
+                    "hello.world": PyFunceble.STATUS.official.down
                 }
             }
         }
 
-        self.inactive_db.add(subject, PyFunceble.STATUS["official"]["down"])
+        self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
         self.assertEqual(expected, self.inactive_db.database)
 
         self.inactive_db.database = {}
@@ -345,12 +344,12 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 str(self.inactive_db._timestamp()): {
-                    "http://hello.world": PyFunceble.STATUS["official"]["down"]
+                    "http://hello.world": PyFunceble.STATUS.official.down
                 }
             }
         }
 
-        self.inactive_db.add(subject, PyFunceble.STATUS["official"]["down"])
+        self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
         self.assertEqual(expected, self.inactive_db.database)
 
         self.test_file_not_exist()
@@ -367,11 +366,11 @@ class TestInactiveDB(TestCase):
         subject = "hello.world"
         expected = {
             self.file_to_test: {
-                timestamp: {"hello.world": PyFunceble.STATUS["official"]["down"]}
+                timestamp: {"hello.world": PyFunceble.STATUS.official.down}
             }
         }
 
-        self.inactive_db.add(subject, PyFunceble.STATUS["official"]["down"])
+        self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
 
         self.assertEqual(
             [int(float(x)) for x in expected[self.file_to_test]],
@@ -394,19 +393,19 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 timestamp: {
-                    "hello.world": PyFunceble.STATUS["official"]["down"],
-                    "world.hello": PyFunceble.STATUS["official"]["down"],
+                    "hello.world": PyFunceble.STATUS.official.down,
+                    "world.hello": PyFunceble.STATUS.official.down,
                 }
             }
         }
 
         self.inactive_db.database = {
             self.file_to_test: {
-                timestamp: {"world.hello": PyFunceble.STATUS["official"]["down"]}
+                timestamp: {"world.hello": PyFunceble.STATUS.official.down}
             }
         }
 
-        self.inactive_db.add(subject, PyFunceble.STATUS["official"]["down"])
+        self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
 
         self.assertEqual(expected, self.inactive_db.database)
 
@@ -423,7 +422,7 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {
             self.file_to_test: {
-                timestamp: {"hello.world": PyFunceble.STATUS["official"]["down"]}
+                timestamp: {"hello.world": PyFunceble.STATUS.official.down}
             }
         }
         subject = "hello.world"

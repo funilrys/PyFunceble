@@ -89,6 +89,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         url_file_path=None,
         url_to_test=None,
     ):
+        PyFunceble.Logger().debug(f"CONFIGURATION:\n{PyFunceble.CONFIGURATION}")
+
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
             self.preset = PyFunceble.Preset()
 
@@ -121,7 +123,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
 
         PyFunceble.DirectoryStructure()
 
-        if PyFunceble.CONFIGURATION["multiprocess"]:
+        if PyFunceble.CONFIGURATION.multiprocess:
             self.preset.maximal_processes()
             self.preset.multiprocess()
 
@@ -138,7 +140,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
 
         PyFunceble.DirectoryStructure()
 
-        if PyFunceble.CONFIGURATION["multiprocess"]:
+        if PyFunceble.CONFIGURATION.multiprocess:
             self.preset.maximal_processes()
             self.preset.multiprocess()
 
@@ -156,7 +158,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         PyFunceble.DirectoryStructure()
         self.preset.file_url()
 
-        if PyFunceble.CONFIGURATION["multiprocess"]:
+        if PyFunceble.CONFIGURATION.multiprocess:
             self.preset.maximal_processes()
             self.preset.multiprocess()
 

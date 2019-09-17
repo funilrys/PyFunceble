@@ -8,11 +8,11 @@ omit =
     /home/travis/virtualenv/*
     *.eggs/*
     */distutils/*
+    PyFunceble/config/*
 
     # omit the following file
     PyFunceble/api_core.py
     PyFunceble/auto_save.py
-    PyFunceble/config.py
     PyFunceble/dispatcher.py
     PyFunceble/production.py
     PyFunceble/simple_core.py
@@ -45,10 +45,8 @@ exclude_lines =
     if self.aggressive
 
     # Don't complain for those blocks
-    PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"
-    PyFunceble\.CONFIGURATION\["db_type"\] == "mariadb"
-    PyFunceble\.CONFIGURATION\["db_type"\] in \["mariadb", "mysql"\]
-    PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mariadb", "mysql"\]
+    PyFunceble\.CONFIGURATION\.db_type == "mariadb"
+    PyFunceble\.CONFIGURATION\.db_type in \["mariadb", "mysql"\]
 
     # Don't complain about those.
     _json

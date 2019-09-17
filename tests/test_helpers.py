@@ -311,6 +311,33 @@ class TestDict(TestCase):
             "pyfunceble": ["funilrys"],
         }
 
+    def test_has_same_keys_ask(self):
+        """
+        Test Dict().has_same_keys_as().
+        """
+
+        # This is a.
+        origin = {"a": 1, "b": 1}
+
+        # This is b.
+        target = {"a": 1, "b": 2, "c": {"a": 1, "b": 3, "c": {"x": "x"}}}
+
+        # We want to test that all keys of a are into b.
+        self.assertEqual(True, Dict(target).has_same_keys_as(origin))
+        # We want to test that all keys of b are into a.
+        self.assertEqual(False, Dict(origin).has_same_keys_as(target))
+
+        origin["c"] = {"a": 1, "b": 3, "c": {"x": "x"}}
+
+        # We want to test that all keys of a are in b.
+        self.assertEqual(True, Dict(target).has_same_keys_as(origin))
+        # We want to test that all keys of b are in a.
+        self.assertEqual(True, Dict(origin).has_same_keys_as(target))
+
+        del origin["c"]["c"]
+        # We want to test that all keys of b are in a.
+        self.assertEqual(False, Dict(origin).has_same_keys_as(target))
+
     def test_remove_key_not_dict(self):
         """
         Test Dict().remove_key() for the case that a dict is not given.

@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long
+# pylint: disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4 or URL.
 
@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.http_code.
+Provide the configuration logic.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,87 +58,27 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
-import unittest.mock as mock  # pylint: disable=useless-import-alias
-from unittest import TestCase
-from unittest import main as launch_tests
 
-import PyFunceble
-from PyFunceble.http_code import HTTPCode
+from box import Box
+
+from .load import Load
+from .merge import Merge
+from .version import Version
 
 
-class TestHTTPCode(TestCase):
+class Core:
     """
-    Test PyFunceble.http_code.
+    Provides an access to every configuration indexes.
+
+    :param str path_to_config:
+        The path where we are supposed to find
+        or install the configuration file.
     """
 
-    def setUp(self):
-        """
-        Setup everything needed for the tests.
-        """
-        PyFunceble.load_config(generate_directory_structure=False)
+    # pylint:disable=too-few-public-methods
 
-        self.subject = "google.com"
-        self.subject_type = "domain"
+    @classmethod
+    def __new__(cls, path_to_config):
+        data = Load(path_to_config).get()
 
-    @mock.patch("PyFunceble.http_code.HTTPCode._access")
-    def test_get_not_activated(self, _):
-        """
-        Test if HTTPCode().get() does not have a launch
-        authorization.
-        """
-
-        PyFunceble.HTTP_CODE.active = False
-        expected = PyFunceble.HTTP_CODE.not_found_default
-        actual = HTTPCode(self.subject, self.subject_type).get()
-
-        self.assertEqual(expected, actual)
-
-    @mock.patch("PyFunceble.http_code.HTTPCode._access")
-    def test_get_known_code(self, access):
-        """
-        Test of HTTPCode().get() for the case that
-        it match a code which is in our list.
-        """
-
-        PyFunceble.HTTP_CODE.active = True
-
-        access.return_value = 200
-        expected = 200
-        actual = HTTPCode(self.subject, self.subject_type).get()
-
-        self.assertEqual(expected, actual)
-
-    @mock.patch("PyFunceble.http_code.HTTPCode._access")
-    def test_get_unknown_code(self, access):
-        """
-        Test of HTTPCode().get() for the case that
-        it match a code which is not in our list.
-        """
-
-        PyFunceble.HTTP_CODE.active = True
-
-        access.return_value = 859
-        expected = PyFunceble.HTTP_CODE.not_found_default
-        actual = HTTPCode(self.subject, self.subject_type).get()
-
-        self.assertEqual(expected, actual)
-
-    @mock.patch("PyFunceble.http_code.HTTPCode._access")
-    def test_get_code_is_none(self, access):
-        """
-        Test of HTTPCode().get() for the case that
-        it match a code which is not in our list.
-        """
-
-        PyFunceble.HTTP_CODE.active = True
-
-        access.return_value = None
-        expected = PyFunceble.HTTP_CODE.not_found_default
-        actual = HTTPCode(self.subject, self.subject_type).get()
-
-        self.assertEqual(expected, actual)
-
-
-if __name__ == "__main__":
-    launch_tests()
+        return Box(data, default_box=True, default_box_attr=None)

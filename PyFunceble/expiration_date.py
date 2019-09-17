@@ -487,7 +487,7 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
             self.whois_record = PyFunceble.WhoisLookup(
                 self.subject,
                 self.whois_server,
-                timeout=PyFunceble.CONFIGURATION["timeout"],
+                timeout=PyFunceble.CONFIGURATION.timeout,
             ).request()
 
             self.__extract_from_record()

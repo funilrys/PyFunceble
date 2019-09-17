@@ -97,21 +97,21 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
         PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
 
-        if PyFunceble.CONFIGURATION["user_agent"]:
+        if PyFunceble.CONFIGURATION.user_agent:
             # The user-agent is given.
 
             # We append the user agent to the header we are going to parse with
             # the request.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+            self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
 
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 # We get the file we are going to save our data.
                 self.database_file = (
                     PyFunceble.CONFIG_DIRECTORY
-                    + PyFunceble.OUTPUTS["default_files"]["mining"]
+                    + PyFunceble.OUTPUTS.default_files.mining
                 )
 
             PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
@@ -120,11 +120,11 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def __getitem__(self, index):
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 if index in self.database[self.filename]:
                     return self.database[self.filename][index]
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = (
                     "SELECT * "
                     "FROM {0} "
@@ -144,7 +144,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def __setitem__(self, index, value):  # pylint: disable=too-many-branches
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 actual_value = self[index]
 
                 if actual_value:
@@ -169,7 +169,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 PyFunceble.Logger().info(
                     f"Inserted {repr(value)} into the subset of {repr(index)}"
                 )
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = (
                     "INSERT INTO {0} "
                     "(file_path, subject, mined, digest) "
@@ -199,7 +199,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def __delitem__(self, index):  # pragma: no cover
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 actual_value = self[index]
 
                 if actual_value:
@@ -210,7 +210,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         f"{repr(index)} and {repr(self.filename)} "
                         f"from the database."
                     )
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = (
                     "DELETE FROM {0} "
                     "WHERE file_path = %(file)s "
@@ -232,7 +232,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Provide the operation authorization.
         """
 
-        return PyFunceble.CONFIGURATION["mining"]
+        return PyFunceble.CONFIGURATION.mining
 
     @classmethod
     def get_history(cls, url):  # pragma: no cover
@@ -247,7 +247,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
         try:
             return PyFunceble.requests.get(
-                url, timeout=PyFunceble.CONFIGURATION["timeout"], headers=cls.headers
+                url, timeout=PyFunceble.CONFIGURATION.timeout, headers=cls.headers
             ).history
         except (
             PyFunceble.requests.ConnectionError,
@@ -266,7 +266,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             return self.mysql_db.tables["mining"]
         return "mining"
 
@@ -300,7 +300,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
 
                 for subject in self.database[self.filename].keys():
                     # We loop through the available list of status
@@ -311,7 +311,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         # the currently read status.
 
                         result.append((subject, element))
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
                     self.table_name
                 )
@@ -327,7 +327,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Load the content of the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             if PyFunceble.path.isfile(self.database_file):
@@ -345,7 +345,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Save the content of the database into the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             # We save the database into the file.
@@ -462,7 +462,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 if isinstance(actual_value, list) and history_member in actual_value:
 
-                    if PyFunceble.CONFIGURATION["db_type"] == "json":
+                    if PyFunceble.CONFIGURATION.db_type == "json":
                         try:
                             actual_value.remove(history_member)
 
@@ -472,7 +472,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             )
                         except ValueError:  # pragma: no cover
                             pass
-                    elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                    elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                         # We construct the query string.
                         query = (
                             "DELETE FROM {0} "

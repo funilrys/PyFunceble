@@ -81,7 +81,7 @@ class TestExecutionTime(BaseStdout):
         PyFunceble.load_config(generate_directory_structure=False)
 
         BaseStdout.setUp(self)
-        PyFunceble.CONFIGURATION["show_execution_time"] = True
+        PyFunceble.CONFIGURATION.show_execution_time = True
         PyFunceble.INTERN["start"] = int(PyFunceble.time())
         PyFunceble.INTERN["end"] = int(PyFunceble.time()) + 15
 

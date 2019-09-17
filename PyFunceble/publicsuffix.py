@@ -71,8 +71,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     def __init__(self):
         # We initiate the destination of our database.
         self.destination = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["public_suffix"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.public_suffix
         )
 
         # We initiate a variablw which will save the database we are going to save.
@@ -146,13 +145,12 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         Update of the content of the :code:`public-suffix.json`.
         """
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
 
             # We print a message for the user on screen.
             print(
-                "Update of %s" % PyFunceble.OUTPUTS["default_files"]["public_suffix"],
-                end=" ",
+                "Update of %s" % PyFunceble.OUTPUTS.default_files.public_suffix, end=" "
             )
 
         # We loop through the line of the upstream file.
@@ -161,7 +159,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         # We save the content of our database in the final testination.
         Dict(self.public_suffix_db).to_json(self.destination)
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
 
             # We inform the user that everything goes right.

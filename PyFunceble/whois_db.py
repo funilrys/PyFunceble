@@ -81,11 +81,10 @@ class WhoisDB:
         self.authorized = self.authorization()
         self.database_file = ""
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if PyFunceble.CONFIGURATION.db_type == "json":
             # We set the location of the database file.
             self.database_file = "{0}{1}".format(
-                PyFunceble.CONFIG_DIRECTORY,
-                PyFunceble.OUTPUTS["default_files"]["whois_db"],
+                PyFunceble.CONFIG_DIRECTORY, PyFunceble.OUTPUTS.default_files.whois_db
             )
 
         self.mysql_db = mysql_db
@@ -100,7 +99,7 @@ class WhoisDB:
 
     def __contains__(self, index):
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 if index in self.database:
                     PyFunceble.Logger().info(f"{index} is present into the database.")
                     return True
@@ -108,7 +107,7 @@ class WhoisDB:
                 PyFunceble.Logger().info(f"{index} is not present into the database.")
                 return False
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
                     self.table_name
                 )
@@ -132,16 +131,16 @@ class WhoisDB:
 
     def __getitem__(self, index):
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 if index in self.database:
                     return self.database[index]
 
                 return None
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 fetched = None
 
-                if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+                if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                     query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
                         self.table_name
                     )
@@ -214,9 +213,9 @@ class WhoisDB:
 
     def __setitem__(self, index, value):
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 self.__setitem_json(index, value)
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 self.__setitem_mysql(index, value)
 
     @classmethod
@@ -226,8 +225,8 @@ class WhoisDB:
         """
 
         return (
-            not PyFunceble.CONFIGURATION["no_whois"]
-            and PyFunceble.CONFIGURATION["whois_database"]
+            not PyFunceble.CONFIGURATION.no_whois
+            and PyFunceble.CONFIGURATION.whois_database
         )
 
     @classmethod
@@ -245,7 +244,7 @@ class WhoisDB:
         # We initiate a local place to save our results.
         result = {}
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if PyFunceble.CONFIGURATION.db_type == "json":
             for index, data in old.items():
                 # We loop through all indexes and data of the database.
 
@@ -272,7 +271,7 @@ class WhoisDB:
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             return self.mysql_db.tables["whois"]
         return "whois"
 
@@ -284,7 +283,7 @@ class WhoisDB:
         if (
             self.authorized
             and PyFunceble.path.isfile(self.database_file)
-            and PyFunceble.CONFIGURATION["db_type"] == "json"
+            and PyFunceble.CONFIGURATION.db_type == "json"
         ):
             # * We are authorized to operate.
             # and
@@ -308,7 +307,7 @@ class WhoisDB:
         Save the database into the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             # We save the current state of the datbase.

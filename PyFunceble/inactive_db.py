@@ -99,14 +99,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We convert the number of days between the database retest
             # to seconds.
             self.days = PyFunceble.timedelta(
-                days=PyFunceble.CONFIGURATION["days_between_db_retest"]
+                days=PyFunceble.CONFIGURATION.days_between_db_retest
             )
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 # We set the path to the inactive database file.
                 self.database_file = "{0}{1}".format(
                     PyFunceble.CONFIG_DIRECTORY,
-                    PyFunceble.OUTPUTS["default_files"]["inactive_db"],
+                    PyFunceble.OUTPUTS.default_files.inactive_db,
                 )
 
             # We share the filename.
@@ -129,7 +129,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 if subject not in self.is_present_cache:
                     for element in [
                         x for x in self.database[self.filename].keys() if x.isdigit()
@@ -146,7 +146,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 return self.is_present_cache[subject]
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = (
                     "SELECT COUNT(*) "
                     "FROM {0} "
@@ -165,7 +165,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     def __getitem__(self, index):
         if (
             self.authorized
-            and PyFunceble.CONFIGURATION["db_type"] == "json"
+            and PyFunceble.CONFIGURATION.db_type == "json"
             and self.filename in self.database
             and index in self.database[self.filename]
         ):
@@ -173,7 +173,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         return []
 
     def __setitem__(self, index, value):
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if PyFunceble.CONFIGURATION.db_type == "json":
             actual_state = self[index]
 
             if actual_state:
@@ -209,14 +209,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Provide the execution authorization.
         """
 
-        return PyFunceble.CONFIGURATION["inactive_database"]
+        return PyFunceble.CONFIGURATION.inactive_database
 
     def get_table_name(self):
         """
         Return the name of the table to use.
         """
 
-        if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             return self.mysql_db.tables["inactive"]
         return "inactive"
 
@@ -226,7 +226,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         has already been set into the database.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             # We get the content of the database.
@@ -275,7 +275,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Load the content of the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             if PyFunceble.path.isfile(self.database_file):
@@ -320,7 +320,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Save the current database into the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
             # We save the current database state into the database file.
@@ -353,7 +353,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if (
             self.authorized
-            and PyFunceble.CONFIGURATION["db_type"] == "json"
+            and PyFunceble.CONFIGURATION.db_type == "json"
             and self.filename in self.database
         ):
             # * We are authorized to operate.
@@ -411,7 +411,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 # We get the timestamp to use as index.
                 timestamp = str(self._timestamp())
 
@@ -430,7 +430,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the database.
                 self.save()
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
 
                 query = (
@@ -481,7 +481,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         if self.authorized:
             # We are authorized to operate.
 
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 for data in self.database[self.filename]:
                     # We loop through the index of the file database.
 
@@ -496,7 +496,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 # And we save the data into the database.
                 self.save()
-            elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = (
                     "DELETE FROM {0} "
@@ -523,7 +523,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         )
 
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 try:
                     return {
                         z
@@ -536,8 +536,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 except KeyError:
                     return set()
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-                if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
+                if PyFunceble.CONFIGURATION.db_type == "mariadb":
                     cast_type = "INTEGER"
                 else:
                     cast_type = "SIGNED"
@@ -566,7 +566,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         )
 
         if self.authorized:
-            if PyFunceble.CONFIGURATION["db_type"] == "json":
+            if PyFunceble.CONFIGURATION.db_type == "json":
                 try:
                     return {
                         z
@@ -579,8 +579,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 except KeyError:
                     return set()
 
-            if PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
-                if PyFunceble.CONFIGURATION["db_type"] == "mariadb":
+            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
+                if PyFunceble.CONFIGURATION.db_type == "mariadb":
                     cast_type = "INTEGER"
                 else:
                     cast_type = "SIGNED"

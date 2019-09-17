@@ -129,7 +129,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 {
                     "domain_syntax_validation": self.checker.is_domain(),
                     "expiration_date": None,
-                    "http_status_code": PyFunceble.HTTP_CODE["not_found_default"],
+                    "http_status_code": PyFunceble.HTTP_CODE.not_found_default,
                     "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
                     "ipv4_syntax_validation": self.checker.is_ipv4(),
                     "subdomain_syntax_validation": self.checker.is_subdomain(),
@@ -139,7 +139,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 }
             )
 
-            if PyFunceble.CONFIGURATION["local"] or (
+            if PyFunceble.CONFIGURATION.local or (
                 self.output["domain_syntax_validation"]
                 or self.output["ipv4_syntax_validation"]
             ):
@@ -162,7 +162,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                         ] = "WHOIS"
                         self.output["_status"] = self.output[
                             "status"
-                        ] = PyFunceble.STATUS["official"]["up"]
+                        ] = PyFunceble.STATUS.official.up
 
                         Generate(
                             self.subject,
@@ -178,8 +178,8 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             exclude_file_generation=self.exclude_file_generation
                             and self.output["status"]
                             not in [
-                                PyFunceble.STATUS["official"]["up"],
-                                PyFunceble.STATUS["official"]["down"],
+                                PyFunceble.STATUS.official.up,
+                                PyFunceble.STATUS.official.down,
                             ]
                         )
                     else:
@@ -196,7 +196,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                     )
             else:
                 self.output["_status_source"] = "SYNTAX"
-                self.output["_status"] = PyFunceble.STATUS["official"]["invalid"]
+                self.output["_status"] = PyFunceble.STATUS.official.invalid
 
                 self.handle(
                     status="invalid",
@@ -225,23 +225,23 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the dns_lookup state.
         self.output["dns_lookup"] = PyFunceble.DNSLookup(
             self.subject,
-            dns_server=PyFunceble.CONFIGURATION["dns_server"],
-            lifetime=PyFunceble.CONFIGURATION["timeout"],
+            dns_server=PyFunceble.CONFIGURATION.dns_server,
+            lifetime=PyFunceble.CONFIGURATION.timeout,
         ).request()
 
-        if status.lower() not in PyFunceble.STATUS["list"]["invalid"]:
+        if status.lower() not in PyFunceble.STATUS.list.invalid:
             # The matched status is not in the list of invalid status.
 
             if self.output["dns_lookup"]:
                 # We could execute the dns_lookup logic.
 
                 # We set the status we got.
-                self.output["_status"] = PyFunceble.STATUS["official"]["up"]
+                self.output["_status"] = PyFunceble.STATUS.official.up
             else:
                 # We could not get something.
 
                 # We set the status we got.
-                self.output["_status"] = PyFunceble.STATUS["official"]["down"]
+                self.output["_status"] = PyFunceble.STATUS.official.down
 
             PyFunceble.Logger().debug(
                 f"[{self.subject}] State before extra rules:\n{self.output}"
@@ -256,7 +256,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We could execute the dns_lookup logic.
 
                 # We set the status we got.
-                self.output["_status"] = PyFunceble.STATUS["official"]["up"]
+                self.output["_status"] = PyFunceble.STATUS.official.up
                 # We set the status source.
                 self.output["_status_source"] = "DNSLOOKUP"
 
@@ -279,10 +279,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         ).status_file(
             exclude_file_generation=self.exclude_file_generation
             and self.output["status"]
-            not in [
-                PyFunceble.STATUS["official"]["up"],
-                PyFunceble.STATUS["official"]["down"],
-            ]
+            not in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.down]
         )
 
         PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")
@@ -314,7 +311,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         self.status_code = http_status_code
 
         # We set the header that we will send when communicating with webservers.
-        self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+        self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
 
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_down = {
@@ -343,7 +340,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple
         """
 
-        return PyFunceble.STATUS["official"]["down"], "SPECIAL"
+        return PyFunceble.STATUS.official.down, "SPECIAL"
 
     @classmethod
     def __special_up(cls):
@@ -354,7 +351,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple
         """
 
-        return PyFunceble.STATUS["official"]["up"], "SPECIAL"
+        return PyFunceble.STATUS.official.up, "SPECIAL"
 
     @classmethod
     def __http_status_code_up(cls):
@@ -365,7 +362,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple
         """
 
-        return PyFunceble.STATUS["official"]["up"], "HTTP Code"
+        return PyFunceble.STATUS.official.up, "HTTP Code"
 
     def __blogspot(self):
         """
@@ -483,8 +480,8 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         if (
-            PyFunceble.HTTP_CODE["active"]
-            and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]
+            PyFunceble.HTTP_CODE.active
+            and self.status_code in PyFunceble.HTTP_CODE.list.potentially_down
         ):
             # * The http status request is activated.
             # and
@@ -496,7 +493,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                 "potentially_down"
             )
 
-            if not PyFunceble.CONFIGURATION["no_special"]:
+            if not PyFunceble.CONFIGURATION.no_special:
                 # We are authorized to play with the SPEICIAL rules.
 
                 for regx in self.regexes_active_to_inactive_potentially_down:
@@ -534,14 +531,14 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         if (
-            PyFunceble.HTTP_CODE["active"]
-            and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]
+            PyFunceble.HTTP_CODE.active
+            and self.status_code in PyFunceble.HTTP_CODE.list.potentially_up
         ):
             # * The http status code request is activated.
             # and
             # * The extracted http status code is into the list of potentially up codes.
 
-            if not PyFunceble.CONFIGURATION["no_special"]:
+            if not PyFunceble.CONFIGURATION.no_special:
                 # We are authorized to play with the SPEICIAL rules.
 
                 for regx in self.regexes_active_to_inactive_potentially_up:
@@ -579,15 +576,15 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         try:
-            if self.status_code in PyFunceble.HTTP_CODE["list"]["up"]:
+            if self.status_code in PyFunceble.HTTP_CODE.list.up:
                 # The extracted http code is in the list of up codes.
 
                 # We generate the analytics files.
                 Generate(self.subject, self.subject_type, previous_state).analytic_file(
-                    PyFunceble.STATUS["official"]["up"]
+                    PyFunceble.STATUS.official.up
                 )
 
-                if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
+                if previous_state.lower() not in PyFunceble.STATUS.list.up:
                     # And we return the new status and source
 
                     PyFunceble.Logger().info(
@@ -596,7 +593,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                     return self.__http_status_code_up()
 
-            if self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_up"]:
+            if self.status_code in PyFunceble.HTTP_CODE.list.potentially_up:
                 # The extracted http status code is in the list of potentially up status.
 
                 # We generate the analytics files.
@@ -604,7 +601,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     "potentially_up"
                 )
 
-                if previous_state.lower() not in PyFunceble.STATUS["list"]["up"]:
+                if previous_state.lower() not in PyFunceble.STATUS.list.up:
 
                     PyFunceble.Logger().info(
                         "[{self.subject}] Switching status according to status code rule."
@@ -614,9 +611,9 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     return self.__http_status_code_up()
 
             if (
-                previous_state.lower() not in PyFunceble.STATUS["list"]["down"]
-                or previous_state.lower() not in PyFunceble.STATUS["list"]["invalid"]
-            ) and self.status_code in PyFunceble.HTTP_CODE["list"]["potentially_down"]:
+                previous_state.lower() not in PyFunceble.STATUS.list.down
+                or previous_state.lower() not in PyFunceble.STATUS.list.invalid
+            ) and self.status_code in PyFunceble.HTTP_CODE.list.potentially_down:
                 # The extracted http code is in the list of potentially down status code.
 
                 # We generate the analytics files.
@@ -640,7 +637,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         if (
-            not PyFunceble.CONFIGURATION["no_special"]
+            not PyFunceble.CONFIGURATION.no_special
             and PyFunceble.Check(self.subject).is_ipv4_range()
         ):
             # * We can run/check the special rule.
@@ -671,7 +668,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We convert the given previous state to lower case.
         previous_state_modified = previous_state.lower()
 
-        if previous_state_modified in PyFunceble.STATUS["list"]["up"]:
+        if previous_state_modified in PyFunceble.STATUS.list.up:
             # The previous state is in the list of up status.
 
             try:
@@ -691,13 +688,13 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             except TypeError:
                 pass
 
-        if previous_state_modified in PyFunceble.STATUS["list"]["valid"]:
+        if previous_state_modified in PyFunceble.STATUS.list.valid:
             # The previous state is in the list of valid status.
 
             # We return the given state and source, nothing changes.
             return previous_state, previous_source
 
-        if previous_state_modified in PyFunceble.STATUS["list"]["down"]:
+        if previous_state_modified in PyFunceble.STATUS.list.down:
             # The previous state is in the list of down status.
 
             try:
@@ -709,7 +706,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             except TypeError:
                 pass
 
-            if PyFunceble.HTTP_CODE["active"]:
+            if PyFunceble.HTTP_CODE.active:
                 # The http status code request is activated.
 
                 try:
@@ -721,10 +718,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                 except TypeError:
                     pass
 
-        if previous_state_modified in PyFunceble.STATUS["list"]["invalid"]:
+        if previous_state_modified in PyFunceble.STATUS.list.invalid:
             # The previous state is in the list of invalid status.
 
-            if PyFunceble.HTTP_CODE["active"]:
+            if PyFunceble.HTTP_CODE.active:
                 # The http status code request is activated.
 
                 try:
@@ -795,35 +792,34 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         # We set the status source.
         self.output["_status_source"] = self.output["status_source"] = "URL"
 
-        if self.output["url_syntax_validation"] or PyFunceble.CONFIGURATION["local"]:
+        if self.output["url_syntax_validation"] or PyFunceble.CONFIGURATION.local:
             # * The URL syntax is valid.
             # or
             # * We are testing in/for a local or private network URL.
 
             # We initiate the list of active status code.
             active_list = []
-            active_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_up"])
-            active_list.extend(PyFunceble.HTTP_CODE["list"]["up"])
+            active_list.extend(PyFunceble.HTTP_CODE.list.potentially_up)
+            active_list.extend(PyFunceble.HTTP_CODE.list.up)
 
             # We initiate the list of inactive status code.
             inactive_list = []
-            inactive_list.extend(PyFunceble.HTTP_CODE["list"]["potentially_down"])
-            inactive_list.append(PyFunceble.HTTP_CODE["not_found_default"])
+            inactive_list.extend(PyFunceble.HTTP_CODE.list.potentially_down)
+            inactive_list.append(PyFunceble.HTTP_CODE.not_found_default)
 
             if self.output["http_status_code"] in active_list:
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["up"]
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.up
             elif self.output["http_status_code"] in inactive_list:
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["down"]
-
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.down
         else:
             self.output["_status_source"] = self.output["status_source"] = "SYNTAX"
-            self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                "official"
-            ]["invalid"]
+            self.output["_status"] = self.output[
+                "status"
+            ] = PyFunceble.STATUS.official.invalid
 
         self.handle()
 
@@ -845,10 +841,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
         ).status_file(
             exclude_file_generation=self.exclude_file_generation
             and self.output["status"]
-            not in [
-                PyFunceble.STATUS["official"]["up"],
-                PyFunceble.STATUS["official"]["down"],
-            ]
+            not in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.down]
         )
 
         PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")
@@ -901,13 +894,13 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             # We are testing for URL syntax.
 
             if self.output["url_syntax_validation"]:
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["valid"]
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.valid
             else:
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["invalid"]
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.invalid
         elif self.subject_type in ["domain", "file_domain"]:
             # We are testing for domain or IP.
 
@@ -915,13 +908,13 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
                 self.output["domain_syntax_validation"]
                 or self.output["ipv4_syntax_validation"]
             ):
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["valid"]
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.valid
             else:
-                self.output["_status"] = self.output["status"] = PyFunceble.STATUS[
-                    "official"
-                ]["invalid"]
+                self.output["_status"] = self.output[
+                    "status"
+                ] = PyFunceble.STATUS.official.invalid
         else:
             raise ValueError("Please register the subject type.")
 

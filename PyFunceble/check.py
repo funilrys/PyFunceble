@@ -111,7 +111,7 @@ class Check:
                     self.subject, regex, return_data=True, rematch=True
                 ).match()[2]
 
-                if PyFunceble.CONFIGURATION["idna_conversion"]:
+                if PyFunceble.CONFIGURATION.idna_conversion:
                     # We have to convert the domain to IDNA.
 
                     # We convert the initial base to IDNA.
@@ -146,7 +146,7 @@ class Check:
                     if splited_base:
                         initial_base = base = splited_base[0]
 
-                    if PyFunceble.CONFIGURATION["idna_conversion"] and return_formatted:
+                    if PyFunceble.CONFIGURATION.idna_conversion and return_formatted:
                         # * We have to convert to IDNA.
                         # and
                         # * We have to return the converted full URL.

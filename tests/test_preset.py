@@ -101,14 +101,14 @@ class TestSwitch(TestCase):
         to True.
         """
 
-        PyFunceble.CONFIGURATION["helloworld"] = True
+        PyFunceble.CONFIGURATION.helloworld = True
 
         expected = False
         actual = Preset.switch("helloworld")
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["helloworld"]
+        del PyFunceble.CONFIGURATION.helloworld
 
     def test_switch_false(self):
         """
@@ -116,21 +116,21 @@ class TestSwitch(TestCase):
         to False.
         """
 
-        PyFunceble.CONFIGURATION["helloworld"] = False
+        PyFunceble.CONFIGURATION.helloworld = False
 
         expected = True
         actual = Preset.switch("helloworld")
 
         self.assertEqual(expected, actual)
 
-        del PyFunceble.CONFIGURATION["helloworld"]
+        del PyFunceble.CONFIGURATION.helloworld
 
     def test_switch_value_is_not_bool(self):
         """
         Test the case that we want to switch a switch which is not
         in bool format.
         """
-        PyFunceble.CONFIGURATION["helloworld"] = "Hello, World!"
+        PyFunceble.CONFIGURATION.helloworld = "Hello, World!"
 
         to_switch = "helloworld"
 
@@ -140,7 +140,7 @@ class TestSwitch(TestCase):
             lambda: Preset.switch(to_switch),
         )
 
-        del PyFunceble.CONFIGURATION["helloworld"]
+        del PyFunceble.CONFIGURATION.helloworld
 
 
 class TestsResetCounters(TestCase):

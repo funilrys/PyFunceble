@@ -349,6 +349,37 @@ class Dict:
         # We set the main dictionnary as the parsed dictionnary.
         self.main_dictionnary = main_dictionnary
 
+    def has_same_keys_as(self, to_check, loop=False):
+        """
+        A dirty solution which checks keys are presents in both
+        given :code:`dict`.
+
+        :param dict to_check: The dict to check.
+        :param bool loop:
+            DO NOT USE, only used to tell us wen to return the list of dataset
+            or the final result.
+        """
+
+        result = []
+
+        for key, value in to_check.items():
+            if key in self.main_dictionnary:
+                if isinstance(value, dict) and isinstance(
+                    self.main_dictionnary[key], dict
+                ):
+                    result.extend(
+                        Dict(self.main_dictionnary[key]).has_same_keys_as(
+                            value, loop=True
+                        )
+                    )
+                else:
+                    result.append(True)
+            else:
+                result.append(False)
+        if loop:
+            return result
+        return False not in result
+
     def remove_key(self, key_to_remove):
         """
         Remove a given key from a given dictionary.

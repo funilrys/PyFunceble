@@ -96,7 +96,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.9.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.10.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -192,16 +192,16 @@ ENV_FILENAME = ".pyfunceble-env"
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
 
 # We initiate the location where we are going to save our whole configuration content.
-CONFIGURATION = {}
+CONFIGURATION = None
 # We initiate the location where we are going to get all statuses.
-STATUS = {}
+STATUS = None
 # We initiate the location where we are going to get all outputs.
-OUTPUTS = {}
+OUTPUTS = None
 # We initiate the location where we are going to get the map of the classification
 # of each status codes for the analytic part.
-HTTP_CODE = {}
+HTTP_CODE = None
 # We initiate the location where we are going to get all links.
-LINKS = {}
+LINKS = None
 # We initiate a location which will have all internal data.
 INTERN = {
     "counter": {
@@ -604,37 +604,14 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
             pyfunceble.configuration.update(config_given_by_user)
     """
 
-    if "config_loaded" not in INTERN:
-        # The configuration was not already loaded.
+    # We load and download the different configuration file if they are non
+    # existant.
+    Load(CONFIG_DIRECTORY, custom)
 
-        # We load and download the different configuration file if they are non
-        # existant.
-        Load(CONFIG_DIRECTORY)
-
-        if generate_directory_structure:
-            # If we are not under test which means that we want to save informations,
-            # we initiate the directory structure.
-            DirectoryStructure()
-
-        # We save that the configuration was loaded.
-        INTERN.update({"config_loaded": True})
-
-    if custom and isinstance(custom, dict):
-        # The given configuration is not None or empty.
-        # and
-        # It is a dict.
-
-        # @TODO: Delete this in the future.
-        # We update the index which was renamed.
-        if "seconds_before_http_timeout" in custom:
-            custom["timeout"] = custom["seconds_before_http_timeout"]
-            del custom["seconds_before_http_timeout"]
-
-        # We update the configuration index.
-        CONFIGURATION.update(custom)
-
-        # We save the fact the the custom was loaded.
-        INTERN.update({"custom_loaded": True, "custom_config_loaded": custom})
+    if generate_directory_structure:
+        # If we are not under test which means that we want to save informations,
+        # we initiate the directory structure.
+        DirectoryStructure()
 
 
 def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
@@ -653,7 +630,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 # We load the configuration.
                 load_config(generate_directory_structure=False)
 
-                PARSER = argparse.ArgumentParser(
+                preset = Preset()
+
+                parser = argparse.ArgumentParser(
                     description="The tool to check the availability or syntax of domains, IPv4 or URL.",  # pylint: disable=line-too-long
                     epilog="Crafted with %s by %s"
                     % (
@@ -675,214 +654,213 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     add_help=False,
                 )
 
-                CURRENT_VALUE_FORMAT = (
+                current_value_format = (
                     Fore.YELLOW + Style.BRIGHT + "Configured value: " + Fore.BLUE
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-ad",
                     "--adblock",
                     action="store_true",
                     help="Switch the decoding of the adblock format. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["adblock"])
+                        current_value_format
+                        + repr(CONFIGURATION.adblock)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--aggressive", action="store_true", help=argparse.SUPPRESS
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-a",
                     "--all",
                     action="store_false",
                     help="Output all available information on the screen. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["less"])
+                        current_value_format
+                        + repr(CONFIGURATION.less)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "" "-c",
                     "--auto-continue",
                     "--continue",
                     action="store_true",
                     help="Switch the value of the auto continue mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["auto_continue"])
+                        current_value_format
+                        + repr(CONFIGURATION.auto_continue)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--autosave-minutes",
                     type=int,
                     help="Update the minimum of minutes before we start "
                     "committing to upstream under Travis CI. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["travis_autosave_minutes"])
+                        current_value_format
+                        + repr(CONFIGURATION.travis_autosave_minutes)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--clean",
                     action="store_true",
                     help="Clean all files under the output directory.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--clean-all",
                     action="store_true",
                     help="Clean all files under the output directory "
                     "along with all file generated by PyFunceble.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--cmd",
                     type=str,
                     help="Pass a command to run before each commit "
                     "(except the final one) under the Travis mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["command_before_end"])
+                        current_value_format
+                        + repr(CONFIGURATION.command_before_end)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--cmd-before-end",
                     type=str,
                     help="Pass a command to run before the results "
                     "(final) commit under the Travis mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["command_before_end"])
+                        current_value_format
+                        + repr(CONFIGURATION.command_before_end)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--commit-autosave-message",
                     type=str,
                     help="Replace the default autosave commit message. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["travis_autosave_commit"])
+                        current_value_format
+                        + repr(CONFIGURATION.travis_autosave_commit)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--commit-results-message",
                     type=str,
                     help="Replace the default results (final) commit message. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["travis_autosave_final_commit"])
+                        current_value_format
+                        + repr(CONFIGURATION.travis_autosave_final_commit)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
                     "A complement is for example `example.org` if `www.example.org` "
                     "is given and vice-versa. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["generate_complements"])
+                        current_value_format
+                        + repr(CONFIGURATION.generate_complements)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-d", "--domain", type=str, help="Set and test the given domain."
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-db",
                     "--database",
                     action="store_true",
                     help="Switch the value of the usage of a database to store "
                     "inactive domains of the currently tested list. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["inactive_database"])
+                        current_value_format
+                        + repr(CONFIGURATION.inactive_database)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--database-type",
                     type=str,
                     help="Tell us the type of database to use. "
                     "You can choose between the following: `json|mariadb|mysql` %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["db_type"])
+                        current_value_format
+                        + repr(CONFIGURATION.db_type)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-dbr",
                     "--days-between-db-retest",
                     type=int,
                     help="Set the numbers of days between each retest of domains present "
                     "into inactive-db.json. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["days_between_db_retest"])
+                        current_value_format
+                        + repr(CONFIGURATION.days_between_db_retest)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--debug", action="store_true", help=argparse.SUPPRESS
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--directory-structure",
                     action="store_true",
                     help="Generate the directory and files that are needed and which does "
                     "not exist in the current directory.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--dns",
                     nargs="+",
                     help="Set the DNS server(s) we have to work with. "
                     "Multiple space separated DNS server can be given. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(", ".join(CONFIGURATION["dns_server"]))
-                        if CONFIGURATION["dns_server"]
-                        else CURRENT_VALUE_FORMAT + "Follow OS DNS" + Style.RESET_ALL
+                        current_value_format + repr(", ".join(CONFIGURATION.dns_server))
+                        if CONFIGURATION.dns_server
+                        else current_value_format + "Follow OS DNS" + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-ex",
                     "--execution",
                     action="store_true",
                     help="Switch the default value of the execution time showing. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["show_execution_time"])
+                        current_value_format
+                        + repr(CONFIGURATION.show_execution_time)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-f",
                     "--file",
                     type=str,
@@ -890,347 +868,347 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--filter", type=str, help="Domain to filter (regex)."
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--help",
                     action="help",
                     default=argparse.SUPPRESS,
                     help="Show this help message and exit.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--hierarchical",
                     action="store_true",
                     help="Switch the value of the hierarchical sorting of the tested file. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["hierarchical_sorting"])
+                        current_value_format
+                        + repr(CONFIGURATION.hierarchical_sorting)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-h",
                     "--host",
                     action="store_true",
                     help="Switch the value of the generation of hosts file. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["generate_hosts"])
+                        current_value_format
+                        + repr(CONFIGURATION.generate_hosts)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--http",
                     action="store_true",
                     help="Switch the value of the usage of HTTP code. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(HTTP_CODE["active"])
+                        current_value_format
+                        + repr(CONFIGURATION.http_codes.active)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--iana",
                     action="store_true",
                     help="Update/Generate `iana-domains-db.json`.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--idna",
                     action="store_true",
                     help="Switch the value of the IDNA conversion. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["idna_conversion"])
+                        current_value_format
+                        + repr(CONFIGURATION.idna_conversion)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-ip",
                     type=str,
                     help="Change the IP to print in the hosts files with the given one. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["custom_ip"])
+                        current_value_format
+                        + repr(CONFIGURATION.custom_ip)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--json",
                     action="store_true",
                     help="Switch the value of the generation "
                     "of the JSON formatted list of domains. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["generate_json"])
+                        current_value_format
+                        + repr(CONFIGURATION.generate_json)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--less",
                     action="store_true",
                     help="Output less informations on screen. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(Preset().switch("less"))
+                        current_value_format
+                        + repr(preset.switch("less"))
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--local",
                     action="store_true",
                     help="Switch the value of the local network testing. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(Preset().switch("local"))
+                        current_value_format
+                        + repr(preset.switch("local"))
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--link", type=str, help="Download and test the given file."
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--mining",
                     action="store_true",
                     help="Switch the value of the mining subsystem usage. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["mining"])
+                        current_value_format
+                        + repr(CONFIGURATION.mining)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-m",
                     "--multiprocess",
                     action="store_true",
                     help="Switch the value of the usage of multiple process. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["multiprocess"])
+                        current_value_format
+                        + repr(CONFIGURATION.multiprocess)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-n",
                     "--no-files",
                     action="store_true",
                     help="Switch the value of the production of output files. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["no_files"])
+                        current_value_format
+                        + repr(CONFIGURATION.no_files)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-nl",
                     "--no-logs",
                     action="store_true",
                     help="Switch the value of the production of logs files "
                     "in the case we encounter some errors. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(not CONFIGURATION["logs"])
+                        current_value_format
+                        + repr(not CONFIGURATION.logs)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-ns",
                     "--no-special",
                     action="store_true",
                     help="Switch the value of the usage of the SPECIAL rules. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["no_special"])
+                        current_value_format
+                        + repr(CONFIGURATION.no_special)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-nu",
                     "--no-unified",
                     action="store_true",
                     help="Switch the value of the production unified logs "
                     "under the output directory. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["unified"])
+                        current_value_format
+                        + repr(CONFIGURATION.unified)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-nw",
                     "--no-whois",
                     action="store_true",
                     help="Switch the value the usage of whois to test domain's status. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["no_whois"])
+                        current_value_format
+                        + repr(CONFIGURATION.no_whois)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--percentage",
                     action="store_true",
                     help="Switch the value of the percentage output mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["show_percentage"])
+                        current_value_format
+                        + repr(CONFIGURATION.show_percentage)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--plain",
                     action="store_true",
                     help="Switch the value of the generation "
                     "of the plain list of domains. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["plain_list_domain"])
+                        current_value_format
+                        + repr(CONFIGURATION.plain_list_domain)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-p",
                     "--processes",
                     type=int,
                     help="Set the number of simultaneous processes to use while "
                     "using multiple processes. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["maximal_processes"])
+                        current_value_format
+                        + repr(CONFIGURATION.maximal_processes)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--production", action="store_true", help=argparse.SUPPRESS
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-psl",
                     "--public-suffix",
                     action="store_true",
                     help="Update/Generate `public-suffix.json`.",
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-q",
                     "--quiet",
                     action="store_true",
                     help="Run the script in quiet mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["quiet"])
+                        current_value_format
+                        + repr(CONFIGURATION.quiet)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--share-logs",
                     action="store_true",
                     help="Switch the value of the sharing of logs. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["share_logs"])
+                        current_value_format
+                        + repr(CONFIGURATION.share_logs)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-s",
                     "--simple",
                     action="store_true",
                     help="Switch the value of the simple output mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["simple"])
+                        current_value_format
+                        + repr(CONFIGURATION.simple)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--split",
                     action="store_true",
                     help="Switch the value of the split of the generated output files. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["inactive_database"])
+                        current_value_format
+                        + repr(CONFIGURATION.inactive_database)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--syntax",
                     action="store_true",
                     help="Switch the value of the syntax test mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["syntax"])
+                        current_value_format
+                        + repr(CONFIGURATION.syntax)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-t",
                     "--timeout",
                     type=int,
                     default=10,
                     help="Switch the value of the timeout. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["timeout"])
+                        current_value_format
+                        + repr(CONFIGURATION.timeout)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--travis",
                     action="store_true",
                     help="Switch the value of the Travis mode. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["travis"])
+                        current_value_format
+                        + repr(CONFIGURATION.travis)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "--travis-branch",
                     type=str,
                     default="master",
                     help="Switch the branch name where we are going to push. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["travis_branch"])
+                        current_value_format
+                        + repr(CONFIGURATION.travis_branch)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-u", "--url", type=str, help="Set and test the given URL."
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-uf",
                     "--url-file",
                     type=str,
@@ -1238,7 +1216,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "If a URL is given we download and test the list (of URL) of the given URL content.",  # pylint: disable=line-too-long
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-ua",
                     "--user-agent",
                     type=str,
@@ -1246,7 +1224,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-v",
                     "--version",
                     help="Show the version of PyFunceble and exit.",
@@ -1254,280 +1232,238 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     version="%(prog)s " + VERSION,
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-vsc",
                     "--verify-ssl-certificate",
                     action="store_true",
                     help="Switch the value of the verification of the "
                     "SSL/TLS certificate when testing for URL. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["verify_ssl_certificate"])
+                        current_value_format
+                        + repr(CONFIGURATION.verify_ssl_certificate)
                         + Style.RESET_ALL
                     ),
                 )
 
-                PARSER.add_argument(
+                parser.add_argument(
                     "-wdb",
                     "--whois-database",
                     action="store_true",
                     help="Switch the value of the usage of a database to store "
                     "whois data in order to avoid whois servers rate limit. %s"
                     % (
-                        CURRENT_VALUE_FORMAT
-                        + repr(CONFIGURATION["whois_database"])
+                        current_value_format
+                        + repr(CONFIGURATION.whois_database)
                         + Style.RESET_ALL
                     ),
                 )
 
-                ARGS = PARSER.parse_args()
+                args = parser.parse_args()
 
-                if ARGS.less:
-                    CONFIGURATION.update({"less": ARGS.less})
-                elif not ARGS.all:
-                    CONFIGURATION.update({"less": ARGS.all})
+                if args.less:
+                    CONFIGURATION.less = args.less
+                elif not args.all:
+                    CONFIGURATION.less = args.all
 
-                if ARGS.adblock:
-                    CONFIGURATION.update({"adblock": Preset().switch("adblock")})
+                if args.adblock:
+                    CONFIGURATION.adblock = preset.switch("adblock")
 
-                if ARGS.aggressive:
-                    CONFIGURATION.update({"aggressive": Preset().switch("aggressive")})
+                if args.aggressive:
+                    CONFIGURATION.aggressive = preset.switch("aggressive")
 
-                if ARGS.auto_continue:
-                    CONFIGURATION.update(
-                        {"auto_continue": Preset().switch("auto_continue")}
+                if args.auto_continue:
+                    CONFIGURATION.auto_continue = preset.switch("auto_continue")
+
+                if args.autosave_minutes:
+                    CONFIGURATION.travis_autosave_minutes = args.autosave_minutes
+
+                if args.cmd:
+                    CONFIGURATION.command = args.cmd
+
+                if args.cmd_before_end:
+                    CONFIGURATION.command_before_end = args.cmd_before_end
+
+                if args.commit_autosave_message:
+                    CONFIGURATION.travis_autosave_commit = args.commit_autosave_message
+
+                if args.commit_results_message:
+                    CONFIGURATION.travis_autosave_final_commit = (
+                        args.commit_results_message
                     )
 
-                if ARGS.autosave_minutes:
-                    CONFIGURATION.update(
-                        {"travis_autosave_minutes": ARGS.autosave_minutes}
+                if args.complements:
+                    CONFIGURATION.generate_complements = preset.switch(
+                        "generate_complements"
                     )
 
-                if ARGS.cmd:
-                    CONFIGURATION.update({"command": ARGS.cmd})
+                if args.database:
+                    CONFIGURATION.inactive_database = preset.switch("inactive_database")
 
-                if ARGS.cmd_before_end:
-                    CONFIGURATION.update({"command_before_end": ARGS.cmd_before_end})
-
-                if ARGS.commit_autosave_message:
-                    CONFIGURATION.update(
-                        {"travis_autosave_commit": ARGS.commit_autosave_message}
-                    )
-
-                if ARGS.commit_results_message:
-                    CONFIGURATION.update(
-                        {"travis_autosave_final_commit": ARGS.commit_results_message}
-                    )
-
-                if ARGS.complements:
-                    CONFIGURATION.update(
-                        {
-                            "generate_complements": Preset().switch(
-                                "generate_complements"
-                            )
-                        }
-                    )
-
-                if ARGS.database:
-                    CONFIGURATION.update(
-                        {"inactive_database": Preset().switch("inactive_database")}
-                    )
-
-                if ARGS.database_type:
-                    if ARGS.database_type.lower() in ["json", "mariadb", "mysql"]:
-                        CONFIGURATION.update({"db_type": ARGS.database_type.lower()})
+                if args.database_type:
+                    if args.database_type.lower() in ["json", "mariadb", "mysql"]:
+                        CONFIGURATION.db_type = args.database_type.lower()
                     else:
                         print(
                             Style.BRIGHT
                             + Fore.RED
                             + "Unknown database type: {0}".format(
-                                repr(ARGS.database_type)
+                                repr(args.database_type)
                             )
                         )
                         exit(1)
 
-                if ARGS.days_between_db_retest:
-                    CONFIGURATION.update(
-                        {"days_between_db_retest": ARGS.days_between_db_retest}
+                if args.days_between_db_retest:
+                    CONFIGURATION.days_between_db_retest = args.days_between_db_retest
+
+                if args.debug:
+                    CONFIGURATION.debug = preset.switch("debug")
+
+                if args.dns:
+                    CONFIGURATION.dns_server = args.dns
+
+                if args.execution:
+                    CONFIGURATION.show_execution_time = preset.switch(
+                        "show_execution_time"
                     )
 
-                if ARGS.debug:
-                    CONFIGURATION.update({"debug": Preset().switch("debug")})
+                if args.filter:
+                    CONFIGURATION.filter = args.filter
 
-                if ARGS.dns:
-                    CONFIGURATION.update({"dns_server": ARGS.dns})
-
-                if ARGS.execution:
-                    CONFIGURATION.update(
-                        {"show_execution_time": Preset().switch("show_execution_time")}
+                if args.hierarchical:
+                    CONFIGURATION.hierarchical_sorting = preset.switch(
+                        "hierarchical_sorting"
                     )
 
-                if ARGS.filter:
-                    CONFIGURATION.update({"filter": ARGS.filter})
+                if args.host:
+                    CONFIGURATION.generate_hosts = preset.switch("generate_hosts")
 
-                if ARGS.hierarchical:
-                    CONFIGURATION.update(
-                        {
-                            "hierarchical_sorting": Preset().switch(
-                                "hierarchical_sorting"
-                            )
-                        }
+                if args.http:
+                    CONFIGURATION.http_codes.active = preset.switch(
+                        CONFIGURATION.http_codes.active, True
                     )
 
-                if ARGS.host:
-                    CONFIGURATION.update(
-                        {"generate_hosts": Preset().switch("generate_hosts")}
-                    )
+                if args.idna:
+                    CONFIGURATION.idna_conversion = preset.switch("idna_conversion")
 
-                if ARGS.http:
-                    HTTP_CODE.update(
-                        {"active": Preset().switch(HTTP_CODE["active"], True)}
-                    )
+                if args.ip:
+                    CONFIGURATION.custom_ip = args.ip
 
-                if ARGS.idna:
-                    CONFIGURATION.update(
-                        {"idna_conversion": Preset().switch("idna_conversion")}
-                    )
+                if args.json:
+                    CONFIGURATION.generate_json = preset.switch("generate_json")
 
-                if ARGS.ip:
-                    CONFIGURATION.update({"custom_ip": ARGS.ip})
+                if args.local:
+                    CONFIGURATION.local = preset.switch("local")
 
-                if ARGS.json:
-                    CONFIGURATION.update(
-                        {"generate_json": Preset().switch("generate_json")}
-                    )
+                if args.mining:
+                    CONFIGURATION.mining = preset.switch("mining")
 
-                if ARGS.local:
-                    CONFIGURATION.update({"local": Preset().switch("local")})
+                if args.multiprocess:
+                    CONFIGURATION.multiprocess = preset.switch("multiprocess")
 
-                if ARGS.mining:
-                    CONFIGURATION.update({"mining": Preset().switch("mining")})
+                if args.no_files:
+                    CONFIGURATION.no_files = preset.switch("no_files")
 
-                if ARGS.multiprocess:
-                    CONFIGURATION.update(
-                        {"multiprocess": Preset().switch("multiprocess")}
-                    )
+                if args.no_logs:
+                    CONFIGURATION.logs = preset.switch("logs")
 
-                if ARGS.no_files:
-                    CONFIGURATION.update({"no_files": Preset().switch("no_files")})
+                if args.no_special:
+                    CONFIGURATION.no_special = preset.switch("no_special")
 
-                if ARGS.no_logs:
-                    CONFIGURATION.update({"logs": Preset().switch("logs")})
+                if args.no_unified:
+                    CONFIGURATION.unified = preset.switch("unified")
 
-                if ARGS.no_special:
-                    CONFIGURATION.update({"no_special": Preset().switch("no_special")})
+                if args.no_whois:
+                    CONFIGURATION.no_whois = preset.switch("no_whois")
 
-                if ARGS.no_unified:
-                    CONFIGURATION.update({"unified": Preset().switch("unified")})
+                if args.percentage:
+                    CONFIGURATION.show_percentage = preset.switch("show_percentage")
 
-                if ARGS.no_whois:
-                    CONFIGURATION.update({"no_whois": Preset().switch("no_whois")})
+                if args.plain:
+                    CONFIGURATION.plain_list_domain = preset.switch("plain_list_domain")
 
-                if ARGS.percentage:
-                    CONFIGURATION.update(
-                        {"show_percentage": Preset().switch("show_percentage")}
-                    )
+                if args.processes and args.processes >= 2:
+                    CONFIGURATION.maximal_processes = args.processes
 
-                if ARGS.plain:
-                    CONFIGURATION.update(
-                        {"plain_list_domain": Preset().switch("plain_list_domain")}
-                    )
+                if args.quiet:
+                    CONFIGURATION.quiet = preset.switch("quiet")
 
-                if ARGS.processes and ARGS.processes >= 2:
-                    CONFIGURATION.update({"maximal_processes": ARGS.processes})
+                if args.share_logs:
+                    CONFIGURATION.share_logs = preset.switch("share_logs")
 
-                if ARGS.quiet:
-                    CONFIGURATION.update({"quiet": Preset().switch("quiet")})
+                if args.simple:
+                    CONFIGURATION.simple = preset.switch("simple")
+                    CONFIGURATION.quiet = True
 
-                if ARGS.share_logs:
-                    CONFIGURATION.update({"share_logs": Preset().switch("share_logs")})
+                if args.split:
+                    CONFIGURATION.split = preset.switch("split")
 
-                if ARGS.simple:
-                    CONFIGURATION.update(
-                        {"simple": Preset().switch("simple"), "quiet": True}
-                    )
+                if args.syntax:
+                    CONFIGURATION.syntax = preset.switch("syntax")
 
-                if ARGS.split:
-                    CONFIGURATION.update({"split": Preset().switch("split")})
+                if args.timeout:
+                    CONFIGURATION.timeout = args.timeout
 
-                if ARGS.syntax:
-                    CONFIGURATION.update({"syntax": Preset().switch("syntax")})
+                if args.travis:
+                    CONFIGURATION.travis = preset.switch("travis")
 
-                if ARGS.timeout:
-                    CONFIGURATION.update({"timeout": ARGS.timeout})
+                if args.travis_branch:
+                    CONFIGURATION.travis_branch = args.travis_branch
 
-                if ARGS.travis:
-                    CONFIGURATION.update({"travis": Preset().switch("travis")})
+                if args.user_agent:
+                    CONFIGURATION.user_agent = args.user_agent
 
-                if ARGS.travis_branch:
-                    CONFIGURATION.update({"travis_branch": ARGS.travis_branch})
+                if args.verify_ssl_certificate:
+                    CONFIGURATION.verify_ssl_certificate = args.verify_ssl_certificate
 
-                if ARGS.user_agent:
-                    CONFIGURATION.update({"user_agent": ARGS.user_agent})
+                if args.whois_database:
+                    CONFIGURATION.whois_database = preset.switch("whois_database")
 
-                if ARGS.verify_ssl_certificate:
-                    CONFIGURATION.update(
-                        {"verify_ssl_certificate": ARGS.verify_ssl_certificate}
-                    )
-
-                if ARGS.whois_database:
-                    CONFIGURATION.update(
-                        {"whois_database": Preset().switch("whois_database")}
-                    )
-
-                if not CONFIGURATION["quiet"]:
+                if not CONFIGURATION.quiet:
                     CLICore.colorify_logo(home=True)
 
-                if ARGS.clean:
+                if args.clean:
                     Clean()
 
-                if ARGS.clean_all:
-                    Clean(ARGS.clean_all)
+                if args.clean_all:
+                    Clean(args.clean_all)
 
-                if ARGS.directory_structure:
+                if args.directory_structure:
                     DirectoryStructure()
 
-                if ARGS.iana:
+                if args.iana:
                     IANA().update()
 
-                if ARGS.production:
+                if args.production:
                     Production()
 
-                if ARGS.public_suffix:
+                if args.public_suffix:
                     PublicSuffix().update()
 
-                Logger().info(f"ARGS:\n{ARGS}")
-                Logger().debug(f"CONFIGURATION:\n{CONFIGURATION}")
+                Logger().info(f"ARGS:\n{args}")
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()
                 Version().print_message()
 
-                # We call our Core which will handle all case depending of the configuration or
-                # the used command line arguments.
-                Dispatcher(
-                    domain_or_ip=ARGS.domain,
-                    file_path=ARGS.file,
-                    url_to_test=ARGS.url,
-                    url_file_path=ARGS.url_file,
-                    link_to_test=ARGS.link,
-                )
-            except KeyError as e:
-                Logger().exception()
-
                 if not Version(True).is_cloned():
                     # We are not into the cloned version.
 
-                    # We merge the local with the upstream configuration.
-                    Merge(CONFIG_DIRECTORY)
-                else:
-                    # We are in the cloned version.
-
-                    # We raise the exception.
+                    # We run the merging logic.
                     #
-                    # Note: The purpose of this is to avoid having
-                    # to search for a mistake while developing.
-                    raise e
+                    # Note: Actually, it compared the local and the upstream configuration.
+                    # if a new key is present, it proposes the enduser to merge upstream
+                    # into the local configuration.
+                    Merge(CONFIG_DIRECTORY)
+
+                # We call our Core which will handle all case depending of the configuration or
+                # the used command line arguments.
+                Dispatcher(
+                    domain_or_ip=args.domain,
+                    file_path=args.file,
+                    url_to_test=args.url,
+                    url_file_path=args.url_file,
+                    link_to_test=args.link,
+                )
             except Exception as e:
                 Logger().exception()
 

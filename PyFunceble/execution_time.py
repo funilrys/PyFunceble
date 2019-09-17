@@ -113,13 +113,13 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
             percentage_output = (
                 PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["percentage"]
-                + PyFunceble.OUTPUTS["logs"]["filenames"]["percentage"]
+                + PyFunceble.OUTPUTS.parent_directory
+                + PyFunceble.OUTPUTS.logs.directories.parent
+                + PyFunceble.OUTPUTS.logs.directories.percentage
+                + PyFunceble.OUTPUTS.logs.filenames.percentage
             )
 
-            if PyFunceble.CONFIGURATION["show_percentage"] and PyFunceble.path.isfile(
+            if PyFunceble.CONFIGURATION.show_percentage and PyFunceble.path.isfile(
                 percentage_output
             ):
                 with open(percentage_output, "a", encoding="utf-8") as file_stream:
@@ -137,8 +137,8 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         if (
-            PyFunceble.CONFIGURATION["show_execution_time"]
-            or PyFunceble.CONFIGURATION["travis"]
+            PyFunceble.CONFIGURATION.show_execution_time
+            or PyFunceble.CONFIGURATION.travis
         ):
             return True
 
@@ -154,7 +154,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
         if (
             self.authorized
-            and PyFunceble.CONFIGURATION["logs"]
+            and PyFunceble.CONFIGURATION.logs
             and "file_to_test" in PyFunceble.INTERN
             and PyFunceble.INTERN["file_to_test"]
         ):
@@ -167,9 +167,9 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # We set the location of the file we are working with.
             self.file = (
                 PyFunceble.OUTPUT_DIRECTORY
-                + PyFunceble.OUTPUTS["parent_directory"]
-                + PyFunceble.OUTPUTS["logs"]["directories"]["parent"]
-                + PyFunceble.OUTPUTS["logs"]["filenames"]["execution_time"]
+                + PyFunceble.OUTPUTS.parent_directory
+                + PyFunceble.OUTPUTS.logs.directories.parent
+                + PyFunceble.OUTPUTS.logs.filenames.execution_time
             )
 
             if PyFunceble.path.isfile(self.file):

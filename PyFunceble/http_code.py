@@ -111,14 +111,14 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         self.subject_type = subject_type
 
         # We set the default status code.
-        self.default = PyFunceble.HTTP_CODE["not_found_default"]
+        self.default = PyFunceble.HTTP_CODE.not_found_default
 
-        if PyFunceble.CONFIGURATION["user_agent"]:
+        if PyFunceble.CONFIGURATION.user_agent:
             # The user-agent is given.
 
             # We append the user agent to the header we are going to parse with
             # the request.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION["user_agent"]}
+            self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
         else:
             # The user-agent is not given or is empty.
 
@@ -145,9 +145,9 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We get the head of the URL.
                 req = PyFunceble.requests.head(
                     self.subject,
-                    timeout=PyFunceble.CONFIGURATION["timeout"],
+                    timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
-                    verify=PyFunceble.CONFIGURATION["verify_ssl_certificate"],
+                    verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
                 )
             else:
                 # We are not globally testing a URL.
@@ -155,7 +155,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We get the head of the constructed URL.
                 req = PyFunceble.requests.head(
                     self.subject,
-                    timeout=PyFunceble.CONFIGURATION["timeout"],
+                    timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
                 )
 
@@ -190,7 +190,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         :rtype: str|int|None
         """
 
-        if PyFunceble.HTTP_CODE["active"]:
+        if PyFunceble.HTTP_CODE.active:
             # The http status code extraction is activated.
 
             # We get the http status code.
@@ -201,9 +201,9 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             list_of_valid_http_code = []
 
             for codes in [
-                PyFunceble.HTTP_CODE["list"]["up"],
-                PyFunceble.HTTP_CODE["list"]["potentially_down"],
-                PyFunceble.HTTP_CODE["list"]["potentially_up"],
+                PyFunceble.HTTP_CODE.list.up,
+                PyFunceble.HTTP_CODE.list.potentially_down,
+                PyFunceble.HTTP_CODE.list.potentially_up,
             ]:
                 # We loop throught the list of http status code.
 

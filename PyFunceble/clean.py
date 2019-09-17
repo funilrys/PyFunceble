@@ -92,7 +92,7 @@ class Clean:
 
         # We initiate the directory we have to look for.
         directory = "{0}{1}".format(
-            PyFunceble.OUTPUT_DIRECTORY, PyFunceble.OUTPUTS["parent_directory"]
+            PyFunceble.OUTPUT_DIRECTORY, PyFunceble.OUTPUTS.parent_directory
         )
 
         if not directory.endswith(PyFunceble.directory_separator):  # pragma: no cover
@@ -147,52 +147,37 @@ class Clean:
         # We initate the result variable.
         result = []
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if PyFunceble.CONFIGURATION.db_type == "json":
             # We initiate the directory we have to look for.
             directory = PyFunceble.CONFIG_DIRECTORY
 
             # We append the dir_structure file.
             result.append(
                 "{0}{1}".format(
-                    directory,
-                    PyFunceble.CONFIGURATION["outputs"]["default_files"][
-                        "dir_structure"
-                    ],
+                    directory, PyFunceble.OUTPUTS.default_files.dir_structure
                 )
             )
 
             # We append the iana file.
             result.append(
-                "{0}{1}".format(
-                    directory,
-                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["iana"],
-                )
+                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana)
             )
 
             # We append the public suffix file.
             result.append(
                 "{0}{1}".format(
-                    directory,
-                    PyFunceble.CONFIGURATION["outputs"]["default_files"][
-                        "public_suffix"
-                    ],
+                    directory, PyFunceble.OUTPUTS.default_files.public_suffix
                 )
             )
 
             # We append the inactive database file.
             result.append(
-                "{0}{1}".format(
-                    directory,
-                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["inactive_db"],
-                )
+                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
             )
 
             # We append the mining database file.
             result.append(
-                "{0}{1}".format(
-                    directory,
-                    PyFunceble.CONFIGURATION["outputs"]["default_files"]["mining"],
-                )
+                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
             )
 
         return result
@@ -231,10 +216,7 @@ class Clean:
         else:  # pragma: no cover
             query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
 
-        if PyFunceble.CONFIGURATION["db_type"] in [
-            "mariadb",
-            "mysql",
-        ]:  # pragma: no cover
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:  # pragma: no cover
             from PyFunceble.mysql import MySQL
 
             mysql_db = MySQL()

@@ -83,7 +83,7 @@ class TestClean(TestCase):
 
         self.file = (
             PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS["parent_directory"]
+            + PyFunceble.OUTPUTS.parent_directory
             + "hello_world"
         )
         self.types = ["up", "down", "invalid", "tested"]

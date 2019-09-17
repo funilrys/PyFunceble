@@ -82,8 +82,7 @@ class TestWhoisDB(TestCase):
         )
 
         self.file = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.OUTPUTS["default_files"]["whois_db"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.whois_db
         )
 
         self.expected_content = {
@@ -119,24 +118,24 @@ class TestWhoisDB(TestCase):
         Test the authorization method.
         """
 
-        PyFunceble.CONFIGURATION["no_whois"] = True
-        PyFunceble.CONFIGURATION["whois_database"] = False
+        PyFunceble.CONFIGURATION.no_whois = True
+        PyFunceble.CONFIGURATION.whois_database = False
         expected = False
 
         self.assertEqual(expected, self.whois_db.authorization())
 
-        PyFunceble.CONFIGURATION["no_whois"] = False
-        PyFunceble.CONFIGURATION["whois_database"] = False
+        PyFunceble.CONFIGURATION.no_whois = False
+        PyFunceble.CONFIGURATION.whois_database = False
 
         self.assertEqual(expected, self.whois_db.authorization())
 
-        PyFunceble.CONFIGURATION["no_whois"] = True
-        PyFunceble.CONFIGURATION["whois_database"] = True
+        PyFunceble.CONFIGURATION.no_whois = True
+        PyFunceble.CONFIGURATION.whois_database = True
 
         self.assertEqual(expected, self.whois_db.authorization())
 
-        PyFunceble.CONFIGURATION["no_whois"] = False
-        PyFunceble.CONFIGURATION["whois_database"] = True
+        PyFunceble.CONFIGURATION.no_whois = False
+        PyFunceble.CONFIGURATION.whois_database = True
         expected = True
 
         self.assertEqual(expected, self.whois_db.authorization())

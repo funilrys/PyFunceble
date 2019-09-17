@@ -230,7 +230,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: None|False|str
         """
 
-        if not PyFunceble.CONFIGURATION["local"]:
+        if not PyFunceble.CONFIGURATION.local:
             # We are not running a test in a local network.
 
             if self.domain_extension not in self.ignored_extension:
@@ -240,7 +240,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                 if self.domain_extension in PyFunceble.INTERN["iana_db"]:
                     # The domain extension is in the iana database.
 
-                    if not PyFunceble.CONFIGURATION["no_whois"]:
+                    if not PyFunceble.CONFIGURATION.no_whois:
                         # We are authorized to use WHOIS for the test result.
 
                         # We get the referer from the database.

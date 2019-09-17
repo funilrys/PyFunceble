@@ -143,7 +143,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         """
 
         for root, _, files in PyFunceble.walk(
-            PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS["parent_directory"]
+            PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS.parent_directory
         ):
             # We loop through the list of directories of the output directory.
 
@@ -173,7 +173,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 # We get the content of the current file.
                 file_content = file_instance.read().splitlines()
 
-                if not PyFunceble.CONFIGURATION["hierarchical_sorting"]:
+                if not PyFunceble.CONFIGURATION.hierarchical_sorting:
                     # We do not have to sort hierarchicaly.
 
                     # We sort the lines of the file standarly.
@@ -242,7 +242,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         # this is needed.
         index = "funilrys"
 
-        if PyFunceble.CONFIGURATION["db_type"] == "json":
+        if PyFunceble.CONFIGURATION.db_type == "json":
             # We create the manager data.
             manager_data = manager.list()
         else:
@@ -255,8 +255,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             processes = []
 
             while (
-                len(active) <= PyFunceble.CONFIGURATION["maximal_processes"]
-                and len(processes) <= PyFunceble.CONFIGURATION["maximal_processes"]
+                len(active) <= PyFunceble.CONFIGURATION.maximal_processes
+                and len(processes) <= PyFunceble.CONFIGURATION.maximal_processes
                 and not self.autosave.is_time_exceed()
             ):
                 # We loop untill we reach the maximal number of processes.
@@ -315,7 +315,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if manager_data is not None and PyFunceble.CONFIGURATION["db_type"] == "json":
+        if manager_data is not None and PyFunceble.CONFIGURATION.db_type == "json":
             if not self.autosave.authorized:
                 print(
                     PyFunceble.Fore.MAGENTA
@@ -369,7 +369,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             self.inactive_db.save()
             # We save the mining database.
             self.mining.save()
-        elif PyFunceble.CONFIGURATION["db_type"] in ["mariadb", "mysql"]:
+        elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
             # We generate the files if they were not previously generated.
             self.generate_files()
 

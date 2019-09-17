@@ -365,7 +365,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
     def __init__(self):
         # We get the destination of the constructed IANA database.
         self.destination = (
-            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["iana"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.iana
         )
 
         if PyFunceble.path.isfile(self.destination):
@@ -416,7 +416,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the  whois record related to the domain extension we are currently
         # working with.
         iana_record = PyFunceble.WhoisLookup(
-            "hello.{}".format(extension), PyFunceble.CONFIGURATION["iana_whois_server"]
+            "hello.{}".format(extension), PyFunceble.CONFIGURATION.iana_whois_server
         ).request()
 
         if iana_record and "refer" in iana_record:
@@ -521,13 +521,12 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         Update the content of `iana-domains-db.json` file.
         """
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
 
             # We print on screen what we are doing.
             print(
-                "Update of {0}".format(PyFunceble.OUTPUTS["default_files"]["iana"]),
-                end=" ",
+                "Update of {0}".format(PyFunceble.OUTPUTS.default_files.iana), end=" "
             )
 
         upstream_lines = (
@@ -536,7 +535,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             .split('<span class="domain tld">')
         )
 
-        with Pool(PyFunceble.CONFIGURATION["maximal_processes"]) as pool:
+        with Pool(PyFunceble.CONFIGURATION.maximal_processes) as pool:
             already_checked = []
             for extension, referer, referer_checked in pool.map(
                 self._get_extension_and_referer_from_block, upstream_lines
@@ -556,7 +555,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We save the content of the constructed database.
         Dict(self.iana_db).to_json(self.destination)
 
-        if not PyFunceble.CONFIGURATION["quiet"]:
+        if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
 
             # We indicate that the work is done without any issue.

@@ -83,12 +83,12 @@ class TestMining(TestCase):
             generate_directory_structure=False, custom={"db_type": "json"}
         )
 
-        PyFunceble.CONFIGURATION["mining"] = True
+        PyFunceble.CONFIGURATION.mining = True
 
         self.file_to_test = "this_file_is_a_ghost"
 
         self.file = (
-            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS["default_files"]["mining"]
+            PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.mining
         )
 
         self.excepted_content = {
@@ -104,7 +104,7 @@ class TestMining(TestCase):
         Setup every we do not need after the test.
         """
 
-        PyFunceble.CONFIGURATION["mining"] = False
+        PyFunceble.CONFIGURATION.mining = False
 
     def test_load_file_not_exist(self):
         """
