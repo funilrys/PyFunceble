@@ -138,7 +138,7 @@ if __name__ == "__main__":
         license="https://git.io/vh1mP",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=["PyFunceble"],
+        packages=["PyFunceble", "PyFunceble.config"],
         keywords=[
             "Python",
             "domain",
