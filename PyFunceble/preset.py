@@ -81,6 +81,7 @@ class Preset:  # pragma: no cover
     def __init__(self):
         self.timeout()
         self.syntax_test()
+        self.multiprocess()
 
     @classmethod
     def switch(
@@ -304,16 +305,21 @@ class Preset:  # pragma: no cover
         """
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            should_be_enabled = ["auto_continue", "whois_database"]
+            if PyFunceble.system().lower() not in PyFunceble.WINDOWS_PLATFORMS:
+                should_be_enabled = ["auto_continue", "whois_database"]
 
-            self.enable(should_be_enabled)
+                self.enable(should_be_enabled)
 
-            if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
-                print(
-                    f"{PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT}The "
-                    f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
-                    "is not recommended with the multiprocessing mode."
-                )
+                if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
+                    print(
+                        f"{PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT}The "
+                        f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
+                        "is not recommended with the multiprocessing mode."
+                    )
+
+                self.maximal_processes()
+            else:
+                self.disable("multiprocess")
 
     @classmethod
     def timeout(cls):

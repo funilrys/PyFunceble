@@ -85,9 +85,7 @@ class Logger:  # pragma: no cover
     def __init__(self, debug=False, on_screen=False, output_directory=None):
         if "logger" not in PyFunceble.INTERN:
             self.on_screen = (
-                on_screen
-                or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
-                or PyFunceble.CONFIGURATION.debug
+                on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
             )
 
             self.authorized = self.authorization(debug)
@@ -217,7 +215,7 @@ class Logger:  # pragma: no cover
                 # )
                 handler = RotatingFileHandler(
                     self.output_directory + f"{handler_type.lower()}.log",
-                    maxBytes=10000000,
+                    maxBytes=10_000_000,
                     backupCount=10,
                 )
 
