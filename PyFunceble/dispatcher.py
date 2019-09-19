@@ -114,7 +114,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         else:
             PyFunceble.CLICore.print_nothing_to_test()
 
-    def dispatch_file_test(self, file_path):
+    @classmethod
+    def dispatch_file_test(cls, file_path):
         """
         Dispatch to the right file testing logic.
 
@@ -128,7 +129,8 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         else:
             FileCore(file_path, "domain").read_and_test_file_content()
 
-    def dispatch_link_test(self, link_to_test):
+    @classmethod
+    def dispatch_link_test(cls, link_to_test):
         """
         Dispatch to the right link testing logic.
 
