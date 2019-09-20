@@ -96,17 +96,8 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 # We initiate the default resolver.
                 self.dns_resolver = dns.resolver.Resolver(configure=False)
 
-                if isinstance(dns_server, (list, tuple)):
-                    # We got a list of dns server.
-
-                    # We parse them.
-                    self.dns_resolver.nameservers = dns_server
-                else:
-                    # We got a dns server.
-
-                    # We parse it.
-                    self.dns_resolver.nameservers = [dns_server]
-
+                # We set the nameservers.
+                self.dns_resolver.nameservers = self.__get_dns_servers_from(dns_server)
             else:
                 # A dns server is not given.
 
@@ -126,6 +117,41 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             Logger().debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
 
             self.complete = complete
+
+    def __get_dns_servers_from(self, inputed_dns):  # pragma: no cover
+        """
+        Given a list or an input representing dns servers,
+        we ensure that we have a list of a string which
+        represent an IP.
+
+        :param input: The inputed DNS server(s).
+        :type input: str, list, tuple
+
+        :return: The list of dns server to use.
+        :rtype: list
+        """
+
+        if isinstance(inputed_dns, (list, tuple)):
+            result = []
+            for dns_server in inputed_dns:
+                result.extend(self.__get_dns_servers_from(dns_server))
+
+            return result
+
+        result = []
+        checker = Check(inputed_dns)
+
+        try:
+            if checker.is_domain():
+                result.extend(
+                    [x.address for x in dns.resolver.Resolver().query(inputed_dns)]
+                )
+            else:
+                result.append(inputed_dns)
+        except DNSException:
+            result.append(inputed_dns)
+
+        return result
 
     def a_record(self, subject=None, lifetime=3.0):  # pragma: no cover
         """

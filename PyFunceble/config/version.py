@@ -343,7 +343,9 @@ class Version:
 
                     if "type" in single_message:
                         if single_message["type"] == "info":
-                            coloration = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
+                            coloration = (
+                                PyFunceble.Fore.YELLOW + PyFunceble.Style.BRIGHT
+                            )
                         elif single_message["type"] == "warning":
                             coloration = (
                                 PyFunceble.Fore.MAGENTA + PyFunceble.Style.BRIGHT
@@ -351,7 +353,7 @@ class Version:
                         else:
                             coloration = PyFunceble.Fore.BLUE + PyFunceble.Style.BRIGHT
                     else:
-                        coloration = PyFunceble.Fore.BLUE + PyFunceble.Style.BRIGHT
+                        coloration = PyFunceble.Fore.CYAN + PyFunceble.Style.BRIGHT
 
                     if (
                         comparison is False or comparison is None

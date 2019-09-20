@@ -310,7 +310,11 @@ class Preset:  # pragma: no cover
 
                 self.enable(should_be_enabled)
 
-                if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
+                if (
+                    PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]
+                    and not PyFunceble.CONFIGURATION.simple
+                    and not PyFunceble.CONFIGURATION.quiet
+                ):
                     print(
                         f"{PyFunceble.Fore.RED + PyFunceble.Style.BRIGHT}The "
                         f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
