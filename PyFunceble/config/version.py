@@ -324,7 +324,11 @@ class Version:
         Prints some message if needed.
         """
 
-        if "messages" in self.upstream_data:
+        if (
+            "messages" in self.upstream_data
+            and not PyFunceble.CONFIGURATION.simple
+            and not PyFunceble.CONFIGURATION.quiet
+        ):
             messages = self.upstream_data["messages"]
 
             for minimal_version, data in messages.items():
