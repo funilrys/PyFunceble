@@ -96,7 +96,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.10.1.dev (Green Galago: Skitterbug)"
+VERSION = "2.10.2.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -1458,6 +1458,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 # We call our Core which will handle all case depending of the configuration or
                 # the used command line arguments.
                 Dispatcher(
+                    preset,
                     domain_or_ip=args.domain,
                     file_path=args.file,
                     url_to_test=args.url,

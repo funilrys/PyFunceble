@@ -83,6 +83,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
 
     def __init__(
         self,
+        preset,
         domain_or_ip=None,
         file_path=None,
         link_to_test=None,
@@ -90,9 +91,9 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         url_to_test=None,
     ):
         PyFunceble.Logger().debug(f"CONFIGURATION:\n{PyFunceble.CONFIGURATION}")
+        self.preset = preset
 
         if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
-            self.preset = PyFunceble.Preset()
 
             CLICore.logs_sharing()
             ExecutionTime("start")
