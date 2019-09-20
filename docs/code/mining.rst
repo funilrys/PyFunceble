@@ -4,7 +4,7 @@ Mining
 Problematic
 -----------
 
-How can we get the list of domain or URL which link to the desired domain, IPv4 or URL?
+How can we get the list of domain or URL which link to the desired domain, IPv4, IPv6 or URL?
 
 Documentation
 -------------

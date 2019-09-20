@@ -80,3 +80,4 @@ IP with range
 ^^^^^^^^^^^^^
 
 - All IPv4 with a range (for example :code:`0.0.0.0/24`) are returned as :code:`ACTIVE`
+- All IPv6 with a range (for example :code:`2001:db8::/43`) are returned as :code:`ACTIVE`

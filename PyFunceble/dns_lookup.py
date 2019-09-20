@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -365,12 +365,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def __request_not_ipv4(self):
+    def __request_not_ip(self):
         """
-        Handle the request for a subject which is not an IPv4.
+        Handle the request for a subject which is not an IP.
         """
 
-        Logger().debug(f"{repr(self.subject)} is not IPv4. Requesting record.")
+        Logger().debug(f"{repr(self.subject)} is not IP. Requesting record.")
 
         result = {}
 
@@ -447,12 +447,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def __request_ipv4(self):
+    def __request_ip(self):
         """
-        Handle the request for a subject which is IPv4.
+        Handle the request for a subject which is an IP.
         """
 
-        Logger().info(f"{repr(self.subject)} is IPv4. Requesting PTR record.")
+        Logger().info(f"{repr(self.subject)} is an IP. Requesting PTR record.")
 
         result = {}
 
@@ -510,17 +510,17 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         result = {}
 
-        if not Check(self.subject).is_ipv4():
+        if not Check(self.subject).is_ip():
             # We are looking for something which is not an IPv4.
 
-            temp_result = self.__request_not_ipv4()
+            temp_result = self.__request_not_ip()
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)
         else:
             # We are working with something which is an IPv4.
 
-            temp_result = self.__request_ipv4()
+            temp_result = self.__request_ip()
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)

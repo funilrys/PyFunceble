@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long, too-many-lines, invalid-name, cyclic-import
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -96,7 +96,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.10.2.dev (Green Galago: Skitterbug)"
+VERSION = "2.11.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -260,13 +260,17 @@ def test(subject, complete=False, config=None):  # pragma: no cover
             {
                 "_status_source": None,
                 "_status": None,
+                "dns_lookup": [],
                 "domain_syntax_validation": None,
                 "expiration_date": None,
                 "http_status_code": None,
-                "ip4_syntax_validation": None,
-                "dns_lookup": [],
-                "status_source": None,
+                "ipv4_range_syntax_validation": None,
+                "ipv4_syntax_validation": None,
+                "ipv6_range_syntax_validation": None,
+                "ipv6_syntax_validation": None,
                 "status": None,
+                "status_source": None,
+                "subdomain_syntax_validation": None,
                 "tested": None,
                 "url_syntax_validation": None,
                 "whois_record": None,
@@ -310,6 +314,31 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
         ::
 
             pyfunceble.configuration.update(config_given_by_user)
+
+    .. note::
+        If :code:`complete` is set to :code:`True`, we return the following indexes.
+
+        ::
+
+            {
+                "_status_source": None,
+                "_status": None,
+                "dns_lookup": [],
+                "domain_syntax_validation": None,
+                "expiration_date": None,
+                "http_status_code": None,
+                "ipv4_range_syntax_validation": None,
+                "ipv4_syntax_validation": None,
+                "ipv6_range_syntax_validation": None,
+                "ipv6_syntax_validation": None,
+                "status": None,
+                "status_source": None,
+                "subdomain_syntax_validation": None,
+                "tested": None,
+                "url_syntax_validation": None,
+                "whois_record": None,
+                "whois_server": None,
+            }
     """
 
     if subject:
@@ -494,6 +523,27 @@ def ipv4_syntax_check(ip):  # pragma: no cover
     return is_ipv4(ip)
 
 
+def is_ip(subject):  # pragma: no cover
+    """
+    Checks if the given subject is a syntactivally valid IPv4 or IPv6.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
+
+    :return: The syntax validity.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty nor None.
+
+        # We return the validity of the given subject.
+        return APICore(subject).ip_syntax()
+
+    # We return None, there is nothing to check.
+    return None
+
+
 def is_ipv4(subject):  # pragma: no cover
     """
     Check if the given subject is a syntactically valid IPv4.
@@ -510,6 +560,48 @@ def is_ipv4(subject):  # pragma: no cover
 
         # We return the validity of the given subject.
         return APICore(subject).ipv4_syntax()
+
+    # We return None, there is nothing to check.
+    return None
+
+
+def is_ipv6(subject):  # pragma: no cover
+    """
+    Checks if the given subject is syntactivally valid IPv6.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str, list
+
+    :return: The syntax validity.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty not None.
+
+        # We return the validity of the given subject.
+        return APICore(subject).ipv6_syntax()
+
+    # We return None, there is nothing to check.
+    return None
+
+
+def is_ip_range(subject):  # pragma: no cover
+    """
+    Check if the given subject is a syntactically valid IPv4 or IPv6 range.
+
+    :param subject: The subject to check the syntax from.
+    :type subject: str|list
+
+    :return: The IPv4 range state.
+    :rtype: bool|dict
+    """
+
+    if subject:
+        # The given subject is not empty nor None.
+
+        # We return the validity of the given subject.
+        return APICore(subject).ip_range_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -633,7 +725,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 preset = Preset()
 
                 parser = argparse.ArgumentParser(
-                    description="The tool to check the availability or syntax of domains, IPv4 or URL.",  # pylint: disable=line-too-long
+                    description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",  # pylint: disable=line-too-long
                     epilog="Crafted with %s by %s"
                     % (
                         Fore.RED + "♥" + Fore.RESET,

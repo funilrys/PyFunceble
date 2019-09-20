@@ -2,7 +2,7 @@ Whois Lookup
 ============
 
 .. note::
-    While testing using PyFunceble, subdomains and IPv4 are not used against our whois lookup logic.
+    While testing using PyFunceble, subdomains, IPv4 and IPv6 are not used against our whois lookup logic.
 
 Why do we need it?
 ------------------

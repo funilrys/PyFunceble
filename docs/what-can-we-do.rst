@@ -3,12 +3,15 @@ What can PyFunceble do?
 
 - Test of the availability of a domain.
 - Test of the availability of an IPv4.
+- Test of the availability of an IPv6.
 - Test of the availability of a URL.
 - Test of the availability of a domain/DNS name in a private or local network.
 - Test of the availability of an IPv4 in a private or local network.
+- Test of the availability of an IPv6 in a private or local network.
 - Test of the availability of a URL in a private or local network.
 - Test of the syntax of a domain.
 - Test of the syntax of an IPv4.
+- Test of the syntax of an IPv6.
 - Test of the syntax of a URL.
 - Test of domain or IP which are present into an Adblock formatted file.
 - Test from a given raw link.

@@ -18,7 +18,7 @@
     If this index is set to :code:`False`, every time we read a given file, we will consider one line as an element to test.
 
 :code:`aggressive`
----------------
+------------------
 
     **Type:** :code:`boolean`
 

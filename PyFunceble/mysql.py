@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -106,8 +106,7 @@ class MySQL:
         if self.authorized:
             self.initiated = False
 
-            if not self.are_tables_present():
-                self.create_tables()
+            self.create_tables_and_apply_patches()
 
     @classmethod
     def authorization(cls):
@@ -304,9 +303,9 @@ class MySQL:
 
         return True
 
-    def create_tables(self):
+    def create_tables_and_apply_patches(self):
         """
-        Create the tables of the database.
+        Create the tables of the database and apply the patches.
         """
 
         if self.authorized:
@@ -314,4 +313,6 @@ class MySQL:
                 for statement in self.parse_mysql_sql_file():
                     cursor.execute(statement)
 
-                PyFunceble.Logger().info("Created the missing tables.")
+                PyFunceble.Logger().info(
+                    "Created the missing tables. Applied all patched"
+                )

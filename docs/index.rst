@@ -1,8 +1,8 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
     :alt: PyFunceble logo
 
-The tool to check the availability or syntax of domains, IPv4 or URL.
-=====================================================================
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+===========================================================================
 
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y

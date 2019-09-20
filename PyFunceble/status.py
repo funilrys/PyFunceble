@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -132,6 +132,8 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                     "http_status_code": PyFunceble.HTTP_CODE.not_found_default,
                     "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
                     "ipv4_syntax_validation": self.checker.is_ipv4(),
+                    "ipv6_range_syntax_validation": self.checker.is_ipv6_range(),
+                    "ipv6_syntax_validation": self.checker.is_ipv6(),
                     "subdomain_syntax_validation": self.checker.is_subdomain(),
                     "tested": self.subject,
                     "url_syntax_validation": self.checker.is_url(),
@@ -139,9 +141,13 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                 }
             )
 
+            ip_validation = (
+                self.output["ipv4_syntax_validation"]
+                or self.output["ipv6_syntax_validation"]
+            )
+
             if PyFunceble.CONFIGURATION.local or (
-                self.output["domain_syntax_validation"]
-                or self.output["ipv4_syntax_validation"]
+                self.output["domain_syntax_validation"] or ip_validation
             ):
                 self.output["http_status_code"] = HTTPCode(
                     self.subject, self.subject_type
@@ -173,7 +179,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                             http_status_code=self.output["http_status_code"],
                             whois_server=self.output["whois_server"],
                             filename=self.filename,
-                            ip_validation=self.output["ipv4_syntax_validation"],
+                            ip_validation=ip_validation,
                         ).status_file(
                             exclude_file_generation=self.exclude_file_generation
                             and self.output["status"]
@@ -185,23 +191,16 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                     else:
                         self.output["_status_source"] = "DNSLOOKUP"
                         self.handle(
-                            status="inactive",
-                            ip_validation_status=self.output["ipv4_syntax_validation"],
+                            status="inactive", ip_validation_status=ip_validation
                         )
                 else:
                     self.output["_status_source"] = "DNSLOOKUP"
-                    self.handle(
-                        status="inactive",
-                        ip_validation_status=self.output["ipv4_syntax_validation"],
-                    )
+                    self.handle(status="inactive", ip_validation_status=ip_validation)
             else:
                 self.output["_status_source"] = "SYNTAX"
                 self.output["_status"] = PyFunceble.STATUS.official.invalid
 
-                self.handle(
-                    status="invalid",
-                    ip_validation_status=self.output["ipv4_syntax_validation"],
-                )
+                self.handle(status="invalid", ip_validation_status=ip_validation)
 
             return self.output
 
@@ -626,7 +625,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We return None, there is no changes.
         return None
 
-    def __handle_ipv4_range(self):
+    def __handle_ip_range(self):
         """
         Handle the IP range status escalation.
 
@@ -638,14 +637,14 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         if (
             not PyFunceble.CONFIGURATION.no_special
-            and PyFunceble.Check(self.subject).is_ipv4_range()
+            and PyFunceble.Check(self.subject).is_ip_range()
         ):
             # * We can run/check the special rule.
             # and
-            # * The element we are currently testing is an IPv4 with range.
+            # * The element we are currently testing is an IP range.
 
             PyFunceble.Logger().info(
-                "[{self.subject}] Switching status according to IPv4 range rule."
+                "[{self.subject}] Switching status according to IP range rule."
             )
 
             # We return the new status and source.
@@ -700,7 +699,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             try:
                 # We try to get the new status and source from another handler.
 
-                new_status, source = self.__handle_ipv4_range()
+                new_status, source = self.__handle_ip_range()
 
                 return new_status, source
             except TypeError:
@@ -767,16 +766,18 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We initiate what we are going to return.
         self.output = {
+            "dns_lookup": None,
             "domain_syntax_validation": None,
             "expiration_date": None,
+            "http_status_code": HTTPCode(self.subject, "url").get(),
             "ipv4_range_syntax_validation": None,
             "ipv4_syntax_validation": None,
+            "ipv6_range_syntax_validation": None,
+            "ipv6_syntax_validation": None,
             "subdomain_syntax_validation": None,
             "tested": self.subject,
             "url_syntax_validation": self.checker.is_url(),
             "whois_server": None,
-            "http_status_code": HTTPCode(self.subject, "url").get(),
-            "dns_lookup": None,
         }
 
         PyFunceble.Logger().debug(f"[{self.subject}] File: {self.filename}")
@@ -875,6 +876,8 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             "http_status_code": None,
             "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
             "ipv4_syntax_validation": self.checker.is_ipv4(),
+            "ipv6_range_syntax_validation": self.checker.is_ipv6_range(),
+            "ipv6_syntax_validation": self.checker.is_ipv6(),
             "subdomain_syntax_validation": self.checker.is_subdomain(),
             "tested": self.subject,
             "url_syntax_validation": self.checker.is_url(),
@@ -907,6 +910,7 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             if (
                 self.output["domain_syntax_validation"]
                 or self.output["ipv4_syntax_validation"]
+                or self.output["ipv6_syntax_validation"]
             ):
                 self.output["_status"] = self.output[
                     "status"
@@ -934,7 +938,8 @@ class SyntaxStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             self.output["status"],
             source=self.output["status_source"],
             filename=self.filename,
-            ip_validation=self.output["ipv4_syntax_validation"],
+            ip_validation=self.output["ipv4_syntax_validation"]
+            or self.output["ipv6_syntax_validation"],
         ).status_file()
 
         PyFunceble.Logger().debug(f"[{self.subject}] State:\n{self.output}")

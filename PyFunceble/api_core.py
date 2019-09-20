@@ -1,6 +1,6 @@
 # pylint: disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -246,6 +246,38 @@ class APICore:
         # We return the validity of the given subject.
         return PyFunceble.Check(self.subject).is_ipv4()
 
+    def ipv6_syntax(self):
+        """
+        Run an IPv6 syntax check over the given subject.
+        """
+
+        if isinstance(self.subject, list):
+            # The given subject is a list of subject.
+
+            # We return the validity of each subjects.
+            return {
+                subject: PyFunceble.Check(subject).is_ipv6() for subject in self.subject
+            }
+
+        # We return the validity of the given subject.
+        return PyFunceble.Check(self.subject).is_ipv6()
+
+    def ip_syntax(self):
+        """
+        Run an IP syntax check over the given subject.
+        """
+
+        if isinstance(self.subject, list):
+            # The given subject is a list of subject.
+
+            # We return the validity of each subjects.
+            return {
+                subject: PyFunceble.Check(subject).is_ip() for subject in self.subject
+            }
+
+        # We return the validity of the given subject.
+        return PyFunceble.Check(self.subject).is_ip()
+
     def ipv4_range_syntax(self):
         """
         Run an IPv4 range syntax check over the given subject.
@@ -262,6 +294,40 @@ class APICore:
 
         # We return the validity of the given subject.
         return PyFunceble.Check(self.subject).is_ipv4_range()
+
+    def ipv6_range_syntax(self):
+        """
+        Run an IPv6 range syntax check over the given subject.
+        """
+
+        if isinstance(self.subject, list):
+            # The given subjet is a list of subject.
+
+            # We return the validity of each subjects.
+            return {
+                subject: PyFunceble.Check(subject).is_ipv6_range()
+                for subject in self.subject
+            }
+
+        # We return the validity of the given subject.
+        return PyFunceble.Check(self.subject).is_ipv6_range()
+
+    def ip_range_syntax(self):
+        """
+        Run an IP range syntax check over the given subject.
+        """
+
+        if isinstance(self.subject, list):
+            # The given subjet is a list of subject.
+
+            # We return the validity of each subjects.
+            return {
+                subject: PyFunceble.Check(subject).is_ip_range()
+                for subject in self.subject
+            }
+
+        # We return the validity of the given subject.
+        return PyFunceble.Check(self.subject).is_ip_range()
 
     def url(self):
         """

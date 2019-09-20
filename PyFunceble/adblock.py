@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -394,7 +394,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
                     # We create an instance of the checker.
                     checker = Check(data)
 
-                    if data and (checker.is_domain() or checker.is_ipv4()):
+                    if data and (checker.is_domain() or checker.is_ip()):
                         # The extraced base is not empty.
                         # and
                         # * The currently read line is a valid domain.

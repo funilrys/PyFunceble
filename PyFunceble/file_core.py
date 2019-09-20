@@ -1,6 +1,6 @@
 # pylint: disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -152,11 +152,13 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 "(tested, file_path, _status, status, _status_source, status_source, "
                 "domain_syntax_validation, expiration_date, http_status_code, "
                 "ipv4_range_syntax_validation, ipv4_syntax_validation, "
+                "ipv6_range_syntax_validation, ipv6_syntax_validation, "
                 "subdomain_syntax_validation, url_syntax_validation, whois_server, digest) "
                 "VALUES (%(tested)s, %(file_path)s, %(_status)s, %(status)s, %(_status_source)s, "
                 "%(status_source)s, %(domain_syntax_validation)s, "
                 "%(expiration_date)s, %(http_status_code)s, "
                 "%(ipv4_range_syntax_validation)s, %(ipv4_syntax_validation)s, "
+                "%(ipv6_range_syntax_validation)s, %(ipv6_syntax_validation)s, "
                 "%(subdomain_syntax_validation)s, "
                 "%(url_syntax_validation)s, %(whois_server)s, %(digest)s)"
             ).format(table_name)
@@ -168,6 +170,8 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 "expiration_date = %(expiration_date)s, http_status_code = %(http_status_code)s, "
                 "ipv4_range_syntax_validation = %(ipv4_range_syntax_validation)s, "
                 "ipv4_syntax_validation = %(ipv4_syntax_validation)s, "
+                "ipv6_range_syntax_validation = %(ipv6_range_syntax_validation)s, "
+                "ipv6_syntax_validation = %(ipv6_syntax_validation)s, "
                 "subdomain_syntax_validation = %(subdomain_syntax_validation)s, "
                 "url_syntax_validation = %(url_syntax_validation)s, "
                 "whois_server = %(whois_server)s "
@@ -523,7 +527,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         if (
             not PyFunceble.CONFIGURATION.local
-            and PyFunceble.Check(subject).is_reserved_ipv4()
+            and PyFunceble.Check(subject).is_reserved_ip()
         ):
             # * We are not testing for local components.
             # and
@@ -684,7 +688,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         to_select = (
             "SELECT tested as subject, status, status_source, expiration_date, "
-            "http_status_code, whois_server, file_path, ipv4_syntax_validation "
+            "http_status_code, whois_server, file_path "
             "FROM {0} WHERE status = %(official_status)s "
             "AND file_path = %(file_path)s ORDER BY subject ASC"
         ).format(self.mysql_db.tables["tested"])

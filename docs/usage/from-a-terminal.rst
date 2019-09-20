@@ -591,7 +591,7 @@ Global overview
                     [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
                     [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
-    The tool to check the availability or syntax of domains, IPv4 or URL.
+    The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
     optional arguments:
         -ad, --adblock        Switch the decoding of the adblock format.

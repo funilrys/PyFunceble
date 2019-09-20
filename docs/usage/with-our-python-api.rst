@@ -294,7 +294,7 @@ Check the syntax of IPv4s
     """
     This is an example which respond to the following problematic(s):
 
-        * How can I check the syntax of an IPv4 with PyFunceble ?
+        * How can I check the syntax of an IPv4/IPv6 with PyFunceble ?
     """
 
     # We want some coloration so we import the tool do to that :)
@@ -304,7 +304,7 @@ Check the syntax of IPv4s
     # We import the configuration loader.
     from PyFunceble import load_config
     # We import the test method of the PyFunceble API.
-    from PyFunceble import is_ipv4 as PyFunceble
+    from PyFunceble import is_ip as PyFunceble
 
     # We initiate the list of IPs we are going to test.
     IPS = ["216.58.207.46", "257.58.207.46"]
