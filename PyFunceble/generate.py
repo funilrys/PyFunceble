@@ -61,6 +61,7 @@ License:
 # pylint: enable=line-too-long
 import PyFunceble
 from PyFunceble import directory_separator
+from PyFunceble.auto_save import Travis
 from PyFunceble.percentage import Percentage
 from PyFunceble.prints import Prints
 
@@ -844,6 +845,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
                 # We print the information on screen.
                 Prints(data_to_print, "Generic").data()
+        elif Travis.authorization():
+            # We are under Travis CI.
+
+            # We print a dot.
+            print(".")
 
     def status_file(
         self, exclude_file_generation=False
