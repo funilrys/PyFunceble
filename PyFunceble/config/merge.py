@@ -124,6 +124,10 @@ class Merge:  # pylint: disable=too-few-public-methods
             Dict(self.upstream_config).merge(self.local_config)
         ).remove_key(to_remove)
 
+        if "seconds_before_http_timeout" in self.new_config:
+            self.new_config["timout"] = self.new_config["seconds_before_http_timeout"]
+            del self.new_config["seconds_before_http_timeout"]
+
     def _save(self):
         """
         Save the new configuration inside the configuration file.

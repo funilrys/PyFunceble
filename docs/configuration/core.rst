@@ -440,7 +440,7 @@
 
     **Type:** :code:`integer`
 
-    **Default value:** :code:`10`
+    **Default value:** :code:`5`
 
     **Description:** Set the timeout to apply everytime it's possible to set one.
 
