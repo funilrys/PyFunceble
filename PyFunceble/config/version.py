@@ -59,7 +59,7 @@ License:
 """
 
 import PyFunceble
-from PyFunceble.helpers import Dict, Download, File
+from PyFunceble.helpers import Dict, Download
 
 
 class Version:
@@ -92,11 +92,6 @@ class Version:
             # usable.
             self.upstream_data = Dict().from_yaml(
                 Download(upstream_link, return_data=True).text()
-            )
-
-            # We get the local content.
-            self.local_data = Dict().from_yaml(
-                File(PyFunceble.CONFIG_DIRECTORY + "version.yaml").read()
             )
 
     @classmethod
