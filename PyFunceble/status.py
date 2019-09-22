@@ -149,9 +149,15 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             if PyFunceble.CONFIGURATION.local or (
                 self.output["domain_syntax_validation"] or ip_validation
             ):
-                self.output["http_status_code"] = HTTPCode(
-                    self.subject, self.subject_type
-                ).get()
+
+                if self.output["ipv6_syntax_validation"]:
+                    self.output["http_status_code"] = HTTPCode(
+                        self.subject, "ipv6"
+                    ).get()
+                else:
+                    self.output["http_status_code"] = HTTPCode(
+                        self.subject, self.subject_type
+                    ).get()
 
                 if not self.output["subdomain_syntax_validation"]:
                     self.output["expiration_date"], self.output[

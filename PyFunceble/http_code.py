@@ -98,12 +98,17 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             # We initiate the element we have to get.
             self.subject = subject
         elif subject_type in ["domain", "file_domain"]:
-            # We are working with domain.
+            # We are working with domain/IPv4.
 
             # We construct the element we have to get.
             # Note: As we may work with IP, we explicitly set the port we are
             # working with.
             self.subject = "http://%s:80" % subject
+        elif subject_type in ["ipv6"]:
+            # We are working with an IPv6
+
+            # We construct the element we have to get.
+            self.subject = "http://[%s]:80" % subject
         else:
             raise Exception("Unknow subject type.")
 
@@ -157,6 +162,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                     self.subject,
                     timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
+                    verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
                 )
 
             PyFunceble.Logger().debug(f"Status Code: {req.status_code}")
