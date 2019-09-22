@@ -130,16 +130,11 @@ class WhoisLookup:
         if timeout:
             # The timeout is given.
 
-            if isinstance(timeout, int):
+            if isinstance(timeout, (int, float)):
                 # The timeout is an int
 
                 # We share it.
-                self.timeout = timeout
-            elif timeout.isdigit():
-                # The timeout is a str digit.
-
-                # We convert it to int and share it.
-                self.timeout = int(timeout)
+                self.timeout = float(timeout)
             else:
                 # The timeout is something we could not understand.
 
@@ -159,11 +154,8 @@ class WhoisLookup:
             # We initiate a socket for the request.
             req = socket(AF_INET, SOCK_STREAM)
 
-            if self.timeout % 3 == 0:
-                # The timeout is a modulo of 3.
-
-                # We set the timeout.
-                req.settimeout(self.timeout)
+            # We set the timeout.
+            req.settimeout(self.timeout)
 
             try:
                 # We try to connect to the whois server at the port 43.

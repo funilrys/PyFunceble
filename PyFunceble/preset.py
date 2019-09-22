@@ -334,7 +334,14 @@ class Preset:  # pragma: no cover
         if cls.__are_we_allowed_to_overwrite("timeout") and (
             not PyFunceble.CONFIGURATION.timeout or PyFunceble.CONFIGURATION.timeout < 3
         ):
-            PyFunceble.CONFIGURATION.timeout = 3
+            PyFunceble.CONFIGURATION.timeout = float(3)
+
+            PyFunceble.Logger().debug(
+                f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
+            )
+
+        if not isinstance(PyFunceble.CONFIGURATION.timeout, float):
+            PyFunceble.CONFIGURATION.timeout = float(PyFunceble.CONFIGURATION.timeout)
 
             PyFunceble.Logger().debug(
                 f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
