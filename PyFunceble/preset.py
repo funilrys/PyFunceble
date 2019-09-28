@@ -299,6 +299,9 @@ class Preset:  # pragma: no cover
         self.disable(should_be_disabled)
         self.enable(should_be_enabled)
 
+        if PyFunceble.CONFIGURATION.api_file_generation:
+            PyFunceble.CONFIGURATION.no_files = False
+
     def multiprocess(self):
         """
         Prepare the global configuration for a test with multiple processes.

@@ -63,6 +63,7 @@ script:
   - python .travis/complementary/advanced_example.py
   - python .travis/complementary/loop_example.py
   - python .travis/complementary/custom_configuration.py
+  - python .travis/complementary/api_file_generation.py
 
 after_success:
   - python-codacy-coverage -r coverage.xml
