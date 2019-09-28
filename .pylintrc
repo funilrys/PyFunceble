@@ -141,7 +141,8 @@ disable=print-statement,
         comprehension-escape,
         bad-continuation,
         logging-fstring-interpolation,
-        logging-format-interpolation
+        logging-format-interpolation,
+        access-member-before-definition
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
