@@ -62,6 +62,7 @@ License:
 
 import argparse
 import socket
+import sys
 import warnings
 from collections import OrderedDict
 from datetime import datetime, timedelta
@@ -1402,7 +1403,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                                 repr(args.database_type)
                             )
                         )
-                        exit(1)
+                        sys.exit(1)
 
                 if args.days_between_db_retest:
                     CONFIGURATION.days_between_db_retest = args.days_between_db_retest

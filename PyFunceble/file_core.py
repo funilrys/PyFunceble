@@ -640,22 +640,20 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 if not PyFunceble.CONFIGURATION.adblock:
                     formatted_subjects = set(pool.map(self._format_line, file_object))
                 else:
-                    formatted_subjects = {
-                        x
-                        for x in AdBlock(
+                    formatted_subjects = set(
+                        AdBlock(
                             file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
                         ).decode()
-                    }
+                    )
         else:
             if not PyFunceble.CONFIGURATION.adblock:
                 formatted_subjects = {self._format_line(x) for x in file_object}
             else:
-                formatted_subjects = {
-                    x
-                    for x in AdBlock(
+                formatted_subjects = set(
+                    AdBlock(
                         file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
                     ).decode()
-                }
+                )
 
         subjects_to_test = (
             formatted_subjects

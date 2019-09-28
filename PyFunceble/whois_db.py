@@ -256,7 +256,8 @@ class WhoisDB:
                     result[index] = data
 
                     continue
-                elif isinstance(data, dict):
+
+                if isinstance(data, dict):
                     # The read data is a dict.
 
                     # We save the content of of the currently read dataset

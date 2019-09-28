@@ -248,7 +248,7 @@ class Version:
                     print(message)
 
                     # We exit PyFunceble with the code 1.
-                    exit(1)
+                    PyFunceble.sys.exit(1)
             elif checked or checked is not False and not checked:
                 # The quiet mode is activated and the current version
                 # is less or equal to the minimal version.

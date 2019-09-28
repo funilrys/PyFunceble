@@ -291,7 +291,7 @@ class Travis:
             Command(command).execute()
             PyFunceble.Logger().info(f"Executed: {command}")
 
-            exit(0)
+            PyFunceble.sys.exit(0)
 
     def end_commit(self):
         """

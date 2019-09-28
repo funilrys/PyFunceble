@@ -221,7 +221,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             # We finally exit.
             self.__merge_processes_data(manager_data)
 
-            exit(1)
+            PyFunceble.sys.exit(1)
 
     def __run_multiprocess_test(self, to_test, manager):
         """

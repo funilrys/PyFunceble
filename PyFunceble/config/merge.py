@@ -190,7 +190,7 @@ class Merge:  # pylint: disable=too-few-public-methods
                         # And we break the loop as we got a satisfied response.
                         break
 
-                    elif response.lower() == "n":
+                    if response.lower() == "n":
                         # The response is a `n` or `N`.
 
                         # We inform the user that something went wrong.

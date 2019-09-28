@@ -86,9 +86,7 @@ class Percentage:
             # * It is a dictionnary.
 
             # We update the counter from the currently read data.
-            PyFunceble.INTERN["counter"]["number"].update(
-                {x: y for x, y in init.items()}
-            )
+            PyFunceble.INTERN["counter"]["number"].update(init)
 
     def count(self):
         """

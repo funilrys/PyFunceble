@@ -178,7 +178,7 @@ class Production:  # pylint: disable=too-few-public-methods
                 print(message)
 
                 # We exit the process.
-                exit(0)
+                PyFunceble.sys.exit(0)
             else:
                 # The local version is less or equal to the older one.
 
@@ -190,7 +190,7 @@ class Production:  # pylint: disable=too-few-public-methods
                 )
 
                 # We exit the process.
-                exit(1)
+                PyFunceble.sys.exit(1)
 
     def _update_urls(self):
         """

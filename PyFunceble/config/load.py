@@ -136,7 +136,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                             # And we break the loop as we got a satisfied response.
                             break
 
-                        elif response.lower() == "n":
+                        if response.lower() == "n":
                             # The response is a `n` or `N`.
 
                             # We inform the user that something went wrong.

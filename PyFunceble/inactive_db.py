@@ -137,9 +137,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         if subject in self[element]:
                             self.is_present_cache[subject] = True
                             break
-                        else:  # pragma: no cover
-                            self.is_present_cache[subject] = False
-                            continue
+
+                        self.is_present_cache[subject] = False  # pragma: no cover
 
                     if subject not in self.is_present_cache:
                         self.is_present_cache[subject] = False
