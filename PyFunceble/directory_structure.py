@@ -93,11 +93,16 @@ class DirectoryStructure:  # pragma: no cover
 
             # We backup the directory structure.
             self.backup()
-        else:
+        elif "structure_already_generated" not in PyFunceble.INTERN:
             # We are not preparing the repository for production.
 
             # We restore the directory structure.
             self.restore()
+
+            # We inform all future logic that the generation was
+            # already done in the current session.
+            PyFunceble.INTERN["structure_already_generated"] = True
+            print("loaded")
 
     def backup(self):
         """

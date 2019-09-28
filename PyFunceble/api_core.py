@@ -94,14 +94,10 @@ class APICore:
 
         # We share the complete option.
         self.complete = complete
-        # We share the configuration.
-        self.configuration = configuration
 
         # We load the global configuration
         # if it was not alreay done.
-        PyFunceble.load_config(
-            generate_directory_structure=False, custom=self.configuration
-        )
+        PyFunceble.load_config(generate_directory_structure=False, custom=configuration)
 
         if PyFunceble.CONFIGURATION.api_file_generation:
             PyFunceble.load_config(generate_directory_structure=True)
