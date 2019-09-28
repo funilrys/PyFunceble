@@ -66,7 +66,7 @@ from PyFunceble.helpers import Dict, Download, File, Regex
 from PyFunceble.whois_lookup import WhoisLookup
 
 
-class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
+class IANA:  # pragma: no cover pylint: disable=too-few-public-methods,access-member-before-definition
     """
     Logic behind the update and usage of `iana-domains-db.json`
     """

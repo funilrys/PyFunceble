@@ -66,7 +66,7 @@ from urllib3 import disable_warnings
 import PyFunceble
 
 
-class HTTPCode:  # pylint: disable=too-few-public-methods
+class HTTPCode:  # pylint: disable=too-few-public-methods,access-member-before-definition
     """
     Get and return the HTTP code status of a given domain.
 
