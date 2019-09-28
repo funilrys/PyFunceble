@@ -102,7 +102,6 @@ class DirectoryStructure:  # pragma: no cover
             # We inform all future logic that the generation was
             # already done in the current session.
             PyFunceble.INTERN["structure_already_generated"] = True
-            print("loaded")
 
     def backup(self):
         """
