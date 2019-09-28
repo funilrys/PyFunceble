@@ -264,7 +264,7 @@ class Version:
         Checks if the local version is deprecated.
         """
 
-        for version in self.upstream_data["deprecated"]:
+        for version in reversed(self.upstream_data["deprecated"]):
             # We loop through the list of deprecated versions.
 
             # We compare the local with the currently read deprecated version.
