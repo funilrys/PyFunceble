@@ -58,6 +58,7 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+# pylint: enable=line-too-long
 
 from box import Box
 

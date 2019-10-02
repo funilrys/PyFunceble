@@ -148,7 +148,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We are globally testing a URL.
 
                 # We get the head of the URL.
-                req = PyFunceble.requests.head(
+                req = PyFunceble.Requests.head(
                     self.subject,
                     timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
@@ -158,7 +158,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We are not globally testing a URL.
 
                 # We get the head of the constructed URL.
-                req = PyFunceble.requests.head(
+                req = PyFunceble.Requests.head(
                     self.subject,
                     timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
@@ -171,11 +171,11 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             return req.status_code
 
         except (
-            PyFunceble.requests.ConnectionError,
-            PyFunceble.requests.exceptions.InvalidSchema,
-            PyFunceble.requests.exceptions.InvalidURL,
-            PyFunceble.requests.exceptions.MissingSchema,
-            PyFunceble.requests.exceptions.Timeout,
+            PyFunceble.Requests.exceptions.ConnectionError,
+            PyFunceble.Requests.exceptions.InvalidSchema,
+            PyFunceble.Requests.exceptions.InvalidURL,
+            PyFunceble.Requests.exceptions.MissingSchema,
+            PyFunceble.Requests.exceptions.Timeout,
             PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.

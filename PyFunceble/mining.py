@@ -246,13 +246,13 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         """
 
         try:
-            return PyFunceble.requests.get(
+            return PyFunceble.Requests.get(
                 url, timeout=PyFunceble.CONFIGURATION.timeout, headers=cls.headers
             ).history
         except (
-            PyFunceble.requests.ConnectionError,
-            PyFunceble.requests.exceptions.Timeout,
-            PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.Requests.exceptions.ConnectionError,
+            PyFunceble.Requests.exceptions.Timeout,
+            PyFunceble.Requests.exceptions.InvalidURL,
             PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.

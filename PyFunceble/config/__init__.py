@@ -59,26 +59,6 @@ License:
     SOFTWARE.
 """
 
-from box import Box
-
 from .load import Load
 from .merge import Merge
 from .version import Version
-
-
-class Core:
-    """
-    Provides an access to every configuration indexes.
-
-    :param str path_to_config:
-        The path where we are supposed to find
-        or install the configuration file.
-    """
-
-    # pylint:disable=too-few-public-methods
-
-    @classmethod
-    def __new__(cls, path_to_config):
-        data = Load(path_to_config).get()
-
-        return Box(data, default_box=True, default_box_attr=None)

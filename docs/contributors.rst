@@ -21,6 +21,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
+-   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
 -   speedmann - `@speedmann`_
@@ -36,6 +37,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
+.. _@opav: https://github.com/opav
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@speedmann: https://github.com/speedmann
 .. _@spirillen: https://github.com/spirillen

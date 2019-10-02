@@ -74,7 +74,8 @@ from yaml import safe_load as load_yaml
 
 from PyFunceble import Fore, Style
 from PyFunceble import copy as shutil_copy
-from PyFunceble import directory_separator, path, requests, sys
+from PyFunceble import directory_separator, path, sys
+from PyFunceble.requests import Requests
 
 
 class Hash:  # pylint: disable=too-few-public-methods
@@ -1102,7 +1103,7 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
         try:
             # We request the link.
-            req = requests.get(self.link, verify=self.verification)
+            req = Requests.get(self.link, verify=self.verification)
 
             if req.status_code == 200:
                 # The request http status code is equal to 200.
@@ -1124,6 +1125,6 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
             # We raise an exception saying that we were unable to download.
             raise Exception("Unable to download %s." % repr(self.link))
-        except requests.exceptions.ConnectionError:
+        except Requests.exceptions.ConnectionError:
             print(Fore.RED + "No Internet connection available." + Style.RESET_ALL)
             sys.exit(1)

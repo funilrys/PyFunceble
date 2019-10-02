@@ -66,6 +66,7 @@ import dns.resolver
 import dns.reversename
 from dns.exception import DNSException
 
+import PyFunceble
 from PyFunceble.check import Check
 from PyFunceble.logger import Logger
 
@@ -87,34 +88,49 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             else:
                 raise ValueError("{0} expected".format(type(subject)))
 
-            if dns_server:
-                # A dns server is given.
-
-                Logger().info(f"DNS Server explicitly given, using the given one.")
-                Logger().debug(f"Given DNS server: {dns_server}")
-
-                # We initiate the default resolver.
-                self.dns_resolver = dns.resolver.Resolver(configure=False)
-
-                # We set the nameservers.
-                self.dns_resolver.nameservers = self.__get_dns_servers_from(dns_server)
+            if (
+                "dns_lookup" in PyFunceble.INTERN
+                and PyFunceble.INTERN["dns_lookup"]["given_dns_server"] == dns_server
+            ):
+                self.dns_resolver = PyFunceble.INTERN["dns_lookup"]["resolver"]
             else:
-                # A dns server is not given.
+                if dns_server:
+                    # A dns server is given.
 
-                Logger().info(
-                    f"DNS Server not explicitly given, using the systemwide one."
+                    Logger().info(f"DNS Server explicitly given, using the given one.")
+                    Logger().debug(f"Given DNS server: {dns_server}")
+
+                    # We initiate the default resolver.
+                    self.dns_resolver = dns.resolver.Resolver(configure=False)
+
+                    # We set the nameservers.
+                    self.dns_resolver.nameservers = self.__get_dns_servers_from(
+                        dns_server
+                    )
+                else:
+                    # A dns server is not given.
+
+                    Logger().info(
+                        f"DNS Server not explicitly given, using the systemwide one."
+                    )
+
+                    # We configure everything with what the OS gives us.
+                    self.dns_resolver = dns.resolver.Resolver()
+
+                # We set the timeout
+                self.dns_resolver.timeout = lifetime
+                self.dns_resolver.lifetime = lifetime
+
+                Logger().debug(
+                    f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}"
                 )
+                Logger().debug(f"DNS Resolver timeout: {self.dns_resolver.timeout}")
+                Logger().debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
 
-                # We configure everything with what the OS gives us.
-                self.dns_resolver = dns.resolver.Resolver()
-
-            # We set the timeout
-            self.dns_resolver.timeout = lifetime
-            self.dns_resolver.lifetime = lifetime
-
-            Logger().debug(f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}")
-            Logger().debug(f"DNS Resolver timeout: {self.dns_resolver.timeout}")
-            Logger().debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
+                PyFunceble.INTERN["dns_lookup"] = {
+                    "resolver": self.dns_resolver,
+                    "given_dns_server": dns_server,
+                }
 
             self.complete = complete
 
@@ -139,17 +155,16 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             return result
 
         result = []
-        checker = Check(inputed_dns)
 
         try:
-            if checker.is_domain():
+            if Check(inputed_dns).is_domain():
                 result.extend(
                     [x.address for x in dns.resolver.Resolver().query(inputed_dns)]
                 )
             else:
                 result.append(inputed_dns)
         except DNSException:
-            result.append(inputed_dns)
+            result.extend(dns.resolver.get_default_resolver().nameservers)
 
         return result
 
@@ -168,12 +183,13 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting A record of {repr(self.subject)}")
             # We get the A record of the given subject.
             return [
                 str(x) for x in self.dns_resolver.query(subject, "A", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get A record of {repr(self.subject)}")
 
         return None
 
@@ -192,13 +208,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting AAAA record of {repr(self.subject)}")
             # We get the A record of the given subject.
             return [
                 str(x)
                 for x in self.dns_resolver.query(subject, "AAAA", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get AAAA record of {repr(self.subject)}")
 
         return None
 
@@ -217,13 +234,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting CNAME record of {repr(self.subject)}")
             # We get the A record of the given subject.
             return [
                 str(x)
                 for x in self.dns_resolver.query(subject, "CNAME", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get CNAME record of {repr(self.subject)}")
 
         return None
 
@@ -242,13 +260,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting MX record of {repr(self.subject)}")
             # We get the MX record of the given subject.
             return [
                 str(x)
                 for x in self.dns_resolver.query(subject, "MX", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get MX record of {repr(self.subject)}")
 
         return None
 
@@ -267,13 +286,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting NS record of {repr(self.subject)}")
             # We get the NS record of the given subject.
             return [
                 str(x)
                 for x in self.dns_resolver.query(subject, "NS", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get NS record of {repr(self.subject)}")
 
         return None
 
@@ -292,13 +312,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting TXT record of {repr(self.subject)}")
             # We get the TXT record of the given subject.
             return [
                 str(x)
                 for x in self.dns_resolver.query(subject, "TXT", lifetime=lifetime)
             ]
         except DNSException:
-            pass
+            Logger().error(f"Could not get TXT record of {repr(self.subject)}")
 
         return None
 
@@ -317,6 +338,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             subject = self.subject
 
         try:
+            Logger().info(f"Getting TXT record of {repr(self.subject)}")
             if reverse_name:
                 # We get the reverse name we are going to request.
                 to_request = dns.reversename.from_address(subject)
@@ -328,7 +350,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 str(x) for x in dns.resolver.query(to_request, "PTR", lifetime=lifetime)
             ]
         except DNSException:  # pragma: no cover
-            pass
+            Logger().error(f"Could not get PTR record of {repr(self.subject)}")
 
         return None  # pragma: no cover
 

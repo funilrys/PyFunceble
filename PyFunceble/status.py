@@ -398,7 +398,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the HTML of the home page.
-            blogger_content_request = PyFunceble.requests.get(
+            blogger_content_request = PyFunceble.Requests.get(
                 url_to_get, headers=self.headers
             )
 
@@ -425,10 +425,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     # We update the status and source.
                     return self.__special_down()
         except (
-            PyFunceble.requests.exceptions.InvalidURL,
+            PyFunceble.Requests.exceptions.InvalidURL,
             PyFunceble.socket.timeout,
-            PyFunceble.requests.exceptions.Timeout,
-            PyFunceble.requests.ConnectionError,
+            PyFunceble.Requests.exceptions.Timeout,
+            PyFunceble.Requests.exceptions.ConnectionError,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
@@ -453,7 +453,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the content of the page.
-            wordpress_com_content = PyFunceble.requests.get(
+            wordpress_com_content = PyFunceble.Requests.get(
                 "http://{}:80".format(self.subject), headers=self.headers
             )
 
@@ -466,7 +466,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                 # We return the new status and source.
                 return self.__special_down()
-        except PyFunceble.requests.exceptions.SSLError:
+        except PyFunceble.Requests.exceptions.SSLError:
             pass
 
         # We return None, there is no changes.

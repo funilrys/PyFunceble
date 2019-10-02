@@ -181,7 +181,7 @@ class Logs:  # pragma: no cover
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
-                PyFunceble.requests.post(
+                PyFunceble.Requests.post(
                     PyFunceble.LINKS.api_date_format, data=to_write[self.current_time]
                 )
 
@@ -219,6 +219,6 @@ class Logs:  # pragma: no cover
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
-                PyFunceble.requests.post(
+                PyFunceble.Requests.post(
                     PyFunceble.LINKS.api_no_referer, data=to_write[self.current_time]
                 )

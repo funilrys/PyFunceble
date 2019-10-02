@@ -74,7 +74,6 @@ from platform import system
 from shutil import copy, rmtree
 from time import mktime, sleep, strftime, strptime, time
 
-import requests
 from colorama import Back, Fore, Style
 from colorama import init as initiate_colorama
 from dotenv import load_dotenv
@@ -92,12 +91,13 @@ from PyFunceble.logger import Logger
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
+from PyFunceble.requests import Requests
 from PyFunceble.whois_lookup import WhoisLookup
 
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.13.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.14.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]

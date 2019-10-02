@@ -19,6 +19,7 @@ omit =
     PyFunceble/whois.py
     PyFunceble/sqlite.py
     PyFunceble/mysql.py
+    PyFunceble/requests.py
 
 [report]
 # This should be False one we move into production
