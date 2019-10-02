@@ -15,6 +15,7 @@ env:
     - PYTHON_VERSION="3.7.4"
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
+    - DEBUG_PYFUNCEBLE_ON_SCREEN="true"
 
 language: generic
 sudo: false
