@@ -75,7 +75,6 @@ from yaml import safe_load as load_yaml
 from PyFunceble import Fore, Style
 from PyFunceble import copy as shutil_copy
 from PyFunceble import directory_separator, path, sys
-from PyFunceble.requests import Requests
 
 
 class Hash:  # pylint: disable=too-few-public-methods
@@ -1100,6 +1099,8 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
             :code:`Exception`
                 If the status code is not :code:`200`.
         """
+
+        from PyFunceble.requests import Requests
 
         try:
             # We request the link.

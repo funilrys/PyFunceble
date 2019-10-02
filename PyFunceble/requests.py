@@ -83,9 +83,14 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
         :rtype: None, str
         """
 
-        records = PyFunceble.DNSLookup(
-            hostname, dns_server=PyFunceble.CONFIGURATION.dns_server, complete=False
-        ).a_record()
+        try:
+            records = PyFunceble.DNSLookup(
+                hostname, dns_server=PyFunceble.CONFIGURATION.dns_server, complete=False
+            ).a_record()
+        except AttributeError:
+            records = PyFunceble.DNSLookup(
+                hostname, dns_server=None, complete=False
+            ).a_record()
 
         if isinstance(records, list):
             return records[0]
