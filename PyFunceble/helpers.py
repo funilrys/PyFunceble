@@ -67,6 +67,7 @@ from re import escape
 from re import sub as substrings
 from subprocess import PIPE, Popen
 
+import requests
 import urllib3.exceptions as urllib3_exceptions
 from urllib3 import disable_warnings
 from yaml import dump as dump_yaml
@@ -1100,11 +1101,9 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
                 If the status code is not :code:`200`.
         """
 
-        from PyFunceble.requests import Requests
-
         try:
             # We request the link.
-            req = Requests.get(self.link, verify=self.verification)
+            req = requests.get(self.link, verify=self.verification)
 
             if req.status_code == 200:
                 # The request http status code is equal to 200.
@@ -1126,6 +1125,6 @@ class Download:  # pragma: no cover pylint:disable=too-few-public-methods
 
             # We raise an exception saying that we were unable to download.
             raise Exception("Unable to download %s." % repr(self.link))
-        except Requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError:
             print(Fore.RED + "No Internet connection available." + Style.RESET_ALL)
             sys.exit(1)
