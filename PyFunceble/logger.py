@@ -135,11 +135,7 @@ class Logger:  # pragma: no cover
                 )
 
             if not PyFunceble.path.isdir(self.output_directory):
-                try:
-                    PyFunceble.mkdir(self.output_directory)
-                except FileExistsError:
-                    PyFunceble.load_config(generate_directory_structure=True)
-                    PyFunceble.mkdir(self.output_directory)
+                PyFunceble.mkdir(self.output_directory)
 
     def __init_loggers(self):
         """

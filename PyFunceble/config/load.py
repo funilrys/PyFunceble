@@ -234,6 +234,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 }
             )
 
+            # We load the directory structure.
+            PyFunceble.DirectoryStructure()
+
             # We load the PSL database.
             PyFunceble.PublicSuffix().load()
 

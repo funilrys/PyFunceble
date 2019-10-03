@@ -332,13 +332,9 @@ class DirectoryStructure:  # pragma: no cover
             # And we update our data.
             to_replace.update({mapped: declared})
 
-            PyFunceble.Logger().info(f"Converted {to_replace[mapped]} to {declared}")
-
         to_replace_base = {}
         for mapped, declared in to_replace_base_map.items():
             # We loop through the declared mad.
-
-            PyFunceble.Logger().info(f"Converted {mapped} to {declared}")
 
             # We fix the path of the declared.
             declared = Directory(declared).fix_path()
@@ -358,7 +354,6 @@ class DirectoryStructure:  # pragma: no cover
             # We try to save the structure into the right path.
 
             Dict(structure).to_json(self.structure)
-            PyFunceble.Logger().info(f"Updated local version of {self.structure}")
         except FileNotFoundError:
             # But if we get a FileNotFoundError exception,
 
@@ -369,11 +364,8 @@ class DirectoryStructure:  # pragma: no cover
             # We create the directory where the directory structure should be saved.
             PyFunceble.mkdir(to_create)
 
-            PyFunceble.Logger().info(f"Created the {repr(to_create)} directory.")
-
             # And we retry to save the structure into the right path.
             Dict(structure).to_json(self.structure)
-            PyFunceble.Logger().info(f"Updated local version of {self.structure}")
 
         # We finaly return the new structure in case it's needed for other logic.
         return structure
@@ -492,8 +484,6 @@ class DirectoryStructure:  # pragma: no cover
 
             # We create the directory.
             PyFunceble.mkdir(directory)
-
-            PyFunceble.Logger().info(f"Created the {repr(directory)} directory.")
 
             # We update the permission.
             # (Only if we are under Travis CI.)
@@ -623,9 +613,6 @@ class DirectoryStructure:  # pragma: no cover
                     # We write our file content into the file path.
                     File(file_path).write(content_to_write + "\n", True)
 
-                    PyFunceble.Logger().info(
-                        f"Updated the content of {repr(file_path)}."
-                    )
         self.delete_uneeded()
 
     def delete_uneeded(self):
