@@ -5,6 +5,9 @@ Multiprocessing
 .. warning::
     This component is not activated by default.
 
+.. warning::
+    This component is unavailable under Windows.
+
 Why do we need it?
 ------------------
 
@@ -65,3 +68,8 @@ Simply update the default value of
 ::
 
     maximal_processes: 25
+
+
+.. warning::
+    If you do not explicitly set the :code:`--processes` argument,
+    we overwrite the default to the number of available CPU.

@@ -382,8 +382,8 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We initiate the URL to the IANA Root Zone Database page.
         self.iana_url = "https://www.iana.org/domains/root/db"
 
-        PyFunceble.Logger().debug(f"Destination: {repr(self.destination)}")
-        PyFunceble.Logger().debug(f"URL: {repr(self.iana_url)}")
+        PyFunceble.LOGGER.debug(f"Destination: {repr(self.destination)}")
+        PyFunceble.LOGGER.debug(f"URL: {repr(self.iana_url)}")
 
     def load(self):
         """
@@ -396,7 +396,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # We update it with the database content.
             PyFunceble.INTERN["iana_db"] = self.iana_db
 
-            PyFunceble.Logger().info(
+            PyFunceble.LOGGER.info(
                 "Loaded current state into memory (DATASET WONT BE LOGGED)."
             )
 
@@ -411,7 +411,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        PyFunceble.Logger().info(f"Trying to find the referer of {repr(extension)}.")
+        PyFunceble.LOGGER.info(f"Trying to find the referer of {repr(extension)}.")
 
         # We get the  whois record related to the domain extension we are currently
         # working with.
@@ -422,7 +422,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         if iana_record and "refer" in iana_record:
             # The record is not empty.
 
-            PyFunceble.Logger().info("Referer probably present. Trying to extract it.")
+            PyFunceble.LOGGER.info("Referer probably present. Trying to extract it.")
 
             # We initiate a regex which will extract the referer.
             regex_referer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
@@ -432,7 +432,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 iana_record, regex_referer, return_data=True, group=1
             ).match()
 
-            PyFunceble.Logger().debug(f"Extracted: {repr(matched)}")
+            PyFunceble.LOGGER.debug(f"Extracted: {repr(matched)}")
 
             if matched:
                 # The referer was extracted successfully.
@@ -440,7 +440,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 # We return the matched referer.
                 return matched
 
-        PyFunceble.Logger().info(
+        PyFunceble.LOGGER.info(
             "Could not extract nor find the referer from record. "
             "Trying to find it into our local entries."
         )
@@ -452,7 +452,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         if extension in cls.manual_server:
             # The extension is in the list of manual entries.
 
-            PyFunceble.Logger().debug(
+            PyFunceble.LOGGER.debug(
                 f"Found local entry for {repr(extension)}: "
                 f"{repr(cls.manual_server[extension])}"
             )

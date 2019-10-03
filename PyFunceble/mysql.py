@@ -313,6 +313,6 @@ class MySQL:
                 for statement in self.parse_mysql_sql_file():
                     cursor.execute(statement)
 
-                PyFunceble.Logger().info(
+                PyFunceble.LOGGER.info(
                     "Created the missing tables. Applied all patched"
                 )

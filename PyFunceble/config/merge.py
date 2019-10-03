@@ -110,7 +110,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         # We check if all upstream keys are into the local keys map.
         result = not Dict(self.local_config).has_same_keys_as(self.upstream_config)
 
-        PyFunceble.Logger().debug(f"Local version is different from upstream: {result}")
+        PyFunceble.LOGGER.debug(f"Local version is different from upstream: {result}")
         return result
 
     def _merge_values(self):

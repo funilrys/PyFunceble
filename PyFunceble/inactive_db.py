@@ -93,7 +93,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         # We get the authorization status.
         self.authorized = self.authorization()
 
-        PyFunceble.Logger().debug(f"Authorization: {self.authorized}")
+        PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
 
         if self.authorized:
             # We convert the number of days between the database retest
@@ -118,9 +118,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             self.table_name = self.get_table_name()
             self.to_retest = self.get_to_retest()
 
-            PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
-            PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
-            PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
+            PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
+            PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
+            PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
             # We initiate the database.
             self.initiate()
@@ -267,7 +267,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         else:  # pragma: no cover
                             self.database[database_top_key][database_low_key] = to_set
 
-            PyFunceble.Logger().info("Merged possible old to the new format")
+            PyFunceble.LOGGER.info("Merged possible old to the new format")
 
     def load(self):
         """
@@ -310,7 +310,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # We create the current file namepace
                 self.database[self.filename] = {}
 
-            PyFunceble.Logger().info(
+            PyFunceble.LOGGER.info(
                 "Database content loaded in memory. (DATASET WONT BE LOGGED)"
             )
 
@@ -325,7 +325,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We save the current database state into the database file.
             Dict(self.database).to_json(self.database_file)
 
-            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
+            PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
     def initiate(self):
         """
@@ -422,7 +422,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 # We initiate the file path and its content into the database.
                 self[timestamp] = {subject: status}
 
-                PyFunceble.Logger().info(
+                PyFunceble.LOGGER.info(
                     f"Indexed {repr(subject)} with the status "
                     f"{repr(status)} into {repr(self.filename)} database's."
                 )
@@ -450,7 +450,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     try:
                         cursor.execute(query, playload)
 
-                        PyFunceble.Logger().info(
+                        PyFunceble.LOGGER.info(
                             f"Inserted into the database: \n {playload}"
                         )
                     except self.mysql_db.errors:
@@ -465,7 +465,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                             {"subject": subject, "status": status, "digest": digest},
                         )
 
-                        PyFunceble.Logger().info(
+                        PyFunceble.LOGGER.info(
                             "Data already indexed, updated the modified "
                             f"column of the row related to {repr(subject)}."
                         )
@@ -489,7 +489,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                         self[data] = Dict(self[data]).remove_key(subject)
 
-                        PyFunceble.Logger().info(
+                        PyFunceble.LOGGER.info(
                             "Cleaned the data related to " f"{repr(subject)}."
                         )
 
@@ -506,7 +506,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 with self.mysql_db.get_connection() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": subject})
 
-                    PyFunceble.Logger().info(
+                    PyFunceble.LOGGER.info(
                         "Cleaned the data related to "
                         f"{repr(subject)} and {repr(self.filename)} from "
                         "the {repr(self.table_name)} table."
@@ -517,7 +517,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return a set of subject to restest.
         """
 
-        PyFunceble.Logger().info(
+        PyFunceble.LOGGER.info(
             "Getting the list of subjects to retest (DATASET WONT BE LOGGED)"
         )
 
@@ -560,7 +560,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Return a set of already tested subjects.
         """
 
-        PyFunceble.Logger().info(
+        PyFunceble.LOGGER.info(
             "Getting the list of already tested (DATASET WONT BE LOGGED)"
         )
 

@@ -83,23 +83,17 @@ class Logger:  # pragma: no cover
     """
 
     def __init__(self, debug=False, on_screen=False, output_directory=None):
-        if "logger" not in PyFunceble.INTERN:
-            self.on_screen = (
-                on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
-            )
+        self.on_screen = (
+            on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
+        )
 
-            self.authorized = self.authorization(debug)
+        self.authorized = self.authorization(debug)
 
-            if self.authorized:
-                self.formatter = logging.Formatter(self.format_to_apply)
+        if self.authorized:
+            self.formatter = logging.Formatter(self.format_to_apply)
 
-                self.__set_output_directory(output_directory)
-                self.__init_loggers()
-
-                PyFunceble.INTERN["logger"] = self.__dict__
-        else:
-            for index, data in PyFunceble.INTERN["logger"].items():
-                setattr(self, index, data)
+            self.__set_output_directory(output_directory)
+            self.__init_loggers()
 
     def authorization(self, debug):
         """

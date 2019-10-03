@@ -222,18 +222,21 @@ class Requests:
         Sends a GET request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.get(url, **kwargs)
 
@@ -243,18 +246,21 @@ class Requests:
         Sends a OPTIONS request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.options(url, **kwargs)
 
@@ -264,18 +270,21 @@ class Requests:
         Sends a HEAD request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.head(url, **kwargs)
 
@@ -285,18 +294,21 @@ class Requests:
         Sends a POST request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.post(url, **kwargs)
 
@@ -306,18 +318,21 @@ class Requests:
         Sends a PUT request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.put(url, **kwargs)
 
@@ -327,18 +342,21 @@ class Requests:
         Sends a PATCH request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.patch(url, **kwargs)
 
@@ -348,17 +366,20 @@ class Requests:
         Sends a DELETE request. Returns :class:`Response` object.
 
         :param url: URL for the new :class:`Request` object.
-        :param **kwargs: Optional arguments that ``request`` takes.
+        :param kwargs: Optional arguments that ``request`` takes.
         :rtype: requests.Response
         """
 
         session = requests.Session()
 
-        if url.startswith("https:"):
-            session.mount(
-                "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-            )
-        else:
-            session.mount("http://", HostAdapter(max_retries=cls.pyfunceble_max_retry))
+        if PyFunceble.CONFIGURATION.dns_server:
+            if url.startswith("https:"):
+                session.mount(
+                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
+            else:
+                session.mount(
+                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
+                )
 
         return session.delete(url, **kwargs)

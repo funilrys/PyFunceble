@@ -212,7 +212,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
             # There was not point, so no extension to work with.
             self.domain_extension = None
 
-        PyFunceble.Logger().debug(
+        PyFunceble.LOGGER.debug(
             f"Extension to get the referer for: {self.domain_extension}"
         )
 
@@ -259,7 +259,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
                         # The referer is into the database.
 
-                        PyFunceble.Logger().debug(f"Referer: {referer}")
+                        PyFunceble.LOGGER.debug(f"Referer: {referer}")
 
                         # We return the extracted referer.
                         return referer

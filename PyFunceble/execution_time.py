@@ -259,7 +259,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         # We set the starting time as the current time.
         PyFunceble.INTERN["start"] = PyFunceble.datetime.now().timestamp()
 
-        PyFunceble.Logger().debug(
+        PyFunceble.LOGGER.debug(
             f'Starting time: {PyFunceble.INTERN["start"]} '
             f'| {PyFunceble.datetime.fromtimestamp(PyFunceble.INTERN["start"])}'
         )
@@ -273,7 +273,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         # We set the ending time as the current time.
         PyFunceble.INTERN["end"] = PyFunceble.datetime.now().timestamp()
 
-        PyFunceble.Logger().debug(
+        PyFunceble.LOGGER.debug(
             f'Stoping time: {PyFunceble.INTERN["start"]} '
             f'| { PyFunceble.datetime.fromtimestamp(PyFunceble.INTERN["end"])}'
         )

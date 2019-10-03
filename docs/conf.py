@@ -67,6 +67,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -210,6 +211,10 @@ epub_exclude_files = ["search.html"]
 
 
 # -- Extension configuration -------------------------------------------------
+
+intersphinx_mapping = {
+    'requests': ('https://requests.kennethreitz.org/en/master/', None),
+}
 
 # -- Options for todo extension ----------------------------------------------
 

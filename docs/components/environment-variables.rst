@@ -30,6 +30,10 @@ Here is the list of environment variables we use and how we use them if they are
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | **Environment Variable**              | **How do we use it?**                                                                                          |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| :code:`DEBUG_PYFUNCEBLE`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                            |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------+
+| :code:`DEBUG_PYFUNCEBLE_ON_SCREEN`    | Tell us to log everything to :code:`stdout`                                                                    |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                     |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MySQL charset to use.                                                                              |
@@ -43,10 +47,6 @@ Here is the list of environment variables we use and how we use them if they are
 | :code:`PYFUNCEBLE_DB_PORT`            | Tell us the MySQL connection port to use.                                                                      |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the MySQL user-name to use.                                                                            |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                            |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`    | Tell us to log everything to :code:`stdout`                                                                    |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_CONFIG_DIR`         | Tell us the location of the directory to use as the configuration directory.                                   |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+

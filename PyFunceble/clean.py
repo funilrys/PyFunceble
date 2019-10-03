@@ -204,7 +204,7 @@ class Clean:
             # And we delete the currently read file.
             File(file).delete()
 
-            PyFunceble.Logger().info(f"Deleted: {file}")
+            PyFunceble.LOGGER.info(f"Deleted: {file}")
 
         if clean_all:  # pragma: no cover
             to_avoid = ["whois"]
@@ -229,7 +229,7 @@ class Clean:
                 with mysql_db.get_connection() as cursor:
                     cursor.execute(lquery, {"file_path": file_path})
 
-                    PyFunceble.Logger().info(
+                    PyFunceble.LOGGER.info(
                         "Cleaned the data related to "
                         f"{repr(file_path)} from the {database_name} table."
                     )
@@ -237,4 +237,4 @@ class Clean:
         if not version.is_cloned() and clean_all:  # pragma: no cover
             PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
 
-            PyFunceble.Logger().info(f"Reloaded configuration.")
+            PyFunceble.LOGGER.info(f"Reloaded configuration.")

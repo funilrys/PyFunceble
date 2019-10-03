@@ -103,10 +103,10 @@ class Prints:
         # the order.
         self.headers = PyFunceble.OrderedDict()
 
-        PyFunceble.Logger().debug(f"Template: {self.template}")
-        PyFunceble.Logger().debug(f"Destination: {self.output}")
-        PyFunceble.Logger().debug(f"Data to print:\n{self.data_to_print}")
-        PyFunceble.Logger().debug(f"Only print on file: {self.only_on_file}")
+        PyFunceble.LOGGER.debug(f"Template: {self.template}")
+        PyFunceble.LOGGER.debug(f"Destination: {self.output}")
+        PyFunceble.LOGGER.debug(f"Data to print:\n{self.data_to_print}")
+        PyFunceble.LOGGER.debug(f"Only print on file: {self.only_on_file}")
 
         # We iniate the Generic header and the spacement of each colomns.
         self.headers["Generic"] = PyFunceble.OrderedDict(
@@ -234,7 +234,7 @@ class Prints:
                 # We print the link and the date in the given file.
                 self.file_output_instance.write(link + date_of_generation)
 
-            PyFunceble.Logger().info(
+            PyFunceble.LOGGER.info(
                 f"Created the {self.file_output_instance.file} file with the header."
             )
 

@@ -176,7 +176,7 @@ class Preset:  # pragma: no cover
             ):
                 PyFunceble.CONFIGURATION[indexes] = False
 
-                PyFunceble.Logger().debug(
+                PyFunceble.LOGGER.debug(
                     f"CONFIGURATION.{indexes} switched to {PyFunceble.CONFIGURATION[indexes]}"
                 )
 
@@ -201,7 +201,7 @@ class Preset:  # pragma: no cover
             ):
                 PyFunceble.CONFIGURATION[indexes] = True
 
-                PyFunceble.Logger().debug(
+                PyFunceble.LOGGER.debug(
                     f"CONFIGURATION.{indexes} switched to {PyFunceble.CONFIGURATION[indexes]}"
                 )
 
@@ -220,7 +220,7 @@ class Preset:  # pragma: no cover
             PyFunceble.INTERN["counter"]["number"][status] = 0
             PyFunceble.INTERN["counter"]["percentage"][status] = 0
 
-        PyFunceble.Logger().debug(f"Counter resetted.")
+        PyFunceble.LOGGER.debug(f"Counter resetted.")
 
     @classmethod
     def syntax_test(cls):
@@ -339,13 +339,13 @@ class Preset:  # pragma: no cover
         ):
             PyFunceble.CONFIGURATION.timeout = float(3)
 
-            PyFunceble.Logger().debug(
+            PyFunceble.LOGGER.debug(
                 f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
             )
 
         if not isinstance(PyFunceble.CONFIGURATION.timeout, float):
             PyFunceble.CONFIGURATION.timeout = float(PyFunceble.CONFIGURATION.timeout)
 
-            PyFunceble.Logger().debug(
+            PyFunceble.LOGGER.debug(
                 f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
             )

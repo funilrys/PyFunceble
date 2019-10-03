@@ -90,9 +90,9 @@ class WhoisDB:
         self.mysql_db = mysql_db
         self.table_name = self.get_table_name()
 
-        PyFunceble.Logger().debug(f"DB: {self.mysql_db}")
-        PyFunceble.Logger().debug(f"Table Name: {self.table_name}")
-        PyFunceble.Logger().debug(f"DB (File): {self.database_file}")
+        PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
+        PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
+        PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
         # We load the configuration.
         self.load()
@@ -101,10 +101,10 @@ class WhoisDB:
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
                 if index in self.database:
-                    PyFunceble.Logger().info(f"{index} is present into the database.")
+                    PyFunceble.LOGGER.info(f"{index} is present into the database.")
                     return True
 
-                PyFunceble.Logger().info(f"{index} is not present into the database.")
+                PyFunceble.LOGGER.info(f"{index} is not present into the database.")
                 return False
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -118,14 +118,10 @@ class WhoisDB:
                     fetched = cursor.fetchone()
 
                     if fetched["COUNT(*)"] != 0:
-                        PyFunceble.Logger().info(
-                            f"{index} is present into the database."
-                        )
+                        PyFunceble.LOGGER.info(f"{index} is present into the database.")
                         return True
 
-                    PyFunceble.Logger().info(
-                        f"{index} is not present into the database."
-                    )
+                    PyFunceble.LOGGER.info(f"{index} is not present into the database.")
 
         return False  # pragma: no cover
 
@@ -178,7 +174,7 @@ class WhoisDB:
         else:
             self.database[index] = value
 
-        PyFunceble.Logger().info(
+        PyFunceble.LOGGER.info(
             f"Inserted {repr(value)} into the subset of {repr(index)}"
         )
 
@@ -207,7 +203,7 @@ class WhoisDB:
             }
             try:
                 cursor.execute(query, playload)
-                PyFunceble.Logger().info(f"Inserted into the database: \n {playload}")
+                PyFunceble.LOGGER.info(f"Inserted into the database: \n {playload}")
             except self.mysql_db.errors:
                 pass
 
@@ -295,7 +291,7 @@ class WhoisDB:
                 self.merge(Dict().from_json(File(self.database_file).read()))
             )
 
-            PyFunceble.Logger().info(
+            PyFunceble.LOGGER.info(
                 "Database content loaded in memory. (DATASET WONT BE LOGGED)"
             )
 
@@ -314,7 +310,7 @@ class WhoisDB:
             # We save the current state of the datbase.
             Dict(self.database).to_json(self.database_file)
 
-            PyFunceble.Logger().info(f"Saved database into {repr(self.database_file)}.")
+            PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
     def is_time_older(self, subject):
         """

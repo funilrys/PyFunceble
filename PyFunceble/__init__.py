@@ -67,7 +67,7 @@ import warnings
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from inspect import getsourcefile
-from os import environ, getcwd, mkdir, path, rename
+from os import cpu_count, environ, getcwd, mkdir, path, rename
 from os import sep as directory_separator
 from os import walk
 from platform import system
@@ -210,6 +210,8 @@ INTERN = {
         "percentage": {"down": 0, "invalid": 0, "up": 0},
     }
 }
+# We initiate the location of the Logger.
+LOGGER = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
@@ -1474,8 +1476,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if args.plain:
                     CONFIGURATION.plain_list_domain = preset.switch("plain_list_domain")
 
-                if args.processes and args.processes >= 2:
+                if args.processes:
                     CONFIGURATION.maximal_processes = args.processes
+                else:
+                    CONFIGURATION.maximal_processes = cpu_count()
 
                 if args.quiet:
                     CONFIGURATION.quiet = preset.switch("quiet")

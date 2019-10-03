@@ -132,7 +132,7 @@ class Logs:  # pragma: no cover
             current_content = self._get_content(output)
             current_content.update(to_write)
 
-            PyFunceble.Logger().debug(f"WHOIS Record of {repr(subject)}:\n{to_write}")
+            PyFunceble.LOGGER.debug(f"WHOIS Record of {repr(subject)}:\n{to_write}")
 
             self._write_content(current_content, output)
 
@@ -171,7 +171,7 @@ class Logs:  # pragma: no cover
             current_content = self._get_content(output)
             current_content.update(to_write)
 
-            PyFunceble.Logger().critical(
+            PyFunceble.LOGGER.critical(
                 f"Wrong date format for {repr(subject)}:\n{to_write}"
             )
 
@@ -209,7 +209,7 @@ class Logs:  # pragma: no cover
             current_content = self._get_content(output)
             current_content.update(to_write)
 
-            PyFunceble.Logger().critical(
+            PyFunceble.LOGGER.critical(
                 f"Referer not found for {repr(subject)}:\n{to_write}"
             )
 

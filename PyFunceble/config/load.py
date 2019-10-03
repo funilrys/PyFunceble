@@ -234,6 +234,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 }
             )
 
+            PyFunceble.LOGGER = PyFunceble.Logger()
+
             # We load the directory structure.
             PyFunceble.DirectoryStructure()
 

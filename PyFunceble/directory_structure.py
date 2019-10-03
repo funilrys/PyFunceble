@@ -109,7 +109,7 @@ class DirectoryStructure:  # pragma: no cover
         and portable for user.
         """
 
-        PyFunceble.Logger().info(f"Backing up the directory structure..")
+        PyFunceble.LOGGER.info(f"Backing up the directory structure..")
 
         # We set the current output directory path.
         output_path = self.base + PyFunceble.OUTPUTS.parent_directory
@@ -149,12 +149,12 @@ class DirectoryStructure:  # pragma: no cover
                     {file: {"sha512": file_hash, "content": formatted_content}},
                 )
 
-                PyFunceble.Logger().info(f"{file_path} backed up.")
+                PyFunceble.LOGGER.info(f"{file_path} backed up.")
 
         # We finally save the directory structure into the production file.
         Dict(result).to_json(self.base + "dir_structure_production.json")
 
-        PyFunceble.Logger().info(f"Backup saved into dir_structure_production.json")
+        PyFunceble.LOGGER.info(f"Backup saved into dir_structure_production.json")
 
     def _restore_replace(self):
         """
@@ -649,4 +649,4 @@ class DirectoryStructure:  # pragma: no cover
                 # We delete it.
                 PyFunceble.rmtree(root)
 
-                PyFunceble.Logger().info(f"Deleted {repr(root)}.")
+                PyFunceble.LOGGER.info(f"Deleted {repr(root)}.")

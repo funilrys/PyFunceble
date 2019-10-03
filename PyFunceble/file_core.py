@@ -196,7 +196,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 except mysql_db.errors:
                     cursor.execute(to_update, to_set)
 
-                PyFunceble.Logger().debug(
+                PyFunceble.LOGGER.debug(
                     f"Saved into the {repr(table_name)} table:\n{to_set}"
                 )
 
@@ -247,14 +247,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                     # We download the content of the link.
                     Download(self.file, destination).text()
 
-                    PyFunceble.Logger().info(
+                    PyFunceble.LOGGER.info(
                         f"Downloaded {repr(self.file)} into {repr(destination)}"
                     )
 
             # We update the global file with the destination.
             self.file = destination
 
-            PyFunceble.Logger().info(f"Set file to test to {repr(self.file)}")
+            PyFunceble.LOGGER.info(f"Set file to test to {repr(self.file)}")
 
     def domain(self, subject):  # pragma: no cover
         """
