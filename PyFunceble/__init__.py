@@ -97,7 +97,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.14.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.15.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -212,6 +212,10 @@ INTERN = {
 }
 # We initiate the location of the Logger.
 LOGGER = None
+# We initiate the location of the HTTP requests.
+REQUESTS = None
+# We initiate the DNS resolver.
+DNSLOOKUP = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
@@ -400,9 +404,9 @@ def dns_lookup(
         # The subject is not empty nor None.
 
         # We return the lookup.
-        return DNSLookup(
-            subject, dns_server=dns_server, complete=complete, lifetime=lifetime
-        ).request()
+        return DNSLookup(dns_server=dns_server, lifetime=lifetime).request(
+            subject, complete=complete
+        )
 
     # We return None, there is nothing to work with.
     return None
@@ -1098,6 +1102,18 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 parser.add_argument(
+                    "--multiprocess-merging-mode",
+                    type=str,
+                    help="Sets the multiprocess merging mode. "
+                    "You can choose between the following `live|ends`. %s"
+                    % (
+                        current_value_format
+                        + repr(CONFIGURATION.multiprocess_merging_mode)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
                     "-n",
                     "--no-files",
                     action="store_true",
@@ -1267,7 +1283,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-t",
                     "--timeout",
                     type=int,
-                    default=10,
+                    default=5,
                     help="Switch the value of the timeout. %s"
                     % (
                         current_value_format
@@ -1454,6 +1470,21 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if args.multiprocess:
                     CONFIGURATION.multiprocess = preset.switch("multiprocess")
+
+                if args.multiprocess_merging_mode:
+                    if args.multiprocess_merging_mode.lower() in ["end", "live"]:
+                        CONFIGURATION.multiprocess_merging_mode = (
+                            args.multiprocess_merging_mode.lower()
+                        )
+                    else:
+                        print(
+                            Style.BRIGHT
+                            + Fore.RED
+                            + "Unknown multiprocess merging mode: {0}".format(
+                                repr(args.multiprocess_merging_mode)
+                            )
+                        )
+                        sys.exit(1)
 
                 if args.no_files:
                     CONFIGURATION.no_files = preset.switch("no_files")

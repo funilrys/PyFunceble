@@ -72,6 +72,24 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
     Extends the build-in HTTP Adapter for urllib3 for our needs.
     """
 
+    def __resolve_with_cache(self, hostname):
+        """
+        Resolve the IP of the given hostname.
+
+        :param str hostname: The hostname to resolve.
+
+        :return: The IP of the host name or the hostname itself.
+        :rtype: None, str
+        """
+
+        if not hasattr(self, "__resolve_cache"):
+            # pylint:disable=attribute-defined-outside-init
+            self.__resolve_cache = {hostname: self.resolve(hostname)}
+        elif hostname not in self.__resolve_cache:
+            self.__resolve_cache[hostname] = self.resolve(hostname)
+
+        return self.__resolve_cache[hostname]
+
     @classmethod
     def resolve(cls, hostname):
         """
@@ -84,13 +102,9 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
         """
 
         try:
-            records = PyFunceble.DNSLookup(
-                hostname, dns_server=PyFunceble.CONFIGURATION.dns_server, complete=False
-            ).a_record()
+            records = PyFunceble.DNSLOOKUP.a_record(hostname)
         except AttributeError:
-            records = PyFunceble.DNSLookup(
-                hostname, dns_server=None, complete=False
-            ).a_record()
+            records = None
 
         if isinstance(records, list):
             return records[0]
@@ -121,7 +135,7 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
         """
 
         parsed_url = urlparse(request.url)
-        hostname_ip = self.resolve(parsed_url.hostname)
+        hostname_ip = self.__resolve_with_cache(parsed_url.hostname)
 
         if parsed_url.scheme == "https" and hostname_ip:
             request.url = request.url.replace(
@@ -142,6 +156,10 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
             self.poolmanager.connection_pool_kw.pop("server_hostname", None)
             self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
 
+            request.url = request.url.replace(
+                f"{parsed_url.hostname}", "pyfunceble-not-resolved"
+            )
+
         return super(HostSSLAdapter, self).send(
             request, stream=False, timeout=None, verify=True, cert=None, proxies=None
         )
@@ -151,6 +169,24 @@ class HostAdapter(requests.adapters.HTTPAdapter):
     """
     Extends the build-in HTTP Adapter for urllib3 for our needs.
     """
+
+    def __resolve_with_cache(self, hostname):
+        """
+        Resolve the IP of the given hostname.
+
+        :param str hostname: The hostname to resolve.
+
+        :return: The IP of the host name or the hostname itself.
+        :rtype: None, str
+        """
+
+        if not hasattr(self, "__resolve_cache"):
+            # pylint:disable=attribute-defined-outside-init
+            self.__resolve_cache = {hostname: HostSSLAdapter.resolve(hostname)}
+        elif hostname not in self.__resolve_cache:
+            self.__resolve_cache[hostname] = HostSSLAdapter.resolve(hostname)
+
+        return self.__resolve_cache[hostname]
 
     def send(
         self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
@@ -176,7 +212,7 @@ class HostAdapter(requests.adapters.HTTPAdapter):
         """
 
         parsed_url = urlparse(request.url)
-        hostname_ip = HostSSLAdapter.resolve(parsed_url.hostname)
+        hostname_ip = self.__resolve_with_cache(parsed_url.hostname)
 
         if parsed_url.scheme == "http" and hostname_ip:
             request.url = request.url.replace(
@@ -202,6 +238,10 @@ class HostAdapter(requests.adapters.HTTPAdapter):
             self.poolmanager.connection_pool_kw.pop("server_hostname", None)
             self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
 
+            request.url = request.url.replace(
+                f"{parsed_url.hostname}", "pyfunceble-not-resolved"
+            )
+
         return super(HostAdapter, self).send(
             request, stream=False, timeout=None, verify=True, cert=None, proxies=None
         )
@@ -210,14 +250,23 @@ class HostAdapter(requests.adapters.HTTPAdapter):
 class Requests:
     """
     Handles all usage of :code:`requests`.
+
+    :param str url: The URL to work with.
     """
 
     exceptions = requests.exceptions
+    pyfunceble_max_retry = 1
 
-    pyfunceble_max_retry = 3
+    def __init__(self):
+        self.session = requests.Session()
+        self.session.mount(
+            "https://", HostSSLAdapter(max_retries=self.pyfunceble_max_retry)
+        )
+        self.session.mount(
+            "http://", HostAdapter(max_retries=self.pyfunceble_max_retry)
+        )
 
-    @classmethod
-    def get(cls, url, **kwargs):
+    def get(self, url, **kwargs):
         """
         Sends a GET request. Returns :class:`Response` object.
 
@@ -226,22 +275,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.get(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.get(url, **kwargs)
-
-    @classmethod
-    def options(cls, url, **kwargs):
+    def options(self, url, **kwargs):
         """
         Sends a OPTIONS request. Returns :class:`Response` object.
 
@@ -250,22 +286,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.options(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.options(url, **kwargs)
-
-    @classmethod
-    def head(cls, url, **kwargs):
+    def head(self, url, **kwargs):
         """
         Sends a HEAD request. Returns :class:`Response` object.
 
@@ -274,22 +297,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.head(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.head(url, **kwargs)
-
-    @classmethod
-    def post(cls, url, **kwargs):
+    def post(self, url, **kwargs):
         """
         Sends a POST request. Returns :class:`Response` object.
 
@@ -298,22 +308,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.post(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.post(url, **kwargs)
-
-    @classmethod
-    def put(cls, url, **kwargs):
+    def put(self, url, **kwargs):
         """
         Sends a PUT request. Returns :class:`Response` object.
 
@@ -322,22 +319,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.put(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.put(url, **kwargs)
-
-    @classmethod
-    def patch(cls, url, **kwargs):
+    def patch(self, url, **kwargs):
         """
         Sends a PATCH request. Returns :class:`Response` object.
 
@@ -346,22 +330,9 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
+        return self.session.patch(url, **kwargs)
 
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.patch(url, **kwargs)
-
-    @classmethod
-    def delete(cls, url, **kwargs):
+    def delete(self, url, **kwargs):
         """
         Sends a DELETE request. Returns :class:`Response` object.
 
@@ -370,16 +341,4 @@ class Requests:
         :rtype: requests.Response
         """
 
-        session = requests.Session()
-
-        if PyFunceble.CONFIGURATION.dns_server:
-            if url.startswith("https:"):
-                session.mount(
-                    "https://", HostSSLAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-            else:
-                session.mount(
-                    "http://", HostAdapter(max_retries=cls.pyfunceble_max_retry)
-                )
-
-        return session.delete(url, **kwargs)
+        return self.session.delete(url, **kwargs)

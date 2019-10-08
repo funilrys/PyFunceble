@@ -54,6 +54,8 @@ maximal_processes: 25
 mining: False
 # Enable / Disable the usage of multiple processes.
 multiprocess: False
+# Set the merging mode. Available: end, live
+multiprocess_merging_mode: end
 # Enable / Disable the generation of any file(s).
 no_files: False
 # Enable / Disable the usage of the SPECIAL rule(s).

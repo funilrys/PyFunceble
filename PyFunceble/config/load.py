@@ -59,7 +59,7 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-
+# pylint: disable=import-error
 from box import Box
 
 import PyFunceble
@@ -235,6 +235,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
             )
 
             PyFunceble.LOGGER = PyFunceble.Logger()
+            PyFunceble.REQUESTS = PyFunceble.Requests()
+            PyFunceble.DNSLOOKUP = PyFunceble.DNSLookup(
+                dns_server=PyFunceble.CONFIGURATION.dns_server,
+                lifetime=PyFunceble.CONFIGURATION.timeout,
+            )
 
             # We load the directory structure.
             PyFunceble.DirectoryStructure()

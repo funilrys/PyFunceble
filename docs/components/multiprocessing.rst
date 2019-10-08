@@ -73,3 +73,22 @@ Simply update the default value of
 .. warning::
     If you do not explicitly set the :code:`--processes` argument,
     we overwrite the default to the number of available CPU.
+
+Merging mode
+^^^^^^^^^^^^
+
+2 merging cross process (data) merging mode are available:
+
+    * :code:`end`
+    * :code:`live`
+
+With the `end` mode, we merge all data at the very end of the current instance.
+With the `live` mode, we merge all data while testing.
+
+Simply update the default value of
+
+::
+
+    multiprocess_merging_mode: end
+
+to the mode you want.

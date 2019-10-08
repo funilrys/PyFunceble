@@ -376,6 +376,21 @@ Want to find domain or URL linked to a domain in your list? This argument will e
 
 Want to speed up the test time? This argument will allow the usage of multiple processes for testing.
 
+:code:`--multiprocess-merging-mode`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Sets the multiprocess merging mode. You can choose between the following `live|ends`.
+
+    **Default value:** :code:`end`
+
+.. note::
+    With the :code:`end` value, the merging of cross process data is made at the very end of the current instance.
+
+.. note::
+    With the :code:`live` value, the merging of cross process data is made after the processing of the maximal number of process.
+
+    Which means that if you allow 5 processes, we will run 5 tests, merge, run 5 tests, merge and so on until the end.
+
 :code:`-n` | :code:`--no-files`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -504,7 +519,7 @@ Want to get the logs (copy of what you see on screen) on different files? This a
 
     Switch the value of the timeout.
 
-    **Default value:** :code:`3`
+    **Default value:** :code:`5`
 
 This argument will set the default timeout to apply everywhere it is possible to set a timeout.
 
@@ -585,9 +600,11 @@ Global overview
                     [--dns DNS [DNS ...]] [-ex] [-f FILE] [--filter FILTER]
                     [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
                     [-ip IP] [--json] [--less] [--local] [--link LINK]
-                    [--mining] [-m] [-n] [-nl] [-ns] [-nu] [-nw] [--percentage]
-                    [--plain] [-p PROCESSES] [-psl] [-q] [--share-logs] [-s]
-                    [--split] [--syntax] [-t TIMEOUT] [--travis]
+                    [--mining] [-m]
+                    [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE] [-n]
+                    [-nl] [-ns] [-nu] [-nw] [--percentage] [--plain]
+                    [-p PROCESSES] [-psl] [-q] [--share-logs] [-s] [--split]
+                    [--syntax] [-t TIMEOUT] [--travis]
                     [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
                     [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
@@ -677,6 +694,10 @@ Global overview
                                 Configured value: False
         -m, --multiprocess    Switch the value of the usage of multiple process.
                                 Configured value: False
+        --multiprocess-merging-mode MULTIPROCESS_MERGING_MODE
+                                Sets the multiprocess merging mode. You can choose
+                                between the following `live|ends`. Configured
+                                value: 'ends'
         -n, --no-files        Switch the value of the production of output files.
                                 Configured value: False
         -nl, --no-logs        Switch the value of the production of logs files in
@@ -711,7 +732,7 @@ Global overview
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
                                 Switch the value of the timeout. Configured
-                                value: 3
+                                value: 5.0
         --travis              Switch the value of the Travis mode.
                                 Configured value: False
         --travis-branch TRAVIS_BRANCH

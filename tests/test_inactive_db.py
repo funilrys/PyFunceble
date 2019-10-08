@@ -298,25 +298,6 @@ class TestInactiveDB(TestCase):
 
         self.test_file_not_exist()
 
-    def test_timestamp_path_exist_time_future(self):  # pylint: disable=invalid-name
-        """
-        Test Inactive._timestamp() for the case that the path exist but
-        the time is in the future.
-        """
-
-        self.test_file_not_exist()
-
-        self.inactive_db.database = {
-            self.file_to_test: {self.time_future: ["hello.world", "world.hello"]}
-        }
-
-        expected = int(self.time_future)
-        actual = self.inactive_db._timestamp()
-
-        self.assertEqual(expected, actual)
-
-        self.test_file_not_exist()
-
     def test_add_path_does_not_exist(self):  # pylint: disable=invalid-name
         """
         Test Inactive.add() for the case that the path does not exist.
@@ -427,7 +408,7 @@ class TestInactiveDB(TestCase):
         }
         subject = "hello.world"
 
-        expected = {self.file_to_test: {timestamp: {}}}
+        expected = {self.file_to_test: {}}
 
         self.inactive_db.remove(subject)
 

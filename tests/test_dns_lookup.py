@@ -72,6 +72,13 @@ class TestDNSLookup(TestCase):
     but we try to keep it simple.
     """
 
+    def setUp(self):
+        """
+        Setup everything needed for the test.
+        """
+
+        self.dns_lookup = DNSLookup()
+
     def test_dns_lookup_domain_down(self):
         """
         Test of NSLookup() for the case a domain is down or non
@@ -79,7 +86,7 @@ class TestDNSLookup(TestCase):
         """
 
         expected = {}
-        actual = DNSLookup("thisdoes-not-workdnfhfep.de").request()
+        actual = self.dns_lookup.request("thisdoes-not-workdnfhfep.de")
 
         self.assertEqual(expected, actual)
 
@@ -89,7 +96,7 @@ class TestDNSLookup(TestCase):
         """
 
         expected = {}
-        actual = DNSLookup("helloworld-.com").request()
+        actual = self.dns_lookup.request("helloworld-.com")
 
         self.assertEqual(expected, actual)
 
@@ -98,14 +105,14 @@ class TestDNSLookup(TestCase):
         Test of Lookup().request() for the case a domain is up.
         """
 
-        actual = DNSLookup("google.com").request()
+        actual = self.dns_lookup.request("google.com", complete=True)
 
         self.assertIsInstance(actual, dict)
 
         if "NS" not in actual:
             raise AssertionError(actual)
 
-        actual = DNSLookup("172.217.22.14").request()
+        actual = self.dns_lookup.request("172.217.22.14")
 
         self.assertIsInstance(actual, dict)
 

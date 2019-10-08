@@ -214,6 +214,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                 # We print the traceback.
                 print(traceback)
+                PyFunceble.LOGGER.error(traceback)
 
                 exception_present = True
 
@@ -265,6 +266,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We get the subject we are going to work with..
                     subject = next(to_test)
 
+                    PyFunceble.LOGGER.info(f"Starting test of {subject}")
+
                     if isinstance(subject, tuple):
                         # The subject is a tuple.
 
@@ -275,6 +278,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     process = OurProcessWrapper(
                         target=self._test_line, args=(subject, manager_data)
                     )
+
+                    process.name = f"PyF {subject}"
+
                     # # We save it into our list of process.
                     processes.append(process)
                     # We then start the job.
@@ -301,6 +307,15 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
             while len(active) != 1:
                 active = active_children()
 
+            if PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live":
+                if not finished and not self.autosave.is_time_exceed():
+                    self.__merge_processes_data(manager_data)
+
+                    manager_data = None
+                    manager_data = manager.list()
+
+                    continue
+
             if finished or self.autosave.is_time_exceed():
 
                 self.__merge_processes_data(manager_data)
@@ -320,7 +335,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                 print(
                     PyFunceble.Fore.MAGENTA
                     + PyFunceble.Style.BRIGHT
-                    + "\nMerging cross processes data... This process might take some time."
+                    + "\nMerging cross processes data... This process may take some time."
                 )
 
             for data in manager_data:

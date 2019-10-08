@@ -86,12 +86,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename, mysql_db=None):
+    def __init__(self, filename, mysql_db=None, parent_process=False):
         self.one_day = PyFunceble.timedelta(days=1)
         self.database_file = ""
 
         # We get the authorization status.
         self.authorized = self.authorization()
+        # We share the parent state.
+        self.parent = parent_process
 
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
 
@@ -130,6 +132,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 if subject not in self.is_present_cache:
                     for element in [
                         x for x in self.database[self.filename].keys() if x.isdigit()
@@ -162,6 +167,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         return False  # pragma: no cover
 
     def __getitem__(self, index):
+        if self.parent and (not hasattr(self, "database") or not self.database):
+            self.load()
+
         if (
             self.authorized
             and PyFunceble.CONFIGURATION.db_type == "json"
@@ -173,6 +181,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def __setitem__(self, index, value):
         if PyFunceble.CONFIGURATION.db_type == "json":
+            if self.parent and (not hasattr(self, "database") or not self.database):
+                self.load()
+
             actual_state = self[index]
 
             if actual_state:
@@ -325,6 +336,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We save the current database state into the database file.
             Dict(self.database).to_json(self.database_file)
 
+            if self.parent:
+                try:
+                    del self.database
+                except AttributeError:
+                    pass
+
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
     def initiate(self):
@@ -342,59 +359,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             self.save()
 
-    def _timestamp(self):
+    @classmethod
+    def _timestamp(cls):
         """
         Get the timestamp where we are going to save our current list.
 
         :return: The timestamp to append with the currently tested element.
         :rtype: int|str
         """
-
-        if (
-            self.authorized
-            and PyFunceble.CONFIGURATION.db_type == "json"
-            and self.filename in self.database
-        ):
-            # * We are authorized to operate.
-            # and
-            # * The currently tested file is already in the database.
-
-            if self.database[self.filename]:
-                # The file we are testing is into the database and its content
-                # is not empty.
-
-                # We get the indexes of the current file (in the dabase).
-                database_keys = [
-                    float(x) for x in self.database[self.filename].keys() if x.isdigit()
-                ]
-
-                if database_keys:
-                    # The list of keys is not empty.
-
-                    # We get the most recent date.
-                    recent_date = PyFunceble.datetime.fromtimestamp(max(database_keys))
-                else:  # pragma: no cover
-                    # The list of keys is empty.
-
-                    # We return the current time.
-                    return int(PyFunceble.datetime.now().timestamp())
-
-                if PyFunceble.datetime.now() > recent_date + self.one_day:
-                    # The most recent time was in more than one day.
-
-                    # We return the current time.
-                    return int(PyFunceble.datetime.now().timestamp())
-
-                # The most recent time was in less than one day.
-
-                if PyFunceble.datetime.now() < recent_date + self.days:
-                    # The most recent time was in less than the expected number of day for
-                    # retesting.
-
-                    # We return the most recent data.
-                    return int(recent_date.timestamp())
-
-        # The database subsystem is not activated.
 
         # We return the current time.
         return int(PyFunceble.datetime.now().timestamp())
@@ -411,6 +383,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 # We get the timestamp to use as index.
                 timestamp = str(self._timestamp())
 
@@ -481,6 +456,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 for data in self.database[self.filename]:
                     # We loop through the index of the file database.
 
@@ -492,6 +470,13 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.LOGGER.info(
                             "Cleaned the data related to " f"{repr(subject)}."
                         )
+
+                to_delete = [
+                    x for x, y in self.database[self.filename].items() if not y
+                ]
+
+                for index in to_delete:
+                    del self.database[self.filename][index]
 
                 # And we save the data into the database.
                 self.save()
@@ -523,6 +508,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 try:
                     return {
                         z
@@ -566,6 +554,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 try:
                     return {
                         z

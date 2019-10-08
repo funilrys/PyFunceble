@@ -118,7 +118,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         # We get/initiate the autosave database/subsyste..
         self.autosave = AutoSave(start_time=PyFunceble.INTERN["start"])
         # We get/initiate the inactive database.
-        self.inactive_db = InactiveDB(self.file, mysql_db=self.mysql_db)
+        self.inactive_db = InactiveDB(
+            self.file, mysql_db=self.mysql_db, parent_process=True
+        )
         # We get/initiate the whois database.
         self.whois_db = WhoisDB(mysql_db=self.mysql_db)
         # We get/initiate the mining subsystem.
@@ -492,7 +494,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         """
 
         if manager_data is not None:
-            autocontinue = AutoContinue(self.file, parent_process=False)
+            autocontinue = AutoContinue(self.file)
             inactive_db = InactiveDB(self.file)
             mining = Mining(self.file)
         else:
@@ -620,6 +622,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 }
             )
 
+            del autocontinue
+            del inactive_db
+            del mining
         # We return None.
         return None
 

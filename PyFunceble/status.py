@@ -189,10 +189,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
                         ).status_file(
                             exclude_file_generation=self.exclude_file_generation
                             and self.output["status"]
-                            not in [
-                                PyFunceble.STATUS.official.up,
-                                PyFunceble.STATUS.official.down,
-                            ]
+                            not in [PyFunceble.STATUS.official.up]
                         )
                     else:
                         self.output["_status_source"] = "DNSLOOKUP"
@@ -228,11 +225,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         # We get the dns_lookup state.
-        self.output["dns_lookup"] = PyFunceble.DNSLookup(
-            self.subject,
-            dns_server=PyFunceble.CONFIGURATION.dns_server,
-            lifetime=PyFunceble.CONFIGURATION.timeout,
-        ).request()
+        self.output["dns_lookup"] = PyFunceble.DNSLOOKUP.request(self.subject)
 
         if status.lower() not in PyFunceble.STATUS.list.invalid:
             # The matched status is not in the list of invalid status.
@@ -283,8 +276,7 @@ class Status:  # pragma: no cover pylint: disable=too-few-public-methods
             ip_validation=ip_validation_status,
         ).status_file(
             exclude_file_generation=self.exclude_file_generation
-            and self.output["status"]
-            not in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.down]
+            and self.output["status"] not in [PyFunceble.STATUS.official.up]
         )
 
         PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.output}")
@@ -398,8 +390,12 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the HTML of the home page.
-            blogger_content_request = PyFunceble.Requests.get(
-                url_to_get, headers=self.headers
+            blogger_content_request = PyFunceble.REQUESTS.get(
+                url_to_get,
+                headers=self.headers,
+                timeout=PyFunceble.CONFIGURATION.timeout,
+                verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                allow_redirects=True,
             )
 
             for regx in regex_blogger:
@@ -425,10 +421,10 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     # We update the status and source.
                     return self.__special_down()
         except (
-            PyFunceble.Requests.exceptions.InvalidURL,
+            PyFunceble.REQUESTS.exceptions.InvalidURL,
             PyFunceble.socket.timeout,
-            PyFunceble.Requests.exceptions.Timeout,
-            PyFunceble.Requests.exceptions.ConnectionError,
+            PyFunceble.REQUESTS.exceptions.Timeout,
+            PyFunceble.REQUESTS.exceptions.ConnectionError,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
         ):
@@ -453,8 +449,12 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         try:
             # We get the content of the page.
-            wordpress_com_content = PyFunceble.Requests.get(
-                "http://{}:80".format(self.subject), headers=self.headers
+            wordpress_com_content = PyFunceble.REQUESTS.get(
+                "http://{}:80".format(self.subject),
+                headers=self.headers,
+                timeout=PyFunceble.CONFIGURATION.timeout,
+                verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                allow_redirects=True,
             )
 
             if does_not_exist in wordpress_com_content.text:
@@ -466,7 +466,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                 # We return the new status and source.
                 return self.__special_down()
-        except PyFunceble.Requests.exceptions.SSLError:
+        except PyFunceble.REQUESTS.exceptions.SSLError:
             pass
 
         # We return None, there is no changes.
@@ -847,8 +847,7 @@ class URLStatus:  # pragma: no cover pylint: disable=too-few-public-methods
             filename=self.filename,
         ).status_file(
             exclude_file_generation=self.exclude_file_generation
-            and self.output["status"]
-            not in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.down]
+            and self.output["status"] not in [PyFunceble.STATUS.official.up]
         )
 
         PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.output}")

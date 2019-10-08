@@ -312,6 +312,25 @@
 
     **Description:** Enable / Disable the usage of multiple processes instead of the default single process.
 
+:code:`multiprocess_merging_mode`
+---------------------------------
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`end`
+
+    **Available values:** :code:`end`, :code:`live`
+
+    **Description:** Set the multiprocess merging mode.
+
+.. note::
+    With the :code:`end` value, the merging of cross process data is made at the very end of the current instance.
+
+.. note::
+    With the :code:`live` value, the merging of cross process data is made after the processing of the maximal number of process.
+
+    Which means that if you allow 5 processes, we will run 5 tests, merge, run 5 tests, merge and so on until the end.
+
 :code:`no_files`
 ----------------
 

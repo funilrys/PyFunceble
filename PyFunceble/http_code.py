@@ -148,21 +148,23 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # We are globally testing a URL.
 
                 # We get the head of the URL.
-                req = PyFunceble.Requests.head(
+                req = PyFunceble.REQUESTS.head(
                     self.subject,
                     timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
                     verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                    allow_redirects=False,
                 )
             else:
                 # We are not globally testing a URL.
 
                 # We get the head of the constructed URL.
-                req = PyFunceble.Requests.head(
+                req = PyFunceble.REQUESTS.head(
                     self.subject,
                     timeout=PyFunceble.CONFIGURATION.timeout,
                     headers=self.headers,
                     verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                    allow_redirects=False,
                 )
 
             PyFunceble.LOGGER.debug(f"Status Code: {req.status_code}")
@@ -171,11 +173,11 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             return req.status_code
 
         except (
-            PyFunceble.Requests.exceptions.ConnectionError,
-            PyFunceble.Requests.exceptions.InvalidSchema,
-            PyFunceble.Requests.exceptions.InvalidURL,
-            PyFunceble.Requests.exceptions.MissingSchema,
-            PyFunceble.Requests.exceptions.Timeout,
+            PyFunceble.REQUESTS.exceptions.ConnectionError,
+            PyFunceble.REQUESTS.exceptions.InvalidSchema,
+            PyFunceble.REQUESTS.exceptions.InvalidURL,
+            PyFunceble.REQUESTS.exceptions.MissingSchema,
+            PyFunceble.REQUESTS.exceptions.Timeout,
             PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.

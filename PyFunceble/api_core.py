@@ -113,7 +113,9 @@ class APICore:
         self.whois_db = WhoisDB(mysql_db=self.mysql_db)
 
         # We create an instance of the inactive database.
-        self.inactive_db = InactiveDB("api_call", mysql_db=self.mysql_db)
+        self.inactive_db = InactiveDB(
+            "api_call", mysql_db=self.mysql_db, parent_process=True
+        )
 
     def __inactive_database_management(self, subject, status):
         """

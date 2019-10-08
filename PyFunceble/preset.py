@@ -244,6 +244,19 @@ class Preset:  # pragma: no cover
         if PyFunceble.CONFIGURATION.maximal_processes < 1:
             PyFunceble.CONFIGURATION.maximal_processes = 1
 
+    @classmethod
+    def multiprocess_merging_mode(cls):
+        """
+        Ensure that a valid merging mode is given.
+        """
+
+        # pylint: disable=line-too-long
+        if not PyFunceble.CONFIGURATION.multiprocess_merging_mode or PyFunceble.CONFIGURATION.multiprocess_merging_mode.lower() not in [
+            "end",
+            "live",
+        ]:
+            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
+
     def simple_domain(self):
         """
         Prepare the global configuration for a domain
@@ -309,10 +322,6 @@ class Preset:  # pragma: no cover
 
         if PyFunceble.CONFIGURATION.multiprocess:
             if PyFunceble.system().lower() not in PyFunceble.WINDOWS_PLATFORMS:
-                should_be_enabled = ["auto_continue", "whois_database"]
-
-                self.enable(should_be_enabled)
-
                 if (
                     PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]
                     and not PyFunceble.CONFIGURATION.simple
@@ -325,6 +334,7 @@ class Preset:  # pragma: no cover
                     )
 
                 self.maximal_processes()
+                self.multiprocess_merging_mode()
             else:
                 self.disable("multiprocess")
 

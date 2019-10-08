@@ -181,8 +181,12 @@ class Logs:  # pragma: no cover
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
-                PyFunceble.Requests.post(
-                    PyFunceble.LINKS.api_date_format, data=to_write[self.current_time]
+                PyFunceble.REQUESTS.post(
+                    PyFunceble.LINKS.api_date_format,
+                    data=to_write[self.current_time],
+                    timeout=PyFunceble.CONFIGURATION.timeout,
+                    verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                    allow_redirects=False,
                 )
 
     def referer_not_found(self, subject, extension):
@@ -219,6 +223,10 @@ class Logs:  # pragma: no cover
                 # The logs sharing is activated.
 
                 # And we share the logs with the api.
-                PyFunceble.Requests.post(
-                    PyFunceble.LINKS.api_no_referer, data=to_write[self.current_time]
+                PyFunceble.REQUESTS.post(
+                    PyFunceble.LINKS.api_no_referer,
+                    data=to_write[self.current_time],
+                    timeout=PyFunceble.CONFIGURATION.timeout,
+                    verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                    allow_redirects=False,
                 )

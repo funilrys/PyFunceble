@@ -406,14 +406,14 @@ class DirectoryStructure:  # pragma: no cover
                 # `dev` is not into the local version name.
 
                 # We get the production file from the master branch.
-                req = PyFunceble.Requests.get(
+                req = PyFunceble.REQUESTS.get(
                     PyFunceble.LINKS.dir_structure.replace("dev", "master")
                 )
             else:
                 # `dev` is into the local version name.
 
                 # We get the production file from the dev branch.
-                req = PyFunceble.Requests.get(
+                req = PyFunceble.REQUESTS.get(
                     PyFunceble.LINKS.dir_structure.replace("master", "dev")
                 )
 

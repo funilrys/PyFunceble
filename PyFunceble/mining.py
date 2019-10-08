@@ -80,7 +80,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     filename = None
     headers = {}
 
-    def __init__(self, filename, mysql_db=None):  # pragma: no cover
+    def __init__(
+        self, filename, mysql_db=None, parent_process=False
+    ):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
         self.database_file = ""
@@ -88,6 +90,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         self.filename = filename
         # Se create the current file namespace.
         self.database[self.filename] = {}
+        # We share the state.
+        self.parent = parent_process
 
         self.mysql_db = mysql_db
 
@@ -121,6 +125,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __getitem__(self, index):
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 if index in self.database[self.filename]:
                     return self.database[self.filename][index]
 
@@ -145,6 +152,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __setitem__(self, index, value):  # pylint: disable=too-many-branches
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 actual_value = self[index]
 
                 if actual_value:
@@ -200,6 +210,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __delitem__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 actual_value = self[index]
 
                 if actual_value:
@@ -246,13 +259,17 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         """
 
         try:
-            return PyFunceble.Requests.get(
-                url, timeout=PyFunceble.CONFIGURATION.timeout, headers=cls.headers
+            return PyFunceble.REQUESTS.get(
+                url,
+                headers=cls.headers,
+                timeout=PyFunceble.CONFIGURATION.timeout,
+                verify=PyFunceble.CONFIGURATION.verify_ssl_certificate,
+                allow_redirects=True,
             ).history
         except (
-            PyFunceble.Requests.exceptions.ConnectionError,
-            PyFunceble.Requests.exceptions.Timeout,
-            PyFunceble.Requests.exceptions.InvalidURL,
+            PyFunceble.REQUESTS.exceptions.ConnectionError,
+            PyFunceble.REQUESTS.exceptions.Timeout,
+            PyFunceble.REQUESTS.exceptions.InvalidURL,
             PyFunceble.socket.timeout,
             urllib3_exceptions.InvalidHeader,
             UnicodeDecodeError,  # The probability that this happend in production is minimal.
@@ -301,6 +318,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
 
                 for subject in self.database[self.filename].keys():
                     # We loop through the available list of status
@@ -351,8 +371,15 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             # We save the database into the file.
             Dict(self.database).to_json(self.database_file)
 
+            if self.parent:
+                try:
+                    del self.database
+                except AttributeError:
+                    pass
+
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
+    # pylint: disable=too-many-branches
     def mine(self, subject, subject_type):  # pragma: no cover
         """
         Search for domain or URL related to the original URL or domain.
@@ -369,6 +396,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 - :code:`domain`
         """
+
+        if self.parent and (not hasattr(self, "database") or not self.database):
+            self.load()
 
         if self.authorized and not self[subject]:
             # We are authorized to operate.
@@ -457,6 +487,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized:
+            if self.parent and (not hasattr(self, "database") or not self.database):
+                self.load()
+
             while True:
                 actual_value = self[subject]
 

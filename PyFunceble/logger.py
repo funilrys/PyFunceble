@@ -72,20 +72,20 @@ class Logger:  # pragma: no cover
     Provides our logging logic.
     """
 
-    format_to_apply = "[%(asctime)s::%(levelname)s::%(origin_path)s:%(origin_line)s@%(origin_func)s](PID%(process)s): %(message)s"  # pylint: disable=line-too-long
+    format_to_apply = "[%(asctime)s::%(levelname)s::%(origin_path)s:%(origin_line)s@%(origin_func)s](PID%(process)s:%(processName)s): %(message)s"  # pylint: disable=line-too-long
     """
     The format to apply.
     """
 
-    root_logger_format = "[%(asctime)s::%(levelname)s](PID%(process)s): %(message)s"
+    root_logger_format = (
+        "[%(asctime)s::%(levelname)s](PID%(process)s:%(processName)s): %(message)s"
+    )
     """
     The format to parse to the root logger (if used).
     """
 
     def __init__(self, debug=False, on_screen=False, output_directory=None):
-        self.on_screen = (
-            on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
-        )
+        self.on_screen = on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
 
         self.authorized = self.authorization(debug)
 
@@ -204,9 +204,6 @@ class Logger:  # pragma: no cover
             if self.on_screen:
                 handler = logging.StreamHandler()
             else:
-                # handler = logging.FileHandler(
-                #     self.output_directory + f"{handler_type.lower()}.log"
-                # )
                 handler = RotatingFileHandler(
                     self.output_directory + f"{handler_type.lower()}.log",
                     maxBytes=10_000_000,

@@ -133,7 +133,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # We clean the output directory.
                 PyFunceble.Clean(file_path=self.filename)
-        elif self.parent:
+        elif self.parent and (not hasattr(self, "database") or not self.database):
             # We are not authorized to operate.
 
             PyFunceble.LOGGER.info(
@@ -147,6 +147,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 if self.filename in self.database:
                     for _, status_data in self.database[self.filename].items():
                         if index in status_data:
@@ -211,6 +214,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 if (
                     self.filename not in self.database
                     or not self.database[self.filename]
@@ -238,7 +244,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 PyFunceble.LOGGER.info(f"File to test was previously indexed.")
                 return False
 
-        PyFunceble.LOGGER.info(
+        PyFunceble.LOGGER.info(  # pragma: no cover
             f"Could not check if the file to test "
             "was previously indexed. Unauthorized action."
         )
@@ -253,6 +259,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 if self.filename in self.database:
                     # We already have something related
                     # to the file we are testing.
@@ -332,6 +342,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We save the current database state.
             Dict(self.database).to_json(self.database_file)
 
+            if self.parent:
+                try:
+                    del self.database
+                except AttributeError:
+                    pass
+
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
     def load(self):
@@ -364,6 +380,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 # We empty the database.
                 self.database[self.filename] = {}
 
@@ -406,6 +425,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # We loop through the list of status.
 
                 if PyFunceble.CONFIGURATION.db_type == "json":
+                    self.load()
+
                     try:
                         # We get the number of tested of the currently read
                         # status.
@@ -472,6 +493,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if self.parent and (not hasattr(self, "database") or not self.database):
+                    self.load()
+
                 try:
                     return {
                         y for _, x in self.database[self.filename].items() for y in x
@@ -521,6 +545,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         """
 
         result = []
+
+        if self.parent and (not hasattr(self, "database") or not self.database):
+            self.load()
 
         if "complements" not in self.database[self.filename].keys():
             # The complements are not saved,
