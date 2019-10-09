@@ -382,9 +382,6 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
         # We initiate the URL to the IANA Root Zone Database page.
         self.iana_url = "https://www.iana.org/domains/root/db"
 
-        PyFunceble.LOGGER.debug(f"Destination: {repr(self.destination)}")
-        PyFunceble.LOGGER.debug(f"URL: {repr(self.iana_url)}")
-
     def load(self):
         """
         Initiate the IANA database if it is not the case.
@@ -395,10 +392,6 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We update it with the database content.
             PyFunceble.INTERN["iana_db"] = self.iana_db
-
-            PyFunceble.LOGGER.info(
-                "Loaded current state into memory (DATASET WONT BE LOGGED)."
-            )
 
     @classmethod
     def _get_referer(cls, extension):
