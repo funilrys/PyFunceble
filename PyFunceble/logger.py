@@ -89,11 +89,7 @@ class Logger:  # pragma: no cover
 
         self.authorized = self.authorization(debug)
 
-        if self.authorized:
-            self.formatter = logging.Formatter(self.format_to_apply)
-
-            self.__set_output_directory(output_directory)
-            self.__init_loggers()
+        self.init(output_directory)
 
     def authorization(self, debug):
         """
@@ -108,6 +104,17 @@ class Logger:  # pragma: no cover
             or PyFunceble.CONFIGURATION.debug
         )
 
+    def init(self, output_directory=None):
+        """
+        Init the logger.
+        """
+
+        if self.authorized:
+            self.formatter = logging.Formatter(self.format_to_apply)
+
+            self.__set_output_directory(output_directory)
+            self.__init_loggers()
+
     def __set_output_directory(self, output_directory):
         """
         Shares the given output directory.
@@ -117,6 +124,8 @@ class Logger:  # pragma: no cover
 
         :param string output_directory: The output directory.
         """
+
+        # pylint: disable=attribute-defined-outside-init
 
         if self.authorized:
             if output_directory:
@@ -136,7 +145,9 @@ class Logger:  # pragma: no cover
         Init all loggers.
         """
 
-        if self.authorized:
+        # pylint: disable=attribute-defined-outside-init
+
+        if self.authorized and not hasattr(self, "info_logger"):
             self.info_logger = logging.getLogger("PyFunceble.info")
             self.info_logger.setLevel(logging.INFO)
 
@@ -184,10 +195,14 @@ class Logger:  # pragma: no cover
 
         complete_file = interest[0].strip()[6:-1].split(PyFunceble.directory_separator)
 
-        if complete_file[-2] != PyFunceble.NAME:
+        try:
+            if complete_file[-2] != PyFunceble.NAME:
+                file = "/".join(complete_file)
+            else:
+                file = "/".join(complete_file[-2:])
+        except IndexError:
             file = "/".join(complete_file)
-        else:
-            file = "/".join(complete_file[-2:])
+
         line = interest[1].strip().split()[-1].strip()
         func_name = interest[2].strip()[3:]
 

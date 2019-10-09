@@ -63,7 +63,10 @@ License:
 from box import Box
 
 import PyFunceble
+from PyFunceble.dns_lookup import DNSLookup
 from PyFunceble.helpers import Dict, Directory, Download, File
+from PyFunceble.logger import Logger
+from PyFunceble.requests import Requests
 
 from .version import Version
 
@@ -234,11 +237,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 }
             )
 
-            PyFunceble.LOGGER = PyFunceble.Logger()
-            PyFunceble.REQUESTS = PyFunceble.Requests()
-            PyFunceble.DNSLOOKUP = PyFunceble.DNSLookup(
+            PyFunceble.LOGGER = Logger(debug=PyFunceble.CONFIGURATION.debug)
+            PyFunceble.REQUESTS = Requests()
+            PyFunceble.DNSLOOKUP = DNSLookup(
                 dns_server=PyFunceble.CONFIGURATION.dns_server,
                 lifetime=PyFunceble.CONFIGURATION.timeout,
+                tcp=PyFunceble.CONFIGURATION.dns_lookup_over_tcp,
             )
 
             # We load the directory structure.

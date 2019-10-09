@@ -127,6 +127,15 @@
 .. warning::
     Do not touch this index unless you have been invited to.
 
+:code:`dns_lookup_over_tcp`
+---------------------------
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Make all DNS lookup with TCP instead of UDP.
+
 :code:`dns_server`
 ------------------
 

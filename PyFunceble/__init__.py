@@ -87,17 +87,15 @@ from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.dns_lookup import DNSLookup
 from PyFunceble.iana import IANA
-from PyFunceble.logger import Logger
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
 from PyFunceble.publicsuffix import PublicSuffix
-from PyFunceble.requests import Requests
 from PyFunceble.whois_lookup import WhoisLookup
 
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.15.0.dev (Green Galago: Skitterbug)"
+VERSION = "2.16.0.dev (Green Galago: Skitterbug)"
 
 # We set the list of windows "platforms"
 WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
@@ -948,6 +946,14 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 parser.add_argument(
+                    "--dns-lookup-over-tcp",
+                    action="store_true",
+                    help="Make all DNS query with TCP. "
+                    "%s"
+                    % (current_value_format + repr(CONFIGURATION.dns_lookup_over_tcp)),
+                )
+
+                parser.add_argument(
                     "-ex",
                     "--execution",
                     action="store_true",
@@ -1283,7 +1289,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     "-t",
                     "--timeout",
                     type=int,
-                    default=5,
+                    default=0,
                     help="Switch the value of the timeout. %s"
                     % (
                         current_value_format
@@ -1371,6 +1377,11 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 args = parser.parse_args()
 
+                if args.debug:
+                    CONFIGURATION.debug = preset.switch("debug")
+                    LOGGER.authorized = LOGGER.authorization(None)
+                    LOGGER.init()
+
                 if args.less:
                     CONFIGURATION.less = args.less
                 elif not args.all:
@@ -1426,11 +1437,13 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if args.days_between_db_retest:
                     CONFIGURATION.days_between_db_retest = args.days_between_db_retest
 
-                if args.debug:
-                    CONFIGURATION.debug = preset.switch("debug")
-
                 if args.dns:
                     CONFIGURATION.dns_server = args.dns
+
+                if args.dns_lookup_over_tcp:
+                    CONFIGURATION.dns_lookup_over_tcp = preset.switch(
+                        "dns_lookup_over_tcp"
+                    )
 
                 if args.execution:
                     CONFIGURATION.show_execution_time = preset.switch(
@@ -1528,9 +1541,6 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if args.syntax:
                     CONFIGURATION.syntax = preset.switch("syntax")
 
-                if args.timeout:
-                    CONFIGURATION.timeout = args.timeout
-
                 if args.travis:
                     CONFIGURATION.travis = preset.switch("travis")
 
@@ -1548,6 +1558,9 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 if not CONFIGURATION.quiet:
                     CLICore.colorify_logo(home=True)
+
+                preset.timeout()
+                preset.dns_lookup_over_tcp()
 
                 if args.clean:
                     Clean()
@@ -1567,7 +1580,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 if args.public_suffix:
                     PublicSuffix().update()
 
-                Logger().info(f"ARGS:\n{args}")
+                LOGGER.info(f"ARGS:\n{args}")
 
                 # We compare the versions (upstream and local) and in between.
                 Version().compare()
@@ -1594,7 +1607,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     link_to_test=args.link,
                 )
             except Exception as e:
-                Logger().exception()
+                LOGGER.exception()
 
                 raise e
 

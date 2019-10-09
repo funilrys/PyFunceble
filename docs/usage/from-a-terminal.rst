@@ -220,6 +220,13 @@ Want to start without anything? This argument generates the output directory aut
     We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
     as :code:`INACTIVE`.
 
+:code:`--dns-lookup-over-tcp`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Make all DNS query through TCP instead of UDP.
+
+    **Default value:** :code:`True`
+
 :code:`-ex` | :code:`--execution`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -597,10 +604,10 @@ Global overview
                     [--complements] [-d DOMAIN] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [--directory-structure]
-                    [--dns DNS [DNS ...]] [-ex] [-f FILE] [--filter FILTER]
-                    [--help] [--hierarchical] [-h] [--http] [--iana] [--idna]
-                    [-ip IP] [--json] [--less] [--local] [--link LINK]
-                    [--mining] [-m]
+                    [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-ex]
+                    [-f FILE] [--filter FILTER] [--help] [--hierarchical] [-h]
+                    [--http] [--iana] [--idna] [-ip IP] [--json] [--less]
+                    [--local] [--link LINK] [--mining] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE] [-n]
                     [-nl] [-ns] [-nu] [-nw] [--percentage] [--plain]
                     [-p PROCESSES] [-psl] [-q] [--share-logs] [-s] [--split]
@@ -663,6 +670,9 @@ Global overview
         --dns DNS [DNS ...]   Set the DNS server(s) we have to work with. Multiple
                                 space separated DNS server can be given.
                                 Configured value: Follow OS DNS
+        --dns-lookup-over-tcp
+                                Make all DNS query with TCP. Configured
+                                value: True
         -ex, --execution      Switch the default value of the execution time
                                 showing. Configured value: False
         -f FILE, --file FILE  Read the given file and test all domains inside it. If
@@ -697,7 +707,7 @@ Global overview
         --multiprocess-merging-mode MULTIPROCESS_MERGING_MODE
                                 Sets the multiprocess merging mode. You can choose
                                 between the following `live|ends`. Configured
-                                value: 'ends'
+                                value: 'end'
         -n, --no-files        Switch the value of the production of output files.
                                 Configured value: False
         -nl, --no-logs        Switch the value of the production of logs files in

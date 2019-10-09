@@ -68,7 +68,6 @@ from dns.exception import DNSException
 
 import PyFunceble
 from PyFunceble.check import Check
-from PyFunceble.logger import Logger
 
 
 class DNSLookup:  # pylint: disable=too-few-public-methods
@@ -81,12 +80,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
     :param int lifetime: Set the lifetime of a query.
     """
 
-    def __init__(self, dns_server=None, lifetime=3):
+    def __init__(self, dns_server=None, lifetime=3, tcp=False):
         if dns_server:
             # A dns server is given.
 
-            Logger().info(f"DNS Server explicitly given, using the given one.")
-            Logger().debug(f"Given DNS server: {dns_server}")
+            PyFunceble.LOGGER.info(f"DNS Server explicitly given, using the given one.")
+            PyFunceble.LOGGER.debug(f"Given DNS server: {dns_server}")
 
             # We initiate the default resolver.
             self.dns_resolver = dns.resolver.Resolver(configure=False)
@@ -96,23 +95,34 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         else:
             # A dns server is not given.
 
-            Logger().info(f"DNS Server not explicitly given, using the systemwide one.")
+            PyFunceble.LOGGER.info(
+                f"DNS Server not explicitly given, using the systemwide one."
+            )
 
             # We configure everything with what the OS gives us.
             self.dns_resolver = dns.resolver.Resolver()
 
-            # We set the timeout
-            self.dns_resolver.timeout = lifetime
-            self.dns_resolver.lifetime = lifetime + 2
+        self.update_lifetime(lifetime)
+        self.tcp = tcp
 
-            Logger().debug(f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}")
-            Logger().debug(f"DNS Resolver timeout: {self.dns_resolver.timeout}")
-            Logger().debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
+        PyFunceble.LOGGER.debug(
+            f"DNS Resolver Nameservers: {self.dns_resolver.nameservers}"
+        )
+        PyFunceble.LOGGER.debug(f"DNS Resolver timeout: {self.dns_resolver.timeout}")
+        PyFunceble.LOGGER.debug(f"DNS Resolver lifetime: {self.dns_resolver.lifetime}")
+        PyFunceble.LOGGER.debug(f"DNS Resolver over TCP: {self.tcp}")
 
-            PyFunceble.INTERN["dns_lookup"] = {
-                "resolver": self.dns_resolver,
-                "given_dns_server": dns_server,
-            }
+        PyFunceble.INTERN["dns_lookup"] = {
+            "resolver": self.dns_resolver,
+            "given_dns_server": dns_server,
+        }
+
+    def update_lifetime(self, lifetime):
+        """
+        Updates the lifetime of a query.
+        """
+
+        self.dns_resolver.lifetime = lifetime
 
     def __get_dns_servers_from(self, inputed_dns):  # pragma: no cover
         """
@@ -148,11 +158,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def a_record(self, subject):  # pragma: no cover
+    def a_record(self, subject, tcp=None):  # pragma: no cover
         """
         Return the A record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of A record(s).
         :rtype: list, None
@@ -162,20 +173,26 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting A record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting A record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "A")]
+            return [str(x) for x in self.dns_resolver.query(subject, "A", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get A record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get A record of {repr(subject)}")
 
         return None
 
-    def aaaa_record(self, subject):  # pragma: no cover
+    def aaaa_record(self, subject, tcp=None):  # pragma: no cover
         """
         Return the AAAA record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of A record(s).
         :rtype: list, None
@@ -185,20 +202,26 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting AAAA record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting AAAA record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "AAAA")]
+            return [str(x) for x in self.dns_resolver.query(subject, "AAAA", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get AAAA record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get AAAA record of {repr(subject)}")
 
         return None
 
-    def cname_record(self, subject):  # pragma: no cover
+    def cname_record(self, subject, tcp=None):  # pragma: no cover
         """
         Return the CNAME record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of CNAME record(s).
         :rtype: list, None
@@ -208,16 +231,21 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting CNAME record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting CNAME record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "CNAME")]
+            return [str(x) for x in self.dns_resolver.query(subject, "CNAME", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get CNAME record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get CNAME record of {repr(subject)}")
 
         return None
 
-    def mx_record(self, subject):  # pragma: no cover
+    def mx_record(self, subject, tcp=None):  # pragma: no cover
         """
         Return the MX record of the given subject (if found).
 
@@ -231,20 +259,26 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting MX record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting MX record of {repr(subject)}")
             # We get the MX record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "MX")]
+            return [str(x) for x in self.dns_resolver.query(subject, "MX", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get MX record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get MX record of {repr(subject)}")
 
         return None
 
-    def ns_record(self, subject):
+    def ns_record(self, subject, tcp=None):
         """
         Return the NS record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of NS record(s).
         :rtype: list, None
@@ -254,20 +288,26 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting NS record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting NS record of {repr(subject)}")
             # We get the NS record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "NS")]
+            return [str(x) for x in self.dns_resolver.query(subject, "NS", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get NS record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get NS record of {repr(subject)}")
 
         return None
 
-    def txt_record(self, subject):  # pragma: no cover
+    def txt_record(self, subject, tcp=None):  # pragma: no cover
         """
         Return the TXT record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of TXT record(s).
         :rtype: list, None
@@ -277,21 +317,26 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting TXT record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting TXT record of {repr(subject)}")
             # We get the TXT record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "TXT")]
+            return [str(x) for x in self.dns_resolver.query(subject, "TXT", tcp=tcp)]
         except DNSException:
-            Logger().error(f"Could not get TXT record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get TXT record of {repr(subject)}")
 
         return None
 
-    @classmethod
-    def ptr_record(cls, subject, reverse_name=True):
+    def ptr_record(self, subject, reverse_name=True, tcp=None):
         """
         Return the PTR record of the given subject (if found).
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return: A list of PTR record(s).
         :rtype: list, None
@@ -301,8 +346,13 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
         try:
-            Logger().info(f"Getting TXT record of {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting TXT record of {repr(subject)}")
             if reverse_name:
                 # We get the reverse name we are going to request.
                 to_request = dns.reversename.from_address(subject)
@@ -310,9 +360,9 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 to_request = subject
 
             # We get the PTR record of the currently read A record.
-            return [str(x) for x in dns.resolver.query(to_request, "PTR")]
+            return [str(x) for x in self.dns_resolver.query(to_request, "PTR", tcp=tcp)]
         except DNSException:  # pragma: no cover
-            Logger().error(f"Could not get PTR record of {repr(subject)}")
+            PyFunceble.LOGGER.error(f"Could not get PTR record of {repr(subject)}")
 
         return None  # pragma: no cover
 
@@ -379,7 +429,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def __request_not_ip(self, subject, complete=False):
+    def __request_not_ip(self, subject, complete=False, tcp=None):
         """
         Handle the request for a subject which is not an IP.
 
@@ -390,29 +440,32 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
-        Logger().debug(f"{repr(subject)} is not IP. Requesting record.")
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"{repr(subject)} is not IP. Requesting record.")
 
         result = {}
 
         # We get the NS record of the given subject.
-        result["NS"] = self.ns_record(subject)
+        result["NS"] = self.ns_record(subject, tcp=tcp)
 
         if complete:  # pragma: no cover
 
             # We get the A record of the given subject.
-            result["A"] = self.a_record(subject)
+            result["A"] = self.a_record(subject, tcp=tcp)
 
             # We get the AAAA record of the given subject.
-            result["AAAA"] = self.aaaa_record(subject)
+            result["AAAA"] = self.aaaa_record(subject, tcp=tcp)
 
             # We get the CNAME record of the given subject.
-            result["CNAME"] = self.cname_record(subject)
+            result["CNAME"] = self.cname_record(subject, tcp=tcp)
 
             # We get the MX record of the given subject.
-            result["MX"] = self.mx_record(subject)
+            result["MX"] = self.mx_record(subject, tcp=tcp)
 
             # We get the TXT record of the given subject.
-            result["TXT"] = self.txt_record(subject)
+            result["TXT"] = self.txt_record(subject, tcp=tcp)
 
             if "A" in result and result["A"]:
                 # We could get some A record(s).
@@ -432,7 +485,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
                     try:
                         # We get the PTR record of the currently read A record.
-                        result["PTR"].extend(self.ptr_record(a_result))
+                        result["PTR"].extend(self.ptr_record(a_result, tcp=tcp))
                     except TypeError:  # pragma: no cover
                         pass
 
@@ -463,16 +516,16 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 # We delete it.
                 del result["addr_info"]
 
-        Logger().debug(f"Records for {repr(subject)}:\n{result}")
+        PyFunceble.LOGGER.debug(f"Records for {repr(subject)}:\n{result}")
 
         return result
 
-    @classmethod
-    def __request_ip(cls, subject):
+    def __request_ip(self, subject, tcp=None):
         """
         Handle the request for a subject which is an IP.
 
         :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
 
         :rtype: dict
         :raise ValueError: When a non string :code:`subject` is given.
@@ -481,35 +534,39 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
-        Logger().info(f"{repr(subject)} is an IP. Requesting PTR record.")
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.info(f"{repr(subject)} is an IP. Requesting PTR record.")
 
         result = {}
 
         # We get the PTR record of the given subject.
-        result["PTR"] = cls.ptr_record(subject)
+        result["PTR"] = self.ptr_record(subject, tcp=tcp)
 
         if "PTR" not in result or not result["PTR"]:  # pragma: no cover
             del result["PTR"]
 
-            Logger().error(f"PTR record for {repr(subject)} not found.")
+            PyFunceble.LOGGER.error(f"PTR record for {repr(subject)} not found.")
 
         if not result:  # pragma: no cover
             # We could not get DNS records about the given subject.
 
-            Logger().info(f"Getting hosts by addr for {repr(subject)}")
+            PyFunceble.LOGGER.info(f"Getting hosts by addr for {repr(subject)}")
 
-            result = cls.get_host_by_addr(subject)
+            result = self.get_host_by_addr(subject)
 
-        Logger().debug(f"Request result: \n{result}")
+        PyFunceble.LOGGER.debug(f"Request result: \n{result}")
 
         return result
 
-    def request(self, subject, complete=False):
+    def request(self, subject, complete=False, tcp=None):
         """
         Perform a DNS lookup/requests.
 
         :param str subject: The subject we are working with.
         :param bool complete: Tell us to return as many result as possible.
+        :param bool tcp: Tell us to use TCP for query.
 
         :return:
             A dict with following index if the given subject is not registered into the
@@ -544,19 +601,22 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         if not subject or not isinstance(subject, str):
             raise ValueError(f"<subject> must be of type {str} and not empty.")
 
+        if tcp is None:
+            tcp = self.tcp
+
         result = {}
 
         if not Check(subject).is_ip():
             # We are looking for something which is not an IPv4 or IPv6.
 
-            temp_result = self.__request_not_ip(subject, complete=complete)
+            temp_result = self.__request_not_ip(subject, complete=complete, tcp=tcp)
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)
         else:
             # We are working with something which is an IPv4 or IPv6.
 
-            temp_result = self.__request_ip(subject)
+            temp_result = self.__request_ip(subject, tcp=tcp)
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)

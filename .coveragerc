@@ -47,6 +47,7 @@ exclude_lines =
     if self\.parent and \(not hasattr\(self, "database"\) or not self\.database\):
     if self\.parent:
     if not subject or not isinstance\(subject, str\):
+    if tcp is None:
 
     # Don't complain for those blocks
     PyFunceble\.CONFIGURATION\.db_type == "mariadb"

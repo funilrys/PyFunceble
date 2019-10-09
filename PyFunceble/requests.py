@@ -156,9 +156,10 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
             self.poolmanager.connection_pool_kw.pop("server_hostname", None)
             self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
 
-            request.url = request.url.replace(
-                f"{parsed_url.hostname}", "pyfunceble-not-resolved"
-            )
+            # request.url = request.url.replace(
+            #     f"{parsed_url.hostname}", "pyfunceble-not-resolved"
+            # )
+            request.url = None
 
         return super(HostSSLAdapter, self).send(
             request, stream=False, timeout=None, verify=True, cert=None, proxies=None
@@ -238,9 +239,10 @@ class HostAdapter(requests.adapters.HTTPAdapter):
             self.poolmanager.connection_pool_kw.pop("server_hostname", None)
             self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
 
-            request.url = request.url.replace(
-                f"{parsed_url.hostname}", "pyfunceble-not-resolved"
-            )
+            # request.url = request.url.replace(
+            #     f"{parsed_url.hostname}", "pyfunceble-not-resolved"
+            # )
+            request.url = None
 
         return super(HostAdapter, self).send(
             request, stream=False, timeout=None, verify=True, cert=None, proxies=None
@@ -255,7 +257,7 @@ class Requests:
     """
 
     exceptions = requests.exceptions
-    pyfunceble_max_retry = 1
+    pyfunceble_max_retry = False
 
     def __init__(self):
         self.session = requests.Session()

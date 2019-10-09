@@ -80,6 +80,7 @@ class Preset:  # pragma: no cover
 
     def __init__(self):
         self.timeout()
+        self.dns_lookup_over_tcp()
         self.syntax_test()
         self.multiprocess()
 
@@ -345,7 +346,7 @@ class Preset:  # pragma: no cover
         """
 
         if cls.__are_we_allowed_to_overwrite("timeout") and (
-            not PyFunceble.CONFIGURATION.timeout or PyFunceble.CONFIGURATION.timeout < 3
+            not PyFunceble.CONFIGURATION.timeout or PyFunceble.CONFIGURATION.timeout < 0
         ):
             PyFunceble.CONFIGURATION.timeout = float(3)
 
@@ -359,3 +360,13 @@ class Preset:  # pragma: no cover
             PyFunceble.LOGGER.debug(
                 f"CONFIGURATION.timeout switched to {PyFunceble.CONFIGURATION.timeout}"
             )
+
+        PyFunceble.DNSLOOKUP.update_lifetime(PyFunceble.CONFIGURATION.timeout)
+
+    @classmethod
+    def dns_lookup_over_tcp(cls):
+        """
+        Ensure that the DNS lookup over tcp is proprely set.
+        """
+
+        PyFunceble.DNSLOOKUP.tcp = PyFunceble.CONFIGURATION.dns_lookup_over_tcp
