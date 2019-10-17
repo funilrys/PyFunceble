@@ -145,7 +145,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We print a message for the user on screen.
             print(
-                "Update of %s" % PyFunceble.OUTPUTS.default_files.public_suffix, end=" "
+                f"Update of {PyFunceble.OUTPUTS.default_files.public_suffix}", end=" "
             )
 
         # We loop through the line of the upstream file.
@@ -171,6 +171,10 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             # * We read, convert to dict and return the file content.
             # and
             # * We fill/create the database.
-            PyFunceble.INTERN["psl_db"] = Dict().from_json_file(
-                self.destination, return_dict_on_error=True
+            PyFunceble.INTERN.update(
+                {
+                    "psl_db": Dict().from_json_file(
+                        self.destination, return_dict_on_error=True
+                    )
+                }
             )

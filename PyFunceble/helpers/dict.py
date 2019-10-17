@@ -1,7 +1,9 @@
-from json import decoder, dump, dumps, load, loads
+from json import decoder, dump, dumps, loads
 
 from yaml import dump as yaml_dump
 from yaml import safe_load as yaml_load
+
+from .file import File
 
 
 class Dict:
@@ -196,12 +198,9 @@ class Dict:
         """
 
         try:
-            with open(
-                file_path, "r", encoding=encoding, newline=newline
-            ) as file_stream:
-                data = load(file_stream)
-
-            return data
+            return loads(
+                File(file_path=file_path).read(encoding=encoding, newline=newline)
+            )
         except decoder.JSONDecodeError:  # pragma: no cover
             return None if not return_dict_on_error else {}
 

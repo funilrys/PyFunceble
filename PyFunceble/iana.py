@@ -393,7 +393,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The global database is empty, None or does not exist.
 
             # We update it with the database content.
-            PyFunceble.INTERN["iana_db"] = self.iana_db.copy()
+            PyFunceble.INTERN.update({"iana_db": self.iana_db.copy()})
 
     @classmethod
     def _get_referer(cls, extension):
