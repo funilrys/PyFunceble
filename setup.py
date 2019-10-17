@@ -138,7 +138,12 @@ if __name__ == "__main__":
         license="https://git.io/vh1mP",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=["PyFunceble", "PyFunceble.config", "PyFunceble.abstracts"],
+        packages=[
+            "PyFunceble.abstracts",
+            "PyFunceble.config",
+            "PyFunceble.helpers",
+            "PyFunceble",
+        ],
         keywords=[
             "availability",
             "dns",
