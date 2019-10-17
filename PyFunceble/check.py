@@ -139,13 +139,13 @@ class Check:
                     domain_status = Check(splited_base[0]).is_domain()
 
                     # We check if the url base is a valid IP.
-                    ip_status = Check(splited_base[0]).is_ipv4()
+                    ip_status = Check(splited_base[0]).is_ip()
                 else:
                     # We check if the url base is a valid domain.
                     domain_status = Check(base).is_domain()
 
                     # We check if the url base is a valid IP.
-                    ip_status = Check(base).is_ipv4()
+                    ip_status = Check(base).is_ip()
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.

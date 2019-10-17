@@ -182,25 +182,14 @@ class Dict:
 
     @classmethod
     def from_json_file(
-        cls,
-        file_path,
-        encoding="utf-8",
-        newline="\n",
-        parse_int=None,
-        parse_float=None,
-        return_dict_on_error=False,
+        cls, file_path, encoding="utf-8", newline="\n", return_dict_on_error=False
     ):
         """
         Reads the given file path and convert it's content to
         dict/list (tolarated).
 
         :param str file_path: The file path.
-        :param bool ensure_ascii: Avoids unicode.
-        :param int indent: The indentation to apply.
-        :param bool sortkeys: Sorts the keys.
         :param str newline: The default newline to use.
-        :param bool parse_int: Try to convert digits to int.
-        :param bool floats: Try to convert float digits to float.
         :param bool return_dict_on_error: Return a dict instead of a NoneType.
 
         :rtype: dict|list
@@ -210,12 +199,7 @@ class Dict:
             with open(
                 file_path, "r", encoding=encoding, newline=newline
             ) as file_stream:
-                data = load(
-                    file_stream,
-                    encoding=encoding,
-                    parse_float=parse_float,
-                    parse_int=parse_int,
-                )
+                data = load(file_stream)
 
             return data
         except decoder.JSONDecodeError:  # pragma: no cover
@@ -237,32 +221,17 @@ class Dict:
         )
 
     @classmethod
-    def from_json(
-        cls,
-        json_str,
-        encoding="utf-8",
-        parse_int=None,
-        parse_float=None,
-        return_dict_on_error=False,
-    ):
+    def from_json(cls, json_str, return_dict_on_error=False):
         """
         Converts a given JSON string to dict/list.
 
-        :param str encoding: The encoding to use.
-        :param bool parse_int: Try to convert digits to int.
-        :param bool floats: Try to convert float digits to float.
         :param bool return_dict_on_error: Return a dict instead of a NoneType.
 
         :rtype: dict|list
         """
 
         try:
-            return loads(
-                json_str,
-                encoding=encoding,
-                parse_float=parse_float,
-                parse_int=parse_int,
-            )
+            return loads(json_str)
         except decoder.JSONDecodeError:  # pragma: no cover
             return None if not return_dict_on_error else {}
 
