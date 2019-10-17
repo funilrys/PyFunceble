@@ -184,7 +184,7 @@ class Dict:
 
     @classmethod
     def from_json_file(
-        cls, file_path, encoding="utf-8", newline="\n", return_dict_on_error=False
+        cls, file_path, encoding="utf-8", newline="\n", return_dict_on_error=True
     ):
         """
         Reads the given file path and convert it's content to
@@ -220,7 +220,7 @@ class Dict:
         )
 
     @classmethod
-    def from_json(cls, json_str, return_dict_on_error=False):
+    def from_json(cls, json_str, return_dict_on_error=True):
         """
         Converts a given JSON string to dict/list.
 

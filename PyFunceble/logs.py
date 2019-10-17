@@ -88,7 +88,7 @@ class Logs:  # pragma: no cover
         """
 
         if File(file).exists():
-            return Dict().from_json_file(file, return_dict_on_error=True)
+            return Dict().from_json_file(file)
 
         return {}
 

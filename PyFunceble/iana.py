@@ -372,9 +372,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The destination exist.
 
             # We get its content.
-            self.iana_db = Dict().from_json_file(
-                self.destination, return_dict_on_error=True
-            )
+            self.iana_db = Dict().from_json_file(self.destination)
         else:
             # The destination does not exist.
 

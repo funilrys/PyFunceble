@@ -48,7 +48,7 @@ class Download:  # pragma: no cover
                 response = req.text
 
                 if destination and isinstance(destination, str):
-                    File(destination).write(req.text)
+                    File(destination).write(req.text, overwrite=True)
 
                 return response
 

@@ -347,9 +347,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # The database file exists.
 
                 # We get its content and save it inside backup_content.
-                self.database = Dict().from_json_file(
-                    self.database_file, return_dict_on_error=True
-                )
+                self.database = Dict().from_json_file(self.database_file)
             else:
                 # The database file do not exists.
 

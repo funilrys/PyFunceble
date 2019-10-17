@@ -342,9 +342,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                 # The database file exists.
 
                 # We update the database with the content of the file.
-                self.database.update(
-                    Dict().from_json_file(self.database_file, return_dict_on_error=True)
-                )
+                self.database.update(Dict().from_json_file(self.database_file))
 
                 PyFunceble.LOGGER.info(
                     "Database content loaded in memory. (DATASET WONT BE LOGGED)"

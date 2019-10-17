@@ -172,9 +172,5 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             # and
             # * We fill/create the database.
             PyFunceble.INTERN.update(
-                {
-                    "psl_db": Dict().from_json_file(
-                        self.destination, return_dict_on_error=True
-                    )
-                }
+                {"psl_db": Dict().from_json_file(self.destination)}
             )

@@ -423,7 +423,7 @@ class DirectoryStructure:  # pragma: no cover
             # And we return the updated the structure from the last read file.
             # (with the names from the configuration file).
             return self._update_structure_from_config(
-                Dict().from_json_file(structure_file, return_dict_on_error=True)
+                Dict().from_json_file(structure_file)
             )
 
         # The destination is not the production file.
@@ -434,7 +434,7 @@ class DirectoryStructure:  # pragma: no cover
             # And we return the updated the structure from the given file.
             # (with the names from the configuration file).
             return self._update_structure_from_config(
-                Dict().from_json_file(structure_file, return_dict_on_error=True)
+                Dict().from_json_file(structure_file)
             )
 
         # The destination does not ends with `.json`.

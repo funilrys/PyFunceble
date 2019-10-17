@@ -242,6 +242,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We load the IANA database.
             PyFunceble.IANA().load()
+
             # We load the PSL database.
             PyFunceble.PublicSuffix().load()
 

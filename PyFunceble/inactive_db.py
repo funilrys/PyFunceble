@@ -231,9 +231,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             # We get the content of the database.
-            database_content = Dict().from_json_file(
-                self.database_file, return_dict_on_error=True
-            )
+            database_content = Dict().from_json_file(self.database_file)
 
             # We get the database top keys.
             database_top_keys = [
