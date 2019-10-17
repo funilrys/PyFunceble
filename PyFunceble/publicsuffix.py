@@ -77,11 +77,6 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         # We initiate a variablw which will save the database we are going to save.
         self.public_suffix_db = {}
 
-        if "psl_db" not in PyFunceble.INTERN:
-            # The psl database was not initiated.
-
-            PyFunceble.INTERN["psl_db"] = {}
-
     @classmethod
     def _data(cls):
         """
@@ -170,10 +165,12 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         Load the public suffix database into the system.
         """
 
-        if not PyFunceble.INTERN["psl_db"]:
+        if "psl_db" not in PyFunceble.INTERN or not PyFunceble.INTERN["psl_db"]:
             # The public database was not already loaded.
 
             # * We read, convert to dict and return the file content.
             # and
             # * We fill/create the database.
-            PyFunceble.INTERN["psl_db"] = Dict().from_json_file(self.destination)
+            PyFunceble.INTERN["psl_db"] = Dict().from_json_file(
+                self.destination, return_dict_on_error=True
+            )

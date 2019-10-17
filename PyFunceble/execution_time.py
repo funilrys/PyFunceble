@@ -177,7 +177,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 # The file we are working with exist.
 
                 # We get its content so we can directly work with it.
-                content = Dict().from_json_file(self.file)
+                content = Dict().from_json_file(self.file, return_dict_on_error=True)
             else:
                 # The file we are working with does not exist.
 

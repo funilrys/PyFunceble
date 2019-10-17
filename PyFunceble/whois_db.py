@@ -287,7 +287,11 @@ class WhoisDB:
             # * The database file exists.
 
             # We merge our current database into already initiated one.
-            self.database.update(self.merge(Dict().from_json_file(self.database_file)))
+            self.database.update(
+                self.merge(
+                    Dict().from_json_file(self.database_file, return_dict_on_error=True)
+                )
+            )
 
             PyFunceble.LOGGER.info(
                 "Database content loaded in memory. (DATASET WONT BE LOGGED)"

@@ -237,11 +237,14 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 }
             )
 
-            # We load the IANA database.
-            PyFunceble.IANA().load()
-
             PyFunceble.LOGGER = Logger(debug=PyFunceble.CONFIGURATION.debug)
             PyFunceble.REQUESTS = Requests()
+
+            # We load the IANA database.
+            PyFunceble.IANA().load()
+            # We load the PSL database.
+            PyFunceble.PublicSuffix().load()
+
             PyFunceble.DNSLOOKUP = DNSLookup(
                 dns_server=PyFunceble.CONFIGURATION.dns_server,
                 lifetime=PyFunceble.CONFIGURATION.timeout,
@@ -250,9 +253,6 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We load the directory structure.
             PyFunceble.DirectoryStructure()
-
-            # We load the PSL database.
-            PyFunceble.PublicSuffix().load()
 
             PyFunceble.INTERN.update({"config_loaded": True})
 

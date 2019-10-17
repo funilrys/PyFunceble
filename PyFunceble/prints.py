@@ -552,7 +552,9 @@ class Prints:
                 # The given output already exist.
 
                 # We get the content of the output.
-                content = Dict().from_json_file(self.file_output_instance.path)
+                content = Dict().from_json_file(
+                    self.file_output_instance.path, return_dict_on_error=True
+                )
 
                 if not content or isinstance(content, dict):
                     content = []

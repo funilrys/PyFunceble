@@ -372,7 +372,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The destination exist.
 
             # We get its content.
-            self.iana_db = Dict().from_json_file(self.destination)
+            self.iana_db = Dict().from_json_file(
+                self.destination, return_dict_on_error=True
+            )
         else:
             # The destination does not exist.
 
@@ -391,7 +393,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The global database is empty, None or does not exist.
 
             # We update it with the database content.
-            PyFunceble.INTERN["iana_db"] = self.iana_db
+            PyFunceble.INTERN["iana_db"] = self.iana_db.copy()
 
     @classmethod
     def _get_referer(cls, extension):
