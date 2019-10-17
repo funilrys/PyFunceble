@@ -351,10 +351,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
             #
             # Note: We add this one in order to allow the enduser to always have
             # a copy of our upstream configuration file.
-            Download(production_config_link, self.path_to_default_config).text()
+            Download(production_config_link).text(
+                destination=self.path_to_default_config
+            )
 
         # And we download the link content and return the download status.
-        return Download(production_config_link, self.path_to_config).text()
+        return Download(production_config_link).text(destination=self.path_to_config)
 
     def _install_db_type_files(self):
         """
@@ -392,7 +394,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 )
 
                 # We finally download the file.
-                Download(link_to_download, destination).text()
+                Download(link_to_download).text(destination=destination)
 
     def _install_iana_config(self):
         """
@@ -414,7 +416,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            return Download(iana_link, destination).text()
+            return Download(iana_link).text(destination=destination)
 
         # We are in the cloned version.
 
@@ -444,7 +446,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            return Download(psl_link, destination).text()
+            return Download(psl_link).text(destination=destination)
 
         # We are in the cloned version.
 
