@@ -60,7 +60,8 @@ License:
 """
 
 import PyFunceble
-from PyFunceble.helpers import Dict, Download, File
+from PyFunceble.helpers import Dict, Download
+from PyFunceble.helpers import Merge as helpers_merge
 
 from .version import Version
 
@@ -85,16 +86,12 @@ class Merge:  # pylint: disable=too-few-public-methods
 
         dict_instance = Dict()
 
-        self.local_config = dict_instance.from_yaml(File(self.path_to_config).read())
-        self.upstream_config = dict_instance.from_yaml(
-            Download(config_link, return_data=True).text()
-        )
+        self.local_config = dict_instance.from_yaml_file(self.path_to_config)
+        self.upstream_config = dict_instance.from_yaml(Download(config_link).text())
 
         if self.upstream_config["links"]["config"] != config_link:
             self.upstream_config = dict_instance.from_yaml(
-                Download(
-                    self.upstream_config["links"]["config"], return_data=True
-                ).text()
+                Download(self.upstream_config["links"]["config"]).text()
             )
 
         self.new_config = {}
@@ -121,7 +118,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         to_remove = []
 
         self.new_config = Dict(
-            Dict(self.upstream_config).merge(self.local_config)
+            helpers_merge(self.local_config).into(self.upstream_config)
         ).remove_key(to_remove)
 
         if "seconds_before_http_timeout" in self.new_config:
@@ -133,7 +130,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         Save the new configuration inside the configuration file.
         """
 
-        Dict(self.new_config).to_yaml(self.path_to_config)
+        Dict(self.new_config).to_yaml_file(self.path_to_config)
 
         if "config_loaded" in PyFunceble.INTERN:
             del PyFunceble.INTERN["config_loaded"]

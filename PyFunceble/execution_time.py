@@ -119,11 +119,12 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 + PyFunceble.OUTPUTS.logs.filenames.percentage
             )
 
-            if PyFunceble.CONFIGURATION.show_percentage and PyFunceble.path.isfile(
-                percentage_output
-            ):
-                with open(percentage_output, "a", encoding="utf-8") as file_stream:
-                    file_stream.write("\nExecution time: {0}".format(formatted_time))
+            file_instance = File(percentage_output)
+
+            if PyFunceble.CONFIGURATION.show_percentage and file_instance.exists():
+                file_instance.write(
+                    "\nExecution time: {0}".format(formatted_time), overwrite=False
+                )
 
         self._save(last=last)
 
@@ -172,11 +173,11 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                 + PyFunceble.OUTPUTS.logs.filenames.execution_time
             )
 
-            if PyFunceble.path.isfile(self.file):
+            if File(self.file).exists():
                 # The file we are working with exist.
 
                 # We get its content so we can directly work with it.
-                content = Dict().from_json(File(self.file).read())
+                content = Dict().from_json_file(self.file)
             else:
                 # The file we are working with does not exist.
 
@@ -246,7 +247,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
             try:
                 # We try to save the whole data at its final location.
-                Dict(content).to_json(self.file)
+                Dict(content).to_json_file(self.file)
             except FileNotFoundError:
                 pass
 

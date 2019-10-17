@@ -59,7 +59,7 @@ License:
 """
 
 import PyFunceble
-from PyFunceble.helpers import Dict, Download
+from PyFunceble.helpers import Dict, Directory, Download, File
 
 
 class Version:
@@ -90,9 +90,7 @@ class Version:
 
             # We get the link content and convert it to a dict which is more
             # usable.
-            self.upstream_data = Dict().from_yaml(
-                Download(upstream_link, return_data=True).text()
-            )
+            self.upstream_data = Dict().from_yaml(Download(upstream_link).text())
 
     @classmethod
     def split_versions(cls, version, return_non_digits=False):
@@ -449,7 +447,7 @@ class Version:
         PyFunceble which implicitly mean that we are in developement mode.
         """
 
-        if not PyFunceble.path.isdir(".git"):
+        if not Directory(".git").exists():
             # The git directory does not exist.
 
             # We return False, the current version is not the cloned version.
@@ -479,7 +477,7 @@ class Version:
         for file in list_of_file:
             # We loop through the list of file.
 
-            if not PyFunceble.path.isfile(file):
+            if not File(file).exists():
                 # The file does not exist in the current directory.
 
                 # We return False, the current version is not the cloned version.
@@ -490,7 +488,7 @@ class Version:
         for directory in list_of_dir:
             # We loop through the list of directory.
 
-            if not PyFunceble.path.isdir(directory):
+            if not Directory(directory).exists():
                 # The directory does not exist in the current directory.
 
                 # We return False, the current version is not the cloned version.

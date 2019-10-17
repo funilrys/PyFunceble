@@ -62,7 +62,7 @@ License:
 # pylint: enable=line-too-long
 
 import PyFunceble
-from PyFunceble.helpers import Command, Dict, File, Regex
+from PyFunceble.helpers import Command, Dict, Directory, File, Regex
 
 
 class Production:  # pylint: disable=too-few-public-methods
@@ -159,8 +159,8 @@ class Production:  # pylint: disable=too-few-public-methods
                 self._update_travis_yml()
 
                 # We save our version data into our `version.yaml` file.
-                Dict(self.data_version_yaml).to_yaml(
-                    PyFunceble.CONFIG_DIRECTORY + "version.yaml", flow_style=None
+                Dict(self.data_version_yaml).to_yaml_file(
+                    PyFunceble.CONFIG_DIRECTORY + "version.yaml"
                 )
 
                 # We prepare the message we are going to print on screen.
@@ -242,9 +242,9 @@ class Production:  # pylint: disable=too-few-public-methods
         ]
 
         for fix_it in to_fix:
-            if PyFunceble.path.isfile(fix_it):
+            if File(fix_it).exists():
                 self._update_docs(fix_it)
-            elif PyFunceble.path.isdir(fix_it):
+            elif Directory(fix_it).exists():
                 for root, _, files in PyFunceble.walk(fix_it):
                     for file in files:
                         self._update_docs(root + PyFunceble.directory_separator + file)
@@ -319,9 +319,7 @@ class Production:  # pylint: disable=too-few-public-methods
         Get and return the content of version.yaml
         """
 
-        return Dict().from_yaml(
-            File(PyFunceble.CONFIG_DIRECTORY + "version.yaml").read()
-        )
+        return Dict().from_yaml_file(PyFunceble.CONFIG_DIRECTORY + "version.yaml")
 
     def _is_version_greater(self):
         """
@@ -475,7 +473,7 @@ class Production:  # pylint: disable=too-few-public-methods
             # We loop through reach element of the map.
 
             # We process the replacement.
-            to_update = Regex(to_update, regex, replace_with=replacement).replace()
+            to_update = Regex(regex).replace_match(to_update, replacement)
 
         # We finally overwrite the file to fix with the filtered.
         # content.
@@ -522,7 +520,7 @@ class Production:  # pylint: disable=too-few-public-methods
             # We loop through our map.
 
             # And we process the replacement.
-            to_update = Regex(to_update, regex, replace_with=replacement).replace()
+            to_update = Regex(regex).replace_match(to_update, replacement)
 
         # We finally replace the content of the file with the filtered
         # version.
@@ -568,7 +566,7 @@ class Production:  # pylint: disable=too-few-public-methods
             # We loop through the map.
 
             # And we process the replacement.
-            to_update = Regex(to_update, regex, replace_with=replacement).replace()
+            to_update = Regex(regex).replace_match(to_update, replacement)
 
         # We finaly replace the file content with the filtered
         # content.

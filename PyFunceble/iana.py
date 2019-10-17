@@ -368,11 +368,11 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.iana
         )
 
-        if PyFunceble.path.isfile(self.destination):
+        if File(self.destination).exists():
             # The destination exist.
 
             # We get its content.
-            self.iana_db = Dict().from_json(File(self.destination).read())
+            self.iana_db = Dict().from_json_file(self.destination)
         else:
             # The destination does not exist.
 
@@ -381,9 +381,6 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
 
         # We initiate the URL to the IANA Root Zone Database page.
         self.iana_url = "https://www.iana.org/domains/root/db"
-
-        PyFunceble.LOGGER.debug(f"Destination: {repr(self.destination)}")
-        PyFunceble.LOGGER.debug(f"URL: {repr(self.iana_url)}")
 
     def load(self):
         """
@@ -395,10 +392,6 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We update it with the database content.
             PyFunceble.INTERN["iana_db"] = self.iana_db
-
-            PyFunceble.LOGGER.info(
-                "Loaded current state into memory (DATASET WONT BE LOGGED)."
-            )
 
     @classmethod
     def _get_referer(cls, extension):
@@ -428,9 +421,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             regex_referer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
 
             # We try to extract the referer.
-            matched = Regex(
-                iana_record, regex_referer, return_data=True, group=1
-            ).match()
+            matched = Regex(regex_referer).match(
+                iana_record, return_match=True, group=1
+            )
 
             PyFunceble.LOGGER.debug(f"Extracted: {repr(matched)}")
 
@@ -496,9 +489,9 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             # The link is in the line.
 
             # We try to extract the extension.
-            matched = Regex(
-                block, regex_valid_extension, return_data=True, rematch=True
-            ).match()[1]
+            matched = Regex(regex_valid_extension).match(
+                block, return_match=True, rematch=True
+            )[1]
 
             if matched:
                 # The extraction is not empty or None.
@@ -530,9 +523,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
             )
 
         upstream_lines = (
-            Download(self.iana_url, return_data=True)
-            .text()
-            .split('<span class="domain tld">')
+            Download(self.iana_url).text().split('<span class="domain tld">')
         )
 
         with Pool(PyFunceble.CONFIGURATION.maximal_processes) as pool:
@@ -553,7 +544,7 @@ class IANA:  # pragma: no cover pylint: disable=too-few-public-methods
                 already_checked.append(referer)
 
         # We save the content of the constructed database.
-        Dict(self.iana_db).to_json(self.destination)
+        Dict(self.iana_db).to_json_file(self.destination)
 
         if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.

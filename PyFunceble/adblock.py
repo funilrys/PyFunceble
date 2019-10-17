@@ -123,7 +123,7 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         for element in to_ignore:
             # We loop through the list of regex.
 
-            if Regex(line.strip(), element, return_data=False).match():
+            if Regex(element).match(line.strip(), return_match=False):
                 # The currently read line match the currently read
                 # regex.
 
@@ -155,9 +155,9 @@ class AdBlock:  # pylint: disable=too-few-public-methods
             try:
                 # We try to extract the list of domains from the currently read
                 # option.
-                domains = Regex(
-                    option, regex_domain_option, return_data=True, rematch=True, group=0
-                ).match()[-1]
+                domains = Regex(regex_domain_option).match(
+                    option, return_match=True, rematch=True, group=0
+                )[-1]
 
                 if domains:
                     # We could extract something.
@@ -249,30 +249,28 @@ class AdBlock:  # pylint: disable=too-few-public-methods
         for line in self.to_format:
             # We loop through the different line.
 
-            rematch = rematch_v3 = rematch_v4 = None
+            rematch = rematch_v3 = rematch_v4 = rematch_v5 = None
 
             # We extract the different group from our first regex.
-            rematch = Regex(
-                line, regex, return_data=True, rematch=True, group=0
-            ).match()
+            rematch = Regex(regex).match(line, return_match=True, group=0, rematch=True)
 
             # We extract the different group from our fourth regex.
             #
             # Note: We execute the following in second because it is more
             # specific that others.
-            rematch_v4 = Regex(
-                line, regex_v4, return_data=True, rematch=True, group=0
-            ).match()
+            rematch_v4 = Regex(regex_v4).match(
+                line, return_match=True, group=0, rematch=True
+            )
 
             # We extract the different group from our third regex.
-            rematch_v3 = Regex(
-                line, regex_v3, return_data=True, rematch=True, group=0
-            ).match()
+            rematch_v3 = Regex(regex_v3).match(
+                line, return_match=True, group=0, rematch=True
+            )
 
             # We extract the different group from our fifth regex.
-            rematch_v5 = Regex(
-                line, regex_v5, return_data=True, rematch=True, group=0
-            ).match()
+            rematch_v5 = Regex(regex_v5).match(
+                line, return_match=True, group=0, rematch=True
+            )
 
             if rematch:
                 # The first extraction was successfull.

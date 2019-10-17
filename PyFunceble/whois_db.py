@@ -279,7 +279,7 @@ class WhoisDB:
 
         if (
             self.authorized
-            and PyFunceble.path.isfile(self.database_file)
+            and File(self.database_file).exists()
             and PyFunceble.CONFIGURATION.db_type == "json"
         ):
             # * We are authorized to operate.
@@ -287,9 +287,7 @@ class WhoisDB:
             # * The database file exists.
 
             # We merge our current database into already initiated one.
-            self.database.update(
-                self.merge(Dict().from_json(File(self.database_file).read()))
-            )
+            self.database.update(self.merge(Dict().from_json_file(self.database_file)))
 
             PyFunceble.LOGGER.info(
                 "Database content loaded in memory. (DATASET WONT BE LOGGED)"
@@ -308,7 +306,7 @@ class WhoisDB:
             # We are authorized to operate.
 
             # We save the current state of the datbase.
-            Dict(self.database).to_json(self.database_file)
+            Dict(self.database).to_json_file(self.database_file)
 
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 

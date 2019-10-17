@@ -17,7 +17,7 @@ db_type: json
 # Enable / disable the generation of debug file(s).
 debug: False
 # Enable / disable the DNS Lookup through the TCP protocol.
-dns_lookup_over_tcp: True
+dns_lookup_over_tcp: False
 # Set the DNS server to use. If None is given we use the one given by the OS.
 # Note:
 #   The following format is expected if you want to give custom dns server.

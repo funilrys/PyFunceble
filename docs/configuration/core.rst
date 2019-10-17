@@ -132,7 +132,7 @@
 
     **Type:** :code:`boolean`
 
-    **Default value:** :code:`True`
+    **Default value:** :code:`False`
 
     **Description:** Make all DNS lookup with TCP instead of UDP.
 

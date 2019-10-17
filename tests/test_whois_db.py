@@ -162,7 +162,7 @@ class TestWhoisDB(TestCase):
 
         self.test_file_not_exist()
 
-        Dict(self.expected_content).to_json(self.file)
+        Dict(self.expected_content).to_json_file(self.file)
         self.whois_db.load()
 
         self.assertEqual(self.expected_content, self.whois_db.database)

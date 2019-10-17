@@ -143,7 +143,9 @@ disable=print-statement,
         logging-fstring-interpolation,
         logging-format-interpolation,
         access-member-before-definition,
-        too-many-arguments
+        too-many-arguments,
+        too-few-public-methods,
+        missing-docstring # DELETE THIS LINE
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

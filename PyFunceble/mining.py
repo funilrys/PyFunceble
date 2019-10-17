@@ -125,9 +125,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __getitem__(self, index):
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 if index in self.database[self.filename]:
                     return self.database[self.filename][index]
 
@@ -152,9 +149,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __setitem__(self, index, value):  # pylint: disable=too-many-branches
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 actual_value = self[index]
 
                 if actual_value:
@@ -210,9 +204,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     def __delitem__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 actual_value = self[index]
 
                 if actual_value:
@@ -319,9 +310,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION.db_type == "json":
 
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 for subject in self.database[self.filename].keys():
                     # We loop through the available list of status
                     # from the database.
@@ -350,11 +338,13 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
+            if File(self.database_file).exists():
                 # The database file exists.
 
                 # We update the database with the content of the file.
-                self.database.update(Dict().from_json(File(self.database_file).read()))
+                self.database.update(
+                    Dict().from_json_file(self.database_file, return_dict_on_error=True)
+                )
 
                 PyFunceble.LOGGER.info(
                     "Database content loaded in memory. (DATASET WONT BE LOGGED)"
@@ -369,13 +359,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             # We save the database into the file.
-            Dict(self.database).to_json(self.database_file)
-
-            if self.parent:
-                try:
-                    del self.database
-                except AttributeError:
-                    pass
+            Dict(self.database).to_json_file(self.database_file)
 
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
@@ -396,9 +380,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 - :code:`domain`
         """
-
-        if self.parent and (not hasattr(self, "database") or not self.database):
-            self.load()
 
         if self.authorized and not self[subject]:
             # We are authorized to operate.
@@ -475,7 +456,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         self[subject] = [local_result]
 
             # We save the database.
-            self.save()
+            if self.parent:
+                self.save()
 
     def remove(self, subject, history_member):
         """
@@ -487,9 +469,6 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized:
-            if self.parent and (not hasattr(self, "database") or not self.database):
-                self.load()
-
             while True:
                 actual_value = self[subject]
 
@@ -536,4 +515,5 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             if not self[subject]:  # pragma: no cover
                 del self[subject]
 
-            self.save()
+            if self.parent:
+                self.save()

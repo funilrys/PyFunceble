@@ -145,7 +145,7 @@ class TestInactiveDB(TestCase):
 
         self.test_file_not_exist()
 
-        Dict(self.expected_content).to_json(self.file)
+        Dict(self.expected_content).to_json_file(self.file)
         self.inactive_db.database = {}
         self.inactive_db.load()
 

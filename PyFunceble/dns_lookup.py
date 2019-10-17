@@ -117,12 +117,18 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             "given_dns_server": dns_server,
         }
 
-    def update_lifetime(self, lifetime):
+    def update_lifetime(self, lifetime):  # pragma: no cover
         """
         Updates the lifetime of a query.
         """
 
-        self.dns_resolver.lifetime = lifetime
+        if isinstance(lifetime, (int, float)):
+            if lifetime == self.dns_resolver.lifetime:
+                self.dns_resolver.lifetime = float(lifetime) + 2.0
+            else:
+                self.dns_resolver.lifetime = float(lifetime)
+        else:
+            self.dns_resolver.lifetime = self.dns_resolver.timeout + 2.0
 
     def __get_dns_servers_from(self, inputed_dns):  # pragma: no cover
         """
@@ -181,7 +187,10 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting A record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "A", tcp=tcp)]
+            result = [str(x) for x in self.dns_resolver.query(subject, "A", tcp=tcp)]
+            PyFunceble.LOGGER.info(f"Could get A record of {repr(subject)}: {result}")
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get A record of {repr(subject)}")
 
@@ -210,7 +219,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting AAAA record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "AAAA", tcp=tcp)]
+            result = [str(x) for x in self.dns_resolver.query(subject, "AAAA", tcp=tcp)]
+            PyFunceble.LOGGER.info(
+                f"Could get AAAA record of {repr(subject)}: {result}"
+            )
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get AAAA record of {repr(subject)}")
 
@@ -239,7 +253,14 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting CNAME record of {repr(subject)}")
             # We get the A record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "CNAME", tcp=tcp)]
+            result = [
+                str(x) for x in self.dns_resolver.query(subject, "CNAME", tcp=tcp)
+            ]
+            PyFunceble.LOGGER.info(
+                f"Could get CNAME record of {repr(subject)}: {result}"
+            )
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get CNAME record of {repr(subject)}")
 
@@ -267,7 +288,11 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting MX record of {repr(subject)}")
             # We get the MX record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "MX", tcp=tcp)]
+            result = [str(x) for x in self.dns_resolver.query(subject, "MX", tcp=tcp)]
+
+            PyFunceble.LOGGER.info(f"Could get MX record of {repr(subject)}: {result}")
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get MX record of {repr(subject)}")
 
@@ -296,7 +321,10 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting NS record of {repr(subject)}")
             # We get the NS record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "NS", tcp=tcp)]
+            result = [str(x) for x in self.dns_resolver.query(subject, "NS", tcp=tcp)]
+            PyFunceble.LOGGER.info(f"Could get NS record of {repr(subject)}: {result}")
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get NS record of {repr(subject)}")
 
@@ -325,7 +353,10 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting TXT record of {repr(subject)}")
             # We get the TXT record of the given subject.
-            return [str(x) for x in self.dns_resolver.query(subject, "TXT", tcp=tcp)]
+            result = [str(x) for x in self.dns_resolver.query(subject, "TXT", tcp=tcp)]
+            PyFunceble.LOGGER.info(f"Could get TXT record of {repr(subject)}: {result}")
+
+            return result
         except DNSException:
             PyFunceble.LOGGER.error(f"Could not get TXT record of {repr(subject)}")
 
@@ -360,7 +391,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 to_request = subject
 
             # We get the PTR record of the currently read A record.
-            return [str(x) for x in self.dns_resolver.query(to_request, "PTR", tcp=tcp)]
+            result = [
+                str(x) for x in self.dns_resolver.query(to_request, "PTR", tcp=tcp)
+            ]
+            PyFunceble.LOGGER.info(f"Could get PTR record of {repr(subject)}: {result}")
+
+            return result
         except DNSException:  # pragma: no cover
             PyFunceble.LOGGER.error(f"Could not get PTR record of {repr(subject)}")
 

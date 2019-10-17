@@ -196,7 +196,7 @@ class Travis:
             x for x in Command("git remote -v").execute().splitlines() if "(push)" in x
         ][0]
 
-        filtered = Regex(remote_of_interest, regex, return_data=True, group=1).match()
+        filtered = Regex(regex).match(remote_of_interest, return_match=True, group=1)
 
         if filtered and "@" in filtered:
             return filtered[filtered.find("@") + 1 :]
@@ -266,11 +266,8 @@ class Travis:
         the latest commit message.
         """
 
-        if (
-            self.authorized
-            and Regex(
-                Command("git log -1").execute(), self.regex_bypass, return_data=False
-            ).match()
+        if self.authorized and Regex(self.regex_bypass).match(
+            Command("git log -1").execute(), return_match=False
         ):
 
             PyFunceble.LOGGER.info(f"Bypass given. Ending process.")

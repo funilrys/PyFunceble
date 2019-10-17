@@ -60,7 +60,7 @@ License:
 """
 # pylint:enable=line-too-long
 import PyFunceble
-from PyFunceble.helpers import Dict, Download, File, List
+from PyFunceble.helpers import Dict, Download, List
 
 
 class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
@@ -95,7 +95,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         )
 
         # And we return the content of the previously declared link.
-        return Download(public_suffix_url, return_data=True).text()
+        return Download(public_suffix_url).text()
 
     def _extensions(self, line):
         """
@@ -157,7 +157,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
         list(map(self._extensions, self._data().split("\n")))
 
         # We save the content of our database in the final testination.
-        Dict(self.public_suffix_db).to_json(self.destination)
+        Dict(self.public_suffix_db).to_json_file(self.destination)
 
         if not PyFunceble.CONFIGURATION.quiet:
             # The quiet mode is not activated.
@@ -176,6 +176,4 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             # * We read, convert to dict and return the file content.
             # and
             # * We fill/create the database.
-            PyFunceble.INTERN["psl_db"] = Dict().from_json(
-                File(self.destination).read()
-            )
+            PyFunceble.INTERN["psl_db"] = Dict().from_json_file(self.destination)

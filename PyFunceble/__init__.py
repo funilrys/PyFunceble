@@ -78,6 +78,7 @@ from colorama import Back, Fore, Style
 from colorama import init as initiate_colorama
 from dotenv import load_dotenv
 
+import PyFunceble.abstracts as abstracts
 from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
 from PyFunceble.clean import Clean
@@ -86,6 +87,7 @@ from PyFunceble.config import Load, Merge, Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.dns_lookup import DNSLookup
+from PyFunceble.helpers import Directory
 from PyFunceble.iana import IANA
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
@@ -95,10 +97,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.16.0.dev (Green Galago: Skitterbug)"
-
-# We set the list of windows "platforms"
-WINDOWS_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
+VERSION = "2.17.0.dev (Green Galago: Skitterbug)"
 
 if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
@@ -108,14 +107,14 @@ elif "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
     CONFIG_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
 elif Version(True).is_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
-    CONFIG_DIRECTORY = getcwd() + directory_separator
+    CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
     # We handle the case that we are under Travis CI.
-    CONFIG_DIRECTORY = getcwd() + directory_separator
+    CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 else:  # pragma: no cover
     # We handle all other case and distributions specific cases.
 
-    if system().lower() == "linux" or system().lower() == "darwin":
+    if abstracts.Platform.is_unix():
         # We are under a Linux distribution.
 
         # We set the default configuration location path.
@@ -123,12 +122,12 @@ else:  # pragma: no cover
             path.expanduser("~" + directory_separator + ".config") + directory_separator
         )
 
-        if path.isdir(config_dir_path):
+        if Directory(config_dir_path).exists():
             # Everything went right:
             #   * `~/.config` exists.
             # We set our configuration location path as the directory we are working with.
             CONFIG_DIRECTORY = config_dir_path
-        elif path.isdir(path.expanduser("~")):
+        elif Directory(path.expanduser("~")).exists():
             # Something went wrong:
             #   * `~/.config` does not exists.
             #   * `~` exists.
@@ -144,8 +143,8 @@ else:  # pragma: no cover
             #   * `~/.config` does not exists.
             #   * `~` soes not exists.
             # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = getcwd() + directory_separator
-    elif system().lower() in WINDOWS_PLATFORMS:
+            CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
+    elif abstracts.Platform.is_windows():
         # We are under Windows or CygWin.
 
         if "APPDATA" in environ:
@@ -157,7 +156,7 @@ else:  # pragma: no cover
             # Everything went wrong:
             #   * `APPDATA` is not into the environnement variables.
             # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = getcwd() + directory_separator
+            CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 
     if not CONFIG_DIRECTORY.endswith(directory_separator):
         # If the directory we are working with does not ends with the directory
@@ -167,7 +166,7 @@ else:  # pragma: no cover
     # We append the name of the project to the directory we are working with.
     CONFIG_DIRECTORY += NAME + directory_separator
 
-    if not path.isdir(CONFIG_DIRECTORY):
+    if not Directory(CONFIG_DIRECTORY).exists():
         # If the directory does not exist we create it.
         mkdir(CONFIG_DIRECTORY)
 
@@ -178,7 +177,7 @@ if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
 
 # We set the location of the `output` directory which should always be in the current
 # directory.
-OUTPUT_DIRECTORY = getcwd() + directory_separator
+OUTPUT_DIRECTORY = Directory.get_current(with_end_sep=True)
 
 # We set the filename of the default configuration file.
 DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"

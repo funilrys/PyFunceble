@@ -258,6 +258,9 @@ class Preset:  # pragma: no cover
         ]:
             PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
 
+        if PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]:
+            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
+
     def simple_domain(self):
         """
         Prepare the global configuration for a domain
@@ -322,7 +325,7 @@ class Preset:  # pragma: no cover
         """
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            if PyFunceble.system().lower() not in PyFunceble.WINDOWS_PLATFORMS:
+            if not PyFunceble.abstracts.Platform.is_windows():
                 if (
                     PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]
                     and not PyFunceble.CONFIGURATION.simple

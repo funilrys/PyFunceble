@@ -66,7 +66,7 @@ from traceback import format_exc
 
 import PyFunceble
 from PyFunceble.file_core import FileCore
-from PyFunceble.helpers import Dict, File, List
+from PyFunceble.helpers import File, List, Merge
 from PyFunceble.sort import Sort
 
 
@@ -97,7 +97,9 @@ class OurProcessWrapper(Process):  # pragma: no cover
 
             # We send None as message as there was no exception.
             self.conn2.send(None)
-        except Exception as exception:  # pylint: disable= broad-except
+        except Exception as exception:  # pylint: disable=broad-except
+            PyFunceble.LOGGER.exception()
+
             # We get the traceback.
             traceback = format_exc()
 
@@ -115,6 +117,8 @@ class OurProcessWrapper(Process):  # pragma: no cover
 
             # We get and save the exception.
             self._exception_receiver = self.conn1.recv()
+
+        self.conn2.close()
 
         return self._exception_receiver
 
@@ -201,22 +205,25 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         for process in processes:
             # We loop through the list of processes.
 
-            if exception_present:
-                # We kill the process.
-                process.terminate()
+            try:
+                if process.exception and not exception_present:
+                    # There in an exception in the currently
+                    # read process.
 
-            if process.exception:
-                # There in an exception in the currently
-                # read process.
+                    # We get the traceback
+                    _, traceback = process.exception
 
-                # We get the traceback
-                _, traceback = process.exception
+                    # We print the traceback.
+                    print(traceback)
+                    PyFunceble.LOGGER.error(traceback)
 
-                # We print the traceback.
-                print(traceback)
-                PyFunceble.LOGGER.error(traceback)
+                    exception_present = True
 
-                exception_present = True
+                if exception_present:
+                    # We kill the process.
+                    process.terminate()
+            except AttributeError:
+                continue
 
         if exception_present:
             # We finally exit.
@@ -224,6 +231,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
             PyFunceble.sys.exit(1)
 
+    # pylint: disable=too-many-branches
     def __run_multiprocess_test(self, to_test, manager):
         """
         Test the given list to test with multiple process.
@@ -252,12 +260,9 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
         while True:
             # We get the list of active process.
             active = active_children()
-            # We initiate a variable which will save the process which are still running.
-            processes = []
 
             while (
                 len(active) <= PyFunceble.CONFIGURATION.maximal_processes
-                and len(processes) <= PyFunceble.CONFIGURATION.maximal_processes
                 and not self.autosave.is_time_exceed()
             ):
                 # We loop untill we reach the maximal number of processes.
@@ -281,8 +286,6 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                     process.name = f"PyF {subject}"
 
-                    # # We save it into our list of process.
-                    processes.append(process)
                     # We then start the job.
                     process.start()
 
@@ -304,11 +307,24 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     # We break the loop
                     break
 
-            while len(active) != 1:
+            self.__process_exception(active_children(), manager_data)
+
+            while len(
+                active
+            ) >= PyFunceble.CONFIGURATION.maximal_processes and "PyF" in " ".join(
+                [x.name for x in reversed(active)]
+            ):
                 active = active_children()
+
+                PyFunceble.LOGGER.info(
+                    f"Active processes: {[x.name for x in reversed(active)]}"
+                )
 
             if PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live":
                 if not finished and not self.autosave.is_time_exceed():
+                    while "PyF" in " ".join([x.name for x in reversed(active)]):
+                        active = active_children()
+
                     self.__merge_processes_data(manager_data)
 
                     manager_data = None
@@ -317,11 +333,11 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     continue
 
             if finished or self.autosave.is_time_exceed():
+                while "PyF" in " ".join([x.name for x in reversed(active)]):
+                    active = active_children()
 
                 self.__merge_processes_data(manager_data)
                 break
-
-        self.__process_exception(processes, manager_data)
 
     def __merge_processes_data(self, manager_data):
         """
@@ -354,8 +370,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                     # We assemble the currenlty read data with the data of the current
                     # session.
-                    self.autocontinue.database = Dict(self.autocontinue.database).merge(
-                        data["autocontinue"], strict=False
+                    self.autocontinue.database = Merge(data["autocontinue"]).into(
+                        self.autocontinue.database, strict=False
                     )
 
                 if self.inactive_db.authorized:
@@ -364,8 +380,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                     # We assemble the currenlty read data with the data of the current
                     # session.
-                    self.inactive_db.database = Dict(self.inactive_db.database).merge(
-                        data["inactive_db"], strict=False
+                    self.inactive_db.database = Merge(data["inactive_db"]).into(
+                        self.inactive_db.database, strict=False
                     )
 
                 if self.mining.authorized:
@@ -374,8 +390,8 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
 
                     # We assemble the currenlty read data with the data of the current
                     # session.
-                    self.mining.database = Dict(self.mining.database).merge(
-                        data["mining"], strict=False
+                    self.mining.database = Merge(data["mining"]).into(
+                        self.mining.database, strict=False
                     )
 
             # We save the autocontinue database.
@@ -419,26 +435,26 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                     self._get_list_to_of_subjects_to_test_from_file(file), manager
                 )
 
-            with Manager() as manager:
-                # We get the list of mined data to test.
-                to_test = chain(self.mining.list_of_mined())
+        with Manager() as manager:
+            # We get the list of mined data to test.
+            to_test = chain(self.mining.list_of_mined())
 
-                # We process the test/save of the mined data to test.
+            # We process the test/save of the mined data to test.
+            self.__run_multiprocess_test(to_test, manager)
+
+        with Manager() as manager:
+
+            # We get the list of complements to test.
+            complements = self.get_complements()
+
+            if complements:
+                # We process the test/save of the original list to test.
+                to_test = chain(complements)
+
                 self.__run_multiprocess_test(to_test, manager)
 
-            with Manager() as manager:
-
-                # We get the list of complements to test.
-                complements = self.get_complements()
-
-                if complements:
-                    # We process the test/save of the original list to test.
-                    to_test = chain(complements)
-
-                    self.__run_multiprocess_test(to_test, manager)
-
-                    # We inform all subsystem that we are not testing for complements anymore.
-                    self.complements_test_started = False
+                # We inform all subsystem that we are not testing for complements anymore.
+                self.complements_test_started = False
 
         # We clean the autocontinue subsystem, we finished
         # the test.

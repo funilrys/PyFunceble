@@ -225,7 +225,7 @@ Want to start without anything? This argument generates the output directory aut
 
     Make all DNS query through TCP instead of UDP.
 
-    **Default value:** :code:`True`
+    **Default value:** :code:`False`
 
 :code:`-ex` | :code:`--execution`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -672,7 +672,7 @@ Global overview
                                 Configured value: Follow OS DNS
         --dns-lookup-over-tcp
                                 Make all DNS query with TCP. Configured
-                                value: True
+                                value: False
         -ex, --execution      Switch the default value of the execution time
                                 showing. Configured value: False
         -f FILE, --file FILE  Read the given file and test all domains inside it. If

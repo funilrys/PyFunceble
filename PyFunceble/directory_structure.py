@@ -133,7 +133,7 @@ class DirectoryStructure:  # pragma: no cover
                 file_path = root + PyFunceble.directory_separator + file
 
                 # We get the hash of the file.
-                file_hash = Hash(file_path, "sha512", True).get()
+                file_hash = Hash().file(file_path)
 
                 # We convert the file content to a list.
                 lines_in_list = [line.rstrip("\n") for line in open(file_path)]
@@ -152,7 +152,7 @@ class DirectoryStructure:  # pragma: no cover
                 PyFunceble.LOGGER.info(f"{file_path} backed up.")
 
         # We finally save the directory structure into the production file.
-        Dict(result).to_json(self.base + "dir_structure_production.json")
+        Dict(result).to_json_file(self.base + "dir_structure_production.json")
 
         PyFunceble.LOGGER.info(f"Backup saved into dir_structure_production.json")
 
@@ -164,7 +164,7 @@ class DirectoryStructure:  # pragma: no cover
         :rtype: bool
         """
 
-        if PyFunceble.path.isdir(self.base + ".git"):
+        if Directory(self.base + ".git").exists():
             # The `.git` directory exist.
 
             if "PyFunceble" not in Command("git remote show origin").execute():
@@ -353,7 +353,7 @@ class DirectoryStructure:  # pragma: no cover
         try:
             # We try to save the structure into the right path.
 
-            Dict(structure).to_json(self.structure)
+            Dict(structure).to_json_file(self.structure)
         except FileNotFoundError:
             # But if we get a FileNotFoundError exception,
 
@@ -365,7 +365,7 @@ class DirectoryStructure:  # pragma: no cover
             PyFunceble.mkdir(to_create)
 
             # And we retry to save the structure into the right path.
-            Dict(structure).to_json(self.structure)
+            Dict(structure).to_json_file(self.structure)
 
         # We finaly return the new structure in case it's needed for other logic.
         return structure
@@ -385,12 +385,12 @@ class DirectoryStructure:  # pragma: no cover
         # We initiate the variable which will save the request instance.
         req = ""
 
-        if PyFunceble.path.isfile(self.structure):
+        if File(self.structure).exists():
             # The structure path file exist.
 
             # We set it as the destination file.
             structure_file = self.structure
-        elif PyFunceble.path.isfile(self.base + "dir_structure_production.json"):
+        elif File(self.base + "dir_structure_production.json").exists():
             # * The structure path file does not exist.
             # but
             # * The production structure path file exist.
@@ -423,7 +423,7 @@ class DirectoryStructure:  # pragma: no cover
             # And we return the updated the structure from the last read file.
             # (with the names from the configuration file).
             return self._update_structure_from_config(
-                Dict().from_json(File(structure_file).read())
+                Dict().from_json_file(structure_file)
             )
 
         # The destination is not the production file.
@@ -434,7 +434,7 @@ class DirectoryStructure:  # pragma: no cover
             # And we return the updated the structure from the given file.
             # (with the names from the configuration file).
             return self._update_structure_from_config(
-                Dict().from_json(File(structure_file).read())
+                Dict().from_json_file(structure_file)
             )
 
         # The destination does not ends with `.json`.
@@ -473,7 +473,7 @@ class DirectoryStructure:  # pragma: no cover
                 # And we create the directory if it does not exist.
                 cls._create_directory(full_path_to_create, True)
 
-        if not PyFunceble.path.isdir(directory):
+        if not Directory(directory).exists():
             # The given directory does not exist.
 
             travis = Travis()
@@ -539,9 +539,9 @@ class DirectoryStructure:  # pragma: no cover
                 online_sha = structure[directory][file]["sha512"]
 
                 # We update the content to write by replacing our glue with `\n`.
-                content_to_write = Regex(
-                    content_to_write, "@@@", escape=True, replace_with="\\n"
-                ).replace()
+                content_to_write = Regex("@@@", escape=True).replace_match(
+                    content_to_write, "\\n"
+                )
 
                 # We get the file path as .keep.
                 git_to_keep = file_path.replace("gitignore", "keep")
@@ -553,8 +553,8 @@ class DirectoryStructure:  # pragma: no cover
                     # We have to replace every .gitignore to .keep.
 
                     if (
-                        PyFunceble.path.isfile(file_path)
-                        and Hash(file_path, "sha512", True).get() == online_sha
+                        File(file_path).exists()
+                        and Hash().file(file_path) == online_sha
                     ):
                         # * The currently read file exist.
                         # and
@@ -581,8 +581,8 @@ class DirectoryStructure:  # pragma: no cover
                 else:
                     # We have to replace every .keep to .gitignore.
                     if (
-                        PyFunceble.path.isfile(keep_to_git)
-                        and Hash(file_path, "sha512", True).get() == online_sha
+                        File(keep_to_git).exists()
+                        and Hash().file(file_path) == online_sha
                     ):
                         # * The .keep file exist.
                         # and

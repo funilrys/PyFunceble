@@ -378,9 +378,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
 
             # We try to get the matched groups if the date to convert match the currently
             # read regex.
-            matched_result = Regex(
-                date_to_convert, regex_dates[regx], return_data=True, rematch=True
-            ).match()
+            matched_result = Regex(regex_dates[regx]).match(
+                date_to_convert, return_match=True, rematch=True
+            )
 
             if matched_result:
                 # The matched result is not None or an empty list.
@@ -420,9 +420,9 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                 # We loop through the list of regex.
 
                 # We try tro extract the expiration date from the WHOIS record.
-                expiration_date = Regex(
-                    self.whois_record, string, return_data=True, rematch=True, group=0
-                ).match()
+                expiration_date = Regex(string).match(
+                    self.whois_record, return_match=True, rematch=True, group=0
+                )
 
                 if expiration_date:
                     # The expiration date could be extracted.
@@ -434,22 +434,17 @@ class ExpirationDate:  # pylint: disable=too-few-public-methods
                     # is present into the extracted expiration date.
                     regex_rumbers = r"[0-9]"
 
-                    if Regex(
-                        self.expiration_date, regex_rumbers, return_data=False
-                    ).match():
+                    if Regex(regex_rumbers).match(
+                        self.expiration_date, return_match=False
+                    ):
                         # The extracted expiration date has a number.
 
                         # We format the extracted expiration date.
                         self.expiration_date = self._format()
 
-                        if (
-                            self.expiration_date
-                            and not Regex(
-                                self.expiration_date,
-                                r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}",
-                                return_data=False,
-                            ).match()
-                        ):
+                        if self.expiration_date and not Regex(
+                            r"[0-9]{2}\-[a-z]{3}\-2[0-9]{3}"
+                        ).match(self.expiration_date, return_match=False):
                             # The formatted expiration date does not match our unified format.
 
                             # We log the problem.

@@ -237,6 +237,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 }
             )
 
+            # We load the IANA database.
+            PyFunceble.IANA().load()
+
             PyFunceble.LOGGER = Logger(debug=PyFunceble.CONFIGURATION.debug)
             PyFunceble.REQUESTS = Requests()
             PyFunceble.DNSLOOKUP = DNSLookup(
@@ -250,9 +253,6 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We load the PSL database.
             PyFunceble.PublicSuffix().load()
-
-            # We load the IANA database.
-            PyFunceble.IANA().load()
 
             PyFunceble.INTERN.update({"config_loaded": True})
 
@@ -296,7 +296,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         try:
             # We try to load the configuration file.
 
-            self.data.update(Dict.from_yaml(File(self.path_to_config).read()))
+            self.data.update(Dict.from_yaml_file(self.path_to_config))
 
             # We install the latest iana configuration file.
             self._install_iana_config()
@@ -312,11 +312,13 @@ Install and load the default configuration at the mentioned location? [y/n] "
         except FileNotFoundError as exception:
             # But if the configuration file is not found.
 
-            if PyFunceble.path.isfile(self.path_to_default_config):
+            file_instance = File(self.path_to_default_config)
+
+            if file_instance.exists():
                 # The `DEFAULT_CONFIGURATION_FILENAME` file exists.
 
                 # We copy it as the configuration file.
-                File(self.path_to_default_config).copy(self.path_to_config)
+                file_instance.copy(self.path_to_config)
 
                 # And we load the configuration file as it does exist (yet).
                 self._load_config_file()
@@ -371,8 +373,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 + PyFunceble.directory_separator
             )
 
-            if not PyFunceble.path.isdir(destination_dir):
-                PyFunceble.mkdir(destination_dir)
+            Directory(destination_dir).create()
 
             # We set the list of index to download.
             index_to_download = ["mariadb", "mysql"]
@@ -409,7 +410,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We set the destination of the downloaded file.
         destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
-        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not File(destination).exists():
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -439,7 +440,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + self.data["outputs"]["default_files"]["public_suffix"]
         )
 
-        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not File(destination).exists():
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -469,11 +470,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + self.data["outputs"]["default_files"]["dir_structure"]
         )
 
-        if not self.version.is_cloned() or not PyFunceble.path.isfile(destination):
+        if not self.version.is_cloned() or not File(destination).exists():
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            data = Download(dir_structure_link, destination, return_data=True).text()
+            data = Download(dir_structure_link).text(destination=destination)
 
             File(destination).write(data, overwrite=True)
             return True

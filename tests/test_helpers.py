@@ -63,7 +63,7 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.helpers import Command, Dict, Directory, File, Hash, List, Regex
+from PyFunceble.helpers import Command, Dict, Directory, File, Hash, Merge, Regex
 
 
 class TestHash(TestCase):
@@ -97,7 +97,7 @@ class TestHash(TestCase):
         for algo, result in self.expected_hashed.items():
             self.assertEqual(
                 result,
-                Hash(data=to_test)._hash_data(algo),
+                Hash(algo=algo.upper()).data(to_test.encode()),
                 msg="%s did not passed the test" % repr(algo),
             )
 
@@ -119,7 +119,7 @@ class TestHash(TestCase):
         for algo, result in self.expected_hashed.items():
             self.assertEqual(
                 result,
-                Hash(self.file)._hash_file(algo),
+                Hash(algo=algo.upper()).file(self.file),
                 msg="%s did not passed the test" % repr(algo),
             )
 
@@ -141,35 +141,7 @@ class TestHash(TestCase):
         self.assertEqual(expected, actual)
 
         expected = None
-        actual = Hash(self.file).get()
-        self.assertEqual(expected, actual)
-
-    def test_get_all(self):
-        """
-        Test Hash.get() for the case that we want all.
-        """
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
-        self.assertEqual(expected, actual)
-
-        File(self.file).write("\n".join(self.data_to_write))
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-
-        expected = self.expected_hashed
-        actual = Hash(self.file, algorithm="all").get()
-        self.assertEqual(expected, actual)
-
-        actual = Hash(data="\n".join(self.data_to_write), algorithm="all").get()
-        self.assertEqual(expected, actual)
-
-        File(self.file).delete()
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
+        actual = Hash().file(self.file)
         self.assertEqual(expected, actual)
 
     def test_get_specific_algo(self):
@@ -189,13 +161,11 @@ class TestHash(TestCase):
         self.assertEqual(expected, actual)
 
         expected = self.expected_hashed["sha512"]
-        actual = Hash(self.file, algorithm="sha512", only_hash=True).get()
+        actual = Hash(algo="sha512").file(self.file)
         self.assertEqual(expected, actual)
 
         expected = self.expected_hashed["sha512"]
-        actual = Hash(
-            data="\n".join(self.data_to_write), algorithm="sha512", only_hash=True
-        ).get()
+        actual = Hash(algo="sha512").data("\n".join(self.data_to_write).encode())
         self.assertEqual(expected, actual)
 
         File(self.file).delete()
@@ -218,9 +188,7 @@ class TestCommand(TestCase):
         expected = "PyFunceble has been written by Fun Ilrys."
         actual = Command("echo '%s'" % expected).execute()
 
-        if (
-            PyFunceble.system().lower() in PyFunceble.WINDOWS_PLATFORMS
-        ):  # pragma: no cover
+        if PyFunceble.abstracts.Platform.is_windows():  # pragma: no cover
             self.assertEqual("'{}'\r\n".format(expected), actual)
         else:
             self.assertEqual("{}\n".format(expected), actual)
@@ -256,7 +224,7 @@ class TestList(TestCase):
         to_merge = ["hello", "world", 5, {"world": "hello"}]
         expected = ["hello", "world", 5, {"hello": "world", "world": "hello"}]
 
-        actual = List(self.main_list).merge(to_merge)
+        actual = Merge(to_merge).into(self.main_list)
         self.assertEqual(expected, actual)
 
         to_merge = ["hello", "world", 5, {"world": "hello"}]
@@ -269,13 +237,13 @@ class TestList(TestCase):
             {"world": "hello"},
         ]
 
-        actual = List(self.main_list).merge(to_merge, False)
+        actual = Merge(to_merge).into(self.main_list, strict=False)
         self.assertEqual(expected, actual)
 
         to_merge = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
         expected = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
 
-        actual = List(self.main_list).merge(to_merge)
+        actual = Merge(to_merge).into(self.main_list)
         self.assertEqual(expected, actual)
 
         to_merge = ["hello", "world", 5, {"hello": "you!"}, [1, 2, 4, 5]]
@@ -289,7 +257,7 @@ class TestList(TestCase):
             [1, 2, 4, 5],
         ]
 
-        actual = List(self.main_list).merge(to_merge, False)
+        actual = Merge(to_merge).into(self.main_list, strict=False)
         self.assertEqual(expected, actual)
 
 
@@ -455,7 +423,7 @@ class TestDict(TestCase):
 
         expected = "{hello: [This is PyFunceble!, Uhh!], world: Fun Ilrys}\n"
 
-        Dict(to_write).to_yaml(file_to_read, flow_style=True)
+        Dict(to_write).to_yaml_file(file_to_read, default_flow_style=True)
 
         expected = """hello:
 - This is PyFunceble!
@@ -463,7 +431,7 @@ class TestDict(TestCase):
 world: Fun Ilrys
 """
 
-        Dict(to_write).to_yaml(file_to_read, flow_style=False)
+        Dict(to_write).to_yaml_file(file_to_read, default_flow_style=False)
 
         actual = File(file_to_read).read()
         self.assertEqual(expected, actual)
@@ -495,7 +463,7 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge, strict=True)
+        actual = Merge(to_merge).into(origin, strict=True)
 
         self.assertEqual(expected, actual)
 
@@ -504,7 +472,7 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge, strict=False)
+        actual = Merge(to_merge).into(origin, strict=False)
 
         self.assertEqual(expected, actual)
 
@@ -528,7 +496,7 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge, strict=True)
+        actual = Merge(to_merge).into(origin, strict=True)
 
         self.assertEqual(expected, actual)
 
@@ -537,7 +505,7 @@ world: Fun Ilrys
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
         }
-        actual = Dict(origin).merge(to_merge, strict=False)
+        actual = Merge(to_merge).into(origin, strict=False)
 
         self.assertEqual(expected, actual)
 
@@ -729,7 +697,7 @@ class TestRegex(TestCase):
 
         regex = "fun"
         expected = ["hello", "world", "PyFunceble"]
-        actual = Regex(self.data_list, regex).not_matching_list()
+        actual = Regex(regex).get_not_matching_list(self.data_list)
 
         self.assertEqual(expected, actual)
 
@@ -740,7 +708,7 @@ class TestRegex(TestCase):
 
         regex = "fun"
         expected = ["funilrys", "funceble", "pyfunceble"]
-        actual = Regex(self.data_list, regex).matching_list()
+        actual = Regex(regex).get_matching_list(self.data_list)
 
         self.assertEqual(expected, actual)
 
@@ -752,7 +720,7 @@ class TestRegex(TestCase):
 
         regex = r"([a-z]{1,})\s([a-z]{1,})\s"
         expected = "is"
-        actual = Regex(self.data, regex, rematch=True, group=1).match()
+        actual = Regex(regex).match(self.data, rematch=True, group=1)
 
         self.assertEqual(expected, actual)
 
@@ -764,7 +732,7 @@ class TestRegex(TestCase):
 
         regex = "e"
         expected = "e"
-        actual = Regex(self.data, regex, group=0).match()
+        actual = Regex(regex).match(self.data, group=0)
 
         self.assertEqual(expected, actual)
 
@@ -776,7 +744,7 @@ class TestRegex(TestCase):
 
         regex = "th"
         expected = self.data
-        actual = Regex(self.data, regex).replace()
+        actual = Regex(regex).replace_match(self.data, None)
 
         self.assertEqual(expected, actual)
 
@@ -787,7 +755,7 @@ class TestRegex(TestCase):
 
         regex = "th"
         expected = "Hello, htis is Fun Ilrys. I just wanted to know how htings goes around hte tests."  # pylint: disable=line-too-long
-        actual = Regex(self.data, regex, replace_with="ht").replace()
+        actual = Regex(regex).replace_match(self.data, "ht")
 
         self.assertEqual(expected, actual)
 

@@ -71,7 +71,7 @@ from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
 from PyFunceble.generate import Generate
-from PyFunceble.helpers import Dict, Download, List, Regex
+from PyFunceble.helpers import Download, File, List, Merge, Regex
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mining import Mining
 from PyFunceble.mysql import MySQL
@@ -181,7 +181,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             ).format(table_name)
 
             with mysql_db.get_connection() as cursor:
-                to_set = Dict(output).merge({"file_path": filename})
+                to_set = Merge({"file_path": filename}).into(output)
 
                 to_set["digest"] = sha256(
                     bytes(to_set["file_path"] + to_set["tested"], "utf-8")
@@ -240,14 +240,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 # The given file is an URL.
 
                 if (
-                    not PyFunceble.path.isfile(destination)
+                    not File(destination).exists()
                     or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
                 ):
                     # The filename does not exist in the current directory
                     # or the currently number of tested is equal to 0.
 
                     # We download the content of the link.
-                    Download(self.file, destination).text()
+                    Download(self.file).text(destination=destination)
 
                     PyFunceble.LOGGER.info(
                         f"Downloaded {repr(self.file)} into {repr(destination)}"
@@ -516,7 +516,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             # We return None, there is nothing to test.
             return None
 
-        if Regex(line, self.regex_ignore, escape=False, return_data=False).match():
+        if Regex(self.regex_ignore).match(line, return_match=False):
             # The line match our list of elemenet
             # to ignore.
 
@@ -541,9 +541,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         if PyFunceble.CONFIGURATION.filter:
             # We have to filter.
 
-            if Regex(
-                subject, PyFunceble.CONFIGURATION.filter, return_data=False
-            ).match():
+            if Regex(PyFunceble.CONFIGURATION.filter).match(
+                subject, return_match=False
+            ):
                 # The line match the given filter.
 
                 # We get the status of the current line.
@@ -610,15 +610,15 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
                 # We process the autosaving if it is necessary.
                 self.autosave.process(test_completed=False)
-        elif PyFunceble.CONFIGURATION.db_type == "json":
+        elif manager_data is not None and PyFunceble.CONFIGURATION.db_type == "json":
             # We are in a multiprocess environment.
 
             # We save everything we initiated into the server process
             manager_data.append(
                 {
-                    "autocontinue": autocontinue.database,
-                    "inactive_db": inactive_db.database,
-                    "mining": mining.database,
+                    "autocontinue": autocontinue.database.copy(),
+                    "inactive_db": inactive_db.database.copy(),
+                    "mining": mining.database.copy(),
                 }
             )
 

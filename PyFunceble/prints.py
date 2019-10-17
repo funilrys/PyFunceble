@@ -186,7 +186,7 @@ class Prints:
         if (
             not PyFunceble.CONFIGURATION.no_files
             and self.output
-            and not PyFunceble.path.isfile(self.output)
+            and not self.file_output_instance.exists()
         ):
             # * We are allowed to generate files.
             # and
@@ -235,7 +235,7 @@ class Prints:
                 self.file_output_instance.write(link + date_of_generation)
 
             PyFunceble.LOGGER.info(
-                f"Created the {self.file_output_instance.file} file with the header."
+                f"Created the {self.file_output_instance.path} file with the header."
             )
 
     @classmethod
@@ -548,11 +548,11 @@ class Prints:
         if self.output:
             # The given output is not empty.
 
-            if PyFunceble.path.isfile(self.output):
+            if self.file_output_instance.exists():
                 # The given output already exist.
 
                 # We get the content of the output.
-                content = Dict().from_json(self.file_output_instance.read())
+                content = Dict().from_json_file(self.file_output_instance.path)
 
                 if not content or isinstance(content, dict):
                     content = []
@@ -573,7 +573,7 @@ class Prints:
                         content = List(content).custom_format(Sort.hierarchical)
 
                     # We finally save our content into the file.
-                    Dict(content).to_json(self.output)
+                    Dict(content).to_json_file(self.output)
                 else:
                     # The content is not a list.
 
@@ -587,7 +587,7 @@ class Prints:
                 # Note: We do not have to take care if self.data_to_print is a list
                 # formatted or not because this method should not be called if it is
                 # not the case.
-                Dict(self.data_to_print).to_json(self.output)
+                Dict(self.data_to_print).to_json_file(self.output)
         else:
             # The given output is empty.
 

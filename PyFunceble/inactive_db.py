@@ -63,7 +63,7 @@ License:
 from hashlib import sha256
 
 import PyFunceble
-from PyFunceble.helpers import Dict, File, List
+from PyFunceble.helpers import Dict, File, List, Merge
 
 
 class InactiveDB:  # pylint: disable=too-many-instance-attributes
@@ -132,9 +132,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 if subject not in self.is_present_cache:
                     for element in [
                         x for x in self.database[self.filename].keys() if x.isdigit()
@@ -167,9 +164,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         return False  # pragma: no cover
 
     def __getitem__(self, index):
-        if self.parent and (not hasattr(self, "database") or not self.database):
-            self.load()
-
         if (
             self.authorized
             and PyFunceble.CONFIGURATION.db_type == "json"
@@ -181,24 +175,21 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def __setitem__(self, index, value):
         if PyFunceble.CONFIGURATION.db_type == "json":
-            if self.parent and (not hasattr(self, "database") or not self.database):
-                self.load()
-
             actual_state = self[index]
 
             if actual_state:
                 if isinstance(actual_state, dict):
                     if isinstance(value, dict):  # pragma: no cover
-                        self.database[self.filename][index] = Dict(
+                        self.database[self.filename][index] = Merge(value).into(
                             self.database[self.filename][index]
-                        ).merge(value, strict=True)
+                        )
                     else:  # pragma: no cover
                         self.database[self.filename][index] = value
                 elif isinstance(actual_state, list):  # pragma: no cover
                     if isinstance(value, list):
-                        self.database[self.filename][index] = List(
-                            self.database[self.filename][index]
-                        ).merge(value, strict=False)
+                        Merge(value).into(
+                            self.database[self.filename][index], strict=False
+                        )
                     else:  # pragma: no cover
                         self.database[self.filename][index].append(value)
 
@@ -240,7 +231,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             # We get the content of the database.
-            database_content = Dict().from_json(File(self.database_file).read())
+            database_content = Dict().from_json_file(
+                self.database_file, return_dict_on_error=True
+            )
 
             # We get the database top keys.
             database_top_keys = [
@@ -272,9 +265,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         self.database[database_top_key] = {database_low_key: to_set}
                     else:
                         if database_low_key in self.database[database_top_key]:
-                            self.database[database_top_key][database_low_key] = Dict(
-                                self.database[database_top_key][database_low_key]
-                            ).merge(to_set, strict=False)
+                            self.database[database_top_key][database_low_key] = Merge(
+                                to_set
+                            ).into(
+                                self.database[database_top_key][database_low_key],
+                                strict=False,
+                            )
                         else:  # pragma: no cover
                             self.database[database_top_key][database_low_key] = to_set
 
@@ -288,7 +284,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
+            if File(self.database_file).exists():
                 # The database file exists.
 
                 self._merge()
@@ -334,13 +330,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             # We save the current database state into the database file.
-            Dict(self.database).to_json(self.database_file)
-
-            if self.parent:
-                try:
-                    del self.database
-                except AttributeError:
-                    pass
+            Dict(self.database).to_json_file(self.database_file)
 
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
@@ -357,7 +347,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We load the database.
             self.load()
 
-            self.save()
+            if self.parent:
+                self.save()
 
     @classmethod
     def _timestamp(cls):
@@ -383,9 +374,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 # We get the timestamp to use as index.
                 timestamp = str(self._timestamp())
 
@@ -403,7 +391,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 )
 
                 # And we save the database.
-                self.save()
+                if self.parent:
+                    self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 digest = sha256(bytes(self.filename + subject, "utf-8")).hexdigest()
 
@@ -456,9 +445,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 for data in self.database[self.filename]:
                     # We loop through the index of the file database.
 
@@ -479,7 +465,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     del self.database[self.filename][index]
 
                 # And we save the data into the database.
-                self.save()
+                if self.parent:
+                    self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = (
@@ -508,9 +495,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 try:
                     return {
                         z
@@ -554,9 +538,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 try:
                     return {
                         z

@@ -401,14 +401,8 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             for regx in regex_blogger:
                 # We loop through the list of regex to match.
 
-                if (
-                    regx in blogger_content_request.text
-                    or Regex(
-                        blogger_content_request.text,
-                        regx,
-                        return_data=False,
-                        escape=False,
-                    ).match()
+                if regx in blogger_content_request.text or Regex(regx).match(
+                    blogger_content_request.text, return_match=False
                 ):
                     # * The currently read regex is present into the docuement.
                     # or
@@ -504,9 +498,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                 for regx in self.regexes_active_to_inactive_potentially_down:
                     # We loop through the list of available regex.
 
-                    if Regex(
-                        data=self.subject, regex=regx, return_data=False, escape=False
-                    ).match():
+                    if Regex(regx).match(self.subject, return_match=False):
                         # The element we are currently testing match the
                         # regex we are currently reading.
 
@@ -549,9 +541,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                 for regx in self.regexes_active_to_inactive_potentially_up:
                     # We loop through the list of available regex.
 
-                    if Regex(
-                        data=self.subject, regex=regx, return_data=False, escape=False
-                    ).match():
+                    if Regex(regex=regx).match(self.subject, return_match=False):
                         # The element we are currently testing match the
                         # regex we are currently reading.
 

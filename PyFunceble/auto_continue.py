@@ -133,7 +133,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # We clean the output directory.
                 PyFunceble.Clean(file_path=self.filename)
-        elif self.parent and (not hasattr(self, "database") or not self.database):
+        elif self.parent:
             # We are not authorized to operate.
 
             PyFunceble.LOGGER.info(
@@ -147,9 +147,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 if self.filename in self.database:
                     for _, status_data in self.database[self.filename].items():
                         if index in status_data:
@@ -214,9 +211,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 if (
                     self.filename not in self.database
                     or not self.database[self.filename]
@@ -259,10 +253,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 if self.filename in self.database:
                     # We already have something related
                     # to the file we are testing.
@@ -288,7 +278,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 )
 
                 # We save everything.
-                self.save()
+                if self.parent:
+                    self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 # We construct the query string.
 
@@ -340,13 +331,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authoried to operate.
 
             # We save the current database state.
-            Dict(self.database).to_json(self.database_file)
-
-            if self.parent:
-                try:
-                    del self.database
-                except AttributeError:
-                    pass
+            Dict(self.database).to_json_file(self.database_file)
 
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
 
@@ -358,11 +343,13 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
             # We are authorized to operate.
 
-            if PyFunceble.path.isfile(self.database_file):
+            if File(self.database_file).exists():
                 # The database file exists.
 
                 # We get its content and save it inside backup_content.
-                self.database = Dict().from_json(File(self.database_file).read())
+                self.database = Dict().from_json_file(
+                    self.database_file, return_dict_on_error=True
+                )
             else:
                 # The database file do not exists.
 
@@ -380,14 +367,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We are authorized to operate.
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 # We empty the database.
                 self.database[self.filename] = {}
 
                 # And we save the current database state.
-                Dict(self.database).to_json(self.database_file)
+                Dict(self.database).to_json_file(self.database_file)
 
                 PyFunceble.LOGGER.info(
                     "Cleaned the data related to "
@@ -425,8 +409,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 # We loop through the list of status.
 
                 if PyFunceble.CONFIGURATION.db_type == "json":
-                    self.load()
-
                     try:
                         # We get the number of tested of the currently read
                         # status.
@@ -493,9 +475,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
-                if self.parent and (not hasattr(self, "database") or not self.database):
-                    self.load()
-
                 try:
                     return {
                         y for _, x in self.database[self.filename].items() for y in x
@@ -546,9 +525,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         result = []
 
-        if self.parent and (not hasattr(self, "database") or not self.database):
-            self.load()
-
         if "complements" not in self.database[self.filename].keys():
             # The complements are not saved,
 
@@ -573,7 +549,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             # We save the constructed list of complements
             self.database[self.filename]["complements"] = list(result)
-            self.save()
+
+            if self.parent:
+                self.save()
         else:
             # We get the complements we still have to test.
             result = self.database[self.filename]["complements"]

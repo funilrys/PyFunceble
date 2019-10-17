@@ -111,9 +111,8 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
 
         return None
 
-    def send(
-        self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
-    ):
+    # pylint: disable=arguments-differ
+    def send(self, request, **kwargs):
         """
         Overwrite the upstream :code:send` method.
 
@@ -137,6 +136,10 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
         parsed_url = urlparse(request.url)
         hostname_ip = self.__resolve_with_cache(parsed_url.hostname)
 
+        PyFunceble.LOGGER.info(
+            f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
+        )
+
         if parsed_url.scheme == "https" and hostname_ip:
             request.url = request.url.replace(
                 f"https://{parsed_url.hostname}", f"https://{hostname_ip}"
@@ -153,17 +156,16 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
                 f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
             )
         else:
-            self.poolmanager.connection_pool_kw.pop("server_hostname", None)
-            self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
+            self.poolmanager.connection_pool_kw.pop(
+                "server_hostname", "pyfunceble-not-resolved"
+            )
+            self.poolmanager.connection_pool_kw.pop(
+                "assert_hostname", "pyfunceble-not-resolved"
+            )
 
-            # request.url = request.url.replace(
-            #     f"{parsed_url.hostname}", "pyfunceble-not-resolved"
-            # )
-            request.url = None
+            request.url = "https://pyfunceble-not-resolved"
 
-        return super(HostSSLAdapter, self).send(
-            request, stream=False, timeout=None, verify=True, cert=None, proxies=None
-        )
+        return super(HostSSLAdapter, self).send(request, **kwargs)
 
 
 class HostAdapter(requests.adapters.HTTPAdapter):
@@ -189,9 +191,8 @@ class HostAdapter(requests.adapters.HTTPAdapter):
 
         return self.__resolve_cache[hostname]
 
-    def send(
-        self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None
-    ):
+    # pylint: disable=arguments-differ
+    def send(self, request, **kwargs):
         """
         Overwrite the upstream :code:send` method.
 
@@ -215,6 +216,10 @@ class HostAdapter(requests.adapters.HTTPAdapter):
         parsed_url = urlparse(request.url)
         hostname_ip = self.__resolve_with_cache(parsed_url.hostname)
 
+        PyFunceble.LOGGER.info(
+            f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
+        )
+
         if parsed_url.scheme == "http" and hostname_ip:
             request.url = request.url.replace(
                 f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
@@ -235,18 +240,16 @@ class HostAdapter(requests.adapters.HTTPAdapter):
             # not work.
             request.headers["Host"] = parsed_url.hostname
         else:
+            self.poolmanager.connection_pool_kw.pop(
+                "server_hostname", "pyfunceble-not-resolved"
+            )
+            self.poolmanager.connection_pool_kw.pop(
+                "assert_hostname", "pyfunceble-not-resolved"
+            )
 
-            self.poolmanager.connection_pool_kw.pop("server_hostname", None)
-            self.poolmanager.connection_pool_kw.pop("assert_hostname", None)
+            request.url = "http://pyfunceble-not-resolved"
 
-            # request.url = request.url.replace(
-            #     f"{parsed_url.hostname}", "pyfunceble-not-resolved"
-            # )
-            request.url = None
-
-        return super(HostAdapter, self).send(
-            request, stream=False, timeout=None, verify=True, cert=None, proxies=None
-        )
+        return super(HostAdapter, self).send(request, **kwargs)
 
 
 class Requests:
@@ -277,7 +280,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.get(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting GET request to {url}.")
+        result = self.session.get(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished GET request to {url}.")
+
+        return result
 
     def options(self, url, **kwargs):
         """
@@ -288,7 +295,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.options(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting OPTIONS request to {url}.")
+        result = self.session.options(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished OPTIONS request to {url}.")
+
+        return result
 
     def head(self, url, **kwargs):
         """
@@ -299,7 +310,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.head(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting HEAD request to {url}.")
+        result = self.session.head(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished HEAD request to {url}.")
+
+        return result
 
     def post(self, url, **kwargs):
         """
@@ -310,7 +325,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.post(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting POST request to {url}.")
+        result = self.session.post(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished POST request to {url}.")
+
+        return result
 
     def put(self, url, **kwargs):
         """
@@ -321,7 +340,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.put(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting PUT request to {url}.")
+        result = self.session.put(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished PUT request to {url}.")
+
+        return result
 
     def patch(self, url, **kwargs):
         """
@@ -332,7 +355,11 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.patch(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting PATCH request to {url}.")
+        result = self.session.patch(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished PATCH request to {url}.")
+
+        return result
 
     def delete(self, url, **kwargs):
         """
@@ -343,4 +370,8 @@ class Requests:
         :rtype: requests.Response
         """
 
-        return self.session.delete(url, **kwargs)
+        PyFunceble.LOGGER.debug("Starting DELETE request to {url}.")
+        result = self.session.delete(url, **kwargs)
+        PyFunceble.LOGGER.debug("Finished DELETE request to {url}.")
+
+        return result

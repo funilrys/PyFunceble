@@ -174,8 +174,10 @@ class MySQL:
         result = {}
         content = ""
 
-        if PyFunceble.path.isfile(env_file_location):
-            content = File(env_file_location).read()
+        file_instance = File(env_file_location)
+
+        if file_instance.exists():
+            content = file_instance.read()
 
             for line in content.splitlines():
                 line = line.strip()
@@ -213,8 +215,8 @@ class MySQL:
                 regex = r"{0}=.*".format(environment_variable)
 
                 if content:
-                    if Regex(content.splitlines(), f"^{regex}").matching_list():
-                        content = Regex(content, regex, replace_with=to_write).replace()
+                    if Regex(f"^{regex}").get_matching_list(content.splitlines()):
+                        content = Regex(regex).replace_match(content, to_write)
                     else:
                         if not content.endswith("\n"):
                             content += "\n{0}\n".format(to_write)

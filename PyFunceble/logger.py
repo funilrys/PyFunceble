@@ -64,6 +64,7 @@ from logging.handlers import RotatingFileHandler
 from traceback import format_exc, format_stack
 
 import PyFunceble
+from PyFunceble.helpers import Directory
 
 
 # pylint: disable=too-many-instance-attributes
@@ -137,8 +138,7 @@ class Logger:  # pragma: no cover
                     + PyFunceble.OUTPUTS.logs.directories.parent
                 )
 
-            if not PyFunceble.path.isdir(self.output_directory):
-                PyFunceble.mkdir(self.output_directory)
+            Directory(self.output_directory).create()
 
     def __init_loggers(self):
         """

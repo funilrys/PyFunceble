@@ -155,7 +155,7 @@ class TestsAutoContinue(TestCase):
         self.test_delete_file()
         self.auto_continue.authorized = True
 
-        Dict({"hello": "world"}).to_json(self.file_to_work_with)
+        Dict({"hello": "world"}).to_json_file(self.file_to_work_with)
 
         expected = {"hello": "world"}
         self.auto_continue.load()

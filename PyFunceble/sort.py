@@ -87,8 +87,8 @@ class Sort:  # pylint: disable=too-few-public-methods
 
         # We remove all special characters and return the formatted string.
         return (
-            Regex(element.strip(), cls.regex_replace, replace_with="@funilrys")
-            .replace()
+            Regex(cls.regex_replace)
+            .replace_match(element.strip(), "@funilrys")
             .replace("@funilrys", "")
         )
 
@@ -211,19 +211,15 @@ class Sort:  # pylint: disable=too-few-public-methods
 
                     # We remove all special characters and return the formatted string.
                     return (
-                        Regex(reversion, cls.regex_replace, replace_with="@funilrys")
-                        .replace()
+                        Regex(cls.regex_replace)
+                        .replace_match(reversion, "@funilrys")
                         .replace("@funilrys", "")
                     )
 
                 # We remove all special characters and return the formatted string.
                 return (
-                    Regex(
-                        to_sort + full_extension,
-                        cls.regex_replace,
-                        replace_with="@funilrys",
-                    )
-                    .replace()
+                    Regex(cls.regex_replace)
+                    .replace_match(to_sort + full_extension, "@funilrys")
                     .replace("@funilrys", "")
                 )
 

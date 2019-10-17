@@ -87,8 +87,8 @@ class Logs:  # pragma: no cover
         :rtype: dict
         """
 
-        if PyFunceble.path.isfile(file):
-            return Dict().from_json(File(file).read())
+        if File(file).exists():
+            return Dict().from_json_file(file)
 
         return {}
 
@@ -106,7 +106,7 @@ class Logs:  # pragma: no cover
             if not isinstance(content, dict):
                 content = {}
 
-            Dict(content).to_json(file)
+            Dict(content).to_json_file(file)
 
     def whois(self, subject, record):
         """

@@ -142,7 +142,7 @@ class TestMining(TestCase):
 
         self.assertEqual(expected, actual)
 
-        Dict(self.excepted_content).to_json(self.file)
+        Dict(self.excepted_content).to_json_file(self.file)
 
         self.mining.load()
 

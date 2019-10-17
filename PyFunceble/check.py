@@ -116,9 +116,9 @@ class Check:
                 regex = r"(^(http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
-                initial_base = base = Regex(
-                    self.subject, regex, return_data=True, rematch=True
-                ).match()[2]
+                initial_base = base = Regex(regex).match(
+                    self.subject, return_match=True, rematch=True
+                )[2]
 
                 if PyFunceble.CONFIGURATION.idna_conversion:
                     # We have to convert the domain to IDNA.
@@ -161,14 +161,9 @@ class Check:
                         # * We have to return the converted full URL.
 
                         # We return the converted full URL.
-                        return Regex(
-                            self.subject,
-                            initial_base,
-                            escape=True,
-                            return_data=True,
-                            replace_with=base,
-                            occurences=1,
-                        ).replace()
+                        return Regex(initial_base, escape=True).replace_match(
+                            self.subject, base, occurences=1
+                        )
 
                     if return_formatted:
                         # * We do not have to convert to IDNA.
@@ -238,7 +233,7 @@ class Check:
                 return False
 
             if (
-                Regex(self.subject, regex_valid_domains, return_data=False).match()
+                Regex(regex_valid_domains).match(self.subject, return_match=False)
                 and not subdomain_check
             ):
                 # * The element pass the domain validation.
@@ -291,9 +286,9 @@ class Check:
                             # We check if it passes our subdomain regex.
                             # * True: It's a valid domain.
                             # * False: It's an invalid domain.
-                            return Regex(
-                                to_check, regex_valid_subdomains, return_data=False
-                            ).match()
+                            return Regex(regex_valid_subdomains).match(
+                                to_check, return_match=False
+                            )
 
                     except ValueError:
                         # In case of a value error because the position is not found,
@@ -323,9 +318,7 @@ class Check:
                 # We check if it passes our subdomain regex.
                 # * True: It's a valid domain.
                 # * False: It's an invalid domain.
-                return Regex(
-                    to_check, regex_valid_subdomains, return_data=False
-                ).match()
+                return Regex(regex_valid_subdomains).match(to_check, return_match=False)
 
         except (ValueError, AttributeError):
             # In case of a value or attribute error we ignore them.
@@ -521,10 +514,10 @@ class Check:
                     or address.is_loopback
                     or address.is_link_local
                     or not address.is_global
-                    or Regex(self.subject, reserved_regex, return_data=False).match()
+                    or Regex(reserved_regex).match(self.subject, return_match=False)
                 )
             except AddressValueError:  # pragma: no cover
-                return Regex(self.subject, reserved_regex, return_data=False).match()
+                return Regex(reserved_regex).match(self.subject, return_match=False)
 
         # We return False, we are not working with an IPv4
         return False
