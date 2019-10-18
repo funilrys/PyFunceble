@@ -846,11 +846,11 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
 
                 # We print the information on screen.
                 Prints(data_to_print, "Generic").data()
-        elif Travis.authorization():
+        elif Travis.authorization() and PyFunceble.CONFIGURATION["quiet"]:
             # We are under Travis CI.
 
             # We print a dot.
-            print(".")
+            print(".", end="")
 
     def status_file(
         self, exclude_file_generation=False
