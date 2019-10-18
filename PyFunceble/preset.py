@@ -223,8 +223,7 @@ class Preset:  # pragma: no cover
 
         PyFunceble.LOGGER.debug(f"Counter resetted.")
 
-    @classmethod
-    def syntax_test(cls):
+    def syntax_test(self):
         """
         Disable the HTTP status code if we are
         testing for syntax
@@ -235,6 +234,12 @@ class Preset:  # pragma: no cover
 
             # We deactivate the http status code.
             PyFunceble.HTTP_CODE.active = False
+
+            should_be_disabled = ["generate_hosts"]
+            should_be_enabled = ["plain_list_domain"]
+
+            self.disable(should_be_disabled)
+            self.enable(should_be_enabled)
 
     @classmethod
     def maximal_processes(cls):

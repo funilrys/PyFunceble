@@ -97,7 +97,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.17.7.dev (Green Galago: Skitterbug)"
+VERSION = "2.17.8.dev (Green Galago: Skitterbug)"
 
 if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
