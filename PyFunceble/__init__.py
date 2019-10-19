@@ -97,7 +97,7 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.17.8.dev (Green Galago: Skitterbug)"
+VERSION = "2.17.9.dev (Green Galago: Skitterbug)"
 
 if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
@@ -977,6 +977,12 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 parser.add_argument(
+                    "--generate-files-from-database",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
                     "--help",
                     action="help",
                     default=argparse.SUPPRESS,
@@ -1604,6 +1610,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     url_to_test=args.url,
                     url_file_path=args.url_file,
                     link_to_test=args.link,
+                    generate_results_only=args.generate_files_from_database,
                 )
             except Exception as e:
                 LOGGER.exception()

@@ -75,7 +75,6 @@ from PyFunceble.helpers import Download, File, List, Merge, Regex
 from PyFunceble.inactive_db import InactiveDB
 from PyFunceble.mining import Mining
 from PyFunceble.mysql import MySQL
-from PyFunceble.percentage import Percentage
 from PyFunceble.sort import Sort
 from PyFunceble.status import Status, SyntaxStatus, URLStatus
 from PyFunceble.whois_db import WhoisDB
@@ -731,15 +730,16 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         Generate all needed files.
         """
 
-        Percentage({})
+        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
+            self.preset.reset_counters()
 
-        if PyFunceble.CONFIGURATION.syntax:
-            self.generate_files_of_status(PyFunceble.STATUS.official.valid)
-        else:
-            self.generate_files_of_status(PyFunceble.STATUS.official.up)
+            if PyFunceble.CONFIGURATION.syntax:
+                self.generate_files_of_status(PyFunceble.STATUS.official.valid)
+            else:
+                self.generate_files_of_status(PyFunceble.STATUS.official.up)
 
-        self.generate_files_of_status(PyFunceble.STATUS.official.down)
-        self.generate_files_of_status(PyFunceble.STATUS.official.invalid)
+            self.generate_files_of_status(PyFunceble.STATUS.official.down)
+            self.generate_files_of_status(PyFunceble.STATUS.official.invalid)
 
     def read_and_test_file_content(self):  # pragma: no cover
         """

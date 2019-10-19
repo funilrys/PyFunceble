@@ -191,50 +191,57 @@ class Clean:
             of almost everything.
         """
 
-        # We get the list of file to delete.
-        to_delete = self.file_to_delete(clean_all)
-        version = Version(True)
+        if (
+            "do_not_clean" not in PyFunceble.INTERN
+            or not PyFunceble.INTERN["do_not_clean"]
+        ):
+            # We get the list of file to delete.
+            to_delete = self.file_to_delete(clean_all)
+            version = Version(True)
 
-        if not version.is_cloned() and clean_all:  # pragma: no cover
-            to_delete.extend(self.databases_to_delete())
+            if not version.is_cloned() and clean_all:  # pragma: no cover
+                to_delete.extend(self.databases_to_delete())
 
-        for file in to_delete:
-            # We loop through the list of file to delete.
+            for file in to_delete:
+                # We loop through the list of file to delete.
 
-            # And we delete the currently read file.
-            File(file).delete()
+                # And we delete the currently read file.
+                File(file).delete()
 
-            PyFunceble.LOGGER.info(f"Deleted: {file}")
+                PyFunceble.LOGGER.info(f"Deleted: {file}")
 
-        if clean_all:  # pragma: no cover
-            to_avoid = ["whois"]
-        else:
-            to_avoid = ["whois", "auto_continue", "inactive", "mining"]
+            if clean_all:  # pragma: no cover
+                to_avoid = ["whois"]
+            else:
+                to_avoid = ["whois", "auto_continue", "inactive", "mining"]
 
-        if not file_path:
-            query = "DELETE FROM {0}"
-        else:  # pragma: no cover
-            query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
+            if not file_path:
+                query = "DELETE FROM {0}"
+            else:  # pragma: no cover
+                query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
 
-        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:  # pragma: no cover
-            from PyFunceble.mysql import MySQL
+            if PyFunceble.CONFIGURATION.db_type in [
+                "mariadb",
+                "mysql",
+            ]:  # pragma: no cover
+                from PyFunceble.mysql import MySQL
 
-            mysql_db = MySQL()
+                mysql_db = MySQL()
 
-            for database_name in [
-                y for x, y in mysql_db.tables.items() if x not in to_avoid
-            ]:
-                lquery = query.format(database_name)
+                for database_name in [
+                    y for x, y in mysql_db.tables.items() if x not in to_avoid
+                ]:
+                    lquery = query.format(database_name)
 
-                with mysql_db.get_connection() as cursor:
-                    cursor.execute(lquery, {"file_path": file_path})
+                    with mysql_db.get_connection() as cursor:
+                        cursor.execute(lquery, {"file_path": file_path})
 
-                    PyFunceble.LOGGER.info(
-                        "Cleaned the data related to "
-                        f"{repr(file_path)} from the {database_name} table."
-                    )
+                        PyFunceble.LOGGER.info(
+                            "Cleaned the data related to "
+                            f"{repr(file_path)} from the {database_name} table."
+                        )
 
-        if not version.is_cloned() and clean_all:  # pragma: no cover
-            PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
+            if not version.is_cloned() and clean_all:  # pragma: no cover
+                PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
 
-            PyFunceble.LOGGER.info(f"Reloaded configuration.")
+                PyFunceble.LOGGER.info(f"Reloaded configuration.")
