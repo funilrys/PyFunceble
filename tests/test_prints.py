@@ -64,7 +64,7 @@ import unittest.mock as mock  # pylint: disable=useless-import-alias
 from unittest import main as launch_tests
 
 import PyFunceble
-from helpers import BaseStdout
+from _helpers import BaseStdout
 from PyFunceble.helpers import File
 from PyFunceble.prints import Prints
 

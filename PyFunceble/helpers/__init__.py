@@ -2,6 +2,7 @@ from .command import Command
 from .dict import Dict
 from .directory import Directory
 from .download import Download
+from .environment_variable import EnvironmentVariable
 from .file import File
 from .hash import Hash
 from .list import List

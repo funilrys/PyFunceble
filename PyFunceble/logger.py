@@ -86,7 +86,10 @@ class Logger:  # pragma: no cover
     """
 
     def __init__(self, debug=False, on_screen=False, output_directory=None):
-        self.on_screen = on_screen or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
+        self.on_screen = (
+            on_screen
+            or PyFunceble.EnvironmentVariable("DEBUG_PYFUNCEBLE_ON_SCREEN").exists()
+        )
 
         self.authorized = self.authorization(debug)
 
@@ -100,8 +103,8 @@ class Logger:  # pragma: no cover
         return (
             debug
             or self.on_screen
-            or "DEBUG_PYFUNCEBLE" in PyFunceble.environ
-            or "DEBUG_PYFUNCEBLE_ON_SCREEN" in PyFunceble.environ
+            or PyFunceble.EnvironmentVariable("DEBUG_PYFUNCEBLE").exists()
+            or PyFunceble.EnvironmentVariable("DEBUG_PYFUNCEBLE_ON_SCREEN").exists()
             or PyFunceble.CONFIGURATION.debug
         )
 

@@ -64,7 +64,7 @@ from unittest import main as launch_tests
 import PyFunceble
 
 # pylint: enable=line-too-long
-from helpers import BaseStdout
+from _helpers import BaseStdout
 from PyFunceble.cli_core import CLICore
 
 

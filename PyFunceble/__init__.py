@@ -79,6 +79,7 @@ from colorama import init as initiate_colorama
 from dotenv import load_dotenv
 
 import PyFunceble.abstracts as abstracts
+import PyFunceble.exceptions as exceptions
 from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
 from PyFunceble.clean import Clean
@@ -87,7 +88,7 @@ from PyFunceble.config import Load, Merge, Version
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.dns_lookup import DNSLookup
-from PyFunceble.helpers import Directory
+from PyFunceble.helpers import Directory, EnvironmentVariable
 from PyFunceble.iana import IANA
 from PyFunceble.preset import Preset
 from PyFunceble.production import Production
@@ -97,18 +98,19 @@ from PyFunceble.whois_lookup import WhoisLookup
 # We set our project name.
 NAME = "PyFunceble"
 # We set out project version.
-VERSION = "2.17.9.dev (Green Galago: Skitterbug)"
+VERSION = "2.17.10.dev (Green Galago: Skitterbug)"
 
-if "PYFUNCEBLE_CONFIG_DIR" in environ:  # pragma: no cover
+
+if EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
-    CONFIG_DIRECTORY = environ["PYFUNCEBLE_CONFIG_DIR"]
-elif "PYFUNCEBLE_OUTPUT_DIR" in environ:  # pragma: no cover
+    CONFIG_DIRECTORY = EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").get_value()
+elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
     # We hande the retro compatibility.
-    CONFIG_DIRECTORY = environ["PYFUNCEBLE_OUTPUT_DIR"]
+    CONFIG_DIRECTORY = EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").get_value()
 elif Version(True).is_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
     CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
-elif "TRAVIS_BUILD_DIR" in environ:  # pragma: no cover
+elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
     # We handle the case that we are under Travis CI.
     CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 else:  # pragma: no cover
@@ -147,11 +149,11 @@ else:  # pragma: no cover
     elif abstracts.Platform.is_windows():
         # We are under Windows or CygWin.
 
-        if "APPDATA" in environ:
+        if EnvironmentVariable("APPDATA").exists():
             # Everything went right:
             #   * `APPDATA` is into the environnement variables.
             # We set it as the directory we are working with.
-            CONFIG_DIRECTORY = environ["APPDATA"]
+            CONFIG_DIRECTORY = EnvironmentVariable("APPDATA").get_value()
         else:
             # Everything went wrong:
             #   * `APPDATA` is not into the environnement variables.

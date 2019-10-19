@@ -147,7 +147,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         Execute the logic behind the merging.
         """
 
-        if "PYFUNCEBLE_AUTO_CONFIGURATION" not in PyFunceble.environ:
+        if not PyFunceble.EnvironmentVariable("PYFUNCEBLE_AUTO_CONFIGURATION").exists():
             # The auto configuration environment variable is not set.
 
             while True:

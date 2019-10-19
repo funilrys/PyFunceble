@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide some helpers for the tests.
+Provides an easy way to work with environment variable.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,23 +59,74 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-import sys
-from io import StringIO
-from unittest import TestCase
+
+from os import environ
 
 
-class BaseStdout(TestCase):
+class EnvironmentVariable:
     """
-    Use when we want to catch stdout.
+    Simplify the way we work with environment variable.
+
+    :param str name:
+        The name of the environment variable to work with.
     """
 
-    def setUp(self):
+    def __init__(self, name):
+        self.name = name
+
+    def exists(self, name=None):
         """
-        Setup stdout.
+        Checks if the given environement variable name exists.
+
+        :param str name
+            The name of the environment variable to work with.
+
+            .. note::
+                If this is not given, we report to the globally
+                give one.
+
+        :rtype: bool
         """
 
-        sys.stdout = StringIO()
+        if name is None:
+            name = self.name
 
-    def tearDown(self):
-        sys.stdout.close()
-        sys.stdout = sys.__stdout__
+        return name in environ
+
+    def get_value(self, name=None, default=None):
+        """
+        Returns the value of the given environment variable name
+        (if exists.)
+
+        :param str name
+            The name of the environment variable to work with.
+
+            .. note::
+                If this is not given, we report to the globally
+                give one.
+        :param default: The default value to return.
+        """
+
+        if name is None:
+            name = self.name
+
+        if self.exists(name=name):
+            return environ[name]
+
+        return default
+
+    def set_value(self, value):
+        """
+        Sets the given value into the given environment variable name.
+
+        :param str value:
+            The value to set.
+        :raise TypeError: When the value is not a string.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> must be {str}, {type(value)} given.")
+
+        environ[self.name] = value
+
+        return self.exists(name=self.name) and self.get_value(name=self.name) == value

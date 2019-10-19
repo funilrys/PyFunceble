@@ -235,11 +235,12 @@ class MySQL:
         if self.authorized:
             if not self.initiated:
                 for (description, data) in self.variables.items():
-                    if data["env"] in PyFunceble.environ:
+                    environment_var = PyFunceble.EnvironmentVariable(data["env"])
+                    if environment_var.exists():
                         setattr(
                             self,
                             "_{0}".format(description),
-                            PyFunceble.environ[data["env"]],
+                            environment_var.get_value(),
                         )
                     else:
                         message = "[MySQL/MariaDB] Please give us your DB {0} ({1}): ".format(

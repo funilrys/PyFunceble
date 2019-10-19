@@ -108,7 +108,9 @@ class Load:  # pylint: disable=too-few-public-methods
         except FileNotFoundError:
             # We got a FileNotFoundError
 
-            if "PYFUNCEBLE_AUTO_CONFIGURATION" not in PyFunceble.environ:
+            if not PyFunceble.EnvironmentVariable(
+                "PYFUNCEBLE_AUTO_CONFIGURATION"
+            ).exists():
                 # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
 
                 while True:

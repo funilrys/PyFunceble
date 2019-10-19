@@ -178,12 +178,9 @@ class Travis:
         Provide the operation authorization.
         """
 
-        try:
-            _ = PyFunceble.environ["TRAVIS_BUILD_DIR"]
-
+        if PyFunceble.EnvironmentVariable("TRAVIS_BUILD_DIR").exists():
             return PyFunceble.CONFIGURATION.travis
-        except KeyError:
-            return False
+        return False
 
     @classmethod
     def __get_remote_destination(cls):
@@ -210,21 +207,34 @@ class Travis:
         if self.authorized:
             remote = self.__get_remote_destination()
 
+            gh_token = PyFunceble.EnvironmentVariable("GH_TOKEN").get_value(
+                default=None
+            )
+            git_email = PyFunceble.EnvironmentVariable("GIT_EMAIL").get_value(
+                default=None
+            )
+            git_name = PyFunceble.EnvironmentVariable("GIT_NAME").get_value(
+                default=None
+            )
+
+            if not gh_token:
+                raise PyFunceble.exceptions.GitHubTokenNotFound()
+
+            if not git_email:
+                raise PyFunceble.exceptions.GitEmailNotFound()
+
+            if not git_name:
+                raise PyFunceble.exceptions.GitNameNotFound()
+
             commands = [
                 ("git remote rm origin", True),
                 (
                     "git remote add origin "
-                    f'https://{PyFunceble.environ["GH_TOKEN"]}@{remote}',  # pylint: disable=line-too-long
+                    f"https://{gh_token}@{remote}",  # pylint: disable=line-too-long
                     False,
                 ),
-                (
-                    f'git config --global user.email "{PyFunceble.environ["GIT_EMAIL"]}"',
-                    True,
-                ),
-                (
-                    f'git config --global user.name "{PyFunceble.environ["GIT_NAME"]}"',
-                    True,
-                ),
+                (f'git config --global user.email "{git_email}"', True),
+                (f'git config --global user.name "{git_name}"', True),
                 ("git config --global push.default simple", True),
                 (f'git checkout "{PyFunceble.CONFIGURATION.travis_branch}"', True),
             ]
@@ -243,7 +253,7 @@ class Travis:
         """
 
         if self.authorized:
-            build_dir = PyFunceble.environ["TRAVIS_BUILD_DIR"]
+            build_dir = PyFunceble.EnvironmentVariable("TRAVIS_BUILD_DIR").get_value()
             commands = [
                 "sudo chown -R travis:travis %s" % (build_dir),
                 "sudo chgrp -R travis %s" % (build_dir),
