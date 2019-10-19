@@ -96,9 +96,9 @@ from PyFunceble.publicsuffix import PublicSuffix
 from PyFunceble.whois_lookup import WhoisLookup
 
 # We set our project name.
-NAME = "PyFunceble"
+NAME = abstracts.Package.NAME
 # We set out project version.
-VERSION = "2.17.10.dev (Green Galago: Skitterbug)"
+VERSION = abstracts.Package.VERSION
 
 
 if EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
@@ -181,13 +181,6 @@ if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
 # directory.
 OUTPUT_DIRECTORY = Directory.get_current(with_end_sep=True)
 
-# We set the filename of the default configuration file.
-DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
-# We set the filename of the configuration file we are actually using.
-CONFIGURATION_FILENAME = ".PyFunceble.yaml"
-# We set the filename of our env file.
-ENV_FILENAME = ".pyfunceble-env"
-
 # We set the current time (return the current time) in a specific format.
 CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
 
@@ -218,7 +211,7 @@ DNSLOOKUP = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
-load_dotenv(CONFIG_DIRECTORY + ENV_FILENAME)
+load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """

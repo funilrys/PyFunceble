@@ -111,7 +111,7 @@ def _get_version():
 
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
     extracted = to_match.findall(
-        open("PyFunceble/__init__.py", encoding="utf-8").read()
+        open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
     )[0]
 
     return ".".join([x for x in extracted.split(".") if x.isdigit()])

@@ -99,7 +99,8 @@ class MySQL:
         self.authorized = self.authorization()
 
         self.pyfunceble_env_location = (
-            PyFunceble.CONFIG_DIRECTORY + PyFunceble.ENV_FILENAME
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.abstracts.Infrastructure.ENV_FILENAME
         )
         self.env_content = self.parse_env_file(self.pyfunceble_env_location)
 

@@ -284,9 +284,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
             default = parsed = path_to_config
 
         # We append the `CONFIGURATION_FILENAME` to the parsed variable.
-        parsed += PyFunceble.CONFIGURATION_FILENAME
+        parsed += PyFunceble.abstracts.Infrastructure.CONFIGURATION_FILENAME
         # And we append the `DEFAULT_CONFIGURATION_FILENAME` to the default variable.
-        default += PyFunceble.DEFAULT_CONFIGURATION_FILENAME
+        default += PyFunceble.abstracts.Infrastructure.DEFAULT_CONFIGURATION_FILENAME
 
         # We finaly return a tuple which contain both informations.
         return (parsed, default)

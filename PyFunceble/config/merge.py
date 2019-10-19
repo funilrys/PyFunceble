@@ -82,7 +82,9 @@ class Merge:  # pylint: disable=too-few-public-methods
         if not self.path_to_config.endswith(PyFunceble.directory_separator):
             self.path_to_config += PyFunceble.directory_separator
 
-        self.path_to_config += PyFunceble.CONFIGURATION_FILENAME
+        self.path_to_config += (
+            PyFunceble.abstracts.Infrastructure.CONFIGURATION_FILENAME
+        )
 
         dict_instance = Dict()
 
