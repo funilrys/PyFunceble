@@ -68,8 +68,6 @@ from PyFunceble.helpers import Dict, Directory, Download, File
 from PyFunceble.logger import Logger
 from PyFunceble.requests import Requests
 
-from .version import Version
-
 
 class Load:  # pylint: disable=too-few-public-methods
     """
@@ -89,8 +87,6 @@ class Load:  # pylint: disable=too-few-public-methods
         self.path_to_config, self.path_to_default_config = self._set_path_to_configs(
             path_to_config
         )
-
-        self.version = Version(True)
 
         if "config_loaded" not in PyFunceble.INTERN:
             self.__load_it()
@@ -343,11 +339,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
         production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
-        production_config_link = self.version.right_url_from_version(
+        production_config_link = PyFunceble.converters.InternalUrl(
             production_config_link
-        )
+        ).get_converted()
 
-        if not self.version.is_cloned():
+        if not PyFunceble.abstracts.Version.is_local_cloned():
             # The current version is not the cloned one.
 
             # We download the link content and save it inside the default location.
@@ -367,7 +363,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         its content.
         """
 
-        if not self.version.is_cloned():
+        if not PyFunceble.abstracts.Version.is_local_cloned():
             # * The current version is not the cloned version.
             # and
             # * The database type is not JSON.
@@ -387,9 +383,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We loop through the list of indexes.
 
                 # We create the right link.
-                link_to_download = self.version.right_url_from_version(
+                link_to_download = PyFunceble.converters.InternalUrl(
                     self.data["links"][index]
-                )
+                ).get_converted()
 
                 # We create the destination.
                 destination = (
@@ -410,12 +406,15 @@ Install and load the default configuration at the mentioned location? [y/n] "
         iana_link = self.data["links"]["iana"]
 
         # We update the link according to our current version.
-        iana_link = self.version.right_url_from_version(iana_link)
+        iana_link = PyFunceble.converters.InternalUrl(iana_link).get_converted()
 
         # We set the destination of the downloaded file.
         destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
-        if not self.version.is_cloned() or not File(destination).exists():
+        if (
+            not PyFunceble.abstracts.Version.is_local_cloned()
+            or not File(destination).exists()
+        ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -437,7 +436,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         psl_link = self.data["links"]["psl"]
 
         # We update the link according to our current version.
-        psl_link = self.version.right_url_from_version(psl_link)
+        psl_link = PyFunceble.converters.InternalUrl(psl_link).get_converted()
 
         # We set the destination of the downloaded file.
         destination = (
@@ -445,7 +444,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + self.data["outputs"]["default_files"]["public_suffix"]
         )
 
-        if not self.version.is_cloned() or not File(destination).exists():
+        if (
+            not PyFunceble.abstracts.Version.is_local_cloned()
+            or not File(destination).exists()
+        ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
@@ -467,7 +469,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
         dir_structure_link = self.data["links"]["dir_structure"]
 
         # We update the link according to our current version.
-        dir_structure_link = self.version.right_url_from_version(dir_structure_link)
+        dir_structure_link = PyFunceble.converters.InternalUrl(
+            dir_structure_link
+        ).get_converted()
 
         # We set the destination of the downloaded file.
         destination = (
@@ -475,7 +479,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             + self.data["outputs"]["default_files"]["dir_structure"]
         )
 
-        if not self.version.is_cloned() or not File(destination).exists():
+        if (
+            not PyFunceble.abstracts.Version.is_local_cloned()
+            or not File(destination).exists()
+        ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.

@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.clean.
+Tests of PyFunceble.abstracts.package
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,71 +59,120 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error
 from unittest import TestCase
+from unittest.mock import patch
 from unittest import main as launch_tests
 
+from os import environ
 import PyFunceble
-from PyFunceble.clean import Clean
-from PyFunceble.helpers import File
+from PyFunceble.abstracts import Version
 
 
-class TestClean(TestCase):
+class TestVersion(TestCase):
     """
-    Testing of PyFunceble.clean.
+    Tests of the PyFunceble.abstracts.Version
     """
 
-    def setUp(self):
+    def test_split_version(self):
         """
-        Setup everything that is needed.
-        """
-
-        PyFunceble.load_config(generate_directory_structure=False)
-
-        self.file = (
-            PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS.parent_directory
-            + "hello_world"
-        )
-        self.types = ["up", "down", "invalid", "tested"]
-
-    def test_clean_all(self):
-        """
-        Test the clean_all process.
+        Tests the case that we want to split the version.
         """
 
-        if not PyFunceble.abstracts.Version.is_local_cloned():  # pragma: no cover
-            file = "whois_db.json"
-
-            File(file).write("Hello, World!")
-
-            expected = True
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-            Clean(clean_all=True)
-
-            expected = False
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-
-    def test_with_empty_list(self):
-        """
-        Test the cleaning in the case that we have to test an empty
-        list.
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
+        given = "1.0.0.dev (Hello, World!)"
+        expected = ["1", "0", "0"]
+        actual = Version.split_versions(given)
 
         self.assertEqual(expected, actual)
-        Clean(None)
+
+    def test_split_version_with_non_digits(self):
+        """
+        Tests the case that we want to split the version
+        but also have the code name.
+        """
+
+        given = "1.0.0.dev (Hello, World!)"
+        expected = (["1", "0", "0"], "dev (Hello, World!)")
+        actual = Version.split_versions(given, return_non_digits=True)
+
+        self.assertEqual(expected, actual)
+
+    def test_literal_comparison(self):
+        """
+        Tests the literal comparison.
+        """
+
+        given = "1.0.0.dev (Hello, World!)"
+        expected = True
+        actual = Version.literally_compare(given, given)
+
+        self.assertEqual(expected, actual)
+
+    def test_literal_comparison_different(self):
+        """
+        Tests the litaral comparison for the case that both given version are different.
+        """
+
+        given = "1.0.0.dev (Hello, World!)"
+        expected = False
+        actual = Version.literally_compare(given, given.replace(".", "_"))
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0.dev (Hello, World)")
+    def test_compare_local_version_is_same(self):
+        """
+        Tests the comparison for the case that the local version is older.
+        """
+
+        given = "1.0.0.dev (Hello, World)"
+        expected = None
+        actual = Version.compare(given)
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "1.50.0.dev (Hello, World)")
+    def test_compare_local_version_is_older(self):
+        """
+        Tests the comparison for the case that the local version is older.
+        """
+
+        given = "2.34.0.dev (Hello, World)"
+        expected = True
+        actual = Version.compare(given)
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0.dev (Hello, World)")
+    def test_compare_local_version_is_newer(self):
+        """
+        Tests the comparison for the case that the local version is older.
+        """
+
+        given = "1.15.0.dev (Hello, World)"
+        expected = False
+        actual = Version.compare(given)
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0.dev (Hello, World)")
+    def test_is_local_dev(self):
+        """
+        Tests if the local version is the dev one.
+        """
+
+        expected = True
+        actual = Version.is_local_dev()
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0. (Hello, World)")
+    def test_is_not_local_dev(self):
+        """
+        Tests if the local version is the not the dev one.
+        """
 
         expected = False
-        actual = PyFunceble.path.isfile(self.file)
+        actual = Version.is_local_dev()
 
         self.assertEqual(expected, actual)
 

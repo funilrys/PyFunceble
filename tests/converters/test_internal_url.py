@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.clean.
+Tests of PyFunceble.converters.internal_url
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,71 +59,62 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error
 from unittest import TestCase
+from unittest.mock import patch
 from unittest import main as launch_tests
 
+from os import environ
 import PyFunceble
-from PyFunceble.clean import Clean
-from PyFunceble.helpers import File
+from PyFunceble.converters import InternalUrl
+from PyFunceble.abstracts import Version
 
 
-class TestClean(TestCase):
+class TestInternalURL(TestCase):
     """
-    Testing of PyFunceble.clean.
+    Tests of the PyFunceble.converters.internal_url
     """
 
-    def setUp(self):
+    @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0. (Hello, World)")
+    def test_nothing_to_do(self):
         """
-        Setup everything that is needed.
+        Tests of the case that there is no changes.
         """
 
-        PyFunceble.load_config(generate_directory_structure=False)
-
-        self.file = (
-            PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS.parent_directory
-            + "hello_world"
+        expected = (
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
         )
-        self.types = ["up", "down", "invalid", "tested"]
 
-    def test_clean_all(self):
-        """
-        Test the clean_all process.
-        """
-
-        if not PyFunceble.abstracts.Version.is_local_cloned():  # pragma: no cover
-            file = "whois_db.json"
-
-            File(file).write("Hello, World!")
-
-            expected = True
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-            Clean(clean_all=True)
-
-            expected = False
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-
-    def test_with_empty_list(self):
-        """
-        Test the cleaning in the case that we have to test an empty
-        list.
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
+        actual = InternalUrl(expected).get_converted()
 
         self.assertEqual(expected, actual)
-        Clean(None)
 
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
+    @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0. (Hello, World)")
+    def test_from_dev_to_master(self):
+        """
+        Tests of the case that there is no changes.
+        """
+
+        given = "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
+        expected = (
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
+        )
+        actual = InternalUrl(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0.dev (Hello, World)")
+    def test_from_master_to_dev(self):
+        """
+        Tests of the case that there is no changes.
+        """
+
+        given = (
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
+        )
+        expected = (
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
+        )
+        actual = InternalUrl(given).get_converted()
 
         self.assertEqual(expected, actual)
 

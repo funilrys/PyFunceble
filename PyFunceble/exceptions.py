@@ -36,3 +36,11 @@ class GitEmailNotFound(PyFuncebleExternalException):
 
 class GitNameNotFound(PyFuncebleExternalException):
     pass
+
+
+class PleaseUpdatePyFunceble(PyFuncebleInternalException):
+    pass
+
+
+class NoConversionMade(PyFuncebleInternalException):
+    pass

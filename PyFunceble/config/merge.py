@@ -63,8 +63,6 @@ import PyFunceble
 from PyFunceble.helpers import Dict, Download
 from PyFunceble.helpers import Merge as helpers_merge
 
-from .version import Version
-
 
 class Merge:  # pylint: disable=too-few-public-methods
     """
@@ -73,9 +71,9 @@ class Merge:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, configuration_path):
-        config_link = Version(True).right_url_from_version(
+        config_link = PyFunceble.converters.InternalUrl(
             "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
-        )
+        ).get_converted()
 
         self.path_to_config = configuration_path
 

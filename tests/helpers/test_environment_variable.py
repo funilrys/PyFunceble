@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.clean.
+Tests of the PyFunceble.helpers.environement_variable
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,73 +59,86 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error
 from unittest import TestCase
 from unittest import main as launch_tests
 
-import PyFunceble
-from PyFunceble.clean import Clean
-from PyFunceble.helpers import File
+from os import environ
+from PyFunceble.helpers import EnvironmentVariable
 
 
-class TestClean(TestCase):
+class TestEnvironmentVariable(TestCase):
     """
-    Testing of PyFunceble.clean.
+    Tests of the PyFunceble.helpers.environement_variable
     """
 
-    def setUp(self):
+    def test_name_exists(self):
         """
-        Setup everything that is needed.
-        """
-
-        PyFunceble.load_config(generate_directory_structure=False)
-
-        self.file = (
-            PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS.parent_directory
-            + "hello_world"
-        )
-        self.types = ["up", "down", "invalid", "tested"]
-
-    def test_clean_all(self):
-        """
-        Test the clean_all process.
+        Tests the case that a name exist.
         """
 
-        if not PyFunceble.abstracts.Version.is_local_cloned():  # pragma: no cover
-            file = "whois_db.json"
-
-            File(file).write("Hello, World!")
-
-            expected = True
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-            Clean(clean_all=True)
-
-            expected = False
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-
-    def test_with_empty_list(self):
-        """
-        Test the cleaning in the case that we have to test an empty
-        list.
-        """
-
-        File(self.file).write("Hello, World!")
+        environ["TEST"] = "test"
 
         expected = True
-        actual = PyFunceble.path.isfile(self.file)
+        actual = EnvironmentVariable("TEST").exists()
 
         self.assertEqual(expected, actual)
-        Clean(None)
+
+    def test_name_does_not_exists(self):
+        """
+        Tests the case that a name does not exist.
+        """
 
         expected = False
-        actual = PyFunceble.path.isfile(self.file)
+        actual = EnvironmentVariable("HELLO,WORLD").exists()
 
         self.assertEqual(expected, actual)
+
+    def test_get_value(self):
+        """
+        Tests the case that the value is needed.
+        """
+
+        environ["TEST"] = "Hello, World!"
+        expected = "Hello, World!"
+        actual = EnvironmentVariable("TEST").get_value()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_default_value(self):
+        """
+        Tests the case that the environment variable does not
+        exists and the value is needed.
+        """
+
+        expected = None
+        actual = EnvironmentVariable("Hello,World").get_value()
+
+        self.assertEqual(expected, actual)
+
+        expected = True
+        actual = EnvironmentVariable("Hello,World").get_value(default=True)
+
+        self.assertEqual(expected, actual)
+
+    def test_set_value(self):
+        """
+        Tests the case the we want to set the value of an environment variable.
+        """
+
+        expected_value = "Hello!"
+
+        expected_output = True
+        actual = EnvironmentVariable("TEST").set_value("Hello!")
+
+        self.assertEqual(expected_output, actual)
+        self.assertEqual(expected_value, environ["TEST"])
+
+    def test_set_value_wrong_type(self):
+        """
+        Tests the case that we want to set a non string value.
+        """
+
+        self.assertRaises(TypeError, lambda: EnvironmentVariable("TEST").set_value(1))
 
 
 if __name__ == "__main__":

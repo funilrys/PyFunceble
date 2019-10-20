@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.clean.
+This submodule will provide some helpers for the tests.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,74 +59,23 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-# pylint: disable=import-error
+import sys
+from io import StringIO
 from unittest import TestCase
-from unittest import main as launch_tests
-
-import PyFunceble
-from PyFunceble.clean import Clean
-from PyFunceble.helpers import File
 
 
-class TestClean(TestCase):
+class BaseStdout(TestCase):
     """
-    Testing of PyFunceble.clean.
+    Use when we want to catch stdout.
     """
 
     def setUp(self):
         """
-        Setup everything that is needed.
+        Setup stdout.
         """
 
-        PyFunceble.load_config(generate_directory_structure=False)
+        sys.stdout = StringIO()
 
-        self.file = (
-            PyFunceble.OUTPUT_DIRECTORY
-            + PyFunceble.OUTPUTS.parent_directory
-            + "hello_world"
-        )
-        self.types = ["up", "down", "invalid", "tested"]
-
-    def test_clean_all(self):
-        """
-        Test the clean_all process.
-        """
-
-        if not PyFunceble.abstracts.Version.is_local_cloned():  # pragma: no cover
-            file = "whois_db.json"
-
-            File(file).write("Hello, World!")
-
-            expected = True
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-            Clean(clean_all=True)
-
-            expected = False
-            actual = PyFunceble.path.isfile(file)
-
-            self.assertEqual(expected, actual)
-
-    def test_with_empty_list(self):
-        """
-        Test the cleaning in the case that we have to test an empty
-        list.
-        """
-
-        File(self.file).write("Hello, World!")
-
-        expected = True
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-        Clean(None)
-
-        expected = False
-        actual = PyFunceble.path.isfile(self.file)
-
-        self.assertEqual(expected, actual)
-
-
-if __name__ == "__main__":
-    launch_tests()
+    def tearDown(self):
+        sys.stdout.close()
+        sys.stdout = sys.__stdout__

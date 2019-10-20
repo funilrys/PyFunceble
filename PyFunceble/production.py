@@ -90,18 +90,16 @@ class Production:  # pylint: disable=too-few-public-methods
 
             # We split the version in oder to get only the list of digits from
             # the local version.
-            self.version_yaml = PyFunceble.Version(True).split_versions(
+            self.version_yaml = PyFunceble.abstracts.Version.split_versions(
                 self.data_version_yaml["current_version"]
             )
 
             # We we get the full version with the non-digits and the digits.
-            self.current_version = PyFunceble.Version(True).split_versions(
-                PyFunceble.VERSION, True
+            self.current_version = PyFunceble.abstracts.Version.split_versions(
+                PyFunceble.VERSION, return_non_digits=True
             )
 
-            if self._is_version_greater() or not PyFunceble.Version(
-                True
-            ).check_versions_literally(
+            if self._is_version_greater() or not PyFunceble.abstracts.Version.literally_compare(
                 PyFunceble.VERSION, self.data_version_yaml["current_version"]
             ):
                 # * The local version is greater than the older one.
@@ -327,9 +325,7 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         # we compare the 2 versions.
-        checked = PyFunceble.Version(True).check_versions(
-            self.current_version[0], self.version_yaml
-        )
+        checked = PyFunceble.abstracts.Version.compare(self.version_yaml)
 
         if checked is not None and not checked:
             # The current version is greater as the older one.

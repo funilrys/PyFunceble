@@ -61,4 +61,3 @@ License:
 
 from .load import Load
 from .merge import Merge
-from .version import Version

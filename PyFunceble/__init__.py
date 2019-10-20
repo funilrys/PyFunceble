@@ -79,12 +79,13 @@ from colorama import init as initiate_colorama
 from dotenv import load_dotenv
 
 import PyFunceble.abstracts as abstracts
+import PyFunceble.converters as converters
 import PyFunceble.exceptions as exceptions
 from PyFunceble.api_core import APICore
 from PyFunceble.check import Check
 from PyFunceble.clean import Clean
 from PyFunceble.cli_core import CLICore
-from PyFunceble.config import Load, Merge, Version
+from PyFunceble.config import Load, Merge
 from PyFunceble.directory_structure import DirectoryStructure
 from PyFunceble.dispatcher import Dispatcher
 from PyFunceble.dns_lookup import DNSLookup
@@ -107,7 +108,7 @@ if EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
 elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
     # We hande the retro compatibility.
     CONFIG_DIRECTORY = EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").get_value()
-elif Version(True).is_cloned():  # pragma: no cover
+elif abstracts.Version.is_local_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
     CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
@@ -1583,15 +1584,14 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 LOGGER.info(f"ARGS:\n{args}")
 
                 # We compare the versions (upstream and local) and in between.
-                Version().compare()
-                Version().print_message()
+                CLICore.compare_version_and_print_messages()
 
-                if not Version(True).is_cloned():
+                if not abstracts.Version.is_local_cloned():
                     # We are not into the cloned version.
 
                     # We run the merging logic.
                     #
-                    # Note: Actually, it compared the local and the upstream configuration.
+                    # Note: Actually, it compares the local and the upstream configuration.
                     # if a new key is present, it proposes the enduser to merge upstream
                     # into the local configuration.
                     Merge(CONFIG_DIRECTORY)

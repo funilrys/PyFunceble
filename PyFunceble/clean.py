@@ -60,7 +60,6 @@ License:
 """
 # pylint: enable=line-too-long
 import PyFunceble
-from PyFunceble.config import Version
 from PyFunceble.helpers import File
 
 
@@ -197,9 +196,10 @@ class Clean:
         ):
             # We get the list of file to delete.
             to_delete = self.file_to_delete(clean_all)
-            version = Version(True)
 
-            if not version.is_cloned() and clean_all:  # pragma: no cover
+            if (
+                not PyFunceble.abstracts.Version.is_local_cloned() and clean_all
+            ):  # pragma: no cover
                 to_delete.extend(self.databases_to_delete())
 
             for file in to_delete:
@@ -241,7 +241,9 @@ class Clean:
                             f"{repr(file_path)} from the {database_name} table."
                         )
 
-            if not version.is_cloned() and clean_all:  # pragma: no cover
+            if (
+                not PyFunceble.abstracts.Version.is_local_cloned() and clean_all
+            ):  # pragma: no cover
                 PyFunceble.Load(PyFunceble.CONFIG_DIRECTORY)
 
                 PyFunceble.LOGGER.info(f"Reloaded configuration.")

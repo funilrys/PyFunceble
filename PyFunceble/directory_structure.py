@@ -88,7 +88,7 @@ class DirectoryStructure:  # pragma: no cover
         # We set the structure base.
         self.structure = self.base + PyFunceble.OUTPUTS.default_files.dir_structure
 
-        if production and PyFunceble.Version(True).is_cloned():
+        if production and PyFunceble.abstracts.Version.is_local_cloned():
             # We are preparing the repository for production.
 
             # We backup the directory structure.
