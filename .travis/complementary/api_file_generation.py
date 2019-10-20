@@ -9,7 +9,7 @@ import PyFunceble
 
 PyFunceble.initiate_colorama(True)
 PyFunceble.load_config(
-    generate_directory_structure=True,
+    generate_directory_structure=False,
     custom={"api_file_generation": True, "plain_list_domain": True},
 )
 PyFunceble.Clean(None)
