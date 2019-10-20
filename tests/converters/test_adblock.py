@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will test PyFunceble.adblock.
+Tests of PyFunceble.converters.adblock
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -63,12 +63,12 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
-from PyFunceble.adblock import AdBlock
+from PyFunceble.converters.adblock import AdBlock, List
 
 
 class TestAdblockDecode(TestCase):
     """
-    Test if the adblock decoder works.
+    Tests of PyFunceble.converters.adblock
     """
 
     def setUp(self):
@@ -76,69 +76,67 @@ class TestAdblockDecode(TestCase):
         Setup everything needed for the test.
         """
 
-        PyFunceble.load_config(generate_directory_structure=False)
-        self.lines = [
-            '##[href^="https://funceble.funilrys.com/"]',
-            '##div[href^="http://funilrys.com/"]',
-            'com##[href^="ftp://funceble.funilrys-funceble.com/"]',
-            "!@@||funceble.world/js",
-            "!||world.hello/*ad.xml",
-            "!funilrys.com##body",
-            "[AdBlock Plus 2.0]",
-            "@@||cnn.com/*ad.xml",
-            "/banner/*/img^",
-            "||ad.google.co.uk^",
-            "||ad.google.co.fr^$image,test",
-            "||api.funilrys.com/widget/$",
-            "||api.google.com/papi/action$popup",
-            "||funilrys.github.io$script,image",
-            "||google.com^$script,image",
-            "||static.quantcast.mgr.consensu.org/*/cmpui-banner.js"
-            "$domain=memy.pl|pwn.pl|translatica.pl",
-            "||twitter.com^helloworld.com",
-            "|github.io|",
-            "~github.com,hello.world##.wrapper",
-            "bing.com,bingo.com#@##adBanner",
-            "facebook.com###player-above-2",
-            "hello#@#badads",
-            "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
-            "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld",
-            ".com",
-            "||ggggggggggg.gq^$all",
-            "||exaaaaaaample.org$document",
-            "facebook.com##.search",
-        ]
+        self.given = {
+            '##[href^="https://funceble.funilrys.com/"]': ["funceble.funilrys.com"],
+            '##div[href^="http://funilrys.com/"]': ["funilrys.com"],
+            'com##[href^="ftp://funceble.funilrys-funceble.com/"]': [],
+            "!@@||funceble.world/js": [],
+            "!||world.hello/*ad.xml": [],
+            "!funilrys.com##body": [],
+            "[AdBlock Plus 2.0]": [],
+            "@@||cnn.com/*ad.xml": [],
+            "/banner/*/img^": [],
+            "||ad.google.co.uk^": ["ad.google.co.uk"],
+            "||ad.google.co.fr^$image,test": [],
+            "||api.funilrys.com/widget/$": ["api.funilrys.com"],
+            "||api.google.com/papi/action$popup": ["api.google.com"],
+            "||funilrys.github.io$script,image": ["funilrys.github.io"],
+            "||google.com^$script,image": ["google.com"],
+            "||static.quantcast.mgr.consensu.org/*/cmpui-banner.js": [
+                "static.quantcast.mgr.consensu.org"
+            ],
+            "$domain=memy.pl|pwn.pl|translatica.pl": [],
+            "||twitter.com^helloworld.com": ["twitter.com"],
+            "|github.io|": ["github.io"],
+            "~github.com,hello.world##.wrapper": ["hello.world"],
+            "bing.com,bingo.com#@##adBanner": ["bing.com", "bingo.com"],
+            "facebook.com###player-above-2": ["facebook.com"],
+            "hello#@#badads": [],
+            "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld": [
+                "hubgit.com",
+                "oohay.com",
+            ],
+            "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld": [
+                "api.hello.world",
+                "yahoo.com",
+            ],
+            ".com": [],
+            "||ggggggggggg.gq^$all": ["ggggggggggg.gq"],
+            "||exaaaaaaample.org$document": ["exaaaaaaample.org"],
+            "facebook.com##.search": ["facebook.com"],
+            "||test.hello.world^$domain=hello.world": ["test.hello.world"],
+            "||test.hwllo.world^$third-party": ["test.hwllo.world"],
+        }
 
-        self.expected = [
-            "ad.google.co.uk",
-            "api.funilrys.com",
-            "api.google.com",
-            "api.hello.world",
-            "bing.com",
-            "bingo.com",
-            "exaaaaaaample.org",
-            "facebook.com",
-            "funceble.funilrys.com",
-            "funilrys.com",
-            "funilrys.github.io",
-            "ggggggggggg.gq",
-            "github.io",
-            "google.com",
-            "hello.world",
-            "hubgit.com",
-            "oohay.com",
-            "static.quantcast.mgr.consensu.org",
-            "twitter.com",
-            "yahoo.com",
-        ]
-
-    def test_adblock_decode(self):
+    def test_conversion_single_input(self):
         """
-        Test that the adblock decoding system is working proprely
+        Tests of the conversion of a single input.
         """
 
-        actual = AdBlock(self.lines).decode()
-        self.assertEqual(self.expected, actual)
+        for given, expected in self.given.items():
+            actual = AdBlock(given).get_converted()
+
+            self.assertEqual(expected, actual, f"Input: {given}")
+
+    def test_conversion_multiple_input(self):
+        """
+        Tests of the conversion with multiple inputs.
+        """
+
+        expected = List([y for x in self.given.values() for y in x]).format()
+        actual = AdBlock(list(self.given.keys())).get_converted()
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":

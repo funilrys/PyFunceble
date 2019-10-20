@@ -58,12 +58,12 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+from os import environ
 # pylint: enable=line-too-long
 from unittest import TestCase
-from unittest.mock import patch
 from unittest import main as launch_tests
+from unittest.mock import patch
 
-from os import environ
 import PyFunceble
 from PyFunceble.abstracts import Version
 

@@ -99,9 +99,6 @@ class APICore:
         # if it was not alreay done.
         PyFunceble.load_config(generate_directory_structure=False, custom=configuration)
 
-        if PyFunceble.CONFIGURATION.api_file_generation:
-            PyFunceble.load_config(generate_directory_structure=True)
-
         # We update the configuration with the given
         # configuration.
         PyFunceble.Preset().api()

@@ -294,7 +294,7 @@ class FileMultiprocessCore(FileCore):  # pragma: no cover
                         # the mining database.
                         self.mining.remove(index, subject)
 
-                    # We increase the process number.
+                    # We decrease the process number.
                     active = active_children()
                     # And we continue the loop.
                     continue

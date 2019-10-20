@@ -67,9 +67,9 @@ from multiprocessing import Pool
 from domain2idna import get as domain2idna
 
 import PyFunceble
-from PyFunceble.adblock import AdBlock
 from PyFunceble.auto_continue import AutoContinue
 from PyFunceble.auto_save import AutoSave
+from PyFunceble.converters import AdBlock
 from PyFunceble.generate import Generate
 from PyFunceble.helpers import Download, File, List, Merge, Regex
 from PyFunceble.inactive_db import InactiveDB
@@ -492,7 +492,12 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
         :param multiprocessing.Manager.list manager_data: A Server process.
         """
 
-        if manager_data is not None:
+        relaunch_dbs = (
+            manager_data is not None
+            and PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]
+        )
+
+        if relaunch_dbs:
             autocontinue = AutoContinue(self.file)
             inactive_db = InactiveDB(self.file)
             mining = Mining(self.file)
@@ -601,7 +606,7 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                     # We save the current state.
                     autocontinue.save()
 
-        if manager_data is None:
+        if not relaunch_dbs:
             # We are not in a multiprocess environment.
 
             if self.autosave.is_time_exceed():
@@ -646,8 +651,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                 else:
                     formatted_subjects = set(
                         AdBlock(
-                            file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
-                        ).decode()
+                            list(file_object),
+                            aggressive=PyFunceble.CONFIGURATION.aggressive,
+                        ).get_converted()
                     )
         else:
             if not PyFunceble.CONFIGURATION.adblock:
@@ -655,8 +661,9 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             else:
                 formatted_subjects = set(
                     AdBlock(
-                        file_object, aggressive=PyFunceble.CONFIGURATION.aggressive
-                    ).decode()
+                        list(file_object),
+                        aggressive=PyFunceble.CONFIGURATION.aggressive,
+                    ).get_converted()
                 )
 
         subjects_to_test = (
