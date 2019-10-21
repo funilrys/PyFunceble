@@ -90,6 +90,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         url_file_path=None,
         url_to_test=None,
         generate_results_only=False,
+        generate_all_results_only=False,
     ):
         PyFunceble.LOGGER.debug(f"CONFIGURATION:\n{PyFunceble.CONFIGURATION}")
         self.preset = preset
@@ -99,17 +100,23 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             CLICore.logs_sharing()
             ExecutionTime("start")
 
-            if generate_results_only:
+            if generate_results_only or generate_all_results_only:
                 PyFunceble.INTERN["do_not_clean"] = True
 
             if domain_or_ip:
                 SimpleCore(domain_or_ip).domain()
             elif file_path:
-                self.dispatch_file_test(file_path, generate_results_only)
+                self.dispatch_file_test(
+                    file_path, generate_results_only, generate_all_results_only
+                )
             elif link_to_test:
-                self.dispatch_link_test(link_to_test, generate_results_only)
+                self.dispatch_link_test(
+                    link_to_test, generate_results_only, generate_all_results_only
+                )
             elif url_file_path:
-                self.dispatch_url_file_test(url_file_path, generate_results_only)
+                self.dispatch_url_file_test(
+                    url_file_path, generate_results_only, generate_all_results_only
+                )
             elif url_to_test:
                 SimpleCore(url_to_test).url()
 
@@ -120,7 +127,9 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             PyFunceble.CLICore.print_nothing_to_test()
 
     @classmethod
-    def dispatch_file_test(cls, file_path, generate_results_only):
+    def dispatch_file_test(
+        cls, file_path, generate_results_only, generate_all_results_only
+    ):
         """
         Dispatch to the right file testing logic.
 
@@ -128,23 +137,40 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         :param bool generate_results_only:
             Tell us to only regenerate from the data stored into the
             MariaDB/MySQL databases.
+        :param bool generate_all_results_only:
+            Tell us to only regenerate from the data stored into the
+            MariaDB/MySQL databases.
+
+            .. note::
+                The difference with :code:`generate_results_only` is that
+                it includes the retested which status didn't changed.
         """
 
         PyFunceble.DirectoryStructure()
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileMultiprocessCore(file_path, "domain").read_and_test_file_content()
+            elif generate_all_results_only:
+                FileMultiprocessCore(file_path, "domain").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileMultiprocessCore(file_path, "domain").generate_files()
         else:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileCore(file_path, "domain").read_and_test_file_content()
+            elif generate_all_results_only:
+                FileCore(file_path, "domain").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileCore(file_path, "domain").generate_files()
 
     @classmethod
-    def dispatch_link_test(cls, link_to_test, generate_results_only):
+    def dispatch_link_test(
+        cls, link_to_test, generate_results_only, generate_all_results_only
+    ):
         """
         Dispatch to the right link testing logic.
 
@@ -157,19 +183,29 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         PyFunceble.DirectoryStructure()
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileMultiprocessCore(
                     link_to_test, "domain"
                 ).read_and_test_file_content()
+            elif generate_all_results_only:
+                FileMultiprocessCore(link_to_test, "domain").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileMultiprocessCore(link_to_test, "domain").generate_files()
         else:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileCore(link_to_test, "domain").read_and_test_file_content()
+            elif generate_all_results_only:
+                FileCore(link_to_test, "domain").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileCore(link_to_test, "domain").generate_files()
 
-    def dispatch_url_file_test(self, url_file_path, generate_results_only):
+    def dispatch_url_file_test(
+        self, url_file_path, generate_results_only, generate_all_results_only
+    ):
         """
         Dispatch to the right url file path testing logic.
 
@@ -183,12 +219,20 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         self.preset.file_url()
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileMultiprocessCore(url_file_path, "url").read_and_test_file_content()
+            elif generate_all_results_only:
+                FileMultiprocessCore(url_file_path, "url").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileMultiprocessCore(url_file_path, "url").generate_files()
         else:
-            if not generate_results_only:
+            if not generate_results_only and not generate_all_results_only:
                 FileCore(url_file_path, "url").read_and_test_file_content()
+            elif generate_all_results_only:
+                FileCore(url_file_path, "url").generate_files(
+                    include_entries_without_changes=True
+                )
             else:
                 FileCore(url_file_path, "url").generate_files()
