@@ -979,6 +979,12 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                 )
 
                 parser.add_argument(
+                    "--generate-all-files-from-database",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
                     "--help",
                     action="help",
                     default=argparse.SUPPRESS,
@@ -1606,6 +1612,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     url_file_path=args.url_file,
                     link_to_test=args.link,
                     generate_results_only=args.generate_files_from_database,
+                    generate_all_results_only=args.generate_all_files_from_database,
                 )
             except Exception as e:
                 LOGGER.exception()

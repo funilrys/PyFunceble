@@ -688,11 +688,14 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
 
         return chain(subjects_to_test, to_retest_inactive_db)
 
-    def generate_files_of_status(self, status):  # pragma: no cover
+    def generate_files_of_status(
+        self, status, include_entries_without_changes=False
+    ):  # pragma: no cover
         """
         Generate the status file of all subjects of the given status.
 
         :param str status: A status to filter.
+        :param bool include_entries_without_changes: Descriptive enough.
         """
 
         to_select = (
@@ -724,15 +727,19 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
                             end=True,
                         )
 
-                        generate.status_file(
-                            exclude_file_generation=self.inactive_db.authorized
-                            and data["status"] not in self.list_of_up_statuses
-                            and data["subject"] in self.inactive_db.to_retest
-                        )
+                        if include_entries_without_changes:
+                            generate.status_file(exclude_file_generation=False)
+                        else:
+                            generate.status_file(
+                                exclude_file_generation=self.inactive_db.authorized
+                                and data["status"] not in self.list_of_up_statuses
+                                and data["subject"] in self.inactive_db.to_retest
+                            )
+
                         generate.prints_status_file()
                         generate.unified_file()
 
-    def generate_files(self):  # pragma: no cover
+    def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
         Generate all needed files.
         """
@@ -741,12 +748,24 @@ class FileCore:  # pylint: disable=too-many-instance-attributes
             self.preset.reset_counters()
 
             if PyFunceble.CONFIGURATION.syntax:
-                self.generate_files_of_status(PyFunceble.STATUS.official.valid)
+                self.generate_files_of_status(
+                    PyFunceble.STATUS.official.valid,
+                    include_entries_without_changes=include_entries_without_changes,
+                )
             else:
-                self.generate_files_of_status(PyFunceble.STATUS.official.up)
+                self.generate_files_of_status(
+                    PyFunceble.STATUS.official.up,
+                    include_entries_without_changes=include_entries_without_changes,
+                )
 
-            self.generate_files_of_status(PyFunceble.STATUS.official.down)
-            self.generate_files_of_status(PyFunceble.STATUS.official.invalid)
+            self.generate_files_of_status(
+                PyFunceble.STATUS.official.down,
+                include_entries_without_changes=include_entries_without_changes,
+            )
+            self.generate_files_of_status(
+                PyFunceble.STATUS.official.invalid,
+                include_entries_without_changes=include_entries_without_changes,
+            )
 
     def read_and_test_file_content(self):  # pragma: no cover
         """
