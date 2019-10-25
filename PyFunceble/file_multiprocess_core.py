@@ -115,8 +115,11 @@ class OurProcessWrapper(Process):  # pragma: no cover
         if self.conn1.poll():
             # There is something to read.
 
-            # We get and save the exception.
-            self._exception_receiver = self.conn1.recv()
+            try:
+                # We get and save the exception.
+                self._exception_receiver = self.conn1.recv()
+            except EOFError:
+                pass
 
         self.conn2.close()
 
