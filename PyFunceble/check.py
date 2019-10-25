@@ -85,9 +85,6 @@ class Check:
     def __init__(self, subject):
         self.subject = subject
 
-        if "config_loaded" not in PyFunceble.INTERN:
-            PyFunceble.load_config()
-
     def is_url(
         self, return_base=False, return_formatted=False
     ):  # pylint: disable=too-many-branches
