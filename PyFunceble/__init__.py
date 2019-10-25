@@ -111,7 +111,7 @@ elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
 elif abstracts.Version.is_local_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
     CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
-elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
+elif EnvironmentVariable("TRAVIS_BUILD_DIR").exists():  # pragma: no cover
     # We handle the case that we are under Travis CI.
     CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
 else:  # pragma: no cover
