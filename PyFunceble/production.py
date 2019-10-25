@@ -325,7 +325,9 @@ class Production:  # pylint: disable=too-few-public-methods
         """
 
         # we compare the 2 versions.
-        checked = PyFunceble.abstracts.Version.compare(self.version_yaml)
+        checked = PyFunceble.abstracts.Version.compare(
+            self.data_version_yaml["current_version"]
+        )
 
         if checked is not None and not checked:
             # The current version is greater as the older one.

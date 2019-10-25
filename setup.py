@@ -141,6 +141,7 @@ if __name__ == "__main__":
         packages=[
             "PyFunceble.abstracts",
             "PyFunceble.config",
+            "PyFunceble.converters",
             "PyFunceble.helpers",
             "PyFunceble",
         ],

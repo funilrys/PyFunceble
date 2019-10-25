@@ -81,7 +81,7 @@ class TestInternalURL(TestCase):
         """
 
         expected = (
-            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         )
 
         actual = InternalUrl(expected).get_converted()
@@ -96,7 +96,7 @@ class TestInternalURL(TestCase):
 
         given = "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         expected = (
-            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         )
         actual = InternalUrl(given).get_converted()
 
@@ -109,7 +109,7 @@ class TestInternalURL(TestCase):
         """
 
         given = (
-            "https://raw.githubusercontent.com/funilrys/PyFuneceble/master/test.json"
+            "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         )
         expected = (
             "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
