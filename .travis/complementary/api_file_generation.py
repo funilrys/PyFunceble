@@ -3,16 +3,18 @@ This is an example which check that the file generation from the API is still
 working.
 """
 
+import sys
 from os import path
 
 import PyFunceble
+import PyFunceble.cli
 
-PyFunceble.initiate_colorama(True)
+PyFunceble.cli.initiate_colorama(True)
 PyFunceble.load_config(
     generate_directory_structure=False,
     custom={"api_file_generation": True, "plain_list_domain": True},
 )
-PyFunceble.Clean(None)
+PyFunceble.output.Clean(None)
 
 DOMAINS = ["github.com", "twitter.com"]
 
@@ -25,13 +27,13 @@ if path.isfile(
     + "domains/ACTIVE/list"
 ):
     print(
-        f"{PyFunceble.Style.BRIGHT + PyFunceble.Fore.GREEN}All right, "
+        f"{PyFunceble.cli.Style.BRIGHT + PyFunceble.cli.Fore.GREEN}All right, "
         "files correctly generated!"
     )
-    PyFunceble.sys.exit(0)
+    sys.exit(0)
 else:
     print(
-        f"{PyFunceble.Style.BRIGHT + PyFunceble.Fore.RED}Something went wrong, "
+        f"{PyFunceble.cli.Style.BRIGHT + PyFunceble.cli.Fore.RED}Something went wrong, "
         "files not correctly generated!"
     )
-    PyFunceble.sys.exit(1)
+    sys.exit(1)

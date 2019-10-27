@@ -14,6 +14,10 @@ class WrongParameterType(PyFuncebleInternalException):
     pass
 
 
+class WrongParameterValue(PyFuncebleInternalException):
+    pass
+
+
 class NoInternetConnection(PyFuncebleExternalException):
     pass
 
@@ -43,4 +47,12 @@ class PleaseUpdatePyFunceble(PyFuncebleInternalException):
 
 
 class NoConversionMade(PyFuncebleInternalException):
+    pass
+
+
+class NoExtractionMade(PyFuncebleInternalException):
+    pass
+
+
+class UnknownSubject(PyFuncebleInternalException):
     pass

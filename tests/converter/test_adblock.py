@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.environement_variable
+Tests of PyFunceble.converters.adblock
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,87 +59,86 @@ License:
     SOFTWARE.
 """
 # pylint: enable=line-too-long
-
-from os import environ
 from unittest import TestCase
 from unittest import main as launch_tests
 
-from PyFunceble.helpers import EnvironmentVariable
+import PyFunceble
+from PyFunceble.converter.adblock import AdBlock
 
 
-class TestEnvironmentVariable(TestCase):
+class TestAdblockDecode(TestCase):
     """
-    Tests of the PyFunceble.helpers.environement_variable
+    Tests of PyFunceble.converter.adblock
     """
 
-    def test_name_exists(self):
+    def setUp(self):
         """
-        Tests the case that a name exist.
+        Setup everything needed for the test.
         """
 
-        environ["TEST"] = "test"
+        self.given = {
+            '##[href^="https://funceble.funilrys.com/"]': ["funceble.funilrys.com"],
+            '##div[href^="http://funilrys.com/"]': ["funilrys.com"],
+            'com##[href^="ftp://funceble.funilrys-funceble.com/"]': [],
+            "!@@||funceble.world/js": [],
+            "!||world.hello/*ad.xml": [],
+            "!funilrys.com##body": [],
+            "[AdBlock Plus 2.0]": [],
+            "@@||cnn.com/*ad.xml": [],
+            "/banner/*/img^": [],
+            "||ad.google.co.uk^": ["ad.google.co.uk"],
+            "||ad.google.co.fr^$image,test": [],
+            "||api.funilrys.com/widget/$": ["api.funilrys.com"],
+            "||api.google.com/papi/action$popup": ["api.google.com"],
+            "||funilrys.github.io$script,image": ["funilrys.github.io"],
+            "||google.com^$script,image": ["google.com"],
+            "||static.quantcast.mgr.consensu.org/*/cmpui-banner.js": [
+                "static.quantcast.mgr.consensu.org"
+            ],
+            "$domain=memy.pl|pwn.pl|translatica.pl": [],
+            "||twitter.com^helloworld.com": ["twitter.com"],
+            "|github.io|": ["github.io"],
+            "~github.com,hello.world##.wrapper": ["hello.world"],
+            "bing.com,bingo.com#@##adBanner": ["bing.com", "bingo.com"],
+            "facebook.com###player-above-2": ["facebook.com"],
+            "hello#@#badads": [],
+            "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld": [
+                "hubgit.com",
+                "oohay.com",
+            ],
+            "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld": [
+                "api.hello.world",
+                "yahoo.com",
+            ],
+            ".com": [],
+            "||ggggggggggg.gq^$all": ["ggggggggggg.gq"],
+            "||exaaaaaaample.org$document": ["exaaaaaaample.org"],
+            "facebook.com##.search": ["facebook.com"],
+            "||test.hello.world^$domain=hello.world": ["test.hello.world"],
+            "||test.hwllo.world^$third-party": ["test.hwllo.world"],
+        }
 
-        expected = True
-        actual = EnvironmentVariable("TEST").exists()
+        PyFunceble.load_config()
+
+    def test_conversion_single_input(self):
+        """
+        Tests of the conversion of a single input.
+        """
+
+        for given, expected in self.given.items():
+            actual = AdBlock(given).get_converted()
+
+            self.assertEqual(expected, actual, f"Input: {given}")
+
+    def test_conversion_multiple_input(self):
+        """
+        Tests of the conversion with multiple inputs.
+        """
+
+        expected = PyFunceble.helpers.List([y for x in self.given.values() for y in x]).format()
+        actual = AdBlock(list(self.given.keys())).get_converted()
 
         self.assertEqual(expected, actual)
-
-    def test_name_does_not_exists(self):
-        """
-        Tests the case that a name does not exist.
-        """
-
-        expected = False
-        actual = EnvironmentVariable("HELLO,WORLD").exists()
-
-        self.assertEqual(expected, actual)
-
-    def test_get_value(self):
-        """
-        Tests the case that the value is needed.
-        """
-
-        environ["TEST"] = "Hello, World!"
-        expected = "Hello, World!"
-        actual = EnvironmentVariable("TEST").get_value()
-
-        self.assertEqual(expected, actual)
-
-    def test_get_default_value(self):
-        """
-        Tests the case that the environment variable does not
-        exists and the value is needed.
-        """
-
-        expected = None
-        actual = EnvironmentVariable("Hello,World").get_value()
-
-        self.assertEqual(expected, actual)
-
-        expected = True
-        actual = EnvironmentVariable("Hello,World").get_value(default=True)
-
-        self.assertEqual(expected, actual)
-
-    def test_set_value(self):
-        """
-        Tests the case the we want to set the value of an environment variable.
-        """
-
-        expected_value = "Hello!"
-
-        expected_output = True
-        actual = EnvironmentVariable("TEST").set_value("Hello!")
-
-        self.assertEqual(expected_output, actual)
-        self.assertEqual(expected_value, environ["TEST"])
-
-    def test_set_value_wrong_type(self):
-        """
-        Tests the case that we want to set a non string value.
-        """
-
-        self.assertRaises(TypeError, lambda: EnvironmentVariable("TEST").set_value(1))
 
 
 if __name__ == "__main__":

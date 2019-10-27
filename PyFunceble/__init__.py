@@ -60,41 +60,26 @@ License:
 """
 # pylint: enable=line-too-long
 
-import argparse
-import socket
-import sys
 import warnings
-from collections import OrderedDict
-from datetime import datetime, timedelta
-from inspect import getsourcefile
-from os import cpu_count, environ, getcwd, mkdir, path, rename
+from datetime import datetime
+from os import path
 from os import sep as directory_separator
-from os import walk
-from platform import system
-from shutil import copy, rmtree
-from time import mktime, sleep, strftime, strptime, time
 
-from colorama import Back, Fore, Style
-from colorama import init as initiate_colorama
 from dotenv import load_dotenv
 
 import PyFunceble.abstracts as abstracts
-import PyFunceble.converters as converters
+import PyFunceble.config as cconfig
+import PyFunceble.converter as converter
+import PyFunceble.core as core
+import PyFunceble.database as database
+import PyFunceble.engine as engine
 import PyFunceble.exceptions as exceptions
-from PyFunceble.api_core import APICore
+import PyFunceble.extractor as extractor
+import PyFunceble.helpers as helpers
+import PyFunceble.lookup as lookup
+import PyFunceble.output as output
+import PyFunceble.status as status
 from PyFunceble.check import Check
-from PyFunceble.clean import Clean
-from PyFunceble.cli_core import CLICore
-from PyFunceble.config import Load, Merge
-from PyFunceble.directory_structure import DirectoryStructure
-from PyFunceble.dispatcher import Dispatcher
-from PyFunceble.dns_lookup import DNSLookup
-from PyFunceble.helpers import Directory, EnvironmentVariable
-from PyFunceble.iana import IANA
-from PyFunceble.preset import Preset
-from PyFunceble.production import Production
-from PyFunceble.publicsuffix import PublicSuffix
-from PyFunceble.whois_lookup import WhoisLookup
 
 # We set our project name.
 NAME = abstracts.Package.NAME
@@ -102,18 +87,18 @@ NAME = abstracts.Package.NAME
 VERSION = abstracts.Package.VERSION
 
 
-if EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
+if helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
-    CONFIG_DIRECTORY = EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").get_value()
-elif EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
+    CONFIG_DIRECTORY = helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").get_value()
+elif helpers.EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
     # We hande the retro compatibility.
-    CONFIG_DIRECTORY = EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").get_value()
+    CONFIG_DIRECTORY = helpers.EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").get_value()
 elif abstracts.Version.is_local_cloned():  # pragma: no cover
     # We handle the case that we are in a cloned.
-    CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
-elif EnvironmentVariable("TRAVIS_BUILD_DIR").exists():  # pragma: no cover
+    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+elif helpers.EnvironmentVariable("TRAVIS_BUILD_DIR").exists():  # pragma: no cover
     # We handle the case that we are under Travis CI.
-    CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
+    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 else:  # pragma: no cover
     # We handle all other case and distributions specific cases.
 
@@ -125,12 +110,12 @@ else:  # pragma: no cover
             path.expanduser("~" + directory_separator + ".config") + directory_separator
         )
 
-        if Directory(config_dir_path).exists():
+        if helpers.Directory(config_dir_path).exists():
             # Everything went right:
             #   * `~/.config` exists.
             # We set our configuration location path as the directory we are working with.
             CONFIG_DIRECTORY = config_dir_path
-        elif Directory(path.expanduser("~")).exists():
+        elif helpers.Directory(path.expanduser("~")).exists():
             # Something went wrong:
             #   * `~/.config` does not exists.
             #   * `~` exists.
@@ -146,20 +131,20 @@ else:  # pragma: no cover
             #   * `~/.config` does not exists.
             #   * `~` soes not exists.
             # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
+            CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
     elif abstracts.Platform.is_windows():
         # We are under Windows or CygWin.
 
-        if EnvironmentVariable("APPDATA").exists():
+        if helpers.EnvironmentVariable("APPDATA").exists():
             # Everything went right:
             #   * `APPDATA` is into the environnement variables.
             # We set it as the directory we are working with.
-            CONFIG_DIRECTORY = EnvironmentVariable("APPDATA").get_value()
+            CONFIG_DIRECTORY = helpers.EnvironmentVariable("APPDATA").get_value()
         else:
             # Everything went wrong:
             #   * `APPDATA` is not into the environnement variables.
             # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = Directory.get_current(with_end_sep=True)
+            CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 
     if not CONFIG_DIRECTORY.endswith(directory_separator):
         # If the directory we are working with does not ends with the directory
@@ -169,9 +154,9 @@ else:  # pragma: no cover
     # We append the name of the project to the directory we are working with.
     CONFIG_DIRECTORY += NAME + directory_separator
 
-    if not Directory(CONFIG_DIRECTORY).exists():
+    if not helpers.Directory(CONFIG_DIRECTORY).exists():
         # If the directory does not exist we create it.
-        mkdir(CONFIG_DIRECTORY)
+        helpers.Directory(CONFIG_DIRECTORY).create()
 
 if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
     # Again for safety, if the directory we are working with does not ends with
@@ -180,10 +165,7 @@ if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
 
 # We set the location of the `output` directory which should always be in the current
 # directory.
-OUTPUT_DIRECTORY = Directory.get_current(with_end_sep=True)
-
-# We set the current time (return the current time) in a specific format.
-CURRENT_TIME = strftime("%a %d %b %H:%m:%S %Z %Y")
+OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 
 # We initiate the location where we are going to save our whole configuration content.
 CONFIGURATION = None
@@ -282,7 +264,9 @@ def test(subject, complete=False, config=None):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the status of the given subject.
-        return APICore(subject, complete=complete, configuration=config).domain_and_ip()
+        return core.API(
+            subject, complete=complete, configuration=config
+        ).domain_and_ip()
 
     # We return None, there is nothing to test.
     return None
@@ -345,7 +329,7 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
         # The given URL is not empty nor None.
 
         # We retunr the status of the the url.
-        return APICore(subject, complete=complete, configuration=config).url()
+        return core.API(subject, complete=complete, configuration=config).url()
 
     # We return None, there is nothing to test.
     return None
@@ -397,7 +381,7 @@ def dns_lookup(
         # The subject is not empty nor None.
 
         # We return the lookup.
-        return DNSLookup(dns_server=dns_server, lifetime=lifetime).request(
+        return lookup.Dns(dns_server=dns_server, lifetime=lifetime).request(
             subject, complete=complete
         )
 
@@ -425,7 +409,7 @@ def whois(subject, server=None, timeout=3):  # pragma: no cover
         # The subject is not empty nor None.
 
         # We return the whois record.
-        return WhoisLookup(subject, server=server, timeout=timeout).request()
+        return lookup.Whois(subject, server=server, timeout=timeout).request()
 
     # We return None, there is nothing to work with.
     return None
@@ -471,7 +455,7 @@ def is_domain(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validiry of the given subject.
-        return APICore(subject).domain_syntax()
+        return core.API(subject).domain_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -492,7 +476,7 @@ def is_subdomain(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We retun the validity of the given subject.
-        return APICore(subject).subdomain_syntax()
+        return core.API(subject).subdomain_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -538,7 +522,7 @@ def is_ip(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validity of the given subject.
-        return APICore(subject).ip_syntax()
+        return core.API(subject).ip_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -559,7 +543,7 @@ def is_ipv4(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validity of the given subject.
-        return APICore(subject).ipv4_syntax()
+        return core.API(subject).ipv4_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -580,7 +564,7 @@ def is_ipv6(subject):  # pragma: no cover
         # The given subject is not empty not None.
 
         # We return the validity of the given subject.
-        return APICore(subject).ipv6_syntax()
+        return core.API(subject).ipv6_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -601,7 +585,7 @@ def is_ip_range(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validity of the given subject.
-        return APICore(subject).ip_range_syntax()
+        return core.API(subject).ip_range_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -622,7 +606,7 @@ def is_ipv4_range(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validity of the given subject.
-        return APICore(subject).ipv4_range_syntax()
+        return core.API(subject).ipv4_range_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -668,7 +652,7 @@ def is_url(subject):  # pragma: no cover
         # The given subject is not empty nor None.
 
         # We return the validity of the given subject.
-        return APICore(subject).url_syntax()
+        return core.API(subject).url_syntax()
 
     # We return None, there is nothing to check.
     return None
@@ -698,926 +682,9 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
 
     # We load and download the different configuration file if they are non
     # existant.
-    Load(CONFIG_DIRECTORY, custom)
+    cconfig.Load(CONFIG_DIRECTORY, custom)
 
     if generate_directory_structure:
         # If we are not under test which means that we want to save informations,
         # we initiate the directory structure.
-        DirectoryStructure()
-
-
-def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
-    """
-    Provide the command line interface.
-    """
-
-    if __name__ == "PyFunceble":
-        # We initiate the end of the coloration at the end of each line.
-        initiate_colorama(autoreset=True)
-
-        try:
-            # The following handle the command line argument.
-
-            try:
-                # We load the configuration.
-                load_config(generate_directory_structure=False)
-
-                preset = Preset()
-
-                parser = argparse.ArgumentParser(
-                    description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",  # pylint: disable=line-too-long
-                    epilog="Crafted with %s by %s"
-                    % (
-                        Fore.RED + "♥" + Fore.RESET,
-                        Style.BRIGHT
-                        + Fore.CYAN
-                        + "Nissar Chababy (Funilrys) "
-                        + Style.RESET_ALL
-                        + "with the help of "
-                        + Style.BRIGHT
-                        + Fore.GREEN
-                        + "https://pyfunceble.github.io/contributors.html "
-                        + Style.RESET_ALL
-                        + "&& "
-                        + Style.BRIGHT
-                        + Fore.GREEN
-                        + "https://pyfunceble.github.io/special-thanks.html",
-                    ),
-                    add_help=False,
-                )
-
-                current_value_format = (
-                    Fore.YELLOW + Style.BRIGHT + "Configured value: " + Fore.BLUE
-                )
-
-                parser.add_argument(
-                    "-ad",
-                    "--adblock",
-                    action="store_true",
-                    help="Switch the decoding of the adblock format. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.adblock)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--aggressive", action="store_true", help=argparse.SUPPRESS
-                )
-
-                parser.add_argument(
-                    "-a",
-                    "--all",
-                    action="store_false",
-                    help="Output all available information on the screen. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.less)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "" "-c",
-                    "--auto-continue",
-                    "--continue",
-                    action="store_true",
-                    help="Switch the value of the auto continue mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.auto_continue)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--autosave-minutes",
-                    type=int,
-                    help="Update the minimum of minutes before we start "
-                    "committing to upstream under Travis CI. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.travis_autosave_minutes)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--clean",
-                    action="store_true",
-                    help="Clean all files under the output directory.",
-                )
-
-                parser.add_argument(
-                    "--clean-all",
-                    action="store_true",
-                    help="Clean all files under the output directory "
-                    "along with all file generated by PyFunceble.",
-                )
-
-                parser.add_argument(
-                    "--cmd",
-                    type=str,
-                    help="Pass a command to run before each commit "
-                    "(except the final one) under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--cmd-before-end",
-                    type=str,
-                    help="Pass a command to run before the results "
-                    "(final) commit under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-autosave-message",
-                    type=str,
-                    help="Replace the default autosave commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.travis_autosave_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-results-message",
-                    type=str,
-                    help="Replace the default results (final) commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.travis_autosave_final_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--complements",
-                    action="store_true",
-                    help="Switch the value of the generation and test of the complements. "
-                    "A complement is for example `example.org` if `www.example.org` "
-                    "is given and vice-versa. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.generate_complements)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-d", "--domain", type=str, help="Set and test the given domain."
-                )
-
-                parser.add_argument(
-                    "-db",
-                    "--database",
-                    action="store_true",
-                    help="Switch the value of the usage of a database to store "
-                    "inactive domains of the currently tested list. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.inactive_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--database-type",
-                    type=str,
-                    help="Tell us the type of database to use. "
-                    "You can choose between the following: `json|mariadb|mysql` %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.db_type)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-dbr",
-                    "--days-between-db-retest",
-                    type=int,
-                    help="Set the numbers of days between each retest of domains present "
-                    "into inactive-db.json. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.days_between_db_retest)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--debug", action="store_true", help=argparse.SUPPRESS
-                )
-
-                parser.add_argument(
-                    "--directory-structure",
-                    action="store_true",
-                    help="Generate the directory and files that are needed and which does "
-                    "not exist in the current directory.",
-                )
-
-                parser.add_argument(
-                    "--dns",
-                    nargs="+",
-                    help="Set the DNS server(s) we have to work with. "
-                    "Multiple space separated DNS server can be given. %s"
-                    % (
-                        current_value_format + repr(", ".join(CONFIGURATION.dns_server))
-                        if CONFIGURATION.dns_server
-                        else current_value_format + "Follow OS DNS" + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--dns-lookup-over-tcp",
-                    action="store_true",
-                    help="Make all DNS query with TCP. "
-                    "%s"
-                    % (current_value_format + repr(CONFIGURATION.dns_lookup_over_tcp)),
-                )
-
-                parser.add_argument(
-                    "-ex",
-                    "--execution",
-                    action="store_true",
-                    help="Switch the default value of the execution time showing. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.show_execution_time)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-f",
-                    "--file",
-                    type=str,
-                    help="Read the given file and test all domains inside it. "
-                    "If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
-                )
-
-                parser.add_argument(
-                    "--filter", type=str, help="Domain to filter (regex)."
-                )
-
-                parser.add_argument(
-                    "--generate-files-from-database",
-                    action="store_true",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--generate-all-files-from-database",
-                    action="store_true",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--help",
-                    action="help",
-                    default=argparse.SUPPRESS,
-                    help="Show this help message and exit.",
-                )
-
-                parser.add_argument(
-                    "--hierarchical",
-                    action="store_true",
-                    help="Switch the value of the hierarchical sorting of the tested file. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.hierarchical_sorting)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-h",
-                    "--host",
-                    action="store_true",
-                    help="Switch the value of the generation of hosts file. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.generate_hosts)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--http",
-                    action="store_true",
-                    help="Switch the value of the usage of HTTP code. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.http_codes.active)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--iana",
-                    action="store_true",
-                    help="Update/Generate `iana-domains-db.json`.",
-                )
-
-                parser.add_argument(
-                    "--idna",
-                    action="store_true",
-                    help="Switch the value of the IDNA conversion. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.idna_conversion)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-ip",
-                    type=str,
-                    help="Change the IP to print in the hosts files with the given one. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.custom_ip)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--json",
-                    action="store_true",
-                    help="Switch the value of the generation "
-                    "of the JSON formatted list of domains. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.generate_json)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--less",
-                    action="store_true",
-                    help="Output less informations on screen. %s"
-                    % (
-                        current_value_format
-                        + repr(preset.switch("less"))
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--local",
-                    action="store_true",
-                    help="Switch the value of the local network testing. %s"
-                    % (
-                        current_value_format
-                        + repr(preset.switch("local"))
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--link", type=str, help="Download and test the given file."
-                )
-
-                parser.add_argument(
-                    "--mining",
-                    action="store_true",
-                    help="Switch the value of the mining subsystem usage. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.mining)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-m",
-                    "--multiprocess",
-                    action="store_true",
-                    help="Switch the value of the usage of multiple process. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.multiprocess)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--multiprocess-merging-mode",
-                    type=str,
-                    help="Sets the multiprocess merging mode. "
-                    "You can choose between the following `live|ends`. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.multiprocess_merging_mode)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-n",
-                    "--no-files",
-                    action="store_true",
-                    help="Switch the value of the production of output files. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.no_files)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-nl",
-                    "--no-logs",
-                    action="store_true",
-                    help="Switch the value of the production of logs files "
-                    "in the case we encounter some errors. %s"
-                    % (
-                        current_value_format
-                        + repr(not CONFIGURATION.logs)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-ns",
-                    "--no-special",
-                    action="store_true",
-                    help="Switch the value of the usage of the SPECIAL rules. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.no_special)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-nu",
-                    "--no-unified",
-                    action="store_true",
-                    help="Switch the value of the production unified logs "
-                    "under the output directory. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.unified)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-nw",
-                    "--no-whois",
-                    action="store_true",
-                    help="Switch the value the usage of whois to test domain's status. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.no_whois)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--percentage",
-                    action="store_true",
-                    help="Switch the value of the percentage output mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.show_percentage)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--plain",
-                    action="store_true",
-                    help="Switch the value of the generation "
-                    "of the plain list of domains. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.plain_list_domain)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-p",
-                    "--processes",
-                    type=int,
-                    help="Set the number of simultaneous processes to use while "
-                    "using multiple processes. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.maximal_processes)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--production", action="store_true", help=argparse.SUPPRESS
-                )
-
-                parser.add_argument(
-                    "-psl",
-                    "--public-suffix",
-                    action="store_true",
-                    help="Update/Generate `public-suffix.json`.",
-                )
-
-                parser.add_argument(
-                    "-q",
-                    "--quiet",
-                    action="store_true",
-                    help="Run the script in quiet mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.quiet)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--share-logs",
-                    action="store_true",
-                    help="Switch the value of the sharing of logs. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.share_logs)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-s",
-                    "--simple",
-                    action="store_true",
-                    help="Switch the value of the simple output mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.simple)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--split",
-                    action="store_true",
-                    help="Switch the value of the split of the generated output files. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.inactive_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--syntax",
-                    action="store_true",
-                    help="Switch the value of the syntax test mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.syntax)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-t",
-                    "--timeout",
-                    type=int,
-                    default=0,
-                    help="Switch the value of the timeout. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.timeout)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--travis",
-                    action="store_true",
-                    help="Switch the value of the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.travis)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--travis-branch",
-                    type=str,
-                    default="master",
-                    help="Switch the branch name where we are going to push. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.travis_branch)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-u", "--url", type=str, help="Set and test the given URL."
-                )
-
-                parser.add_argument(
-                    "-uf",
-                    "--url-file",
-                    type=str,
-                    help="Read and test the list of URL of the given file. "
-                    "If a URL is given we download and test the list (of URL) of the given URL content.",  # pylint: disable=line-too-long
-                )
-
-                parser.add_argument(
-                    "-ua",
-                    "--user-agent",
-                    type=str,
-                    help="Set the user-agent to use and set every time we "
-                    "interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
-                )
-
-                parser.add_argument(
-                    "-v",
-                    "--version",
-                    help="Show the version of PyFunceble and exit.",
-                    action="version",
-                    version="%(prog)s " + VERSION,
-                )
-
-                parser.add_argument(
-                    "-vsc",
-                    "--verify-ssl-certificate",
-                    action="store_true",
-                    help="Switch the value of the verification of the "
-                    "SSL/TLS certificate when testing for URL. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.verify_ssl_certificate)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-wdb",
-                    "--whois-database",
-                    action="store_true",
-                    help="Switch the value of the usage of a database to store "
-                    "whois data in order to avoid whois servers rate limit. %s"
-                    % (
-                        current_value_format
-                        + repr(CONFIGURATION.whois_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                args = parser.parse_args()
-
-                if args.debug:
-                    CONFIGURATION.debug = preset.switch("debug")
-                    LOGGER.authorized = LOGGER.authorization(None)
-                    LOGGER.init()
-
-                if args.less:
-                    CONFIGURATION.less = args.less
-                elif not args.all:
-                    CONFIGURATION.less = args.all
-
-                if args.adblock:
-                    CONFIGURATION.adblock = preset.switch("adblock")
-
-                if args.aggressive:
-                    CONFIGURATION.aggressive = preset.switch("aggressive")
-
-                if args.auto_continue:
-                    CONFIGURATION.auto_continue = preset.switch("auto_continue")
-
-                if args.autosave_minutes:
-                    CONFIGURATION.travis_autosave_minutes = args.autosave_minutes
-
-                if args.cmd:
-                    CONFIGURATION.command = args.cmd
-
-                if args.cmd_before_end:
-                    CONFIGURATION.command_before_end = args.cmd_before_end
-
-                if args.commit_autosave_message:
-                    CONFIGURATION.travis_autosave_commit = args.commit_autosave_message
-
-                if args.commit_results_message:
-                    CONFIGURATION.travis_autosave_final_commit = (
-                        args.commit_results_message
-                    )
-
-                if args.complements:
-                    CONFIGURATION.generate_complements = preset.switch(
-                        "generate_complements"
-                    )
-
-                if args.database:
-                    CONFIGURATION.inactive_database = preset.switch("inactive_database")
-
-                if args.database_type:
-                    if args.database_type.lower() in ["json", "mariadb", "mysql"]:
-                        CONFIGURATION.db_type = args.database_type.lower()
-                    else:
-                        print(
-                            Style.BRIGHT
-                            + Fore.RED
-                            + "Unknown database type: {0}".format(
-                                repr(args.database_type)
-                            )
-                        )
-                        sys.exit(1)
-
-                if args.days_between_db_retest:
-                    CONFIGURATION.days_between_db_retest = args.days_between_db_retest
-
-                if args.dns:
-                    CONFIGURATION.dns_server = args.dns
-
-                if args.dns_lookup_over_tcp:
-                    CONFIGURATION.dns_lookup_over_tcp = preset.switch(
-                        "dns_lookup_over_tcp"
-                    )
-
-                if args.execution:
-                    CONFIGURATION.show_execution_time = preset.switch(
-                        "show_execution_time"
-                    )
-
-                if args.filter:
-                    CONFIGURATION.filter = args.filter
-
-                if args.hierarchical:
-                    CONFIGURATION.hierarchical_sorting = preset.switch(
-                        "hierarchical_sorting"
-                    )
-
-                if args.host:
-                    CONFIGURATION.generate_hosts = preset.switch("generate_hosts")
-
-                if args.http:
-                    CONFIGURATION.http_codes.active = preset.switch(
-                        CONFIGURATION.http_codes.active, True
-                    )
-
-                if args.idna:
-                    CONFIGURATION.idna_conversion = preset.switch("idna_conversion")
-
-                if args.ip:
-                    CONFIGURATION.custom_ip = args.ip
-
-                if args.json:
-                    CONFIGURATION.generate_json = preset.switch("generate_json")
-
-                if args.local:
-                    CONFIGURATION.local = preset.switch("local")
-
-                if args.mining:
-                    CONFIGURATION.mining = preset.switch("mining")
-
-                if args.multiprocess:
-                    CONFIGURATION.multiprocess = preset.switch("multiprocess")
-
-                if args.multiprocess_merging_mode:
-                    if args.multiprocess_merging_mode.lower() in ["end", "live"]:
-                        CONFIGURATION.multiprocess_merging_mode = (
-                            args.multiprocess_merging_mode.lower()
-                        )
-                    else:
-                        print(
-                            Style.BRIGHT
-                            + Fore.RED
-                            + "Unknown multiprocess merging mode: {0}".format(
-                                repr(args.multiprocess_merging_mode)
-                            )
-                        )
-                        sys.exit(1)
-
-                if args.no_files:
-                    CONFIGURATION.no_files = preset.switch("no_files")
-
-                if args.no_logs:
-                    CONFIGURATION.logs = preset.switch("logs")
-
-                if args.no_special:
-                    CONFIGURATION.no_special = preset.switch("no_special")
-
-                if args.no_unified:
-                    CONFIGURATION.unified = preset.switch("unified")
-
-                if args.no_whois:
-                    CONFIGURATION.no_whois = preset.switch("no_whois")
-
-                if args.percentage:
-                    CONFIGURATION.show_percentage = preset.switch("show_percentage")
-
-                if args.plain:
-                    CONFIGURATION.plain_list_domain = preset.switch("plain_list_domain")
-
-                if args.processes:
-                    CONFIGURATION.maximal_processes = args.processes
-                else:
-                    CONFIGURATION.maximal_processes = cpu_count()
-
-                if args.quiet:
-                    CONFIGURATION.quiet = preset.switch("quiet")
-
-                if args.share_logs:
-                    CONFIGURATION.share_logs = preset.switch("share_logs")
-
-                if args.simple:
-                    CONFIGURATION.simple = preset.switch("simple")
-                    CONFIGURATION.quiet = True
-
-                if args.split:
-                    CONFIGURATION.split = preset.switch("split")
-
-                if args.syntax:
-                    CONFIGURATION.syntax = preset.switch("syntax")
-
-                if args.travis:
-                    CONFIGURATION.travis = preset.switch("travis")
-
-                if args.travis_branch:
-                    CONFIGURATION.travis_branch = args.travis_branch
-
-                if args.user_agent:
-                    CONFIGURATION.user_agent = args.user_agent
-
-                if args.verify_ssl_certificate:
-                    CONFIGURATION.verify_ssl_certificate = args.verify_ssl_certificate
-
-                if args.whois_database:
-                    CONFIGURATION.whois_database = preset.switch("whois_database")
-
-                if not CONFIGURATION.quiet:
-                    CLICore.colorify_logo(home=True)
-
-                preset.timeout()
-                preset.dns_lookup_over_tcp()
-
-                if args.clean:
-                    Clean()
-
-                if args.clean_all:
-                    Clean(args.clean_all)
-
-                if args.directory_structure:
-                    DirectoryStructure()
-
-                if args.iana:
-                    IANA().update()
-
-                if args.production:
-                    Production()
-
-                if args.public_suffix:
-                    PublicSuffix().update()
-
-                LOGGER.info(f"ARGS:\n{args}")
-
-                # We compare the versions (upstream and local) and in between.
-                CLICore.compare_version_and_print_messages()
-
-                if not abstracts.Version.is_local_cloned():
-                    # We are not into the cloned version.
-
-                    # We run the merging logic.
-                    #
-                    # Note: Actually, it compares the local and the upstream configuration.
-                    # if a new key is present, it proposes the enduser to merge upstream
-                    # into the local configuration.
-                    Merge(CONFIG_DIRECTORY)
-
-                # We call our Core which will handle all case depending of the configuration or
-                # the used command line arguments.
-                Dispatcher(
-                    preset,
-                    domain_or_ip=args.domain,
-                    file_path=args.file,
-                    url_to_test=args.url,
-                    url_file_path=args.url_file,
-                    link_to_test=args.link,
-                    generate_results_only=args.generate_files_from_database,
-                    generate_all_results_only=args.generate_all_files_from_database,
-                )
-            except Exception as e:
-                LOGGER.exception()
-
-                raise e
-
-        except KeyboardInterrupt:
-            CLICore.stay_safe()
+        output.Constructor()

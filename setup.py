@@ -140,9 +140,17 @@ if __name__ == "__main__":
         platforms=["any"],
         packages=[
             "PyFunceble.abstracts",
+            "PyFunceble.cli",
             "PyFunceble.config",
-            "PyFunceble.converters",
+            "PyFunceble.converter",
+            "PyFunceble.core",
+            "PyFunceble.database",
+            "PyFunceble.engine",
+            "PyFunceble.extractor",
             "PyFunceble.helpers",
+            "PyFunceble.lookup",
+            "PyFunceble.output",
+            "PyFunceble.status",
             "PyFunceble",
         ],
         keywords=[
@@ -171,8 +179,8 @@ if __name__ == "__main__":
         test_suite="setup._test_suite",
         entry_points={
             "console_scripts": [
-                "PyFunceble=PyFunceble:_command_line",
-                "pyfunceble=PyFunceble:_command_line",
+                "PyFunceble=PyFunceble.cli:tool",
+                "pyfunceble=PyFunceble.cli:tool",
             ]
         },
     )

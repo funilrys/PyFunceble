@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.environement_variable
+Provide the default file content converter.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -60,87 +60,63 @@ License:
 """
 # pylint: enable=line-too-long
 
-from os import environ
-from unittest import TestCase
-from unittest import main as launch_tests
+from PyFunceble.exceptions import WrongParameterType
 
-from PyFunceble.helpers import EnvironmentVariable
+from .base import ConverterBase
 
 
-class TestEnvironmentVariable(TestCase):
+class File(ConverterBase):
     """
-    Tests of the PyFunceble.helpers.environement_variable
+    Converts a line to a subject to test.
     """
 
-    def test_name_exists(self):
+    comment_sign = "#"
+    space_sign = " "
+    tab_sign = "\t"
+
+    def __init__(self, data_to_convert):
+        if not isinstance(data_to_convert, (str, list)):
+            raise WrongParameterType(
+                f"<data_to_convert> should be {str} or {list}, {type(data_to_convert)} given."
+            )
+
+        super().__init__(data_to_convert)
+
+    def get_converted(self):
         """
-        Tests the case that a name exist.
-        """
+        Provides the converted data.
 
-        environ["TEST"] = "test"
+        .. warning::
+            This method returns return None if no subject
+            of interest was found.
 
-        expected = True
-        actual = EnvironmentVariable("TEST").exists()
-
-        self.assertEqual(expected, actual)
-
-    def test_name_does_not_exists(self):
-        """
-        Tests the case that a name does not exist.
-        """
-
-        expected = False
-        actual = EnvironmentVariable("HELLO,WORLD").exists()
-
-        self.assertEqual(expected, actual)
-
-    def test_get_value(self):
-        """
-        Tests the case that the value is needed.
+        :rtype: None, str, list
         """
 
-        environ["TEST"] = "Hello, World!"
-        expected = "Hello, World!"
-        actual = EnvironmentVariable("TEST").get_value()
+        if isinstance(self.data_to_convert, list):
+            return [File(x).get_converted() for x in self.data_to_convert]
 
-        self.assertEqual(expected, actual)
+        subject = self.data_to_convert.strip()
 
-    def test_get_default_value(self):
-        """
-        Tests the case that the environment variable does not
-        exists and the value is needed.
-        """
+        if subject and not subject.startswith(self.comment_sign):
+            if self.comment_sign in subject:
+                subject = subject[: subject.find(self.comment_sign)].strip()
 
-        expected = None
-        actual = EnvironmentVariable("Hello,World").get_value()
+            if self.space_sign in subject or self.tab_sign in subject:
+                splited = subject.split()
 
-        self.assertEqual(expected, actual)
+                # As there was a space or a tab in the string, we consider
+                # that we are working with the hosts file format which means
+                # that the domain we have to test is after the first string.
+                # So we set the index to 1.
+                index = 1
 
-        expected = True
-        actual = EnvironmentVariable("Hello,World").get_value(default=True)
+                while index < len(splited):
+                    if splited[index]:
+                        break
+                    index += 1
 
-        self.assertEqual(expected, actual)
+                return splited[index]
 
-    def test_set_value(self):
-        """
-        Tests the case the we want to set the value of an environment variable.
-        """
-
-        expected_value = "Hello!"
-
-        expected_output = True
-        actual = EnvironmentVariable("TEST").set_value("Hello!")
-
-        self.assertEqual(expected_output, actual)
-        self.assertEqual(expected_value, environ["TEST"])
-
-    def test_set_value_wrong_type(self):
-        """
-        Tests the case that we want to set a non string value.
-        """
-
-        self.assertRaises(TypeError, lambda: EnvironmentVariable("TEST").set_value(1))
-
-
-if __name__ == "__main__":
-    launch_tests()
+            return subject
+        return None

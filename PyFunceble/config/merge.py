@@ -59,9 +59,12 @@ License:
     SOFTWARE.
 """
 
+
+from os import sep as directory_separator
+
+from colorama import Fore, Style
+
 import PyFunceble
-from PyFunceble.helpers import Dict, Download
-from PyFunceble.helpers import Merge as helpers_merge
 
 
 class Merge:  # pylint: disable=too-few-public-methods
@@ -71,27 +74,31 @@ class Merge:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, configuration_path):
-        config_link = PyFunceble.converters.InternalUrl(
+        config_link = PyFunceble.converter.InternalUrl(
             "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
         ).get_converted()
 
         self.path_to_config = configuration_path
 
-        if not self.path_to_config.endswith(PyFunceble.directory_separator):
-            self.path_to_config += PyFunceble.directory_separator
+        if not self.path_to_config.endswith(directory_separator):
+            self.path_to_config += directory_separator
 
         self.path_to_config += (
             PyFunceble.abstracts.Infrastructure.CONFIGURATION_FILENAME
         )
 
-        dict_instance = Dict()
+        dict_instance = PyFunceble.helpers.Dict()
 
         self.local_config = dict_instance.from_yaml_file(self.path_to_config)
-        self.upstream_config = dict_instance.from_yaml(Download(config_link).text())
+        self.upstream_config = dict_instance.from_yaml(
+            PyFunceble.helpers.Download(config_link).text()
+        )
 
         if self.upstream_config["links"]["config"] != config_link:
             self.upstream_config = dict_instance.from_yaml(
-                Download(self.upstream_config["links"]["config"]).text()
+                PyFunceble.helpers.Download(
+                    self.upstream_config["links"]["config"]
+                ).text()
             )
 
         self.new_config = {}
@@ -105,7 +112,9 @@ class Merge:  # pylint: disable=too-few-public-methods
         """
 
         # We check if all upstream keys are into the local keys map.
-        result = not Dict(self.local_config).has_same_keys_as(self.upstream_config)
+        result = not PyFunceble.helpers.Dict(self.local_config).has_same_keys_as(
+            self.upstream_config
+        )
 
         PyFunceble.LOGGER.debug(f"Local version is different from upstream: {result}")
         return result
@@ -117,8 +126,8 @@ class Merge:  # pylint: disable=too-few-public-methods
 
         to_remove = []
 
-        self.new_config = Dict(
-            helpers_merge(self.local_config).into(self.upstream_config)
+        self.new_config = PyFunceble.helpers.Dict(
+            PyFunceble.helpers.Merge(self.local_config).into(self.upstream_config)
         ).remove_key(to_remove)
 
         if "seconds_before_http_timeout" in self.new_config:
@@ -130,7 +139,7 @@ class Merge:  # pylint: disable=too-few-public-methods
         Save the new configuration inside the configuration file.
         """
 
-        Dict(self.new_config).to_yaml_file(self.path_to_config)
+        PyFunceble.helpers.Dict(self.new_config).to_yaml_file(self.path_to_config)
 
         if "config_loaded" in PyFunceble.INTERN:
             del PyFunceble.INTERN["config_loaded"]
@@ -147,7 +156,9 @@ class Merge:  # pylint: disable=too-few-public-methods
         Execute the logic behind the merging.
         """
 
-        if not PyFunceble.EnvironmentVariable("PYFUNCEBLE_AUTO_CONFIGURATION").exists():
+        if not PyFunceble.helpers.EnvironmentVariable(
+            "PYFUNCEBLE_AUTO_CONFIGURATION"
+        ).exists():
             # The auto configuration environment variable is not set.
 
             while True:
@@ -155,16 +166,12 @@ class Merge:  # pylint: disable=too-few-public-methods
 
                 # We ask the user if we should install and load the default configuration.
                 response = input(
-                    PyFunceble.Style.BRIGHT
-                    + PyFunceble.Fore.RED
+                    Style.BRIGHT
+                    + Fore.RED
                     + "A configuration key is missing.\n"
-                    + PyFunceble.Fore.RESET
+                    + Fore.RESET
                     + "Try to merge upstream configuration file into %s ? [y/n] "
-                    % (
-                        PyFunceble.Style.BRIGHT
-                        + self.path_to_config
-                        + PyFunceble.Style.RESET_ALL
-                    )
+                    % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
                 )
 
                 if isinstance(response, str):
@@ -180,7 +187,7 @@ class Merge:  # pylint: disable=too-few-public-methods
                         self._save()
 
                         print(
-                            PyFunceble.Style.BRIGHT + PyFunceble.Fore.GREEN + "Done!\n"
+                            Style.BRIGHT + Fore.GREEN + "Done!\n"
                             "If it happens again, please fill a new issue."
                         )
 

@@ -72,7 +72,6 @@ from ipaddress import (
 from domain2idna import get as domain2idna
 
 import PyFunceble
-from PyFunceble.helpers import Regex
 
 
 class Check:
@@ -116,7 +115,7 @@ class Check:
                 regex = r"(^(http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
-                initial_base = base = Regex(regex).match(
+                initial_base = base = PyFunceble.helpers.Regex(regex).match(
                     self.subject, return_match=True, rematch=True
                 )[2]
 
@@ -161,9 +160,9 @@ class Check:
                         # * We have to return the converted full URL.
 
                         # We return the converted full URL.
-                        return Regex(initial_base, escape=True).replace_match(
-                            self.subject, base, occurences=1
-                        )
+                        return PyFunceble.helpers.Regex(
+                            initial_base, escape=True
+                        ).replace_match(self.subject, base, occurences=1)
 
                     if return_formatted:
                         # * We do not have to convert to IDNA.
@@ -233,7 +232,9 @@ class Check:
                 return False
 
             if (
-                Regex(regex_valid_domains).match(self.subject, return_match=False)
+                PyFunceble.helpers.Regex(regex_valid_domains).match(
+                    self.subject, return_match=False
+                )
                 and not subdomain_check
             ):
                 # * The element pass the domain validation.
@@ -286,9 +287,9 @@ class Check:
                             # We check if it passes our subdomain regex.
                             # * True: It's a valid domain.
                             # * False: It's an invalid domain.
-                            return Regex(regex_valid_subdomains).match(
-                                to_check, return_match=False
-                            )
+                            return PyFunceble.helpers.Regex(
+                                regex_valid_subdomains
+                            ).match(to_check, return_match=False)
 
                     except ValueError:
                         # In case of a value error because the position is not found,
@@ -318,7 +319,9 @@ class Check:
                 # We check if it passes our subdomain regex.
                 # * True: It's a valid domain.
                 # * False: It's an invalid domain.
-                return Regex(regex_valid_subdomains).match(to_check, return_match=False)
+                return PyFunceble.helpers.Regex(regex_valid_subdomains).match(
+                    to_check, return_match=False
+                )
 
         except (ValueError, AttributeError):
             # In case of a value or attribute error we ignore them.
@@ -514,10 +517,14 @@ class Check:
                     or address.is_loopback
                     or address.is_link_local
                     or not address.is_global
-                    or Regex(reserved_regex).match(self.subject, return_match=False)
+                    or PyFunceble.helpers.Regex(reserved_regex).match(
+                        self.subject, return_match=False
+                    )
                 )
             except AddressValueError:  # pragma: no cover
-                return Regex(reserved_regex).match(self.subject, return_match=False)
+                return PyFunceble.helpers.Regex(reserved_regex).match(
+                    self.subject, return_match=False
+                )
 
         # We return False, we are not working with an IPv4
         return False

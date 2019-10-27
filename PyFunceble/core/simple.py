@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.environement_variable
+Provide the logic for a simple test from the CLI.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,89 +58,82 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
+# pylint:enable=line-too-long
 
-from os import environ
-from unittest import TestCase
-from unittest import main as launch_tests
+from domain2idna import get as domain2idna
 
-from PyFunceble.helpers import EnvironmentVariable
+import PyFunceble
+
+from .cli import CLICore
 
 
-class TestEnvironmentVariable(TestCase):
+class SimpleCore(CLICore):
     """
-    Tests of the PyFunceble.helpers.environement_variable
+    Brain of PyFunceble for simple test.
+
+    :param str subject: The subject we are testing.
     """
 
-    def test_name_exists(self):
+    def __init__(self, subject):
+        super().__init__()
+
+        if PyFunceble.CONFIGURATION.idna_conversion:
+            self.subject = domain2idna(subject)
+        else:
+            self.subject = subject
+
+    def test(self, subject, subject_type):
         """
-        Tests the case that a name exist.
-        """
-
-        environ["TEST"] = "test"
-
-        expected = True
-        actual = EnvironmentVariable("TEST").exists()
-
-        self.assertEqual(expected, actual)
-
-    def test_name_does_not_exists(self):
-        """
-        Tests the case that a name does not exist.
+        Process a test of the given subject and return the result.
         """
 
-        expected = False
-        actual = EnvironmentVariable("HELLO,WORLD").exists()
+        if isinstance(subject, list):
+            return [self.test(x, subject_type) for x in subject]
 
-        self.assertEqual(expected, actual)
+        if PyFunceble.CONFIGURATION.syntax:
+            return PyFunceble.status.DomainAndIpSyntax(
+                subject, whois_db=self.whois_db
+            ).get()
 
-    def test_get_value(self):
+        if subject_type in ["url"]:
+            return PyFunceble.status.UrlAvailability(
+                subject, whois_db=self.whois_db
+            ).get()
+
+        return PyFunceble.status.DomainAndIpAvailability(
+            subject, whois_db=self.whois_db
+        ).get()
+
+    def domain(self):
         """
-        Tests the case that the value is needed.
-        """
-
-        environ["TEST"] = "Hello, World!"
-        expected = "Hello, World!"
-        actual = EnvironmentVariable("TEST").get_value()
-
-        self.assertEqual(expected, actual)
-
-    def test_get_default_value(self):
-        """
-        Tests the case that the environment variable does not
-        exists and the value is needed.
-        """
-
-        expected = None
-        actual = EnvironmentVariable("Hello,World").get_value()
-
-        self.assertEqual(expected, actual)
-
-        expected = True
-        actual = EnvironmentVariable("Hello,World").get_value(default=True)
-
-        self.assertEqual(expected, actual)
-
-    def test_set_value(self):
-        """
-        Tests the case the we want to set the value of an environment variable.
+        Handle the simple domain testing.
         """
 
-        expected_value = "Hello!"
+        # We run the preset specific to this method.
+        self.preset.simple_domain()
+        # We print the header if it was not done yet.
+        self.print_header()
 
-        expected_output = True
-        actual = EnvironmentVariable("TEST").set_value("Hello!")
+        if self.subject:
+            data = self.test(self.subject, "domain")
 
-        self.assertEqual(expected_output, actual)
-        self.assertEqual(expected_value, environ["TEST"])
+            self.save_into_database(data, None, self.mysql_db)
+        else:
+            self.print_nothing_to_test()
 
-    def test_set_value_wrong_type(self):
+    def url(self):
         """
-        Tests the case that we want to set a non string value.
+        Handle the simple URL testing.
         """
 
-        self.assertRaises(TypeError, lambda: EnvironmentVariable("TEST").set_value(1))
+        # We run the preset specific to this method.
+        self.preset.simple_url()
+        # We print the header if it was not done yet.
+        self.print_header()
 
+        if self.subject:
+            data = self.test(self.subject, "url")
 
-if __name__ == "__main__":
-    launch_tests()
+            self.save_into_database(data, None, self.mysql_db)
+        else:
+            self.print_nothing_to_test()

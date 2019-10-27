@@ -60,13 +60,13 @@ License:
 """
 # pylint: enable=line-too-long
 # pylint: disable=import-error
+
+from os import sep as directory_separator
+
 from box import Box
+from colorama import Fore, Style
 
 import PyFunceble
-from PyFunceble.dns_lookup import DNSLookup
-from PyFunceble.helpers import Dict, Directory, Download, File
-from PyFunceble.logger import Logger
-from PyFunceble.requests import Requests
 
 
 class Load:  # pylint: disable=too-few-public-methods
@@ -104,7 +104,7 @@ class Load:  # pylint: disable=too-few-public-methods
         except FileNotFoundError:
             # We got a FileNotFoundError
 
-            if not PyFunceble.EnvironmentVariable(
+            if not PyFunceble.helpers.EnvironmentVariable(
                 "PYFUNCEBLE_AUTO_CONFIGURATION"
             ).exists():
                 # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
@@ -116,11 +116,7 @@ class Load:  # pylint: disable=too-few-public-methods
                     response = input(
                         "%s was not found.\n\
 Install and load the default configuration at the mentioned location? [y/n] "
-                        % (
-                            PyFunceble.Style.BRIGHT
-                            + self.path_to_config
-                            + PyFunceble.Style.RESET_ALL
-                        )
+                        % (Style.BRIGHT + self.path_to_config + Style.RESET_ALL)
                     )
 
                     if isinstance(response, str):
@@ -172,7 +168,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # And we fix the path.
                 # Which means: If they do not end with the directory separator, we append
                 # it to the end.
-                self.data["outputs"][main_key]["directory"] = Directory(
+                self.data["outputs"][main_key][
+                    "directory"
+                ] = PyFunceble.helpers.Directory(
                     self.data["outputs"][main_key]["directory"]
                 ).fix_path()
             except KeyError:
@@ -187,14 +185,14 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # And we fix the path.
                 # Which means: If they do not end with the directory separator, we append
                 # it to the end.
-                self.data["outputs"][main_key]["directories"][key] = Directory(
-                    value
-                ).fix_path()
+                self.data["outputs"][main_key]["directories"][
+                    key
+                ] = PyFunceble.helpers.Directory(value).fix_path()
 
         # We fix the path.
         # Which means: If they do not end with the directory separator, we append
         # it to the end.
-        self.data["outputs"]["parent_directory"] = Directory(
+        self.data["outputs"]["parent_directory"] = PyFunceble.helpers.Directory(
             self.data["outputs"]["parent_directory"]
         ).fix_path()
 
@@ -215,10 +213,15 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             PyFunceble.CONFIGURATION.update(custom)
 
+            if "custom_config_loaded" in PyFunceble.INTERN:
+                PyFunceble.INTERN["custom_config_loaded"] = PyFunceble.helpers.Merge(
+                    custom
+                ).into(PyFunceble.INTERN["custom_config_loaded"])
+            else:
+                PyFunceble.INTERN["custom_config_loaded"] = custom
+
             # We save the fact the the custom was loaded.
-            PyFunceble.INTERN.update(
-                {"custom_loaded": True, "custom_config_loaded": custom}
-            )
+            PyFunceble.INTERN["custom_loaded"] = True
 
         if "config_loaded" not in PyFunceble.INTERN:
             PyFunceble.STATUS = PyFunceble.CONFIGURATION.status
@@ -229,29 +232,25 @@ Install and load the default configuration at the mentioned location? [y/n] "
             # Those 2 strings are used to say if something like the cleaning went right (done)
             # or wrong (error).
             PyFunceble.INTERN.update(
-                {
-                    "done": PyFunceble.Fore.GREEN + "✔",
-                    "error": PyFunceble.Fore.RED + "✘",
-                }
+                {"done": Fore.GREEN + "✔", "error": Fore.RED + "✘"}
             )
 
-            PyFunceble.LOGGER = Logger(debug=PyFunceble.CONFIGURATION.debug)
-            PyFunceble.REQUESTS = Requests()
+            PyFunceble.LOGGER = PyFunceble.engine.Logger(
+                debug=PyFunceble.CONFIGURATION.debug
+            )
+            PyFunceble.REQUESTS = PyFunceble.lookup.Requests()
 
             # We load the IANA database.
-            PyFunceble.IANA().load()
+            PyFunceble.lookup.Iana().load()
 
             # We load the PSL database.
-            PyFunceble.PublicSuffix().load()
+            PyFunceble.lookup.PublicSuffix().load()
 
-            PyFunceble.DNSLOOKUP = DNSLookup(
+            PyFunceble.DNSLOOKUP = PyFunceble.lookup.Dns(
                 dns_server=PyFunceble.CONFIGURATION.dns_server,
                 lifetime=PyFunceble.CONFIGURATION.timeout,
                 tcp=PyFunceble.CONFIGURATION.dns_lookup_over_tcp,
             )
-
-            # We load the directory structure.
-            PyFunceble.DirectoryStructure()
 
             PyFunceble.INTERN.update({"config_loaded": True})
 
@@ -268,11 +267,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
         :rtype: tuple
         """
 
-        if not path_to_config.endswith(PyFunceble.directory_separator):
+        if not path_to_config.endswith(directory_separator):
             # The path to the config does not ends with the directory separator.
 
             # We initiate the default and the parsed variable with the directory separator.
-            default = parsed = path_to_config + PyFunceble.directory_separator
+            default = parsed = path_to_config + directory_separator
         else:
             # The path to the config does ends with the directory separator.
 
@@ -295,7 +294,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
         try:
             # We try to load the configuration file.
 
-            self.data.update(Dict.from_yaml_file(self.path_to_config))
+            self.data.update(
+                PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
+            )
 
             # We install the latest iana configuration file.
             self._install_iana_config()
@@ -311,7 +312,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         except FileNotFoundError as exception:
             # But if the configuration file is not found.
 
-            file_instance = File(self.path_to_default_config)
+            file_instance = PyFunceble.helpers.File(self.path_to_default_config)
 
             if file_instance.exists():
                 # The `DEFAULT_CONFIGURATION_FILENAME` file exists.
@@ -339,7 +340,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
 
         # We update the link according to our current version.
-        production_config_link = PyFunceble.converters.InternalUrl(
+        production_config_link = PyFunceble.converter.InternalUrl(
             production_config_link
         ).get_converted()
 
@@ -350,12 +351,14 @@ Install and load the default configuration at the mentioned location? [y/n] "
             #
             # Note: We add this one in order to allow the enduser to always have
             # a copy of our upstream configuration file.
-            Download(production_config_link).text(
+            PyFunceble.helpers.Download(production_config_link).text(
                 destination=self.path_to_default_config
             )
 
         # And we download the link content and return the download status.
-        return Download(production_config_link).text(destination=self.path_to_config)
+        return PyFunceble.helpers.Download(production_config_link).text(
+            destination=self.path_to_config
+        )
 
     def _install_db_type_files(self):
         """
@@ -371,10 +374,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             destination_dir = (
                 PyFunceble.CONFIG_DIRECTORY
                 + self.data["outputs"]["db_type"]["directory"]
-                + PyFunceble.directory_separator
+                + directory_separator
             )
 
-            Directory(destination_dir).create()
+            PyFunceble.helpers.Directory(destination_dir).create()
 
             # We set the list of index to download.
             index_to_download = ["mariadb", "mysql"]
@@ -383,7 +386,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # We loop through the list of indexes.
 
                 # We create the right link.
-                link_to_download = PyFunceble.converters.InternalUrl(
+                link_to_download = PyFunceble.converter.InternalUrl(
                     self.data["links"][index]
                 ).get_converted()
 
@@ -393,7 +396,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 )
 
                 # We finally download the file.
-                Download(link_to_download).text(destination=destination)
+                PyFunceble.helpers.Download(link_to_download).text(
+                    destination=destination
+                )
 
     def _install_iana_config(self):
         """
@@ -406,19 +411,19 @@ Install and load the default configuration at the mentioned location? [y/n] "
         iana_link = self.data["links"]["iana"]
 
         # We update the link according to our current version.
-        iana_link = PyFunceble.converters.InternalUrl(iana_link).get_converted()
+        iana_link = PyFunceble.converter.InternalUrl(iana_link).get_converted()
 
         # We set the destination of the downloaded file.
         destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
         if (
             not PyFunceble.abstracts.Version.is_local_cloned()
-            or not File(destination).exists()
+            or not PyFunceble.helpers.File(destination).exists()
         ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            return Download(iana_link).text(destination=destination)
+            return PyFunceble.helpers.Download(iana_link).text(destination=destination)
 
         # We are in the cloned version.
 
@@ -436,7 +441,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         psl_link = self.data["links"]["psl"]
 
         # We update the link according to our current version.
-        psl_link = PyFunceble.converters.InternalUrl(psl_link).get_converted()
+        psl_link = PyFunceble.converter.InternalUrl(psl_link).get_converted()
 
         # We set the destination of the downloaded file.
         destination = (
@@ -446,12 +451,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         if (
             not PyFunceble.abstracts.Version.is_local_cloned()
-            or not File(destination).exists()
+            or not PyFunceble.helpers.File(destination).exists()
         ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            return Download(psl_link).text(destination=destination)
+            return PyFunceble.helpers.Download(psl_link).text(destination=destination)
 
         # We are in the cloned version.
 
@@ -469,7 +474,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         dir_structure_link = self.data["links"]["dir_structure"]
 
         # We update the link according to our current version.
-        dir_structure_link = PyFunceble.converters.InternalUrl(
+        dir_structure_link = PyFunceble.converter.InternalUrl(
             dir_structure_link
         ).get_converted()
 
@@ -481,14 +486,16 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
         if (
             not PyFunceble.abstracts.Version.is_local_cloned()
-            or not File(destination).exists()
+            or not PyFunceble.helpers.File(destination).exists()
         ):
             # The current version is not the cloned version.
 
             # We Download the link content and return the download status.
-            data = Download(dir_structure_link).text(destination=destination)
+            data = PyFunceble.helpers.Download(dir_structure_link).text(
+                destination=destination
+            )
 
-            File(destination).write(data, overwrite=True)
+            PyFunceble.helpers.File(destination).write(data, overwrite=True)
             return True
 
         # We are in the cloned version.

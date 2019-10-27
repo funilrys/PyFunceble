@@ -16,6 +16,11 @@ class Platform:
     Provides the list of supported unix platform.
     """
 
+    MAC = ["darwin"]
+    """
+    Provides teh list of supported MAC platform.
+    """
+
     @classmethod
     def get(cls):
         """
@@ -38,3 +43,11 @@ class Platform:
         """
 
         return cls.get() in cls.UNIX  # pragma: no cover
+
+    @classmethod
+    def is_mac_os(cls):
+        """
+        Checks if the current platform is in our OSX list.
+        """
+
+        return cls.get() in cls.MAC
