@@ -44,7 +44,7 @@ script:
   - coverage run setup.py test
   - coverage xml # Needed for codacy.
   - echo "Lint PyFunceble" && pylint PyFunceble
-  - echo "Lint tests" && pylint tests/*.py
+  - echo "Lint tests" && pylint tests
   - PyFunceble -v
   - PyFunceble --clean
   - PyFunceble --clean-all

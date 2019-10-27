@@ -61,13 +61,11 @@ License:
 # pylint: enable=line-too-long
 
 
-from os import environ
 from unittest import TestCase
 from unittest import main as launch_tests
 from unittest.mock import patch
 
-import PyFunceble
-from PyFunceble.converter import InternalUrl
+from PyFunceble.converter.internal_url import InternalUrl
 
 
 class TestInternalURL(TestCase):
@@ -109,9 +107,7 @@ class TestInternalURL(TestCase):
         Tests of the case that there is no changes.
         """
 
-        given = (
-            "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
-        )
+        given = "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         expected = (
             "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
         )

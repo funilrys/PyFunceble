@@ -135,7 +135,9 @@ class TestAdblockDecode(TestCase):
         Tests of the conversion with multiple inputs.
         """
 
-        expected = PyFunceble.helpers.List([y for x in self.given.values() for y in x]).format()
+        expected = PyFunceble.helpers.List(
+            [y for x in self.given.values() for y in x]
+        ).format()
         actual = AdBlock(list(self.given.keys())).get_converted()
 
         self.assertEqual(expected, actual)
