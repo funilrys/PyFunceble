@@ -18,13 +18,21 @@ env:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
 language: generic
-sudo: false
 
 os:
   - linux
   - osx
 
 matrix:
+  include:
+    - os: linux
+      dist: bionic
+      addons:
+        apt:
+          packages:
+            - libffi-devel
+            - libssl-dev
+    - os: osx
   fast_finish: true
 
 install:
