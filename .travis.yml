@@ -1,33 +1,51 @@
 env:
-  matrix:
-    - PYTHON_VERSION="3.8.0"
-    - PYTHON_VERSION="3.7.4"
-    - PYTHON_VERSION="3.7.3"
-    - PYTHON_VERSION="3.7.2"
-    - PYTHON_VERSION="3.7.1"
-    - PYTHON_VERSION="3.7.0"
-    - PYTHON_VERSION="3.6.9"
-    - PYTHON_VERSION="3.6.8"
-    - PYTHON_VERSION="3.6.7"
-    - PYTHON_VERSION="3.6.6"
-    - PYTHON_VERSION="3.6.5"
-    - PYTHON_VERSION="3.6.4"
-    - PYTHON_VERSION="3.6.3"
-    - PYTHON_VERSION="3.6.2"
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
 language: generic
 
-os:
-  - linux
-  - osx
-
-addons:
-  apt:
-    packages:
-      - libffi-dev
-      - libssl-dev
+jobs:
+  include:
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.8.0 under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.8.0"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.8.0 under macOS 10.13"
+      env: PYTHON_VERSION="3.8.0"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.7.4 under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.7.4"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.7.4 under macOS 10.13"
+      env: PYTHON_VERSION="3.7.4"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.7.3 under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.7.3"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.7.3 under macOS 10.13"
+      env: PYTHON_VERSION="3.7.3"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.6.9 under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.6.9"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.6.9 under macOS 10.13"
+      env: PYTHON_VERSION="3.6.9"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.6.8 <under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.6.8"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.6.8 under macOS 10.13"
+      env: PYTHON_VERSION="3.6.8"
 
 matrix:
   fast_finish: true
