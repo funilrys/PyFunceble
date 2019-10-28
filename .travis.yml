@@ -38,7 +38,7 @@ install:
   - source activate test-environment
   - python -VV
   - pip --version
-  - pip install pylint coverage coveralls codacy-coverage
+  - pip install pylint coverage coveralls codacy-coverage cffi
 
 script:
   - pip install -e .
