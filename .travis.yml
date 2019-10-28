@@ -20,11 +20,9 @@ env:
 language: generic
 sudo: false
 
-jobs:
-  include:
-    - os: linux
-      dist: bionic
-    - os: osx
+os:
+  - linux
+  - osx
 
 matrix:
   fast_finish: true
