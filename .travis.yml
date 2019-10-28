@@ -6,14 +6,14 @@ language: generic
 
 jobs:
   include:
-    # - os: linux
-    #   dist: bionic
-    #   name: "Test with Python 3.8.0 under Ubuntu Bionic"
-    #   env: PYTHON_VERSION="3.8.0"
-    # - os: osx
-    #   osx_image: xcode9.4
-    #   name: "Test with Python 3.8.0 under macOS 10.13"
-    #   env: PYTHON_VERSION="3.8.0"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.8.0 under Ubuntu Bionic"
+      env: PYTHON_VERSION="3.8.0"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.8.0 under macOS 10.13"
+      env: PYTHON_VERSION="3.8.0"
     - os: linux
       dist: bionic
       name: "Test with Python 3.7.4 under Ubuntu Bionic"
@@ -60,8 +60,9 @@ install:
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
   - python -VV
+  - conda install cffi
   - pip --version
-  - pip install pylint coverage coveralls codacy-coverage cffi
+  - pip install pylint coverage coveralls codacy-coverage
 
 script:
   - pip install -e .
