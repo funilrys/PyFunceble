@@ -77,11 +77,13 @@ class TestDigit2Digits(TestCase):
         """
 
         self.assertRaises(
-            PyFunceble.exceptions.WrongParameterType, lambda: Digit2Digits(["1"]).get_converted()
+            PyFunceble.exceptions.WrongParameterType,
+            lambda: Digit2Digits(["1"]).get_converted(),
         )
 
         self.assertRaises(
-            PyFunceble.exceptions.WrongParameterType, lambda: Digit2Digits(1).get_converted()
+            PyFunceble.exceptions.WrongParameterType,
+            lambda: Digit2Digits(1).get_converted(),
         )
 
     def test_simple_input(self):
