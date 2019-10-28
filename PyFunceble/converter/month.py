@@ -10,18 +10,18 @@ class Month(ConverterBase):
 
     # We map the different month and their possible representation.
     months = {
-        "jan": [str(1), "01", "Jan", "January"],
-        "feb": [str(2), "02", "Feb", "February"],
-        "mar": [str(3), "03", "Mar", "March"],
-        "apr": [str(4), "04", "Apr", "April"],
-        "may": [str(5), "05", "May"],
-        "jun": [str(6), "06", "Jun", "June"],
-        "jul": [str(7), "07", "Jul", "July"],
-        "aug": [str(8), "08", "Aug", "August"],
-        "sep": [str(9), "09", "Sep", "September"],
-        "oct": [str(10), "Oct", "October"],
-        "nov": [str(11), "Nov", "November"],
-        "dec": [str(12), "Dec", "December"],
+        "jan": [str(1), "01", "jan", "january", "jan."],
+        "feb": [str(2), "02", "feb", "february", "feb."],
+        "mar": [str(3), "03", "mar", "march", "mar."],
+        "apr": [str(4), "04", "apr", "april", "apr."],
+        "may": [str(5), "05", "may"],
+        "jun": [str(6), "06", "jun", "june", "jun."],
+        "jul": [str(7), "07", "jul", "july", "jul."],
+        "aug": [str(8), "08", "aug", "august", "aug."],
+        "sep": [str(9), "09", "sep", "september", "sep.", "sept", "sept."],
+        "oct": [str(10), "oct", "october", "oct."],
+        "nov": [str(11), "nov", "november", "nov."],
+        "dec": [str(12), "dec", "december", "dec."],
     }
 
     def __init__(self, data_to_convert):
@@ -33,6 +33,6 @@ class Month(ConverterBase):
         super().__init__(data_to_convert)
 
         for to_return, possibilities in self.months.items():
-            if self.data_to_convert in possibilities:
+            if self.data_to_convert.lower() in possibilities:
                 self.converted_data = to_return
                 break

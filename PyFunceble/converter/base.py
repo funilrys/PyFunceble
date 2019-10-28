@@ -14,4 +14,4 @@ class ConverterBase:  # pragma: no cover
             # pylint: disable=no-member
             return self.converted_data
 
-        raise NoConversionMade()
+        raise NoConversionMade(self.data_to_convert)
