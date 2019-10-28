@@ -106,18 +106,18 @@ class TestMerge(TestCase):
         """
 
         given = {
-            "hello": ["This is PyFunceble!", "Uhh!"],
             "world": "Fun Ilrys",
             "hello_world": {"author": "funilrys", "name": "Fun"},
+            "hello": ["This is PyFunceble!", "Uhh!"],
         }
         to_merge = {
-            "hello": ["hello", "Uhh"],
             "hello_world": {"author": "nobody", "surname": "body"},
+            "hello": ["hello", "Uhh"],
         }
         expected = {
-            "hello": ["hello", "Uhh"],
-            "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+            "world": "Fun Ilrys",
+            "hello": ["hello", "Uhh"],
         }
         actual = Merge(to_merge).into(given, strict=True)
 
@@ -138,9 +138,9 @@ class TestMerge(TestCase):
             "hello_world": {"author": "nobody", "surname": "body"},
         }
         expected = {
-            "hello": ["This is PyFunceble!", "Uhh!", "hello", "Uhh"],
             "world": "Fun Ilrys",
             "hello_world": {"author": "nobody", "name": "Fun", "surname": "body"},
+            "hello": ["This is PyFunceble!", "Uhh!", "hello", "Uhh"],
         }
 
         actual = Merge(to_merge).into(given, strict=False)
