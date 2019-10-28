@@ -70,7 +70,7 @@ from colorama import Fore, Style
 import PyFunceble
 
 
-class Production:  # pylint: disable=too-few-public-methods
+class Production:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Manage and provide the production preparation logic.
 

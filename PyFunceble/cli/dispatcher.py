@@ -65,7 +65,7 @@ import PyFunceble
 from .execution_time import ExecutionTime
 
 
-class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
+class Dispatcher:  # pragma: no cover pylint: disable=too-few-public-methods, too-many-arguments
     """
     Dispatch to the right brain side.
 

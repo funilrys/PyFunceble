@@ -69,7 +69,7 @@ from colorama import Fore, Style
 import PyFunceble
 
 
-class Load:  # pylint: disable=too-few-public-methods
+class Load:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Help us load the configuration(s) file(s).
 

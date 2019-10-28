@@ -92,14 +92,14 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # The action is equal to `start`.
 
             # We set the starting time.
-            self._starting_time()
+            self.set_starting_time()
         elif self.action == "stop":
             # * The action is not equal to `start`.
             # and
             # * The action is equal to `stop`
 
             # We set the ending time.
-            self._stoping_time()
+            self.set_stoping_time()
 
         if self.authorized and self.action == "stop":
             # * We are authorized to operate.
@@ -126,10 +126,10 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                     "\nExecution time: {0}".format(formatted_time), overwrite=False
                 )
 
-        self._save(last=last)
+        self.save(last=last)
 
     @classmethod
-    def authorization(cls):  # pragma: no cover
+    def authorization(cls):
         """
         Check the execution authorization.
 
@@ -145,7 +145,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
         return False
 
-    def _save(self, last=False):  # pragma: no cover
+    def save(self, last=False):
         """
         Save the current time to the file.
 
@@ -238,21 +238,18 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
                             + "Global execution time: "
                             + content["final_total"]
                         )
-                except KeyError:
+                except KeyError:  # pragma: no cover
                     # It is not possible to work with the data index because
                     # it does not exist.
 
                     # We ignore the problem.
                     pass
 
-            try:
-                # We try to save the whole data at its final location.
-                PyFunceble.helpers.Dict(content).to_json_file(self.file)
-            except FileNotFoundError:
-                pass
+            # We try to save the whole data at its final location.
+            PyFunceble.helpers.Dict(content).to_json_file(self.file)
 
     @classmethod
-    def _starting_time(cls):  # pragma: no cover
+    def set_starting_time(cls):  # pragma: no cover
         """
         Set the starting time.
         """
@@ -266,7 +263,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         )
 
     @classmethod
-    def _stoping_time(cls):  # pragma: no cover
+    def set_stoping_time(cls):  # pragma: no cover
         """
         Set the ending time.
         """
@@ -280,7 +277,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         )
 
     @classmethod
-    def _calculate(cls, start=None, end=None):
+    def calculate(cls, start=None, end=None):
         """
         calculate the difference between starting and ending time.
 
@@ -311,7 +308,9 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
             # The start and end time is not explicitly given.
 
             # We get the difference between the ending and the starting time.
-            time_difference = PyFunceble.INTERN["end"] - PyFunceble.INTERN["start"]
+            time_difference = float(PyFunceble.INTERN["end"]) - float(
+                PyFunceble.INTERN["start"]
+            )
 
         # We initiate an OrderedDict.
         # Indeed, we use an ordered dict because we want the structuration and the
@@ -350,4 +349,4 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We return the formatted execution time.
-        return ":".join(list(self._calculate(start, end).values()))
+        return ":".join(list(self.calculate(start, end).values()))

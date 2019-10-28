@@ -109,14 +109,7 @@ class File(ConverterBase):
                 # that we are working with the hosts file format which means
                 # that the domain we have to test is after the first string.
                 # So we set the index to 1.
-                index = 1
-
-                while index < len(splited):
-                    if splited[index]:
-                        break
-                    index += 1
-
-                return splited[index]
+                return splited[1]
 
             return subject
         return None

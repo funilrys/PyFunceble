@@ -67,7 +67,7 @@ from colorama import Fore, Style
 import PyFunceble
 
 
-class Merge:  # pylint: disable=too-few-public-methods
+class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
     """
     Merge the old into the new configuration file.
     :param str configuration_path: The path to the configuration file to update.

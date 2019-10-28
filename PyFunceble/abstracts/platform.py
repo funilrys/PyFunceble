@@ -1,7 +1,7 @@
 from platform import system
 
 
-class Platform:
+class Platform:  # pragma: no cover
     """
     Provides an easy way to get the current platform.
     """
