@@ -17,13 +17,14 @@ env:
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
-dist: bionic
 language: generic
 sudo: false
 
-os:
-  - linux
-  - osx
+jobs:
+  include:
+    - os: linux
+      dist: bionic
+    - os: osx
 
 matrix:
   fast_finish: true
