@@ -79,7 +79,11 @@ class Merge:
             Activates the strict mode.
         """
 
-        origin = origin.copy()
+        try:
+            origin = origin.copy()
+        except AttributeError:
+            pass
+
         if isinstance(self.main, list) and isinstance(origin, list):
             return self.__list(origin, strict=strict)
 
