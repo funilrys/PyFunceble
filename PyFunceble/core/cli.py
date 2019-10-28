@@ -94,7 +94,7 @@ class CLICore:
         self.complements_test_started = False
 
     @classmethod
-    def sort_generated_files(cls):
+    def sort_generated_files(cls):  # pragma: no cover
         """
         Sort the content of all files we generated.
         """
@@ -151,7 +151,7 @@ class CLICore:
                 )
 
     @classmethod
-    def save_into_database(cls, output, filename, mysql_db):
+    def save_into_database(cls, output, filename, mysql_db):  # pragma: no cover
         """
         Saves the current status inside the database.
         """
@@ -322,7 +322,7 @@ class CLICore:
             PyFunceble.CONFIGURATION.header_printed = True
 
     @classmethod
-    def print_nothing_to_test(cls):  # pragma: no cover
+    def print_nothing_to_test(cls):
         """
         Print the nothing to test message.
         """
@@ -330,7 +330,7 @@ class CLICore:
         print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
 
     @classmethod
-    def stay_safe(cls):  # pragma: no cover
+    def stay_safe(cls):
         """
         Print a friendly message.
         """
@@ -370,7 +370,7 @@ class CLICore:
                 )
 
     @classmethod
-    def logs_sharing(cls):  # pragma: no cover
+    def logs_sharing(cls):
         """
         Print an information message when the logs sharing
         is activated.

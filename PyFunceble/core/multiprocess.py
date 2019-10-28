@@ -132,7 +132,9 @@ class OurProcessWrapper(Process):  # pragma: no cover
         return self._exception_receiver
 
 
-class MultiprocessCore(FileCore):  # pylint: disable=too-many-instance-attributes
+class MultiprocessCore(
+    FileCore
+):  # pragma: no cover pylint: disable=too-many-instance-attributes
     """
     Brain of PyFunceble for file testing with multiple processes.s.
 
