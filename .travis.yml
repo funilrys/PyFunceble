@@ -19,9 +19,9 @@ env:
 
 language: generic
 
-# os:
-#   - linux
-#   - osx
+os:
+  - linux
+  - osx
 
 jobs:
   include:
