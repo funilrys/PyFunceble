@@ -24,10 +24,10 @@ os:
   - osx
 
 addons:
-        apt:
-          packages:
-            - libffi-devel
-            - libssl-dev
+  apt:
+    packages:
+      - libffi-devel
+      - libssl-dev
 
 matrix:
   fast_finish: true
