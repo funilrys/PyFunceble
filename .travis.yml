@@ -60,7 +60,6 @@ install:
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
   - python -VV
-  - conda install cffi
   - pip --version
   - pip install pylint coverage coveralls codacy-coverage
 
