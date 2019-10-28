@@ -130,17 +130,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION.db_type == "json":
                 if subject not in self.is_present_cache:
+                    self.is_present_cache[subject] = False
+
                     for element in [
                         x for x in self.database[self.filename].keys() if x.isdigit()
                     ]:
                         if subject in self[element]:
                             self.is_present_cache[subject] = True
                             break
-
-                        self.is_present_cache[subject] = False  # pragma: no cover
-
-                    if subject not in self.is_present_cache:
-                        self.is_present_cache[subject] = False
 
                 return self.is_present_cache[subject]
 
@@ -346,7 +343,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 self.save()
 
     @classmethod
-    def _timestamp(cls):
+    def timestamp(cls):
         """
         Get the timestamp where we are going to save our current list.
 
@@ -370,7 +367,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION.db_type == "json":
                 # We get the timestamp to use as index.
-                timestamp = str(self._timestamp())
+                timestamp = str(self.timestamp())
 
                 if self.filename in self.database:
                     # * The file path is not into the database.
