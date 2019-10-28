@@ -23,17 +23,14 @@ language: generic
 #   - linux
 #   - osx
 
-matrix:
+jobs:
   include:
     - os: linux
       dist: bionic
-      addons:
-        apt:
-          packages:
-            - libffi-devel
-            - libssl-dev
     - os: osx
       osx_image: xcode7.3
+
+matrix:
   fast_finish: true
 
 install:
