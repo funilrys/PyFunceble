@@ -17,6 +17,7 @@ env:
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
+dist: bionic
 language: generic
 sudo: false
 
