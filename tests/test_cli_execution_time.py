@@ -156,6 +156,34 @@ class TestExecutionTime(StdoutBase):
 
     @patch("PyFunceble.cli.execution_time.ExecutionTime.set_stoping_time", lambda x: x)
     @patch("PyFunceble.cli.execution_time.ExecutionTime.set_starting_time", lambda x: x)
+    def test_calculate_consequent(self):
+        """
+        Tests the calculation method with more consequent data.
+        """
+
+        start_time = datetime.now()
+        PyFunceble.INTERN["start"] = start_time.timestamp()
+        PyFunceble.INTERN["end"] = (
+            start_time + timedelta(days=1, hours=50)
+        ).timestamp()
+
+        expected = OrderedDict(
+            zip(["days", "hours", "minutes", "seconds"], ["03", "02", "00", "0.0"])
+        )
+
+        actual = ExecutionTime("stop").calculate()
+
+        self.assertEqual(expected, actual)
+
+        actual = ExecutionTime("stop").calculate(
+            start=start_time.timestamp(),
+            end=(start_time + timedelta(days=1, hours=50)).timestamp(),
+        )
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.cli.execution_time.ExecutionTime.set_stoping_time", lambda x: x)
+    @patch("PyFunceble.cli.execution_time.ExecutionTime.set_starting_time", lambda x: x)
     def test_save(self):
         """
         Test the saving method.
@@ -225,6 +253,31 @@ class TestExecutionTime(StdoutBase):
         expected["final_total"] = "00:00:00:15.0"
 
         actual = PyFunceble.helpers.Dict().from_json_file(expected_file_location)
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.cli.execution_time.ExecutionTime.set_stoping_time", lambda x: x)
+    @patch("PyFunceble.cli.execution_time.ExecutionTime.set_starting_time", lambda x: x)
+    @patch("PyFunceble.cli.execution_time.ExecutionTime.calculate")
+    def test_format_execution_time(self, calculate):
+        """
+        Tests of the date formatter method.
+        """
+
+        calculate.return_value = OrderedDict(
+            zip(["days", "hours", "minutes", "seconds"], ["00", "00", "00", "15.0"])
+        )
+        expected = "00:00:00:15.0"
+        actual = ExecutionTime("stop").format_execution_time()
+
+        self.assertEqual(expected, actual)
+
+        calculate.return_value = OrderedDict(
+            zip(["days", "hours", "minutes", "seconds"], ["03", "02", "00", "0.0"])
+        )
+
+        expected = "03:02:00:0.0"
+        actual = ExecutionTime("stop").format_execution_time()
+
         self.assertEqual(expected, actual)
 
 
