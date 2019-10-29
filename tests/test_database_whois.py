@@ -61,7 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 from datetime import datetime, timedelta
-from io import StringIO
+from unittest import TestCase
 from unittest import main as launch_tests
 
 import PyFunceble
