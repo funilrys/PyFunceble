@@ -333,7 +333,7 @@ class WhoisDB:
             self.authorized
             and data
             and "epoch" in data
-            and data["epoch"] < datetime.now().timestamp()
+            and datetime.fromtimestamp(float(data["epoch"])) < datetime.now()
         )
 
     def get_expiration_date(self, subject):
