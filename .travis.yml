@@ -62,7 +62,7 @@ jobs:
     - language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.6.8 <under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Test with Python 3.6.8 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
