@@ -2,72 +2,79 @@ env:
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
-language: generic
-
 jobs:
   include:
     # - os: linux
     #   dist: bionic
-    #   name: "Test with Python 3.8.0 under Ubuntu 18.04"
+    #   name: "Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
     #   env:
     #     - PYTHON_VERSION="3.8.0"
     #     - TOXENV="py38"
     # - os: osx
-    #   osx_image: xcode9.4
-    #   name: "Test with Python 3.8.0 under macOS 10.13"
+    #   osx_image: xcode11.2
+    #   name: "Test with Python 3.8.0 under macOS 10.14 (Mojave)"
     #   env:
     #     - PYTHON_VERSION="3.8.0"
     #     - TOXENV="py38"
     - stage: "Tests"
+      language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.7.5 under Ubuntu 18.04"
+      name: "Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.7.5"
         - TOXENV="py37"
-    - os: osx
-      osx_image: xcode9.4
-      name: "Test with Python 3.7.5 under macOS 10.13"
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Test with Python 3.7.5 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.7.5"
         - TOXENV="py37"
-    - os: linux
+    - language: generic
+      os: linux
       dist: bionic
-      name: "Test with Python 3.7.4 under Ubuntu 18.04"
+      name: "Test with Python 3.7.4 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.7.4"
         - TOXENV="py37"
-    - os: osx
-      osx_image: xcode9.4
-      name: "Test with Python 3.7.4 under macOS 10.13"
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Test with Python 3.7.4 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.7.4"
         - TOXENV="py37"
-    - os: linux
+    - language: generic
+      os: linux
       dist: bionic
-      name: "Test with Python 3.6.9 under Ubuntu 18.04"
+      name: "Test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.9"
         - TOXENV="py36"
-    - os: osx
-      osx_image: xcode9.4
-      name: "Test with Python 3.6.9 under macOS 10.13"
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Test with Python 3.6.9 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.6.9"
         - TOXENV="py36"
-    - os: linux
+    - language: generic
+      os: linux
       dist: bionic
-      name: "Test with Python 3.6.8 <under Ubuntu 18.04"
+      name: "Test with Python 3.6.8 <under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
-    - os: osx
-      osx_image: xcode9.4
-      name: "Test with Python 3.6.8 under macOS 10.13"
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Test with Python 3.6.8 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
-    - stage: "Deployements"
+    - language: generic
+      stage: "Deployements"
       os: linux
       dist: bionic
       name: "Deployement to PyPi"
