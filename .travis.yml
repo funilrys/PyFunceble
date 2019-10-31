@@ -6,7 +6,6 @@ language: generic
 
 jobs:
   include:
-    - stage: "Tests"
     # - os: linux
     #   dist: bionic
     #   name: "Test with Python 3.8.0 under Ubuntu 18.04"
@@ -19,7 +18,8 @@ jobs:
     #   env:
     #     - PYTHON_VERSION="3.8.0"
     #     - TOXENV="py38"
-    - os: linux
+    - stage: "Tests"
+      os: linux
       dist: bionic
       name: "Test with Python 3.7.5 under Ubuntu 18.04"
       env:
