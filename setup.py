@@ -150,6 +150,8 @@ if __name__ == "__main__":
             "PyFunceble.helpers",
             "PyFunceble.lookup",
             "PyFunceble.output",
+            "PyFunceble.status.availability",
+            "PyFunceble.status.syntax",
             "PyFunceble.status",
             "PyFunceble",
         ],

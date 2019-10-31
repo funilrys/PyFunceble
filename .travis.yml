@@ -8,44 +8,76 @@ jobs:
   include:
     - os: linux
       dist: bionic
-      name: "Test with Python 3.8.0 under Ubuntu Bionic"
-      env: PYTHON_VERSION="3.8.0"
+      name: "Test with Python 3.8.0 under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
     - os: osx
       osx_image: xcode9.4
       name: "Test with Python 3.8.0 under macOS 10.13"
-      env: PYTHON_VERSION="3.8.0"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
     - os: linux
       dist: bionic
-      name: "Test with Python 3.7.4 under Ubuntu Bionic"
-      env: PYTHON_VERSION="3.7.4"
+      name: "Test with Python 3.7.5 under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.7.5"
+        - TOXENV="py37"
+    - os: osx
+      osx_image: xcode9.4
+      name: "Test with Python 3.7.5 under macOS 10.13"
+      env:
+        - PYTHON_VERSION="3.7.5"
+        - TOXENV="py37"
+    - os: linux
+      dist: bionic
+      name: "Test with Python 3.7.4 under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.7.4"
+        - TOXENV="py37"
     - os: osx
       osx_image: xcode9.4
       name: "Test with Python 3.7.4 under macOS 10.13"
-      env: PYTHON_VERSION="3.7.4"
+      env:
+        - PYTHON_VERSION="3.7.4"
+        - TOXENV="py37"
     - os: linux
       dist: bionic
-      name: "Test with Python 3.7.3 under Ubuntu Bionic"
-      env: PYTHON_VERSION="3.7.3"
+      name: "Test with Python 3.7.3 under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.7.3"
+        - TOXENV="py37"
     - os: osx
       osx_image: xcode9.4
       name: "Test with Python 3.7.3 under macOS 10.13"
-      env: PYTHON_VERSION="3.7.3"
+      env:
+        - PYTHON_VERSION="3.7.3"
+        - TOXENV="py37"
     - os: linux
       dist: bionic
-      name: "Test with Python 3.6.9 under Ubuntu Bionic"
-      env: PYTHON_VERSION="3.6.9"
+      name: "Test with Python 3.6.9 under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.6.9"
+        - TOXENV="py36"
     - os: osx
       osx_image: xcode9.4
       name: "Test with Python 3.6.9 under macOS 10.13"
-      env: PYTHON_VERSION="3.6.9"
+      env:
+        - PYTHON_VERSION="3.6.9"
+        - TOXENV="py36"
     - os: linux
       dist: bionic
-      name: "Test with Python 3.6.8 <under Ubuntu Bionic"
-      env: PYTHON_VERSION="3.6.8"
+      name: "Test with Python 3.6.8 <under Ubuntu 18.04"
+      env:
+        - PYTHON_VERSION="3.6.8"
+        - TOXENV="py36"
     - os: osx
       osx_image: xcode9.4
       name: "Test with Python 3.6.8 under macOS 10.13"
-      env: PYTHON_VERSION="3.6.8"
+      env:
+        - PYTHON_VERSION="3.6.8"
+        - TOXENV="py36"
 
 matrix:
   fast_finish: true
@@ -59,35 +91,14 @@ install:
   - conda update -q conda
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
-  - python -VV
+  - python --version --version
   - pip --version
-  - pip install pylint coverage coveralls codacy-coverage
+  - conda --version
+  - pip install pylint coverage coveralls codacy-coverage tox-current-env
+  - pip install -e .
 
 script:
-  - pip install -e .
-  - coverage run setup.py test
-  - coverage xml # Needed for codacy.
-  - echo "Lint PyFunceble" && pylint PyFunceble
-  - echo "Lint tests" && pylint tests
-  - PyFunceble -v
-  - PyFunceble --clean
-  - PyFunceble --clean-all
-  - rm -R output && PyFunceble --directory-structure && ls -al output
-  - PyFunceble -t 3 -ex -d github.com --dns 1.1.1.1 1.0.0.1
-  - PyFunceble -t 3 -ex -s -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1
-  - PyFunceble -t 3 -ex --syntax -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1
-  - PyFunceble -t 3 -ex -f .travis/lists/simple --json --plain -m --dns 1.1.1.1 1.0.0.1
-  - PyFunceble -t 3 -ex -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1  # Normally, all inactive are not tested anymore.
-  - PyFunceble -t 3 -ex --database -f .travis/lists/simple  -m  --dns 1.1.1.1 1.0.0.1 # And they will be retested.
-  - PyFunceble -t 3 -ex --database --filter ".info$" -f .travis/lists/simple -m --dns 1.1.1.1 1.0.0.1  # Only .info domains should be tested.
-  - PyFunceble -t 3 -ex --adblock -a -f .travis/lists/adblock -m --dns 1.1.1.1 1.0.0.1
-  - PyFunceble -t 3 -ex --link https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts -m --dns 1.1.1.1 1.0.0.1
-  - python .travis/complementary/basic_example.py
-  - python .travis/complementary/basic_example_syntax.py
-  - python .travis/complementary/advanced_example.py
-  - python .travis/complementary/loop_example.py
-  - python .travis/complementary/custom_configuration.py
-  - python .travis/complementary/api_file_generation.py
+  - tox --current-env
 
 after_success:
   - python-codacy-coverage -r coverage.xml
