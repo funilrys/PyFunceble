@@ -145,6 +145,7 @@ disable=print-statement,
         access-member-before-definition,
         too-many-arguments,
         too-few-public-methods,
+        wrong-import-order, # DELETE/FIX THIS ONE DAY
         missing-docstring # DELETE THIS LINE
 
 # Enable the message, report, category or checker with the given id(s). You can
