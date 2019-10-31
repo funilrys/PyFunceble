@@ -125,9 +125,10 @@ class DomainAndIp(GathererBase):
                 ).get()
 
             if not self.status.subdomain_syntax_validation:
-                self.status.expiration_date, self.status.whois_record = (
-                    self.__gather_expiration_date()
-                )
+                (
+                    self.status.expiration_date,
+                    self.status.whois_record,
+                ) = self.__gather_expiration_date()
 
                 if isinstance(self.status.expiration_date, str):
                     self.status["_status_source"] = self.status.status_source = "WHOIS"

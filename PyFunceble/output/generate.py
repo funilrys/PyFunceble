@@ -391,9 +391,8 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
             splited_destination,
         )
 
-    def info_files(  # pylint: disable=inconsistent-return-statements,too-many-branches
-        self
-    ):
+    # pylint: disable=inconsistent-return-statements,too-many-branches
+    def info_files(self):
         """
         Generate the hosts file, the plain list, the JSON file and the splitted files.
         """
@@ -442,7 +441,12 @@ class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes,
                 )
 
             # We get the destination of the different files.
-            hosts_destination, plain_destination, json_destination, splited_destination = self.___get_info_files_destinations(  # pylint: disable=line-too-long
+            (
+                hosts_destination,
+                plain_destination,
+                json_destination,
+                splited_destination,
+            ) = self.___get_info_files_destinations(
                 output_hosts, output_domains, output_json
             )
 
