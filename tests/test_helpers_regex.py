@@ -63,7 +63,6 @@ License:
 from unittest import TestCase
 from unittest import main as launch_tests
 
-from PyFunceble.abstracts import Platform
 from PyFunceble.helpers import Regex
 
 
