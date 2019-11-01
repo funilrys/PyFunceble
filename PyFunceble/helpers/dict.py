@@ -216,7 +216,7 @@ class Dict:
         """
 
         return dumps(
-            self.main, ensure_ascii=ensure_ascii, indent=indent, sort_keys=sort_keys
+            self.main, ensure_ascii=ensure_ascii, indent=indent, sort_keys=sort_keys,
         )
 
     @classmethod
@@ -327,4 +327,4 @@ class Dict:
             line_break=newline,
             encoding=encoding,
             sort_keys=sort_keys,
-        )
+        ).decode()
