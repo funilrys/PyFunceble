@@ -11,15 +11,11 @@ omit =
     PyFunceble/config/*
 
     # omit the following file
-    PyFunceble/api_core.py
-    PyFunceble/auto_save.py
-    PyFunceble/dispatcher.py
-    PyFunceble/production.py
-    PyFunceble/simple_core.py
-    PyFunceble/whois.py
-    PyFunceble/sqlite.py
-    PyFunceble/mysql.py
-    PyFunceble/requests.py
+    PyFunceble/cli/dispatcher.py
+    PyFunceble/cli/production.py
+    PyFunceble/engine/mysql.py
+    PyFunceble/helpers/download.py
+    PyFunceble/lookup/requests.py
 
 [report]
 # This should be False one we move into production
@@ -43,10 +39,6 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
-    if self\.aggressive
-    if self\.parent and \(not hasattr\(self, "database"\) or not self\.database\):
-    if self\.parent:
-    if not subject or not isinstance\(subject, str\):
     if tcp is None:
 
     # Don't complain for those blocks

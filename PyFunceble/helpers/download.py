@@ -4,7 +4,7 @@ from ..exceptions import NoInternetConnection
 from .file import File
 
 
-class Download:  # pragma: no cover
+class Download:
     """
     Simplification of the downloads.
 
