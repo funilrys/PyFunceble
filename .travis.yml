@@ -79,6 +79,7 @@ jobs:
       dist: bionic
       name: "Deployement to PyPi"
       script: skip
+      after_success: skip
       deploy:
         provider: pypi
         user: funilrys
