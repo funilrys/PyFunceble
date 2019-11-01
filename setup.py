@@ -110,9 +110,17 @@ def _get_version():
     """
 
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
-    extracted = to_match.findall(
-        open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
-    )[0]
+
+    try:
+        extracted = to_match.findall(
+            open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
+        )[0]
+    except FileNotFoundError:
+        extracted = to_match.findall(
+            open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
+        )[0]
+
+        return extracted
 
     return ".".join([x for x in extracted.split(".") if x.isdigit()])
 

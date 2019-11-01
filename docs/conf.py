@@ -17,28 +17,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../"))
 
-from re import compile as comp
-
-
-def _get_version(full=False):
-    """
-    This function will extract the version from PyFunceble/__init__.py
-
-    Argument:
-        - full: bool
-            True: Return the full version name
-            False: Return the short version
-    """
-
-    to_match = comp(r'VERSION\s=\s"(.*)"\n')
-    extracted = to_match.findall(
-        open("../PyFunceble/__init__.py", encoding="utf-8").read()
-    )[0]
-
-    if not full:
-        return ".".join([x for x in extracted.split(".") if x.isdigit()])
-    return extracted
-
+from setup import _get_version
 
 # -- Project information -----------------------------------------------------
 
@@ -49,7 +28,7 @@ author = "Nissar Chababy (@funilrys)"
 # The short X.Y version
 version = _get_version()
 # The full version, including alpha/beta/rc tags
-release = _get_version(True)
+release = _get_version()
 
 
 # -- General configuration ---------------------------------------------------
