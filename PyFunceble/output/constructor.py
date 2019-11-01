@@ -66,7 +66,7 @@ from os import walk
 import PyFunceble
 
 
-class Constructor:  # pragma: no cover
+class Constructor:
     """
     Basically a backup/reconstructor of our :code:`output` directory.
 

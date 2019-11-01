@@ -13,9 +13,14 @@ omit =
     # omit the following file
     PyFunceble/cli/dispatcher.py
     PyFunceble/cli/production.py
+    PyFunceble/engine/auto_save.py
     PyFunceble/engine/mysql.py
     PyFunceble/helpers/download.py
     PyFunceble/lookup/requests.py
+    PyFunceble/output/clean.py
+    PyFunceble/output/constructor.py
+    PyFunceble/output/generate.py
+    PyFunceble/output/logs.py
 
 [report]
 # This should be False one we move into production

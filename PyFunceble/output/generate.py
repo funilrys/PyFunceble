@@ -66,7 +66,7 @@ from os import sep as directory_separator
 import PyFunceble
 
 
-class Generate:  # pragma: no cover pylint:disable=too-many-instance-attributes, too-many-arguments
+class Generate:  # pylint:disable=too-many-instance-attributes, too-many-arguments
     """
     Generate different sort of files.
 

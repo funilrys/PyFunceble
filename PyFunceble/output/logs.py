@@ -65,7 +65,7 @@ from datetime import datetime
 import PyFunceble
 
 
-class Logs:  # pragma: no cover
+class Logs:
     """
     Provide a clean and unique way to work with logs.
     Indeed, it's not good to have logs spread around the code :smile:
