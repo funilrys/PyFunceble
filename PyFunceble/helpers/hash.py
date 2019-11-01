@@ -42,14 +42,18 @@ class Hash:
         """
         Hash the given data.
 
-        :param bytes data:
+        :param data:
             The data to hash.
+        :type data: str, bytes
 
         :rtype: str
         """
 
-        if not isinstance(data, bytes):  # pragma: no cover
-            raise ValueError(f"<data> must be {bytes}, {type(data)}, given.")
+        if not isinstance(data, (bytes, str)):  # pragma: no cover
+            raise ValueError(f"<data> must be {bytes} or {str}, {type(data)}, given.")
+
+        if isinstance(data, str):
+            data = data.encode()
 
         digest = hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
         digest.update(data)
