@@ -90,7 +90,7 @@ class TestAutoContinue(TestCase):
         self.file_to_test = "this_file_is_a_ghost"
         self.our_dataset = {self.file_to_test: {"INVALID": ["hello", "world"]}}
 
-        self.auto_continue = AutoContinue(self.file_to_test)
+        self.auto_continue = AutoContinue(self.file_to_test, parent_process=True)
 
         PyFunceble.helpers.File(self.storage_file).delete()
 

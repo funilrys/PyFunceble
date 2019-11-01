@@ -306,8 +306,8 @@ class WhoisDB:
 
         if (
             self.authorized
-            and PyFunceble.CONFIGURATION.db_type == "json"
             and self.parent
+            and PyFunceble.CONFIGURATION.db_type == "json"
         ):
             # We are authorized to operate.
 

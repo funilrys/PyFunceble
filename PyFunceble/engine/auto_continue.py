@@ -279,8 +279,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 )
 
                 # We save everything.
-                if self.parent:
-                    self.save()
+                self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 # We construct the query string.
 
@@ -328,7 +327,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         Save the current state of the database.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
+        if (
+            self.authorized
+            and self.parent
+            and PyFunceble.CONFIGURATION.db_type == "json"
+        ):
             # We are authoried to operate.
 
             # We save the current database state.
@@ -556,8 +559,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We save the constructed list of complements
             self.database[self.filename]["complements"] = list(result)
 
-            if self.parent:
-                self.save()
+            self.save()
         else:
             # We get the complements we still have to test.
             result = self.database[self.filename]["complements"]

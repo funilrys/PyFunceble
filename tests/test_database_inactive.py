@@ -91,7 +91,7 @@ class TestInactiveDB(TestCase):
         self.time_past = str(int((datetime.now() - timedelta(days=365)).timestamp()))
         self.time_future = str(int((datetime.now() + timedelta(days=365)).timestamp()))
 
-        self.inactive_db = InactiveDB(self.file_to_test)
+        self.inactive_db = InactiveDB(self.file_to_test, parent_process=True)
 
         PyFunceble.helpers.File(self.storage_file).delete()
 

@@ -318,7 +318,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Save the current database into the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
+        if (
+            self.authorized
+            and self.parent
+            and PyFunceble.CONFIGURATION.db_type == "json"
+        ):
             # We are authorized to operate.
 
             # We save the current database state into the database file.
@@ -339,8 +343,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We load the database.
             self.load()
 
-            if self.parent:
-                self.save()
+            self.save()
 
     @classmethod
     def timestamp(cls):
@@ -383,8 +386,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 )
 
                 # And we save the database.
-                if self.parent:
-                    self.save()
+                self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 digest = PyFunceble.helpers.Hash(algo="sha256").data(
                     bytes(self.filename + subject, "utf-8")
@@ -461,8 +463,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     del self.database[self.filename][index]
 
                 # And we save the data into the database.
-                if self.parent:
-                    self.save()
+                self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 # We construct the query we are going to execute.
                 query = (
