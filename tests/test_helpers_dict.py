@@ -285,8 +285,6 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
-    ###########################
-
     def test_to_yaml_file_non_dict(self):
         """
         Tests the method which let us save a dict into a YAML file
@@ -296,10 +294,10 @@ class TestDict(TestCase):
         output_file = "this_file_is_a_ghost"
         File(output_file).delete()
 
-        self.assertRaises(TypeError, lambda: Dict(1).to_json_file(output_file))
-        self.assertRaises(TypeError, lambda: Dict("100").to_json_file(output_file))
+        self.assertRaises(TypeError, lambda: Dict(1).to_yaml_file(output_file))
+        self.assertRaises(TypeError, lambda: Dict("100").to_yaml_file(output_file))
         self.assertRaises(
-            TypeError, lambda: Dict("{'hello': 'world'}").to_json_file(output_file)
+            TypeError, lambda: Dict("{'hello': 'world'}").to_yaml_file(output_file)
         )
 
         File(output_file).delete()
