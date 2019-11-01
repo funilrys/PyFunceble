@@ -90,6 +90,13 @@ class TestExecutionTime(StdoutBase):
 
         StdoutBase.setUp(self)
 
+    def tearDown(self):
+        """
+        Setups everything needed for after the tests.
+        """
+
+        StdoutBase.tearDown(self)
+
     def test_authorization(self):
         """
         Tests the authorization method.

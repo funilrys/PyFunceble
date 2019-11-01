@@ -69,7 +69,7 @@ from PyFunceble.helpers import Command
 from stdout_base import StdoutBase
 
 
-class TestEnvironmentVariable(StdoutBase):
+class TestCommand(StdoutBase):
     """
     Tests of the PyFunceble.helpers.command.
     """
