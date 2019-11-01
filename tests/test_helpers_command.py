@@ -60,8 +60,6 @@ License:
 """
 # pylint: enable=line-too-long
 
-from os import environ
-from unittest import TestCase
 from unittest import main as launch_tests
 
 from PyFunceble.abstracts import Platform
