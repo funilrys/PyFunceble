@@ -80,6 +80,8 @@ jobs:
       name: "Deployement to PyPi"
       script: skip
       after_success: skip
+      env:
+        - PYTHON_VERSION="3.7.5"
       deploy:
         provider: pypi
         user: funilrys
