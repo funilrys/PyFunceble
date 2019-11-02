@@ -357,7 +357,7 @@ class CLICore:
                 print(
                     Fore.GREEN
                     + Style.BRIGHT
-                    + "Have a feedback, an issue or an improvement idea ?"
+                    + "Have a feedback, an issue or an improvement idea?"
                 )
                 print(
                     Fore.YELLOW
