@@ -154,7 +154,7 @@ class ExpirationDate(ExtractorBase):
     def __init__(self, data):
         super().__init__(data)
 
-        self.extracted_data = self.__format_it(self.data)
+        self.extracted_data = self.__extract_it()
 
     def __format_management(self, index, matched):
         """
@@ -192,15 +192,12 @@ class ExpirationDate(ExtractorBase):
                     str(matched[case_data[1][2]]),
                 ]
 
-        return matched
+        return matched  # pragma: no cover
 
     def __format_it(self, data):
         """
         Format the given data.
         """
-
-        if not data:
-            return None
 
         for index, regex in self.regex_dates.items():
             matched = helpers.Regex(regex).match(data, return_match=True, rematch=True)
@@ -210,11 +207,11 @@ class ExpirationDate(ExtractorBase):
 
             date = self.__format_management(index, matched)
 
-            if not date:
+            if not date:  # pragma: no cover
                 continue
 
             return "-".join(date)
-        return None
+        return None  # pragma: no cover
 
     def __extract_it(self):
         """
