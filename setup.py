@@ -115,7 +115,7 @@ def _get_version():
         extracted = to_match.findall(
             open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
         )[0]
-    except FileNotFoundError:
+    except FileNotFoundError:  # pragma: no cover
         extracted = to_match.findall(
             open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
         )[0]
