@@ -65,7 +65,7 @@ import PyFunceble
 from .cli import CLICore
 
 
-class APICore:  # pragma: no cover
+class APICore:
     """
     Provide the logic and interface for the tests from the API.
 

@@ -76,7 +76,7 @@ from .api import APICore
 from .file import FileCore
 
 
-class OurProcessWrapper(Process):  # pragma: no cover
+class OurProcessWrapper(Process):
     """
     Wrapper of Process.
     The object of this class is just to overwrite :code:`Process.run()`

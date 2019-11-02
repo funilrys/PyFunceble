@@ -67,9 +67,7 @@ import PyFunceble
 from .cli import CLICore
 
 
-class FileCore(
-    CLICore
-):  # pragma: no cover pylint: disable=too-many-instance-attributes
+class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
     """
     Brain of PyFunceble for file testing.
 

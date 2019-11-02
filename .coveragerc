@@ -13,6 +13,10 @@ omit =
     # omit the following file
     PyFunceble/cli/dispatcher.py
     PyFunceble/cli/production.py
+    PyFunceble/core/api.py
+    PyFunceble/core/file.py
+    PyFunceble/core/multiprocess.py
+    PyFunceble/core/simple.py
     PyFunceble/engine/auto_save.py
     PyFunceble/engine/mysql.py
     PyFunceble/helpers/download.py

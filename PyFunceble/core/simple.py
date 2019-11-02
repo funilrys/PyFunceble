@@ -67,7 +67,7 @@ import PyFunceble
 from .cli import CLICore
 
 
-class SimpleCore(CLICore):  # pragma: no cover
+class SimpleCore(CLICore):
     """
     Brain of PyFunceble for simple test.
 
