@@ -356,7 +356,11 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         Save the content of the database into the database file.
         """
 
-        if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
+        if (
+            self.authorized
+            and self.parent
+            and PyFunceble.CONFIGURATION.db_type == "json"
+        ):
             # We are authorized to operate.
 
             # We save the database into the file.
@@ -457,8 +461,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         self[subject] = [local_result]
 
             # We save the database.
-            if self.parent:
-                self.save()
+            self.save()
 
     def remove(self, subject, history_member):
         """
@@ -516,5 +519,4 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             if not self[subject]:  # pragma: no cover
                 del self[subject]
 
-            if self.parent:
-                self.save()
+            self.save()
