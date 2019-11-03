@@ -209,7 +209,7 @@ class TestCLICore(StdoutBase):
         datetime_patch.now = Mock(return_value=datetime(1970, 1, 1, 1, 0, 1, 0))
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
 
-        self.cli_core.stay_safe()
+        CLI().stay_safe()
         actual = sys.stdout.getvalue()
 
         self.assertEqual(expected, actual)
@@ -234,7 +234,7 @@ class TestCLICore(StdoutBase):
         datetime_patch.now = Mock(return_value=datetime(1970, 1, 1, 1, 0, 0, 0))
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
 
-        self.cli_core.stay_safe()
+        CLI().stay_safe()
         actual = sys.stdout.getvalue()
 
         self.assertEqual(expected, actual)

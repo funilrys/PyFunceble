@@ -555,7 +555,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def __request_ip(self, subject, complete=False, tcp=None):  # pragma: no cover
+    def __request_ip(self, subject, tcp=None):  # pragma: no cover
         """
         Handle the request for a subject which is an IP.
 
@@ -584,7 +584,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
             PyFunceble.LOGGER.error(f"PTR record for {repr(subject)} not found.")
 
-        if not result and complete:
+        if not result:
             # We could not get DNS records about the given subject.
 
             PyFunceble.LOGGER.info(f"Getting hosts by addr for {repr(subject)}")
@@ -651,7 +651,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         else:
             # We are working with something which is an IPv4 or IPv6.
 
-            temp_result = self.__request_ip(subject, complete=complete, tcp=tcp)
+            temp_result = self.__request_ip(subject, tcp=tcp)
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)
