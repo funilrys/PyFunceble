@@ -116,13 +116,13 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             "given_dns_server": dns_server,
         }
 
-    def update_lifetime(self, lifetime):  # pragma: no cover
+    def update_lifetime(self, lifetime):
         """
         Updates the lifetime of a query.
         """
 
         if isinstance(lifetime, (int, float)):
-            if lifetime == self.dns_resolver.lifetime:
+            if lifetime == self.dns_resolver.timeout:
                 self.dns_resolver.lifetime = float(lifetime) + 2.0
             else:
                 self.dns_resolver.lifetime = float(lifetime)
@@ -163,7 +163,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def a_record(self, subject, tcp=None):  # pragma: no cover
+    def a_record(self, subject, tcp=None):
         """
         Return the A record of the given subject (if found).
 
@@ -195,7 +195,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def aaaa_record(self, subject, tcp=None):  # pragma: no cover
+    def aaaa_record(self, subject, tcp=None):
         """
         Return the AAAA record of the given subject (if found).
 
@@ -229,7 +229,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def cname_record(self, subject, tcp=None):  # pragma: no cover
+    def cname_record(self, subject, tcp=None):
         """
         Return the CNAME record of the given subject (if found).
 
@@ -265,7 +265,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def mx_record(self, subject, tcp=None):  # pragma: no cover
+    def mx_record(self, subject, tcp=None):
         """
         Return the MX record of the given subject (if found).
 
@@ -329,7 +329,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def txt_record(self, subject, tcp=None):  # pragma: no cover
+    def txt_record(self, subject, tcp=None):
         """
         Return the TXT record of the given subject (if found).
 
@@ -386,7 +386,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             if reverse_name:
                 # We get the reverse name we are going to request.
                 to_request = dns.reversename.from_address(subject)
-            else:  # pragma: no cover
+            else:
                 to_request = subject
 
             # We get the PTR record of the currently read A record.
@@ -396,13 +396,13 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             PyFunceble.LOGGER.info(f"Could get PTR record of {repr(subject)}: {result}")
 
             return result
-        except DNSException:  # pragma: no cover
+        except DNSException:
             PyFunceble.LOGGER.error(f"Could not get PTR record of {repr(subject)}")
 
-        return None  # pragma: no cover
+        return None
 
     @classmethod
-    def get_addr_info(cls, subject):
+    def get_addr_info(cls, subject):  # pragma: no cover
         """
         Get and return the information of the given subject (address).
 
@@ -422,10 +422,10 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
             # We format the addr infos.
             return [x[-1][0] for x in req]
-        except (gaierror, OSError, herror, UnicodeError):  # pragma: no cover
+        except (gaierror, OSError, herror, UnicodeError):
             pass
 
-        return None  # pragma: no cover
+        return None
 
     @classmethod
     def get_host_by_addr(cls, subject):  # pragma: no cover
@@ -464,7 +464,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
-    def __request_not_ip(self, subject, complete=False, tcp=None):
+    def __request_not_ip(self, subject, complete=False, tcp=None):  # pragma: no cover
         """
         Handle the request for a subject which is not an IP.
 
@@ -555,7 +555,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def __request_ip(self, subject, tcp=None):
+    def __request_ip(self, subject, complete=False, tcp=None):  # pragma: no cover
         """
         Handle the request for a subject which is an IP.
 
@@ -579,12 +579,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         # We get the PTR record of the given subject.
         result["PTR"] = self.ptr_record(subject, tcp=tcp)
 
-        if "PTR" not in result or not result["PTR"]:  # pragma: no cover
+        if "PTR" not in result or not result["PTR"]:
             del result["PTR"]
 
             PyFunceble.LOGGER.error(f"PTR record for {repr(subject)} not found.")
 
-        if not result:  # pragma: no cover
+        if not result and complete:
             # We could not get DNS records about the given subject.
 
             PyFunceble.LOGGER.info(f"Getting hosts by addr for {repr(subject)}")
@@ -595,7 +595,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return result
 
-    def request(self, subject, complete=False, tcp=None):
+    def request(self, subject, complete=False, tcp=None):  # pragma: no cover
         """
         Perform a DNS lookup/requests.
 
@@ -651,7 +651,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         else:
             # We are working with something which is an IPv4 or IPv6.
 
-            temp_result = self.__request_ip(subject, tcp=tcp)
+            temp_result = self.__request_ip(subject, complete=complete, tcp=tcp)
 
             if isinstance(temp_result, dict):
                 result.update(temp_result)
