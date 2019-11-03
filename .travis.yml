@@ -109,7 +109,7 @@ install:
   - python --version --version
   - pip --version
   - conda --version
-  - pip install pylint coverage coveralls codacy-coverage tox-current-env
+  - pip install pylint coverage coveralls codacy-coverage tox-conda tox-current-env
   - pip install -e .
 
 script:
