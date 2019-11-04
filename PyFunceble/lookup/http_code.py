@@ -85,6 +85,8 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         - :code:`file_url`
 
         - :code:`file_domain`
+
+        - :code:`ipv6`
     """
 
     def __init__(self, subject, subject_type):  # pragma: no cover
@@ -135,7 +137,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         PyFunceble.LOGGER.debug(f"Subject: {repr(self.subject)}")
         PyFunceble.LOGGER.debug(f"Headers:\n{self.headers}")
 
-    def _access(self):  # pragma: no cover
+    def _get_it(self):  # pragma: no cover
         """
         Get the HTTP code status.
 
@@ -204,7 +206,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
             # The http status code extraction is activated.
 
             # We get the http status code.
-            http_code = self._access()
+            http_code = self._get_it()
 
             # We initiate a variable which will save the list of allowed
             # http status code.
@@ -221,7 +223,7 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
                 # codes.
                 list_of_valid_http_code.extend(codes)
 
-            if http_code not in list_of_valid_http_code or http_code is None:
+            if http_code is None or http_code not in list_of_valid_http_code:
                 # * The extracted http code is not in the list of valid http code.
                 # or
                 # * The extracted http code is equal to `None`.
