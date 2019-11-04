@@ -81,6 +81,22 @@ class Check:
     :param str subject: The subject (URL, IP or domain) to check.
     """
 
+    # pylint: disable=line-too-long
+    SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS = ["onion"]
+    """
+    Specify the extension which are specified as "Special-Use Domain Names"
+    and supported by our project.
+
+    .. seealso::
+       * [`RFC6761`_]
+       * `IANA Special-Use Domain Names`_ assignments.
+       * [`RFC7686`_]
+
+    .. _RFC6761: https://tools.ietf.org/html/rfc6761
+    .. _RFC7686: https://tools.ietf.org/html/rfc6761
+    .. _IANA Special-Use Domain Names: https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.txt
+    """
+
     def __init__(self, subject):
         self.subject = subject
 
@@ -223,10 +239,16 @@ class Check:
                 except IndexError:
                     pass
 
-            if not extension or extension not in PyFunceble.INTERN["iana_db"]:
+            if not extension or (
+                extension not in PyFunceble.INTERN["iana_db"]
+                and extension not in self.SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS
+            ):
                 # * The extension is not found.
                 # or
                 # * The extension is not into the IANA database.
+                # or
+                # * The extension is not into our mapping of
+                #   the "Special-Use Domain Names" specification.
 
                 # We return false.
                 return False

@@ -115,6 +115,7 @@ class TestCheck(TestCase):
             "hello-.abuse.co.za",
             "hello-world.com.",
             "hello-world.com",
+            "hello.onion",
             "hello.world_hello.world.com.",
             "hello.world_hello.world.com",
             "hello.world.com.",
@@ -122,6 +123,7 @@ class TestCheck(TestCase):
             "hello.world.hello.com.",
             "hello.world.hello.com",
             "pogotowie-komputerowe-warszawa.com.pl",
+            "worl.hello.onion",
             "xn--bittr-fsa6124c.com.",
             "xn--bittr-fsa6124c.com",
             "xn--bllogram-g80d.com.",
@@ -341,6 +343,7 @@ class TestCheck(TestCase):
             "_hello_world_.abuse.co.za",
             "hello_world.abuse.co.za",
             "hello-.abuse.co.za",
+            "hello.world.onion",
         ]
 
         expected = True
