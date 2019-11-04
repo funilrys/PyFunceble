@@ -189,7 +189,7 @@ class Prints:
         # We initate a instance of the file output.
         self.file_output_instance = PyFunceble.helpers.File(self.output)
 
-    def _before_header(self):
+    def before_header(self):
         """
         Print informations about PyFunceble and the date of generation of a file
         into a given path, if doesn't exist.
@@ -200,6 +200,7 @@ class Prints:
             and self.output
             and not self.file_output_instance.exists()
         ):
+
             # * We are allowed to generate files.
             # and
             # * And output is given.
@@ -213,7 +214,7 @@ class Prints:
 
             # We initiate the information about the generation date of this file.
             date_of_generation = (
-                "# Date of generation: %s \n\n" % datetime.now().isoformat()
+                "# Date of generation: %s\n\n" % datetime.now().isoformat()
             )
 
             # We initiate a variable which will save the list of
@@ -233,8 +234,10 @@ class Prints:
 
                 # We get the header.
                 header = (
-                    self._header_constructor(self.currently_used_header, None)[0] + "\n"
+                    self.header_constructor(self.currently_used_header, None)[0] + "\n"
                 )
+
+                PyFunceble.LOGGER.debug(f"HEADER: {header}")
 
             try:
                 # We try to print the link, the date of generation and the header in the
@@ -251,7 +254,7 @@ class Prints:
             )
 
     @classmethod
-    def _header_constructor(
+    def header_constructor(
         cls, data_to_print, header_separator="-", column_separator=" "
     ):
         """
@@ -441,9 +444,9 @@ class Prints:
                 # We are not authorized to print anything.
 
                 # We generate the before header.
-                self._before_header()
+                self.before_header()
 
-                for formatted_template in self._header_constructor(to_print):
+                for formatted_template in self.header_constructor(to_print):
                     # We loop through the formatted template.
 
                     if not self.only_on_file:
@@ -458,7 +461,7 @@ class Prints:
                         # We write the file with the formatted header template.
                         self.file_output_instance.write(formatted_template + "\n")
 
-    def _data_constructor(self, size):
+    def data_constructor(self, size):
         """
         Construct the table of data according to given size.
 
@@ -616,7 +619,7 @@ class Prints:
             # We raise an exception.
             raise Exception("Empty output given.")
 
-    def __get_print_size(self):
+    def __get_print_size(self):  # pragma: no cover
         """
         Provides the size of the element to print.
         """
@@ -690,12 +693,12 @@ class Prints:
             to_print_size = self.__get_print_size()
 
             # We construct and format the data to print.
-            to_print = self._data_constructor(to_print_size)
+            to_print = self.data_constructor(to_print_size)
 
             # We print the before header section.
-            self._before_header()
+            self.before_header()
 
-            for data in self._header_constructor(to_print, False):
+            for data in self.header_constructor(to_print, False):
                 # We loop through the formatted data.
 
                 if self.template.lower() in PyFunceble.STATUS.list.generic or self.template in [
