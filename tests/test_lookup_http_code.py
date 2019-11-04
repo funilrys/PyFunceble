@@ -68,7 +68,7 @@ import PyFunceble
 from PyFunceble.lookup import HTTPCode
 
 
-class TestCommand(TestCase):
+class TestHTTPCode(TestCase):
     """
     Tests of PyFunceble.lookup.http_code
     """
