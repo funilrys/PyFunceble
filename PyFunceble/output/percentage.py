@@ -117,7 +117,7 @@ class Percentage:
                 PyFunceble.INTERN["counter"]["number"]["invalid"] += 1
 
     @classmethod
-    def _calculate(cls):
+    def calculate(cls):
         """
         Calculate the percentage of each status.
         """
@@ -170,7 +170,7 @@ class Percentage:
             PyFunceble.helpers.File(output).delete()
 
             # We calculate the percentage of each statuses.
-            self._calculate()
+            self.calculate()
 
             # We construct the different lines/data to print on screen and file.
             lines_to_print = [
@@ -204,6 +204,8 @@ class Percentage:
 
                 # And we unset the INACTIVE line.
                 del lines_to_print[1]
+                del PyFunceble.INTERN["counter"]["number"]["down"]
+                del PyFunceble.INTERN["counter"]["number"]["up"]
 
             if (
                 not PyFunceble.CONFIGURATION.quiet
@@ -250,4 +252,4 @@ class Percentage:
             # We run the calculation.
             # Note: The following is needed, because all counter calculation are
             # done by this class.
-            self._calculate()
+            self.calculate()
