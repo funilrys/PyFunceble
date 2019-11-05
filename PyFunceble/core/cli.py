@@ -335,6 +335,10 @@ class CLICore:
         Print a friendly message.
         """
 
+        raise Exception(
+            int(choice(str(int(datetime.now().timestamp())))),
+            datetime.now().timestamp(),
+        )
         random = int(choice(str(int(datetime.now().timestamp()))))
 
         if not PyFunceble.CONFIGURATION.quiet and not PyFunceble.CONFIGURATION.simple:
