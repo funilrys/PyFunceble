@@ -102,6 +102,9 @@ class APICore:
         # We share the given configuration.
         self.configuration = configuration
 
+        # We share the db file name.
+        self.db_file_name = db_file_name
+
         # We load the global configuration
         # if it was not alreay done.
         PyFunceble.load_config(
@@ -184,7 +187,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, "api_call", self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -233,7 +236,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, "api_call", self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -271,7 +274,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, "api_call", self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -462,7 +465,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, "api_call", self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
 
         if self.complete:
             # The user want a complete copy of the data.
