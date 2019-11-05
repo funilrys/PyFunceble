@@ -60,6 +60,7 @@ License:
 """
 # pylint: enable=line-too-long
 
+from os import sched_getaffinity
 
 from colorama import Fore, Style
 
@@ -339,19 +340,27 @@ class Preset:  # pragma: no cover
         if PyFunceble.CONFIGURATION.multiprocess:
             if not PyFunceble.abstracts.Platform.is_windows():
                 if (
-                    PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]
+                    "multiprocess_warning_printed" not in PyFunceble.INTERN
                     and not PyFunceble.CONFIGURATION.simple
                     and not PyFunceble.CONFIGURATION.quiet
-                    and "multiprocess_warning_printed" not in PyFunceble.INTERN
                 ):
-                    print(
-                        f"{Fore.RED + Style.BRIGHT}The "
-                        f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
-                        "is not recommended with the multiprocessing mode."
-                    )
+                    if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
+                        print(
+                            f"{Fore.RED + Style.BRIGHT}The "
+                            f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
+                            "is not recommended with the multiprocessing mode."
+                        )
+
+                    usable_cpu = len(sched_getaffinity(0))
+
+                    if PyFunceble.CONFIGURATION.maximal_processes > usable_cpu:
+                        print(
+                            f"{Fore.RED + Style.BRIGHT}You're using more processes "
+                            f"({repr(PyFunceble.CONFIGURATION.maximal_processes)}) than "
+                            f"the number of usable CPU ({usable_cpu}). Use at your own risk!"
+                        )
 
                     PyFunceble.INTERN["multiprocess_warning_printed"] = True
-
                 self.maximal_processes()
                 self.multiprocess_merging_mode()
             else:

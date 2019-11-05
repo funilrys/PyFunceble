@@ -1,7 +1,7 @@
 import argparse
 import sys
 from multiprocessing import set_start_method
-from os import cpu_count
+from os import sched_getaffinity
 
 from colorama import Back, Fore, Style
 from colorama import init as initiate_colorama
@@ -871,7 +871,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 if args.processes:
                     PyFunceble.CONFIGURATION.maximal_processes = args.processes
                 else:
-                    PyFunceble.CONFIGURATION.maximal_processes = cpu_count()
+                    PyFunceble.CONFIGURATION.maximal_processes = len(
+                        sched_getaffinity(0)
+                    )
 
                 if args.quiet:
                     PyFunceble.CONFIGURATION.quiet = preset.switch("quiet")
