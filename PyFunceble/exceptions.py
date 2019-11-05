@@ -22,10 +22,6 @@ class NoInternetConnection(PyFuncebleExternalException):
     pass
 
 
-class MessageNotFound(PyFuncebleInternalException):
-    pass
-
-
 class ConfigurationFileNotFound(PyFuncebleInternalException):
     pass
 

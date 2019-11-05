@@ -138,7 +138,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                             # The response is a `n` or `N`.
 
                             # We inform the user that something went wrong.
-                            raise Exception("Unable to find the configuration file.")
+                            raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
             else:
                 # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
@@ -326,7 +326,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 # The `DEFAULT_CONFIGURATION_FILENAME` file does not exists.
 
                 # We raise the exception we were handling.
-                raise exception
+                raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
     def _install_production_config(self):
         """
