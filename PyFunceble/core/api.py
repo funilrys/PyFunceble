@@ -169,7 +169,7 @@ class APICore:
 
                 result[subject] = APICore(
                     subject, complete=self.complete, configuration=self.configuration
-                ).syntax(subject_type)
+                ).availability(subject_type)
 
             # We return our local result.
             return result
@@ -427,7 +427,7 @@ class APICore:
             return {
                 subject: APICore(
                     subject, complete=self.complete, configuration=self.configuration
-                ).ipv6_range_syntax()
+                ).ip_range_syntax()
                 for subject in self.subject
             }
 
