@@ -3,9 +3,24 @@ from datetime import timedelta, timezone
 
 class TZ:
     """
-    Provides a timezone
+    Provides a timezone.
 
-    :param int offset: The offset in seconds.
+    :param str sign:
+        The sign to apply. Should be :code:`+` or :code:`-`.
+    :param int days:
+        The number of days from UTC.
+    :param int seconds:
+        The number of seconds from UTC.
+    :param int microseconds:
+        The number of microseconds from UTC.
+    :param int milliseconds:
+        The number of days from UTC.
+    :param int minutes:
+        The number of minutes from UTC.
+    :param int hours:
+        The number of hours from UTC.
+    :param int weeks:
+        The number of weeks from UTC.
     """
 
     def __init__(
@@ -37,6 +52,8 @@ class TZ:
     def get(self):
         """
         Provides the timezone itself.
+
+        :rtype: timezone
         """
 
         return timezone(self.sign * self.timedelda)
