@@ -120,8 +120,6 @@ def _get_version():
             open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
         )[0]
 
-        return extracted
-
     return ".".join([x for x in extracted.split(".") if x.isdigit()])
 
 
