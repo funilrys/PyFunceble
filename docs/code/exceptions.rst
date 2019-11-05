@@ -1,14 +1,15 @@
-Dispatcher
+Exceptions
 ==========
 
 Problematic
 -----------
 
-How can we dispatch the different CLI commands.
+How can we provide our very own exceptions ?
 
 Documentation
 -------------
 
-.. automodule:: PyFunceble.dispatcher
+.. automodule:: PyFunceble.exceptions
    :members:
    :private-members:
+

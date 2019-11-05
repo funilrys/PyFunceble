@@ -41,7 +41,7 @@ class Status:
         The subdomain syntax validation status.
     :ivar str tested:
         The tested subject.
-    :ivar bool url_syntax validation.
+    :ivar bool url_syntax_validation:
         The URL syntax validation status.
     :ivar str whois_server:
         The WHOIS server we contact-ed to get

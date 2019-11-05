@@ -1,12 +1,12 @@
-Configuration
-=============
+Config
+======
 
-Problematics
-------------
+Problematic
+-----------
 
-* How can we avoid the usage of :code:`tool.py`?
 * How can we make personalization more simple?
 * How can we automaticaly merge the new configuration with the local one?
+* How can we link some configuration endpoints with the real logic.
 
 Documentation
 -------------
@@ -14,3 +14,25 @@ Documentation
 .. automodule:: PyFunceble.config
    :members:
    :private-members:
+
+
+:code:`Load()`
+^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.config.load.Load
+    :members:
+    :private-members:
+
+:code:`Merge()`
+^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.config.merge.Merge
+    :members:
+    :private-members:
+
+:code:`Preset()`
+^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.config.preset.Preset
+    :members:
+    :private-members:

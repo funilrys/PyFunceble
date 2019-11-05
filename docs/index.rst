@@ -160,40 +160,20 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Code documentation
 
    code/logic-representation
-   code/helpers
-   code/adblock
-   code/api_core
-   code/auto_continue
-   code/auto_save
    code/check
-   code/clean
-   code/cli_core
+   code/exceptions
+   code/abstracts
+   code/cli
    code/config
-   code/directory_structure
-   code/dispatcher
-   code/dns_lookup
-   code/execution_time
-   code/expiration_date
-   code/file_core
-   code/generate
-   code/http_code
-   code/iana
-   code/inactive_db
-   code/logs
-   code/mining
-   code/percentage
-   code/preset
-   code/prints
-   code/production
-   code/publicsuffix
-   code/referer
-   code/requests
-   code/simple_core
-   code/sort
+   code/converter
+   code/core
+   code/database
+   code/engine
+   code/extractor
+   code/helpers
+   code/lookup
+   code/output
    code/status
-   code/whois_db
-   code/whois_lookup
-
 
 Indices and tables
 ==================
