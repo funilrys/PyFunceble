@@ -61,7 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest import main as launch_tests
 from unittest.mock import Mock, patch
 
