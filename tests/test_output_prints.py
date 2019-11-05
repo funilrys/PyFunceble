@@ -70,6 +70,7 @@ from colorama import Back, Fore
 import PyFunceble
 from PyFunceble.output import Prints
 from stdout_base import StdoutBase
+from time_zone import TZ
 
 
 class TestPrints(StdoutBase):
@@ -119,7 +120,9 @@ class TestPrints(StdoutBase):
         self.assertEqual(expected, actual)
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(return_value=datetime(1970, 1, 1, 1, 0, 2, 0))
+        datetime_patch.now = Mock(
+            return_value=datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
+        )
         patch("PyFunceble.output.prints.datetime", new=datetime_patch).start()
 
         # pylint: disable=line-too-long

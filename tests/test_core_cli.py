@@ -61,7 +61,7 @@ License:
 # pylint: enable=line-too-long
 
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest import main as launch_tests
 from unittest.mock import Mock, patch
 
@@ -71,6 +71,7 @@ from colorama import init as init_colorama
 import PyFunceble
 from PyFunceble.core import CLI
 from stdout_base import StdoutBase
+from time_zone import TZ
 
 
 class TestCLICore(StdoutBase):
@@ -206,7 +207,9 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(return_value=datetime(1970, 1, 1, 1, 0, 2, 0))
+        datetime_patch.now = Mock(
+            return_value=datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
+        )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
 
         CLI().stay_safe()
@@ -231,7 +234,9 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(return_value=datetime(1970, 1, 1, 1, 0, 3, 0))
+        datetime_patch.now = Mock(
+            return_value=datetime(1970, 1, 1, 1, 0, 3, 0, tzinfo=TZ("+", hours=1).get())
+        )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
 
         CLI().stay_safe()
