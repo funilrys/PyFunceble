@@ -109,6 +109,11 @@ class MySQL:
 
             self.create_tables_and_apply_patches()
 
+            if PyFunceble.CONFIGURATION.db_type == "mariadb":
+                self.int_cast_type = "INTEGER"
+            else:
+                self.int_cast_type = "SIGNED"
+
     @classmethod
     def authorization(cls):
         """

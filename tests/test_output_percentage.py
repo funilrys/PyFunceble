@@ -84,9 +84,9 @@ class TestPercentage(StdoutBase):
         PyFunceble.CONFIGURATION.show_percentage = True
         PyFunceble.CONFIGURATION.syntax = False
 
-    def test_count(self):
+    def __preset_counters_and_get_expected(self):
         """
-        Tests if the counter can be set proprely.
+        Preset the counters.
         """
 
         expected = {}
@@ -94,6 +94,15 @@ class TestPercentage(StdoutBase):
         for i, element in enumerate(["tested", "up", "down", "invalid"]):
             PyFunceble.INTERN["counter"]["number"][element] = 12 + i
             expected.update({element: 12 + i})
+
+        return expected
+
+    def test_count(self):
+        """
+        Tests if the counter can be set proprely.
+        """
+
+        expected = self.__preset_counters_and_get_expected()
 
         for element in ["up", "down", "invalid"]:
             Percentage(
@@ -108,9 +117,7 @@ class TestPercentage(StdoutBase):
 
         PyFunceble.CONFIGURATION.syntax = True
 
-        for i, element in enumerate(["tested", "up", "down", "invalid"]):
-            PyFunceble.INTERN["counter"]["number"][element] = 12 + i
-            expected.update({element: 12 + i})
+        expected = self.__preset_counters_and_get_expected()
 
         for element in ["up", "down", "invalid"]:
             Percentage(

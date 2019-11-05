@@ -78,32 +78,35 @@ class TestFile(TestCase):
 
         self.file = "this_file_is_a_ghost"
 
+        self.file_instance = File(self.file)
+        self.file_instance_2 = File(self.file + "_2")
+
+        self.file_instance.delete()
+        self.file_instance_2.delete()
+
+    def tearDown(self):
+        """
+        Setups everything needed after the tests.
+        """
+
+        self.file_instance.delete()
+        self.file_instance_2.delete()
+
     def test_exists(self):
         """
         Tests of the method which let us check the existance
         of a file.
         """
 
-        file_instance = File(self.file)
-        file_instance.delete()
-
         expected = False
-        actual = file_instance.exists()
+        actual = self.file_instance.exists()
 
         self.assertEqual(expected, actual)
 
-        with open(self.file, "w") as file_stream:
-            file_stream.write(file_instance.path)
+        self.file_instance.write(self.file_instance.path)
 
         expected = True
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        file_instance.delete()
-
-        expected = False
-        actual = file_instance.exists()
+        actual = self.file_instance.exists()
 
         self.assertEqual(expected, actual)
 
@@ -112,92 +115,48 @@ class TestFile(TestCase):
         Tests the method which let us delete and write into a file.
         """
 
-        file_instance = File(self.file)
-        file_instance.delete()
-
-        expected = False
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        file_instance.write("Hello, World!")
+        self.file_instance.write("Hello, World!")
 
         expected = "Hello, World!"
-        actual = file_instance.read()
+        actual = self.file_instance.read()
 
         self.assertEqual(expected, actual)
 
-        file_instance.write("Hello, World!")
+        self.file_instance.write("Hello, World!")
 
         expected += "Hello, World!"
-        actual = file_instance.read()
+        actual = self.file_instance.read()
 
         self.assertEqual(expected, actual)
 
-        file_instance.write("Crap!", overwrite=True)
+        self.file_instance.write("Crap!", overwrite=True)
 
         expected = "Crap!"
-        actual = file_instance.read()
+        actual = self.file_instance.read()
 
         self.assertEqual(expected, actual)
-
-        file_instance.delete()
-
-        expected = False
-        actual = file_instance.exists()
 
     def test_copy(self):
         """
         Tests the method which let us copy a file to another location.
         """
 
-        file_instance = File(self.file)
-        file_instance.delete()
-
-        file_instance_2 = File(self.file + "_2")
-        file_instance_2.delete()
-
-        expected = False
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        actual = file_instance_2.exists()
-
-        self.assertEqual(expected, actual)
-
-        file_instance.write("Hello, World!")
+        self.file_instance.write("Hello, World!")
 
         expected = "Hello, World!"
-        actual = file_instance.read()
+        actual = self.file_instance.read()
 
         self.assertEqual(expected, actual)
 
-        file_instance.copy(file_instance_2.path)
+        self.file_instance.copy(self.file_instance_2.path)
 
         expected = True
-        actual = file_instance_2.exists()
 
-        self.assertEqual(expected, actual)
-        self.assertEqual(expected, file_instance.exists())
+        self.assertEqual(expected, self.file_instance_2.exists())
+        self.assertEqual(expected, self.file_instance.exists())
 
         expected = "Hello, World!"
-        actual = file_instance_2.read()
-
-        self.assertEqual(expected, actual)
-
-        file_instance = File(self.file)
-        file_instance.delete()
-
-        file_instance_2 = File(self.file + "_2")
-        file_instance_2.delete()
-
-        expected = False
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        actual = file_instance_2.exists()
+        actual = self.file_instance_2.read()
 
         self.assertEqual(expected, actual)
 
@@ -206,57 +165,27 @@ class TestFile(TestCase):
         Tests the method which let us move a file to another location.
         """
 
-        file_instance = File(self.file)
-        file_instance.delete()
-
-        file_instance_2 = File(self.file + "_2")
-        file_instance_2.delete()
-
-        expected = False
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        actual = file_instance_2.exists()
-
-        self.assertEqual(expected, actual)
-
-        file_instance.write("Hello, World!")
+        self.file_instance.write("Hello, World!")
 
         expected = "Hello, World!"
-        actual = file_instance.read()
+        actual = self.file_instance.read()
 
         self.assertEqual(expected, actual)
 
-        file_instance.move(file_instance_2.path)
+        self.file_instance.move(self.file_instance_2.path)
 
         expected = True
-        actual = file_instance_2.exists()
+        actual = self.file_instance_2.exists()
 
         self.assertEqual(expected, actual)
 
         expected = False
-        actual = file_instance.exists()
+        actual = self.file_instance.exists()
 
         self.assertEqual(expected, actual)
 
         expected = "Hello, World!"
-        actual = file_instance_2.read()
-
-        self.assertEqual(expected, actual)
-
-        file_instance = File(self.file)
-        file_instance.delete()
-
-        file_instance_2 = File(self.file + "_2")
-        file_instance_2.delete()
-
-        expected = False
-        actual = file_instance.exists()
-
-        self.assertEqual(expected, actual)
-
-        actual = file_instance_2.exists()
+        actual = self.file_instance_2.read()
 
         self.assertEqual(expected, actual)
 

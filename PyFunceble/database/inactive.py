@@ -481,6 +481,20 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         "the {repr(self.table_name)} table."
                     )
 
+    def __execute_query_retest_already_tested(self, query):
+        """
+        Executes the query to get the list to retest or already tested.
+        """
+
+        with self.mysql_db.get_connection() as cursor:
+            cursor.execute(query, {"file": self.filename, "days": self.days})
+            fetched = cursor.fetchall()
+
+            if fetched:
+                return {x["subject"] for x in fetched}
+
+        return set()
+
     def get_to_retest(self):  # pylint: pragma: no cover
         """
         Return a set of subject to restest.
@@ -505,23 +519,13 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     return set()
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                if PyFunceble.CONFIGURATION.db_type == "mariadb":
-                    cast_type = "INTEGER"
-                else:
-                    cast_type = "SIGNED"
-
                 query = (
                     "SELECT * FROM {0} WHERE file_path = %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, cast_type)
+                ).format(self.table_name, self.mysql_db.int_cast_type)
 
-                with self.mysql_db.get_connection() as cursor:
-                    cursor.execute(query, {"file": self.filename, "days": self.days})
-                    fetched = cursor.fetchall()
-
-                    if fetched:
-                        return {x["subject"] for x in fetched}
+                return self.__execute_query_retest_already_tested(query)
         return set()
 
     def get_already_tested(self):  # pragma: no cover
@@ -548,21 +552,11 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     return set()
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                if PyFunceble.CONFIGURATION.db_type == "mariadb":
-                    cast_type = "INTEGER"
-                else:
-                    cast_type = "SIGNED"
-
                 query = (
                     "SELECT * FROM {0} WHERE file_path= %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, cast_type)
+                ).format(self.table_name, self.mysql_db.int_cast_type)
 
-                with self.mysql_db.get_connection() as cursor:
-                    cursor.execute(query, {"file": self.filename, "days": self.days})
-                    fetched = cursor.fetchall()
-
-                    if fetched:
-                        return {x["subject"] for x in fetched}
+                return self.__execute_query_retest_already_tested(query)
         return set()
