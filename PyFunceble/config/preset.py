@@ -60,7 +60,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from os import sched_getaffinity
+from os import cpu_count
 
 from colorama import Fore, Style
 
@@ -351,13 +351,13 @@ class Preset:  # pragma: no cover
                             "is not recommended with the multiprocessing mode."
                         )
 
-                    usable_cpu = len(sched_getaffinity(0))
+                    available_cpu = cpu_count()
 
-                    if PyFunceble.CONFIGURATION.maximal_processes > usable_cpu:
+                    if PyFunceble.CONFIGURATION.maximal_processes > available_cpu:
                         print(
                             f"{Fore.RED + Style.BRIGHT}You're using more processes "
                             f"({repr(PyFunceble.CONFIGURATION.maximal_processes)}) than "
-                            f"the number of usable CPU ({usable_cpu}). Use at your own risk!"
+                            f"the number of available CPU ({available_cpu}). Use at your own risk!"
                         )
 
                     PyFunceble.INTERN["multiprocess_warning_printed"] = True
