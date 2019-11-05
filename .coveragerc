@@ -25,6 +25,7 @@ omit =
     PyFunceble/output/constructor.py
     PyFunceble/output/generate.py
     PyFunceble/output/logs.py
+    PyFunceble/status/*
 
 [report]
 # This should be False one we move into production
