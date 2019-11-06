@@ -17,7 +17,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.auto_save.AutoCoAutoSaventinue`!
+    Want to read the code ? It's here :func:`~PyFunceble.auto_save.AutoCoAutoSaventinue`!
 
 After a given amount of minutes, we stop the tool, generate the percentage,
 run a given command (if found), commit all the changes we made to the repository

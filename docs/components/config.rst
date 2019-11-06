@@ -11,7 +11,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the configuration loader code ? It's here :func:`PyFunceble.config.Load`!
+    Want to read the configuration loader code ? It's here :func:`~PyFunceble.config.Load`!
 
 We first look for the :code:`.PyFunceble.yaml`. If not found, we get/generate it.
 Then we parse it to the system.

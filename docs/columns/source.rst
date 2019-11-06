@@ -8,9 +8,9 @@ HTTP Code
 
 This source is returned when **all the following cases** are met:
 
-- We can't extract the expiration date from :func:`PyFunceble.whois.Whois.request`.
+- We can't extract the expiration date from :func:`~PyFunceble.whois.Whois.request`.
 - The :code:`INACTIVE` status is the one returned by other methods.
-- :func:`PyFunceble.http_code.HTTPCode.get` outputs is one the following :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
+- :func:`~PyFunceble.http_code.HTTPCode.get` outputs is one the following :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
 
 SYNTAX
 ------
@@ -21,7 +21,7 @@ The usage of this source comes from the comparison of the element against our do
 DNSLOOKUP
 ---------
 
-This source is always returned when the taken decision of the status of the domain/IP comes from :func:`PyFunceble.dns_lookup.DNSLookup.request` outputs.
+This source is always returned when the taken decision of the status of the domain/IP comes from :func:`~PyFunceble.dns_lookup.DNSLookup.request` outputs.
 
 SPECIAL
 -------
@@ -31,7 +31,7 @@ So I introduced the SPECIAL source.
 
 
 .. note::
-    Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :func:`PyFunceble.http_code.HTTPCode.get`.
+    Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :func:`~PyFunceble.http_code.HTTPCode.get`.
 
 .. warning::
     Do not want those rules ? You can use following to disable them.

@@ -13,7 +13,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.adblock.AdBlock.decode()`!
+    Want to read the code ? It's here :func:`~PyFunceble.adblock.AdBlock.decode()`!
 
 We keep it simple by trying to comply with the "`Adblock Plus filters explained`_" documentation.
 For us, the relevant parts are the one which defines/explains which domains are being blocked from a given rule.

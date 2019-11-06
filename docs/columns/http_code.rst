@@ -14,7 +14,7 @@ As active
 ---------
 
 .. note::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
 
 .. warning::
   While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status

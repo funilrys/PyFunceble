@@ -14,7 +14,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.mining.Mining`!
+    Want to read the code ? It's here :func:`~PyFunceble.mining.Mining`!
 
 We access the given domain/URL and get the redirection history which we then test once we finished the normal test.
 

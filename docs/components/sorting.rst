@@ -14,7 +14,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here: :func:`PyFunceble.sort.Sort`!
+    Want to read the code ? It's here: :func:`~PyFunceble.sort.Sort`!
 
 Alphabetically
 ^^^^^^^^^^^^^^

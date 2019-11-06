@@ -10,7 +10,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the parser code ? It's here :func:`PyFunceble.public_suffix.PublicSuffix`!
+    Want to read the parser code ? It's here :func:`~PyFunceble.public_suffix.PublicSuffix`!
 
 The copy of the public suffix list we use is saved into the :code:`public-suffix.json` file.
 It is formatted like below and is automatically merged for the end-user before
