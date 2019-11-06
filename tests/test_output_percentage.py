@@ -84,7 +84,8 @@ class TestPercentage(StdoutBase):
         PyFunceble.CONFIGURATION.show_percentage = True
         PyFunceble.CONFIGURATION.syntax = False
 
-    def __preset_counters_and_get_expected(self):
+    @classmethod
+    def __preset_counters_and_get_expected(cls):
         """
         Preset the counters.
         """
