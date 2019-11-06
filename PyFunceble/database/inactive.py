@@ -481,7 +481,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         "the {repr(self.table_name)} table."
                     )
 
-    def __execute_query_retest_already_tested(self, query):
+    def __execute_query_retest_already_tested(self, query):  # pragma: no cover
         """
         Executes the query to get the list to retest or already tested.
         """

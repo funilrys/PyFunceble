@@ -198,7 +198,7 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
                         # The response is a `n` or `N`.
 
                         # We inform the user that something went wrong.
-                        raise Exception("Configuration key still missing.")
+                        raise PyFunceble.exceptions.ConfigurationFileNotFound()
         else:
             # The auto configuration environment variable is set.
 

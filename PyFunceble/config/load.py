@@ -101,7 +101,7 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
         try:
             # We try to load the configuration.
             self._load_config_file()
-        except (FileNotFoundError, PyFunceble.exceptions.ConfigurationFileNotFound):
+        except PyFunceble.exceptions.ConfigurationFileNotFound:
             # We got a FileNotFoundError
 
             if not PyFunceble.helpers.EnvironmentVariable(
