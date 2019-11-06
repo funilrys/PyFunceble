@@ -54,7 +54,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Facts
 
-   facts/they-use-it
+   facts/they-use-d-it
    facts/faq
    facts/known_issues
    facts/contact

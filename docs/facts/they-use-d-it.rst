@@ -1,5 +1,5 @@
-They use PyFunceble!
-====================
+They use-d PyFunceble!
+======================
 
 Just a list of tool/repository/code/infrastructure which uses or used PyFunceble!
 

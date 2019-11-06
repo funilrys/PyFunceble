@@ -23,7 +23,7 @@ Simply use the :code:`--multiprocess` argument to activate the usage of multiple
 You can in addition of that use the :code:`--processes` argument to tell us the number of simultaneous process to run.
 
 .. warning::
-    Try not to exceed :code:`150` processes if you want to keep your machine somehow alive and healthy.
+    Try not to exceed your number of CPU (as :code:`--processes`) if you want to keep your machine somehow alive and healthy.
 
 I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
