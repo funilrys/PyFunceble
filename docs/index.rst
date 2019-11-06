@@ -151,7 +151,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Contributing
 
    contributing/submit
-   contributing/before_commit
    contributing/the_commit
    contributing/coding_conventions
 

@@ -17,7 +17,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.percentage.Percentage`!
+    Want to read the code ? It's here :func:`~PyFunceble.output.percentage.Percentage`!
 
 Regularly or at the very end of a test we get the number of subjects for each status along with the number of tested subjects.
 We then generate and print the percentage calculation on the screen (:code:`stdout`) and into :code:`output/logs/percentage/percentage.txt`

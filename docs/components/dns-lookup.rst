@@ -11,7 +11,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.dns_lookup.DNSLookup`!
+    Want to read the code ? It's here :func:`~PyFunceble.lookup.dns.DNSLookup`!
 
 For domains
 ^^^^^^^^^^^

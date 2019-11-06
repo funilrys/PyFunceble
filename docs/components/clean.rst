@@ -11,7 +11,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.clean.Clean`!
+    Want to read the code ? It's here :func:`~PyFunceble.output.clean.Clean`!
 
 It has an internal map of what has to be deleted and how.
 

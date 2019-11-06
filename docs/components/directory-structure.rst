@@ -12,7 +12,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.directory_structure.DirectoryStructure`!
+    Want to read the code ? It's here :func:`~PyFunceble.output.constructor.Constructor`!
 
 After each version, the maintainer does a :code:`--production` which will prepare the repository
 for production.

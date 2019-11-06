@@ -9,7 +9,7 @@ As we need to be one in a middle of connection to a webserver, the custom user a
 How does it work?
 -----------------
 
-We set the custom useragent everytime we request something with the :code:`http:` and :code:`https` protocols.
+We set the custom user-agent everytime we request something with the :code:`http` and :code:`https` protocols.
 
 How to use it?
 --------------

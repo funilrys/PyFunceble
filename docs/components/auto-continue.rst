@@ -15,7 +15,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.auto_continue.AutoContinue`!
+    Want to read the code ? It's here :func:`~PyFunceble.engine.auto_continue.AutoContinue`!
 
 We log every subject already tested previously and remove them when the same file path
 is given again.
