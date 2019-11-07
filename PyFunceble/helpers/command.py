@@ -1,4 +1,6 @@
-from subprocess import PIPE, Popen
+import sys
+from os import environ
+from subprocess import PIPE, STDOUT, Popen
 
 
 class Command:
@@ -49,23 +51,24 @@ class Command:
         """
 
         # We initiate a process and parse the command to it.
-        process = Popen(self.command, stdout=PIPE, stderr=PIPE, shell=True)
+        with Popen(
+            self.command, stdout=PIPE, stderr=STDOUT, shell=True, env=environ
+        ) as process:
+            # We communicate the command and get the output and the error.
+            (stdout, stderr) = process.communicate()
 
-        # We communicate the command and get the output and the error.
-        (output, error) = process.communicate()
+            if process.returncode != 0:  # pragma: no cover
+                # The return code is different to 0.
 
-        if process.returncode != 0:  # pragma: no cover
-            # The return code is different to 0.
+                # We return the decoded error.
+                return self._decode_output(stderr)
 
-            # We return the decoded error.
-            return self._decode_output(error)
+            # The return code (or exit code if you prefer) if equal to 0.
 
-        # The return code (or exit code if you prefer) if equal to 0.
+            # We return the decoded output of the executed command.
+            return self._decode_output(stdout)
 
-        # We return the decoded output of the executed command.
-        return self._decode_output(output)
-
-    def run(self):
+    def run(self, rstrip=True):
         """
         Run the given command and yield each line(s) one by one.
 
@@ -74,9 +77,14 @@ class Command:
             is that :func:`~PyFunceble.helpers.Command.execute` wait for the process to end
             in order to return its output while this method return each line one by one
             - as they are outputed.
+
+        :param bool rstrip:
+            Deactivates the rstrip of the output.
         """
 
-        with Popen(self.command, stdout=PIPE, shell=True) as process:
+        with Popen(
+            self.command, stdout=PIPE, stderr=STDOUT, shell=True, env=environ
+        ) as process:
             # We initiate a process and parse the command to it.
 
             while True:
@@ -86,9 +94,9 @@ class Command:
                 # We get the current line from the process stdout.
                 #
                 # Note: we use rstrip() because we are paranoid :-)
-                current_line = process.stdout.readline().rstrip()
+                current_line = process.stdout.readline()
 
-                if not current_line:
+                if not current_line and process.poll() is not None:
                     # The current line is empty or equal to None.
 
                     # We break the loop.
@@ -96,5 +104,17 @@ class Command:
 
                 # The line is not empty nor equal to None.
 
-                # We encode and yield the current line
-                yield self._decode_output(current_line)
+                if rstrip:
+                    # We encode and yield the current line
+                    yield self._decode_output(current_line.rstrip())
+                else:
+                    # We encode and yield the current line
+                    yield self._decode_output(current_line)
+
+    def run_to_stdout(self):
+        """
+        Run the given command and print each line(s) to stdout.
+        """
+
+        for line in self.run(rstrip=False):
+            sys.stdout.write(line)

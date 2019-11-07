@@ -246,8 +246,7 @@ class Travis:
             for command, allow_stdout in commands:
                 if allow_stdout:
                     PyFunceble.LOGGER.debug(f"Executing: {repr(command)}")
-                    for line in PyFunceble.helpers.Command(command).run():
-                        sys.stdout.write("{}\n".format(line))
+                    PyFunceble.helpers.Command(command).run_to_stdout()
                 else:
                     PyFunceble.helpers.Command(command).execute()
 
@@ -328,17 +327,14 @@ class Travis:
                     f"Executing: {PyFunceble.CONFIGURATION.command_before_end}"
                 )
 
-                for line in PyFunceble.helpers.Command(
+                PyFunceble.helpers.Command(
                     PyFunceble.CONFIGURATION.command_before_end
-                ).run():
-                    sys.stdout.write("{}\n".format(line))
-
+                ).run_to_stdout()
                 self.permissions()
 
             PyFunceble.LOGGER.info(f"Executing: {command}")
 
-            for line in PyFunceble.helpers.Command(command).run():
-                sys.stdout.write("{}\n".format(line))
+            PyFunceble.helpers.Command(command).run_to_stdout()
             self.push()
 
     def not_end_commit(self):
@@ -357,16 +353,13 @@ class Travis:
             if PyFunceble.CONFIGURATION.command:
                 PyFunceble.LOGGER.info(f"Executing: {PyFunceble.CONFIGURATION.command}")
 
-                for line in PyFunceble.helpers.Command(
+                PyFunceble.helpers.Command(
                     PyFunceble.CONFIGURATION.command
-                ).run():
-                    sys.stdout.write("{}\n".format(line))
-
+                ).run_to_stdout()
                 self.permissions()
 
             PyFunceble.LOGGER.info(f"Executing: {command}")
 
-            for line in PyFunceble.helpers.Command(command).run():
-                sys.stdout.write("{}\n".format(line))
+            PyFunceble.helpers.Command(command).run_to_stdout()
 
             self.push()

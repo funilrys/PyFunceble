@@ -60,6 +60,7 @@ License:
 """
 # pylint: enable=line-too-long
 
+import sys
 from unittest import main as launch_tests
 
 from PyFunceble.abstracts import Platform
@@ -72,20 +73,6 @@ class TestCommand(StdoutBase):
     Tests of the PyFunceble.helpers.command.
     """
 
-    def setUp(self):
-        """
-        Setups everything needed for the tests.
-        """
-
-        StdoutBase.setUp(self)
-
-    def tearDown(self):
-        """
-        Setups everything needed for after the tests.
-        """
-
-        StdoutBase.tearDown(self)
-
     def test_execute(self):
         """
         Tests the execution of command.
@@ -94,6 +81,20 @@ class TestCommand(StdoutBase):
         if Platform.is_unix():
             expected = "Hello, World!\n"
             actual = Command("echo 'Hello, World!'").execute()
+
+            self.assertEqual(expected, actual)
+
+    def test_run_to_stdout(self):
+        """
+        Tests the run of command.
+        """
+
+        if Platform.is_unix():
+            expected = "Hello, World!\n"
+
+            Command("echo 'Hello, World!'").run_to_stdout()
+
+            actual = sys.stdout.getvalue()
 
             self.assertEqual(expected, actual)
 
