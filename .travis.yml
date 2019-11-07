@@ -78,8 +78,10 @@ jobs:
       os: linux
       dist: bionic
       name: "Deployement to PyPi"
-      script: skip
-      after_success: skip
+      script:
+        - echo "Hello, World!"
+      after_success:
+        - echo "Hello, World!"
       env:
         - PYTHON_VERSION="3.7.5"
       deploy:

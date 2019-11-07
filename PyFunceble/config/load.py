@@ -309,7 +309,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We install the db types files.
             self._install_db_type_files()
-        except FileNotFoundError as exception:
+        except FileNotFoundError:
             # But if the configuration file is not found.
 
             file_instance = PyFunceble.helpers.File(self.path_to_default_config)
