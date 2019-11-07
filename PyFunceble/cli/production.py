@@ -255,7 +255,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
         Read the code and update all links.
         """
 
-        to_ignore = [".gitignore", ".keep"]
+        to_ignore = [".gitignore", ".keep", "test_converter_internal_url.py"]
 
         for root, _, files in walk(
             PyFunceble.CONFIG_DIRECTORY
