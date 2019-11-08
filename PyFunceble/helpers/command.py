@@ -42,7 +42,8 @@ class Command:
 
         if to_decode:
             return to_decode.decode(self.decode_type)
-        return to_decode # pragma: no cover
+
+        return ""
 
     def execute(self):
         """

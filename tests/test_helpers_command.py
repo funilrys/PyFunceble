@@ -84,6 +84,11 @@ class TestCommand(StdoutBase):
 
             self.assertEqual(expected, actual)
 
+            expected = ""
+            actual = Command("printf ''").execute()
+
+            self.assertEqual(expected, actual)
+
     def test_run_to_stdout(self):
         """
         Tests the run of command.
