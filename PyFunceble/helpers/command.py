@@ -40,7 +40,9 @@ class Command:
         :rtype: str
         """
 
-        return to_decode.decode(self.decode_type)
+        if to_decode:
+            return to_decode.decode(self.decode_type)
+        return to_decode # pragma: no cover
 
     def execute(self):
         """
