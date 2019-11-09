@@ -88,6 +88,7 @@ class Preset:  # pragma: no cover
     def __init__(self):
         self.timeout()
         self.dns_lookup_over_tcp()
+        self.dns_nameserver()
         self.syntax_test()
         self.multiprocess()
 
@@ -397,3 +398,11 @@ class Preset:  # pragma: no cover
         """
 
         PyFunceble.DNSLOOKUP.tcp = PyFunceble.CONFIGURATION.dns_lookup_over_tcp
+
+    @classmethod
+    def dns_nameserver(cls):
+        """
+        Ensure that the DNS nameserver is proprely set.
+        """
+
+        PyFunceble.DNSLOOKUP.update_nameserver(PyFunceble.CONFIGURATION.dns_server)
