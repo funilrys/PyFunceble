@@ -182,6 +182,24 @@ class TestCLICore(StdoutBase):
 
         PyFunceble.INTERN["counter"]["percentage"]["up"] = 0
 
+    def test_colored_ascii_success_syntax(self):
+        """
+        Tests the method which colors the ASCII representation of PyFunceble
+        for the case that we want the success representation for the case
+        that we are testing for syntax.
+        """
+
+        PyFunceble.INTERN["counter"]["percentage"]["valid"] = 55
+
+        self.cli_core.colorify_logo()
+
+        expected = f"{self.green_ascii}\n"
+        actual = sys.stdout.getvalue()
+
+        self.assertEqual(expected, actual)
+
+        PyFunceble.INTERN["counter"]["percentage"]["valid"] = 0
+
     def test_nothing_to_test(self):
         """
         Tests the correctness of the desired message.

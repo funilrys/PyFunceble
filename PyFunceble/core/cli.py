@@ -264,7 +264,10 @@ class CLICore:
                     # line with the right coloration.
                     to_print.append(Fore.YELLOW + line + Fore.RESET)
 
-            elif PyFunceble.INTERN["counter"]["percentage"]["up"] >= 50:
+            elif PyFunceble.INTERN["counter"]["percentage"]["up"] >= 50 or (
+                "valid" in PyFunceble.INTERN["counter"]["percentage"]
+                and PyFunceble.INTERN["counter"]["percentage"]["valid"] >= 50
+            ):
                 # The percentage of up is greater or equal to 50%.
 
                 for line in PyFunceble.ASCII_PYFUNCEBLE.split("\n"):
