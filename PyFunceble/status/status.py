@@ -110,8 +110,4 @@ class Status:
         Provides the status in a dict format.
         """
 
-        return {
-            x: y
-            for x, y in self.__dict__.items()
-            if x in self.resulting_indexes or not x.startswith("__")
-        }
+        return {x: y for x, y in self.__dict__.items() if x in self.resulting_indexes}
