@@ -17,6 +17,8 @@ class Status:
     :ivar str _status:
         The status before the application of our
         extra rules (if activated).
+    :ivar list dns_lookup:
+        The result of the DNS Lookup logic.
     :ivar bool domain_syntax_validation:
         The domain syntax validation status.
     :ivar list, None dns_lookup:
@@ -53,6 +55,7 @@ class Status:
     resulting_indexes = [
         "_status_source",
         "_status",
+        "dns_lookup",
         "domain_syntax_validation",
         "expiration_date",
         "http_status_code",
@@ -65,8 +68,8 @@ class Status:
         "subdomain_syntax_validation",
         "tested",
         "url_syntax_validation",
-        "whois_server",
         "whois_record",
+        "whois_server",
     ]
 
     def __init__(self, subject):
@@ -76,6 +79,7 @@ class Status:
         pre_loading = {
             "_status_source": None,
             "_status": None,
+            "dns_lookup": None,
             "domain_syntax_validation": self.checker.is_domain(),
             "expiration_date": None,
             "http_status_code": PyFunceble.HTTP_CODE.not_found_default,
@@ -88,8 +92,8 @@ class Status:
             "subdomain_syntax_validation": self.checker.is_subdomain(),
             "tested": self.subject,
             "url_syntax_validation": self.checker.is_url(),
-            "whois_server": PyFunceble.lookup.Referer(self.subject).get(),
             "whois_record": None,
+            "whois_server": PyFunceble.lookup.Referer(self.subject).get(),
         }
 
         for description, value in pre_loading.items():
@@ -106,4 +110,8 @@ class Status:
         Provides the status in a dict format.
         """
 
-        return {x: y for x, y in self.__dict__.items() if x in self.resulting_indexes}
+        return {
+            x: y
+            for x, y in self.__dict__.items()
+            if x in self.resulting_indexes or not x.startswith("__")
+        }
