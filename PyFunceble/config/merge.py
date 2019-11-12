@@ -12,7 +12,8 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provide the merging logic.
+Provides the configuration merger. Understand by that the fact that we are mergin
+the upstream configuration file locally.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom

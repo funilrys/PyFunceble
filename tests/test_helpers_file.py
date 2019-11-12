@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.file
+Tests of PyFunceble.helpers.file
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -68,7 +68,7 @@ from PyFunceble.helpers import File
 
 class TestFile(TestCase):
     """
-    Tests of the PyFunceble.helpers.file.
+    Tests of PyFunceble.helpers.file.
     """
 
     def setUp(self):
@@ -94,7 +94,7 @@ class TestFile(TestCase):
 
     def test_exists(self):
         """
-        Tests of the method which let us check the existance
+        Tests method which let us check the existance
         of a file.
         """
 

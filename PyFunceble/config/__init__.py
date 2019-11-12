@@ -1,4 +1,3 @@
-# pylint: disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provide the configuration logic.
+Provides the configuration logics.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom

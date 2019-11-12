@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide the whois database logic and interface.
+Provides the WHOIS database interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,7 +57,6 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: disable=line-too-long
 
 from datetime import datetime
 
@@ -182,7 +180,7 @@ class WhoisDB:
         query = (
             "INSERT INTO {0} "
             "(subject, expiration_date, expiration_date_epoch, state, record, digest) "
-            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(record)s, %(digest)s)"
+            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(record)s, %(digest)s)"  # pylint: disable=line-too-long
         ).format(self.table_name)
 
         digest = PyFunceble.helpers.Hash(algo="sha256").data(

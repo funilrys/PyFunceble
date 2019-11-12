@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.engine.sort
+Tests of PyFunceble.engine.sort
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -69,7 +69,7 @@ from PyFunceble.helpers import List
 
 class TestSort(TestCase):
     """
-    Tests of the PyFunceble.engine.sort
+    Tests of PyFunceble.engine.sort
     """
 
     def setUp(self):
@@ -135,7 +135,7 @@ class TestSort(TestCase):
 
     def test_standard_sorting(self):
         """
-        Tests of the standard sorting.
+        Tests standard sorting.
         """
 
         expected = [
@@ -202,7 +202,7 @@ class TestSort(TestCase):
 
     def test_hierarchical_sorting(self):
         """
-        Tests of the hierarchical sorting.
+        Tests hierarchical sorting.
         """
 
         expected = [

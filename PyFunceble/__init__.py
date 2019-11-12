@@ -1,4 +1,4 @@
-# pylint:disable=line-too-long, too-many-lines, invalid-name, cyclic-import
+# pylint:disable=invalid-name, cyclic-import
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -11,8 +11,6 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
-
-This submodule is the main entry of PyFunceble.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,7 +56,6 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
 
 import warnings
 from datetime import datetime

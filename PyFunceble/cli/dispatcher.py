@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Dispatch between the diferrent cores from the CLI.
+Dispatches between the diferrent cores (from the CLI.)
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,14 +57,13 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
 
 import PyFunceble
 
 from .execution_time import ExecutionTime
 
 
-class Dispatcher:  # pragma: no cover pylint: disable=too-few-public-methods, too-many-arguments
+class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
     """
     Dispatch to the right brain side.
 

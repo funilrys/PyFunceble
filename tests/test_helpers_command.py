@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.command
+Tests of PyFunceble.helpers.command
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -70,7 +70,7 @@ from stdout_base import StdoutBase
 
 class TestCommand(StdoutBase):
     """
-    Tests of the PyFunceble.helpers.command.
+    Tests of PyFunceble.helpers.command.
     """
 
     def test_execute(self):

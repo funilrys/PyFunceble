@@ -69,7 +69,7 @@ from PyFunceble.extractor import ExpirationDate
 
 class TestExpirationDate(TestCase):
     """
-    Tests of the PyFunceble.engine.expiration_date.
+    Tests of PyFunceble.engine.expiration_date.
     """
 
     def setUp(self):
@@ -161,7 +161,7 @@ class TestExpirationDate(TestCase):
 
     def test_extractor(self):
         """
-        Tests of the extractor.
+        Tests extractor.
         """
 
         expected = "02-jan-2017"

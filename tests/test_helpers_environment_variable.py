@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.environement_variable
+Tests of PyFunceble.helpers.environement_variable
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -69,7 +69,7 @@ from PyFunceble.helpers import EnvironmentVariable
 
 class TestEnvironmentVariable(TestCase):
     """
-    Tests of the PyFunceble.helpers.environement_variable
+    Tests of PyFunceble.helpers.environement_variable
     """
 
     def test_name_exists(self):

@@ -1,4 +1,3 @@
-# pylint: disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provide the logic for a file test from the CLI.
+Provides the file testing core interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,7 +57,6 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
 
 from domain2idna import get as domain2idna
 

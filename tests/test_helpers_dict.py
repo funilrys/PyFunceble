@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Tests of the PyFunceble.helpers.dict
+Tests of PyFunceble.helpers.dict
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -68,7 +68,7 @@ from PyFunceble.helpers import Dict, File
 
 class TestDict(TestCase):
     """
-    Tests of the PyFunceble.helpers.dict.
+    Tests of PyFunceble.helpers.dict.
     """
 
     def setUp(self):

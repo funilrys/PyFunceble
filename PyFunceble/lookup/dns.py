@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -58,7 +57,6 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
 
 from socket import IPPROTO_TCP, gaierror, getaddrinfo, gethostbyaddr, herror
 

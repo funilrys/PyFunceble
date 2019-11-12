@@ -70,13 +70,13 @@ from PyFunceble.converter.internal_url import InternalUrl
 
 class TestInternalURL(TestCase):
     """
-    Tests of the PyFunceble.converters.internal_url
+    Tests of PyFunceble.converters.internal_url
     """
 
     @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0.dev (Hello, World)")
     def test_nothing_to_do(self):
         """
-        Tests of the case that there is no changes.
+        Tests case that there is no changes.
         """
 
         expected = (
@@ -90,7 +90,7 @@ class TestInternalURL(TestCase):
     @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0. (Hello, World)")
     def test_from_dev_to_master(self):
         """
-        Tests of the case that there is no changes.
+        Tests case that there is no changes.
         """
 
         given = "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"
@@ -104,7 +104,7 @@ class TestInternalURL(TestCase):
     @patch("PyFunceble.abstracts.Package.VERSION", "1.0.0.dev (Hello, World)")
     def test_from_master_to_dev(self):
         """
-        Tests of the case that there is no changes.
+        Tests case that there is no changes.
         """
 
         given = "https://raw.githubusercontent.com/funilrys/PyFuneceble/dev/test.json"

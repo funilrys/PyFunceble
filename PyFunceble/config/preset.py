@@ -12,7 +12,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provide a way to preset the configuration before launching a specific test type.
+Provides a way to preset the configuration before launching a specific test type.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom

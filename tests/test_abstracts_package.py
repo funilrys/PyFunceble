@@ -70,7 +70,7 @@ from PyFunceble.abstracts import Version
 
 class TestVersion(TestCase):
     """
-    Tests of the PyFunceble.abstracts.Version
+    Tests of PyFunceble.abstracts.Version
     """
 
     def test_split_version(self):
