@@ -94,7 +94,11 @@ class Url(GathererBase):
         Process the gathering.
         """
 
-        self.status["_status_source"] = self.status.status_source = "URL"
+        self.status.http_status_code = PyFunceble.lookup.HTTPCode(
+            self.subject, "url"
+        ).get()
+
+        self.status["_status_source"] = self.status.status_source = "HTTP Code"
 
         if PyFunceble.CONFIGURATION.local or self.status.url_syntax_validation:
             if self.status.http_status_code in self.active_list:

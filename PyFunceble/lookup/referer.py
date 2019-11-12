@@ -58,6 +58,8 @@ License:
     SOFTWARE.
 """
 
+from random import choice
+
 import PyFunceble
 
 
@@ -220,12 +222,16 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
         :return:
 
-            - :code:`None` if there is no referer.
+            - [0] :code:`None` if there is no referer.
 
-            - :code:`False` if the extension is unknown which implicitly means
+            - [0] :code:`False` if the extension is unknown which implicitly means
                that the subject is :code:`INVALID`
 
-        :rtype: None|False|str
+            - [0] :code:`str` The resolved IP to use.
+
+            - [1] :code:`str`, :code:`None` the domain referer.
+
+        :rtype: tuple
         """
 
         if not PyFunceble.CONFIGURATION.local:
@@ -259,26 +265,24 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
 
                         PyFunceble.LOGGER.debug(f"Referer: {referer}")
 
-                        # We return the extracted referer.
-                        return referer
+                        resolved_referer = PyFunceble.DNSLOOKUP.a_record(referer)
+
+                        PyFunceble.LOGGER.debug(f"Resolved Referer: {resolved_referer}")
+
+                        try:
+                            # We return the extracted referer.
+                            return choice(resolved_referer), referer
+                        except (IndexError, TypeError):
+                            return None, referer
 
                     # We are not authorized to use WHOIS for the test result.
 
-                    # We return None.
-                    return None
-
                 # The domain extension is not in the iana database.
-
-                # We return False, it is an invalid domain.
-                return False
 
             # The extension of the domain we are testing is not into
             # the list of ignored extensions.
 
-            # We return None, the domain does not have a whois server.
-            return None
-
         # We are running a test in a local network.
 
         # We return None.
-        return None
+        return None, None

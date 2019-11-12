@@ -58,10 +58,13 @@ License:
     SOFTWARE.
 """
 
+from random import choice
 from socket import AF_INET, SOCK_STREAM
 from socket import error as socket_error
 from socket import socket
 from socket import timeout as socket_timeout
+
+import PyFunceble
 
 from .referer import Referer
 
@@ -112,8 +115,13 @@ class WhoisLookup:
             if isinstance(server, str):
                 # The server is a str.
 
-                # We share it.
-                self.server = server
+                resolved_server = PyFunceble.DNSLOOKUP.a_record(server)
+
+                try:
+                    # We share it.
+                    self.server = choice(resolved_server)
+                except (IndexError, TypeError):
+                    self.server = None
             else:
                 # The server is not a str.
 
@@ -123,7 +131,7 @@ class WhoisLookup:
             # The server is not given or is None.
 
             # We get the server.
-            self.server = Referer(self.subject).get()
+            self.server = Referer(self.subject).get()[0]
 
         if timeout:
             # The timeout is given.
@@ -137,7 +145,7 @@ class WhoisLookup:
                 # The timeout is something we could not understand.
 
                 # We eaise an exception.
-                raise ValueError("`timeout` must be an integer or digit string.")
+                raise ValueError("`timeout` must be an integer or float.")
 
     def request(self):  # pragma: no cover
         """
