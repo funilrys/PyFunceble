@@ -507,17 +507,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         # We get the list of domains we are going to work with.
         already_tested = self.get_already_tested()
-        result = [
-            x
-            for x in already_tested
-            if not PyFunceble.Check(x).is_subdomain()
-            and PyFunceble.Check(x).is_domain()
-        ]
-
-        # We generate the one without "www." if "www." is given.
-        result.extend([x[4:] for x in result if x.startswith("www.")])
-        # We generate the one with "www." if "www." is not given.
-        result.extend(["www.{0}".format(x) for x in result if not x.startswith("www.")])
+        result = PyFunceble.get_complements(already_tested)
 
         # We remove the already tested subjects.
         return set(PyFunceble.helpers.List(result).format()) - already_tested
@@ -533,26 +523,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         if "complements" not in self.database[self.filename].keys():
             # The complements are not saved,
 
-            # We get the list of domains we are going to work with.
-            result = [
-                x
-                for x in self.get_already_tested()
-                if not PyFunceble.Check(x).is_subdomain()
-                and PyFunceble.Check(x).is_domain()
-            ]
-
-            # We generate the one without "www." if "www." is given.
-            result.extend([x[4:] for x in result if x.startswith("www.")])
-            # We generate the one with "www." if "www." is not given.
-            result.extend(
-                ["www.{0}".format(x) for x in result if not x.startswith("www.")]
-            )
+            already_tested = self.get_already_tested()
+            result = PyFunceble.get_complements(already_tested)
 
             # We remove the already tested subjects.
-            result = (
-                set(PyFunceble.helpers.List(result).format())
-                - self.get_already_tested()
-            )
+            result = set(PyFunceble.helpers.List(result).format()) - already_tested
 
             # We save the constructed list of complements
             self.database[self.filename]["complements"] = list(result)

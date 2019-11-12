@@ -685,3 +685,38 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         # If we are not under test which means that we want to save informations,
         # we initiate the directory structure.
         output.Constructor()
+
+
+def get_complements(subject, include_given=False):
+    """
+    Provides the complements of the given subject(s).
+
+    A complement is for example :code:`example.com` if :code:`www.example.com`
+    is given and vice-versa.
+
+    :param subject: The subject to get the complement for.
+    :type subject str, list
+
+    :param bool include_given:
+        Tell us to add the given one into the result.
+
+    :rtype: list
+    """
+
+    complements = []
+
+    if isinstance(subject, str):
+        checker = Check(subject)
+
+        if include_given and subject not in complements:
+            complements.append(subject)
+
+        if subject.startswith("www."):
+            complements.append(subject[4:])
+        elif checker.is_domain() and not checker.is_subdomain():
+            complements.append(f"www.{subject}")
+    elif isinstance(subject, (list, set)):
+        for subj in subject:
+            complements.extend(get_complements(subj, include_given=include_given))
+
+    return complements

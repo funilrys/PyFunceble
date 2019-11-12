@@ -80,6 +80,11 @@ class SimpleCore(CLICore):
         else:
             self.subject = subject
 
+        if PyFunceble.CONFIGURATION.generate_complements:
+            self.subject = PyFunceble.get_complements(self.subject, include_given=True)
+        else:
+            self.subject = self.subject
+
     def test(self, subject, subject_type):
         """
         Process a test of the given subject and return the result.
