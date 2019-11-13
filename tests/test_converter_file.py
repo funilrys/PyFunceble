@@ -150,6 +150,32 @@ class TestFileLineConverter(TestCase):
 
             self.assertEqual(expected, actual)
 
+    def tests_with_prefix_and_multiple_subjects(self):
+        """
+        Tests the case that a line has a decorator and multiple subjects.
+
+        For example:
+        ::
+
+            127.0.0.1 google.com example.com example.net
+        """
+
+        for domain in self.domains:
+            expected = [domain, "example.com", "example.net"]
+
+            data = f"0.0.0.0 {domain} example.com\t\texample.net"
+            actual = File(data).get_converted()
+
+            self.assertEqual(expected, actual)
+
+        for domain in self.domains:
+            expected = [domain, "example.com", "example.net"]
+
+            data = f"127.0.0.1 {domain} example.com\t\texample.net"
+            actual = File(data).get_converted()
+
+            self.assertEqual(expected, actual)
+
     def tests_multiple_spaces(self):
         """
         Tests the case that we have multiple space as sparator between

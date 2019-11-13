@@ -103,13 +103,14 @@ class File(ConverterBase):
                 subject = subject[: subject.find(self.comment_sign)].strip()
 
             if self.space_sign in subject or self.tab_sign in subject:
-                splited = subject.split()
-
                 # As there was a space or a tab in the string, we consider
                 # that we are working with the hosts file format which means
                 # that the domain we have to test is after the first string.
-                # So we set the index to 1.
-                return splited[1]
 
+                splited = subject.split()
+
+                if len(splited[1:]) > 1:
+                    return splited[1:]
+                return splited[1]
             return subject
         return None
