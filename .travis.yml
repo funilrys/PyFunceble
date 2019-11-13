@@ -4,20 +4,22 @@ env:
 
 jobs:
   include:
-    # - os: linux
-    #   dist: bionic
-    #   name: "Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
-    #   env:
-    #     - PYTHON_VERSION="3.8.0"
-    #     - TOXENV="py38"
-    # - os: osx
-    #   osx_image: xcode11.2
-    #   name: "Test with Python 3.8.0 under macOS 10.14 (Mojave)"
-    #   env:
-    #     - PYTHON_VERSION="3.8.0"
-    #     - TOXENV="py38"
     - stage: "Tests"
       language: generic
+      os: linux
+      dist: bionic
+      name: "Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Test with Python 3.8.0 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+    - language: generic
       os: linux
       dist: bionic
       name: "Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"

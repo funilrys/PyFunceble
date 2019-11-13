@@ -135,7 +135,7 @@ if __name__ == "__main__":
     setup(
         name="PyFunceble-dev",
         version=_get_version(),
-        python_requires=">=3.6, <4, <3.8",
+        python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
         description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",
         long_description=_get_long_description(),
