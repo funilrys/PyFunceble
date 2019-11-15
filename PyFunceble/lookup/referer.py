@@ -259,7 +259,7 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                             )
 
                             # And we handle and return None status.
-                            return None
+                            return None, None
 
                         # The referer is into the database.
 
