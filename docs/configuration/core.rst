@@ -252,7 +252,7 @@
 .. warning:
     This feature is not supported for the URL testing.
 
-.. _domain2idna: https://github.com/funilrys/domain2idna
+.. _domain2idna: https://github.com/PyFunceble/domain2idna
 
 :code:`inactive_database`
 -------------------------

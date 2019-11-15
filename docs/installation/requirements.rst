@@ -46,11 +46,11 @@ As we propose the conversion of domains to IDNA, :code:`domain2idna` is required
 
 .. note::
     :code:`domain2idna` is maintained and developed by
-    `Nissar Chababy (@funilrys)`_, the main developer of PyFunceble.
+    `Nissar Chababy (@funilrys)`_, the developer of PyFunceble.
     Its source code can be found `on GitHub`_.
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
-.. _on GitHub: https://github.com/funilrys/domain2idna
+.. _on GitHub: https://github.com/PyFunceble/domain2idna
 
 :code:`PyMySQL`
 ---------------
