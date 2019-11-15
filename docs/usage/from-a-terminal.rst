@@ -310,9 +310,6 @@ This argument generates or updates `iana-domains-db.json`.
 
 This argument allows the conversion of the domains using `domain2idna`_
 
-.. warning::
-    This feature is not supported yet for the URL testing.
-
 .. _domain2idna: https://github.com/PyFunceble/domain2idna
 
 :code:`-ip "something"`
