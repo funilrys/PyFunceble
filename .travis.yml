@@ -4,77 +4,122 @@ env:
 
 jobs:
   include:
-    - stage: "Tests"
+    - stage: "Code Tests"
       language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.8.0"
         - TOXENV="py38"
+      script:
+        - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Test with Python 3.8.0 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.8.0 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.8.0"
         - TOXENV="py38"
+      script:
+        - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.7.5"
         - TOXENV="py37"
+      script:
+        - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Test with Python 3.7.5 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.7.5 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.7.5"
         - TOXENV="py37"
+      script:
+        - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.7.4 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code test with Python 3.7.4 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.7.4"
         - TOXENV="py37"
+      script:
+        - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Test with Python 3.7.4 under macOS 10.14 (Mojave)"
+      name: "Code test with Python 3.7.4 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.7.4"
         - TOXENV="py37"
+      script:
+        - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.9"
         - TOXENV="py36"
+      script:
+        - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Test with Python 3.6.9 under macOS 10.14 (Mojave)"
+      name: "Code test with Python 3.6.9 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.6.9"
         - TOXENV="py36"
+      script:
+        - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Test with Python 3.6.8 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code test with Python 3.6.8 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
+      script:
+        - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Test with Python 3.6.8 under macOS 10.14 (Mojave)"
+      name: "Code test with Python 3.6.8 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
+      script:
+        - tox --current-env
+
+
+
+    - stage: "CLI (running) Tests"
+      language: generic
+      os: linux
+      dist: bionic
+      name: "Run with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+      script:
+        - tox --current-env -c tox_run.ini
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Run with Python 3.8.0 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+      script:
+        - tox --current-env -c tox_run.ini
+
+
+
     - language: generic
       stage: "Deployements"
       os: linux
@@ -115,9 +160,6 @@ install:
   - conda --version
   - pip install pylint coverage coveralls codacy-coverage tox-current-env
   - pip install -e .
-
-script:
-  - tox --current-env
 
 after_success:
   - python-codacy-coverage -r coverage.xml
