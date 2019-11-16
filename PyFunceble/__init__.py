@@ -695,7 +695,7 @@ def get_complements(subject, include_given=False):
     is given and vice-versa.
 
     :param subject: The subject to get the complement for.
-    :type subject str, list
+    :type subject: str, list
 
     :param bool include_given:
         Tell us to add the given one into the result.

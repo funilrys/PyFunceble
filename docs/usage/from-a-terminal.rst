@@ -536,6 +536,30 @@ This argument will set the default timeout to apply everywhere it is possible to
 
 Want to use PyFunceble under Travis CI? This argument is suited for your need!
 
+:code:`--travis-distribution-branch`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the branch name where we are going to push the final results.
+
+    **Default value:** :code:`master`
+
+.. note::
+    The difference between this and :code:`--travis-branch` is the fact
+    that this branch will get the result only when the test were finished
+    under the given :code:`--travis-branch`.
+
+    As example, this allow us to have 2 branches:
+
+    - :code:`proceessing` (travis branch), for the tests with PyFunceble.
+    - :code:`master` (travis distribution branch), for the distribution of the results of PyFunceble.
+
+:code:`--travis-branch`
+^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the branch name where we are going to push.
+
+    **Default value:** :code:`master`
+
 :code:`-url "something"` | :code:`--url "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -598,7 +622,7 @@ Global overview
                     [--cmd-before-end CMD_BEFORE_END]
                     [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
                     [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                    [--complements] [-d DOMAIN] [-db]
+                    [--complements] [-d DOMAIN [DOMAIN ...]] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [--directory-structure]
                     [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-ex]
@@ -609,6 +633,7 @@ Global overview
                     [-nl] [-ns] [-nu] [-nw] [--percentage] [--plain]
                     [-p PROCESSES] [-psl] [-q] [--share-logs] [-s] [--split]
                     [--syntax] [-t TIMEOUT] [--travis]
+                    [--travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH]
                     [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
                     [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
@@ -648,7 +673,7 @@ Global overview
                                 complements. A complement is for example `example.org`
                                 if `www.example.org` is given and vice-versa.
                                 Configured value: False
-        -d DOMAIN, --domain DOMAIN
+        -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
                                 Set and test the given domain.
         -db, --database       Switch the value of the usage of a database to store
                                 inactive domains of the currently tested list.
@@ -742,6 +767,10 @@ Global overview
                                 value: 5.0
         --travis              Switch the value of the Travis mode.
                                 Configured value: False
+        --travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH
+                                Switch the branch name where we are going to push the
+                                final results. Configured value:
+                                'master'
         --travis-branch TRAVIS_BRANCH
                                 Switch the branch name where we are going to push.
                                 Configured value: 'master'

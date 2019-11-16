@@ -697,6 +697,18 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
+                    "--travis-distribution-branch",
+                    type=str,
+                    default="master",
+                    help="Switch the branch name where we are going to push the final results. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_branch)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
                     "--travis-branch",
                     type=str,
                     default="master",
@@ -951,6 +963,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.travis:
                     PyFunceble.CONFIGURATION.travis = preset.switch("travis")
+
+                if args.travis_distribution_branch:
+                    PyFunceble.CONFIGURATION.travis_distribution_branch = (
+                        args.travis_distribution_branch
+                    )
 
                 if args.travis_branch:
                     PyFunceble.CONFIGURATION.travis_branch = args.travis_branch

@@ -60,6 +60,7 @@ License:
 
 import sys
 from datetime import datetime, timedelta
+from itertools import repeat
 from os import sep as directory_separator
 
 import PyFunceble
@@ -201,6 +202,21 @@ class Travis:
             return filtered[filtered.find("@") + 1 :]
         raise ValueError("Could not find remote.")
 
+    @classmethod
+    def exec_commands(cls, commands):
+        """
+        Execute a set of commands.
+
+        :param list commands: A list of command to run.
+        """
+
+        for command, allow_stdout in commands:
+            if allow_stdout:
+                PyFunceble.LOGGER.debug(f"Executing: {repr(command)}")
+                PyFunceble.helpers.Command(command).run_to_stdout()
+            else:
+                PyFunceble.helpers.Command(command).execute()
+
     def init(self):
         """
         Init the TravisCI virtual machine.
@@ -239,14 +255,13 @@ class Travis:
                 (f'git config --global user.name "{git_name}"', True),
                 ("git config --global push.default simple", True),
                 (f'git checkout "{PyFunceble.CONFIGURATION.travis_branch}"', True),
+                (
+                    f'git pull origin "{PyFunceble.CONFIGURATION.travis_distribution_branch}"',
+                    False,
+                ),
             ]
 
-            for command, allow_stdout in commands:
-                if allow_stdout:
-                    PyFunceble.LOGGER.debug(f"Executing: {repr(command)}")
-                    PyFunceble.helpers.Command(command).run_to_stdout()
-                else:
-                    PyFunceble.helpers.Command(command).execute()
+            self.exec_commands(commands)
 
     def permissions(self):
         """
@@ -257,17 +272,16 @@ class Travis:
             build_dir = PyFunceble.helpers.EnvironmentVariable(
                 "TRAVIS_BUILD_DIR"
             ).get_value()
+
             commands = [
-                "sudo chown -R travis:travis %s" % (build_dir),
-                "sudo chgrp -R travis %s" % (build_dir),
-                "sudo chmod -R g+rwX %s" % (build_dir),
-                "sudo chmod 777 -Rf %s.git" % (build_dir + directory_separator),
-                r"sudo find %s -type d -exec chmod g+x '{}' \;" % (build_dir),
+                f"sudo chown -R travis:travis {build_dir}",
+                f"sudo chgrp -R travis {build_dir}",
+                f"sudo chmod -R g+rwX {build_dir}",
+                f"sudo chmod 777 -Rf {build_dir}{directory_separator}.git",
+                f"sudo find {build_dir} -type d -exec chmod g+x '{{}}' \;",  # pylint: disable=anomalous-backslash-in-string
             ]
 
-            for command in commands:
-                PyFunceble.helpers.Command(command).execute()
-                PyFunceble.LOGGER.debug(f"Executed: {command}")
+            self.exec_commands(zip(commands, repeat(False)))
 
             if (
                 PyFunceble.helpers.Command("git config core.sharedRepository").execute()
@@ -298,9 +312,7 @@ class Travis:
 
         if self.authorized:
 
-            command = "git push origin {0}".format(
-                PyFunceble.CONFIGURATION.travis_branch
-            )
+            command = f"git push origin {PyFunceble.CONFIGURATION.travis_branch}"
 
             PyFunceble.helpers.Command(command).execute()
             PyFunceble.LOGGER.info(f"Executed: {command}")
@@ -316,8 +328,9 @@ class Travis:
             PyFunceble.output.Percentage().log()
             self.permissions()
 
-            command = 'git add --all && git commit -a -m "{0}"'.format(
-                PyFunceble.CONFIGURATION.travis_autosave_final_commit + " [ci skip]"
+            command = (
+                f"git add --all && git commit -a "
+                f'-m "{PyFunceble.CONFIGURATION.travis_autosave_final_commit} [ci skip]"'
             )
 
             if PyFunceble.CONFIGURATION.command_before_end:
@@ -334,6 +347,21 @@ class Travis:
 
             PyFunceble.helpers.Command(command).run_to_stdout()
             self.push()
+
+            # We now merge to the destination branch.
+            commands = [
+                (
+                    f'git checkout "{PyFunceble.CONFIGURATION.travis_distribution_branch}"',
+                    True,
+                ),
+                (f'git pull origin "{PyFunceble.CONFIGURATION.travis_branch}"', False),
+                (
+                    f'git push origin "{PyFunceble.CONFIGURATION.travis_distribution_branch}"',
+                    False,
+                ),
+            ]
+
+            self.exec_commands(commands)
 
     def not_end_commit(self):
         """

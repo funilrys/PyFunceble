@@ -518,6 +518,25 @@
 .. note::
     As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes.
 
+:code:`travis_distribution_branch`
+----------------------------------
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`master`
+
+    **Description:** Set the git branch where we are going to push our results.
+
+.. note::
+    The difference between this and :code:`travis_branch` is the fact
+    that this branch will get the result only when the test were finished
+    under the given :code:`travis_branch`.
+
+    As example, this allow us to have 2 branches:
+
+    - :code:`proceessing` (travis branch), for the tests with PyFunceble.
+    - :code:`master` (travis distribution branch), for the distribution of the results of PyFunceble.
+
 :code:`travis_branch`
 ---------------------
 
