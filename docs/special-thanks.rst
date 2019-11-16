@@ -43,6 +43,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Saurabh Kumar - `@theskumar`_ (`python-dotenv`_)
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   spirillen - `@spirillen`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
 -   `yWorks`_ - (`yEd Graph Editor`_)
 
@@ -74,6 +75,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _@rthalley: https://github.com/rthalley
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
+.. _@spirillen: https://github.com/spirillen
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@yaml: https://github.com/yaml

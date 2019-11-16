@@ -192,26 +192,29 @@ class MultiprocessCore(
         Read all results and put them at the right location.
         """
 
-        if not self.autosave.authorized:
-            print(
-                Fore.MAGENTA
-                + Style.BRIGHT
-                + "\nMerging cross processes data... This process may take some time."
-            )
+        if manager_data is not None:
+            if not self.autosave.authorized:
+                print(
+                    Fore.MAGENTA
+                    + Style.BRIGHT
+                    + "\nMerging cross processes data... This process may take some time."
+                )
 
-        for test_output in manager_data:
-            if self.autosave.authorized:
-                print(Fore.MAGENTA + Style.BRIGHT + "Merging process data ...")
+            for test_output in manager_data:
+                if self.autosave.authorized:
+                    print(Fore.MAGENTA + Style.BRIGHT + "Merging process data ...")
 
-            self.post_test_treatment(
-                test_output,
-                self.file_type,
-                complements_test_started=self.complements_test_started,
-                auto_continue_db=self.autocontinue,
-                inactive_db=self.inactive_db,
-                mining=self.mining,
-                whois_db=self.whois_db,
-            )
+                self.post_test_treatment(
+                    test_output,
+                    self.file_type,
+                    complements_test_started=self.complements_test_started,
+                    auto_continue_db=self.autocontinue,
+                    inactive_db=self.inactive_db,
+                    mining=self.mining,
+                    whois_db=self.whois_db,
+                )
+
+            manager_data[:] = []
 
         self.autocontinue.save()
         self.inactive_db.save()
@@ -219,8 +222,6 @@ class MultiprocessCore(
 
         self.generate_files()
         self.cleanup(self.autocontinue, self.autosave, test_completed=False)
-
-        manager_data[:] = []
 
     def __check_exception(self, processes, manager_data):
         """
