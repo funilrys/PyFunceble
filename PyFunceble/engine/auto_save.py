@@ -191,7 +191,7 @@ class Travis:
         remote_of_interest = [
             x
             for x in PyFunceble.helpers.Command("git remote -v").execute().splitlines()
-            if "(push)" in x
+            if "(fetch)" in x
         ][0]
 
         filtered = PyFunceble.helpers.Regex(regex).match(
@@ -200,6 +200,9 @@ class Travis:
 
         if filtered and "@" in filtered:
             return filtered[filtered.find("@") + 1 :]
+
+        if filtered and "//" in filtered:
+            return filtered[filtered.find("//") + 2 :]
         raise ValueError("Could not find remote.")
 
     @classmethod
