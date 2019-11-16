@@ -308,9 +308,11 @@ class Travis:
 
             self.end_commit()
 
-    def push(self):
+    def push(self, exit_it=True):
         """
         Push.
+
+        :param bool exit_it: Allow us to directly exit after pushing.
         """
 
         if self.authorized:
@@ -320,7 +322,8 @@ class Travis:
             PyFunceble.helpers.Command(command).execute()
             PyFunceble.LOGGER.info(f"Executed: {command}")
 
-            sys.exit(0)
+            if exit_it:
+                sys.exit(0)
 
     def end_commit(self):
         """
@@ -349,7 +352,7 @@ class Travis:
             PyFunceble.LOGGER.info(f"Executing: {command}")
 
             PyFunceble.helpers.Command(command).run_to_stdout()
-            self.push()
+            self.push(exit_it=False)
 
             # We now merge to the destination branch.
             commands = [
@@ -365,6 +368,7 @@ class Travis:
             ]
 
             self.exec_commands(commands)
+            sys.exit(0)
 
     def not_end_commit(self):
         """
