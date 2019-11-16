@@ -511,7 +511,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                                 f"{repr(self.filename)} and from "
                                 f"the {repr(self.table_name)} table."
                             )
-                else: # pragma: no cover
+                else:  # pragma: no cover
                     break
 
             if not self[subject]:  # pragma: no cover
