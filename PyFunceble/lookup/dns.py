@@ -564,7 +564,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
                 # We delete it.
                 del result["addr_info"]
-        else:
+        elif result:
             result["nameservers"] = self.resolver.nameservers
 
         PyFunceble.LOGGER.debug(
@@ -601,7 +601,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             del result["PTR"]
 
             PyFunceble.LOGGER.error(f"PTR record for {repr(subject)} not found.")
-        else:
+        elif result["PTR"]:
             result["nameservers"] = self.resolver.nameservers
 
         if not result:
