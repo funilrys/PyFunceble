@@ -61,6 +61,7 @@ License:
 
 import warnings
 from getpass import getpass
+from os import sep as directory_separator
 
 import pymysql
 
@@ -71,6 +72,8 @@ class MySQL:
     """
     Provide our way to work with our mysql/mariadb database.
     """
+
+    # pylint: disable=no-member
 
     variables = {
         "host": {"env": "PYFUNCEBLE_DB_HOST", "default": "localhost"},
@@ -274,13 +277,24 @@ class MySQL:
                 self.save_to_env_file(self.env_content, self.pyfunceble_env_location)
                 self.initiated = True
 
+            if directory_separator not in self._host or "/" not in self._host:
+                return pymysql.connect(
+                    host=self._host,
+                    port=self._port,
+                    user=self._username,
+                    password=self._password,
+                    db=self._name,
+                    charset=self._charset,
+                    cursorclass=pymysql.cursors.DictCursor,
+                    autocommit=True,
+                )
+
             return pymysql.connect(
-                host=self._host,  # pylint: disable=no-member
-                port=self._port,  # pylint: disable=no-member
-                user=self._username,  # pylint: disable=no-member
-                password=self._password,  # pylint: disable=no-member
-                db=self._name,  # pylint: disable=no-member
-                charset=self._charset,  # pylint: disable=no-member
+                unix_socket=self._host,
+                user=self._username,
+                password=self._password,
+                db=self._name,
+                charset=self._charset,
                 cursorclass=pymysql.cursors.DictCursor,
                 autocommit=True,
             )
@@ -302,11 +316,7 @@ class MySQL:
                         "AND table_name = %(table_name)s "
                     )
                     cursor.execute(
-                        query,
-                        {
-                            "database_name": self._name,  # pylint: disable=no-member
-                            "table_name": table_name,
-                        },
+                        query, {"database_name": self._name, "table_name": table_name,},
                     )
 
                     result = cursor.fetchone()

@@ -38,7 +38,7 @@ Here is the list of environment variables we use and how we use them if they are
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MySQL charset to use.                                                                              |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host of the MySQL database.                                                                        |
+| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host or the Unix socket (absolute file path) of the MySQL database.                                |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_NAME`            | Tell us the name of the MySQL database to use.                                                                 |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------+
