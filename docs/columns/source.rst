@@ -10,7 +10,8 @@ This source is returned when **all the following cases** are met:
 
 - We can't extract the expiration date from :func:`~PyFunceble.whois.Whois.request`.
 - The :code:`INACTIVE` status is the one returned by other methods.
-- :func:`~PyFunceble.http_code.HTTPCode.get` outputs is one the following :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
+- :func:`~PyFunceble.http_code.HTTPCode.get` outputs is different from the default one
+  (:code:`XXX`) and the other methods provides the :code:`INACTIVE` status.
 
 SYNTAX
 ------
@@ -36,7 +37,7 @@ So I introduced the SPECIAL source.
 .. warning::
     Do not want those rules ? You can use following to disable them.
 
-    * :code:`-ns`|:code:`--no-special` arguments from the CLI.
+    * :code:`-ns|--no-special` arguments from the CLI.
     * :code:`no_special: True` into your local configuration file.
 
 :code:`*.blogspot.*`

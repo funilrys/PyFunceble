@@ -78,6 +78,8 @@ class GathererBase:
         An instance of the inactive db interface.
     """
 
+    # pylint: disable=no-member
+
     def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
         if not subject:
             raise PyFunceble.exceptions.UnknownSubject(subject)
@@ -113,3 +115,17 @@ class GathererBase:
         """
 
         return self.status.get()
+
+    def gather_http_status_code(self):
+        """
+        Univertialy gather the status code.
+        """
+
+        if self.status.ipv6_syntax_validation:
+            self.status.http_status_code = PyFunceble.lookup.HTTPCode(
+                self.subject, "ipv6"
+            ).get()
+        else:
+            self.status.http_status_code = PyFunceble.lookup.HTTPCode(
+                self.subject, self.subject_type
+            ).get()

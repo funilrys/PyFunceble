@@ -1,7 +1,7 @@
 Status
 ======
 
-There's 3 possible output for this column.
+There's 4 possible output for this column.
 
 ACTIVE
 ------
@@ -14,14 +14,14 @@ This status is returned when **one of the following cases** is met:
       We don't check if the extracted date is in the past.
 
 
-- :func:`~PyFunceble.lookup.dns.DNSLookup.request` don't return an error.
-
-   - *Please note that we don't read the returned value.*
+- :func:`~PyFunceble.lookup.dns.DNSLookup.request` don't returns :code:`None`.
 
    .. note::
-      We distribute but don't take the non-:code:`None` retuned value in consideration.
+      We don't read nor interpret the returned data.
 
-- :func:`~PyFunceble.lookup.http_code.HTTPCode.get` return one the following code :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
+- :func:`~PyFunceble.lookup.dns.DNSLookup.request` returns :code:`None`,
+  :func:`~PyFunceble.lookup.whois.WhoisLookup.request` provides nothing exploitable,
+  but :func:`~PyFunceble.lookup.http_code.HTTPCode.get` returned something which is not the default value (:code:`XXX`).
 
 INACTIVE
 --------

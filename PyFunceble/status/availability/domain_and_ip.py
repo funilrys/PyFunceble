@@ -131,35 +131,42 @@ class DomainAndIp(GathererBase):
 
         return expiration_date, whois_record
 
-    def __gather_dns_lookup(self):
+    def __gather_extra_rules(self):
         """
-        Handle the lack of WHOIS record by doing a DNS Lookup.
+        Handle the lack of WHOIS record.
         """
-
-        self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
 
         if self.status["_status"].lower() not in PyFunceble.STATUS.list.invalid:
-            if self.status.dns_lookup:
-                self.status["_status"] = PyFunceble.STATUS.official.up
-            else:
-                self.status["_status"] = PyFunceble.STATUS.official.down
+            if self.status["_status"].lower() in PyFunceble.STATUS.list.down:
+                self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
 
-            PyFunceble.LOGGER.debug(
-                f'[{self.subject}] State before extra rules:\n{self.status["_status"]}'
-            )
+                if self.status.dns_lookup:
+                    self.status["_status"] = PyFunceble.STATUS.official.up
+                    self.status["_status_source"] = "DNSLOOKUP"
+                else:
+                    self.status["_status"] = PyFunceble.STATUS.official.down
+                    self.status["_status_source"] = "DNSLOOKUP"
 
-            self.status.status, self.status.status_source = ExtraRules(
-                self.subject, self.subject_type, self.status.http_status_code
-            ).handle(self.status["_status"], self.status["_status_source"])
+                    # Everything else returned INVALID. So we get the status code.
+                    self.gather_http_status_code()
         else:
+            self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
+
             if self.status.dns_lookup:
+                # This is a safety. Indeed, as I may not be that reactive in the
+                # future, this allow a new rule to be checked with the dns lookup
+                # logic.
+
                 self.status["_status"] = PyFunceble.STATUS.official.up
                 self.status["_status_source"] = "DNSLOOKUP"
 
-            self.status.status, self.status.status_source = (
-                self.status["_status"],
-                self.status["_status_source"],
-            )
+        PyFunceble.LOGGER.debug(
+            f'[{self.subject}] State before extra rules:\n{self.status["_status"]}'
+        )
+
+        self.status.status, self.status.status_source = ExtraRules(
+            self.subject, self.subject_type, self.status.http_status_code
+        ).handle(self.status["_status"], self.status["_status_source"])
 
     def __gather(self):
         """
@@ -175,15 +182,6 @@ class DomainAndIp(GathererBase):
             or self.status.domain_syntax_validation
             or ip_validation
         ):
-            if self.status.ipv6_syntax_validation:
-                self.status.http_status_code = PyFunceble.lookup.HTTPCode(
-                    self.subject, "ipv6"
-                ).get()
-            else:
-                self.status.http_status_code = PyFunceble.lookup.HTTPCode(
-                    self.subject, self.subject_type
-                ).get()
-
             if not self.status.subdomain_syntax_validation:
                 (
                     self.status.expiration_date,
@@ -191,23 +189,22 @@ class DomainAndIp(GathererBase):
                 ) = self.__gather_expiration_date()
 
                 if isinstance(self.status.expiration_date, str):
-                    self.status["_status_source"] = self.status.status_source = "WHOIS"
-                    self.status[
-                        "_status"
-                    ] = self.status.status = PyFunceble.STATUS.official.up
+                    self.status["_status_source"] = "WHOIS"
+                    self.status["_status"] = PyFunceble.STATUS.official.up
+                    self.__gather_extra_rules()
                 else:
-                    self.status["_status_source"] = "DNSLOOKUP"
+                    self.status["_status_source"] = "WHOIS"
                     self.status["_status"] = PyFunceble.STATUS.official.down
-                    self.__gather_dns_lookup()
+                    self.__gather_extra_rules()
             else:
-                self.status["_status_source"] = "DNSLOOKUP"
+                self.status["_status_source"] = "SYNTAX"
                 self.status["_status"] = PyFunceble.STATUS.official.down
-                self.__gather_dns_lookup()
+                self.__gather_extra_rules()
         else:
             self.status["_status_source"] = "SYNTAX"
             self.status["_status"] = PyFunceble.STATUS.official.invalid
 
-            self.__gather_dns_lookup()
+            self.__gather_extra_rules()
 
         PyFunceble.output.Generate(
             self.subject,

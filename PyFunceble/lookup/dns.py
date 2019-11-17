@@ -281,6 +281,40 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
+    def dname_record(self, subject, tcp=None):  # pragma: no cover
+        """
+        Return the DNAME record of the given subject (if found).
+
+        :param str subject: The subject we are working with.
+        :param bool tcp: Tell us to use TCP for query.
+
+        :return: A list of DNAME record(s).
+        :rtype: list, None
+        :raise ValueError: When a non string :code:`subject` is given.
+        """
+
+        if not subject or not isinstance(subject, str):
+            raise ValueError(f"<subject> must be of type {str} and not empty.")
+
+        if tcp is None:
+            tcp = self.tcp
+
+        PyFunceble.LOGGER.debug(f"Query over TCP: {self.tcp}")
+
+        try:
+            PyFunceble.LOGGER.info(f"Getting DNAME record of {repr(subject)}")
+            # We get the A record of the given subject.
+            result = [str(x) for x in self.resolver.query(subject, "DNAME", tcp=tcp)]
+            PyFunceble.LOGGER.info(
+                f"Could get DNAME record of {repr(subject)}: {result}"
+            )
+
+            return result
+        except DNSException:
+            PyFunceble.LOGGER.error(f"Could not get DNAME record of {repr(subject)}")
+
+        return None
+
     def mx_record(self, subject, tcp=None):
         """
         Return the MX record of the given subject (if found).
@@ -478,6 +512,63 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
+    def __request_complete_not_ip(self, subject, tcp=None):  # pragma: no cover
+        """
+        Requests and provides the complete DNS spectrum.
+
+        :rtype: dict
+        """
+
+        result = {}
+
+        # We get the A record of the given subject.
+        result["A"] = self.a_record(subject, tcp=tcp)
+
+        # We get the AAAA record of the given subject.
+        result["AAAA"] = self.aaaa_record(subject, tcp=tcp)
+
+        # We get the CNAME record of the given subject.
+        result["CNAME"] = self.cname_record(subject, tcp=tcp)
+
+        # We get the DNAME record of the given subject.
+        result["DNAME"] = self.dname_record(subject, tcp=tcp)
+
+        # We get the MX record of the given subject.
+        result["MX"] = self.mx_record(subject, tcp=tcp)
+
+        # We get the TXT record of the given subject.
+        result["TXT"] = self.txt_record(subject, tcp=tcp)
+
+        if "A" in result and result["A"]:
+            # We could get some A record(s).
+
+            # We initiate the PTR.
+            result["PTR"] = []
+
+            for a_result in result["A"]:
+                # We loop through the list of A records.
+
+                if "." not in a_result:  # pragma: no cover
+                    # There is no "." in the currently
+                    # read A record.
+
+                    # We continue the loop.
+                    continue
+
+                try:
+                    # We get the PTR record of the currently read A record.
+                    result["PTR"].extend(self.ptr_record(a_result, tcp=tcp))
+                except TypeError:  # pragma: no cover
+                    pass
+
+            if not all(result["PTR"]):  # pragma: no cover
+                # No PTR record was found.
+
+                # We delete the PTR entry.
+                del result["PTR"]
+
+        return result
+
     def __request_not_ip(self, subject, complete=False, tcp=None):  # pragma: no cover
         """
         Handle the request for a subject which is not an IP.
@@ -500,49 +591,17 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         result["NS"] = self.ns_record(subject, tcp=tcp)
 
         if complete:  # pragma: no cover
+            result = PyFunceble.helpers.Merge(
+                self.__request_complete_not_ip(subject, tcp=tcp)
+            ).into(result)
 
-            # We get the A record of the given subject.
-            result["A"] = self.a_record(subject, tcp=tcp)
-
-            # We get the AAAA record of the given subject.
-            result["AAAA"] = self.aaaa_record(subject, tcp=tcp)
-
-            # We get the CNAME record of the given subject.
+        if "CNAME" not in result and not result["NS"]:
+            # As sometime we may not have a NS but a CNAME, we handle that case.
             result["CNAME"] = self.cname_record(subject, tcp=tcp)
 
-            # We get the MX record of the given subject.
-            result["MX"] = self.mx_record(subject, tcp=tcp)
-
-            # We get the TXT record of the given subject.
-            result["TXT"] = self.txt_record(subject, tcp=tcp)
-
-            if "A" in result and result["A"]:
-                # We could get some A record(s).
-
-                # We initiate the PTR.
-                result["PTR"] = []
-
-                for a_result in result["A"]:
-                    # We loop through the list of A records.
-
-                    if "." not in a_result:  # pragma: no cover
-                        # There is no "." in the currently
-                        # read A record.
-
-                        # We continue the loop.
-                        continue
-
-                    try:
-                        # We get the PTR record of the currently read A record.
-                        result["PTR"].extend(self.ptr_record(a_result, tcp=tcp))
-                    except TypeError:  # pragma: no cover
-                        pass
-
-                if not all(result["PTR"]):  # pragma: no cover
-                    # No PTR record was found.
-
-                    # We delete the PTR entry.
-                    del result["PTR"]
+        if ("CNAME" not in result or not result["CNAME"]) and "DNAME" not in result:
+            # Same but with DNAME.
+            result["DNAME"] = self.dname_record(subject, tcp=tcp)
 
         # We get the list of index to delete.
         to_delete = [x for x in result if not result[x]]
@@ -564,7 +623,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
                 # We delete it.
                 del result["addr_info"]
-        else:
+        elif result:
             result["nameservers"] = self.resolver.nameservers
 
         PyFunceble.LOGGER.debug(
@@ -601,7 +660,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             del result["PTR"]
 
             PyFunceble.LOGGER.error(f"PTR record for {repr(subject)} not found.")
-        else:
+        elif result["PTR"]:
             result["nameservers"] = self.resolver.nameservers
 
         if not result:
@@ -644,6 +703,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                         "A": [],
                         "AAAA": [],
                         "CNAME": [],
+                        "DNAME": [],
                         "MX": [],
                         "NS": [],
                         "TXT": [],

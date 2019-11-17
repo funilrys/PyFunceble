@@ -81,8 +81,6 @@ class Status:
         The result of the DNS Lookup logic.
     :ivar bool domain_syntax_validation:
         The domain syntax validation status.
-    :ivar list, None dns_lookup:
-        The DNS lookup status.
     :ivar str expiration_date:
         The expiration date of the subject.
     :ivar str http_status_code:
@@ -111,6 +109,8 @@ class Status:
     :ivar str whois_record:
         The WHOIS record.
     """
+
+    # pylint: disable=no-member, attribute-defined-outside-init
 
     resulting_indexes = [
         "_status_source",

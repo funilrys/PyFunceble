@@ -358,6 +358,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         try:
+
             if self.status_code in PyFunceble.HTTP_CODE.list.up:
                 # The extracted http code is in the list of up codes.
 
@@ -391,6 +392,22 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                     # And we return the new status and source
                     return self.__http_status_code_up()
+
+            if (
+                previous_state.lower() in PyFunceble.STATUS.list.down
+                and self.status_code != PyFunceble.HTTP_CODE.not_found_default
+            ):
+                # We generate the analytics files.
+                PyFunceble.output.Generate(
+                    self.subject, self.subject_type, previous_state
+                ).analytic_file("potentially_up")
+
+                PyFunceble.LOGGER.info(
+                    "[{self.subject}] Switching status according to status code rule."
+                )
+
+                # And we return the new status and source
+                return self.__http_status_code_up()
 
             if (
                 previous_state.lower() not in PyFunceble.STATUS.list.down
