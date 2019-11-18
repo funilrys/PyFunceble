@@ -239,7 +239,7 @@ Want to know the execution time of your test? Well, this argument will let you k
 :code:`-f "something"` | :code:`--file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read the given file and test all domains inside it. If a URL is given we download and test the content of the given URL.
+    Read the given file and test all domains inside it. You can also provide a URL directly and PyFunceble will downloadit, and test the content of the given URL as if it was a local stored file.
 
 .. note::
     We consider one line as one domain or one commented line. A line can be commented at the end.
@@ -358,7 +358,11 @@ Want to run a test over a local or private network? This argument will disable t
 :code:`--link "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Download and test the given file.
+    Download and test the a hosted file for domains inside it. You can download 
+        remotely hosted files over http(s)?. The test will then be performed as 
+        if it was your local `/etc/hosts`
+    
+    You can do the same with the `-f` switch
 
 Want to test a raw link? This argument will download and test the given raw link.
 
@@ -573,8 +577,17 @@ Want to test the availability or an URL? Enjoy this argument!
 :code:`-uf "something"` | :code:`--url-file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read and test the list of URL of the given file.
-    If a URL is given we download and test the list (of URL) of  the given URL content.
+    Read and test the list of http(s)?://URL of a given file.
+    If a URL is given we download and test weather the full url's in that list. The `-uf` test if and url returns the http 200 code. It do not test the domains, only full urls.
+    
+.. example::
+    ```
+    PyFunceble -uf https://gitlab.com/my-privacy-dns/matrix/matrix/blob/master/source.list
+    ```
+    
+    This will then test urls inside that list, and fetch the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+    This is done by using the (http(s)?://*) and _not_ whois or DNS lookup of domains/IP.
+    See also: :code:`-u "something"`
 
 .. note::
     We consider one line as one URL to test.
@@ -697,9 +710,11 @@ Global overview
                                 value: False
         -ex, --execution      Switch the default value of the execution time
                                 showing. Configured value: False
-        -f FILE, --file FILE  Read the given file and test all domains inside it. If
+        -f FILE, --file FILE  Read a given file and test all domains inside it. If
                                 a URL is given we download and test the content of the
-                                given URL.
+                                given domains.
+                                The -f will work on both local and hosted files over 
+                                http(s)?
         --filter FILTER       Domain to filter (regex).
         --help                Show this help message and exit.
         --hierarchical        Switch the value of the hierarchical sorting of the
@@ -721,7 +736,8 @@ Global overview
                                 Configured value: False
         --local               Switch the value of the local network testing.
                                 Configured value: True
-        --link LINK           Download and test the given file.
+        --link LINK           Download and test a remotely hosted file for given
+                                domains listed. You can achief the same with `-f`
         --mining              Switch the value of the mining subsystem usage.
                                 Configured value: False
         -m, --multiprocess    Switch the value of the usage of multiple process.
@@ -774,11 +790,11 @@ Global overview
         --travis-branch TRAVIS_BRANCH
                                 Switch the branch name where we are going to push.
                                 Configured value: 'master'
-        -u URL, --url URL     Set and test the given URL.
+        -u URL, --url URL     Set and test a given URLs http(s)? status code.
         -uf URL_FILE, --url-file URL_FILE
                                 Read and test the list of URL of the given file. If a
-                                URL is given we download and test the list (of URL) of
-                                the given URL content.
+                                URL is given we download and test the list (of URLs) for
+                                the given URL http(s)? status code. See also '-u'
         -ua USER_AGENT, --user-agent USER_AGENT
                                 Set the user-agent to use and set every time we
                                 interact with everything which is not our logs sharing
