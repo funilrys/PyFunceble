@@ -239,7 +239,9 @@ Want to know the execution time of your test? Well, this argument will let you k
 :code:`-f "something"` | :code:`--file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read the given file and test all domains inside it. You can also provide a URL directly and PyFunceble will downloadit, and test the content of the given URL as if it was a local stored file.
+    Read the given file and test all domains inside it. You can also provide a URL to a source file
+    directly and PyFunceble will download it, and test the content of the given URL as
+    if it was a locally stored file. See also :code:`--link "something"`
 
 .. note::
     We consider one line as one domain or one commented line. A line can be commented at the end.
@@ -549,7 +551,7 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
 
 .. note::
     The difference between this and :code:`--travis-branch` is the fact
-    that this branch will get the result only when the test were finished
+    that this branch will get the final result only when the test is finished
     under the given :code:`--travis-branch`.
 
     As example, this allow us to have 2 branches:
@@ -560,7 +562,8 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
 :code:`--travis-branch`
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-    Switch the branch name where we are going to push.
+    Switch the branch name where we are going to push the temponary results.
+    This only works when :code:`--travis-distribution-branch` is set.
 
     **Default value:** :code:`master`
 
@@ -570,6 +573,7 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
     Set and test the given URL.
 
 Want to test the availability or an URL? Enjoy this argument!
+This will only test for the HTTP resonse code of provided urls, no DNS results are tested.
 
 .. note::
     When we test the availability of an URL, we check the HTTP status code of the given URL.
@@ -578,7 +582,8 @@ Want to test the availability or an URL? Enjoy this argument!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Read and test the list of http(s)?://URL of a given file.
-    If a URL is given we download and test weather the full url's in that list. The `-uf` test if and url returns the http 200 code. It do not test the domains, only full urls.
+    If a URL is given we download and test the full url's in that list. The `-uf` 
+    test if and url returns the http 200 code. It do not test the domains, only full urls.
     
 .. example::
     ```
@@ -710,11 +715,12 @@ Global overview
                                 value: False
         -ex, --execution      Switch the default value of the execution time
                                 showing. Configured value: False
-        -f FILE, --file FILE  Read a given file and test all domains inside it. If
-                                a URL is given we download and test the content of the
-                                given domains.
+        -f FILE, --file FILE  Read a given file and test the status of the domains
+                                domains inside that file. 
+                                If a URL is given to a source file, we download 
+                                and test the content of thoose domains.
                                 The -f will work on both local and hosted files over 
-                                http(s)?
+                                http(s)?. See also `--link`
         --filter FILTER       Domain to filter (regex).
         --help                Show this help message and exit.
         --hierarchical        Switch the value of the hierarchical sorting of the
@@ -788,7 +794,9 @@ Global overview
                                 final results. Configured value:
                                 'master'
         --travis-branch TRAVIS_BRANCH
-                                Switch the branch name where we are going to push.
+                                Switch the branch name where we are going to push the 
+                                in pregress test relusts. To set the final branch use
+                                `--travis-distribution-branch`
                                 Configured value: 'master'
         -u URL, --url URL     Set and test a given URLs http(s)? status code.
         -uf URL_FILE, --url-file URL_FILE
