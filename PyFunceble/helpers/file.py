@@ -111,15 +111,12 @@ class File:
             remove(file_path)
         return not self.exists(file_path=file_path)
 
-    def write(
-        self, data, overwrite=False, encoding="utf-8", newline="\n", file_path=None
-    ):
+    def write(self, data, overwrite=False, encoding="utf-8", file_path=None):
         """
         Write the given data into the given file path.
 
         :param str data: The data to write.
         :param str encoding: The encoding to use while opening the file.
-        :param str newline: The new line char to use.
         :param str file_path:
             The file path to check.
 
@@ -133,17 +130,13 @@ class File:
 
         if data and isinstance(data, str):
             if overwrite or not self.exists(file_path=file_path):
-                with open(
-                    file_path, "w", encoding=encoding, newline=newline
-                ) as file_stream:
+                with open(file_path, "w", encoding=encoding) as file_stream:
                     file_stream.write(data)
             else:
-                with open(
-                    file_path, "a", encoding=encoding, newline=newline
-                ) as file_stream:
+                with open(file_path, "a", encoding=encoding) as file_stream:
                     file_stream.write(data)
 
-    def read(self, file_path=None, encoding="utf-8", newline="\n"):
+    def read(self, file_path=None, encoding="utf-8"):
         """
         Read the given file path and return it's content.
 
@@ -154,7 +147,6 @@ class File:
                 If :code:`None` is given, we
                 report to the globally given file path.
         :param str encoding: The encoding to use.
-        :param str newline: The new line char to use.
         :rtype: str
         """
 
@@ -164,9 +156,7 @@ class File:
         data = None
 
         if self.exists(file_path):
-            with open(
-                self.path, "r", encoding=encoding, newline=newline
-            ) as file_stream:
+            with open(self.path, "r", encoding=encoding) as file_stream:
                 data = file_stream.read()
 
         return data

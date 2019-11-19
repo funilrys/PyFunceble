@@ -182,14 +182,15 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         :param bool include_entries_without_changes: Descriptive enough.
         """
 
-        to_select = (
-            "SELECT tested as subject, status, status_source, expiration_date, "
-            "http_status_code, whois_server, file_path "
-            "FROM {0} WHERE status = %(official_status)s "
-            "AND file_path = %(file_path)s ORDER BY subject ASC"
-        ).format(self.mysql_db.tables["tested"])
-
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
+
+            to_select = (
+                "SELECT tested as subject, status, status_source, expiration_date, "
+                "http_status_code, whois_server, file_path "
+                "FROM {0} WHERE status = %(official_status)s "
+                "AND file_path = %(file_path)s ORDER BY subject ASC"
+            ).format(self.mysql_db.tables["tested"])
+
             with self.mysql_db.get_connection() as cursor:
                 cursor.execute(
                     to_select, {"official_status": status, "file_path": self.file}
@@ -219,9 +220,6 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                                 and data["status"] not in self.list_of_up_statuses
                                 and data["subject"] in self.inactive_db.to_retest
                             )
-
-                        generate.prints_status_file()
-                        generate.unified_file()
 
     def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
@@ -413,17 +411,36 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 test_output["whois_record"],
             )
 
+        if (
+            PyFunceble.CONFIGURATION.db_type == "json"
+            and PyFunceble.CONFIGURATION.multiprocess
+        ):
+            generate = PyFunceble.output.Generate(
+                test_output["tested"],
+                f"file_{self.file_type}",
+                test_output["status"],
+                source=test_output["status_source"],
+                expiration_date=test_output["expiration_date"],
+                http_status_code=test_output["http_status_code"],
+                whois_server=test_output["whois_server"],
+                filename=self.file,
+                end=True,
+            )
+
+            generate.prints_status_file()
+            generate.unified_file()
+
     def cleanup(self, auto_continue_db, auto_save, test_completed=False):
         """
         Run the logic to run at the end of all test.
         """
 
-        self.sort_generated_files()
-
         auto_continue_db.update_counters()
-        self.sort_generated_files()
 
         if test_completed:
+            self.generate_files()
+            self.sort_generated_files()
+
             auto_continue_db.clean()
 
         auto_save.process(test_completed=test_completed)
@@ -512,5 +529,4 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.__test_line(subject)
             self.mining.remove(index, subject)
 
-        self.generate_files()
         self.cleanup(self.autocontinue, self.autosave, test_completed=True)

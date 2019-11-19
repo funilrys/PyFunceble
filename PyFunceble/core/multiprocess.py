@@ -171,19 +171,29 @@ class MultiprocessCore(
             subject = domain2idna(subject)
 
         if PyFunceble.CONFIGURATION.syntax:
-            result = APICore(subject, complete=True, is_parent=False).syntax(
-                file_content_type
-            )
+            result = APICore(
+                subject, complete=True, is_parent=False, db_file_name=self.file
+            ).syntax(file_content_type)
         else:
-            result = APICore(subject, complete=True, is_parent=False).availability(
-                file_content_type
-            )
+            result = APICore(
+                subject, complete=True, is_parent=False, db_file_name=self.file
+            ).availability(file_content_type)
 
         self.generate_complement_status_file(result["tested"], result["status"])
         self.save_into_database(result, self.file, self.mysql_db)
 
         if manager_data is not None:
             manager_data.append(result)
+        else:
+            self.post_test_treatment(
+                result,
+                self.file_type,
+                complements_test_started=self.complements_test_started,
+                auto_continue_db=self.autocontinue,
+                inactive_db=self.inactive_db,
+                mining=self.mining,
+                whois_db=self.whois_db,
+            )
 
         return result
 
@@ -220,7 +230,6 @@ class MultiprocessCore(
         self.inactive_db.save()
         self.mining.save()
 
-        self.generate_files()
         self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
     def __check_exception(self, processes, manager_data):
@@ -272,10 +281,11 @@ class MultiprocessCore(
         original_intern = PyFunceble.INTERN.copy()
 
         configuration = PyFunceble.CONFIGURATION.copy()
+
         configuration = Box(
             PyFunceble.helpers.Merge(
                 {
-                    "api_file_generation": True,
+                    "api_file_generation": PyFunceble.CONFIGURATION.db_type == "json",
                     "inactive_database": False,
                     "auto_continue": False,
                 }

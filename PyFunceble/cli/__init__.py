@@ -1036,7 +1036,10 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     generate_all_results_only=args.generate_all_files_from_database,
                 )
             except Exception as exception:
-                PyFunceble.LOGGER.exception()
+                try:
+                    PyFunceble.LOGGER.exception()
+                except AttributeError:
+                    pass
 
                 raise exception
 

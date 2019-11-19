@@ -214,13 +214,7 @@ class Dict:
         return None
 
     def to_json_file(
-        self,
-        file_path,
-        ensure_ascii=False,
-        indent=4,
-        sort_keys=True,
-        encoding="utf-8",
-        newline="\n",
+        self, file_path, ensure_ascii=False, indent=4, sort_keys=True, encoding="utf-8",
     ):
         """
         Converts the given :code:`dict` to JSON and save the result
@@ -230,10 +224,9 @@ class Dict:
         :param bool ensure_ascii: Avoids unicode.
         :param int indent: The indentation to apply.
         :param bool sortkeys: Sorts the keys.
-        :param str newline: The default newline to use.
         """
 
-        with open(file_path, "w", encoding=encoding, newline=newline) as file_stream:
+        with open(file_path, "w", encoding=encoding) as file_stream:
             dump(
                 self.main,
                 file_stream,
@@ -243,24 +236,19 @@ class Dict:
             )
 
     @classmethod
-    def from_json_file(
-        cls, file_path, encoding="utf-8", newline="\n", return_dict_on_error=True
-    ):
+    def from_json_file(cls, file_path, encoding="utf-8", return_dict_on_error=True):
         """
         Reads the given file path and convert it's content to
         dict/list (tolarated).
 
         :param str file_path: The file path.
-        :param str newline: The default newline to use.
         :param bool return_dict_on_error: Return a dict instead of a NoneType.
 
         :rtype: dict|list
         """
 
         try:
-            return loads(
-                File(file_path=file_path).read(encoding=encoding, newline=newline)
-            )
+            return loads(File(file_path=file_path).read(encoding=encoding))
         except decoder.JSONDecodeError:  # pragma: no cover
             return None if not return_dict_on_error else {}
 
@@ -295,18 +283,17 @@ class Dict:
             return None if not return_dict_on_error else {}
 
     @classmethod
-    def from_yaml_file(cls, file_path, encoding="utf-8", newline="\n"):
+    def from_yaml_file(cls, file_path, encoding="utf-8"):
         """
         Converts a given YAML formatted file, into dict/list.
 
         :param str file_path: The file path.
         :param str encoding: The encoding to use.
-        :param str newline: The newline char string.
 
         :rtype: dict|list
         """
 
-        with open(file_path, "r", encoding=encoding, newline=newline) as file_stream:
+        with open(file_path, "r", encoding=encoding) as file_stream:
             data = yaml_load(file_stream)
 
         return data
@@ -315,7 +302,6 @@ class Dict:
         self,
         file_path,
         encoding="utf-8",
-        newline="\n",
         default_flow_style=False,
         indent=4,
         allow_unicode=True,
@@ -326,21 +312,19 @@ class Dict:
 
         :param str file_path: The file path.
         :param str encoding: The encoding.
-        :param str newline: The newline char string.
         :param bool default_flow_style: Uses the default flow style.
         :param int indent: The indentation to apply.
         :param bool allow_unicode: Allows the  decoding of unicode chars.
         :param bool sort_keys: Sorts the keys.
         """
 
-        with open(file_path, "w", encoding=encoding, newline=newline) as file_stream:
+        with open(file_path, "w", encoding=encoding) as file_stream:
             yaml_dump(
                 self.main,
                 stream=file_stream,
                 default_flow_style=default_flow_style,
                 indent=indent,
                 allow_unicode=allow_unicode,
-                line_break=newline,
                 encoding=encoding,
                 sort_keys=sort_keys,
             )
@@ -359,7 +343,6 @@ class Dict:
     def to_yaml(
         self,
         encoding="utf-8",
-        newline="\n",
         default_flow_style=False,
         indent=4,
         allow_unicode=True,
@@ -370,7 +353,6 @@ class Dict:
         the result.
 
         :param str encoding: The encoding to use.
-        :param str newline: The newline char string.
         :param bool default_flow_style: Uses the default flow style.
         :param int indent: The indentation to apply.
         :param bool allow_unicode: Allows the decoding of unicode chars.
@@ -384,7 +366,6 @@ class Dict:
             default_flow_style=default_flow_style,
             indent=indent,
             allow_unicode=allow_unicode,
-            line_break=newline,
             encoding=encoding,
             sort_keys=sort_keys,
         ).decode()

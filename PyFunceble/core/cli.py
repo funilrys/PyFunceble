@@ -97,6 +97,8 @@ class CLICore:
         Sort the content of all files we generated.
         """
 
+        header_limit = 3
+
         for root, _, files in walk(
             PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS.parent_directory
         ):
@@ -121,6 +123,14 @@ class CLICore:
                     # We continue the loop.
                     continue
 
+                if f"{directory_separator}logs" in root:
+                    # The currently read root should be ignored.
+
+                    continue
+
+                if f"{directory_separator}splited" in root:
+                    header_limit += 1
+
                 # We create an instance of our File().
                 file_instance = PyFunceble.helpers.File(
                     "{0}{1}{2}".format(root, directory_separator, file)
@@ -132,21 +142,23 @@ class CLICore:
                     # We do not have to sort hierarchicaly.
 
                     # We sort the lines of the file standarly.
-                    formatted = PyFunceble.helpers.List(file_content[3:]).custom_format(
-                        PyFunceble.engine.Sort.standard
-                    )
+                    formatted = PyFunceble.helpers.List(
+                        file_content[header_limit:]
+                    ).custom_format(PyFunceble.engine.Sort.standard)
                 else:
                     # We do have to sort hierarchicaly.
 
                     # We sort the lines of the file hierarchicaly.
-                    formatted = PyFunceble.helpers.List(file_content[3:]).custom_format(
-                        PyFunceble.engine.Sort.hierarchical
-                    )
+                    formatted = PyFunceble.helpers.List(
+                        file_content[header_limit:]
+                    ).custom_format(PyFunceble.engine.Sort.hierarchical)
 
                 # We finally put the formatted data in place.
-                file_instance.write(
-                    "\n".join(file_content[:3] + formatted), overwrite=True
-                )
+                to_write = file_content[:header_limit]
+                to_write.extend(formatted)
+                to_write.append("")
+
+                file_instance.write("\n".join(to_write), overwrite=True)
 
     @classmethod
     def save_into_database(cls, output, filename, mysql_db):  # pragma: no cover
