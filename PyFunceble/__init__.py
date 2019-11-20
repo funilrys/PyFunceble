@@ -313,7 +313,7 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
     if subject:
         # The given URL is not empty nor None.
 
-        # We retunr the status of the the url.
+        # We return the status of the the url.
         return APICore(subject, complete=complete, configuration=config).url()
 
     # We return None, there is nothing to test.
@@ -789,8 +789,8 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 PARSER.add_argument(
                     "-d", "--domain", type=str, 
-                    help="Test given domain(s). This value take 1 or more values."
-                    "Example: `pyfunceble -d example.org example.net`",
+                    help="Test given domain(s). This value take 1 or more values. "
+                    "Example: `pyfunceble -d example.org example.net` ",
                 )
 
                 PARSER.add_argument(
