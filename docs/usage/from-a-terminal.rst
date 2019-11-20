@@ -149,9 +149,9 @@ This argument allows us to set a custom commit message which is going to be used
 :code:`-d "something"` | :code:`--domain "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Set and test the given domain.
+    Test given domain(s).
 
-This argument will test and give the results of the tests of the given domain.
+This value take 1 or more values. Example :code:`pyfunceble -d example.org example.net`
 
 .. note::
     For this argument (and only for this argument), we are converting the given string to lowercase.
@@ -186,8 +186,8 @@ This argument let us use different types of database.
     * Mining physically located (JSON) at :code:`[config_dir]/mining.json`.
     * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json`.
 
-:code:`-dbr "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Set the numbers of days between each retest of domains present into the database of `INACTIVE` and `INVALID` domains.
 
@@ -211,7 +211,7 @@ Want to start without anything? This argument generates the output directory aut
 ^^^^^^^^^^^^^
 
     Set the DNS server(s) we have to work with.
-    Multiple  space separated DNS server can be given.
+    Multiple space separated DNS server can be given.
 
 
     **Default value:** :code:`Follow OS DNS` ==> :code:`None`
@@ -239,9 +239,9 @@ Want to know the execution time of your test? Well, this argument will let you k
 :code:`-f "something"` | :code:`--file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read the given file and test all domains inside it. You can also provide a URL to a source file
-    directly and PyFunceble will download it, and test the content of the given URL as
-    if it was a locally stored file. See also :code:`--link "something"`
+    Read a local file or remote (http://example.org/file) and test all domains inside it.
+    If remote location is given, PyFunceble will download it, and test the content of the
+    given URL as if it was a locally stored file.
 
 .. note::
     We consider one line as one domain or one commented line. A line can be commented at the end.
@@ -287,7 +287,7 @@ This argument will let the system know if we have to sort the list and our outpu
 :code:`--http`
 ^^^^^^^^^^^^^^
 
-    Switch the value of the usage of HTTP code.
+    Test domain(s) with HTTP reponse code.
 
     **Default value:** :code:`True`
 
@@ -356,17 +356,6 @@ This argument allows the conversion of the domains using `domain2idna`_
     **Default value:** :code:`False`
 
 Want to run a test over a local or private network? This argument will disable the limitation which does not apply to private networks.
-
-:code:`--link "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Download and test the a hosted file for domains inside it. You can download 
-        remotely hosted files over http(s)?. The test will then be performed as 
-        if it was your local `/etc/hosts`
-    
-    You can do the same with the `-f` switch
-
-Want to test a raw link? This argument will download and test the given raw link.
 
 :code:`--mining`
 ^^^^^^^^^^^^^^^^
@@ -524,6 +513,8 @@ Want to get the logs (copy of what you see on screen) on different files? This a
 
     **Default value:** :code:`False`
 
+Test if syntax of domains are currect
+
 :code:`-t "something"` | :code:`--timeout "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -581,16 +572,17 @@ This will only test for the HTTP resonse code of provided urls, no DNS results a
 :code:`-uf "something"` | :code:`--url-file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read and test the list of http(s)?://URL of a given file.
+    Test urls HTTP response code.
+    Read and test a local or remote (http(s)?://example.org/file) file to test.
     If a URL is given we download and test the full url's in that list. The `-uf` 
-    test if and url returns the http 200 code. It do not test the domains, only full urls.
+    only tests full urls, _not_ domains.
     
 .. example::
     ```
     PyFunceble -uf https://gitlab.com/my-privacy-dns/matrix/matrix/blob/master/source.list
     ```
     
-    This will then test urls inside that list, and fetch the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+    This will then test urls inside that list, and fetch the [HTTP status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
     This is done by using the (http(s)?://*) and _not_ whois or DNS lookup of domains/IP.
     See also: :code:`-u "something"`
 
