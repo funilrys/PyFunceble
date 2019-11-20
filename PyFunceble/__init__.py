@@ -789,7 +789,7 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
 
                 PARSER.add_argument(
                     "-d", "--domain", type=str, 
-                    help="Test given domain(s). This value take 1 or more values.",
+                    help="Test given domain(s). This value take 1 or more values."
                     "Example: `pyfunceble -d example.org example.net`",
                 )
 
