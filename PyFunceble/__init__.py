@@ -974,6 +974,10 @@ def _command_line():  # pragma: no cover pylint: disable=too-many-branches,too-m
                     ),
                 )
 
+                parser.add_argument(
+                    "--link", type=str, help="Is to be deleted"
+                )
+
                 PARSER.add_argument(
                     "--local",
                     action="store_true",
