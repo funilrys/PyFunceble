@@ -80,7 +80,6 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         preset,
         domain_or_ip=None,
         file_path=None,
-        link_to_test=None,
         url_file_path=None,
         url_to_test=None,
         generate_results_only=False,
@@ -89,7 +88,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         self.preset = preset
         PyFunceble.LOGGER.debug(f"CONFIGURATION:\n{PyFunceble.CONFIGURATION}")
 
-        if domain_or_ip or file_path or link_to_test or url_file_path or url_to_test:
+        if domain_or_ip or file_path or url_file_path or url_to_test:
 
             PyFunceble.core.CLI.logs_sharing()
             ExecutionTime("start")
@@ -102,10 +101,6 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
             elif file_path:
                 self.dispatch_file_test(
                     file_path, generate_results_only, generate_all_results_only
-                )
-            elif link_to_test:
-                self.dispatch_link_test(
-                    link_to_test, generate_results_only, generate_all_results_only
                 )
             elif url_file_path:
                 self.dispatch_url_file_test(
@@ -163,40 +158,6 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
                 )
             else:
                 PyFunceble.core.File(file_path, "domain").generate_files()
-
-    @classmethod
-    def dispatch_link_test(
-        cls, link_to_test, generate_results_only, generate_all_results_only
-    ):
-        """
-        Dispatch to the right link testing logic.
-
-        :param str link_to_test: The link to test.
-        :param bool generate_results_only:
-            Tell us to only regenerate from the data stored into the
-            MariaDB/MySQL databases.
-        """
-
-        PyFunceble.output.Constructor()
-
-        if PyFunceble.CONFIGURATION.multiprocess:
-            if not generate_results_only and not generate_all_results_only:
-                PyFunceble.core.Multiprocess(link_to_test, "domain").run_test()
-            elif generate_all_results_only:
-                PyFunceble.core.Multiprocess(link_to_test, "domain").generate_files(
-                    include_entries_without_changes=True
-                )
-            else:
-                PyFunceble.core.Multiprocess(link_to_test, "domain").generate_files()
-        else:
-            if not generate_results_only and not generate_all_results_only:
-                PyFunceble.core.File(link_to_test, "domain").run_test()
-            elif generate_all_results_only:
-                PyFunceble.core.File(link_to_test, "domain").generate_files(
-                    include_entries_without_changes=True
-                )
-            else:
-                PyFunceble.core.File(link_to_test, "domain").generate_files()
 
     def dispatch_url_file_test(
         self, url_file_path, generate_results_only, generate_all_results_only

@@ -149,13 +149,17 @@ This argument allows us to set a custom commit message which is going to be used
 :code:`-d "something"` | :code:`--domain "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Set and test the given domain.
-
-This argument will test and give the results of the tests of the given domain.
+    Test the given domain(s). Multiple space separated DNS server can be given.
 
 .. note::
-    For this argument (and only for this argument), we are converting the given string to lowercase.
 
+    This argument take 1 or more values.
+
+    As example:
+
+    ::
+
+        $ PyFunceble -d example.org example.com
 
 :code:`-db` | :code:`--database`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -186,8 +190,8 @@ This argument let us use different types of database.
     * Mining physically located (JSON) at :code:`[config_dir]/mining.json`.
     * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json`.
 
-:code:`-dbr "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Set the numbers of days between each retest of domains present into the database of `INACTIVE` and `INVALID` domains.
 
@@ -211,7 +215,7 @@ Want to start without anything? This argument generates the output directory aut
 ^^^^^^^^^^^^^
 
     Set the DNS server(s) we have to work with.
-    Multiple  space separated DNS server can be given.
+    Multiple space separated DNS server can be given.
 
 
     **Default value:** :code:`Follow OS DNS` ==> :code:`None`
@@ -239,16 +243,12 @@ Want to know the execution time of your test? Well, this argument will let you k
 :code:`-f "something"` | :code:`--file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read the given file and test all domains inside it.
-    You can also provide a RAW URL directly and PyFunceble will download it,
-    and test the content of the given URL as if it was a locally stored file.
+    Read a local or remote (RAW link) file and test all domains inside it.
+    If remote (RAW link) file is given, PyFunceble will download it,
+    and test the content of the given RAW link as if it was a locally stored file.
 
 .. note::
-    We consider one line as one domain or one commented line. A line can be commented at the end.
-
-.. note::
-    You can give a raw link and the system will download and test its content.
-
+    We consider one line as one domain or one commented line.
 
 :code:`--filter "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -356,13 +356,6 @@ This argument allows the conversion of the domains using `domain2idna`_
     **Default value:** :code:`False`
 
 Want to run a test over a local or private network? This argument will disable the limitation which does not apply to private networks.
-
-:code:`--link "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Download and test the given file.
-
-Want to test a raw link? This argument will download and test the given raw link.
 
 :code:`--mining`
 ^^^^^^^^^^^^^^^^
@@ -520,6 +513,9 @@ Want to get the logs (copy of what you see on screen) on different files? This a
 
     **Default value:** :code:`False`
 
+.. warning::
+    This will disable all other form of test and will only check the syntax of the given subject to test.
+
 :code:`-t "something"` | :code:`--timeout "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -547,7 +543,7 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
 
 .. note::
     The difference between this and :code:`--travis-branch` is the fact
-    that this branch will get the result only when the test were finished
+    that this branch will get the (final) result only when the test is finished
     under the given :code:`--travis-branch`.
 
     As example, this allow us to have 2 branches:
@@ -565,24 +561,45 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
 :code:`-url "something"` | :code:`--url "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Set and test the given URL.
-
-Want to test the availability or an URL? Enjoy this argument!
+    Test the given URL(s). Multiple space separated URL can be given.
 
 .. note::
-    When we test the availability of an URL, we check the HTTP status code of the given URL.
+    When we test the availability of a URL, we (only) check the HTTP status code of the given URL.
+
+.. note::
+    This argument take 1 or more values.
+
+    As example:
+
+    ::
+        $ PyFunceble -d example.org example.com
+
 
 :code:`-uf "something"` | :code:`--url-file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read and test the list of URL of the given file.
-    If a URL is given we download and test the list (of URL) of  the given URL content.
+    Read a local or remote (RAW link) file and test all (full) URLs inside it.
+    If remote (RAW link) file is given, PyFunceble will download it,
+    and test the content of the given RAW link as if it was a locally stored file.
 
 .. note::
     We consider one line as one URL to test.
 
 .. note::
-    You can give a raw link and the system will download and test its content.
+    This argument test if a URL which is inside the given file is available.
+    It ONLY test full URLs.
+
+    As example:
+
+    ::
+
+        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/master/.travis/lists/url`
+
+    will download the given URL and test for it's content assuming that each line represent a URL to test.
+
+.. warning::
+    A test with this argument consist of the comparison of the status code.
+    No WHOIS record will be request nor DNS Lookup will be done.
 
 :code:`-ua "something"` | :code:`--user-agent "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -630,14 +647,14 @@ Global overview
                     [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-ex]
                     [-f FILE] [--filter FILTER] [--help] [--hierarchical] [-h]
                     [--http] [--iana] [--idna] [-ip IP] [--json] [--less]
-                    [--local] [--link LINK] [--mining] [-m]
+                    [--local] [--mining] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE] [-n]
                     [-nl] [-ns] [-nu] [-nw] [--percentage] [--plain]
                     [-p PROCESSES] [-psl] [-q] [--share-logs] [-s] [--split]
                     [--syntax] [-t TIMEOUT] [--travis]
                     [--travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH]
-                    [--travis-branch TRAVIS_BRANCH] [-u URL] [-uf URL_FILE]
-                    [-ua USER_AGENT] [-v] [-vsc] [-wdb]
+                    [--travis-branch TRAVIS_BRANCH] [-u URL [URL ...]]
+                    [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
 
     The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -650,62 +667,50 @@ Global overview
                                 Switch the value of the auto continue mode.
                                 Configured value: True
         --autosave-minutes AUTOSAVE_MINUTES
-                                Update the minimum of minutes before we start
-                                committing to upstream under Travis CI.
+                                Update the minimum of minutes before we start committing to upstream under Travis CI.
                                 Configured value: 15
         --clean               Clean all files under the output directory.
-        --clean-all           Clean all files under the output directory along with
-                                all file generated by PyFunceble.
-        --cmd CMD             Pass a command to run before each commit (except the
-                                final one) under the Travis mode. Configured
-                                value: ''
+        --clean-all           Clean all files under the output directory along with all file generated by PyFunceble.
+        --cmd CMD             Pass a command to run before each commit (except the final one) under the Travis mode.
+                                Configured value: ''
         --cmd-before-end CMD_BEFORE_END
-                                Pass a command to run before the results (final)
-                                commit under the Travis mode. Configured
-                                value: ''
+                                Pass a command to run before the results (final) commit under the Travis mode.
+                                Configured value: ''
         --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
                                 Replace the default autosave commit message.
-                                Configured value: 'PyFunceble -
-                                AutoSave'
+                                Configured value: 'PyFunceble - AutoSave'
         --commit-results-message COMMIT_RESULTS_MESSAGE
                                 Replace the default results (final) commit message.
-                                Configured value: 'PyFunceble -
-                                Results'
-        --complements         Switch the value of the generation and test of the
-                                complements. A complement is for example `example.org`
-                                if `www.example.org` is given and vice-versa.
+                                Configured value: 'PyFunceble - Results'
+        --complements         Switch the value of the generation and test of the complements.
+                                A complement is for example `example.org` if `www.example.org` is given and vice-versa.
                                 Configured value: False
         -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
-                                Set and test the given domain.
-        -db, --database       Switch the value of the usage of a database to store
-                                inactive domains of the currently tested list.
+                                Test the given domain(s). Multiple space separated domains can be given.
+        -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
                                 Configured value: True
         --database-type DATABASE_TYPE
-                                Tell us the type of database to use. You can choose
-                                between the following: `json|mariadb|mysql`
+                                Tell us the type of database to use.
+                                You can choose between the following: `json|mariadb|mysql`
                                 Configured value: 'json'
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
-                                Set the numbers of days between each retest of domains
-                                present into inactive-db.json. Configured
-                                value: 1
+                                Set the numbers of days between each retest of domains present into inactive-db.json.
+                                Configured value: 1
         --directory-structure
-                                Generate the directory and files that are needed and
-                                which does not exist in the current directory.
-        --dns DNS [DNS ...]   Set the DNS server(s) we have to work with. Multiple
-                                space separated DNS server can be given.
+                                Generate the directory and files that are needed and which does not exist in the current directory.
+        --dns DNS [DNS ...]   Set the DNS server(s) we have to work with. Multiple space separated DNS server can be given.
                                 Configured value: Follow OS DNS
         --dns-lookup-over-tcp
-                                Make all DNS query with TCP. Configured
-                                value: False
-        -ex, --execution      Switch the default value of the execution time
-                                showing. Configured value: False
-        -f FILE, --file FILE  Read the given file and test all domains inside it. If
-                                a URL is given we download and test the content of the
-                                given URL.
+                                Make all DNS query with TCP.
+                                Configured value: False
+        -ex, --execution      Switch the default value of the execution time showing.
+                                Configured value: False
+        -f FILE, --file FILE  Read a local or remote (RAW link) file and test all domains inside it.
+                                If remote (RAW link) file is given, PyFunceble will download it, and test the content of the given RAW link as if it was a locally stored file.
         --filter FILTER       Domain to filter (regex).
         --help                Show this help message and exit.
-        --hierarchical        Switch the value of the hierarchical sorting of the
-                                tested file. Configured value: False
+        --hierarchical        Switch the value of the hierarchical sorting of the tested file.
+                                Configured value: False
         -h, --host            Switch the value of the generation of hosts file.
                                 Configured value: True
         --http                Switch the value of the usage of HTTP code.
@@ -713,88 +718,77 @@ Global overview
         --iana                Update/Generate `iana-domains-db.json`.
         --idna                Switch the value of the IDNA conversion.
                                 Configured value: False
-        -ip IP                Change the IP to print in the hosts files with the
-                                given one. Configured value:
-                                '0.0.0.0'
-        --json                Switch the value of the generation of the JSON
-                                formatted list of domains. Configured value:
-                                False
+        -ip IP                Change the IP to print in the hosts files with the given one.
+                                Configured value: '0.0.0.0'
+        --json                Switch the value of the generation of the JSON formatted list of domains.
+                                Configured value: False
         --less                Output less informations on screen.
                                 Configured value: False
         --local               Switch the value of the local network testing.
                                 Configured value: True
-        --link LINK           Download and test the given file.
         --mining              Switch the value of the mining subsystem usage.
                                 Configured value: False
         -m, --multiprocess    Switch the value of the usage of multiple process.
                                 Configured value: False
         --multiprocess-merging-mode MULTIPROCESS_MERGING_MODE
-                                Sets the multiprocess merging mode. You can choose
-                                between the following `live|ends`. Configured
-                                value: 'end'
+                                Sets the multiprocess merging mode.
+                                You can choose between the following: `live|ends`.
+                                Configured value: 'end'
         -n, --no-files        Switch the value of the production of output files.
                                 Configured value: False
-        -nl, --no-logs        Switch the value of the production of logs files in
-                                the case we encounter some errors. Configured
-                                value: False
+        -nl, --no-logs        Switch the value of the production of logs files in the case we encounter some errors.
+                                Configured value: False
         -ns, --no-special     Switch the value of the usage of the SPECIAL rules.
                                 Configured value: False
-        -nu, --no-unified     Switch the value of the production unified logs under
-                                the output directory. Configured value:
-                                False
-        -nw, --no-whois       Switch the value the usage of whois to test domain's
-                                status. Configured value: False
+        -nu, --no-unified     Switch the value of the production unified logs under the output directory.
+                                Configured value: False
+        -nw, --no-whois       Switch the value the usage of whois to test domain's status.
+                                Configured value: False
         --percentage          Switch the value of the percentage output mode.
                                 Configured value: True
-        --plain               Switch the value of the generation of the plain list
-                                of domains. Configured value: False
+        --plain               Switch the value of the generation of the plain list of domains.
+                                Configured value: False
         -p PROCESSES, --processes PROCESSES
-                                Set the number of simultaneous processes to use while
-                                using multiple processes. Configured value:
-                                25
+                                Set the number of simultaneous processes to use while using multiple processes.
+                                Configured value: 25
         -psl, --public-suffix
                                 Update/Generate `public-suffix.json`.
-        -q, --quiet           Run the script in quiet mode. Configured
-                                value: False
+        -q, --quiet           Run the script in quiet mode.
+                                Configured value: False
         --share-logs          Switch the value of the sharing of logs.
                                 Configured value: False
         -s, --simple          Switch the value of the simple output mode.
                                 Configured value: False
-        --split               Switch the value of the split of the generated output
-                                files. Configured value: True
+        --split               Switch the value of the split of the generated output files.
+                                Configured value: True
         --syntax              Switch the value of the syntax test mode.
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
-                                Switch the value of the timeout. Configured
-                                value: 5.0
+                                Switch the value of the timeout.
+                                Configured value: 5.0
         --travis              Switch the value of the Travis mode.
                                 Configured value: False
         --travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH
-                                Switch the branch name where we are going to push the
-                                final results. Configured value:
-                                'master'
+                                Switch the branch name where we are going to push the final results.
+                                Configured value: 'master'
         --travis-branch TRAVIS_BRANCH
                                 Switch the branch name where we are going to push.
                                 Configured value: 'master'
-        -u URL, --url URL     Set and test the given URL.
+        -u URL [URL ...], --url URL [URL ...]
+                                Test the given URL(s). Multiple space separated URL can be given.
         -uf URL_FILE, --url-file URL_FILE
-                                Read and test the list of URL of the given file. If a
-                                URL is given we download and test the list (of URL) of
-                                the given URL content.
+                                Read a local or remote (RAW link) file and test all (full) URLs inside it.
+                                If remote (RAW link) file is given, PyFunceble will download it, and test the content of the given RAW link as if it was a locally stored file.
+
+                                This argument test if an URL is available. It ONLY test full URLs.
         -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set every time we
-                                interact with everything which is not our logs sharing
-                                system.
+                                Set the user-agent to use and set every time we interact with everything which is not our logs sharing system.
         -v, --version         Show the version of PyFunceble and exit.
         -vsc, --verify-ssl-certificate
-                                Switch the value of the verification of the SSL/TLS
-                                certificate when testing for URL. Configured
-                                value: False
+                                Switch the value of the verification of the SSL/TLS certificate when testing for URL.
+                                Configured value: False
         -wdb, --whois-database
-                                Switch the value of the usage of a database to store
-                                whois data in order to avoid whois servers rate limit.
+                                Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
                                 Configured value: True
 
-    Crafted with ♥ by Nissar Chababy (Funilrys) with the
-    help of https://pyfunceble.github.io/contributors.html &&
-    https://pyfunceble.github.io/special-thanks.html
+    Crafted with ♥ by Nissar Chababy (Funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html

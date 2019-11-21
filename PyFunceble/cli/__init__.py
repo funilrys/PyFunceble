@@ -1,4 +1,4 @@
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines, line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -97,7 +97,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 preset = PyFunceble.cconfig.Preset()
 
                 parser = argparse.ArgumentParser(
-                    description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",  # pylint: disable=line-too-long
+                    description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",
                     epilog="Crafted with %s by %s"
                     % (
                         Fore.RED + "♥" + Fore.RESET,
@@ -116,10 +116,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                         + "https://pyfunceble.github.io/special-thanks.html",
                     ),
                     add_help=False,
+                    formatter_class=argparse.RawTextHelpFormatter,
                 )
 
                 current_value_format = (
-                    Fore.YELLOW + Style.BRIGHT + "Configured value: " + Fore.BLUE
+                    f"\n{Fore.YELLOW}{Style.BRIGHT}Configured value: {Fore.BLUE}"
                 )
 
                 parser.add_argument(
@@ -238,7 +239,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
-                    "A complement is for example `example.org` if `www.example.org` "
+                    "\nA complement is for example `example.org` if `www.example.org` "
                     "is given and vice-versa. %s"
                     % (
                         current_value_format
@@ -252,7 +253,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--domain",
                     type=str,
                     nargs="+",
-                    help="Set and test the given domain.",
+                    help="Test the given domain(s). Multiple space separated domains can be given.",
                 )
 
                 parser.add_argument(
@@ -272,7 +273,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--database-type",
                     type=str,
                     help="Tell us the type of database to use. "
-                    "You can choose between the following: `json|mariadb|mysql` %s"
+                    "\nYou can choose between the following: `json|mariadb|mysql` %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.db_type)
@@ -344,9 +345,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-f",
                     "--file",
                     type=str,
-                    help="Read the given file and test all domains inside it."
-                    "You can also provide a RAW URL directly and PyFunceble will download it, "
-                    "and test the content of the given URL as if it was a locally stored file.",
+                    help="Read a local or remote (RAW link) file and test all domains inside it."
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "and test the content of the given RAW link as if it was a locally stored file.",
                 )
 
                 parser.add_argument(
@@ -469,10 +470,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "--link", type=str, help="Download and test the given file."
-                )
-
-                parser.add_argument(
                     "--mining",
                     action="store_true",
                     help="Switch the value of the mining subsystem usage. %s"
@@ -499,7 +496,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--multiprocess-merging-mode",
                     type=str,
                     help="Sets the multiprocess merging mode. "
-                    "You can choose between the following `live|ends`. %s"
+                    "\nYou can choose between the following: `live|ends`. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.multiprocess_merging_mode)
@@ -722,15 +719,21 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "-u", "--url", type=str, help="Set and test the given URL."
+                    "-u",
+                    "--url",
+                    type=str,
+                    nargs="+",
+                    help="Test the given URL(s). Multiple space separated URL can be given.",
                 )
 
                 parser.add_argument(
                     "-uf",
                     "--url-file",
                     type=str,
-                    help="Read and test the list of URL of the given file. "
-                    "If a URL is given we download and test the list (of URL) of the given URL content.",  # pylint: disable=line-too-long
+                    help="Read a local or remote (RAW link) file and test all (full) URLs inside it."
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "and test the content of the given RAW link as if it was a locally stored file. "
+                    "\n\nThis argument test if an URL is available. It ONLY test full URLs.",
                 )
 
                 parser.add_argument(
@@ -738,7 +741,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--user-agent",
                     type=str,
                     help="Set the user-agent to use and set every time we "
-                    "interact with everything which is not our logs sharing system.",  # pylint: disable=line-too-long
+                    "interact with everything which is not our logs sharing system.",
                 )
 
                 parser.add_argument(
@@ -1032,7 +1035,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     file_path=args.file,
                     url_to_test=args.url,
                     url_file_path=args.url_file,
-                    link_to_test=args.link,
                     generate_results_only=args.generate_files_from_database,
                     generate_all_results_only=args.generate_all_files_from_database,
                 )
