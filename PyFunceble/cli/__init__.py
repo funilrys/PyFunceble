@@ -344,8 +344,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-f",
                     "--file",
                     type=str,
-                    help="Read the given file and test all domains inside it. "
-                    "If a URL is given we download and test the content of the given URL.",  # pylint: disable=line-too-long
+                    help="Read the given file and test all domains inside it."
+                    "You can also provide a RAW URL directly and PyFunceble will download it, "
+                    "and test the content of the given URL as if it was a locally stored file.",
                 )
 
                 parser.add_argument(

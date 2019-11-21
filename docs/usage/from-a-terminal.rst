@@ -239,7 +239,9 @@ Want to know the execution time of your test? Well, this argument will let you k
 :code:`-f "something"` | :code:`--file "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Read the given file and test all domains inside it. If a URL is given we download and test the content of the given URL.
+    Read the given file and test all domains inside it.
+    You can also provide a RAW URL directly and PyFunceble will download it,
+    and test the content of the given URL as if it was a locally stored file.
 
 .. note::
     We consider one line as one domain or one commented line. A line can be commented at the end.
