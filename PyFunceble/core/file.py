@@ -440,7 +440,6 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         if test_completed:
             self.generate_files()
             self.sort_generated_files()
-
             auto_continue_db.clean()
 
         auto_save.process(test_completed=test_completed)
@@ -468,8 +467,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 whois_db=self.whois_db,
             )
 
-            if self.autosave.is_time_exceed():
-                self.cleanup(self.autocontinue, self.autosave, test_completed=True)
+            self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
         elif self.autosave.authorized and not PyFunceble.CONFIGURATION.quiet:
             # We are under Travis CI.
