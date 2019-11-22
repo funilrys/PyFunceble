@@ -441,6 +441,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.generate_files()
             self.sort_generated_files()
             auto_continue_db.clean()
+        elif auto_save.is_time_exceed():
+            self.generate_files()
+            self.sort_generated_files()
 
         auto_save.process(test_completed=test_completed)
 
