@@ -512,6 +512,41 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
         return None
 
+    @classmethod
+    def is_record_present_in_result(cls, to_check, result, allow_empty=False):
+        """
+        Checks if the given record type is in the result.
+
+        :param to_check:
+            The record to check the presence.
+        :type to_check: list, str, tuple
+        :param dict result:
+            The result to work with.
+        :param bool allow_empty:
+            Tell to if we allow and empty result as present.
+
+        :rtype: bool
+        """
+
+        if isinstance(to_check, (list, tuple)):
+            return any(
+                [
+                    cls.is_record_present_in_result(x, result, allow_empty=allow_empty)
+                    for x in to_check
+                ]
+            )
+
+        if to_check in result:
+            if not allow_empty and not result[to_check]:
+                PyFunceble.LOGGER.debug(
+                    f"{to_check} record is not in result:\n{result}"
+                )
+                return False
+            PyFunceble.LOGGER.debug(f"{to_check} record is in result:\n{result}")
+            return True
+        PyFunceble.LOGGER.debug(f"{to_check} record is not in result:\n{result}")
+        return False
+
     def __request_complete_not_ip(self, subject, tcp=None):  # pragma: no cover
         """
         Requests and provides the complete DNS spectrum.
@@ -539,7 +574,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         # We get the TXT record of the given subject.
         result["TXT"] = self.txt_record(subject, tcp=tcp)
 
-        if "A" in result and result["A"]:
+        if self.is_record_present_in_result("A", result):
             # We could get some A record(s).
 
             # We initiate the PTR.
@@ -595,13 +630,23 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 self.__request_complete_not_ip(subject, tcp=tcp)
             ).into(result)
 
-        if "CNAME" not in result and not result["NS"]:
+        if not self.is_record_present_in_result(["CNAME", "NS"], result):
             # As sometime we may not have a NS but a CNAME, we handle that case.
             result["CNAME"] = self.cname_record(subject, tcp=tcp)
 
-        if ("CNAME" not in result or not result["CNAME"]) and "DNAME" not in result:
+        if not self.is_record_present_in_result(["CNAME", "DNAME", "NS"], result):
             # Same but with DNAME.
             result["DNAME"] = self.dname_record(subject, tcp=tcp)
+
+        if not self.is_record_present_in_result(["A", "CNAME", "DNAME", "NS"], result):
+            # Same but with A.
+            result["A"] = self.a_record(subject, tcp=tcp)
+
+        if not self.is_record_present_in_result(
+            ["A", "AAAA", "CNAME", "DNAME", "NS"], result
+        ):
+            # Same but with A.
+            result["AAAA"] = self.aaaa_record(subject, tcp=tcp)
 
         # We get the list of index to delete.
         to_delete = [x for x in result if not result[x]]
