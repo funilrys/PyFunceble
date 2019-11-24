@@ -171,6 +171,48 @@ class TestDNSLookup(TestCase):
         self.assertIsInstance(actual, list)
         self.assertNotEqual([], actual)
 
+    def test_record_is_present_in_result(self):
+        """
+        Tests the methos which let us check if a type of record
+        is in the results for the case that the record is not present.
+        """
+
+        given = {"A": None}
+
+        expected = False
+        actual = self.dns_lookup.is_record_present_in_result("A", given)
+
+        self.assertEqual(expected, actual)
+
+        actual = self.dns_lookup.is_record_present_in_result(["A", "CNAME"], given)
+
+        self.assertEqual(expected, actual)
+
+        expected = True
+        actual = self.dns_lookup.is_record_present_in_result(
+            "A", given, allow_empty=True
+        )
+
+        actual = self.dns_lookup.is_record_present_in_result(
+            ["A", "CNAME"], given, allow_empty=True
+        )
+
+        self.assertEqual(expected, actual)
+
+        given["A"] = []
+
+        actual = self.dns_lookup.is_record_present_in_result("A", given)
+        expected = False
+
+        self.assertEqual(expected, actual)
+
+        expected = True
+        actual = self.dns_lookup.is_record_present_in_result(
+            "A", given, allow_empty=True
+        )
+
+        self.assertEqual(expected, actual)
+
 
 class TestDNSLookupA(TestCase):
     """

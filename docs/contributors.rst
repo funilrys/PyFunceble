@@ -24,6 +24,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
 -   ScriptTiger - `@ScriptTiger`_
+-   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
 -   WaLLy3K - `@WaLLy3K`_
@@ -38,6 +39,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
 .. _@opav: https://github.com/opav
+.. _@sjhgvr: https://github.com/sjhgvr
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@speedmann: https://github.com/speedmann
 .. _@spirillen: https://github.com/spirillen
