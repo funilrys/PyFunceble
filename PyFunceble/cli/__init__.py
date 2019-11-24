@@ -96,25 +96,26 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 preset = PyFunceble.cconfig.Preset()
 
+                description = (
+                    f"{Style.BRIGHT}{Fore.GREEN}PyFunceble{Style.RESET_ALL} - "
+                    "The tool to check the availability or syntax of domains, IPv4, IPv6 or URL."
+                )
+
+                epilog = (
+                    f"{Style.BRIGHT}{Fore.YELLOW}For an in depth usage, examplation and examples of the arguments, "
+                    f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io/en/dev/"
+                    f"{Style.RESET_ALL}\n\n"
+                    f"Crafted with {Fore.RED}♥{Fore.RESET} by "
+                    f"{Style.BRIGHT}{Fore.CYAN}Nissar Chababy (@funilrys){Style.RESET_ALL} "
+                    f"with the help of{Style.BRIGHT}{Fore.GREEN} "
+                    f"https://pyfunceble.github.io/contributors.html{Style.RESET_ALL} "
+                    f"&& {Style.BRIGHT}{Fore.GREEN}"
+                    "https://pyfunceble.github.io/special-thanks.html"
+                )
+
                 parser = argparse.ArgumentParser(
-                    description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",
-                    epilog="Crafted with %s by %s"
-                    % (
-                        Fore.RED + "♥" + Fore.RESET,
-                        Style.BRIGHT
-                        + Fore.CYAN
-                        + "Nissar Chababy (Funilrys) "
-                        + Style.RESET_ALL
-                        + "with the help of "
-                        + Style.BRIGHT
-                        + Fore.GREEN
-                        + "https://pyfunceble.github.io/contributors.html "
-                        + Style.RESET_ALL
-                        + "&& "
-                        + Style.BRIGHT
-                        + Fore.GREEN
-                        + "https://pyfunceble.github.io/special-thanks.html",
-                    ),
+                    description=description,
+                    epilog=epilog,
                     add_help=False,
                     formatter_class=argparse.RawTextHelpFormatter,
                 )
@@ -190,52 +191,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "--cmd",
-                    type=str,
-                    help="Pass a command to run before each commit "
-                    "(except the final one) under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--cmd-before-end",
-                    type=str,
-                    help="Pass a command to run before the results "
-                    "(final) commit under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-autosave-message",
-                    type=str,
-                    help="Replace the default autosave commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-results-message",
-                    type=str,
-                    help="Replace the default results (final) commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_final_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
@@ -253,7 +208,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--domain",
                     type=str,
                     nargs="+",
-                    help="Test the given domain(s). Multiple space separated domains can be given.",
+                    help="Test one or more domains, separated by spaces.",
                 )
 
                 parser.add_argument(
@@ -273,7 +228,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--database-type",
                     type=str,
                     help="Tell us the type of database to use. "
-                    "\nYou can choose between the following: `json|mariadb|mysql` %s"
+                    "\nYou can choose between the following: `json | mariadb | mysql` %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.db_type)
@@ -308,8 +263,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 parser.add_argument(
                     "--dns",
                     nargs="+",
-                    help="Set the DNS server(s) we have to work with. "
-                    "Multiple space separated DNS server can be given. %s"
+                    help="Set one or more specific DNS servers to use during the test, "
+                    "separated by spaces. %s"
                     % (
                         current_value_format
                         + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))
@@ -695,18 +650,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "--travis-distribution-branch",
-                    type=str,
-                    default="master",
-                    help="Switch the branch name where we are going to push the final results. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_branch)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
                     "--travis-branch",
                     type=str,
                     default="master",
@@ -719,11 +662,69 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
+                    "--travis-distribution-branch",
+                    type=str,
+                    default="master",
+                    help="Switch the branch name where we are going to push the final results. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_branch)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
+                    "--cmd",
+                    type=str,
+                    help="Pass a command to run before each commit "
+                    "(except the final one) under the Travis mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.command_before_end)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
+                    "--cmd-before-end",
+                    type=str,
+                    help="Pass a command to run before the results "
+                    "(final) commit under the Travis mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.command_before_end)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
+                    "--commit-autosave-message",
+                    type=str,
+                    help="Replace the default autosave commit message. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_autosave_commit)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
+                    "--commit-results-message",
+                    type=str,
+                    help="Replace the default results (final) commit message. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_autosave_final_commit)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                parser.add_argument(
                     "-u",
                     "--url",
                     type=str,
                     nargs="+",
-                    help="Test the given URL(s). Multiple space separated URL can be given.",
+                    help="Test one or more full URL, separated by spaces.",
                 )
 
                 parser.add_argument(
@@ -741,7 +742,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--user-agent",
                     type=str,
                     help="Set the user-agent to use and set every time we "
-                    "interact with everything which is not our logs sharing system.",
+                    "interact with everything which is not the logs sharing system.",
                 )
 
                 parser.add_argument(

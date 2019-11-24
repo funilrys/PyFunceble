@@ -81,63 +81,6 @@ As it is sometimes needed to clean our :code:`output/` directory, this argument 
     If you don't combine this argument alongside with the :code:`--database-type` argument or its configurable equivalent,
     this argument will only clean the JSON formatted databases.
 
-:code:`--cmd` "something"
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Pass a command before each commit (except the final one).
-
-    **Default value:** :code:`''`
-
-.. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
-
-.. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
-
-:code:`--cmd-before-end "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Pass a command before the results (final) commit under the Travis mode.
-
-    **Default value:** :code:`''`
-
-.. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
-
-.. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
-
-:code:`--commit-autosave-message "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Replace the default autosave commit message.
-
-    **Default value:** :code:`PyFunceble - AutoSave`
-
-This argument allows us to set a custom commit message which is going to be used as commit message when saving.
-
-.. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
-
-.. note::
-    This argument is only used if we have to split the work into multiple processes because a list is too long or the timeout is reached.
-
-.. warning::
-    Please avoid the usage of :code:`[ci skip]` here.
-
-:code:`--commit-results-message "something"`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    Replace the default results (final) commit message.
-
-    **Default value:** :code:`PyFunceble - Results`
-
-.. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
-
-.. note::
-    This argument is only used if we reached the end of the list we are or have to test.
-
 :code:`--complements`
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,7 +92,7 @@ This argument allows us to set a custom commit message which is going to be used
 :code:`-d "something"` | :code:`--domain "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Test the given domain(s). Multiple space separated DNS server can be given.
+    Test one or more domains, separated by spaces.
 
 .. note::
 
@@ -159,7 +102,7 @@ This argument allows us to set a custom commit message which is going to be used
 
     ::
 
-        $ PyFunceble -d example.org example.com
+        $ PyFunceble -d example.org example.net
 
 :code:`-db` | :code:`--database`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -176,7 +119,8 @@ This argument will disable or enable the usage of a database which saves all `IN
 :code:`--database-type`
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-    Tell us the type of database to use. You can choose between the following: :code:`json`, :code:`mariadb`, :code:`mysql`.
+    Tell us the type of database to use.
+    You can choose between the following: :code:`json`, :code:`mariadb`, :code:`mysql`.
 
     **Default value:** :code:`json`
 
@@ -214,8 +158,7 @@ Want to start without anything? This argument generates the output directory aut
 :code:`--dns`
 ^^^^^^^^^^^^^
 
-    Set the DNS server(s) we have to work with.
-    Multiple space separated DNS server can be given.
+    Set one or more specific DNS servers to use during the test, separated by spacees.
 
 
     **Default value:** :code:`Follow OS DNS` ==> :code:`None`
@@ -281,7 +224,7 @@ This argument will let the system know if it has to generate the hosts file vers
 
     **Default value:** :code:`True`
 
-This argument will let the system know if we have to sort the list and our output in hierarchical order.
+This argument will output the result listed in a hierarchical order.
 
 
 :code:`--http`
@@ -514,7 +457,9 @@ Want to get the logs (copy of what you see on screen) on different files? This a
     **Default value:** :code:`False`
 
 .. warning::
-    This will disable all other form of test and will only check the syntax of the given subject to test.
+    This will disable all other form of test,
+    will validate the syntax of a given test subject,
+    and output its results in plain format into :code:`output/domains/{VALID,INVALID}/list`
 
 :code:`-t "something"` | :code:`--timeout "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -532,7 +477,18 @@ This argument will set the default timeout to apply everywhere it is possible to
 
     **Default value:** :code:`False`
 
+.. note::
+    If you combine this argument with the `--quiet` argument, the test will
+    output a dotted line, were each dot (:code:`.`) represent one test result.
+
 Want to use PyFunceble under Travis CI? This argument is suited for your need!
+
+:code:`--travis-branch`
+^^^^^^^^^^^^^^^^^^^^^^^
+
+    Switch the branch name where we are going to push.
+
+    **Default value:** :code:`master`
 
 :code:`--travis-distribution-branch`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -551,17 +507,68 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
     - :code:`proceessing` (travis branch), for the tests with PyFunceble.
     - :code:`master` (travis distribution branch), for the distribution of the results of PyFunceble.
 
-:code:`--travis-branch`
-^^^^^^^^^^^^^^^^^^^^^^^
+:code:`--cmd` "something"
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Switch the branch name where we are going to push.
+    Pass a command before each commit (except the final one).
 
-    **Default value:** :code:`master`
+    **Default value:** :code:`''`
+
+.. note::
+    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+
+.. note::
+    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
+
+:code:`--cmd-before-end "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Pass a command before the results (final) commit under the Travis mode.
+
+    **Default value:** :code:`''`
+
+.. note::
+    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+
+.. note::
+    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
+
+:code:`--commit-autosave-message "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Replace the default autosave commit message.
+
+    **Default value:** :code:`PyFunceble - AutoSave`
+
+This argument allows us to set a custom commit message which is going to be used as commit message when saving.
+
+.. note::
+    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
+
+.. note::
+    This argument is only used if we have to split the work into multiple processes because a list is too long or the timeout is reached.
+
+.. warning::
+    Please avoid the usage of :code:`[ci skip]` here.
+
+:code:`--commit-results-message "something"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Replace the default results (final) commit message.
+
+    **Default value:** :code:`PyFunceble - Results`
+
+.. note::
+    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
+
+.. note::
+    This argument is only used if we reached the end of the list we are or have to test.
+
 
 :code:`-url "something"` | :code:`--url "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Test the given URL(s). Multiple space separated URL can be given.
+    Test one or more full URL, separated by spaces.
 
 .. note::
     When we test the availability of a URL, we (only) check the HTTP status code of the given URL.
@@ -604,7 +611,7 @@ Want to use PyFunceble under Travis CI? This argument is suited for your need!
 :code:`-ua "something"` | :code:`--user-agent "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Set the user-agent to use and set every time we interact with everything which is not our logs sharing system.
+    Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
 
 :code:`-v` | :code:`--version`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -637,11 +644,8 @@ Global overview
 ::
 
     usage: PyFunceble [-ad] [-a] [-c] [--autosave-minutes AUTOSAVE_MINUTES]
-                    [--clean] [--clean-all] [--cmd CMD]
-                    [--cmd-before-end CMD_BEFORE_END]
-                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
-                    [--commit-results-message COMMIT_RESULTS_MESSAGE]
-                    [--complements] [-d DOMAIN [DOMAIN ...]] [-db]
+                    [--clean] [--clean-all] [--complements]
+                    [-d DOMAIN [DOMAIN ...]] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [--directory-structure]
                     [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-ex]
@@ -652,11 +656,15 @@ Global overview
                     [-nl] [-ns] [-nu] [-nw] [--percentage] [--plain]
                     [-p PROCESSES] [-psl] [-q] [--share-logs] [-s] [--split]
                     [--syntax] [-t TIMEOUT] [--travis]
+                    [--travis-branch TRAVIS_BRANCH]
                     [--travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH]
-                    [--travis-branch TRAVIS_BRANCH] [-u URL [URL ...]]
-                    [-uf URL_FILE] [-ua USER_AGENT] [-v] [-vsc] [-wdb]
+                    [--cmd CMD] [--cmd-before-end CMD_BEFORE_END]
+                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
+                    [--commit-results-message COMMIT_RESULTS_MESSAGE]
+                    [-u URL [URL ...]] [-uf URL_FILE] [-ua USER_AGENT] [-v]
+                    [-vsc] [-wdb]
 
-    The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+    PyFunceble - The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
     optional arguments:
         -ad, --adblock        Switch the decoding of the adblock format.
@@ -671,34 +679,23 @@ Global overview
                                 Configured value: 15
         --clean               Clean all files under the output directory.
         --clean-all           Clean all files under the output directory along with all file generated by PyFunceble.
-        --cmd CMD             Pass a command to run before each commit (except the final one) under the Travis mode.
-                                Configured value: ''
-        --cmd-before-end CMD_BEFORE_END
-                                Pass a command to run before the results (final) commit under the Travis mode.
-                                Configured value: ''
-        --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
-                                Replace the default autosave commit message.
-                                Configured value: 'PyFunceble - AutoSave'
-        --commit-results-message COMMIT_RESULTS_MESSAGE
-                                Replace the default results (final) commit message.
-                                Configured value: 'PyFunceble - Results'
         --complements         Switch the value of the generation and test of the complements.
                                 A complement is for example `example.org` if `www.example.org` is given and vice-versa.
                                 Configured value: False
         -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
-                                Test the given domain(s). Multiple space separated domains can be given.
+                                Test one or more domains, separated by spaces.
         -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
                                 Configured value: True
         --database-type DATABASE_TYPE
                                 Tell us the type of database to use.
-                                You can choose between the following: `json|mariadb|mysql`
+                                You can choose between the following: `json | mariadb | mysql`
                                 Configured value: 'json'
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of days between each retest of domains present into inactive-db.json.
                                 Configured value: 1
         --directory-structure
                                 Generate the directory and files that are needed and which does not exist in the current directory.
-        --dns DNS [DNS ...]   Set the DNS server(s) we have to work with. Multiple space separated DNS server can be given.
+        --dns DNS [DNS ...]   Set one or more specific DNS servers to use during the test, separated by spaces.
                                 Configured value: Follow OS DNS
         --dns-lookup-over-tcp
                                 Make all DNS query with TCP.
@@ -768,21 +765,32 @@ Global overview
                                 Configured value: 5.0
         --travis              Switch the value of the Travis mode.
                                 Configured value: False
-        --travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH
-                                Switch the branch name where we are going to push the final results.
-                                Configured value: 'master'
         --travis-branch TRAVIS_BRANCH
                                 Switch the branch name where we are going to push.
                                 Configured value: 'master'
+        --travis-distribution-branch TRAVIS_DISTRIBUTION_BRANCH
+                                Switch the branch name where we are going to push the final results.
+                                Configured value: 'master'
+        --cmd CMD             Pass a command to run before each commit (except the final one) under the Travis mode.
+                                Configured value: ''
+        --cmd-before-end CMD_BEFORE_END
+                                Pass a command to run before the results (final) commit under the Travis mode.
+                                Configured value: ''
+        --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
+                                Replace the default autosave commit message.
+                                Configured value: 'PyFunceble - AutoSave'
+        --commit-results-message COMMIT_RESULTS_MESSAGE
+                                Replace the default results (final) commit message.
+                                Configured value: 'PyFunceble - Results'
         -u URL [URL ...], --url URL [URL ...]
-                                Test the given URL(s). Multiple space separated URL can be given.
+                                Test one or more full URL, separated by spaces.
         -uf URL_FILE, --url-file URL_FILE
                                 Read a local or remote (RAW link) file and test all (full) URLs inside it.
                                 If remote (RAW link) file is given, PyFunceble will download it, and test the content of the given RAW link as if it was a locally stored file.
 
                                 This argument test if an URL is available. It ONLY test full URLs.
         -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set every time we interact with everything which is not our logs sharing system.
+                                Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
         -v, --version         Show the version of PyFunceble and exit.
         -vsc, --verify-ssl-certificate
                                 Switch the value of the verification of the SSL/TLS certificate when testing for URL.
@@ -791,4 +799,6 @@ Global overview
                                 Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
                                 Configured value: True
 
-    Crafted with ♥ by Nissar Chababy (Funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html
+    For an in depth usage, examplation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
+
+    Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html
