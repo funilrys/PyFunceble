@@ -15,18 +15,26 @@ Execute the following and let's hack PyFunceble!
 .. note::
    We highly recommend you to develop PyFunceble under a :code:`virtualenv`.
 
+Python2.x:
 ::
 
    $ git clone https://github.com/funilrys/PyFunceble.git
    $ cd PyFunceble && git checkout dev && virtualenv venv
    $ source venv/bin/activate && pip3 install -e .
 
+Python3.x:
+::
+
+   $ git clone https://github.com/funilrys/PyFunceble.git
+   $ cd PyFunceble && git checkout dev && venv venv
+   $ source venv/bin/activate && python3 -m pip install -e .
+
 .. note::
    After installing with:
 
    ::
 
-      $ source venv/bin/activate && pip3 install -e .
+      $ source venv/bin/activate && python3 -m pip install -e .
 
    * you only need to update the repository.
    * you don't have to rerun the :code:`pip` command.
@@ -44,24 +52,24 @@ From PyPi
 
 ::
 
-   $ pip3 install --user PyFunceble-dev
+   $ python3 -m pip install --user PyFunceble-dev
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis-CI.
 
 From GitHub
 """""""""""
 
 ::
 
-   $ pip3 install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+   $ python3 -m pip install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis-CI.
 
 Using the AUR (for Arch Linux users)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
