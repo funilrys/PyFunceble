@@ -34,7 +34,7 @@ Warnings around Database (self) management
 Databases types
 ===============
 
-Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble :code:`>=1.18.0`),
+Since PyFunceble :code:`2.0.0` (equivalent of :code:`>=1.18.0.dev`),
 we offer multiple database types which are (as per configuration) :code:`json` (default), :code:`mariadb` and :code:`mysql`.
 
 Why different database types?
@@ -61,12 +61,15 @@ How to use the :code:`mysql` or :code:`mariadb` format?
     PYFUNCEBLE_DB_PORT=3306
     PYFUNCEBLE_DB_USERNAME=pyfunceble
 
-.. note:: Since version 2.4.3 it have possible to use the :code:`mysqld.sock` for :code:`PYFUNCEBLE_DB_HOST=` value.
+.. note::
+    Since the version :code:`2.4.3.dev` it have possible to provide a UNIX socket
+    file for the :code:`PYFUNCEBLE_DB_HOST` environment variable.
 
-    The typycal location for :code:`mysqld.sock` is :code:`/var/run/mysqld/mysqld.sock`. This have been done to make  
-    
-      1. It easier to use in conjunction with Travis-CI  
-      2. Leaving more space on the IP-stack on local DB installations  
+    The typycal location for :code:`mysqld.sock` is :code:`/var/run/mysqld/mysqld.sock`.
+    This have been done to make:
+
+      1. It easier to use in conjunction with Travis-CI
+      2. Leaving more space on the IP-stack on local DB installations
       3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on local runs
 
 4. Switch the :code:`db_type` index of your configuration file to :code:`mysql` or :code:`mariadb`.
