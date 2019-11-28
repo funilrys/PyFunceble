@@ -9,24 +9,24 @@ From PyPi
 
 ::
 
-   $ python3 -m pip install --user PyFunceble
+   $ pip install --user PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis-CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 From GitHub
 ^^^^^^^^^^^
 
 ::
 
-   $ python3 -m pip install --user git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
+   $ pip install --user git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis-CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 Using the AUR (for Arch Linux users)
 ------------------------------------
