@@ -146,9 +146,6 @@ class DomainAndIp(GathererBase):
                 else:
                     self.status["_status"] = PyFunceble.STATUS.official.down
                     self.status["_status_source"] = "DNSLOOKUP"
-
-                    # Everything else returned INVALID. So we get the status code.
-                    self.gather_http_status_code()
         else:
             self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
 
@@ -163,6 +160,8 @@ class DomainAndIp(GathererBase):
         PyFunceble.LOGGER.debug(
             f'[{self.subject}] State before extra rules:\n{self.status["_status"]}'
         )
+
+        self.gather_http_status_code()
 
         self.status.status, self.status.status_source = ExtraRules(
             self.subject, self.subject_type, self.status.http_status_code

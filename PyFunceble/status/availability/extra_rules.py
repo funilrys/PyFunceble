@@ -96,11 +96,12 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_down = {
             r"\.blogspot\.": self.__blogspot,
-            r"\.canalblog\.com$": self.__special_down,
-            r"\.doubleclick\.net$": self.__special_down,
-            r"\.liveadvert\.com$": self.__special_down,
-            r"\.skyrock\.com$": self.__special_down,
-            r"\.tumblr\.com$": self.__special_down,
+            r"\.canalblog\.com$": self.__special_down_404,
+            r"\.doubleclick\.net$": self.__special_down_404,
+            r"\.github\.io$": self.__special_down_404,
+            r"\.liveadvert\.com$": self.__special_down_404,
+            r"\.skyrock\.com$": self.__special_down_404,
+            r"\.tumblr\.com$": self.__special_down_404,
         }
 
         # We set a list of regex and methods to call if matched.
@@ -121,6 +122,19 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         return PyFunceble.STATUS.official.down, "SPECIAL"
+
+    def __special_down_404(self):
+        """
+        Set what we return for the SPECIAL status de-escalation
+        when the 404 status code is caught.
+
+        :return: :code:`(new status, new source)`
+        :rtype: tuple
+        """
+
+        if self.status_code == "404":
+            return PyFunceble.STATUS.official.down, "SPECIAL"
+        return None
 
     @classmethod
     def __special_up(cls):
@@ -192,7 +206,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
                     # * Something in the document match the currently read regex.
 
                     PyFunceble.LOGGER.info(
-                        "[{self.subject}] Switching status according to blogspot rule.."
+                        "[{self.subject}] Switching status according to blogspot rule."
                     )
 
                     # We update the status and source.

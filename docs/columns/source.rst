@@ -57,6 +57,11 @@ So I introduced the SPECIAL source.
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
+:code:`*.github.io`
+^^^^^^^^^^^^^^^^^^^
+
+- All :code:`404` are returned as :code:`INACTIVE`
+
 :code:`*.liveadvert.com`
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
