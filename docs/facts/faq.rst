@@ -22,7 +22,7 @@ I have multiple CPU
 Simply use the :code:`-m | --multiprocess` argument to activate
 the usage of multiple processes.
 You can in addition to that use the :code:`-p | --processes`
-argument to tell us the number of simultaneous process to run.
+argument to tell set the number of simultaneous process to run.
 
 .. note::
     A good number for :code:`-p` is your number of :code:`CPU_cores -1`, to leave room for orther processes to work.
@@ -36,7 +36,8 @@ argument to tell us the number of simultaneous process to run.
         $ lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
 
 .. warning::
-    DO NOT try to exceed your total number of CPU cores (as :code:`-p | --processes`) if you want to keep your machine somehow alive and healthy.
+    DO NOT try to exceed your total number of CPU cores (as :code:`-p | --processes`),
+    if you want to keep your machine somehow alive and healthy.
 
 I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
