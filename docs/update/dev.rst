@@ -82,7 +82,7 @@ Execute the following and enjoy PyFunceble!
    $ git fetch origin && git merge origin/dev
    $ python3 setup.py test
    $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip install --user --upgrade -e .
+   $ pip3 install --user --upgrade -e .
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.

@@ -9,7 +9,7 @@ From PyPi
 
 ::
 
-   $ pip install --user --upgrade PyFunceble
+   $ pip3 install --user --upgrade PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
@@ -21,7 +21,7 @@ From GitHub
 
 ::
 
-   $ pip install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
+   $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
@@ -63,7 +63,7 @@ Execute the following and enjoy PyFunceble!
    $ git checkout master && git fetch origin && git merge origin/master
    $ python3 setup.py test
    $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip install --user --upgrade -e .
+   $ pip3 install --user --upgrade -e .
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.

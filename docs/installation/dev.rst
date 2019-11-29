@@ -26,7 +26,7 @@ Execute the following and let's hack PyFunceble!
    $ git checkout dev
    $ virtualenv venv
    $ source venv/bin/activate
-   $ pip install -e .
+   $ pip3 install -e .
 
 .. note::
    After installing with:
@@ -34,7 +34,7 @@ Execute the following and let's hack PyFunceble!
    ::
 
       $ source venv/bin/activate
-      $ pip install -e .
+      $ pip3 install -e .
 
    * you only need to update the repository.
    * you don't have to rerun the :code:`pip` command.
@@ -52,7 +52,7 @@ From PyPi
 
 ::
 
-   $ pip install --user PyFunceble-dev
+   $ pip3 install --user PyFunceble-dev
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
@@ -64,7 +64,7 @@ From GitHub
 
 ::
 
-   $ pip install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+   $ pip3 install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
@@ -107,7 +107,7 @@ Execute the following and enjoy PyFunceble!
    $ cd PyFunceble && git checkout dev
    $ python3 setup.py test
    $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip install --user -e .
+   $ pip3 install --user -e .
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
