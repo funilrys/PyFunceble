@@ -167,10 +167,10 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--autosave-minutes",
                     type=int,
                     help="Update the minimum of minutes before we start "
-                    "committing to upstream under Travis CI. %s"
+                    "committing to upstream under a CI. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_minutes)
+                        + repr(PyFunceble.CONFIGURATION.ci_autosave_minutes)
                         + Style.RESET_ALL
                     ),
                 )
@@ -218,7 +218,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     help="Replace the default autosave commit message. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_commit)
+                        + repr(PyFunceble.CONFIGURATION.ci_autosave_commit)
                         + Style.RESET_ALL
                     ),
                 )
@@ -229,7 +229,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     help="Replace the default results (final) commit message. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_final_commit)
+                        + repr(PyFunceble.CONFIGURATION.ci_autosave_final_commit)
                         + Style.RESET_ALL
                     ),
                 )
@@ -686,12 +686,16 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "--travis",
+                    "--travis", action="store_true", help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
+                    "--ci",
                     action="store_true",
-                    help="Switch the value of the Travis mode. %s"
+                    help="Switch the value of the CI mode. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis)
+                        + repr(PyFunceble.CONFIGURATION.ci)
                         + Style.RESET_ALL
                     ),
                 )
@@ -700,10 +704,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--travis-distribution-branch",
                     type=str,
                     default="master",
+                    help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
+                    "--ci-distribution-branch",
+                    type=str,
+                    default="master",
                     help="Switch the branch name where we are going to push the final results. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_branch)
+                        + repr(PyFunceble.CONFIGURATION.ci_distribution_branch)
                         + Style.RESET_ALL
                     ),
                 )
@@ -712,10 +723,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--travis-branch",
                     type=str,
                     default="master",
+                    help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
+                    "--ci-branch",
+                    type=str,
+                    default="master",
                     help="Switch the branch name where we are going to push. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_branch)
+                        + repr(PyFunceble.CONFIGURATION.ci_branch)
                         + Style.RESET_ALL
                     ),
                 )
@@ -798,9 +816,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     )
 
                 if args.autosave_minutes:
-                    PyFunceble.CONFIGURATION.travis_autosave_minutes = (
-                        args.autosave_minutes
-                    )
+                    PyFunceble.CONFIGURATION.ci_autosave_minutes = args.autosave_minutes
 
                 if args.cmd:
                     PyFunceble.CONFIGURATION.command = args.cmd
@@ -809,12 +825,12 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.command_before_end = args.cmd_before_end
 
                 if args.commit_autosave_message:
-                    PyFunceble.CONFIGURATION.travis_autosave_commit = (
+                    PyFunceble.CONFIGURATION.ci_autosave_commit = (
                         args.commit_autosave_message
                     )
 
                 if args.commit_results_message:
-                    PyFunceble.CONFIGURATION.travis_autosave_final_commit = (
+                    PyFunceble.CONFIGURATION.ci_autosave_final_commit = (
                         args.commit_results_message
                     )
 
@@ -961,16 +977,22 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 if args.syntax:
                     PyFunceble.CONFIGURATION.syntax = preset.switch("syntax")
 
-                if args.travis:
-                    PyFunceble.CONFIGURATION.travis = preset.switch("travis")
+                if args.ci or args.travis:
+                    PyFunceble.CONFIGURATION.ci = preset.switch("ci")
 
-                if args.travis_distribution_branch:
-                    PyFunceble.CONFIGURATION.travis_distribution_branch = (
+                if args.ci_distribution_branch:
+                    PyFunceble.CONFIGURATION.ci_distribution_branch = (
+                        args.ci_distribution_branch
+                    )
+                elif args.travis_distribution_branch:
+                    PyFunceble.CONFIGURATION.ci_distribution_branch = (
                         args.travis_distribution_branch
                     )
 
-                if args.travis_branch:
-                    PyFunceble.CONFIGURATION.travis_branch = args.travis_branch
+                if args.ci_branch:
+                    PyFunceble.CONFIGURATION.ci_branch = args.ci_branch
+                elif args.travis_branch:
+                    PyFunceble.CONFIGURATION.ci_branch = args.travis_branch
 
                 if args.user_agent:
                     PyFunceble.CONFIGURATION.user_agent = args.user_agent

@@ -81,7 +81,7 @@ class Preset:  # pragma: no cover
         "no_files",
         "quiet",
         "timeout",
-        "travis",
+        "ci",
         "whois_database",
     ]
 
