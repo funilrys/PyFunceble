@@ -73,7 +73,7 @@ from .dispatcher import Dispatcher
 from .production import Production
 
 
-def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements
+def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements,too-many-locals
     """
     Provide the CLI.
     """
@@ -120,11 +120,58 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     formatter_class=argparse.RawTextHelpFormatter,
                 )
 
+                source_group = parser.add_argument_group("Source")
+                filtering_group = parser.add_argument_group(
+                    "Source filtering, decoding, conversion and expansion"
+                )
+                test_control = parser.add_argument_group("Test control")
+                dns_control_group = parser.add_argument_group("DNS (resolver) control")
+                database_control_group = parser.add_argument_group("Databases")
+                output_control_group = parser.add_argument_group("Output control")
+                multiprocessing_group = parser.add_argument_group("Multiprocessing")
+                ci_group = parser.add_argument_group("CI / CD")
+                unique_group = parser.add_argument_group("Unique actions")
+
                 current_value_format = (
                     f"\n{Fore.YELLOW}{Style.BRIGHT}Configured value: {Fore.BLUE}"
                 )
 
-                parser.add_argument(
+                source_group.add_argument(
+                    "-d",
+                    "--domain",
+                    type=str,
+                    nargs="+",
+                    help="Test one or more domains, separated by spaces.",
+                )
+
+                source_group.add_argument(
+                    "-u",
+                    "--url",
+                    type=str,
+                    nargs="+",
+                    help="Test one or more full URL, separated by spaces.",
+                )
+
+                source_group.add_argument(
+                    "-f",
+                    "--file",
+                    type=str,
+                    help="Read a local or remote (RAW link) file and test all domains inside it."
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "and test the content of the given RAW link as if it was a locally stored file.",
+                )
+
+                source_group.add_argument(
+                    "-uf",
+                    "--url-file",
+                    type=str,
+                    help="Read a local or remote (RAW link) file and test all (full) URLs inside it."
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "and test the content of the given RAW link as if it was a locally stored file. "
+                    "\n\nThis argument test if an URL is available. It ONLY test full URLs.",
+                )
+
+                filtering_group.add_argument(
                     "-ad",
                     "--adblock",
                     action="store_true",
@@ -136,61 +183,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
+                filtering_group.add_argument(
                     "--aggressive", action="store_true", help=argparse.SUPPRESS
                 )
 
-                parser.add_argument(
-                    "-a",
-                    "--all",
-                    action="store_false",
-                    help="Output all available information on the screen. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.less)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "" "-c",
-                    "--auto-continue",
-                    "--continue",
-                    action="store_true",
-                    help="Switch the value of the auto continue mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.auto_continue)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--autosave-minutes",
-                    type=int,
-                    help="Update the minimum of minutes before we start "
-                    "committing to upstream under a CI. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci_autosave_minutes)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--clean",
-                    action="store_true",
-                    help="Clean all files under the output directory.",
-                )
-
-                parser.add_argument(
-                    "--clean-all",
-                    action="store_true",
-                    help="Clean all files under the output directory "
-                    "along with all file generated by PyFunceble.",
-                )
-
-                parser.add_argument(
+                filtering_group.add_argument(
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
@@ -203,172 +200,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "-d",
-                    "--domain",
-                    type=str,
-                    nargs="+",
-                    help="Test one or more domains, separated by spaces.",
-                )
-
-                parser.add_argument(
-                    "-db",
-                    "--database",
-                    action="store_true",
-                    help="Switch the value of the usage of a database to store "
-                    "inactive domains of the currently tested list. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.inactive_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--database-type",
-                    type=str,
-                    help="Tell us the type of database to use. "
-                    "\nYou can choose between the following: `json | mariadb | mysql` %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.db_type)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-dbr",
-                    "--days-between-db-retest",
-                    type=int,
-                    help="Set the numbers of days between each retest of domains present "
-                    "into inactive-db.json. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.days_between_db_retest)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--debug", action="store_true", help=argparse.SUPPRESS
-                )
-
-                parser.add_argument(
-                    "--directory-structure",
-                    action="store_true",
-                    help="Generate the directory and files that are needed and which does "
-                    "not exist in the current directory.",
-                )
-
-                parser.add_argument(
-                    "--dns",
-                    nargs="+",
-                    help="Set one or more specific DNS servers to use during the test, "
-                    "separated by spaces. %s"
-                    % (
-                        current_value_format
-                        + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))
-                        if PyFunceble.CONFIGURATION.dns_server
-                        else current_value_format + "Follow OS DNS" + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--dns-lookup-over-tcp",
-                    action="store_true",
-                    help="Make all DNS query with TCP. "
-                    "%s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.dns_lookup_over_tcp)
-                    ),
-                )
-
-                parser.add_argument(
-                    "-ex",
-                    "--execution",
-                    action="store_true",
-                    help="Switch the default value of the execution time showing. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.show_execution_time)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-f",
-                    "--file",
-                    type=str,
-                    help="Read a local or remote (RAW link) file and test all domains inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
-                    "and test the content of the given RAW link as if it was a locally stored file.",
-                )
-
-                parser.add_argument(
+                filtering_group.add_argument(
                     "--filter", type=str, help="Domain to filter (regex)."
                 )
 
-                parser.add_argument(
-                    "--generate-files-from-database",
-                    action="store_true",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--generate-all-files-from-database",
-                    action="store_true",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--help",
-                    action="help",
-                    default=argparse.SUPPRESS,
-                    help="Show this help message and exit.",
-                )
-
-                parser.add_argument(
-                    "--hierarchical",
-                    action="store_true",
-                    help="Switch the value of the hierarchical sorting of the tested file. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.hierarchical_sorting)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-h",
-                    "--host",
-                    action="store_true",
-                    help="Switch the value of the generation of hosts file. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.generate_hosts)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--http",
-                    action="store_true",
-                    help="Switch the value of the usage of HTTP code. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.http_codes.active)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--iana",
-                    action="store_true",
-                    help="Update/Generate `iana-domains-db.json`.",
-                )
-
-                parser.add_argument(
+                filtering_group.add_argument(
                     "--idna",
                     action="store_true",
                     help="Switch the value of the IDNA conversion. %s"
@@ -379,52 +215,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "-ip",
-                    type=str,
-                    help="Change the IP to print in the hosts files with the given one. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.custom_ip)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--json",
-                    action="store_true",
-                    help="Switch the value of the generation "
-                    "of the JSON formatted list of domains. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.generate_json)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--less",
-                    action="store_true",
-                    help="Output less informations on screen. %s"
-                    % (
-                        current_value_format
-                        + repr(preset.switch("less"))
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--local",
-                    action="store_true",
-                    help="Switch the value of the local network testing. %s"
-                    % (
-                        current_value_format
-                        + repr(preset.switch("local"))
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
+                filtering_group.add_argument(
                     "--mining",
                     action="store_true",
                     help="Switch the value of the mining subsystem usage. %s"
@@ -435,56 +226,42 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "-m",
-                    "--multiprocess",
+                test_control.add_argument(
+                    "" "-c",
+                    "--auto-continue",
+                    "--continue",
                     action="store_true",
-                    help="Switch the value of the usage of multiple process. %s"
+                    help="Switch the value of the auto continue mode. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.multiprocess)
+                        + repr(PyFunceble.CONFIGURATION.auto_continue)
                         + Style.RESET_ALL
                     ),
                 )
 
-                parser.add_argument(
-                    "--multiprocess-merging-mode",
-                    type=str,
-                    help="Sets the multiprocess merging mode. "
-                    "\nYou can choose between the following: `live|ends`. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.multiprocess_merging_mode)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-n",
-                    "--no-files",
+                test_control.add_argument(
+                    "--http",
                     action="store_true",
-                    help="Switch the value of the production of output files. %s"
+                    help="Switch the value of the usage of HTTP code. %s"
                     % (
                         current_value_format
-                        + repr(PyFunceble.CONFIGURATION.no_files)
+                        + repr(PyFunceble.CONFIGURATION.http_codes.active)
                         + Style.RESET_ALL
                     ),
                 )
 
-                parser.add_argument(
-                    "-nl",
-                    "--no-logs",
+                test_control.add_argument(
+                    "--local",
                     action="store_true",
-                    help="Switch the value of the production of logs files "
-                    "in the case we encounter some errors. %s"
+                    help="Switch the value of the local network testing. %s"
                     % (
                         current_value_format
-                        + repr(not PyFunceble.CONFIGURATION.logs)
+                        + repr(preset.switch("local"))
                         + Style.RESET_ALL
                     ),
                 )
 
-                parser.add_argument(
+                test_control.add_argument(
                     "-ns",
                     "--no-special",
                     action="store_true",
@@ -496,20 +273,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "-nu",
-                    "--no-unified",
-                    action="store_true",
-                    help="Switch the value of the production unified logs "
-                    "under the output directory. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.unified)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
+                test_control.add_argument(
                     "-nw",
                     "--no-whois",
                     action="store_true",
@@ -521,100 +285,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "--percentage",
-                    action="store_true",
-                    help="Switch the value of the percentage output mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.show_percentage)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--plain",
-                    action="store_true",
-                    help="Switch the value of the generation "
-                    "of the plain list of domains. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.plain_list_domain)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-p",
-                    "--processes",
-                    type=int,
-                    help="Set the number of simultaneous processes to use while "
-                    "using multiple processes. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.maximal_processes)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--production", action="store_true", help=argparse.SUPPRESS
-                )
-
-                parser.add_argument(
-                    "-psl",
-                    "--public-suffix",
-                    action="store_true",
-                    help="Update/Generate `public-suffix.json`.",
-                )
-
-                parser.add_argument(
-                    "-q",
-                    "--quiet",
-                    action="store_true",
-                    help="Run the script in quiet mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.quiet)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--share-logs",
-                    action="store_true",
-                    help="Switch the value of the sharing of logs. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.share_logs)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-s",
-                    "--simple",
-                    action="store_true",
-                    help="Switch the value of the simple output mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.simple)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--split",
-                    action="store_true",
-                    help="Switch the value of the split of the generated output files. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.inactive_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
+                test_control.add_argument(
                     "--syntax",
                     action="store_true",
                     help="Switch the value of the syntax test mode. %s"
@@ -625,7 +296,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
+                test_control.add_argument(
                     "-t",
                     "--timeout",
                     type=int,
@@ -638,124 +309,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
-                    "--travis", action="store_true", help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--ci",
-                    action="store_true",
-                    help="Switch the value of the CI mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--travis-branch",
-                    type=str,
-                    default="master",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--ci-distribution-branch",
-                    type=str,
-                    default="master",
-                    help="Switch the branch name where we are going to push the final results. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci_distribution_branch)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--travis-distribution-branch",
-                    type=str,
-                    default="master",
-                    help=argparse.SUPPRESS,
-                )
-
-                parser.add_argument(
-                    "--ci-branch",
-                    type=str,
-                    default="master",
-                    help="Switch the branch name where we are going to push. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci_branch)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--cmd",
-                    type=str,
-                    help="Pass a command to run before each commit "
-                    "(except the final one) under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--cmd-before-end",
-                    type=str,
-                    help="Pass a command to run before the results "
-                    "(final) commit under the Travis mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.command_before_end)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-autosave-message",
-                    type=str,
-                    help="Replace the default autosave commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-results-message",
-                    type=str,
-                    help="Replace the default results (final) commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.travis_autosave_final_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "-u",
-                    "--url",
-                    type=str,
-                    nargs="+",
-                    help="Test one or more full URL, separated by spaces.",
-                )
-
-                parser.add_argument(
-                    "-uf",
-                    "--url-file",
-                    type=str,
-                    help="Read a local or remote (RAW link) file and test all (full) URLs inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
-                    "and test the content of the given RAW link as if it was a locally stored file. "
-                    "\n\nThis argument test if an URL is available. It ONLY test full URLs.",
-                )
-
-                parser.add_argument(
+                test_control.add_argument(
                     "-ua",
                     "--user-agent",
                     type=str,
@@ -763,15 +317,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "interact with everything which is not the logs sharing system.",
                 )
 
-                parser.add_argument(
-                    "-v",
-                    "--version",
-                    help="Show the version of PyFunceble and exit.",
-                    action="version",
-                    version="%(prog)s " + PyFunceble.VERSION,
-                )
-
-                parser.add_argument(
+                test_control.add_argument(
                     "-vsc",
                     "--verify-ssl-certificate",
                     action="store_true",
@@ -784,7 +330,71 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
-                parser.add_argument(
+                dns_control_group.add_argument(
+                    "--dns",
+                    nargs="+",
+                    help="Set one or more specific DNS servers to use during the test, "
+                    "separated by spaces. %s"
+                    % (
+                        current_value_format
+                        + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))
+                        if PyFunceble.CONFIGURATION.dns_server
+                        else current_value_format
+                        + "OS (declared) DNS server"
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                dns_control_group.add_argument(
+                    "--dns-lookup-over-tcp",
+                    action="store_true",
+                    help="Make all DNS query with TCP. "
+                    "%s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.dns_lookup_over_tcp)
+                    ),
+                )
+
+                database_control_group.add_argument(
+                    "-db",
+                    "--database",
+                    action="store_true",
+                    help="Switch the value of the usage of a database to store "
+                    "inactive domains of the currently tested list. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.inactive_database)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                database_control_group.add_argument(
+                    "--database-type",
+                    type=str,
+                    help="Tell us the type of database to use. "
+                    "\nYou can choose between the following: `json | mariadb | mysql` %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.db_type)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                database_control_group.add_argument(
+                    "-dbr",
+                    "--days-between-db-retest",
+                    type=int,
+                    help="Set the numbers of days between each retest of domains present "
+                    "into inactive-db.json. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.days_between_db_retest)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                database_control_group.add_argument(
                     "-wdb",
                     "--whois-database",
                     action="store_true",
@@ -795,6 +405,410 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                         + repr(PyFunceble.CONFIGURATION.whois_database)
                         + Style.RESET_ALL
                     ),
+                )
+
+                output_control_group.add_argument(
+                    "-a",
+                    "--all",
+                    action="store_false",
+                    help="Output all available information on the screen. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.less)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-ex",
+                    "--execution",
+                    action="store_true",
+                    help="Switch the default value of the execution time showing. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.show_execution_time)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--hierarchical",
+                    action="store_true",
+                    help="Switch the value of the hierarchical sorting of the tested file. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.hierarchical_sorting)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-h",
+                    "--host",
+                    action="store_true",
+                    help="Switch the value of the generation of hosts file. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.generate_hosts)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-ip",
+                    type=str,
+                    help="Change the IP to print in the hosts files with the given one. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.custom_ip)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--json",
+                    action="store_true",
+                    help="Switch the value of the generation "
+                    "of the JSON formatted list of domains. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.generate_json)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--less",
+                    action="store_true",
+                    help="Output less informations on screen. %s"
+                    % (
+                        current_value_format
+                        + repr(preset.switch("less"))
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-n",
+                    "--no-files",
+                    action="store_true",
+                    help="Switch the value of the production of output files. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.no_files)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-nl",
+                    "--no-logs",
+                    action="store_true",
+                    help="Switch the value of the production of logs files "
+                    "in the case we encounter some errors. %s"
+                    % (
+                        current_value_format
+                        + repr(not PyFunceble.CONFIGURATION.logs)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-nu",
+                    "--no-unified",
+                    action="store_true",
+                    help="Switch the value of the production unified logs "
+                    "under the output directory. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.unified)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--percentage",
+                    action="store_true",
+                    help="Switch the value of the percentage output mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.show_percentage)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--plain",
+                    action="store_true",
+                    help="Switch the value of the generation "
+                    "of the plain list of domains. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.plain_list_domain)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-q",
+                    "--quiet",
+                    action="store_true",
+                    help="Run the script in quiet mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.quiet)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--share-logs",
+                    action="store_true",
+                    help="Switch the value of the sharing of logs. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.share_logs)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "-s",
+                    "--simple",
+                    action="store_true",
+                    help="Switch the value of the simple output mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.simple)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
+                    "--split",
+                    action="store_true",
+                    help="Switch the value of the split of the generated output files. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.inactive_database)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                multiprocessing_group.add_argument(
+                    "-m",
+                    "--multiprocess",
+                    action="store_true",
+                    help="Switch the value of the usage of multiple process. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.multiprocess)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                multiprocessing_group.add_argument(
+                    "--multiprocess-merging-mode",
+                    type=str,
+                    help="Sets the multiprocess merging mode. "
+                    "\nYou can choose between the following: `live|ends`. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.multiprocess_merging_mode)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                multiprocessing_group.add_argument(
+                    "-p",
+                    "--processes",
+                    type=int,
+                    help="Set the number of simultaneous processes to use while "
+                    "using multiple processes. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.maximal_processes)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--autosave-minutes",
+                    type=int,
+                    help="Update the minimum of minutes before we start "
+                    "committing to upstream under the CI mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.ci_autosave_minutes)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--travis", action="store_true", help=argparse.SUPPRESS,
+                )
+
+                ci_group.add_argument(
+                    "--ci",
+                    action="store_true",
+                    help="Switch the value of the CI mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.ci)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--ci-branch",
+                    type=str,
+                    default="master",
+                    help="Switch the branch name where we are going to push. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.ci_branch)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--travis-branch",
+                    type=str,
+                    default="master",
+                    help=argparse.SUPPRESS,
+                )
+
+                ci_group.add_argument(
+                    "--ci-distribution-branch",
+                    type=str,
+                    default="master",
+                    help="Switch the branch name where we are going to push the final results. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.ci_distribution_branch)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--travis-distribution-branch",
+                    type=str,
+                    default="master",
+                    help=argparse.SUPPRESS,
+                )
+
+                ci_group.add_argument(
+                    "--cmd",
+                    type=str,
+                    help="Pass a command to run before each commit "
+                    "(except the final one) under the CI mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.command_before_end)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--cmd-before-end",
+                    type=str,
+                    help="Pass a command to run before the results "
+                    "(final) commit under the CI mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.command_before_end)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--commit-autosave-message",
+                    type=str,
+                    help="Replace the default autosave commit message. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_autosave_commit)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                ci_group.add_argument(
+                    "--commit-results-message",
+                    type=str,
+                    help="Replace the default results (final) commit message. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.travis_autosave_final_commit)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                unique_group.add_argument(
+                    "--clean",
+                    action="store_true",
+                    help="Clean all files under the output directory.",
+                )
+
+                unique_group.add_argument(
+                    "--clean-all",
+                    action="store_true",
+                    help="Clean all files under the output directory "
+                    "along with all file generated by PyFunceble.",
+                )
+
+                unique_group.add_argument(
+                    "--directory-structure",
+                    action="store_true",
+                    help="Generate the directory and files that are needed and which does "
+                    "not exist in the current directory.",
+                )
+
+                unique_group.add_argument(
+                    "--iana",
+                    action="store_true",
+                    help="Update/Generate `iana-domains-db.json`.",
+                )
+
+                unique_group.add_argument(
+                    "--production", action="store_true", help=argparse.SUPPRESS
+                )
+
+                unique_group.add_argument(
+                    "-psl",
+                    "--public-suffix",
+                    action="store_true",
+                    help="Update/Generate `public-suffix.json`.",
+                )
+
+                unique_group.add_argument(
+                    "--generate-files-from-database",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
+                )
+
+                unique_group.add_argument(
+                    "--generate-all-files-from-database",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
+                )
+
+                parser.add_argument(
+                    "--debug", action="store_true", help=argparse.SUPPRESS
+                )
+
+                parser.add_argument(
+                    "--help",
+                    action="help",
+                    default=argparse.SUPPRESS,
+                    help="Show this help message and exit.",
+                )
+
+                parser.add_argument(
+                    "-v",
+                    "--version",
+                    help="Show the version of PyFunceble and exit.",
+                    action="version",
+                    version="%(prog)s " + PyFunceble.VERSION,
                 )
 
                 args = parser.parse_args()

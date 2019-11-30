@@ -71,7 +71,7 @@ class Package:
     Sets the package name.
     """
 
-    VERSION = "2.49.2.dev (Green Galago: Skitterbug)"
+    VERSION = "2.49.3.dev (Green Galago: Skitterbug)"
     """
     Sets the package version.
     """
