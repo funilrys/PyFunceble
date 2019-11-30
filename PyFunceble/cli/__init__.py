@@ -191,28 +191,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 parser.add_argument(
-                    "--commit-autosave-message",
-                    type=str,
-                    help="Replace the default autosave commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci_autosave_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
-                    "--commit-results-message",
-                    type=str,
-                    help="Replace the default results (final) commit message. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.ci_autosave_final_commit)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                parser.add_argument(
                     "--complements",
                     action="store_true",
                     help="Switch the value of the generation and test of the complements. "
