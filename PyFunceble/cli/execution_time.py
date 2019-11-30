@@ -135,10 +135,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         :rtype: bool
         """
 
-        if (
-            PyFunceble.CONFIGURATION.show_execution_time
-            or PyFunceble.CONFIGURATION.travis
-        ):
+        if PyFunceble.CONFIGURATION.show_execution_time or PyFunceble.CONFIGURATION.ci:
             return True
 
         return False

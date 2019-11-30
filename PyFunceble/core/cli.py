@@ -59,7 +59,7 @@ License:
 """
 
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from os import sep as directory_separator
 from os import walk
 from random import choice
@@ -533,19 +533,24 @@ class CLICore:
             and not PyFunceble.CONFIGURATION.quiet
         ):
             messages = upstream_version["messages"]
+            local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
 
             for minimal_version, data in messages.items():
                 comparison = PyFunceble.abstracts.Version.compare(minimal_version)
+                until_date = None
+                until_comparison = None
 
                 for single_message in data:
+                    if "until_date" in single_message:
+                        until_date = (
+                            datetime.fromisoformat(single_message["until_date"])
+                            - datetime.now(tz=local_timezone)
+                        ).days
+
                     if "until" in single_message:
-                        until_comparison = (
-                            PyFunceble.abstracts.Version.compare(
-                                single_message["until"]
-                            ),
+                        until_comparison = PyFunceble.abstracts.Version.compare(
+                            single_message["until"]
                         )
-                    else:
-                        until_comparison = True
 
                     if "type" in single_message:
                         if single_message["type"] == "info":
@@ -558,8 +563,10 @@ class CLICore:
                         coloration = Fore.CYAN + Style.BRIGHT
 
                     if (
-                        comparison is False or comparison is None
-                    ) and until_comparison is True:
+                        (comparison is False or comparison is None)
+                        and until_comparison is True
+                        or (until_date is not None and until_date > 0)
+                    ):
 
                         print(f"{coloration}{single_message['message']}")
 
@@ -651,3 +658,6 @@ class CLICore:
                     print("New version available.")
 
         cls.__print_messages(upstream_version)
+
+        # One may use the following as behavior debugger.
+        # cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))

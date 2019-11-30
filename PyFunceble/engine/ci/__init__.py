@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the engine interfaces.
+Provides all CI interfaces.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -57,10 +57,4 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-
-from .auto_continue import AutoContinue
-from .auto_save import AutoSave
-from .logger import Logger
-from .mining import Mining
-from .mysql import MySQL
-from .sort import Sort
+from .travis_ci import TravisCI

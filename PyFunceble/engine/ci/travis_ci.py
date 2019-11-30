@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the auto-save engine.
+Provides the Travis CI interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,103 +58,104 @@ License:
     SOFTWARE.
 """
 
-from datetime import datetime, timedelta
+from itertools import repeat
+from os import sep as directory_separator
 
 import PyFunceble
 
-from .ci import TravisCI
+from .base import CIBase
 
 
-class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
+class TravisCI(CIBase):
     """
-    Provide the autosave logic.
-
-    :param bool is_last_domain:
-        Tell this subsystem if we are at the very end of the file testing.
-
-    :param bool is_bypass:
-        Tell this subsystem if we are in bypassing mode.
+    Provides the Travis CI preset and initializer.
     """
 
-    # We set the varible which will save the global authorization to operate.
-    authorized = None
-    # We set the variable which will save the starting time.
-    start_time = None
-    # We set the variable which will save the end time.
-    endtime = None
-    # We set the variable which will process as a chache for the
-    # time exceeed value.
-    time_exceed = False
+    def __init__(self):
+        self.authorized = self.authorization()
+        super().__init__()
 
-    def __init__(self, start_time=None):
-        self.available_ci_engines = [TravisCI()]
+    @classmethod
+    def authorization(cls):
+        """
+        Provide the operation authorization.
+        """
 
-        self.current_ci_engine = self.get_current_ci()
+        return (
+            PyFunceble.helpers.EnvironmentVariable("TRAVIS_BUILD_DIR").exists()
+            and PyFunceble.CONFIGURATION.ci
+        )
 
-        PyFunceble.LOGGER.info(f"Current CI engine: {self.current_ci_engine}")
+    def init(self):
+        """
+        Init the CI machine/environment.
+        """
 
-        if self.current_ci_engine:
-            self.authorized = True
+        if self.authorized:
+            remote = self.get_remote_destination()
 
-            self.current_ci_engine.init()
-            self.current_ci_engine.bypass()
-
-            self.start_time = datetime.fromtimestamp(int(start_time))
-            self.end_time = self.start_time + timedelta(
-                minutes=int(PyFunceble.CONFIGURATION.ci_autosave_minutes)
+            gh_token = PyFunceble.helpers.EnvironmentVariable("GH_TOKEN").get_value(
+                default=None
+            )
+            git_email = PyFunceble.helpers.EnvironmentVariable("GIT_EMAIL").get_value(
+                default=None
+            )
+            git_name = PyFunceble.helpers.EnvironmentVariable("GIT_NAME").get_value(
+                default=None
             )
 
-            PyFunceble.LOGGER.debug(f"Start Time: {self.start_time}")
-            PyFunceble.LOGGER.debug(f"End Time:  {self.end_time}")
+            if not gh_token:
+                raise PyFunceble.exceptions.GitHubTokenNotFound()
 
-    def get_current_ci(self):
+            if not git_email:
+                raise PyFunceble.exceptions.GitEmailNotFound()
+
+            if not git_name:
+                raise PyFunceble.exceptions.GitNameNotFound()
+
+            commands = [
+                ("git remote rm origin", True),
+                (
+                    "git remote add origin "
+                    f"https://{gh_token}@{remote}",  # pylint: disable=line-too-long
+                    False,
+                ),
+                (f'git config --global user.email "{git_email}"', True),
+                (f'git config --global user.name "{git_name}"', True),
+                ("git config --global push.default simple", True),
+                (f'git checkout "{PyFunceble.CONFIGURATION.ci_branch}"', True),
+                (
+                    f'git pull origin "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
+                    False,
+                ),
+            ]
+
+            self.exec_commands(commands)
+
+    def permissions(self):
         """
-        Provides the current CI to use.
-        """
-
-        for ci_engine in self.available_ci_engines:
-            if ci_engine.authorized:
-                return ci_engine
-
-        return None
-
-    def is_time_exceed(self):
-        """
-        Check if the end time is exceed.
-        """
-
-        if self.authorized:
-            # We are authorized to operate.
-
-            if not self.time_exceed and datetime.now() >= self.end_time:
-                # * We did not tested previously if the time exceed.
-                # and
-                # * The time exceed.
-
-                # We update the time exceed marker.
-                self.time_exceed = True
-
-        PyFunceble.LOGGER.debug(f"Time exceed: {self.time_exceed}")
-
-        return self.time_exceed
-
-    def process(self, test_completed=False):
-        """
-        Process the autosave base on the current state of the test.
-
-        :param bool test_completed: Tell us if we finished the test.
+        Set permissions in order to avoid issues before commiting.
         """
 
         if self.authorized:
-            # We are authorized to operate.
+            build_dir = PyFunceble.helpers.EnvironmentVariable(
+                "TRAVIS_BUILD_DIR"
+            ).get_value()
 
-            if test_completed:
-                # The test was completed.
+            commands = [
+                f"sudo chown -R travis:travis {build_dir}",
+                f"sudo chgrp -R travis {build_dir}",
+                f"sudo chmod -R g+rwX {build_dir}",
+                f"sudo chmod 777 -Rf {build_dir}{directory_separator}.git",
+                f"sudo find {build_dir} -type d -exec chmod g+x '{{}}' \;",  # pylint: disable=anomalous-backslash-in-string
+            ]
 
-                # We run the end commit.
-                self.current_ci_engine.end_commit()
-            elif self.is_time_exceed():
-                # The current time excessed the minimal time for autosaving.
+            self.exec_commands(zip(commands, repeat(False)))
 
-                # We run the not end commit.
-                self.current_ci_engine.not_end_commit()
+            if (
+                PyFunceble.helpers.Command("git config core.sharedRepository").execute()
+                == ""
+            ):
+                PyFunceble.helpers.Command(
+                    "git config core.sharedRepository group"
+                ).execute()

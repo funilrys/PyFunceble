@@ -487,18 +487,20 @@ class Constructor:
         if not PyFunceble.helpers.Directory(directory).exists():
             # The given directory does not exist.
 
-            travis = PyFunceble.engine.Travis()
+            ci_engine = PyFunceble.engine.AutoSave().get_current_ci()
 
-            # We update the permission.
-            # (Only if we are under Travis CI.)
-            travis.permissions()
+            if ci_engine:
+                # We update the permission.
+                # (Only if we are under CI.)
+                ci_engine.permissions()
 
             # We create the directory.
             PyFunceble.helpers.Directory(directory).create()
 
-            # We update the permission.
-            # (Only if we are under Travis CI.)
-            travis.permissions()
+            if ci_engine:
+                # We update the permission.
+                # (Only if we are under CI.)
+                ci_engine.permissions()
 
     def restore(self):
         """

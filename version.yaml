@@ -1,4 +1,4 @@
-current_version: '2.48.1.dev (Green Galago: Skitterbug)'
+current_version: '2.49.2.dev (Green Galago: Skitterbug)'
 deprecated:
 - 0.0.0
 - 0.0.1
@@ -177,6 +177,7 @@ deprecated:
 - 2.45.0
 - 2.46.1
 - 2.47.0
+- 2.48.1
 force_update:
     minimal_version:
     - 0.0.0
@@ -192,3 +193,9 @@ messages:
     2.10.0:
     -   message: 🌟 🎉 🍰 We now support IPv6! 🍰 🎉 🌟
         type: info
+        until: 4.0.0
+    2.49.1:
+    -   message: A manual intervention is needed. Find more at https://git.io/Je1Q6
+            !
+        type: warning
+        until_date: '2020-01-30T00:00:00+01:00'

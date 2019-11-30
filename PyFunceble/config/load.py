@@ -203,12 +203,6 @@ Install and load the default configuration at the mentioned location? [y/n] "
             PyFunceble.CONFIGURATION = self.data
 
         if custom and isinstance(custom, dict):
-            # @TODO: Delete this in the future.
-            # We update the index which was renamed.
-            if "seconds_before_http_timeout" in custom:
-                custom["timeout"] = custom["seconds_before_http_timeout"]
-                del custom["seconds_before_http_timeout"]
-
             PyFunceble.CONFIGURATION.update(custom)
 
             if "custom_config_loaded" in PyFunceble.INTERN:

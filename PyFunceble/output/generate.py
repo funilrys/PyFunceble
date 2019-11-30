@@ -879,9 +879,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
 
                 # We print the information on screen.
                 PyFunceble.output.Prints(data_to_print, "Generic").data()
-        elif (
-            PyFunceble.engine.Travis.authorization() and PyFunceble.CONFIGURATION.quiet
-        ):
+        elif PyFunceble.engine.AutoSave().authorized and PyFunceble.CONFIGURATION.quiet:
             # We are under Travis CI.
 
             # We print a dot.

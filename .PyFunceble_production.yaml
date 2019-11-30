@@ -83,21 +83,21 @@ split: True
 syntax: False
 # Set the timeout to apply when a timeout can be set.
 timeout: 5
-# Enable / disable the Travis CI autosave system.
-travis: False
+# Enable / disable the CI autosave system.
+ci: False
 # Set the default commit message we have to use when have to save but we did not finished the test.
-travis_autosave_commit: "PyFunceble - AutoSave"
+ci_autosave_commit: "PyFunceble - AutoSave"
 # Set the default final commit message we have to usve when have to save and we finished the test.
-travis_autosave_final_commit: "PyFunceble - Results"
+ci_autosave_final_commit: "PyFunceble - Results"
 # Set the minimum of minutes we have to run before to automatically save our test results.
-travis_autosave_minutes: 15
+ci_autosave_minutes: 15
 # Set the git branch where we are going to work from.
-travis_branch: master
+ci_branch: master
 # Set the destination branch. The destination branch is the branch which will merge the travis_branch at the very end.
 # So for example:
 #   We have a `dev` branch which can be used as processing branch.
 #   We have a `master` branch (our distribution branch) which is used to distribute the results.
-travis_distribution_branch: master
+ci_distribution_branch: master
 # Activate/Deactivate the generation of unified files for the results logs.
 unified: False
 # Set the default user agent use when requesting the HTTP code.

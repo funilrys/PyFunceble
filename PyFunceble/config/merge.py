@@ -125,15 +125,45 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         Simply merge the older into the new one.
         """
 
-        to_remove = []
+        to_remove = [
+            "seconds_before_http_timeout",
+            "travis_autosave_final_commit",
+            "travis_autosave_minutes",
+            "travis_branch",
+            "travis_distribution_branch",
+            "travis",
+        ]
 
-        self.new_config = PyFunceble.helpers.Dict(
-            PyFunceble.helpers.Merge(self.local_config).into(self.upstream_config)
-        ).remove_key(to_remove)
+        self.new_config = PyFunceble.helpers.Merge(self.local_config).into(
+            self.upstream_config
+        )
+        new_config_copy = self.new_config.copy()
 
         if "seconds_before_http_timeout" in self.new_config:
-            self.new_config["timout"] = self.new_config["seconds_before_http_timeout"]
-            del self.new_config["seconds_before_http_timeout"]
+            self.new_config["timout"] = new_config_copy["seconds_before_http_timeout"]
+
+        if "travis_autosave_minutes" in self.new_config:
+            self.new_config["ci_autosave_minutes"] = new_config_copy[
+                "travis_autosave_minutes"
+            ]
+
+        if "travis_branch" in self.new_config:
+            self.new_config["ci_branch"] = new_config_copy["travis_branch"]
+
+        if "travis_distribution_branch" in self.new_config:
+            self.new_config["ci_distribution_branch"] = new_config_copy[
+                "travis_distribution_branch"
+            ]
+
+        if "travis_autosave_final_commit" in self.new_config:
+            self.new_config["ci_autosave_final_commit"] = new_config_copy[
+                "travis_autosave_final_commit"
+            ]
+
+        if "travis" in self.new_config:
+            self.new_config["ci"] = new_config_copy["travis"]
+
+        self.new_config = PyFunceble.helpers.Dict(self.new_config).remove_key(to_remove)
 
     def _save(self):
         """

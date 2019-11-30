@@ -110,7 +110,7 @@ class TestExecutionTime(StdoutBase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION.show_execution_time = False
-        PyFunceble.CONFIGURATION.travis = True
+        PyFunceble.CONFIGURATION.ci = True
         expected = True
 
         actual = ExecutionTime.authorization()
@@ -118,7 +118,7 @@ class TestExecutionTime(StdoutBase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION.show_execution_time = False
-        PyFunceble.CONFIGURATION.travis = False
+        PyFunceble.CONFIGURATION.ci = False
         expected = False
 
         actual = ExecutionTime.authorization()
@@ -126,7 +126,7 @@ class TestExecutionTime(StdoutBase):
         self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION.show_execution_time = True
-        PyFunceble.CONFIGURATION.travis = False
+        PyFunceble.CONFIGURATION.ci = False
         expected = True
 
         actual = ExecutionTime.authorization()
