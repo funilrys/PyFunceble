@@ -24,14 +24,6 @@ jobs:
       script:
         - tox --current-env
     - language: generic
-      os: windows
-      name: "Code Test with Python 3.8.0 under Windows Server 1803."
-      env:
-        - PYTHON_VERSION="3.8.0"
-        - TOXENV="py38"
-      script:
-        - tox --current-env
-    - language: generic
       os: linux
       dist: bionic
       name: "Code Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
@@ -154,15 +146,9 @@ jobs:
 matrix:
   fast_finish: true
 
-before_install:
+install:
   - export PATH="${HOME}/miniconda/bin:${PATH}"
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
-    elif [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
-      choco install miniconda3 --params="'/AddToPath:1'";
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; else wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
@@ -172,9 +158,7 @@ before_install:
   - python --version --version
   - pip --version
   - conda --version
-
-install:
-  - pip install pylint coverage coveralls codacy-coverage tox-current-env unittest2
+  - pip install pylint coverage coveralls codacy-coverage tox-current-env
   - pip install -e .
 
 after_success:
