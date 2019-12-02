@@ -152,13 +152,15 @@ install:
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels conda-forge
   - conda update -q conda
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
   - python --version --version
   - pip --version
   - conda --version
-  - pip install pylint coverage coveralls codacy-coverage tox-current-env
+  - conda install coverage coveralls codacy-coverage pylint unittest2
+  - pip install tox-current-env
   - pip install -e .
 
 after_success:
