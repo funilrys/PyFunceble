@@ -5,9 +5,6 @@ Multiprocessing
 .. warning::
     This component is not activated by default.
 
-.. warning::
-    This component is unavailable under Windows.
-
 Why do we need it?
 ------------------
 

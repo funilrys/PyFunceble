@@ -339,33 +339,30 @@ class Preset:  # pragma: no cover
         """
 
         if PyFunceble.CONFIGURATION.multiprocess:
-            if not PyFunceble.abstracts.Platform.is_windows():
-                if (
-                    "multiprocess_warning_printed" not in PyFunceble.INTERN
-                    and not PyFunceble.CONFIGURATION.simple
-                    and not PyFunceble.CONFIGURATION.quiet
-                ):
-                    if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
-                        print(
-                            f"{Fore.RED + Style.BRIGHT}The "
-                            f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
-                            "is not recommended with the multiprocessing mode."
-                        )
+            if (
+                "multiprocess_warning_printed" not in PyFunceble.INTERN
+                and not PyFunceble.CONFIGURATION.simple
+                and not PyFunceble.CONFIGURATION.quiet
+            ):
+                if PyFunceble.CONFIGURATION.db_type not in ["mysql", "mariadb"]:
+                    print(
+                        f"{Fore.RED + Style.BRIGHT}The "
+                        f"{repr(PyFunceble.CONFIGURATION.db_type)} database type "
+                        "is not recommended with the multiprocessing mode."
+                    )
 
-                    available_cpu = cpu_count()
+                available_cpu = cpu_count()
 
-                    if PyFunceble.CONFIGURATION.maximal_processes > available_cpu:
-                        print(
-                            f"{Fore.RED + Style.BRIGHT}You're using more processes "
-                            f"({repr(PyFunceble.CONFIGURATION.maximal_processes)}) than "
-                            f"the number of available CPU ({available_cpu}). Use at your own risk!"
-                        )
+                if PyFunceble.CONFIGURATION.maximal_processes > available_cpu:
+                    print(
+                        f"{Fore.RED + Style.BRIGHT}You're using more processes "
+                        f"({repr(PyFunceble.CONFIGURATION.maximal_processes)}) than "
+                        f"the number of available CPU ({available_cpu}). Use at your own risk!"
+                    )
 
-                    PyFunceble.INTERN["multiprocess_warning_printed"] = True
-                self.maximal_processes()
-                self.multiprocess_merging_mode()
-            else:
-                self.disable("multiprocess")
+                PyFunceble.INTERN["multiprocess_warning_printed"] = True
+            self.maximal_processes()
+            self.multiprocess_merging_mode()
 
     @classmethod
     def timeout(cls):
