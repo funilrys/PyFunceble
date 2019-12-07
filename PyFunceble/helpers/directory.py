@@ -58,7 +58,7 @@ License:
     SOFTWARE.
 """
 
-from os import getcwd, mkdir, path
+from os import getcwd, makedirs, path
 from os import sep as directory_separator
 from shutil import rmtree
 
@@ -142,7 +142,7 @@ class Directory:
             dir_path = self.path
 
         if not self.exists(dir_path=dir_path):
-            mkdir(dir_path)
+            makedirs(dir_path)
 
         return self.exists(dir_path=dir_path)
 

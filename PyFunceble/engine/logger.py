@@ -134,7 +134,7 @@ class Logger:  # pragma: no cover
 
         # pylint: disable=attribute-defined-outside-init
 
-        if self.authorized:
+        if self.authorized and not self.on_screen:
             if output_directory:
                 self.output_directory = output_directory
             else:
