@@ -67,13 +67,7 @@ from .ci import TravisCI
 
 class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     """
-    Provide the autosave logic.
-
-    :param bool is_last_domain:
-        Tell this subsystem if we are at the very end of the file testing.
-
-    :param bool is_bypass:
-        Tell this subsystem if we are in bypassing mode.
+    Provides the autosave interface.
     """
 
     # We set the varible which will save the global authorization to operate.
@@ -96,16 +90,23 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         if self.current_ci_engine:
             self.authorized = True
 
-            self.current_ci_engine.init()
-            self.current_ci_engine.bypass()
+            if "ci_initiated" not in PyFunceble.INTERN:
+                self.current_ci_engine.init()
+                self.current_ci_engine.bypass()
 
-            self.start_time = datetime.fromtimestamp(int(start_time))
-            self.end_time = self.start_time + timedelta(
-                minutes=int(PyFunceble.CONFIGURATION.ci_autosave_minutes)
-            )
+                if start_time is None:
+                    self.start_time = datetime.now()
+                else:
+                    self.start_time = datetime.fromtimestamp(int(start_time))
 
-            PyFunceble.LOGGER.debug(f"Start Time: {self.start_time}")
-            PyFunceble.LOGGER.debug(f"End Time:  {self.end_time}")
+                self.end_time = self.start_time + timedelta(
+                    minutes=int(PyFunceble.CONFIGURATION.ci_autosave_minutes)
+                )
+
+                PyFunceble.LOGGER.debug(f"Start Time: {self.start_time}")
+                PyFunceble.LOGGER.debug(f"End Time:  {self.end_time}")
+
+                PyFunceble.INTERN["ci_initiated"] = True
 
     def get_current_ci(self):
         """
