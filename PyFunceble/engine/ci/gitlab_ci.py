@@ -98,11 +98,9 @@ class GitLabCI(CIBase):
 
             commands = [
                 ("git remote rm origin", True),
-                (
-                    "git remote add origin "
-                    f"https://oauth2:{token}@{remote}",  # pylint: disable=line-too-long
-                    False,
-                ),
+                ("git remote add origin " f"https://oauth2:{token}@{remote}", False),
+                ("git remote update", False),
+                ("git fetch", False),
             ]
 
             self.exec_commands(commands)
