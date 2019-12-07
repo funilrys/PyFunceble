@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the Travis CI interface.
+Provides the GitLab CI/CD interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,17 +58,14 @@ License:
     SOFTWARE.
 """
 
-from itertools import repeat
-from os import sep as directory_separator
-
 import PyFunceble
 
 from .base import CIBase
 
 
-class TravisCI(CIBase):
+class GitLabCI(CIBase):
     """
-    Provides the Travis CI preset and initializer.
+    Provides the GitLab CI preset and initializer.
     """
 
     def __init__(self):
@@ -77,54 +74,50 @@ class TravisCI(CIBase):
 
     @classmethod
     def authorization(cls):
-        """
-        Provide the operation authorization.
-        """
+        needed_environment_vars = ["GITLAB_CI", "GITLAB_USER_ID"]
 
         return (
-            PyFunceble.helpers.EnvironmentVariable("TRAVIS_BUILD_DIR").exists()
+            all(
+                [
+                    PyFunceble.helpers.EnvironmentVariable(x).exists()
+                    for x in needed_environment_vars
+                ]
+            )
             and PyFunceble.CONFIGURATION.ci
         )
 
-    def init(self):
+    def init_git_remote_with_token(self, token):
         """
-        Init the CI machine/environment.
+        Provides a simple way to initiate the git remote url.
+
+        :param str token: A token with push access.
         """
 
         if self.authorized:
-            gh_token = PyFunceble.helpers.EnvironmentVariable("GH_TOKEN").get_value(
+            remote = self.get_remote_destination()
+
+            commands = [
+                ("git remote rm origin", True),
+                (
+                    "git remote add origin "
+                    f"https://oauth2:{token}@{remote}",  # pylint: disable=line-too-long
+                    False,
+                ),
+            ]
+
+            self.exec_commands(commands)
+
+    def init(self):
+        """
+        Initiate the CI machine/environment.
+        """
+
+        if self.authorized:
+            gl_token = PyFunceble.helpers.EnvironmentVariable("GL_TOKEN").get_value(
                 default=None
             )
 
-            if not gh_token:
-                raise PyFunceble.exceptions.GitHubTokenNotFound()
+            if not gl_token:
+                raise PyFunceble.exceptions.GitLabTokenNotFound()
 
-            self.init_git(gh_token)
-
-    def permissions(self):
-        """
-        Set permissions in order to avoid issues before commiting.
-        """
-
-        if self.authorized:
-            build_dir = PyFunceble.helpers.EnvironmentVariable(
-                "TRAVIS_BUILD_DIR"
-            ).get_value()
-
-            commands = [
-                f"sudo chown -R travis:travis {build_dir}",
-                f"sudo chgrp -R travis {build_dir}",
-                f"sudo chmod -R g+rwX {build_dir}",
-                f"sudo chmod 777 -Rf {build_dir}{directory_separator}.git",
-                f"sudo find {build_dir} -type d -exec chmod g+x '{{}}' \;",  # pylint: disable=anomalous-backslash-in-string
-            ]
-
-            self.exec_commands(zip(commands, repeat(False)))
-
-            if (
-                PyFunceble.helpers.Command("git config core.sharedRepository").execute()
-                == ""
-            ):
-                PyFunceble.helpers.Command(
-                    "git config core.sharedRepository group"
-                ).execute()
+            self.init_git(gl_token)

@@ -57,4 +57,5 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
+from .gitlab_ci import GitLabCI
 from .travis_ci import TravisCI

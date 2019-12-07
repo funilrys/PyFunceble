@@ -74,6 +74,15 @@ class CIBase:
     # PyFunceble.
     regex_bypass = r"\[PyFunceble\sskip\]"
 
+    def __init__(self):
+        self.git_email = PyFunceble.helpers.EnvironmentVariable("GIT_EMAIL").get_value(
+            default=None
+        )
+
+        self.git_name = PyFunceble.helpers.EnvironmentVariable("GIT_NAME").get_value(
+            default=None
+        )
+
     def authorization(self):
         """
         Provides the operation authorization.
@@ -85,6 +94,61 @@ class CIBase:
         """
         Provides a permission fixer.
         """
+
+    def git_var_checker(self):
+        """
+        Process some checks of the git related variables.
+        """
+
+        if self.authorized:
+            if not self.git_email:
+                raise PyFunceble.exceptions.GitEmailNotFound()
+
+            if not self.git_name:
+                raise PyFunceble.exceptions.GitNameNotFound()
+
+    def init_git_remote_with_token(self, token):
+        """
+        Provides a simple way to initiate the git remote url.
+
+        :param str token: A token with push access.
+        """
+
+        if self.authorized:
+            remote = self.get_remote_destination()
+
+            commands = [
+                ("git remote rm origin", True),
+                (
+                    "git remote add origin "
+                    f"https://{token}@{remote}",  # pylint: disable=line-too-long
+                    False,
+                ),
+            ]
+
+            self.exec_commands(commands)
+
+    def init_git(self, token):
+        """
+        Initiate the git project/repository.
+        """
+
+        if self.authorized:
+            self.git_var_checker()
+            self.init_git_remote_with_token(token)
+
+            commands = [
+                (f'git config --global user.email "{self.git_email}"', True),
+                (f'git config --global user.name "{self.git_name}"', True),
+                ("git config --global push.default simple", True),
+                (f'git checkout "{PyFunceble.CONFIGURATION.ci_branch}"', True),
+                (
+                    f'git pull origin "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
+                    False,
+                ),
+            ]
+
+            self.exec_commands(commands)
 
     def init(self):
         """

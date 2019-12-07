@@ -108,6 +108,12 @@ class GitHubTokenNotFound(PyFuncebleExternalException):
     """
 
 
+class GitLabTokenNotFound(PyFuncebleExternalException):
+    """
+    Describes a missing GitLab token.
+    """
+
+
 class GitEmailNotFound(PyFuncebleExternalException):
     """
     Describes a missing Git Email.

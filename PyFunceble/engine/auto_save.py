@@ -62,7 +62,7 @@ from datetime import datetime, timedelta
 
 import PyFunceble
 
-from .ci import TravisCI
+from .ci import GitLabCI, TravisCI
 
 
 class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
@@ -81,7 +81,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     time_exceed = False
 
     def __init__(self, start_time=None):
-        self.available_ci_engines = [TravisCI()]
+        self.available_ci_engines = [TravisCI(), GitLabCI()]
 
         self.current_ci_engine = self.get_current_ci()
 
