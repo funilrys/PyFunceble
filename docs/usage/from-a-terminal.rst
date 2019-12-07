@@ -528,7 +528,8 @@ CI / CD
 
 .. note::
     If you combine this argument with the :code:`--quiet` argument, the test will
-    output a dotted line, were each dot (:code:`.`) represent one test result.
+    output a dotted line, were each dot (:code:`.`) represent one test result
+    or an input which was skiped because it was previously tested.
 
 Want to use PyFunceble under a supporter CI infrastructure/network? This argument is suited for your need!
 

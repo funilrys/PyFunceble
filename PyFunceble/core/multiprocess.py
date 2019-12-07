@@ -306,6 +306,8 @@ class MultiprocessCore(
             )
             process.name = f"PyF {subject}"
             process.start()
+        elif self.autosave.authorized:
+            print(f".", end="")
 
         PyFunceble.CONFIGURATION.update(original_config)
         PyFunceble.INTERN.update(original_intern)
