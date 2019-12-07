@@ -472,8 +472,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
             self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
-        elif self.autosave.authorized and PyFunceble.CONFIGURATION.quiet:
-            # We are under Travis CI.
+        elif self.autosave.authorized:
+            # We are under a CI/CD environment.
 
             # We print a dot.
             print(".", end="")

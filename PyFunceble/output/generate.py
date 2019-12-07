@@ -879,7 +879,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
 
                 # We print the information on screen.
                 PyFunceble.output.Prints(data_to_print, "Generic").data()
-        elif PyFunceble.engine.AutoSave().current_ci_engine:
+        elif "ci_initiated" in PyFunceble.INTERN:
             # We are under a CI/CD environment.
 
             # We print a dot.
