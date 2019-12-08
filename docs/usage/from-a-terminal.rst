@@ -568,7 +568,7 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
 
 :code:`--cmd-before-end "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -581,7 +581,7 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
 
 :code:`--commit-autosave-message "something"`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -593,7 +593,7 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
 This argument allows us to set a custom commit message which is going to be used as commit message when saving.
 
 .. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are used.
 
 .. note::
     This argument is only used if we have to split the work into multiple processes because a list is too long or the timeout is reached.
@@ -609,7 +609,7 @@ This argument allows us to set a custom commit message which is going to be used
     **Default value:** :code:`PyFunceble - Results`
 
 .. note::
-    This argument is only used if :code:`--travis` or :code:`travis : true`  (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are used.
 
 .. note::
     This argument is only used if we reached the end of the list we are or have to test.

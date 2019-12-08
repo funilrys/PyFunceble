@@ -48,7 +48,7 @@
     **Description:** Set the command to run before each commit (except the final one).
 
 .. note::
-    The parsed command is called only if :code:`auto_continue` and :code:`travis` are set to :code:`True`.
+    The parsed command is called only if :code:`auto_continue` and :code:`ci` are set to :code:`True`.
 
 :code:`command_before_end`
 --------------------------
@@ -60,7 +60,7 @@
     **Description:** Set the command to run before the final commit.
 
 .. note::
-    The parsed command is called only if :code:`auto_continue` and :code:`travis` are set to :code:`True`.
+    The parsed command is called only if :code:`auto_continue` and :code:`ci` are set to :code:`True`.
 
 .. note::
     Understand by final commit the commit which will deliver the last element we have to test.
@@ -476,20 +476,20 @@
 
     **Description:** Set the timeout to apply everytime it's possible to set one.
 
-:code:`travis`
---------------
+:code:`ci`
+----------
 
     **Type:** :code:`boolean`
 
     **Default value:** :code:`False`
 
-    **Description:** Enable / disable the Travis CI autosaving system.
+    **Description:** Enable / disable the CI autosaving system.
 
 .. warning::
-    Do not activate this index unless you are using PyFunceble under Travis CI.
+    Do not activate this index unless you are using PyFunceble under a supported CI environment/platform.
 
-:code:`travis_autosave_commit`
-------------------------------
+:code:`ci_autosave_commit`
+--------------------------
 
     **Type:** :code:`string`
 
@@ -497,8 +497,8 @@
 
     **Description:** Set the default commit message we want to use when have to commit (save) but our tests are not yet completed.
 
-:code:`travis_autosave_final_commit`
-------------------------------------
+:code:`ci_autosave_final_commit`
+--------------------------------
 
     **Type:** :code:`string`
 
@@ -506,8 +506,8 @@
 
     **Description:** Set the default final commit message we want to use when we all tests are finished.
 
-:code:`travis_autosave_minutes`
--------------------------------
+:code:`ci_autosave_minutes`
+---------------------------
 
     **Type:** :code:`integer`
 
@@ -518,8 +518,8 @@
 .. note::
     As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes.
 
-:code:`travis_distribution_branch`
-----------------------------------
+:code:`ci_distribution_branch`
+------------------------------
 
     **Type:** :code:`string`
 
@@ -528,17 +528,17 @@
     **Description:** Set the git branch where we are going to push our results.
 
 .. note::
-    The difference between this and :code:`travis_branch` is the fact
+    The difference between this and :code:`ci_branch` is the fact
     that this branch will get the result only when the test were finished
-    under the given :code:`travis_branch`.
+    under the given :code:`ci_branch`.
 
     As example, this allow us to have 2 branches:
 
-    - :code:`proceessing` (travis branch), for the tests with PyFunceble.
-    - :code:`master` (travis distribution branch), for the distribution of the results of PyFunceble.
+    - :code:`proceessing` (ci branch), for the tests with PyFunceble.
+    - :code:`master` (ci distribution branch), for the distribution of the results of PyFunceble.
 
-:code:`travis_branch`
----------------------
+:code:`ci_branch`
+-----------------
 
     **Type:** :code:`string`
 

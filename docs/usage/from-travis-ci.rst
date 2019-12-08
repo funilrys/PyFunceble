@@ -1,7 +1,9 @@
 From a Travis CI container
 ==========================
 
-As we offer an argument named :code:`--travis` to activate the usage of PyFunceble in a Travis CI instance, we document here what you need to know!
+As we offer an argument named :code:`--ci` to activate 
+the usage of PyFunceble in a Travis CI instance,
+we document here what you need to know!
 
 Configuration
 -------------
@@ -54,9 +56,9 @@ Configuration
         # We move inside it.
         - cd PyFunceble-tests
         # We test the file `my_awesome_list` which is located inside the current directory.
-        # Note: we precise the `--travis` argument here,
+        # Note: we precise the `--ci` argument here,
         #     but you work without it if you set `travis: true` inside your `.PyFunceble.yaml`
-        - PyFunceble --travis -f my_awesome_list --plain
+        - PyFunceble --ci -f my_awesome_list --plain
 
     # The following initiate email notification logic.
     notifications:

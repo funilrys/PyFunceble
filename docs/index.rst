@@ -96,6 +96,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Usage
 
    usage/from-a-terminal
+   usage/from-gitlab-ci
    usage/from-travis-ci
    usage/with-our-python-api
 

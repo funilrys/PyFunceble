@@ -96,6 +96,12 @@ elif abstracts.Version.is_local_cloned():  # pragma: no cover
 elif helpers.EnvironmentVariable("TRAVIS_BUILD_DIR").exists():  # pragma: no cover
     # We handle the case that we are under Travis CI.
     CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+elif (
+    helpers.EnvironmentVariable("CI_PROJECT_DIR").exists()
+    and helpers.EnvironmentVariable("GITLAB_CI").exists()
+):  # pragma: no cover
+    # We handle the case that we are under GitLab CI/CD.
+    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 else:  # pragma: no cover
     # We handle all other case and distributions specific cases.
 

@@ -68,7 +68,7 @@ How to use the :code:`mysql` or :code:`mariadb` format?
     The typycal location for :code:`mysqld.sock` is :code:`/var/run/mysqld/mysqld.sock`.
     This have been done to make:
 
-      1. It easier to use in conjunction with Travis CI
+      1. It easier to use in conjunction with a supported CI environment/platform.
       2. Leaving more space on the IP-stack on local DB installations
       3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on local runs
 

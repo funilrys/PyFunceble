@@ -30,6 +30,20 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
 
 .. _Travis CI: https://travis-ci.org/
 
+GitLab CI/CD
+------------
+
+Under `GitLab CI/CD`_, we search or initiate the configuration at the directory we are currently located.
+
+.. warning::
+    We don't care about the distribution, as long as the :code:`PROJECT_CI` and :code:`GITLAB_CI` environment variables are set,
+    we search or initiate the configuration in the current directory.
+
+.. note::
+    If you want to force the directory where we should work, you can initiate the :code:`PYFUNCEBLE_CONFIG_DIR` environment variable with the path where we should work.
+
+.. _GitLab CI/CD: https://docs.gitlab.com/ee/ci/
+
 Linux and MacOS (Darwin Kernel)
 -------------------------------
 

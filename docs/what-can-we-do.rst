@@ -31,10 +31,11 @@ What can PyFunceble do?
 - Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
 - Print the execution time on screen and file.
 - Customization of the different option via command-line arguments or configuration file.
-- Continuous tests under Travis CI with the help of an auto saving and database system.
+- Continuous tests under Travis CI or GitLab CI/CI
 
+  - ... with the help of an auto saving and database system.
   - Set branch to push the result to for the autosaving system.
-  - Set the minimal time before we autosave in order to avoid Travis CI limitation.
+  - Set the minimal time before we autosave in order to avoid CI/CD limitation.
   - Set a command to execute at the end of the test.
   - Set the commit message for the autosaving system.
 
