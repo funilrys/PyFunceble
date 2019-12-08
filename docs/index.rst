@@ -63,25 +63,19 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Use Dead-Hosts if you can't!
 
-   dead-hosts/why
-   dead-hosts/how
-   dead-hosts/history
+   dead-hosts/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Installation
 
-   installation/requirements
-   installation/stable
-   installation/dev
-   installation/first-steps
+   installation/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Update
 
-   update/stable
-   update/dev
+   update/index
 
 .. toctree::
    :maxdepth: 3

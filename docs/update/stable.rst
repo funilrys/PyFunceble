@@ -1,11 +1,11 @@
 Stable version
-==============
+--------------
 
 Using :code:`pip`
------------------
+^^^^^^^^^^^^^^^^^
 
 From PyPi
-^^^^^^^^^
+"""""""""
 
 ::
 
@@ -17,7 +17,7 @@ From PyPi
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 From GitHub
-^^^^^^^^^^^
+"""""""""""
 
 ::
 

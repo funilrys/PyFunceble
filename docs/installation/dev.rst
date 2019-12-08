@@ -1,6 +1,6 @@
 
 Development version
-===================
+-------------------
 
 The development version of PyFunceble represents the :code:`dev` branch.
 It's intended for the development of next features
@@ -11,7 +11,7 @@ we are sure that the new commit does not break or introduce
 critical issue under PyFunceble.
 
 For development
----------------
+^^^^^^^^^^^^^^^
 
 Execute the following and let's hack PyFunceble!
 
@@ -40,15 +40,15 @@ Execute the following and let's hack PyFunceble!
    * you don't have to rerun the :code:`pip` command.
 
 For usage
----------
+^^^^^^^^^
 
 Using :code:`pip`
-^^^^^^^^^^^^^^^^^
+"""""""""""""""""
 
 Execute one of the following and enjoy PyFunceble!
 
 From PyPi
-"""""""""
+~~~~~~~~~
 
 ::
 
@@ -60,7 +60,7 @@ From PyPi
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 From GitHub
-"""""""""""
+~~~~~~~~~~~
 
 ::
 
@@ -72,12 +72,12 @@ From GitHub
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 Using the AUR (for Arch Linux users)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""
 
 The package can be found at https://aur.archlinux.org/packages/pyfunceble-dev/.
 
 With makepkg
-""""""""""""
+~~~~~~~~~~~~
 
 ::
 
@@ -86,7 +86,7 @@ With makepkg
     $ sudo pacman -U pyfunceble-dev*.tar.xz
 
 With your favorite AUR helper
-"""""""""""""""""""""""""""""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning::
     We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
@@ -97,7 +97,7 @@ With your favorite AUR helper
     $ yourFavoriteAurHelper -S pyfunceble-dev
 
 Pure Python method
-^^^^^^^^^^^^^^^^^^
+""""""""""""""""""
 
 Execute the following and enjoy PyFunceble!
 

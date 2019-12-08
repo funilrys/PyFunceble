@@ -1,5 +1,5 @@
 History of Dead-Hosts
-=======================
+---------------------
 
 The project started on 3rd March 2017 at `funilrys/dead-hosts`_.
 

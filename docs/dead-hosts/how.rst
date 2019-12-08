@@ -1,5 +1,5 @@
 How do Dead-Hosts work?
-=======================
+-----------------------
 
 `Dead-Hosts`_ is like a wrapper of PyFunceble. Indeed, we use Travis CI
 containers in order to test lists with PyFunceble.

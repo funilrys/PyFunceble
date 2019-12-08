@@ -1,11 +1,11 @@
 Stable version
-==============
+--------------
 
 Using :code:`pip`
------------------
+^^^^^^^^^^^^^^^^^
 
 From PyPi
-^^^^^^^^^
+"""""""""
 
 ::
 
@@ -17,7 +17,7 @@ From PyPi
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 From GitHub
-^^^^^^^^^^^
+"""""""""""
 
 ::
 
@@ -29,12 +29,12 @@ From GitHub
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
 
 Using the AUR (for Arch Linux users)
-------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The package can be found at https://aur.archlinux.org/packages/pyfunceble/.
 
 With makepkg
-^^^^^^^^^^^^
+""""""""""""
 
 ::
 
@@ -43,7 +43,7 @@ With makepkg
     $ sudo pacman -U pyfunceble*.tar.xz
 
 With your favorite AUR helper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""
 
 .. warning::
     We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
@@ -54,7 +54,7 @@ With your favorite AUR helper
     $ yourFavoriteAurHelper -S pyfunceble
 
 Pure Python method
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Execute the following and enjoy PyFunceble!
 
