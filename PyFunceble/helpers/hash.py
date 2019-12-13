@@ -61,6 +61,8 @@ License:
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 
+from .file import File
+
 
 class Hash:
     """
@@ -78,7 +80,7 @@ class Hash:
         if not hasattr(hashes, self.algo):
             raise ValueError(f"Unknown <algo> ({self.algo})")
 
-    def file(self, file_path):
+    def file(self, file_path, encoding="utf-8"):
         """
         Open the given file, and it's content.
 
@@ -90,13 +92,13 @@ class Hash:
 
         digest = hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
 
-        try:
-            with open(file_path, "rb") as file_stream:
-                digest.update(file_stream.read())
+        content = File(file_path).read(encoding=encoding)
 
+        if content:
+            digest.update(content.encode(encoding))
             return digest.finalize().hex()
-        except FileNotFoundError:
-            return None
+
+        return None
 
     def data(self, data):
         """
