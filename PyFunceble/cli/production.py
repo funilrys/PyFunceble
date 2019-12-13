@@ -445,7 +445,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             # We map what we have to replace.
             # Format: {match:replacement}
             regexes = {
-                "/%s/" % "dev": r"\/%s\/" % "master",
+                "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",
             }
         elif self.is_master_version():
@@ -453,7 +453,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We map what we have to replace.
             regexes = {
-                "/%s/" % "master": r"\/%s\/" % "dev",
+                "PyFunceble/%s/" % "master": r"PyFunceble\/%s\/" % "dev",
                 "=%s" % "master": "=%s" % "dev",
             }
         else:

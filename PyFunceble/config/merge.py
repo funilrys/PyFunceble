@@ -74,6 +74,11 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
     :param str configuration_path: The path to the configuration file to update.
     """
 
+    updated_links = {
+        "psl": "funilrys/PyFunceble",
+        "iana": "funilrys/PyFunceble",
+    }
+
     def __init__(self, configuration_path):
         config_link = PyFunceble.converter.InternalUrl(
             "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
@@ -104,8 +109,35 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
         self.new_config = {}
 
-        if self._is_local_version_different_from_upstream():
+        if (
+            self._is_local_version_different_from_upstream()
+            or self._should_links_be_updated()
+        ):
             self._load()
+
+    def _should_links_be_updated(self):
+        """
+        Checks if we have to update the links.
+        """
+
+        result = False
+
+        if "link" in self.local_config:
+            for index, value in self.local_config["link"].items():
+                if (
+                    index not in self.updated_links
+                    or self.updated_links[index] not in value
+                ):
+                    continue
+
+                result = True
+                break
+        else:
+            # This will force the merge as something is missing.
+            result = True
+
+        PyFunceble.LOGGER.debug(f"Links should be updated: {result}")
+        return result
 
     def _is_local_version_different_from_upstream(self):
         """
@@ -119,6 +151,17 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
         PyFunceble.LOGGER.debug(f"Local version is different from upstream: {result}")
         return result
+
+    def _merge_links(self):
+        """
+        Simply merge the new links.
+        """
+
+        for index, value in self.updated_links.items():
+            if value not in self.new_config["links"][index]:
+                continue
+
+            self.new_config["links"][index] = self.upstream_config["links"][index]
 
     def _merge_values(self):
         """
@@ -164,6 +207,8 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
             self.new_config["ci"] = new_config_copy["travis"]
 
         self.new_config = PyFunceble.helpers.Dict(self.new_config).remove_key(to_remove)
+
+        self._merge_links()
 
     def _save(self):
         """

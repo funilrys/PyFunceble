@@ -33,4 +33,5 @@ for a subdomain or not.
 How to generate it manually?
 ----------------------------
 
-You can't. But using the :code:`--public-suffix` argument will do the job on purpose.
+You can't and should not as we are automatically generating it every 24 hours.
+But, using the :code:`--public-suffix` argument will do the job on purpose.

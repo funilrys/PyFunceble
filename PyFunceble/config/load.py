@@ -59,6 +59,7 @@ License:
 """
 # pylint: disable=import-error
 
+from datetime import datetime
 from os import sep as directory_separator
 
 from box import Box
@@ -74,9 +75,18 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
     :param str path_to_config: The possible path to the configuration to load.
     """
 
+    download_times = {"iana": {}, "psl": {}}
+    """
+    Sample of what we are going to write into
+    :code:`.pyfunceble_download_times.json`
+    """
+
     def __init__(self, path_to_config, custom=None):
         # We initiate the vairable which will provides the configuration content.
         self.data = Box({}, default_box=True, default_box_attr=None)
+
+        if not path_to_config.endswith(directory_separator):
+            path_to_config += directory_separator
 
         # We initiate 2 variables:
         #   * One with the path to the config file
@@ -87,8 +97,23 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
         )
 
         if "config_loaded" not in PyFunceble.INTERN:
+            file_instance = PyFunceble.helpers.File(
+                f"{path_to_config}.pyfunceble_intern_downtime.json"
+            )
+
+            if file_instance.exists():
+                content = PyFunceble.helpers.Dict().from_json_file(file_instance.path)
+
+                if content and all([x in content for x in self.download_times]):
+                    self.download_times = content.copy()
+
             self.__load_it()
             self.__fix_paths()
+
+            PyFunceble.helpers.Dict(self.download_times).to_json_file(
+                file_instance.path
+            )
+
         self.__set_it(custom)
 
     def __load_it(self):
@@ -402,25 +427,24 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # are sure that the configuration file exist.
         iana_link = self.data["links"]["iana"]
 
-        # We update the link according to our current version.
-        iana_link = PyFunceble.converter.InternalUrl(iana_link).get_converted()
-
         # We set the destination of the downloaded file.
         destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
 
+        date = datetime.now()
+
         if (
-            not PyFunceble.abstracts.Version.is_local_cloned()
-            or not PyFunceble.helpers.File(destination).exists()
+            not PyFunceble.helpers.File(destination).exists()
+            or not self.download_times["iana"]
+            or (
+                (date - datetime.fromisoformat(self.download_times["iana"]["iso"])).days
+                >= 1
+            )
         ):
-            # The current version is not the cloned version.
-
-            # We Download the link content and return the download status.
-            return PyFunceble.helpers.Download(iana_link).text(destination=destination)
-
-        # We are in the cloned version.
-
-        # We do not need to download the file, so we are returning None.
-        return None
+            if PyFunceble.helpers.Download(iana_link).text(destination=destination):
+                self.download_times["iana"] = {
+                    "iso": date.isoformat(),
+                    "timestamp": date.timestamp(),
+                }
 
     def _install_psl_config(self):
         """
@@ -432,28 +456,27 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # are sure that the configuration file exist.
         psl_link = self.data["links"]["psl"]
 
-        # We update the link according to our current version.
-        psl_link = PyFunceble.converter.InternalUrl(psl_link).get_converted()
-
         # We set the destination of the downloaded file.
         destination = (
             PyFunceble.CONFIG_DIRECTORY
             + self.data["outputs"]["default_files"]["public_suffix"]
         )
 
+        date = datetime.now()
+
         if (
-            not PyFunceble.abstracts.Version.is_local_cloned()
-            or not PyFunceble.helpers.File(destination).exists()
+            not PyFunceble.helpers.File(destination).exists()
+            or not self.download_times["psl"]
+            or (
+                (date - datetime.fromisoformat(self.download_times["psl"]["iso"])).days
+                >= 1
+            )
         ):
-            # The current version is not the cloned version.
-
-            # We Download the link content and return the download status.
-            return PyFunceble.helpers.Download(psl_link).text(destination=destination)
-
-        # We are in the cloned version.
-
-        # We do not need to download the file, so we are returning None.
-        return None
+            if PyFunceble.helpers.Download(psl_link).text(destination=destination):
+                self.download_times["psl"] = {
+                    "iso": date.isoformat(),
+                    "timestamp": date.timestamp(),
+                }
 
     def _install_directory_structure_file(self):
         """

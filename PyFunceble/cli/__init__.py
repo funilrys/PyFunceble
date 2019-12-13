@@ -764,9 +764,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 unique_group.add_argument(
-                    "--iana",
-                    action="store_true",
-                    help="Update/Generate `iana-domains-db.json`.",
+                    "--iana", action="store_true", help=argparse.SUPPRESS,
                 )
 
                 unique_group.add_argument(
@@ -777,7 +775,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-psl",
                     "--public-suffix",
                     action="store_true",
-                    help="Update/Generate `public-suffix.json`.",
+                    help=argparse.SUPPRESS,
                 )
 
                 unique_group.add_argument(
