@@ -1,5 +1,5 @@
 Autoconfiguration
-=================
+-----------------
 
 Sometimes, you may find yourself in a position that you do not or you can't answer the question which asks you if you would like to install the default configuration file.
 

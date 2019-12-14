@@ -1,5 +1,5 @@
 :code:`adblock`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -18,7 +18,7 @@
     If this index is set to :code:`False`, every time we read a given file, we will consider one line as an element to test.
 
 :code:`aggressive`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -30,7 +30,7 @@
     This option is available but please keep in mind that the some settings which it enable are experimental.
 
 :code:`auto_continue`
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -39,7 +39,7 @@
     **Description:** Enable / disable the auto continue system.
 
 :code:`command`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -51,7 +51,7 @@
     The parsed command is called only if :code:`auto_continue` and :code:`ci` are set to :code:`True`.
 
 :code:`command_before_end`
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -66,7 +66,7 @@
     Understand by final commit the commit which will deliver the last element we have to test.
 
 :code:`custom_ip`
------------------
+^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -78,7 +78,7 @@
     This index has no effect if :code:`generate_hosts` is set to :code:`False`.
 
 :code:`days_between_db_retest`
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`integer`
 
@@ -90,7 +90,7 @@
     This index has no effect if :code:`inactive_database` is set to :code:`False`.
 
 :code:`db_type`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -110,7 +110,7 @@
     * WhoisDB physically located (JSON) at :code:`[config_dir]/whois.json`.
 
 :code:`debug`
--------------
+^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -128,7 +128,7 @@
     Do not touch this index unless you have been invited to.
 
 :code:`dns_lookup_over_tcp`
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -137,7 +137,7 @@
     **Description:** Make all DNS lookup with TCP instead of UDP.
 
 :code:`dns_server`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`None` or :code:`list`
 
@@ -159,7 +159,7 @@
     as :code:`INACTIVE`.
 
 :code:`filter`
---------------
+^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -171,7 +171,7 @@
     This index should be initiated with a regular expression.
 
 :code:`generate_complements`
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -184,7 +184,7 @@
 
 
 :code:`generate_hosts`
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -193,7 +193,7 @@
     **Description:** Enable / disable the generation of the hosts file(s).
 
 :code:`generate_json`
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -202,7 +202,7 @@
     **Description:** Enable / disable the generation of the JSON file(s).
 
 :code:`header_printed`
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -214,7 +214,7 @@
     Do not touch this index unless you have a good reason to.
 
 :code:`hierarchical_sorting`
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -223,7 +223,7 @@
     **Description:** Say to the system if we have to sort the list and the outputs in a hierarchical order.
 
 :code:`iana_whois_server`
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -238,7 +238,7 @@
     Do not touch this index unless you a have good reason to.
 
 :code:`idna_conversion`
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -255,7 +255,7 @@
 .. _domain2idna: https://github.com/PyFunceble/domain2idna
 
 :code:`inactive_database`
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -264,7 +264,7 @@
     **Description:** Enable / Disable the usage of a database to store the :code:`INACTIVE` and :code:`INVALID` element to retest overtime.
 
 :code:`less`
-------------
+^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -273,7 +273,7 @@
     **Description:** Enable / Disable the output of every information of screen.
 
 :code:`local`
--------------
+^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -282,7 +282,7 @@
     **Description:** Enable / Disable the execution of the test(s) in a local or private network.
 
 :code:`logs`
-------------
+^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -291,7 +291,7 @@
     **Description:** Enable / Disable the output of all logs.
 
 :code:`maximal_processes`
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`integer`
 
@@ -300,11 +300,11 @@
     **Description:** Set the number of maximal simultaneous processes to use/create/run.
 
 .. warning::
-    If you do not explicitly set the :code:`--processes` argument,
+    If you do not explicitly set the :code:`^^processes` argument,
     we overwrite the default to the number of available CPU.
 
 :code:`mining`
---------------
+^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -313,7 +313,7 @@
     **Description:** Enable / Disable the mining subsystem.
 
 :code:`multiprocess`
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -322,7 +322,7 @@
     **Description:** Enable / Disable the usage of multiple processes instead of the default single process.
 
 :code:`multiprocess_merging_mode`
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -341,7 +341,7 @@
     Which means that if you allow 5 processes, we will run 5 tests, merge, run 5 tests, merge and so on until the end.
 
 :code:`no_files`
-----------------
+^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -350,7 +350,7 @@
     **Description:** Enable / Disable the generation of any file(s).
 
 :code:`no_special`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -359,7 +359,7 @@
     **Description:** Enable / Disable the usage of the SPECIAL rules - which are discribes in the source column section.
 
 :code:`no_whois`
-----------------
+^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -368,7 +368,7 @@
     **Description:** Enable / Disable the usage of :code:`whois` in the tests.
 
 :code:`plain_list_domain`
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -380,7 +380,7 @@
     Do not touch this index unless you a have good reason to.
 
 :code:`quiet`
--------------
+^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -389,7 +389,7 @@
     **Description:** Enable / Disable the generation of output on the screen.
 
 :code:`referer`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -401,7 +401,7 @@
     Do not touch this index unless you a have good reason to.
 
 :code:`share_logs`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -414,7 +414,7 @@
     This index has no effect if :code:`logs` is set to :code:`False`.
 
 :code:`show_execution_time`
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -423,7 +423,7 @@
     **Description:** Enable / disable the output of the execution time.
 
 :code:`show_percentage`
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -432,7 +432,7 @@
     **Description:** Enable / disable the output of the percentage of each status.
 
 :code:`simple`
---------------
+^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -444,7 +444,7 @@
     If this index is set to :code:`True`, the system will only return the result inf format: :code:`tested.element STATUS`.
 
 :code:`split`
--------------
+^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -456,7 +456,7 @@
     Understand with "results files" the mirror of what is shown on screen.
 
 :code:`syntax`
---------------
+^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -468,7 +468,7 @@
     If this index is set to :code:`True`, we **ONLY** check for syntax, not availability.
 
 :code:`timeout`
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`integer`
 
@@ -477,7 +477,7 @@
     **Description:** Set the timeout to apply everytime it's possible to set one.
 
 :code:`ci`
-----------
+^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -489,7 +489,7 @@
     Do not activate this index unless you are using PyFunceble under a supported CI environment/platform.
 
 :code:`ci_autosave_commit`
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -498,7 +498,7 @@
     **Description:** Set the default commit message we want to use when have to commit (save) but our tests are not yet completed.
 
 :code:`ci_autosave_final_commit`
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -507,7 +507,7 @@
     **Description:** Set the default final commit message we want to use when we all tests are finished.
 
 :code:`ci_autosave_minutes`
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`integer`
 
@@ -519,7 +519,7 @@
     As many services are setting a rate limit per IP, it's a good idea to set this value between :code:`1` and :code:`15` minutes.
 
 :code:`ci_distribution_branch`
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -538,7 +538,7 @@
     - :code:`master` (ci distribution branch), for the distribution of the results of PyFunceble.
 
 :code:`ci_branch`
------------------
+^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -547,7 +547,7 @@
     **Description:** Set the git branch where we are going to push our results.
 
 :code:`unified`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -559,7 +559,7 @@
     This index has no effect if :code:`split` is set to :code:`True`.
 
 :code:`user_agent`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`string`
 
@@ -568,7 +568,7 @@
     **Description:** Set the User-Agent to use every time we are requesting something from a web server other than our API.
 
 :code:`verify_ssl_certificate`
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 
@@ -583,7 +583,7 @@
 
 
 :code:`whois_database`
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`boolean`
 

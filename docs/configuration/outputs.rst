@@ -1,5 +1,5 @@
 :code:`outputs`
----------------
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`dict`
 
@@ -16,7 +16,7 @@
     **Description:** Set the default name of some important files.
 
 :code:`outputs[default_files][dir_structure]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -28,7 +28,7 @@
     This index has no influence with :code:`dir_structure_production.json`
 
 :code:`outputs[default_files][iana]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -37,7 +37,7 @@
     **Description:** Set the default filename of the file which has the formatted copy of the IANA root zone database.
 
 :code:`outputs[default_files][inactive_db]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -47,7 +47,7 @@
 
 
 :code:`outputs[default_files][results]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -56,7 +56,7 @@
     **Description:** Set the default filename of the file which will save the formatted copy of the public suffix database.
 
 :code:`outputs[default_files][public_suffix]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -65,7 +65,7 @@
     **Description:** Set the default filename of the file which will save the mirror of what is shown on screen.
 
 :code:`outputs[default_files][mining]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -75,7 +75,7 @@
 
 
 :code:`outputs[default_files][whois_db`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -91,7 +91,7 @@
     **Description:** Set the default name of some important files related to the :code:`db_type` index.
 
 :code:`outputs[db_type][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -100,7 +100,7 @@
     **Description:** Set the default directory where we have to save the SQL files which we are later going to be used for database generation/creation.
 
 :code:`outputs[db_type][files]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`dict`
 
@@ -114,7 +114,7 @@
     **Description:** Set the default name of some important files related to the :code:`plain_list_domain` index.
 
 :code:`outputs[domains][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -123,7 +123,7 @@
     **Description:** Set the default directory where we have to save the plain list of elements for each status.
 
 :code:`outputs[domains][filename]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -139,7 +139,7 @@
     **Description:** Set the default name of some important files related to the :code:`generate_hosts` index.
 
 :code:`outputs[hosts][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -148,7 +148,7 @@
     **Description:** Set the default directory where we have to save the hosts files of the elements for each status.
 
 :code:`outputs[hosts][filename]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -164,7 +164,7 @@
     **Description:** Set the default name of some important files related to the :code:`generate_json` index.
 
 :code:`outputs[json][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -173,7 +173,7 @@
     **Description:** Set the default directory where we have to save the JSON files of the elements for each status.
 
 :code:`outputs[json][filename]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -190,7 +190,7 @@
 
 
 :code:`outputs[complements][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -206,14 +206,14 @@
     **Description:** Set the default name of some important files and directories related to the :code:`generate_hosts` index.
 
 :code:`outputs[analytic][directories]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`dict`
 
     **Description:** Set the default name of some important directories related to the :code:`http_codes[active]` index.
 
 :code:`outputs[analytic][directories][parent]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -222,7 +222,7 @@
     **Description:** Set the default directory where we are going to put everything related to the HTTP analytic.
 
 :code:`outputs[analytic][directories][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -232,7 +232,7 @@
 
 
 :code:`outputs[analytic][directories][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -241,7 +241,7 @@
     **Description:** Set the default directory where we are going to put all potentially active data.
 
 :code:`outputs[analytic][directories][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -250,7 +250,7 @@
     **Description:** Set the default directory where we are going to put all active data.
 
 :code:`outputs[analytic][directories][suspicious]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -260,14 +260,14 @@
 
 
 :code:`outputs[analytic][filenames]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`dict`
 
     **Description:** Set the default name of some important files related to the :code:`http_codes[active]` index and the HTTP analytic subsystem.
 
 :code:`outputs[analytic][filenames][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -277,7 +277,7 @@
 
 
 :code:`outputs[analytic][filenames][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -286,7 +286,7 @@
     **Description:** Set the default filename where we are going to put all potentially active data.
 
 :code:`outputs[analytic][filenames][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -295,7 +295,7 @@
     **Description:** Set the default filename where we are going to put all active data.
 
 :code:`outputs[analytic][filenames][suspicious]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -313,7 +313,7 @@
 
 
 :code:`outputs[logs][directories]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
      **Type:** :code:`dict`
 
@@ -321,7 +321,7 @@
 
 
 :code:`outputs[logs][directories][date_format]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -330,7 +330,7 @@
     **Description:** Set the default directory where we are going to put everything related to the data when the dates are in the wrong format.
 
 :code:`outputs[logs][directories][no_referer]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -339,7 +339,7 @@
     **Description:** Set the default directory where we are going to put everything related to the data when no referer is found.
 
 :code:`outputs[logs][directories][parent]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -348,7 +348,7 @@
     **Description:** Set the default directory where we are going to put everything related to the data when no referer is found.
 
 :code:`outputs[logs][directories][percentage]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -357,7 +357,7 @@
     **Description:** Set the default directory where we are going to put everything related to percentages.
 
 :code:`outputs[logs][directories][whois]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -369,14 +369,14 @@
     This is the location of all files when the :code:`debug` index is set to :code:`True`.
 
 :code:`outputs[logs][filenames]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`dict`
 
     **Description:** Set the default filenames of some important files related to the :code:`logs` index.
 
 :code:`outputs[logs][filenames][auto_continue]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -388,7 +388,7 @@
     This file is allocated if the :code:`auto_continue` is set to :code:`True`.
 
 :code:`outputs[logs][filenames][execution_time]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -400,7 +400,7 @@
     This file is allocated if the :code:`show_execution_time` is set to :code:`True`.
 
 :code:`outputs[logs][filenames][percentage]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -438,7 +438,7 @@
     **Description:** Set the default name of some important files and directory related to the :code:`split` index.
 
 :code:`outputs[splited][directory]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 

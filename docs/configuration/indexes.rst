@@ -1,5 +1,5 @@
 Indexes
-=======
+-------
 
 This page will try to detail each configuration available into :code:`.PyFunceble.yaml` along with the location of where we are looking for the configuration file.
 

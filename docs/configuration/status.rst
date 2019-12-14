@@ -1,5 +1,5 @@
 :code:`status`
----------------
+^^^^^^^^^^^^^^
 
     **Type:** :code:`dict`
     
@@ -17,7 +17,7 @@
     All status should be in lowercase.
 
 :code:`status[list][valid]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -29,7 +29,7 @@
     This status is only shown if the :code:`syntax` index is activated.
 
 :code:`status[list][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -38,7 +38,7 @@
     **Description:** Set the accepted :code:`ACTIVE` status.
 
 :code:`status[list][generic]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -50,7 +50,7 @@
     This status is the one used to say the system that we have to print the complete information on the screen.
 
 :code:`status[list][http_active]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -60,7 +60,7 @@
 
 
 :code:`status[list][down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -70,7 +70,7 @@
 
 
 :code:`status[list][invalid]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -79,7 +79,7 @@
     **Description:** Set the accepted status :code:`INVALID` index.
 
 :code:`status[list][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -88,7 +88,7 @@
     **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][potentially_down]` index.
 
 :code:`status[list][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -97,7 +97,7 @@
     **Description:** Set the accepted status for the :code:`outputs[analytic][filenames][potentially_up]` index.
 
 :code:`status[list][suspicious]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -119,7 +119,7 @@
     After any changes here please delete :code:`dir_structure.json` and the :code:`output/` directory.
 
 :code:`status[official][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -128,7 +128,7 @@
     **Description:** Set the returned status for the :code:`ACTIVE` case.
 
 :code:`status[official][down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -137,7 +137,7 @@
     **Description:** Set the returned status for the :code:`INACTIVE` case.
 
 :code:`status[official][invalid]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 
@@ -146,7 +146,7 @@
     **Description:** Set the returned status for the :code:`INVALID` case.
 
 :code:`status[official][valid]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`string`
 

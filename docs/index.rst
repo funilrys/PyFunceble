@@ -81,9 +81,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Configuration
 
-   configuration/location
-   configuration/auto
-   configuration/indexes
+   configuration/index
 
 .. toctree::
    :maxdepth: 3
