@@ -136,7 +136,6 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
             # This will force the merge as something is missing.
             result = True
 
-        PyFunceble.LOGGER.debug(f"Links should be updated: {result}")
         return result
 
     def _is_local_version_different_from_upstream(self):
@@ -149,7 +148,6 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
             self.upstream_config
         )
 
-        PyFunceble.LOGGER.debug(f"Local version is different from upstream: {result}")
         return result
 
     def _merge_links(self):

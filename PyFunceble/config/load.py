@@ -85,6 +85,8 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
         # We initiate the vairable which will provides the configuration content.
         self.data = Box({}, default_box=True, default_box_attr=None)
 
+        self.__path_to_config = path_to_config
+
         if not path_to_config.endswith(directory_separator):
             path_to_config += directory_separator
 
@@ -315,11 +317,25 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
             )
 
-            # We install the latest iana configuration file.
-            self._install_iana_config()
+            try:
+                # We install the latest iana configuration file.
+                self._install_iana_config()
+            except Exception as exception:  # pylint: disable=broad-except
+                if "Unable to download" in str(exception):
+                    PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                    self._load_config_file()
+                else:
+                    raise exception
 
-            # We install the latest public suffix configuration file.
-            self._install_psl_config()
+            try:
+                # We install the latest public suffix configuration file.
+                self._install_psl_config()
+            except Exception as exception:  # pylint: disable=broad-except
+                if "Unable to download" in str(exception):
+                    PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                    self._load_config_file()
+                else:
+                    raise exception
 
             # We install the latest directory structure file.
             self._install_directory_structure_file()
