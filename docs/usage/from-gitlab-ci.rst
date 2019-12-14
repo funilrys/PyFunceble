@@ -1,12 +1,12 @@
 From a GitLab CI/CD environment
-===============================
+-------------------------------
 
 As we offer an argument named :code:`--ci` which will
 autosave in a GitLab CI/CI environment, this document try to
 describe hot it works!
 
 Configuration
--------------
+^^^^^^^^^^^^^
 
 Personal Access Token
 """""""""""""""""""""
