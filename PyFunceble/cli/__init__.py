@@ -489,7 +489,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 output_control_group.add_argument(
-                    "-n",
+                    "-nf",
                     "--no-files",
                     action="store_true",
                     help="Switch the value of the production of output files. %s"

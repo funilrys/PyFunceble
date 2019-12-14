@@ -389,8 +389,8 @@ This argument will let the system know if it has to generate the hosts file vers
     ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
     pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
 
-:code:`-n` | :code:`--no-files`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`-nf` | :code:`--no-files`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Switch the value the production of output files.
 
