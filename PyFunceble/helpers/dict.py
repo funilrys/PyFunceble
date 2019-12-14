@@ -132,8 +132,7 @@ class Dict:
                 for key in key_to_remove:
                     # We loop through the list of key to remove.
 
-                    # We delete the key from the dictionnary.
-                    del self.main[key]
+                    self.remove_key(key)
             else:
                 # The parsed key to remove is not a list.
 

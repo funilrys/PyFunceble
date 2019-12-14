@@ -139,6 +139,10 @@ class TestDict(TestCase):
 
         self.assertEqual(expected, actual)
 
+        actual = Dict(self.test_subject).remove_key(["Py", "test"])
+
+        self.assertEqual(expected, actual)
+
     def test_remove_multiple_key(self):
         """
         Tests the method which let us remove a key with
