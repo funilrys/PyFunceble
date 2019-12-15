@@ -122,8 +122,8 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
         result = False
 
-        if "link" in self.local_config:
-            for index, value in self.local_config["link"].items():
+        if "links" in self.local_config:
+            for index, value in self.local_config["links"].items():
                 if (
                     index not in self.updated_links
                     or self.updated_links[index] not in value

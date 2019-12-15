@@ -377,6 +377,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
             production_config_link
         ).get_converted()
 
+        production_config = PyFunceble.helpers.Download(production_config_link).text()
+
         if not PyFunceble.abstracts.Version.is_local_cloned():
             # The current version is not the cloned one.
 
@@ -384,13 +386,12 @@ Install and load the default configuration at the mentioned location? [y/n] "
             #
             # Note: We add this one in order to allow the enduser to always have
             # a copy of our upstream configuration file.
-            PyFunceble.helpers.Download(production_config_link).text(
-                destination=self.path_to_default_config
+            PyFunceble.helpers.File(self.path_to_default_config).write(
+                production_config, overwrite=True
             )
 
-        # And we download the link content and return the download status.
-        return PyFunceble.helpers.Download(production_config_link).text(
-            destination=self.path_to_config
+        PyFunceble.helpers.File(self.path_to_config).write(
+            production_config, overwrite=True
         )
 
     def _install_db_type_files(self):
