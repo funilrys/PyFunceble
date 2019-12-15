@@ -9,29 +9,31 @@ Global configuration load
 
 ::
 
-    from PyFunceble import load_config
+    import PyFunceble
 
-    OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION = {
-        "api_file_generation": True
-    }
+    OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION = {"api_file_generation": True}
 
-    load_config(generate_directory_structure=True, custom=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION)
+    PyFunceble.load_config(
+        generate_directory_structure=True, custom=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION
+    )
 
     # The output directory is then generated, and the file(s) too.
 
     # You logic or whatever you want.
+
 
 Local configuration load
 ------------------------
 
 ::
 
-    from PyFunceble import test as PyFunceble
+    import PyFunceble
 
-    OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION = {
-        "api_file_generation": True
-    }
+    OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION = {"api_file_generation": True}
 
-    print(f"google.com is {PyFunceble("google.com", config=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION)}")
+    print(
+        "google.com is "
+        f"{PyFunceble.test('google.com', config=OUR_CUSTOM_PYFUNCEBLE_CONFIGURATION)}"
+    )
 
     # The output directory is then generated, and the file(s) too.
