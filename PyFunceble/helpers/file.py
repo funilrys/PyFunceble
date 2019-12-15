@@ -58,7 +58,7 @@ License:
     SOFTWARE.
 """
 
-from os import path, remove
+from os import path, remove, stat
 from shutil import copy as shutil_copy
 from shutil import move as shutil_move
 
@@ -89,6 +89,32 @@ class File:
             file_path = self.path
 
         return path.isfile(file_path)
+
+    def get_size(self, file_path=None):
+        """
+        Provides the size (in bytes) of the
+        given file path.
+
+        :param str file_path:
+            The file path to check.
+
+            .. note::
+                If :code:`None` is given, we
+                report to the globally given file path.
+        :rtype: int
+        """
+
+        if not file_path:
+            file_path = self.path
+
+        return stat(file_path).st_size
+
+    def is_empty(self, file_path=None):
+        """
+        Checks if the given file path is empty.
+        """
+
+        return self.get_size(file_path=file_path) <= 0
 
     def delete(self, file_path=None):
         """
@@ -128,7 +154,7 @@ class File:
         if not file_path:
             file_path = self.path
 
-        if data and isinstance(data, str):
+        if isinstance(data, str):
             if overwrite or not self.exists(file_path=file_path):
                 with open(file_path, "w", encoding=encoding) as file_stream:
                     file_stream.write(data)

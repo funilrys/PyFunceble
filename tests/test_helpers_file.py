@@ -110,6 +110,44 @@ class TestFile(TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_size(self):
+        """
+        Tests the method which let us get the size of a file.
+        """
+
+        self.file_instance.write("Hello, World!", overwrite=True)
+
+        expected = 13
+        actual = self.file_instance.get_size()
+
+        self.assertEqual(expected, actual)
+
+        self.file_instance.write(" ", overwrite=True)
+
+        expected = 1
+        actual = self.file_instance.get_size()
+
+        self.assertEqual(expected, actual)
+
+    def test_is_emtpy(self):
+        """
+        Tests the method which let us know if a file is empty.
+        """
+
+        self.file_instance.write("Hello!!", overwrite=True)
+
+        expected = False
+        actual = self.file_instance.is_empty()
+
+        self.assertEqual(expected, actual)
+
+        self.file_instance.write("", overwrite=True)
+
+        expected = True
+        actual = self.file_instance.is_empty()
+
+        self.assertEqual(expected, actual)
+
     def test_delete_read_and_write(self):
         """
         Tests the method which let us delete and write into a file.

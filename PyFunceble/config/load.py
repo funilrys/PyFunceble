@@ -313,6 +313,13 @@ Install and load the default configuration at the mentioned location? [y/n] "
         try:
             # We try to load the configuration file.
 
+            file_instance = PyFunceble.helpers.File(self.path_to_config)
+
+            if not file_instance.exists() or file_instance.is_empty():
+
+                # We force the regenation of the configuration file.
+                raise FileNotFoundError(self.path_to_config)
+
             self.data.update(
                 PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
             )
@@ -342,8 +349,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We install the db types files.
             self._install_db_type_files()
-        except FileNotFoundError:
-            # But if the configuration file is not found.
+        except (FileNotFoundError, TypeError):
+            # *  But if the configuration file is not found.
+            # Or
+            # * A configuration index is not found.
 
             file_instance = PyFunceble.helpers.File(self.path_to_default_config)
 
