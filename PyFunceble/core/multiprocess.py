@@ -150,7 +150,7 @@ class MultiprocessCore(
         super().__init__(file, file_content_type=file_content_type)
 
     # pylint: disable=arguments-differ
-    def test(self, subject, file_content_type, configuration, manager_data):
+    def test(self, subject, file_content_type, configuration, manager_data, intern):
         """
         Tests the given subject and return the result.
         """
@@ -160,12 +160,14 @@ class MultiprocessCore(
             "counter": {
                 "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
                 "percentage": {"down": 0, "invalid": 0, "up": 0},
-            },
-            "multiprocess_warning_printed": True,
+            }
         }
+
         initiate_colorama(True)
 
         PyFunceble.load_config(custom=configuration)
+
+        PyFunceble.INTERN.update(intern)
 
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
@@ -302,12 +304,18 @@ class MultiprocessCore(
         ):
             process = OurProcessWrapper(
                 target=self.test,
-                args=(subject, self.file_type, configuration, manager_data),
+                args=(
+                    subject,
+                    self.file_type,
+                    configuration,
+                    manager_data,
+                    original_intern,
+                ),
             )
             process.name = f"PyF {subject}"
             process.start()
         elif self.autosave.authorized:
-            print(f".", end="")
+            print(".", end="")
 
         PyFunceble.CONFIGURATION.update(original_config)
         PyFunceble.INTERN.update(original_intern)
