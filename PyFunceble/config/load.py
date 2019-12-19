@@ -166,7 +166,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
                             raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
             else:
-                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
+                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environment variables.
 
                 # We install the production configuration.
                 self._install_production_config()

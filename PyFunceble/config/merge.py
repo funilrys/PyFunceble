@@ -85,12 +85,17 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         ).get_converted()
 
         self.path_to_config = configuration_path
+        self.path_to_default_config = configuration_path
 
         if not self.path_to_config.endswith(directory_separator):
             self.path_to_config += directory_separator
+            self.path_to_default_config += directory_separator
 
         self.path_to_config += (
             PyFunceble.abstracts.Infrastructure.CONFIGURATION_FILENAME
+        )
+        self.path_to_default_config += (
+            PyFunceble.abstracts.Infrastructure.DEFAULT_CONFIGURATION_FILENAME
         )
 
         dict_instance = PyFunceble.helpers.Dict()
@@ -214,6 +219,9 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         PyFunceble.helpers.Dict(self.new_config).to_yaml_file(self.path_to_config)
+        PyFunceble.helpers.Dict(self.upstream_config).to_yaml_file(
+            self.path_to_default_config
+        )
 
         if "config_loaded" in PyFunceble.INTERN:
             del PyFunceble.INTERN["config_loaded"]
