@@ -469,14 +469,13 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 mining=self.mining,
                 whois_db=self.whois_db,
             )
-
-            self.cleanup(self.autocontinue, self.autosave, test_completed=False)
-
         elif self.autosave.authorized:
             # We are under a CI/CD environment.
 
             # We print a dot.
             print(".", end="")
+
+        self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
     def __test_line(self, line, ignore_inactive_db_check=False):
         """
