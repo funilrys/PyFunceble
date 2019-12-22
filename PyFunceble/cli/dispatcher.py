@@ -65,14 +65,50 @@ from .execution_time import ExecutionTime
 
 class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
     """
-    Dispatch to the right brain side.
+    Dispatches to one of the other brain.
 
     .. note::
-        The purpose of this is to not loose compatibility with
-        the old (v1.x.x) :code:`PyFunceble.PyFunceble.core.Core`.
+        We are talking about :code:`brain` because,
+        each :code:`PyFunceble.core.*` is a unique brain
+        which has it's own function ;-)
 
-    .. warning::
-        This is the replacement of the old (v1.x.x) :code:`PyFunceble.PyFunceble.core.Core`.
+        Sometimes, 2 brains depends from the other one.
+        But that's great because working together is always
+        great ;-)
+
+    :param preset:
+        An instance of the configuration preset.
+    :type preset: :py:class:`~PyFunceble.config.preset.Preset`
+    :param list domain_or_ip:
+        A list of subject to test.
+    :param str file_path:
+        A file path or a link.
+
+        .. note::
+            If a file path is given, we read and test its content.
+
+        .. note::
+            If a link is given, we download it's content and test
+            it.
+
+        .. warning::
+            If given, we consider each line to be an adblock filter,
+            a host file format or a subject to test.
+
+    :param str url_file_path:
+        A file path or a link.
+
+        .. note::
+            If a file path is given, we read and test its content.
+
+        .. note::
+            If a link is given, we download it's content and test
+            it.
+
+        .. warning::
+            If given, we consider each line to be a URL to test.
+    :param str url_to_test:
+        A list of URL to test.
     """
 
     def __init__(
@@ -123,7 +159,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         cls, file_path, generate_results_only, generate_all_results_only
     ):
         """
-        Dispatch to the right file testing logic.
+        Dispatches to the brain in charge of file testing.
 
         :param str file_path: The file path to test.
         :param bool generate_results_only:
@@ -163,7 +199,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         self, url_file_path, generate_results_only, generate_all_results_only
     ):
         """
-        Dispatch to the right url file path testing logic.
+        Dispatches to the brain in charge of url file testing.
 
         :param str url_file_path: The file to test.
         :param bool generate_results_only:

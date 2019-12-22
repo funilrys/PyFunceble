@@ -70,8 +70,11 @@ import PyFunceble
 
 class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Merge the old into the new configuration file.
-    :param str configuration_path: The path to the configuration file to update.
+    Merges the old (local) into the new
+    (upstream) configuration file.
+
+    :param str configuration_path:
+        The path to the configuration file to update.
     """
 
     updated_links = {
@@ -215,7 +218,7 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _save(self):
         """
-        Save the new configuration inside the configuration file.
+        Saves the new configuration inside the configuration file.
         """
 
         PyFunceble.helpers.Dict(self.new_config).to_yaml_file(self.path_to_config)
@@ -235,7 +238,7 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _load(self):
         """
-        Execute the logic behind the merging.
+        Executes the logic behind the merging.
         """
 
         if not PyFunceble.helpers.EnvironmentVariable(

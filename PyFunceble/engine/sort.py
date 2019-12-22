@@ -63,8 +63,8 @@ import PyFunceble
 
 class Sort:  # pylint: disable=too-few-public-methods
     """
-    Provide some sorting presets which we can
-    parse to PyFunceble.helpers.List().custom_format().
+    Provides some sorting presets which we can
+    parse to :py:class:`PyFunceble.helpers.list.List.custom_format`.
     """
 
     # We initiate a regex which will match everything which is not
@@ -74,7 +74,7 @@ class Sort:  # pylint: disable=too-few-public-methods
     @classmethod
     def standard(cls, element):
         """
-        Implement the standard and alphabetical sorting.
+        Implements the standard and alphabetical sorting.
 
         :param str element: The element we are currently reading.
 

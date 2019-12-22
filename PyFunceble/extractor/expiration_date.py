@@ -256,7 +256,7 @@ class ExpirationDate(ExtractorBase):
 
     def __format_it(self, data):
         """
-        Format the given data.
+        Formats the given data.
         """
 
         for index, regex in self.regex_dates.items():

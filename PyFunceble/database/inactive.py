@@ -65,7 +65,7 @@ import PyFunceble
 
 class InactiveDB:  # pylint: disable=too-many-instance-attributes
     """
-    Provide the inactive database logic and interface.
+    Provides the inactive database logic and interface.
 
     :param str filename: The name of the file we are processing.
     """
@@ -199,14 +199,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     @classmethod
     def authorization(cls):
         """
-        Provide the execution authorization.
+        Provides the execution authorization.
         """
 
         return PyFunceble.CONFIGURATION.inactive_database
 
     def get_table_name(self):
         """
-        Return the name of the table to use.
+        Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -215,7 +215,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def _merge(self):
         """
-        Merge the database with the older one which
+        Merges the database with the older one which
         has already been set into the database.
         """
 
@@ -270,7 +270,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def load(self):
         """
-        Load the content of the database file.
+        Loads the content of the database file.
         """
 
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
@@ -313,7 +313,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def save(self):
         """
-        Save the current database into the database file.
+        Saves the current database into the database file.
         """
 
         if (
@@ -330,7 +330,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def initiate(self):
         """
-        Initiate the databse.
+        Initiates the databsse.
         """
 
         if self.authorized:
@@ -346,7 +346,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     @classmethod
     def timestamp(cls):
         """
-        Get the timestamp where we are going to save our current list.
+        Gets the timestamp where we are going to save our current list.
 
         :return: The timestamp to append with the currently tested element.
         :rtype: int|str
@@ -357,7 +357,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def add(self, subject, status):
         """
-        Add the given subject into the database.
+        Adds the given subject into the database.
 
         :param str subject: The subject we are working with.
         :param str status: The status of the given subject.
@@ -430,7 +430,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def remove(self, subject):
         """
-        Remove all occurence of the given subject from the database.
+        Removes all occurrences of the given subject from the database.
 
         :param str subject: The subject we are working with.
         """
@@ -495,7 +495,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def get_to_retest(self):  # pylint: pragma: no cover
         """
-        Return a set of subject to restest.
+        Returns a set of subject to restest.
         """
 
         PyFunceble.LOGGER.info(
@@ -528,7 +528,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     def get_already_tested(self):  # pragma: no cover
         """
-        Return a set of already tested subjects.
+        Returns a set of already tested subjects.
         """
 
         PyFunceble.LOGGER.info(

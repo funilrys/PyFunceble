@@ -87,7 +87,7 @@ class SimpleCore(CLICore):
 
     def test(self, subject, subject_type):
         """
-        Process a test of the given subject and return the result.
+        Processes a test of the given subject and return the result.
         """
 
         if isinstance(subject, list):
@@ -109,7 +109,7 @@ class SimpleCore(CLICore):
 
     def domain(self):
         """
-        Handle the simple domain testing.
+        Handles the simple domain testing.
         """
 
         # We run the preset specific to this method.
@@ -126,7 +126,7 @@ class SimpleCore(CLICore):
 
     def url(self):
         """
-        Handle the simple URL testing.
+        Handles the simple URL testing.
         """
 
         # We run the preset specific to this method.

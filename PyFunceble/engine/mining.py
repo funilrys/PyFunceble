@@ -68,7 +68,7 @@ import PyFunceble
 
 class Mining:  # pylint: disable=too-many-instance-attributes
     """
-    Manage the minig subsystem.
+    Manages the minig subsystem.
     """
 
     database = {}
@@ -232,7 +232,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     @classmethod
     def authorization(cls):
         """
-        Provide the operation authorization.
+        Provides the operation authorization.
         """
 
         return PyFunceble.CONFIGURATION.mining
@@ -240,7 +240,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     @classmethod
     def get_history(cls, url):  # pragma: no cover
         """
-        Get the history of the given url.
+        Gets the history of the given url.
 
         :param str url: An URL to call.
 
@@ -270,7 +270,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def get_table_name(self):
         """
-        Return the name of the table to use.
+        Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -279,7 +279,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def list_of_mined(self):
         """
-        Provide the list of mined domains so that they can
+        Provides the list of mined domains so that they can
         be tested.
 
         :return:
@@ -331,7 +331,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def load(self):
         """
-        Load the content of the database file.
+        Loads the content of the database file.
         """
 
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
@@ -351,7 +351,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def save(self):
         """
-        Save the content of the database into the database file.
+        Saves the content of the database into the database file.
         """
 
         if (
@@ -369,7 +369,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-branches
     def mine(self, subject, subject_type):  # pragma: no cover
         """
-        Search for domain or URL related to the original URL or domain.
+        Searches for domain or URL related to the original URL or domain.
         If some are found, we add them into the database.
 
         :param str subject: The subject we are working with.
@@ -463,7 +463,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
     def remove(self, subject, history_member):
         """
-        Remove the given subject from the database assigned to the
+        Removes the given subject from the database assigned to the
         currently tested file.
 
         :param str subject: The subject we are working with.

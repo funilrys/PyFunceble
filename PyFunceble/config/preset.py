@@ -69,7 +69,7 @@ import PyFunceble
 
 class Preset:  # pragma: no cover
     """
-    Check or update the global configuration based on some events.
+    Checks or update the global configuration based on some events.
     """
 
     # List all index which can be superset.
@@ -97,7 +97,7 @@ class Preset:  # pragma: no cover
         cls, variable, custom=False
     ):  # pylint: disable=inconsistent-return-statements
         """
-        Switch PyFunceble.CONFIGURATION variables to their opposite.
+        Switches :code:`PyFunceble.CONFIGURATION` variables to their opposite.
 
         :param variable:
             The variable name to switch.
@@ -170,7 +170,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def disable(cls, indexes):
         """
-        Set the given configuration index to :code:`False`.
+        Sets the given configuration index to :code:`False`.
         """
 
         if isinstance(indexes, list):
@@ -194,7 +194,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def enable(cls, indexes):
         """
-        Set the given configuration index to :code:`True`.
+        Sets the given configuration index to :code:`True`.
         """
 
         if isinstance(indexes, list):
@@ -220,7 +220,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def reset_counters(cls):
         """
-        Reset the counters.
+        Resets the counters.
         """
 
         for status in ["up", "down", "invalid", "tested"]:
@@ -234,7 +234,7 @@ class Preset:  # pragma: no cover
 
     def syntax_test(self):
         """
-        Disable the HTTP status code if we are
+        Disables the HTTP status code if we are
         testing for syntax
         """
 
@@ -253,7 +253,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def maximal_processes(cls):
         """
-        Ensure that the number of maximal processes is alway >= 1.
+        Ensures that the number of maximal processes is alway >= 1.
         """
 
         if PyFunceble.CONFIGURATION.maximal_processes < 1:
@@ -262,7 +262,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def multiprocess_merging_mode(cls):
         """
-        Ensure that a valid merging mode is given.
+        Ensures that a valid merging mode is given.
         """
 
         # pylint: disable=line-too-long
@@ -277,7 +277,7 @@ class Preset:  # pragma: no cover
 
     def simple_domain(self):
         """
-        Prepare the global configuration for a domain
+        Prepares the global configuration for a domain
         test.
         """
 
@@ -288,7 +288,7 @@ class Preset:  # pragma: no cover
 
     def simple_url(self):
         """
-        Prepare the global configuration for an URL test.
+        Prepares the global configuration for an URL test.
         """
 
         should_be_disabled = ["show_percentage", "whois_database"]
@@ -297,7 +297,7 @@ class Preset:  # pragma: no cover
 
     def complements(self):
         """
-        Prepare the global configuration for a complements generation.
+        Prepares the global configuration for a complements generation.
         """
 
         should_be_enabled = ["auto_continue"]
@@ -306,7 +306,7 @@ class Preset:  # pragma: no cover
 
     def file_url(self):
         """
-        Prepare the global configuration for a list of URL to test.
+        Prepares the global configuration for a list of URL to test.
         """
 
         should_be_disabled = ["generate_hosts"]
@@ -317,7 +317,7 @@ class Preset:  # pragma: no cover
 
     def api(self):
         """
-        Prepare the global configuration for a test from the API.
+        Prepares the global configuration for a test from the API.
         """
 
         should_be_disabled = [
@@ -335,7 +335,7 @@ class Preset:  # pragma: no cover
 
     def multiprocess(self):
         """
-        Prepare the global configuration for a test with multiple processes.
+        Prepares the global configuration for a test with multiple processes.
         """
 
         if PyFunceble.CONFIGURATION.multiprocess:
@@ -367,7 +367,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def timeout(cls):
         """
-        Ensure that the timeout is always correct.
+        Ensures that the timeout is always correct.
         """
 
         if cls.__are_we_allowed_to_overwrite("timeout") and (
@@ -391,7 +391,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_lookup_over_tcp(cls):
         """
-        Ensure that the DNS lookup over tcp is proprely set.
+        Ensures that the DNS lookup over tcp is proprely set.
         """
 
         PyFunceble.DNSLOOKUP.tcp = PyFunceble.CONFIGURATION.dns_lookup_over_tcp
@@ -399,7 +399,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_nameserver(cls):
         """
-        Ensure that the DNS nameserver is proprely set.
+        Ensures that the DNS nameserver is proprely set.
         """
 
         PyFunceble.DNSLOOKUP.update_nameserver(PyFunceble.CONFIGURATION.dns_server)

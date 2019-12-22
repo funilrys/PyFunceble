@@ -113,7 +113,7 @@ class OurProcessWrapper(Process):
     @property
     def exception(self):
         """
-        Provide a way to check if an exception was send.
+        Provides a way to check if an exception was send.
         """
 
         try:
@@ -201,7 +201,7 @@ class MultiprocessCore(
 
     def __merge_processes_data(self, manager_data):
         """
-        Read all results and put them at the right location.
+        Reads all results and put them at the right location.
         """
 
         if manager_data is not None:
@@ -236,7 +236,7 @@ class MultiprocessCore(
 
     def __check_exception(self, processes, manager_data):
         """
-        Check if an exception is present into the given pool of processes.
+        Checks if an exception is present into the given pool of processes.
 
         :param list processes. A list of running processes.
         """
@@ -274,7 +274,7 @@ class MultiprocessCore(
 
     def __start_process(self, subject, manager_data, ignore_inactive_db_check=False):
         """
-        Start a new process.
+        Starts a new process.
         """
 
         original_config = Box(
@@ -323,7 +323,7 @@ class MultiprocessCore(
     # pylint: disable=too-many-nested-blocks,too-many-branches
     def __run_multiprocess_test(self, stream, manager, ignore_inactive_db_check=False):
         """
-        Test the content of the given file.
+        Tests the content of the given file.
         """
 
         finished = False
@@ -416,7 +416,7 @@ class MultiprocessCore(
 
     def run_test(self):
         """
-        Run the test of the content of the given file.
+        Runs the test of the content of the given file.
         """
 
         self.print_header()

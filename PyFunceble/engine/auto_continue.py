@@ -64,7 +64,7 @@ import PyFunceble
 
 class AutoContinue:  # pylint: disable=too-many-instance-attributes
     """
-    Provide the auto-continue subsystem.
+    Provides the auto-continue subsystem.
     """
 
     # Save the content of the database.
@@ -185,7 +185,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     @classmethod
     def authorization(cls):
         """
-        Provide the execution authorization.
+        Provides the execution authorization.
         """
 
         return (
@@ -195,7 +195,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def get_table_name(self):
         """
-        Return the name of the table to use.
+        Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -204,8 +204,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def is_empty(self):
         """
-        Check if the database related to the currently tested
-        file is emtpy.
+        Checks if the database related to the currently tested
+        file is empty.
         """
 
         if self.authorized:
@@ -245,7 +245,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def add(self, subject, status):
         """
-        Add the given subject into the database.
+        Adds the given subject into the database.
         """
 
         if self.authorized:
@@ -322,7 +322,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def save(self):
         """
-        Save the current state of the database.
+        Saves the current state of the database.
         """
 
         if (
@@ -339,7 +339,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def load(self):
         """
-        Load previously saved database.
+        Loads previously saved database.
         """
 
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
@@ -362,7 +362,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def clean(self):
         """
-        Clean the database.
+        Cleans the database.
         """
 
         if self.authorized:
@@ -395,7 +395,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def update_counters(self):  # pragma: no cover
         """
-        Update the counters.
+        Updates the counters.
         """
 
         if self.authorized and self.parent:
@@ -468,7 +468,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def get_already_tested(self):
         """
-        Return the list of subjects which were already tested as a set.
+        Returns the list of subjects which were already tested as a set.
         """
 
         PyFunceble.LOGGER.info(
@@ -502,7 +502,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def __generate_complements(self):  # pragma: no cover
         """
-        Generate the complements from the given list of tested.
+        Generates the complements from the given list of tested.
         """
 
         # We get the list of domains we are going to work with.
@@ -514,7 +514,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def __get_or_generate_complements_json(self):  # pragma: no cover
         """
-        Get or generate the complements while working with
+        Gets or generates the complements while working with
         as JSON formatted database.
         """
 
@@ -541,7 +541,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def __get_or_generate_complements_mysql(self):  # pragma: no cover
         """
-        Get or generate the complements while working with
+        Gets or generates the complements while working with
         as MySQL/MariaDB formatted database.
         """
 
@@ -594,7 +594,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
     def get_or_generate_complements(self):  # pragma: no cover
         """
-        Get or generate the complements.
+        Gets or generates the complements.
         """
 
         PyFunceble.LOGGER.info("Generate/Get complements (DATASET WONT BE LOGGED)")

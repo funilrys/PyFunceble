@@ -65,7 +65,7 @@ import PyFunceble
 
 class WhoisDB:
     """
-    Provide the WHOIS database interface and logic.
+    Provides the WHOIS database interface and logic.
     """
 
     database = {}
@@ -215,7 +215,7 @@ class WhoisDB:
     @classmethod
     def authorization(cls):
         """
-        Provide the operation authorization.
+        Provides the operation authorization.
         """
 
         return (
@@ -226,7 +226,7 @@ class WhoisDB:
     @classmethod
     def merge(cls, old):  # pragma: no cover
         """
-        Merge the older version of the database into the new version.
+        Merges the older version of the database into the new version.
 
         :param dict old: The old version of the database.
 
@@ -263,7 +263,7 @@ class WhoisDB:
 
     def get_table_name(self):
         """
-        Return the name of the table to use.
+        Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -272,7 +272,7 @@ class WhoisDB:
 
     def load(self):
         """
-        Load the database file into the database.
+        Loads the database file into the database.
         """
 
         if (
@@ -299,7 +299,7 @@ class WhoisDB:
 
     def save(self):
         """
-        Save the database into the database file.
+        Saves the database into the database file.
         """
 
         if (
@@ -316,7 +316,7 @@ class WhoisDB:
 
     def is_time_older(self, subject):
         """
-        Check if the expiration time of the given subject is
+        Checks if the expiration time of the given subject is
         older.
 
         :param str subject: The subject we are working with.
@@ -336,7 +336,7 @@ class WhoisDB:
 
     def get_expiration_date(self, subject):
         """
-        Get the expiration date of the given subject.
+        Gets the expiration date of the given subject.
 
         :param str subject: The subject we are working with.
 
@@ -362,7 +362,7 @@ class WhoisDB:
 
     def add(self, subject, expiration_date, record=None):
         """
-        Add the given subject and expiration date to the database.
+        Adds the given subject and expiration date to the database.
 
         :param str subject: The subject we are working with.
         :param str expiration_date: The extracted expiration date.

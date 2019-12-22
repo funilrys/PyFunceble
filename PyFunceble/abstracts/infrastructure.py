@@ -67,14 +67,28 @@ class Infrastructure:
     DEFAULT_CONFIGURATION_FILENAME = ".PyFunceble_production.yaml"
     """
     Sets the name of the default configuration file.
+
+    :type: str
     """
 
     CONFIGURATION_FILENAME = ".PyFunceble.yaml"
     """
     Sets the name of the user editable configuration file.
+
+    :type: str
     """
 
     ENV_FILENAME = ".pyfunceble-env"
     """
     Sets the name of our own environment file.
+
+    :type: str
+    """
+
+    DOWN_FILENAME = ".pyfunceble_intern_downtime.json"
+    """
+    Sets the name of our own download time record
+    file.
+
+    :type: str
     """

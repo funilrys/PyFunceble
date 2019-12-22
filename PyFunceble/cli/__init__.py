@@ -75,7 +75,7 @@ from .production import Production
 
 def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements,too-many-locals
     """
-    Provide the CLI.
+    Provides the CLI.
     """
 
     if __name__ == "PyFunceble.cli":

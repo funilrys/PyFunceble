@@ -69,29 +69,40 @@ class Platform:  # pragma: no cover
     WINDOWS = ["windows", "cygwin", "cygwin_nt-10.0"]
     """
     Provides the list of supported windows platform.
+
+    :type: list
     """
 
     UNIX = ["linux", "darwin"]
     """
     Provides the list of supported unix platform.
+
+    :type: list
     """
 
     MAC = ["darwin"]
     """
     Provides teh list of supported MAC platform.
+
+    :type: list
     """
 
     @classmethod
     def get(cls):
         """
         Returns the current platform.
+
+        :rtype: str
         """
+
         return system().lower()
 
     @classmethod
     def is_windows(cls):
         """
         Checks if the current platform is in our windows list.
+
+        :rtype: bool
         """
 
         return cls.get() in cls.WINDOWS
@@ -100,6 +111,8 @@ class Platform:  # pragma: no cover
     def is_unix(cls):
         """
         Checks if the current platform is in our unix list.
+
+        :rtype: bool
         """
 
         return cls.get() in cls.UNIX  # pragma: no cover
@@ -108,6 +121,8 @@ class Platform:  # pragma: no cover
     def is_mac_os(cls):
         """
         Checks if the current platform is in our OSX list.
+
+        :rtype: bool
         """
 
         return cls.get() in cls.MAC

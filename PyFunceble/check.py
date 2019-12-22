@@ -74,7 +74,7 @@ import PyFunceble
 
 class Check:
     """
-    Provide several "checker" around URL, IP or domain syntax.
+    Provides our syntax checkers.
 
     :param str subject: The subject (URL, IP or domain) to check.
     """
@@ -82,13 +82,15 @@ class Check:
     # pylint: disable=line-too-long
     SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS = ["onion"]
     """
-    Specify the extension which are specified as "Special-Use Domain Names"
+    Specifies the extension which are specified as "Special-Use Domain Names"
     and supported by our project.
 
+    :type: list
+
     .. seealso::
-       * [`RFC6761`_]
+       * `RFC6761`_
        * `IANA Special-Use Domain Names`_ assignments.
-       * [`RFC7686`_]
+       * `RFC7686`_
 
     .. _RFC6761: https://tools.ietf.org/html/rfc6761
     .. _RFC7686: https://tools.ietf.org/html/rfc6761
@@ -102,19 +104,16 @@ class Check:
         self, return_base=False, return_formatted=False
     ):  # pylint: disable=too-many-branches
         """
-        Check if the given subject is a valid URL.
-
-        :param str url: The url to validate.
+        Checks if the given subject is a valid URL.
 
         :param bool return_base:
             Allow us the return of the url base (if URL formatted correctly).
 
         :param bool return_formatted:
-            Allow us to get the URL converted to IDNA if the conversion
-            is activated.
+            Allow us to get the formatted URL as response.
 
         :return: The validity or the base if asked.
-        :rtype: bool|str
+        :rtype: bool, str
         """
 
         # We initiate a variable which will save the initial base in case
@@ -210,10 +209,15 @@ class Check:
         self, subdomain_check=False
     ):  # pylint:disable=too-many-return-statements, too-many-branches
         """
-        Check if the given subject is a valid domain.
+        Checks if the given subject is a valid domain.
 
         :param bool subdomain_check:
-            Activate the subdomain checking.
+            Activates the subdomain checking.
+
+            .. warning::
+                Do not manually use.
+
+                Please report to :py:func:`~PyFunceble.check.Check.is_subdomain`.
 
         :return: The validity.
         :rtype: bool
@@ -352,7 +356,7 @@ class Check:
 
     def is_subdomain(self):
         """
-        Check if the given subject is a valid subdomain.
+        Checks if the given subject is a valid subdomain.
 
         :return: The validity.
         :rtype: bool
@@ -373,7 +377,7 @@ class Check:
 
     def is_ipv4(self):
         """
-        Check if the given subject is a valid IPv4.
+        Checks if the given subject is a valid IPv4.
 
         :return: The validity.
         :rtype: bool
@@ -421,7 +425,7 @@ class Check:
 
     def is_ipv4_range(self):
         """
-        Check if the given subject is a valid IPv4 range.
+        Checks if the given subject is a valid IPv4 range.
 
         :return: The validity.
         :rtype: bool
@@ -462,7 +466,7 @@ class Check:
     # pylint: disable=line-too-long
     def is_reserved_ipv4(self):
         """
-        Check if the given subject is a reserved IPv4.
+        Checks if the given subject is a reserved IPv4.
 
         .. note::
             This method has been written on basis of the following links:
@@ -551,7 +555,7 @@ class Check:
 
     def is_reserved_ipv6(self):
         """
-        Check if the given subject is a reserved IPv6.
+        Checks if the given subject is a reserved IPv6.
 
         :return: The validity.
         :rtype: bool

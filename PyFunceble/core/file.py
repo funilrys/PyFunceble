@@ -108,7 +108,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
     def download_link(self, input_file):  # pragma: no cover
         """
-        Download the file if it is an URL and return the name of the new file to test.
+        Downloads the file if it is an URL and return the name of the new file to test.
         """
 
         if PyFunceble.Check(input_file).is_url():
@@ -176,7 +176,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         self, status, include_entries_without_changes=False
     ):  # pragma: no cover
         """
-        Generate the status file of all subjects of the given status.
+        Generates the status file of all subjects of the given status.
 
         :param str status: A status to filter.
         :param bool include_entries_without_changes: Descriptive enough.
@@ -223,7 +223,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
     def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
-        Generate all needed files.
+        Generates all needed files.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -251,7 +251,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
     def test(self, subject):
         """
-        Test the given subject and return it's results.
+        Tests the given subject and return it's results.
         """
 
         if PyFunceble.CONFIGURATION.idna_conversion:
@@ -299,7 +299,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
     ):
         """
         Given a subject which is supposed to be tested,
-        we check if we shouls not test it.
+        we check if we should ignore it.
         """
 
         if not subject:
@@ -432,7 +432,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
     def cleanup(self, auto_continue_db, auto_save, test_completed=False):
         """
-        Run the logic to run at the end of all test.
+        Runs the logic to run at the end of all test.
         """
 
         auto_continue_db.update_counters()

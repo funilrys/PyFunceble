@@ -68,7 +68,7 @@ import PyFunceble
 
 class ExecutionTime:  # pylint: disable=too-few-public-methods
     """
-    Set and return the exection time of the program.
+    Sets and returns the execution time of the program.
 
     :param str action:
         The action related the execution time.
@@ -129,7 +129,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     @classmethod
     def authorization(cls):
         """
-        Check the execution authorization.
+        Checks the execution authorization.
 
         :return: The authorization status.
         :rtype: bool
@@ -142,7 +142,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
     def save(self, last=False):
         """
-        Save the current time to the file.
+        Saves the current time to our backup file.
 
         :param bool last:
             Tell us if we are at the very end of the file testing.
@@ -246,7 +246,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     @classmethod
     def set_starting_time(cls):  # pragma: no cover
         """
-        Set the starting time.
+        Sets the starting time.
         """
 
         # We set the starting time as the current time.
@@ -260,7 +260,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     @classmethod
     def set_stoping_time(cls):  # pragma: no cover
         """
-        Set the ending time.
+        Sets the ending time.
         """
 
         # We set the ending time as the current time.
@@ -274,13 +274,13 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
     @classmethod
     def calculate(cls, start=None, end=None):
         """
-        calculate the difference between starting and ending time.
+        Calculates the difference between starting and ending time.
 
         :param start: A starting time.
-        :type start: int|str
+        :type start: int, str
 
         :param stop: A ending time.
-        :type stop: int|str
+        :type stop: int, str
 
         :return:
             A dict with following as index.
@@ -331,13 +331,13 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
 
     def format_execution_time(self, start=None, end=None):
         """
-        Format the calculated time into a human readable format.
+        Formats the calculated time into a human readable format.
 
         :param start: A starting time.
-        :type start: int|str
+        :type start: int, str
 
         :param stop: A ending time.
-        :type stop: int|str
+        :type stop: int, str
 
         :return: A human readable date.
         :rtype: str

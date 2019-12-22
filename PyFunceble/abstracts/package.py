@@ -69,11 +69,15 @@ class Package:
     NAME = "PyFunceble"
     """
     Sets the package name.
+
+    :type: str
     """
 
     VERSION = "2.53.3.dev (Green Galago: Skitterbug)"
     """
     Sets the package version.
+
+    :type: str
     """
 
 
@@ -85,7 +89,7 @@ class Version:
     @classmethod
     def split_versions(cls, version, return_non_digits=False):
         """
-        Convert the versions to a shorter one.
+        Converts the versions to a shorter one.
 
         :param str version: The version to split.
 
@@ -93,14 +97,17 @@ class Version:
             Activate the return of the non-digits parts of the splitted
             version.
 
-        :return: The splitted version name/numbers.
-        :rtype: list
+        :return:
+            A tuple. The first index is the digit part of the version,
+            when the second one is the the non-digit part of the
+            version.
+        :rtype: tuple
         """
 
         # We split the version.
         splited_version = version.split(".")
 
-        # We split the parsed version and keep the digits.
+        # We keep the digits only.
         digits = [x for x in splited_version if x.isdigit()]
 
         if not return_non_digits:
@@ -111,24 +118,28 @@ class Version:
 
         # We have to return the non digit parts of the version.
 
-        # We split the parsed version and keep the non digits.
+        # We keep the non digits.
         non_digits = [x for x in splited_version if not x.isdigit()]
 
         # We return a tuple with first the digits part and finally the non digit parts.
-        return (digits, non_digits[0])
+        return digits, non_digits[0]
 
     @classmethod
     def literally_compare(cls, local, upstream):
         """
-        Compare the given versions literally.
+        Compares the given versions, literally.
 
-        :param str local: The local version converted by split_versions().
+        :param str local:
+            The local version converted
+            by :py:func:`~PyFunceble.abstracts.package.split_versions`.
 
-        :param str upstream: The upstream version converted by split_versions().
+        :param str upstream:
+            The upstream version converted
+            by :py:func:`~PyFunceble.abstracts.package.split_versions`.
 
         :return:
-            - True: local == upstream
-            - False: local != upstream
+            - :code:`True`: local == upstream
+            - :code:`False`: local != upstream
         :rtype: bool
         """
 
@@ -137,17 +148,21 @@ class Version:
     @classmethod
     def compare(cls, upstream):
         """
-        Compare the given versions with the local one.
+        Compares the given versions with the local one.
 
-        :param list local: The local version converted by split_versions().
+        :param list local:
+            The local version converted
+            by :py:func:`~PyFunceble.abstracts.package.split_versions`.
 
-        :param list upstream: The upstream version converted by split_versions().
+        :param list upstream:
+            The upstream version converted
+            by :py:func:`~PyFunceble.abstracts.package.split_versions`.
 
         :return:
-            - True: local < upstream
-            - None: local == upstream
-            - False: local > upstream
-        :rtype: bool|None
+            - :code:`True`: local < upstream
+            - :code:`None`: local == upstream
+            - :code:`False`: local > upstream
+        :rtype: bool, None
         """
 
         # We get the local version.
@@ -212,8 +227,8 @@ class Version:
     @classmethod
     def is_local_cloned(cls):  # pragma: no cover
         """
-        Let us know if we are currently in the cloned version of
-        PyFunceble which implicitly mean that we are in developement mode.
+        Checks if the local version is was downloaded
+        per :code:`git clone`.
         """
 
         if not helpers.Directory(".git").exists():

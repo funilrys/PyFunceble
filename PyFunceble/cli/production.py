@@ -70,7 +70,15 @@ import PyFunceble
 
 class Production:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Manage and provide the production preparation logic.
+    Manages and provides the production preparation logic.
+
+    .. note::
+        We do this because we want to be able to distribute
+        a new version without having to have a separate
+        tool/argument/logic.
+
+        For the history, in Funceble, this class will be the
+        equivalent of the `tool` script/file.
 
     :param bool extern:
         Tell us if we do not have to execute the logic automatically.
@@ -191,7 +199,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _update_urls(self):
         """
-        Read the file/dir and update all links.
+        Reads the file/dir and update all links/URL.
         """
 
         to_fix = [
@@ -250,7 +258,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _update_code_urls(self):
         """
-        Read the code and update all links.
+        Reads the code and update all links/URL.
         """
 
         to_ignore = [".gitignore", ".keep", "test_converter_internal_url.py"]
@@ -313,7 +321,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
     @classmethod
     def _get_current_version_yaml(cls):
         """
-        Get and return the content of version.yaml
+        Gets and returns the content of version.yaml
         """
 
         return PyFunceble.helpers.Dict().from_yaml_file(
@@ -322,7 +330,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _is_version_greater(self):
         """
-        Check if the current version is greater as the older older one.
+        Checks if the current version is greater as the older older one.
         """
 
         # we compare the 2 versions.
@@ -342,7 +350,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
     @classmethod
     def is_dev_version(cls):
         """
-        Check if the current branch is `dev`.
+        Checks if the current branch is `dev`.
         """
 
         # We initiate the command we have to run in order to
@@ -369,7 +377,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
     @classmethod
     def is_master_version(cls):
         """
-        Check if the current branch is `master`.
+        Checks if the current branch is `master`.
         """
 
         # We initiate the command we have to run in order to
@@ -395,7 +403,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _does_require_deprecation(self):
         """
-        Check if we have to put the previous version into the deprecated list.
+        Checks if we have to put the previous version into the deprecated list.
         """
 
         for index, version_number in enumerate(self.current_version[0][:2]):
@@ -413,7 +421,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _does_require_force_update(self):
         """
-        Check if we have to put the previsous verion into the list of minimal version
+        Checks if we have to put the previous version into the list of minimal version
         for force_update.
         """
 
@@ -430,8 +438,8 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _update_docs(self, file_to_update):
         """
-        Update the given documentation file or :code:`README.rst` so that
-        it always gives branch related URL and informations.
+        Updates the given documentation file or :code:`README.rst` so that
+        it always gives branch related URL and information.
 
         .. note::
             This only apply to :code:`dev` and :code:`master` branch.
@@ -447,6 +455,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",
+                "/en/%s" % "dev": "en/%s" % "master",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -455,6 +464,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "master": r"PyFunceble\/%s\/" % "dev",
                 "=%s" % "master": "=%s" % "dev",
+                "/en/%s" % "master": "en/%s" % "dev",
             }
         else:
             # The current version is not the master nor the dev version.
@@ -482,7 +492,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _update_setup_py(self):
         """
-        Update :code:`setup.py` so that it always have the right name.
+        Updates :code:`setup.py` so that it always have the right name.
         """
 
         # We initiate the path to the file we have to filter.
@@ -531,7 +541,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def _update_travis_yml(self):
         """
-        Update :code:`.travis.yml` according to current branch.
+        Updates :code:`.travis.yml` according to current branch.
         """
 
         # We initiate the file we have to filter/update.
@@ -573,6 +583,6 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 to_update, replacement
             )
 
-        # We finaly replace the file content with the filtered
+        # We finally replace the file content with the filtered
         # content.
         file_instance.write(to_update, overwrite=True)

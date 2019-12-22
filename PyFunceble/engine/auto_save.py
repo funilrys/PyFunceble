@@ -121,7 +121,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     def is_time_exceed(self):
         """
-        Check if the end time is exceed.
+        Checks if the end time is exceed.
         """
 
         if self.authorized:
@@ -141,7 +141,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     def process(self, test_completed=False):
         """
-        Process the autosave base on the current state of the test.
+        Processes the autosave base on the current state of the test.
 
         :param bool test_completed: Tell us if we finished the test.
         """

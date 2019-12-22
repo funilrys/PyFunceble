@@ -71,7 +71,7 @@ import PyFunceble
 
 class CLICore:
     """
-    Provide some methods which are dedicated for the CLI.
+    Provides some methods which are dedicated for the CLI.
     """
 
     def __init__(self):
@@ -303,7 +303,7 @@ class CLICore:
     @classmethod
     def print_header(cls):  # pragma: no cover
         """
-        Print the header if needed.
+        Prints the header if needed.
         """
 
         if (
@@ -337,7 +337,7 @@ class CLICore:
     @classmethod
     def print_nothing_to_test(cls):
         """
-        Print the nothing to test message.
+        Prints the nothing to test message.
         """
 
         print(Fore.CYAN + Style.BRIGHT + "Nothing to test.")
@@ -345,7 +345,7 @@ class CLICore:
     @classmethod
     def stay_safe(cls):
         """
-        Print a friendly message.
+        Prints a friendly message.
         """
 
         random = int(choice(str(int(datetime.now().timestamp()))))
@@ -385,7 +385,7 @@ class CLICore:
     @classmethod
     def logs_sharing(cls):
         """
-        Print an information message when the logs sharing
+        Prints an information message when the logs sharing
         is activated.
         """
 
@@ -523,7 +523,7 @@ class CLICore:
     @classmethod
     def __print_messages(cls, upstream_version):  # pragma: no cover
         """
-        Look at the messages and print the one that needs to be
+        Looks at the messages and prints the one that needs to be
         printed.
         """
 

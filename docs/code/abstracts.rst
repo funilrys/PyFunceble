@@ -30,6 +30,14 @@ Documentation
     :members:
     :private-members:
 
+:code:`Platform()`
+^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.abstracts.platform.Platform
+    :members:
+    :private-members:
+
+
 :code:`Version()`
 ^^^^^^^^^^^^^^^^^
 

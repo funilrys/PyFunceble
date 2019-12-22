@@ -98,7 +98,7 @@ class Logger:  # pragma: no cover
 
     def authorization(self, debug):
         """
-        Provide the operation authorization.
+        Provides the operation authorization.
         """
 
         return (
@@ -113,7 +113,7 @@ class Logger:  # pragma: no cover
 
     def init(self, output_directory=None):
         """
-        Init the logger.
+        Initiates the logger.
         """
 
         if self.authorized:
@@ -148,7 +148,7 @@ class Logger:  # pragma: no cover
 
     def __init_loggers(self):
         """
-        Init all loggers.
+        Initiates all loggers.
         """
 
         # pylint: disable=attribute-defined-outside-init
@@ -186,7 +186,7 @@ class Logger:  # pragma: no cover
     @classmethod
     def get_origin_info(cls):
         """
-        Return the information about where the logger was triggered.
+        Returns the information about where the logger was triggered.
 
         :return:
             A tuple, which is composed of the following.
@@ -216,7 +216,7 @@ class Logger:  # pragma: no cover
 
     def __get_handler(self, handler_type):
         """
-        Provide a handler for of the given type.
+        Provides a handler for of the given type.
         """
 
         handler_type = handler_type.upper()
@@ -240,7 +240,7 @@ class Logger:  # pragma: no cover
 
     def info(self, message):
         """
-        Log the info message.
+        Logs the info message.
         """
 
         if self.authorized:
@@ -256,7 +256,7 @@ class Logger:  # pragma: no cover
 
     def debug(self, message):
         """
-        Log the debug message.
+        Logs the debug message.
         """
 
         if self.authorized:
@@ -272,7 +272,7 @@ class Logger:  # pragma: no cover
 
     def warning(self, message):
         """
-        Log the warning message.
+        Logs the warning message.
         """
 
         if self.authorized:
@@ -288,7 +288,7 @@ class Logger:  # pragma: no cover
 
     def error(self, message):
         """
-        Log the error message.
+        Logs the error message.
         """
 
         if self.authorized:
@@ -304,7 +304,7 @@ class Logger:  # pragma: no cover
 
     def fatal(self, message):
         """
-        Log the fatal message.
+        Logs the fatal message.
         """
 
         if self.authorized:
@@ -320,7 +320,7 @@ class Logger:  # pragma: no cover
 
     def critical(self, message):
         """
-        Log the critical message.
+        Logs the critical message.
         """
 
         if self.authorized:
@@ -336,7 +336,7 @@ class Logger:  # pragma: no cover
 
     def exception(self):
         """
-        Log the exception message.
+        Logs the exception message.
         """
 
         if self.authorized:

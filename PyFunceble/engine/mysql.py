@@ -70,7 +70,7 @@ import PyFunceble
 
 class MySQL:
     """
-    Provide our way to work with our mysql/mariadb database.
+    Provides our way to work with our mysql/mariadb database.
     """
 
     # pylint: disable=no-member
@@ -118,7 +118,7 @@ class MySQL:
     @classmethod
     def authorization(cls):
         """
-        Provide the authorization to operate.
+        Provides the authorization to operate.
         """
 
         return PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]
@@ -126,7 +126,7 @@ class MySQL:
     @classmethod
     def parse_mysql_sql_file(cls):
         """
-        Parse our mysql.sql file into something we understand.
+        Parses our mysql.sql file into something we understand.
         """
 
         source = PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.db_type.directory
@@ -173,7 +173,7 @@ class MySQL:
     @classmethod
     def parse_env_file(cls, env_file_location):
         """
-        Parse the environment file into something we understand.
+        Parses the environment file into something we understand.
 
         :param str env_file_location: The location of the file we have to parse.
         """
@@ -203,7 +203,7 @@ class MySQL:
 
     def save_to_env_file(self, envs, env_file_location):
         """
-        Save the given dict of environment variable into our environment file.
+        Saves the given dict of environment variable into our environment file.
 
         :param dict envs: A dict of environment variables to save.
         :param str env_file_location: The location of the file we have to update.
@@ -240,7 +240,7 @@ class MySQL:
 
     def get_connection(self):
         """
-        Provide the connection to the database.
+        Provides the connection to the database.
         """
 
         if self.authorized:
@@ -303,7 +303,7 @@ class MySQL:
 
     def are_tables_present(self):
         """
-        Check if all our tables are present.
+        Checks if all our tables are present.
         """
 
         if self.authorized:
@@ -328,7 +328,7 @@ class MySQL:
 
     def create_tables_and_apply_patches(self):
         """
-        Create the tables of the database and apply the patches.
+        Creates the tables of the database and apply the patches.
         """
 
         if self.authorized:

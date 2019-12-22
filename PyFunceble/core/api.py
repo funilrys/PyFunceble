@@ -65,15 +65,19 @@ from .cli import CLICore
 
 class APICore:
     """
-    Provide the logic and interface for the tests from the API.
+    Provides the logic and interface for the tests from the API.
 
     :param str subject: The element we are testing.
     :param bool complete:
-        Activate the return of a dictionnary with signigicant - if not all -
+        Activate the return of a dictionnary with significant - if not all -
         data about the test.
 
     :param dict configuration:
-        The configuration to
+        The custom configuration to load.
+
+        .. note::
+            This will let you overwrite any of the previously given
+            configuration index.
     """
 
     # The subject we are working with.
@@ -214,7 +218,7 @@ class APICore:
 
     def domain_and_ip(self):
         """
-        Run a domain/IP avaibility check over the given subject.
+        Run a domain/IP availability check over the given subject.
         """
 
         if isinstance(self.subject, list):
@@ -404,7 +408,7 @@ class APICore:
 
     def url(self):
         """
-        Run an URL avaibility check over the given subject.
+        Run an URL availability check over the given subject.
         """
 
         if isinstance(self.subject, list):

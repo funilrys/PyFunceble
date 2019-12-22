@@ -67,7 +67,7 @@ from .base import ConverterBase
 
 class AdBlock(ConverterBase):
     """
-    Converts an adblock line to a list os subject to test.
+    Converts an adblock filter line to a list os subject to test.
     """
 
     options_separator = "$"
@@ -194,7 +194,7 @@ class AdBlock(ConverterBase):
 
     def format_decoded(self, decoded, result=None):  # pragma: no cover
         """
-        Formats the exctracted adblock line in order to be
+        Formats the extracted adblock line in order to be
         compatible with what the system understand.
 
         :param str decoded: The decoded data to work with.
@@ -280,7 +280,7 @@ class AdBlock(ConverterBase):
 
     def __decode_v1(self, data):
         """
-        Decode the v1.
+        Decodes the v1.
 
         :param str data: A string to decode.
         :rtype: list
@@ -325,7 +325,7 @@ class AdBlock(ConverterBase):
 
     def __decode_v2(self, data):
         """
-        Decode the v2.
+        Decodes the v2.
 
         :param str data: A string to decode.
         :rtype: list
@@ -344,7 +344,7 @@ class AdBlock(ConverterBase):
 
     def __decode_v3(self, data):
         """
-        Decode the v3.
+        Decodes the v3.
 
         :param str data: A string to decode.
         :rtype: list
@@ -363,7 +363,7 @@ class AdBlock(ConverterBase):
 
     def __decode_v4(self, data):
         """
-        Decode the v4.
+        Decodes the v4.
 
         :param str data: A string to decode.
         :rtype: list

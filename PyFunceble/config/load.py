@@ -70,15 +70,19 @@ import PyFunceble
 
 class Load:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Help us load the configuration(s) file(s).
+    Loads the configuration(s) file(s).
 
-    :param str path_to_config: The possible path to the configuration to load.
+    :param str path_to_config:
+        The possible path to the configuration to load.
+
+    :param dict custom:
+        The custom index, this is what we overwrite.
     """
 
     download_times = {"iana": {}, "psl": {}}
     """
     Sample of what we are going to write into
-    :code:`.pyfunceble_download_times.json`
+    :py:attr:`~PyFunceble.abstracts.infrastructure.Infrastructure.DOWN_FILENAME`
     """
 
     def __init__(self, path_to_config, custom=None):
@@ -100,7 +104,7 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
 
         if "config_loaded" not in PyFunceble.INTERN:
             file_instance = PyFunceble.helpers.File(
-                f"{path_to_config}.pyfunceble_intern_downtime.json"
+                f"{path_to_config}{PyFunceble.abstracts.Infrastructure.DOWN_FILENAME}"
             )
 
             if file_instance.exists():
@@ -120,7 +124,11 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def __load_it(self):
         """
-        Load the configuration and everything needed aroud it.
+        Loads the configuration and everything needed around it.
+
+        .. note::
+            "Everything needed around it" is meant to be all files
+            which are needed by other part of the project.
         """
 
         try:
@@ -176,7 +184,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def __fix_paths(self):
         """
-        Fix all paths.
+        Fixes all paths.
         """
 
         for main_key in [
@@ -223,7 +231,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def __set_it(self, custom):
         """
-        Set the configuration at its final location and load the complementary infos.
+        Sets the configuration at its final location and load the complementary infos.
+
+        :param dict custom:
+            The custom index, this is what we overwrite.
         """
 
         if "config_loaded" not in PyFunceble.INTERN:
@@ -276,9 +287,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
     @classmethod
     def _set_path_to_configs(cls, path_to_config):
         """
-        Set the paths to the configuration files.
+        Sets the paths to the configuration files.
 
-        :param str path_to_config: The possible path to the config to load.
+        :param str path_to_config:
+            The possible path to the config to load.
 
         :return:
             The path to the config to read (0), the path to the default
@@ -307,7 +319,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _load_config_file(self):
         """
-        Load .PyFunceble.yaml into the system.
+        Loads :code.`.PyFunceble.yaml` into the system.
         """
 
         try:
@@ -372,8 +384,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_production_config(self):
         """
-        Download the production configuration and install it in the
-        current directory.
+        Downloads the production configuration and install it in the
+        given configuration directory.
         """
 
         # We initiate the link to the production configuration.
@@ -405,7 +417,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_db_type_files(self):
         """
-        Create the .db_type directory if it does not exists and update
+        Creates the :code:`db_type/` directory if it does not exists and update
         its content.
         """
 
@@ -445,7 +457,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_iana_config(self):
         """
-        Download `iana-domains-db.json` if not present.
+        Downloads :code:`iana-domains-db.json` if not present.
         """
 
         # We initiate the link to the iana configuration.
@@ -474,7 +486,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_psl_config(self):
         """
-        Download `public-suffix.json` if not present.
+        Downloads :code:`public-suffix.json` if not present.
         """
 
         # We initiate the link to the public suffix configuration.
@@ -506,7 +518,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def _install_directory_structure_file(self):
         """
-        Download the latest version of `dir_structure_production.json`.
+        Downloads the latest version of :code:`dir_structure_production.json`.
         """
 
         # We initiate the link to the public suffix configuration.
@@ -546,7 +558,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
     def get(self):
         """
-        Return the loaded config
+        Returns the loaded config
         """
 
         return self.data
