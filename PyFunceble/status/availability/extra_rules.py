@@ -131,7 +131,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         :rtype: tuple
         """
 
-        if self.status_code == "404":
+        if self.status_code == 404:
             return PyFunceble.STATUS.official.down, "SPECIAL"
         return None
 
