@@ -97,7 +97,6 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         self.regexes_active_to_inactive_potentially_down = {
             r"\.blogspot\.": self.__blogspot,
             r"\.canalblog\.com$": self.__special_down_404,
-            r"\.doubleclick\.net$": self.__special_down_404,
             r"\.github\.io$": self.__special_down_404,
             r"\.liveadvert\.com$": self.__special_down_404,
             r"\.skyrock\.com$": self.__special_down_404,

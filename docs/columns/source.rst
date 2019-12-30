@@ -52,11 +52,6 @@ So I introduced the SPECIAL source.
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
-:code:`*.doubleclick.net`
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- All :code:`404` are returned as :code:`INACTIVE`
-
 :code:`*.github.io`
 ^^^^^^^^^^^^^^^^^^^
 
