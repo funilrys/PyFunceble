@@ -527,6 +527,8 @@ class CLICore:
         printed.
         """
 
+        iso_dateformat = "%Y-%m-%dT%H:%M:%S%z"
+
         if (
             "messages" in upstream_version
             and not PyFunceble.CONFIGURATION.simple
@@ -543,7 +545,9 @@ class CLICore:
                 for single_message in data:
                     if "until_date" in single_message:
                         until_date = (
-                            datetime.fromisoformat(single_message["until_date"])
+                            datetime.strptime(
+                                single_message["until_date"], iso_dateformat
+                            )
                             - datetime.now(tz=local_timezone)
                         ).days
 

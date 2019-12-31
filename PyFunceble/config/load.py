@@ -474,7 +474,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             not PyFunceble.helpers.File(destination).exists()
             or not self.download_times["iana"]
             or (
-                (date - datetime.fromisoformat(self.download_times["iana"]["iso"])).days
+                (
+                    date
+                    - datetime.fromtimestamp(self.download_times["iana"]["timestamp"])
+                ).days
                 >= 1
             )
         ):
@@ -506,7 +509,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             not PyFunceble.helpers.File(destination).exists()
             or not self.download_times["psl"]
             or (
-                (date - datetime.fromisoformat(self.download_times["psl"]["iso"])).days
+                (
+                    date
+                    - datetime.fromtimestamp(self.download_times["psl"]["timestamp"])
+                ).days
                 >= 1
             )
         ):
