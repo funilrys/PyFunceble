@@ -88,14 +88,14 @@ How to use the :code:`mysql` or :code:`mariadb` format?
       3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on 
 	  local runs.
 
-::
+	::
 
-    PYFUNCEBLE_DB_CHARSET=utf8mb4
-    PYFUNCEBLE_DB_HOST=/var/run/mysqld/mysqld.sock
-    PYFUNCEBLE_DB_NAME=PyFunceble
-    PYFUNCEBLE_DB_PASSWORD=Hello,World!
-    PYFUNCEBLE_DB_PORT=3306
-    PYFUNCEBLE_DB_USERNAME=pyfunceble
+	    PYFUNCEBLE_DB_CHARSET=utf8mb4
+	    PYFUNCEBLE_DB_HOST=/var/run/mysqld/mysqld.sock
+	    PYFUNCEBLE_DB_NAME=PyFunceble
+	    PYFUNCEBLE_DB_PASSWORD=Hello,World!
+	    PYFUNCEBLE_DB_PORT=3306
+	    PYFUNCEBLE_DB_USERNAME=pyfunceble
 
 4. Switch the :code:`db_type` index of your configuration file to :code:`mysql` 
     or :code:`mariadb`.
