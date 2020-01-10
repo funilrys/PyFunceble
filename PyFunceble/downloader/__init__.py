@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our exceptions.
+Provides the downloaders of all our static files.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,106 +58,8 @@ License:
     SOFTWARE.
 """
 
-
-class PyFuncebleException(Exception):
-    """
-    Describes our own exceptions.
-    """
-
-
-class PyFuncebleExternalException(PyFuncebleException):
-    """
-    Describes an exception which is caused by an external input.
-    """
-
-
-class PyFuncebleInternalException(PyFuncebleException):
-    """
-    Describes an exception which is caused by our own logic.
-    """
-
-
-class WrongParameterType(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter type.
-    """
-
-
-class WrongParameterValue(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter value.
-    """
-
-
-class NoInternetConnection(PyFuncebleExternalException):
-    """
-    Describes a missing connection.
-    """
-
-
-class ConfigurationFileNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing configuration file.
-    """
-
-
-class GitHubTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitHub token.
-    """
-
-
-class GitLabTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitLab token.
-    """
-
-
-class GitEmailNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Email.
-    """
-
-
-class GitNameNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Name.
-    """
-
-
-class PleaseUpdatePyFunceble(PyFuncebleInternalException):
-    """
-    Describes the impossiblity to continue with an older version.
-    """
-
-
-class NoConversionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that a conversion was expected but none
-    was made.
-    """
-
-
-class NoExtractionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that an extraction was expected but none
-    was made.
-    """
-
-
-class UnknownSubject(PyFuncebleInternalException):
-    """
-    Describes the fact that an unknown subject is inputed.
-    """
-
-
-class NoDownloadDestinationGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that the download destination was not declared.
-    """
-
-
-class NoDownloadLinkGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that no download link was declared.
-    """
+from .config import ConfigDownloader as Config
+from .db_type import DBTypeDownloader as DBType
+from .directory_structure import DirectoryStructureDownloader as DirectoryStructure
+from .iana import IANADownloader as IANA
+from .publicsuffix import PublicSuffixDownloader as PublicSuffix

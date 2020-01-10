@@ -83,10 +83,6 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
     }
 
     def __init__(self, configuration_path):
-        config_link = PyFunceble.converter.InternalUrl(
-            "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
-        ).get_converted()
-
         self.path_to_config = configuration_path
         self.path_to_default_config = configuration_path
 
@@ -104,11 +100,13 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         dict_instance = PyFunceble.helpers.Dict()
 
         self.local_config = dict_instance.from_yaml_file(self.path_to_config)
-        self.upstream_config = dict_instance.from_yaml(
-            PyFunceble.helpers.Download(config_link).text()
-        )
+        self.upstream_config = dict_instance.from_yaml_file(self.path_to_default_config)
 
-        if self.upstream_config["links"]["config"] != config_link:
+        if (
+            self.upstream_config["links"]["config"]
+            != PyFunceble.abstracts.Infrastructure.PROD_CONFIG_LINK
+        ):
+
             self.upstream_config = dict_instance.from_yaml(
                 PyFunceble.helpers.Download(
                     self.upstream_config["links"]["config"]
@@ -222,9 +220,14 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         """
 
         PyFunceble.helpers.Dict(self.new_config).to_yaml_file(self.path_to_config)
-        PyFunceble.helpers.Dict(self.upstream_config).to_yaml_file(
-            self.path_to_default_config
-        )
+
+        if (
+            self.upstream_config["links"]["config"]
+            != PyFunceble.abstracts.Infrastructure.PROD_CONFIG_LINK
+        ):
+            PyFunceble.helpers.Dict(self.upstream_config).to_yaml_file(
+                self.path_to_default_config
+            )
 
         if "config_loaded" in PyFunceble.INTERN:
             del PyFunceble.INTERN["config_loaded"]

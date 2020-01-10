@@ -451,7 +451,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             # The current version is the dev version.
 
             # We map what we have to replace.
-            # Format: {match:replacement}
+            # Format: {replacement:match}
             regexes = {
                 "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",

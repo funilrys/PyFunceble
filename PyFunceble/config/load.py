@@ -59,7 +59,6 @@ License:
 """
 # pylint: disable=import-error
 
-from datetime import datetime
 from os import sep as directory_separator
 
 from box import Box
@@ -79,12 +78,6 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
         The custom index, this is what we overwrite.
     """
 
-    download_times = {"iana": {}, "psl": {}}
-    """
-    Sample of what we are going to write into
-    :py:attr:`~PyFunceble.abstracts.infrastructure.Infrastructure.DOWN_FILENAME`
-    """
-
     def __init__(self, path_to_config, custom=None):
         # We initiate the vairable which will provides the configuration content.
         self.data = Box({}, default_box=True, default_box_attr=None)
@@ -102,25 +95,15 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
             path_to_config
         )
 
+        # We download the latest production configuration file.
+        PyFunceble.downloader.Config()
+
         if "config_loaded" not in PyFunceble.INTERN:
-            file_instance = PyFunceble.helpers.File(
-                f"{path_to_config}{PyFunceble.abstracts.Infrastructure.DOWN_FILENAME}"
-            )
-
-            if file_instance.exists():
-                content = PyFunceble.helpers.Dict().from_json_file(file_instance.path)
-
-                if content and all([x in content for x in self.download_times]):
-                    self.download_times = content.copy()
-
             self.__load_it()
             self.__fix_paths()
 
-            PyFunceble.helpers.Dict(self.download_times).to_json_file(
-                file_instance.path
-            )
-
         self.__set_it(custom)
+        self.__download_them_all()
 
     def __load_it(self):
         """
@@ -140,10 +123,10 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
             if not PyFunceble.helpers.EnvironmentVariable(
                 "PYFUNCEBLE_AUTO_CONFIGURATION"
             ).exists():
-                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environnements variables.
+                # `PYFUNCEBLE_AUTO_CONFIGURATION` is not into the environments variables.
 
                 while True:
-                    # We infinitly loop until we get a reponse which is `y|Y` or `n|N`.
+                    # We infinitely loop until we get a response which is `y|Y` or `n|N`.
 
                     # We ask the user if we should install and load the default configuration.
                     response = input(
@@ -228,6 +211,37 @@ Install and load the default configuration at the mentioned location? [y/n] "
         self.data["outputs"]["parent_directory"] = PyFunceble.helpers.Directory(
             self.data["outputs"]["parent_directory"]
         ).fix_path()
+
+    def __download_them_all(self):
+        """
+        Download everything that needs to be downloaded.
+        """
+
+        try:
+            # We install the latest iana configuration file.
+            PyFunceble.downloader.IANA()
+        except Exception as exception:  # pylint: disable=broad-except
+            if "Unable to download" in str(exception):
+                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                self._load_config_file()
+            else:
+                raise exception
+
+        try:
+            # We install the latest public suffix configuration file.
+            PyFunceble.downloader.PublicSuffix()
+        except Exception as exception:  # pylint: disable=broad-except
+            if "Unable to download" in str(exception):
+                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                self._load_config_file()
+            else:
+                raise exception
+
+        # We install the latest directory structure file.
+        PyFunceble.downloader.DirectoryStructure()
+
+        # We install the db_type file if needed.
+        PyFunceble.downloader.DBType()
 
     def __set_it(self, custom):
         """
@@ -314,7 +328,7 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # And we append the `DEFAULT_CONFIGURATION_FILENAME` to the default variable.
         default += PyFunceble.abstracts.Infrastructure.DEFAULT_CONFIGURATION_FILENAME
 
-        # We finaly return a tuple which contain both informations.
+        # We finally return a tuple which contain both information.
         return (parsed, default)
 
     def _load_config_file(self):
@@ -329,58 +343,19 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             if not file_instance.exists() or file_instance.is_empty():
 
-                # We force the regenation of the configuration file.
+                # We force the regeneration of the configuration file.
                 raise FileNotFoundError(self.path_to_config)
 
             self.data.update(
                 PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
             )
-
-            try:
-                # We install the latest iana configuration file.
-                self._install_iana_config()
-            except Exception as exception:  # pylint: disable=broad-except
-                if "Unable to download" in str(exception):
-                    PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
-                    self._load_config_file()
-                else:
-                    raise exception
-
-            try:
-                # We install the latest public suffix configuration file.
-                self._install_psl_config()
-            except Exception as exception:  # pylint: disable=broad-except
-                if "Unable to download" in str(exception):
-                    PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
-                    self._load_config_file()
-                else:
-                    raise exception
-
-            # We install the latest directory structure file.
-            self._install_directory_structure_file()
-
-            # We install the db types files.
-            self._install_db_type_files()
         except (FileNotFoundError, TypeError):
             # *  But if the configuration file is not found.
             # Or
             # * A configuration index is not found.
 
-            file_instance = PyFunceble.helpers.File(self.path_to_default_config)
-
-            if file_instance.exists():
-                # The `DEFAULT_CONFIGURATION_FILENAME` file exists.
-
-                # We copy it as the configuration file.
-                file_instance.copy(self.path_to_config)
-
-                # And we load the configuration file as it does exist (yet).
-                self._load_config_file()
-            else:
-                # The `DEFAULT_CONFIGURATION_FILENAME` file does not exists.
-
-                # We raise the exception we were handling.
-                raise PyFunceble.exceptions.ConfigurationFileNotFound()
+            # We raise the exception we were handling.
+            raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
     def _install_production_config(self):
         """
@@ -388,179 +363,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
         given configuration directory.
         """
 
-        # We initiate the link to the production configuration.
-        # It is not hard coded because this method is called only if we
-        # are sure that the configuration file exist.
-        production_config_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
-
-        # We update the link according to our current version.
-        production_config_link = PyFunceble.converter.InternalUrl(
-            production_config_link
-        ).get_converted()
-
-        production_config = PyFunceble.helpers.Download(production_config_link).text()
-
-        if not PyFunceble.abstracts.Version.is_local_cloned():
-            # The current version is not the cloned one.
-
-            # We download the link content and save it inside the default location.
-            #
-            # Note: We add this one in order to allow the enduser to always have
-            # a copy of our upstream configuration file.
-            PyFunceble.helpers.File(self.path_to_default_config).write(
-                production_config, overwrite=True
-            )
-
-        PyFunceble.helpers.File(self.path_to_config).write(
-            production_config, overwrite=True
-        )
-
-    def _install_db_type_files(self):
-        """
-        Creates the :code:`db_type/` directory if it does not exists and update
-        its content.
-        """
-
-        if not PyFunceble.abstracts.Version.is_local_cloned():
-            # * The current version is not the cloned version.
-            # and
-            # * The database type is not JSON.
-
-            destination_dir = (
-                PyFunceble.CONFIG_DIRECTORY
-                + self.data["outputs"]["db_type"]["directory"]
-                + directory_separator
-            )
-
-            PyFunceble.helpers.Directory(destination_dir).create()
-
-            # We set the list of index to download.
-            index_to_download = ["mariadb", "mysql"]
-
-            for index in index_to_download:
-                # We loop through the list of indexes.
-
-                # We create the right link.
-                link_to_download = PyFunceble.converter.InternalUrl(
-                    self.data["links"][index]
-                ).get_converted()
-
-                # We create the destination.
-                destination = (
-                    destination_dir + self.data["outputs"]["db_type"]["files"][index]
-                )
-
-                # We finally download the file.
-                PyFunceble.helpers.Download(link_to_download).text(
-                    destination=destination
-                )
-
-    def _install_iana_config(self):
-        """
-        Downloads :code:`iana-domains-db.json` if not present.
-        """
-
-        # We initiate the link to the iana configuration.
-        # It is not hard coded because this method is called only if we
-        # are sure that the configuration file exist.
-        iana_link = self.data["links"]["iana"]
-
-        # We set the destination of the downloaded file.
-        destination = PyFunceble.CONFIG_DIRECTORY + "iana-domains-db.json"
-
-        date = datetime.now()
-
-        if (
-            not PyFunceble.helpers.File(destination).exists()
-            or not self.download_times["iana"]
-            or (
-                (
-                    date
-                    - datetime.fromtimestamp(self.download_times["iana"]["timestamp"])
-                ).days
-                >= 1
-            )
-        ):
-            if PyFunceble.helpers.Download(iana_link).text(destination=destination):
-                self.download_times["iana"] = {
-                    "iso": date.isoformat(),
-                    "timestamp": date.timestamp(),
-                }
-
-    def _install_psl_config(self):
-        """
-        Downloads :code:`public-suffix.json` if not present.
-        """
-
-        # We initiate the link to the public suffix configuration.
-        # It is not hard coded because this method is called only if we
-        # are sure that the configuration file exist.
-        psl_link = self.data["links"]["psl"]
-
-        # We set the destination of the downloaded file.
-        destination = (
-            PyFunceble.CONFIG_DIRECTORY
-            + self.data["outputs"]["default_files"]["public_suffix"]
-        )
-
-        date = datetime.now()
-
-        if (
-            not PyFunceble.helpers.File(destination).exists()
-            or not self.download_times["psl"]
-            or (
-                (
-                    date
-                    - datetime.fromtimestamp(self.download_times["psl"]["timestamp"])
-                ).days
-                >= 1
-            )
-        ):
-            if PyFunceble.helpers.Download(psl_link).text(destination=destination):
-                self.download_times["psl"] = {
-                    "iso": date.isoformat(),
-                    "timestamp": date.timestamp(),
-                }
-
-    def _install_directory_structure_file(self):
-        """
-        Downloads the latest version of :code:`dir_structure_production.json`.
-        """
-
-        # We initiate the link to the public suffix configuration.
-        # It is not hard coded because this method is called only if we
-        # are sure that the configuration file exist.
-        dir_structure_link = self.data["links"]["dir_structure"]
-
-        # We update the link according to our current version.
-        dir_structure_link = PyFunceble.converter.InternalUrl(
-            dir_structure_link
-        ).get_converted()
-
-        # We set the destination of the downloaded file.
-        destination = (
-            PyFunceble.CONFIG_DIRECTORY
-            + self.data["outputs"]["default_files"]["dir_structure"]
-        )
-
-        if (
-            not PyFunceble.abstracts.Version.is_local_cloned()
-            or not PyFunceble.helpers.File(destination).exists()
-        ):
-            # The current version is not the cloned version.
-
-            # We Download the link content and return the download status.
-            data = PyFunceble.helpers.Download(dir_structure_link).text(
-                destination=destination
-            )
-
-            PyFunceble.helpers.File(destination).write(data, overwrite=True)
-            return True
-
-        # We are in the cloned version.
-
-        # We do not need to download the file, so we are returning None.
-        return None
+        # We copy the previously downloaded production file.
+        PyFunceble.helpers.File(self.path_to_default_config).copy(self.path_to_config)
 
     def get(self):
         """

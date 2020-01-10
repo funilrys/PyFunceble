@@ -69,6 +69,7 @@ import PyFunceble.config as cconfig
 import PyFunceble.converter as converter
 import PyFunceble.core as core
 import PyFunceble.database as database
+import PyFunceble.downloader as downloader
 import PyFunceble.engine as engine
 import PyFunceble.exceptions as exceptions
 import PyFunceble.extractor as extractor

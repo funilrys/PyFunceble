@@ -156,6 +156,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    code/converter
    code/core
    code/database
+   code/downloader
    code/engine
    code/extractor
    code/helpers

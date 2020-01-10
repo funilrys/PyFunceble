@@ -92,3 +92,15 @@ class Infrastructure:
 
     :type: str
     """
+
+    IANA_FILENAME = "iana-domains-db.json"
+    """
+    Sets the name of our own IANA database file.
+
+    :type: str
+    """
+
+    PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+    """
+    Sets the link to the production configuration file.
+    """

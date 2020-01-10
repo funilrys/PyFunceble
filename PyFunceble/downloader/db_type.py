@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our exceptions.
+Provides the downloader of the desired database type file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,106 +58,52 @@ License:
     SOFTWARE.
 """
 
+from os import sep as directory_separator
 
-class PyFuncebleException(Exception):
-    """
-    Describes our own exceptions.
-    """
+import PyFunceble
 
-
-class PyFuncebleExternalException(PyFuncebleException):
-    """
-    Describes an exception which is caused by an external input.
-    """
+from .base import DownloaderBase
 
 
-class PyFuncebleInternalException(PyFuncebleException):
+class DBTypeDownloader(DownloaderBase):
     """
-    Describes an exception which is caused by our own logic.
-    """
-
-
-class WrongParameterType(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter type.
+    Provides the downloader of the desired database type file.
     """
 
+    DOWNTIME_INDEX = f"db_type"
+    REDOWNLOAD_AFTER = 0
 
-class WrongParameterValue(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter value.
-    """
+    def __init__(self):
+        is_cloned_version = PyFunceble.abstracts.Version.is_local_cloned()
+        destination_directory = (
+            f"{PyFunceble.CONFIG_DIRECTORY}"
+            f"{PyFunceble.CONFIGURATION.outputs.db_type.directory}"
+            f"{directory_separator}"
+        )
+        destination_dir_instance = PyFunceble.helpers.Directory(destination_directory)
 
+        not_supported_db_types = ["json"]
 
-class NoInternetConnection(PyFuncebleExternalException):
-    """
-    Describes a missing connection.
-    """
+        self.destination = (
+            f"{destination_directory}"
+            f"{PyFunceble.CONFIGURATION.outputs.db_type.files[PyFunceble.CONFIGURATION.db_type]}"
+        )
 
+        if not is_cloned_version or (
+            PyFunceble.CONFIGURATION.db_type not in not_supported_db_types
+            and not PyFunceble.helpers.File(self.destination).exists()
+        ):
+            destination_dir_instance.delete()
 
-class ConfigurationFileNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing configuration file.
-    """
+            if PyFunceble.CONFIGURATION.db_type not in not_supported_db_types:
+                destination_dir_instance.create()
 
+                self.DOWNTIME_INDEX += f"_{PyFunceble.CONFIGURATION.db_type}"  # pylint: disable=invalid-name
 
-class GitHubTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitHub token.
-    """
+                self.download_link = PyFunceble.converter.InternalUrl(
+                    PyFunceble.CONFIGURATION.links[PyFunceble.CONFIGURATION.db_type]
+                ).get_converted()
 
+                super().__init__()
 
-class GitLabTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitLab token.
-    """
-
-
-class GitEmailNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Email.
-    """
-
-
-class GitNameNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Name.
-    """
-
-
-class PleaseUpdatePyFunceble(PyFuncebleInternalException):
-    """
-    Describes the impossiblity to continue with an older version.
-    """
-
-
-class NoConversionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that a conversion was expected but none
-    was made.
-    """
-
-
-class NoExtractionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that an extraction was expected but none
-    was made.
-    """
-
-
-class UnknownSubject(PyFuncebleInternalException):
-    """
-    Describes the fact that an unknown subject is inputed.
-    """
-
-
-class NoDownloadDestinationGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that the download destination was not declared.
-    """
-
-
-class NoDownloadLinkGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that no download link was declared.
-    """
+                self.process()

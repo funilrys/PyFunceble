@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our exceptions.
+Provides the downloader of the public suffix list file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -59,106 +58,26 @@ License:
     SOFTWARE.
 """
 
+import PyFunceble
 
-class PyFuncebleException(Exception):
-    """
-    Describes our own exceptions.
-    """
+from .base import DownloaderBase
 
 
-class PyFuncebleExternalException(PyFuncebleException):
+class PublicSuffixDownloader(DownloaderBase):
     """
-    Describes an exception which is caused by an external input.
-    """
-
-
-class PyFuncebleInternalException(PyFuncebleException):
-    """
-    Describes an exception which is caused by our own logic.
+    Provides the downloader of the public suffix list file.
     """
 
+    DOWNTIME_INDEX = "psl"
+    REDOWNLOAD_AFTER = 1
 
-class WrongParameterType(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter type.
-    """
+    def __init__(self):
+        self.download_link = PyFunceble.CONFIGURATION.links.psl
+        self.destination = (
+            f"{PyFunceble.CONFIG_DIRECTORY}"
+            f"{PyFunceble.CONFIGURATION.outputs.default_files.public_suffix}"
+        )
 
+        super().__init__()
 
-class WrongParameterValue(PyFuncebleInternalException):
-    """
-    Describes a wrong parameter value.
-    """
-
-
-class NoInternetConnection(PyFuncebleExternalException):
-    """
-    Describes a missing connection.
-    """
-
-
-class ConfigurationFileNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing configuration file.
-    """
-
-
-class GitHubTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitHub token.
-    """
-
-
-class GitLabTokenNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing GitLab token.
-    """
-
-
-class GitEmailNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Email.
-    """
-
-
-class GitNameNotFound(PyFuncebleExternalException):
-    """
-    Describes a missing Git Name.
-    """
-
-
-class PleaseUpdatePyFunceble(PyFuncebleInternalException):
-    """
-    Describes the impossiblity to continue with an older version.
-    """
-
-
-class NoConversionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that a conversion was expected but none
-    was made.
-    """
-
-
-class NoExtractionMade(PyFuncebleInternalException):
-    """
-    Describes the fact that an extraction was expected but none
-    was made.
-    """
-
-
-class UnknownSubject(PyFuncebleInternalException):
-    """
-    Describes the fact that an unknown subject is inputed.
-    """
-
-
-class NoDownloadDestinationGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that the download destination was not declared.
-    """
-
-
-class NoDownloadLinkGiven(PyFuncebleInternalException):
-    """
-    Describes the fact that no download link was declared.
-    """
+        self.process()
