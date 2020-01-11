@@ -42,15 +42,15 @@ Documentation
     :members:
     :private-members:
 
-:code:`IANA()`
-^^^^^^^^^^^^^^
+:code:`IANADownloader()`
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: PyFunceble.downloader.iana.IANADownloader
     :members:
     :private-members:
 
-:code:`PublicSuffix()`
-^^^^^^^^^^^^^^^^^^^^^^
+:code:`PublicSuffixDownloader()`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: PyFunceble.downloader.publicsuffix.PublicSuffixDownloader
     :members:
