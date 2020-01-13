@@ -284,12 +284,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
                 debug=PyFunceble.CONFIGURATION.debug
             )
             PyFunceble.REQUESTS = PyFunceble.lookup.Requests()
-
             PyFunceble.PSLOOOKUP = PyFunceble.lookup.PublicSuffix()
-
-            # We load the IANA database.
-            PyFunceble.lookup.Iana().load()
-
+            PyFunceble.IANALOOKUP = PyFunceble.lookup.Iana()
             PyFunceble.DNSLOOKUP = PyFunceble.lookup.Dns(
                 dns_server=PyFunceble.CONFIGURATION.dns_server,
                 lifetime=PyFunceble.CONFIGURATION.timeout,

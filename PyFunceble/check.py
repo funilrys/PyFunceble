@@ -242,7 +242,7 @@ class Check:
                     pass
 
             if not extension or (
-                extension not in PyFunceble.INTERN["iana_db"]
+                extension not in PyFunceble.IANALOOKUP
                 and extension not in self.SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS
             ):
                 # * The extension is not found.

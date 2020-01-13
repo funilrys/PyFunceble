@@ -70,6 +70,7 @@ from colorama import init as initiate_colorama
 import PyFunceble
 
 from .dispatcher import Dispatcher
+from .iana import Iana
 from .production import Production
 from .publicsuffix import PublicSuffix
 
@@ -1040,7 +1041,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.output.Constructor()
 
                 if args.iana:
-                    PyFunceble.lookup.Iana().update()
+                    Iana().update()
 
                 if args.production:
                     Production()

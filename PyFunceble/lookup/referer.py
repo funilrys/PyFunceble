@@ -241,14 +241,14 @@ class Referer:  # pragma: no cover pylint: disable=too-few-public-methods
                 # The extension of the domain we are testing is not into
                 # the list of ignored extensions.
 
-                if self.domain_extension in PyFunceble.INTERN["iana_db"]:
+                if self.domain_extension in PyFunceble.IANALOOKUP:
                     # The domain extension is in the iana database.
 
                     if not PyFunceble.CONFIGURATION.no_whois:
                         # We are authorized to use WHOIS for the test result.
 
                         # We get the referer from the database.
-                        referer = PyFunceble.INTERN["iana_db"][self.domain_extension]
+                        referer = PyFunceble.IANALOOKUP[self.domain_extension]
 
                         if not referer:
                             # The referer is not filled.
