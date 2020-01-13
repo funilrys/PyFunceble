@@ -86,7 +86,7 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
 
     def __get_content(self):
         """
-        Provides the content of the database.
+        Provides the content of our PSL database.
         """
 
         return PyFunceble.helpers.Dict().from_json_file(self.destination)
