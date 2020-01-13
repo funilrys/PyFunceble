@@ -212,30 +212,11 @@ Install and load the default configuration at the mentioned location? [y/n] "
             self.data["outputs"]["parent_directory"]
         ).fix_path()
 
-    def __download_them_all(self):
+    @classmethod
+    def __download_them_all(cls):
         """
         Download everything that needs to be downloaded.
         """
-
-        try:
-            # We install the latest iana configuration file.
-            PyFunceble.downloader.IANA()
-        except Exception as exception:  # pylint: disable=broad-except
-            if "Unable to download" in str(exception):
-                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
-                self._load_config_file()
-            else:
-                raise exception
-
-        try:
-            # We install the latest public suffix configuration file.
-            PyFunceble.downloader.PublicSuffix()
-        except Exception as exception:  # pylint: disable=broad-except
-            if "Unable to download" in str(exception):
-                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
-                self._load_config_file()
-            else:
-                raise exception
 
         # We install the latest directory structure file.
         PyFunceble.downloader.DirectoryStructure()
@@ -266,6 +247,26 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We save the fact the the custom was loaded.
             PyFunceble.INTERN["custom_loaded"] = True
+
+        try:
+            # We install the latest iana configuration file.
+            PyFunceble.downloader.IANA()
+        except Exception as exception:  # pylint: disable=broad-except
+            if "Unable to download" in str(exception):
+                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                self._load_config_file()
+            else:
+                raise exception
+
+        try:
+            # We install the latest public suffix configuration file.
+            PyFunceble.downloader.PublicSuffix()
+        except Exception as exception:  # pylint: disable=broad-except
+            if "Unable to download" in str(exception):
+                PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
+                self._load_config_file()
+            else:
+                raise exception
 
         if "config_loaded" not in PyFunceble.INTERN:
             PyFunceble.STATUS = PyFunceble.CONFIGURATION.status
