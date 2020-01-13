@@ -271,10 +271,10 @@ class Check:
             # The element did not pass the domain validation. That means that
             # it has invalid character or the position of - or _ are not right.
 
-            if extension in PyFunceble.INTERN["psl_db"]:
+            if extension in PyFunceble.PSLOOOKUP:
                 # The extension is into the psl database.
 
-                for suffix in PyFunceble.INTERN["psl_db"][extension]:
+                for suffix in PyFunceble.PSLOOOKUP[extension]:
                     # We loop through the element of the extension into the psl database.
 
                     try:

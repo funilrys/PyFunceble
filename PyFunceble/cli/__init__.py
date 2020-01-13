@@ -71,6 +71,7 @@ import PyFunceble
 
 from .dispatcher import Dispatcher
 from .production import Production
+from .publicsuffix import PublicSuffix
 
 
 def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-statements,too-many-locals
@@ -1045,7 +1046,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     Production()
 
                 if args.public_suffix:
-                    PyFunceble.lookup.PublicSuffix().update()
+                    PublicSuffix().update()
 
                 PyFunceble.LOGGER.info(f"ARGS:\n{args}")
 

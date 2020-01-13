@@ -195,6 +195,8 @@ LOGGER = None
 REQUESTS = None
 # We initiate the DNS resolver.
 DNSLOOKUP = None
+# We initiate the PSL lookup.
+PSLOOOKUP = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")

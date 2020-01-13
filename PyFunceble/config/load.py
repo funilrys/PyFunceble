@@ -285,11 +285,10 @@ Install and load the default configuration at the mentioned location? [y/n] "
             )
             PyFunceble.REQUESTS = PyFunceble.lookup.Requests()
 
+            PyFunceble.PSLOOOKUP = PyFunceble.lookup.PublicSuffix()
+
             # We load the IANA database.
             PyFunceble.lookup.Iana().load()
-
-            # We load the PSL database.
-            PyFunceble.lookup.PublicSuffix().load()
 
             PyFunceble.DNSLOOKUP = PyFunceble.lookup.Dns(
                 dns_server=PyFunceble.CONFIGURATION.dns_server,

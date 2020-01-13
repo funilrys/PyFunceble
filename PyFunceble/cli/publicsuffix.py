@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the public suffix list lookup interface.
+Provides the public suffix database generation tool.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -62,7 +62,7 @@ import PyFunceble
 
 class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
     """
-    Let us interact with the public suffix database.
+    Let us generate a new version of the public suffix database.
     """
 
     database = {}
@@ -73,20 +73,85 @@ class PublicSuffix:  # pragma: no cover pylint: disable=too-few-public-methods
             PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.public_suffix
         )
 
-        self.database = self.__get_content()
-
-    def __contains__(self, extension):
-        return extension in self.database
-
-    def __getitem__(self, extension):
-        if extension in self:
-            return self.database[extension]
-
-        return None
-
-    def __get_content(self):
+    @classmethod
+    def _data(cls):
         """
-        Provides the content of the database.
+        Get the database from the public suffix repository.
         """
 
-        return PyFunceble.helpers.Dict().from_json_file(self.destination)
+        # We initiate a variable which will save the link to the upstream public suffix file.
+        public_suffix_url = (
+            "https://raw.githubusercontent.com/publicsuffix/list/%s/public_suffix_list.dat"
+            % "master"
+        )
+
+        # And we return the content of the previously declared link.
+        return PyFunceble.helpers.Download(public_suffix_url).text()
+
+    def _extensions(self, line):
+        """
+        Extract the extension from the given line.
+
+        :param str line: The line from the official public suffix repository.
+        """
+
+        # We strip the parsed line.
+        line = line.strip()
+
+        if not line.startswith("//") and "." in line:
+            # * The parsed line is not a commented line.
+            # and
+            # * There is a point in the parsed line.
+            line = line.encode("idna").decode("utf-8")
+
+            if line.startswith("*."):
+                # The parsed line start with `*.`.
+
+                # We remove the first two characters.
+                line = line[2:]
+
+            # We we split the points and we get the last element.
+            # Explanation: The idea behind this action is to
+            # always get the extension.
+            extension = line.split(".")[-1]
+
+            if extension in self.database:
+                # The extension is alrady in our database.
+
+                # We update the content of the 1st level TDL with
+                # the content of the suffix.
+                # In between, we format so that we ensure that there is no
+                # duplicate in the database index content.
+                self.database[extension] = PyFunceble.helpers.List(
+                    self.database[extension] + [line]
+                ).format()
+            else:
+                # The extension is not already in our database.
+
+                # We append the currently formatted extension and the line content.
+                self.database.update({extension: [line]})
+
+    def update(self):
+        """
+        Update of the content of the :code:`public-suffix.json`.
+        """
+
+        if not PyFunceble.CONFIGURATION.quiet:
+            # The quiet mode is not activated.
+
+            # We print a message for the user on screen.
+            print(
+                f"Update of {PyFunceble.OUTPUTS.default_files.public_suffix}", end=" "
+            )
+
+        # We loop through the line of the upstream file.
+        list(map(self._extensions, self._data().split("\n")))
+
+        # We save the content of our database in the final testination.
+        PyFunceble.helpers.Dict(self.database).to_json_file(self.destination)
+
+        if not PyFunceble.CONFIGURATION.quiet:
+            # The quiet mode is not activated.
+
+            # We inform the user that everything goes right.
+            print(PyFunceble.INTERN["done"])
