@@ -248,7 +248,7 @@ class Dict:
 
         try:
             return loads(File(file_path=file_path).read(encoding=encoding))
-        except decoder.JSONDecodeError:  # pragma: no cover
+        except (decoder.JSONDecodeError, TypeError):  # pragma: no cover
             return None if not return_dict_on_error else {}
 
     def to_json(self, ensure_ascii=False, indent=4, sort_keys=True):
@@ -278,7 +278,7 @@ class Dict:
 
         try:
             return loads(json_str)
-        except decoder.JSONDecodeError:  # pragma: no cover
+        except (decoder.JSONDecodeError, TypeError):  # pragma: no cover
             return None if not return_dict_on_error else {}
 
     @classmethod
