@@ -197,6 +197,8 @@ REQUESTS = None
 DNSLOOKUP = None
 # We initiate the PSL lookup.
 PSLOOOKUP = None
+# We initiate the IANA lookup.
+IANALOOKUP = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
