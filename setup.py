@@ -151,6 +151,7 @@ if __name__ == "__main__":
             "PyFunceble.converter",
             "PyFunceble.core",
             "PyFunceble.database",
+            "PyFunceble.downloader",
             "PyFunceble.engine",
             "PyFunceble.engine.ci",
             "PyFunceble.extractor",
