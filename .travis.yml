@@ -117,7 +117,28 @@ jobs:
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
-
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Run with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+        - PYFUNCEBLE_DB_CHARSET=utf8mb4
+        - PYFUNCEBLE_DB_HOST="/var/run/mysqld/mysqld.sock"
+        - PYFUNCEBLE_DB_NAME="pyfunceble"
+        - PYFUNCEBLE_DB_PASSWORD="pyfunceble"
+        - PYFUNCEBLE_DB_PORT="3306"
+        - PYFUNCEBLE_DB_USERNAME="pyfunceble"
+      addons:
+          mariadb: '10.4.11'
+      before_script:
+        - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+        - sudo mysql -u root -h localhost -e "CREATE USER 'root'@'%' IDENTIFIED BY ''"
+        - sudo mysql -u root -h localhost -e "CREATE USER 'pyfunceble'@'localhost' IDENTIFIED BY 'pyfunceble';"
+        - sudo mysql -u root -h localhost -e "GRANT ALL PRIVILEGES ON pyfunceble.* TO 'pyfunceble'@'localhost';"
+      script:
+        - tox --current-env -c tox_run_mariadb.ini
 
 
     - language: generic
