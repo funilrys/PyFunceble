@@ -221,9 +221,6 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We install the latest directory structure file.
         PyFunceble.downloader.DirectoryStructure()
 
-        # We install the db_type file if needed.
-        PyFunceble.downloader.DBType()
-
     def __set_it(self, custom):
         """
         Sets the configuration at its final location and load the complementary infos.

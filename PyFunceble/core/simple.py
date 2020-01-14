@@ -85,6 +85,20 @@ class SimpleCore(CLICore):
         else:
             self.subject = self.subject
 
+    def __save_in_database(self, dataset):
+        """
+        Saves the given dataset (result) into the database.
+
+        :param dataset: The dataset to save.
+        :type dataset: dict, list
+        """
+
+        if isinstance(dataset, list):
+            for data in dataset:
+                self.__save_in_database(data)
+        else:
+            self.save_into_database(dataset, None, self.mysql_db)
+
     def test(self, subject, subject_type):
         """
         Processes a test of the given subject and return the result.
@@ -118,9 +132,7 @@ class SimpleCore(CLICore):
         self.print_header()
 
         if self.subject:
-            data = self.test(self.subject, "domain")
-
-            self.save_into_database(data, None, self.mysql_db)
+            self.__save_in_database(self.test(self.subject, "domain"))
         else:
             self.print_nothing_to_test()
 
@@ -135,8 +147,6 @@ class SimpleCore(CLICore):
         self.print_header()
 
         if self.subject:
-            data = self.test(self.subject, "url")
-
-            self.save_into_database(data, None, self.mysql_db)
+            self.__save_in_database(self.test(self.subject, "url"))
         else:
             self.print_nothing_to_test()

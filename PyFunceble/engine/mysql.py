@@ -108,6 +108,8 @@ class MySQL:
         if self.authorized:
             self.initiated = False
 
+            PyFunceble.downloader.DBType()
+
             self.create_tables_and_apply_patches()
 
             if PyFunceble.CONFIGURATION.db_type == "mariadb":
