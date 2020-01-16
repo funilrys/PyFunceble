@@ -131,7 +131,7 @@ jobs:
         - PYFUNCEBLE_DB_PORT="3306"
         - PYFUNCEBLE_DB_USERNAME="pyfunceble"
       addons:
-          mariadb: '10.4.11'
+          mariadb: '10.4'
       before_script:
         - sudo systemctl restart mysql
         - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
