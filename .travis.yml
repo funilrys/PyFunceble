@@ -8,6 +8,24 @@ jobs:
       language: generic
       os: linux
       dist: bionic
+      name: "Code Test with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code Test with Python 3.8.1 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
       name: "Code Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.8.0"
@@ -102,27 +120,27 @@ jobs:
       language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.0"
+        - PYTHON_VERSION="3.8.1"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Run with Python 3.8.0 under macOS 10.14 (Mojave)"
+      name: "Run with Python 3.8.1 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.0"
+        - PYTHON_VERSION="3.8.1"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
       env:
-        - PYTHON_VERSION="3.8.0"
+        - PYTHON_VERSION="3.8.1"
         - TOXENV="py38"
         - PYFUNCEBLE_DB_CHARSET=utf8mb4
         - PYFUNCEBLE_DB_HOST="/var/run/mysqld/mysqld.sock"
@@ -152,7 +170,7 @@ jobs:
       after_success:
         - echo "Hello, World!"
       env:
-        - PYTHON_VERSION="3.7.5"
+        - PYTHON_VERSION="3.8.1"
       deploy:
         provider: pypi
         user: funilrys
