@@ -62,6 +62,24 @@ jobs:
     - language: generic
       os: linux
       dist: bionic
+      name: "Code test with Python 3.6.10 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.6.10"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code test with Python 3.6.10 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.6.10"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
       name: "Code test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
       env:
         - PYTHON_VERSION="3.6.9"
@@ -74,24 +92,6 @@ jobs:
       name: "Code test with Python 3.6.9 under macOS 10.14 (Mojave)"
       env:
         - PYTHON_VERSION="3.6.9"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code test with Python 3.6.8 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.6.8"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code test with Python 3.6.8 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.6.8"
         - TOXENV="py36"
       script:
         - tox --current-env
