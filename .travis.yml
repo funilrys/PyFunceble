@@ -142,12 +142,6 @@ jobs:
       env:
         - PYTHON_VERSION="3.8.1"
         - TOXENV="py38"
-        - PYFUNCEBLE_DB_CHARSET=utf8mb4
-        - PYFUNCEBLE_DB_HOST="/var/run/mysqld/mysqld.sock"
-        - PYFUNCEBLE_DB_NAME="pyfunceble"
-        - PYFUNCEBLE_DB_PASSWORD="pyfunceble"
-        - PYFUNCEBLE_DB_PORT="3306"
-        - PYFUNCEBLE_DB_USERNAME="pyfunceble"
       addons:
           mariadb: '10.1'
       before_script:
@@ -156,6 +150,14 @@ jobs:
         - sudo mysql -u root -h localhost -e "CREATE USER 'root'@'%' IDENTIFIED BY ''"
         - sudo mysql -u root -h localhost -e "CREATE USER 'pyfunceble'@'localhost' IDENTIFIED BY 'pyfunceble';"
         - sudo mysql -u root -h localhost -e "GRANT ALL PRIVILEGES ON pyfunceble.* TO 'pyfunceble'@'localhost';"
+
+        - mkdir -p "tests_dir"
+        - echo 'PYFUNCEBLE_DB_CHARSET=utf8mb4' > tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_HOST="/var/run/mysqld/mysqld.sock"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_NAME="pyfunceble"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_PASSWORD="pyfunceble"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_PORT="3306"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_USERNAME="pyfunceble"' >> tests_dir/.pyfunceble-env
       script:
         - tox --current-env -c tox_run_mariadb.ini
 
