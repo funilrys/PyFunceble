@@ -109,6 +109,7 @@ class TestWhoisDB(TestCase):
         """
 
         PyFunceble.helpers.File(self.storage_file).delete()
+        del self.whois_db
 
     def test_load_file_does_not_exists(self):
         """
