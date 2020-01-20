@@ -58,7 +58,7 @@ License:
     SOFTWARE.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import PyFunceble
 
@@ -169,9 +169,15 @@ class DownloaderBase:
         ):
             return True
 
+        last_download = datetime.fromtimestamp(self.get_downtime()["timestamp"])
+
         if (
-            datetime.now() - datetime.fromtimestamp(self.get_downtime()["timestamp"])
-        ).days >= self.REDOWNLOAD_AFTER:
+            self.REDOWNLOAD_AFTER <= 0
+            and (datetime.now() - last_download).seconds < 3600
+        ):
+            return False
+
+        if last_download + timedelta(days=self.REDOWNLOAD_AFTER) <= datetime.now():
             return True
 
         return False

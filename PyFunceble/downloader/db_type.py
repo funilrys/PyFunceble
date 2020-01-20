@@ -89,9 +89,8 @@ class DBTypeDownloader(DownloaderBase):
             f"{PyFunceble.CONFIGURATION.outputs.db_type.files[PyFunceble.CONFIGURATION.db_type]}"
         )
 
-        if not is_cloned_version or (
+        if not is_cloned_version and (
             PyFunceble.CONFIGURATION.db_type not in not_supported_db_types
-            and not PyFunceble.helpers.File(self.destination).exists()
         ):
             destination_dir_instance.delete()
 
