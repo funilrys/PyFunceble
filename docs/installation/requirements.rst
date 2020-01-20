@@ -3,7 +3,7 @@ Requirements
 
 Here is the list of requirements:
 
--   Python 3.6.2+
+-   Python 3.6.9+
 -   :code:`colorama`
 -   :code:`cryptography`
 -   :code:`dnspython`
@@ -16,11 +16,11 @@ Here is the list of requirements:
 -   :code:`setuptools`
 -   :code:`urllib3`
 
-Python 3.6.8+
+Python 3.6.9+
 ^^^^^^^^^^^^^
 
-The specification :code:`3.6.8+` is because we test PyFunceble (daily)
-in all version from :code:`3.6.8`.
+The specification :code:`3.6.9+` is because we test PyFunceble (daily)
+in all version from :code:`3.6.9`.
 Otherwise, more semantically, PyFunceble is written for all Python 3.6+ version.
 
 :code:`colorama`
