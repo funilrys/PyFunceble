@@ -73,7 +73,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "2.54.2.dev (Green Galago: Skitterbug)"
+    VERSION = "2.55.0.dev (Green Galago: Skitterbug)"
     """
     Sets the package version.
 

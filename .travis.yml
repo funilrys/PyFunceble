@@ -166,7 +166,7 @@ jobs:
       stage: "Deployments"
       os: linux
       dist: bionic
-      name: "Deployement to PyPi"
+      name: "Deployment to PyPi"
       script:
         - echo "Hello, World!"
       after_success:
