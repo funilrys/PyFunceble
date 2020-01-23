@@ -13,6 +13,7 @@ What can PyFunceble do?
 - Test of the syntax of an IPv4.
 - Test of the syntax of an IPv6.
 - Test of the syntax of a URL.
+- Test of the AlienVault's reputation of an IPv4.
 - Test of domain or IP which are present into an Adblock formatted file.
 - Test from a given raw link.
 - Test using multiprocessing (from CLI only).
