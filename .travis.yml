@@ -163,7 +163,7 @@ jobs:
 
 
     - language: generic
-      stage: "Deployements"
+      stage: "Deployments"
       os: linux
       dist: bionic
       name: "Deployement to PyPi"

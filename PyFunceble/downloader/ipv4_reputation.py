@@ -72,13 +72,12 @@ class IPv4ReputationDownloader(DownloaderBase):
     REDOWNLOAD_AFTER = 1
 
     def __init__(self):
-        if PyFunceble.CONFIGURATION.use_reputation_data:
-            self.download_link = PyFunceble.CONFIGURATION.links.ipv4_reputation
-            self.destination = (
-                f"{PyFunceble.CONFIG_DIRECTORY}"
-                f"{PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME}"
-            )
+        self.download_link = PyFunceble.CONFIGURATION.links.ipv4_reputation
+        self.destination = (
+            f"{PyFunceble.CONFIG_DIRECTORY}"
+            f"{PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME}"
+        )
 
-            super().__init__()
+        super().__init__()
 
-            self.process()
+        self.process()
