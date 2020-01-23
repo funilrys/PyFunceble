@@ -400,6 +400,18 @@
 .. warning::
     Do not touch this index unless you a have good reason to.
 
+:code:`reputation`
+^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the reputation (only) testing.
+
+.. warning::
+    If this index is set to :code:`True`, we **ONLY** check for reputation, not availability nor syntax.
+
 :code:`share_logs`
 ^^^^^^^^^^^^^^^^^^
 
@@ -465,10 +477,10 @@
     **Description:** Enable / disable the syntax (only) testing.
 
 .. warning::
-    If this index is set to :code:`True`, we **ONLY** check for syntax, not availability.
+    If this index is set to :code:`True`, we **ONLY** check for syntax, not availability nor reputation.
 
 :code:`timeout`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
     **Type:** :code:`integer`
 
@@ -557,6 +569,18 @@
 
 .. note::
     This index has no effect if :code:`split` is set to :code:`True`.
+
+:code:`use_reputation_data`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the usage of reputation data while testing the availability of a given subject.
+
+.. warning::
+    This only have an effect when used along with the availability test.
 
 :code:`user_agent`
 ^^^^^^^^^^^^^^^^^^

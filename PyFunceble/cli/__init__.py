@@ -323,6 +323,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 test_control.add_argument(
+                    "--use-reputation-data",
+                    action="store_true",
+                    help="Switch the value of the reputation data usage. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.use_reputation_data)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
                     "-ua",
                     "--user-agent",
                     type=str,
@@ -604,17 +615,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.inactive_database)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                output_control_group.add_argument(
-                    "--use-reputation-data",
-                    action="store_true",
-                    help="Switch the value of the reputation data usage. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.use_reputation_data)
                         + Style.RESET_ALL
                     ),
                 )

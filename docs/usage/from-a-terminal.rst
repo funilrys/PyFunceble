@@ -210,6 +210,28 @@ Don't want to use or take in consideration the results from :code:`whois`? This 
 
 This argument will set the default timeout to apply everywhere it is possible to set a timeout.
 
+:code:`--reputation`
+""""""""""""""""""""
+
+    Switch the value of the reputation test mode.
+
+    **Default value:** :code:`False`
+
+.. warning::
+    This will disable all other form of test,
+    will checks against AlienVault's reputation data
+    and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
+
+:code:`--use-reputation-data`
+"""""""""""""""""""""""""""""
+
+    Switch teh value of the reputation data usage.
+
+    **Default value:** :code:`False`
+
+.. warning::
+    This only have an effect when used along with the availability test.
+
 :code:`-ua "something"` | :code:`--user-agent "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -666,11 +688,12 @@ Global overview
     usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--http] [--local] [-ns] [-nw]
-                    [--syntax] [-t TIMEOUT] [-ua USER_AGENT] [-vsc]
+                    [--syntax] [-t TIMEOUT] [--reputation]
+                    [--use-reputation-data] [-ua USER_AGENT] [-vsc]
                     [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
-                    [--hierarchical] [-h] [-ip IP] [--json] [--less] [-n] [-nl]
+                    [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
                     [-nu] [--percentage] [--plain] [-q] [--share-logs] [-s]
                     [--split] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
@@ -680,8 +703,7 @@ Global overview
                     [--cmd CMD] [--cmd-before-end CMD_BEFORE_END]
                     [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
                     [--commit-results-message COMMIT_RESULTS_MESSAGE] [--clean]
-                    [--clean-all] [--directory-structure]
-                    [--help] [-v]
+                    [--clean-all] [--directory-structure] [--help] [-v]
 
     PyFunceble - The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
@@ -730,7 +752,12 @@ Global overview
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
                                 Switch the value of the timeout.
-                                Configured value: 5.0
+                                Configured value: 5
+        --reputation          Switch the value of the reputation test mode.
+                                Configured value: False
+        --use-reputation-data
+                                Switch the value of the reputation data usage.
+                                Configured value: False
         -ua USER_AGENT, --user-agent USER_AGENT
                                 Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
         -vsc, --verify-ssl-certificate
@@ -744,7 +771,7 @@ Global overview
                                 Make all DNS query with TCP.
                                 Configured value: False
 
-    Databases:
+        Databases:
         -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
                                 Configured value: True
         --database-type DATABASE_TYPE
@@ -773,7 +800,7 @@ Global overview
                                 Configured value: False
         --less                Output less informations on screen.
                                 Configured value: False
-        -n, --no-files        Switch the value of the production of output files.
+        -nf, --no-files       Switch the value of the production of output files.
                                 Configured value: False
         -nl, --no-logs        Switch the value of the production of logs files in the case we encounter some errors.
                                 Configured value: False

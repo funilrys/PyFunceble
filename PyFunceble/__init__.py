@@ -711,6 +711,7 @@ def is_domain_malicious(subject):
         return core.API(subject).reputation("domain") == "MALICIOUS"
     return None
 
+
 def is_ipv4_malicious(subject):
     """
     Checks if the given IPv4 is malicious.
@@ -719,6 +720,7 @@ def is_ipv4_malicious(subject):
     """
 
     return is_domain_malicious(subject)
+
 
 def is_url_malicious(subject):
     """
@@ -732,6 +734,7 @@ def is_url_malicious(subject):
     if subject:
         return core.API(subject).reputation("url") == "MALICIOUS"
     return None
+
 
 def get_complements(subject, include_given=False):
     """
