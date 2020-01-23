@@ -698,7 +698,7 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         output.Constructor()
 
 
-def is_domain_malicious(subject):
+def is_domain_malicious(subject):  # pragma: no cover
     """
     Checks if the given domain is malicious.
 
@@ -712,7 +712,7 @@ def is_domain_malicious(subject):
     return None
 
 
-def is_ipv4_malicious(subject):
+def is_ipv4_malicious(subject):  # pragma: no cover
     """
     Checks if the given IPv4 is malicious.
 
@@ -722,7 +722,7 @@ def is_ipv4_malicious(subject):
     return is_domain_malicious(subject)
 
 
-def is_url_malicious(subject):
+def is_url_malicious(subject):  # pragma: no cover
     """
     Checks if the given URL is malicious.
 

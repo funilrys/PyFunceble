@@ -21,6 +21,7 @@ omit =
     PyFunceble/engine/mysql.py
     PyFunceble/helpers/download.py
     PyFunceble/lookup/requests.py
+    PyFunceble/lookup/ipv4_reputation.py
     PyFunceble/output/clean.py
     PyFunceble/output/constructor.py
     PyFunceble/output/generate.py

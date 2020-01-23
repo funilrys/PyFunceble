@@ -78,11 +78,20 @@ class TestPercentage(StdoutBase):
         Setups everything needed for the tests.
         """
 
+        PyFunceble.INTERN = {
+            "counter": {
+                "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
+                "percentage": {"down": 0, "invalid": 0, "up": 0},
+            }
+        }
         PyFunceble.load_config()
         StdoutBase.setUp(self)
 
+        PyFunceble.cconfig.Preset().init_all()
+
         PyFunceble.CONFIGURATION.show_percentage = True
         PyFunceble.CONFIGURATION.syntax = False
+        PyFunceble.CONFIGURATION.reputation = False
 
     @classmethod
     def __preset_counters_and_get_expected(cls):
@@ -205,6 +214,7 @@ INVALID     1%%           2%s
         """
 
         PyFunceble.CONFIGURATION.syntax = True
+        PyFunceble.CONFIGURATION.reputation = False
 
         expected = """
 
@@ -218,7 +228,7 @@ INVALID     4%%           2%s
             " " * 11,
         )
         PyFunceble.INTERN["counter"]["number"].update(
-            {"valid": 45, "invalid": 2, "tested": 47}
+            {"up": 0, "down": 0, "valid": 45, "invalid": 2, "tested": 47}
         )
 
         Percentage(domain_status=None, init=None).log()
@@ -229,15 +239,62 @@ INVALID     4%%           2%s
         # Test for the case that we do not show_percentage
         PyFunceble.CONFIGURATION.show_percentage = False
         PyFunceble.INTERN["counter"]["number"].update(
-            {"valid": 45, "invalid": 2, "tested": 47}
+            {"up": 0, "down": 0, "valid": 45, "invalid": 2, "tested": 47}
         )
 
         Percentage(domain_status=None, init=None).log()
 
         actual = PyFunceble.INTERN["counter"]["percentage"]
-        expected = {"valid": 95, "invalid": 4}
+        expected = {"up": 0, "down": 0, "valid": 95, "invalid": 4}
 
         self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION.syntax = False
+        PyFunceble.CONFIGURATION.reputation = False
+
+    def test_log_reputation_test(self):
+        """
+        Tests the logging of the percentage for a reputation check.
+        """
+
+        PyFunceble.CONFIGURATION.reputation = True
+        PyFunceble.CONFIGURATION.syntax = False
+
+        expected = """
+
+Status      Percentage   Numbers%s
+----------- ------------ ------------
+SANE        95%%          45%s
+MALICIOUS   4%%           2%s
+""" % (
+            " " * 5,
+            " " * 10,
+            " " * 11,
+        )
+        PyFunceble.INTERN["counter"]["number"].update(
+            {"up": 0, "down": 0, "invalid": 0, "sane": 45, "malicious": 2, "tested": 47}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+        actual = sys.stdout.getvalue()
+
+        self.assertEqual(expected, actual)
+
+        # Test for the case that we do not show_percentage
+        PyFunceble.CONFIGURATION.show_percentage = False
+        PyFunceble.INTERN["counter"]["number"].update(
+            {"up": 0, "down": 0, "invalid": 0, "sane": 45, "malicious": 2, "tested": 47}
+        )
+
+        Percentage(domain_status=None, init=None).log()
+
+        actual = PyFunceble.INTERN["counter"]["percentage"]
+        expected = {"up": 0, "down": 0, "invalid": 0, "sane": 95, "malicious": 4}
+
+        self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION.reputation = False
+        PyFunceble.CONFIGURATION.syntax = False
 
 
 if __name__ == "__main__":
