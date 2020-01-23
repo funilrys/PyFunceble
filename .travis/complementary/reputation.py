@@ -6,7 +6,9 @@ import PyFunceble
 import PyFunceble.cli
 
 PyFunceble.cli.initiate_colorama(True)
-PyFunceble.load_config(generate_directory_structure=False,)
+PyFunceble.load_config(
+    generate_directory_structure=False, custom={"use_reputation_data": True}
+)
 PyFunceble.output.Clean()
 
 LIMIT = 10
