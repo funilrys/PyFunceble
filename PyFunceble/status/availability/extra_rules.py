@@ -438,6 +438,28 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We return None, there is no changes.
         return None
 
+    def __handle_reputation(self):
+        """
+        Handle the reputation escalation.
+
+        :return:
+            :code:`(new status, new source)` or :code:`None` if there is any
+            change to apply.
+        :rtype: tuple|None
+        """
+
+        if (
+            not PyFunceble.CONFIGURATION.no_special
+            and PyFunceble.CONFIGURATION.use_reputation_data
+            and self.subject in PyFunceble.lookup.IPv4Reputation()
+        ):
+            PyFunceble.LOGGER.info(
+                "[{self.subject}] Switching status according to reputation rule."
+            )
+
+            return self.__special_up()
+        return None
+
     def __handle_ip_range(self):
         """
         Handle the IP range status escalation.

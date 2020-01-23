@@ -60,6 +60,8 @@ License:
 
 from .availability import DomainAndIp as DomainAndIpAvailability
 from .availability import Url as UrlAvailability
+from .reputation import DomainAndIp as DomainAndIPReputation
+from .reputation import Url as UrlReputation
 from .status import Status
 from .syntax import DomainAndIp as DomainAndIpSyntax
 from .syntax import Url as UrlSyntax

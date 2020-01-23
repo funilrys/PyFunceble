@@ -257,6 +257,14 @@ class Constructor:
             # configuration file.
             "complements/VALID/": PyFunceble.OUTPUTS.complements.directory
             + PyFunceble.STATUS.official.valid,
+            # We get the replacement of the complements/MALICIOUS directory from the
+            # configuration file.
+            "complements/MALICIOUS/": PyFunceble.OUTPUTS.complements.directory
+            + PyFunceble.STATUS.official.malicious,
+            # We get the replacement of the complements/SANE directory from the
+            # configuration file.
+            "complements/SANE/": PyFunceble.OUTPUTS.complements.directory
+            + PyFunceble.STATUS.official.sane,
             # We get the replacement of the domains directory from the
             # configuration file.
             "domains/": PyFunceble.OUTPUTS.domains.directory,
@@ -276,6 +284,14 @@ class Constructor:
             # configuration file.
             "domains/VALID/": PyFunceble.OUTPUTS.domains.directory
             + PyFunceble.STATUS.official.valid,
+            # We get the replacement of the domains/MALICIOUS directory from the
+            # configuration file.
+            "domains/MALICIOUS/": PyFunceble.OUTPUTS.domains.directory
+            + PyFunceble.STATUS.official.malicious,
+            # We get the replacement of the domains/SANE directory from the
+            # configuration file.
+            "domains/SANE/": PyFunceble.OUTPUTS.domains.directory
+            + PyFunceble.STATUS.official.sane,
             # We get the replacement of the hosts directory from the
             # configuration file.
             "hosts/": PyFunceble.OUTPUTS.hosts.directory,
@@ -295,6 +311,14 @@ class Constructor:
             # configuration file.
             "hosts/VALID/": PyFunceble.OUTPUTS.hosts.directory
             + PyFunceble.STATUS.official.valid,
+            # We get the replacement of the hosts/MALICIOUS directory from the
+            # configuration file.
+            "hosts/MALICIOUS/": PyFunceble.OUTPUTS.hosts.directory
+            + PyFunceble.STATUS.official.malicious,
+            # We get the replacement of the hosts/SANE directory from the
+            # configuration file.
+            "hosts/SANE/": PyFunceble.OUTPUTS.hosts.directory
+            + PyFunceble.STATUS.official.sane,
             # We get the replacement of the json directory from the
             # configuration file.
             "json/": PyFunceble.OUTPUTS.json.directory,
@@ -314,6 +338,14 @@ class Constructor:
             # configuration file.
             "json/VALID/": PyFunceble.OUTPUTS.json.directory
             + PyFunceble.STATUS.official.valid,
+            # We get the replacement of the json/MALICIOUS directory from the
+            # configuration file.
+            "json/MALICIOUS/": PyFunceble.OUTPUTS.json.directory
+            + PyFunceble.STATUS.official.malicious,
+            # We get the replacement of the json/SANE directory from the
+            # configuration file.
+            "json/SANE/": PyFunceble.OUTPUTS.json.directory
+            + PyFunceble.STATUS.official.sane,
             # We get the replacement of the logs directory from the
             # configuration file.
             "logs/": PyFunceble.OUTPUTS.logs.directories.parent,

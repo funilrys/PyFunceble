@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the lookup interfaces.
+Provides the ipv4 reputation status interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -57,12 +57,5 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-
-from .dns import DNSLookup as Dns
-from .http_code import HTTPCode
-from .iana import Iana
-from .ipv4_reputation import IPv4Reputation
-from .publicsuffix import PublicSuffix
-from .referer import Referer
-from .requests import Requests
-from .whois import WhoisLookup as Whois
+from .domain_and_ip import DomainAndIp
+from .url import Url

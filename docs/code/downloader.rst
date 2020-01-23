@@ -49,6 +49,13 @@ Documentation
     :members:
     :private-members:
 
+:code:`IPv4ReputationDownloader()`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.downloader.ipv4_reputation.IPv4ReputationDownloader
+    :members:
+    :private-members:
+
 :code:`PublicSuffixDownloader()`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

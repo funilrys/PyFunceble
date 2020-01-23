@@ -77,9 +77,12 @@ class CLICore:
     def __init__(self):
         self.list_of_up_statuses = PyFunceble.STATUS.list.up
         self.list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
+        self.list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
 
         self.mysql_db = PyFunceble.engine.MySQL()
         self.preset = PyFunceble.cconfig.Preset()
+        self.preset.init_all()
+
         self.autosave = PyFunceble.engine.AutoSave(
             start_time=PyFunceble.INTERN["start"]
         )
@@ -233,13 +236,20 @@ class CLICore:
         :param str status: An official status output.
         """
 
-        if status in [PyFunceble.STATUS.official.up, PyFunceble.STATUS.official.valid]:
+        if status in [
+            PyFunceble.STATUS.official.up,
+            PyFunceble.STATUS.official.valid,
+            PyFunceble.STATUS.official.sane,
+        ]:
             # The status is in the list of UP status.
 
             # We return the green coloration.
             return Fore.GREEN + Style.BRIGHT
 
-        if status == PyFunceble.STATUS.official.down:
+        if status in [
+            PyFunceble.STATUS.official.down,
+            PyFunceble.STATUS.official.malicious,
+        ]:
             # The status is in the list of DOWN status.
 
             # We return the red coloration.
@@ -274,9 +284,16 @@ class CLICore:
                     # line with the right coloration.
                     to_print.append(Fore.YELLOW + line + Fore.RESET)
 
-            elif PyFunceble.INTERN["counter"]["percentage"]["up"] >= 50 or (
-                "valid" in PyFunceble.INTERN["counter"]["percentage"]
-                and PyFunceble.INTERN["counter"]["percentage"]["valid"] >= 50
+            elif (
+                PyFunceble.INTERN["counter"]["percentage"]["up"] >= 50
+                or (
+                    "valid" in PyFunceble.INTERN["counter"]["percentage"]
+                    and PyFunceble.INTERN["counter"]["percentage"]["valid"] >= 50
+                )
+                or (
+                    "sane" in PyFunceble.INTERN["counter"]["percentage"]
+                    and PyFunceble.INTERN["counter"]["percentage"]["sane"] >= 50
+                )
             ):
                 # The percentage of up is greater or equal to 50%.
 

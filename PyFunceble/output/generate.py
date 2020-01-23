@@ -293,6 +293,17 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
 
             # We complete the path to the json list file.
             json_destination = output_json % PyFunceble.STATUS.official.valid
+        elif self.status.lower() in PyFunceble.STATUS.list.sane:
+            # The status is in the list of sane list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS.official.sane
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS.official.sane
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS.official.sane
         elif self.status.lower() in PyFunceble.STATUS.list.up:
             # The status is in the list of up list.
 
@@ -304,6 +315,17 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
 
             # We complete the path to the json list file.
             json_destination = output_json % PyFunceble.STATUS.official.up
+        elif self.status.lower() in PyFunceble.STATUS.list.malicious:
+            # The status is in the list of malicious list.
+
+            # We complete the path to the hosts file.
+            hosts_destination = output_hosts % PyFunceble.STATUS.official.malicious
+
+            # We complete the path to the plain list file.
+            plain_destination = output_domains % PyFunceble.STATUS.official.malicious
+
+            # We complete the path to the json list file.
+            json_destination = output_json % PyFunceble.STATUS.official.malicious
         elif self.status.lower() in PyFunceble.STATUS.list.down:
             # The status is in the list of down list.
 
@@ -761,6 +783,37 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     # We print the informations to print on file.
                     PyFunceble.output.Prints(
                         data_to_print, PyFunceble.STATUS.official.valid, output, True
+                    ).data()
+                elif self.status.lower() in PyFunceble.STATUS.list.sane:
+                    # The status is in the list of sane status.
+
+                    # We initiate the data to print.
+                    data_to_print = [
+                        self.subject,
+                        self.source,
+                        datetime.now().isoformat(),
+                    ]
+
+                    # We print the informations to print on file.
+                    PyFunceble.output.Prints(
+                        data_to_print, PyFunceble.STATUS.official.sane, output, True
+                    ).data()
+                elif self.status.lower() in PyFunceble.STATUS.list.malicious:
+                    # The status is in the list of malicious status.
+
+                    # We initiate the data to print.
+                    data_to_print = [
+                        self.subject,
+                        self.source,
+                        datetime.now().isoformat(),
+                    ]
+
+                    # We print the informations to print on file.
+                    PyFunceble.output.Prints(
+                        data_to_print,
+                        PyFunceble.STATUS.official.malicious,
+                        output,
+                        True,
                     ).data()
                 elif self.status.lower() in PyFunceble.STATUS.list.down:
                     # The status is in the list of down status.

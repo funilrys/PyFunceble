@@ -138,6 +138,16 @@ class Prints:
             zip(["Subject", "Source", "Analyze Date"], [100, 10, 20])
         )
 
+        # We iniate the official SANE header and the spacement of each colomns.
+        self.headers[PyFunceble.STATUS.official.sane] = OrderedDict(
+            zip(["Subject", "Source", "Analyze Date"], [100, 10, 20])
+        )
+
+        # We iniate the official MALICIOUS header and the spacement of each colomns.
+        self.headers[PyFunceble.STATUS.official.malicious] = OrderedDict(
+            zip(["Subject", "Source", "Analyze Date"], [100, 10, 20])
+        )
+
         # We iniate the official DOWN header and the spacement of each colomns.
         self.headers[PyFunceble.STATUS.official.down] = OrderedDict(
             zip(
@@ -224,6 +234,8 @@ class Prints:
                 PyFunceble.STATUS.official.down,
                 PyFunceble.STATUS.official.invalid,
                 PyFunceble.STATUS.official.valid,
+                PyFunceble.STATUS.official.sane,
+                PyFunceble.STATUS.official.malicious,
                 "Less",
             ]
 
@@ -395,6 +407,16 @@ class Prints:
 
                 # We informations to print is the valid header.
                 to_print = self.headers[PyFunceble.STATUS.official.valid]
+            elif self.template.lower() in PyFunceble.STATUS.list.sane:
+                # The template is in the list of sane status.
+
+                # We informations to print is the sane header.
+                to_print = self.headers[PyFunceble.STATUS.official.sane]
+            elif self.template.lower() in PyFunceble.STATUS.list.malicious:
+                # The template is in the list of malicious status.
+
+                # We informations to print is the malicious header.
+                to_print = self.headers[PyFunceble.STATUS.official.malicious]
             elif self.template.lower() in PyFunceble.STATUS.list.down:
                 # The template is in the list of down status.
 
@@ -538,12 +560,16 @@ class Prints:
             if (
                 self.data_to_print[1].lower() in PyFunceble.STATUS.list.up
                 or self.data_to_print[1].lower() in PyFunceble.STATUS.list.valid
+                or self.data_to_print[1].lower() in PyFunceble.STATUS.list.sane
             ):
                 # The status is in the list of up status.
 
                 # We print the data with a green background.
                 data = Fore.BLACK + Back.GREEN + data
-            elif self.data_to_print[1].lower() in PyFunceble.STATUS.list.down:
+            elif (
+                self.data_to_print[1].lower() in PyFunceble.STATUS.list.down
+                or self.data_to_print[1].lower() in PyFunceble.STATUS.list.malicious
+            ):
                 # The status is in the list of down status.
 
                 # We print the data with a red background.

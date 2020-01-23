@@ -77,10 +77,7 @@ class DirectoryStructureDownloader(DownloaderBase):
             f"{PyFunceble.CONFIGURATION.outputs.default_files.dir_structure}"
         )
 
-        if (
-            not PyFunceble.abstracts.Version.is_local_cloned()
-            or not PyFunceble.helpers.File(self.destination).exists()
-        ):
+        if not PyFunceble.abstracts.Version.is_local_cloned():
             self.download_link = PyFunceble.converter.InternalUrl(
                 PyFunceble.CONFIGURATION.links.dir_structure
             ).get_converted()

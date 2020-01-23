@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the lookup interfaces.
+Provides the status interface for domains and IP reputation check.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,11 +58,57 @@ License:
     SOFTWARE.
 """
 
-from .dns import DNSLookup as Dns
-from .http_code import HTTPCode
-from .iana import Iana
-from .ipv4_reputation import IPv4Reputation
-from .publicsuffix import PublicSuffix
-from .referer import Referer
-from .requests import Requests
-from .whois import WhoisLookup as Whois
+import PyFunceble
+
+from ..gatherer_base import GathererBase
+
+
+class DomainAndIp(GathererBase):
+    """
+    Gather the reputation of the given domain or IP.
+    """
+
+    # pylint: disable=no-member
+
+    def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
+        super().__init__(
+            subject, filename=filename, whois_db=whois_db, inactive_db=inactive_db
+        )
+
+        self.subject_type += "domain"
+
+        self.__gather()
+
+    def __gather(self):
+        """
+        Process the gathering.
+        """
+
+        self.status["_status_source"] = self.status.status_source = "REPUTATION"
+
+        if self.status.domain_syntax_validation or self.status.ipv4_syntax_validation:
+            if self.subject in PyFunceble.lookup.IPv4Reputation():
+                self.status[
+                    "_status"
+                ] = self.status.status = PyFunceble.STATUS.official.malicious
+            else:
+                self.status[
+                    "_status"
+                ] = self.status.status = PyFunceble.STATUS.official.sane
+        else:
+            self.status[
+                "_status"
+            ] = self.status.status = PyFunceble.STATUS.official.sane
+
+        PyFunceble.output.Generate(
+            self.subject,
+            self.subject_type,
+            self.status.status,
+            source=self.status.status_source,
+            whois_server=self.status.whois_server,
+            filename=self.filename,
+            ip_validation=self.status.ipv4_syntax_validation
+            or self.status.ipv6_syntax_validation,
+        ).status_file()
+
+        PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.status.get()}")

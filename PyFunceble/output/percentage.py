@@ -99,12 +99,16 @@ class Percentage:
             if (
                 self.status.lower() in PyFunceble.STATUS.list.up
                 or self.status.lower() in PyFunceble.STATUS.list.valid
+                or self.status.lower() in PyFunceble.STATUS.list.sane
             ):
                 # The status is in the list of up status.
 
                 # We increase the number of up.
                 PyFunceble.INTERN["counter"]["number"]["up"] += 1
-            elif self.status.lower() in PyFunceble.STATUS.list.down:
+            elif (
+                self.status.lower() in PyFunceble.STATUS.list.down
+                or self.status.lower() in PyFunceble.STATUS.list.malicious
+            ):
                 # The status is in the list of down status.
 
                 # We increase the number of down.
@@ -142,6 +146,8 @@ class Percentage:
 
             # And we update the percentage counter of the actual status.
             PyFunceble.INTERN["counter"]["percentage"].update({percentage: calculation})
+
+        # raise Exception(PyFunceble.INTERN["counter"]["percentage"])
 
     def log(self):
         """
@@ -205,6 +211,32 @@ class Percentage:
                 del lines_to_print[1]
                 del PyFunceble.INTERN["counter"]["number"]["down"]
                 del PyFunceble.INTERN["counter"]["number"]["up"]
+
+            if PyFunceble.CONFIGURATION.reputation:
+                # We are checking for reputation.
+
+                # We update the denomination of the UP.
+                lines_to_print[0][0] = PyFunceble.STATUS.official.sane
+                lines_to_print[0][1] = (
+                    str(PyFunceble.INTERN["counter"]["percentage"]["sane"]) + "%"
+                )
+
+                lines_to_print[0][2] = PyFunceble.INTERN["counter"]["number"]["sane"]
+
+                # We update the denomination of the Down.
+                lines_to_print[1][0] = PyFunceble.STATUS.official.malicious
+                lines_to_print[1][1] = (
+                    str(PyFunceble.INTERN["counter"]["percentage"]["malicious"]) + "%"
+                )
+                lines_to_print[1][2] = PyFunceble.INTERN["counter"]["number"][
+                    "malicious"
+                ]
+
+                # And we unset the INVALID line.
+                del lines_to_print[2]
+                del PyFunceble.INTERN["counter"]["number"]["invalid"]
+                del PyFunceble.INTERN["counter"]["number"]["up"]
+                del PyFunceble.INTERN["counter"]["number"]["down"]
 
             if (
                 not PyFunceble.CONFIGURATION.quiet

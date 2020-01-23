@@ -115,7 +115,9 @@ class APICore:
 
         # We update the configuration with the given
         # configuration.
-        PyFunceble.cconfig.Preset().api()
+        preset = PyFunceble.cconfig.Preset()
+        preset.init_all()
+        preset.api()
 
         # We get an instance of the DB connection.
         self.mysql_db = PyFunceble.engine.MySQL()
@@ -150,6 +152,55 @@ class APICore:
 
                 # We add it into the database.
                 self.inactive_db.add(subject, status)
+
+    def reputation(self, subject_type):
+        """
+        Make a reputation check.
+
+        :param str subject_type:
+            Should be one of the following.
+
+            - :code:`domain`
+
+            - :code:`url`
+        """
+
+        if isinstance(self.subject, list):
+            # The given subject is a list of subjects.
+
+            # We initiate a variable which save our result.
+            result = {}
+
+            for subject in self.subject:
+                # We loop through the list of subject.
+
+                result[subject] = APICore(
+                    subject, complete=self.complete, configuration=self.configuration
+                ).reputation(subject_type)
+
+            # We return our local result.
+            return result
+
+        if "url" in subject_type:
+            data = PyFunceble.status.UrlReputation(
+                self.subject, whois_db=self.whois_db, inactive_db=self.inactive_db
+            ).get()
+        else:
+            data = PyFunceble.status.DomainAndIPReputation(
+                self.subject, whois_db=self.whois_db, inactive_db=self.inactive_db
+            ).get()
+
+        self.__inactive_database_management(self.subject, data["status"])
+        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+
+        if self.complete:
+            # The user want a copy of the compelte data.
+
+            # We return them
+            return data
+
+        # We only return the status.
+        return data["status"]
 
     def availability(self, subject_type):
         """

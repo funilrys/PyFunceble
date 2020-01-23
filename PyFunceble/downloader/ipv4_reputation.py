@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the lookup interfaces.
+Provides the downloader of the IPv4 reputation file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,11 +58,27 @@ License:
     SOFTWARE.
 """
 
-from .dns import DNSLookup as Dns
-from .http_code import HTTPCode
-from .iana import Iana
-from .ipv4_reputation import IPv4Reputation
-from .publicsuffix import PublicSuffix
-from .referer import Referer
-from .requests import Requests
-from .whois import WhoisLookup as Whois
+import PyFunceble
+
+from .base import DownloaderBase
+
+
+class IPv4ReputationDownloader(DownloaderBase):
+    """
+    Provides the downloader of the IPv4 reputation file.
+    """
+
+    DOWNTIME_INDEX = "ipv4_reputation"
+    REDOWNLOAD_AFTER = 1
+
+    def __init__(self):
+        if PyFunceble.CONFIGURATION.use_reputation_data:
+            self.download_link = PyFunceble.CONFIGURATION.links.ipv4_reputation
+            self.destination = (
+                f"{PyFunceble.CONFIG_DIRECTORY}"
+                f"{PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME}"
+            )
+
+            super().__init__()
+
+            self.process()

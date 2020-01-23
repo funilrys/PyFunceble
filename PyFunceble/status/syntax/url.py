@@ -65,7 +65,7 @@ from ..gatherer_base import GathererBase
 
 class Url(GathererBase):
     """
-    Gather the availability of the given URL.
+    Gather the syntax of the given URL.
     """
 
     # pylint: disable=no-member

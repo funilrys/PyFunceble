@@ -122,6 +122,7 @@ class Dispatcher:  # pylint: disable=too-few-public-methods, too-many-arguments
         generate_all_results_only=False,
     ):
         self.preset = preset
+        self.preset.init_all()
         PyFunceble.LOGGER.debug(f"CONFIGURATION:\n{PyFunceble.CONFIGURATION}")
 
         if domain_or_ip or file_path or url_file_path or url_to_test:

@@ -77,20 +77,29 @@ class Preset:  # pragma: no cover
     # is also listed into PyFunceble.INTERN["custom_config_loaded"],
     # We do not update it.
     do_not_overwrite_if_customized = [
+        "ci",
         "inactive_database",
         "no_files",
         "quiet",
+        "reputation",
         "timeout",
-        "ci",
+        "use_reputation_data",
         "whois_database",
     ]
 
-    def __init__(self):
+    def init_all(self):
+        """
+        Initiate all presets which are independent from others.
+        """
+
         self.timeout()
         self.dns_lookup_over_tcp()
         self.dns_nameserver()
-        self.syntax_test()
+
         self.multiprocess()
+
+        self.syntax_test()
+        self.reputation_data()
 
     @classmethod
     def switch(
@@ -173,11 +182,17 @@ class Preset:  # pragma: no cover
         Sets the given configuration index to :code:`False`.
         """
 
+        # pylint: disable=unsupported-membership-test,unsubscriptable-object,unsupported-assignment-operation
+
         if isinstance(indexes, list):
             for index in indexes:
-                return cls.disable(index)
+                cls.disable(index)
+
+            return None
 
         if not cls.__are_we_allowed_to_overwrite(indexes):
+            PyFunceble.LOGGER.debug(f"Not allowed to switch {indexes}.")
+
             return None
 
         if indexes not in PyFunceble.CONFIGURATION or PyFunceble.CONFIGURATION[indexes]:
@@ -189,6 +204,12 @@ class Preset:  # pragma: no cover
 
             return None
 
+        PyFunceble.LOGGER.debug(
+            f"Not allowed to switch {indexes} because "
+            "it is already to the right value. "
+            f"({PyFunceble.CONFIGURATION[indexes]})"
+        )
+
         return None
 
     @classmethod
@@ -197,11 +218,17 @@ class Preset:  # pragma: no cover
         Sets the given configuration index to :code:`True`.
         """
 
+        # pylint: disable=unsupported-membership-test,unsubscriptable-object,unsupported-assignment-operation
+
         if isinstance(indexes, list):
             for index in indexes:
-                return cls.enable(index)
+                cls.enable(index)
+
+            return None
 
         if not cls.__are_we_allowed_to_overwrite(indexes):
+            PyFunceble.LOGGER.debug(f"Not allowed to switch {indexes}.")
+
             return None
 
         if (
@@ -214,6 +241,12 @@ class Preset:  # pragma: no cover
                 f"CONFIGURATION.{indexes} switched to {PyFunceble.CONFIGURATION[indexes]}"
             )
             return None
+
+        PyFunceble.LOGGER.debug(
+            f"Not allowed to switch {indexes} because "
+            "it is already to the right value. "
+            f"({PyFunceble.CONFIGURATION[indexes]})"
+        )
 
         return None
 
@@ -244,7 +277,7 @@ class Preset:  # pragma: no cover
             # We deactivate the http status code.
             PyFunceble.HTTP_CODE.active = False
 
-            should_be_disabled = ["generate_hosts"]
+            should_be_disabled = ["generate_hosts", "reputation", "use_reputation_data"]
             should_be_enabled = ["plain_list_domain"]
 
             self.disable(should_be_disabled)
@@ -403,3 +436,17 @@ class Preset:  # pragma: no cover
         """
 
         PyFunceble.DNSLOOKUP.update_nameserver(PyFunceble.CONFIGURATION.dns_server)
+
+    def reputation_data(self):
+        """
+        Ensures that the usage of reputation data is activated when needed.
+        """
+
+        if PyFunceble.CONFIGURATION.reputation:
+            should_be_enabled = ["use_reputation_data", "no_whois", "plain_list_domain"]
+            should_be_disabled = ["whois_database", "inactive_database", "mining"]
+
+            self.enable(should_be_enabled)
+            self.disable(should_be_disabled)
+
+            PyFunceble.HTTP_CODE.active = False

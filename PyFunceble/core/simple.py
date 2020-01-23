@@ -99,7 +99,7 @@ class SimpleCore(CLICore):
         else:
             self.save_into_database(dataset, None, self.mysql_db)
 
-    def test(self, subject, subject_type):
+    def test(self, subject, subject_type):  # pylint: disable=too-many-return-statements
         """
         Processes a test of the given subject and return the result.
         """
@@ -108,7 +108,18 @@ class SimpleCore(CLICore):
             return [self.test(x, subject_type) for x in subject]
 
         if PyFunceble.CONFIGURATION.syntax:
+            if subject_type in ["url"]:
+                return PyFunceble.status.UrlSyntax(subject, whois_db=self.whois_db)
+
             return PyFunceble.status.DomainAndIpSyntax(
+                subject, whois_db=self.whois_db
+            ).get()
+
+        if PyFunceble.CONFIGURATION.reputation:
+            if subject_type in ["url"]:
+                return PyFunceble.status.UrlReputation(subject, whois_db=self.whois_db)
+
+            return PyFunceble.status.DomainAndIPReputation(
                 subject, whois_db=self.whois_db
             ).get()
 

@@ -234,16 +234,28 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                     PyFunceble.STATUS.official.valid,
                     include_entries_without_changes=include_entries_without_changes,
                 )
+            elif PyFunceble.CONFIGURATION.reputation:
+                self.generate_files_of_status(
+                    PyFunceble.STATUS.official.sane,
+                    include_entries_without_changes=include_entries_without_changes,
+                )
             else:
                 self.generate_files_of_status(
                     PyFunceble.STATUS.official.up,
                     include_entries_without_changes=include_entries_without_changes,
                 )
 
-            self.generate_files_of_status(
-                PyFunceble.STATUS.official.down,
-                include_entries_without_changes=include_entries_without_changes,
-            )
+            if PyFunceble.CONFIGURATION.reputation:
+                self.generate_files_of_status(
+                    PyFunceble.STATUS.official.malicious,
+                    include_entries_without_changes=include_entries_without_changes,
+                )
+            else:
+                self.generate_files_of_status(
+                    PyFunceble.STATUS.official.down,
+                    include_entries_without_changes=include_entries_without_changes,
+                )
+
             self.generate_files_of_status(
                 PyFunceble.STATUS.official.invalid,
                 include_entries_without_changes=include_entries_without_changes,
@@ -267,6 +279,21 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 ).get()
             else:
                 result = PyFunceble.status.DomainAndIpSyntax(
+                    subject,
+                    whois_db=self.whois_db,
+                    inactive_db=self.inactive_db,
+                    filename=self.file,
+                ).get()
+        elif PyFunceble.CONFIGURATION.reputation:
+            if "url" in self.file_type:
+                result = PyFunceble.status.UrlReputation(
+                    subject,
+                    whois_db=self.whois_db,
+                    inactive_db=self.inactive_db,
+                    filename=self.file,
+                ).get()
+            else:
+                result = PyFunceble.status.DomainAndIPReputation(
                     subject,
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,

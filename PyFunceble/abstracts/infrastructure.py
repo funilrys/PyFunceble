@@ -100,7 +100,16 @@ class Infrastructure:
     :type: str
     """
 
+    IPV4_REPUTATION_FILENAME = "ipv4_reputation.data"
+    """
+    Sets the name of our own copy of the IPv4 reputation data file.
+
+    :type: str
+    """
+
     PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
     """
     Sets the link to the production configuration file.
+
+    :type: str
     """

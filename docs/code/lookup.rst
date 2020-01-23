@@ -62,6 +62,13 @@ Documentation
     :members:
     :private-members:
 
+:code:`IPv4Reputation`
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.lookup.ipv4_reputation.IPv4Reputation
+    :members:
+    :private-members:
+
 :code:`Requests()`
 ^^^^^^^^^^^^^^^^^^
 

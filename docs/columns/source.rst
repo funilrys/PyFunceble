@@ -82,3 +82,14 @@ IP with range
 
 - All IPv4 with a range (for example :code:`0.0.0.0/24`) are returned as :code:`ACTIVE`
 - All IPv6 with a range (for example :code:`2001:db8::/43`) are returned as :code:`ACTIVE`
+
+Reputation
+^^^^^^^^^^
+
+If the :code:`--use-reputation-data` argument is activated
+or the :code:`use_reputation_data` index of your
+configuration file is active, the following apply.
+
+- All IPv4 and IPv6 which are present into the AlienVault public
+  reputation data are returned as :code:`ACTIVE`
+

@@ -62,4 +62,5 @@ from .config import ConfigDownloader as Config
 from .db_type import DBTypeDownloader as DBType
 from .directory_structure import DirectoryStructureDownloader as DirectoryStructure
 from .iana import IANADownloader as IANA
+from .ipv4_reputation import IPv4ReputationDownloader as IPv4Reputation
 from .publicsuffix import PublicSuffixDownloader as PublicSuffix

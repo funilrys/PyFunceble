@@ -49,6 +49,20 @@ Availability: :code:`Url()`
     :members:
     :private-members:
 
+Reputation: :code:`DomainAndIp()`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.status.reputation.domain_and_ip.DomainAndIp
+    :members:
+    :private-members:
+
+Reputation: :code:`Url()`
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PyFunceble.status.reputation.url.Url
+    :members:
+    :private-members:
+
 Syntax: :code:`DomainAndIp()`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

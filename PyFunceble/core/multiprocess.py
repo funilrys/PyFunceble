@@ -176,6 +176,10 @@ class MultiprocessCore(
             result = APICore(
                 subject, complete=True, is_parent=False, db_file_name=self.file
             ).syntax(file_content_type)
+        elif PyFunceble.CONFIGURATION.reputation:
+            result = APICore(
+                subject, complete=True, is_parent=False, db_file_name=self.file
+            ).reputation(file_content_type)
         else:
             result = APICore(
                 subject, complete=True, is_parent=False, db_file_name=self.file

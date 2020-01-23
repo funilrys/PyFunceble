@@ -698,6 +698,41 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         output.Constructor()
 
 
+def is_domain_malicious(subject):
+    """
+    Checks if the given domain is malicious.
+
+    :param str subject: The subject to work with.
+
+    :rtype: bool
+    """
+
+    if subject:
+        return core.API(subject).reputation("domain") == "MALICIOUS"
+    return None
+
+def is_ipv4_malicious(subject):
+    """
+    Checks if the given IPv4 is malicious.
+
+    :rtype: bool
+    """
+
+    return is_domain_malicious(subject)
+
+def is_url_malicious(subject):
+    """
+    Checks if the given URL is malicious.
+
+    :param str subject: The subject to work with.
+
+    :rtype: bool
+    """
+
+    if subject:
+        return core.API(subject).reputation("url") == "MALICIOUS"
+    return None
+
 def get_complements(subject, include_given=False):
     """
     Provides the complements of the given subject(s).
