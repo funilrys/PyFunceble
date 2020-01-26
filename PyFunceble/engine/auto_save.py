@@ -82,11 +82,14 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
     def __init__(self, start_time=None):
         self.current_ci_engine = self.get_current_ci()
-        PyFunceble.LOGGER.info(f"Current CI engine: {self.current_ci_engine}")
+        PyFunceble.LOGGER.debug(f"Current CI engine: {self.current_ci_engine}")
 
         if self.current_ci_engine:
             self.authorized = True
 
+            PyFunceble.LOGGER.debug(
+                "CI (already) Initiated: %s" % "ci_initiated" not in PyFunceble.INTERN
+            )
             if "ci_initiated" not in PyFunceble.INTERN:
                 self.current_ci_engine.init()
                 self.current_ci_engine.bypass()

@@ -118,7 +118,7 @@ class CIBase:
             remote = self.get_remote_destination()
 
             commands = [
-                ("git remote rm origin", True),
+                ("git remote rm origin", False),
                 ("git remote add origin " f"https://{token}@{remote}", False),
                 ("git remote update", False),
                 ("git fetch", False),
@@ -136,10 +136,10 @@ class CIBase:
             self.init_git_remote_with_token(token)
 
             commands = [
-                (f'git config --global user.email "{self.git_email}"', True),
-                (f'git config --global user.name "{self.git_name}"', True),
-                ("git config --global push.default simple", True),
-                (f'git checkout "{PyFunceble.CONFIGURATION.ci_branch}"', True),
+                (f'git config --global user.email "{self.git_email}"', False),
+                (f'git config --global user.name "{self.git_name}"', False),
+                ("git config --global push.default simple", False),
+                (f'git checkout "{PyFunceble.CONFIGURATION.ci_branch}"', False),
                 (
                     f'git pull origin "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
                     False,
