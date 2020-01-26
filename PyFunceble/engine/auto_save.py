@@ -112,7 +112,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                 PyFunceble.LOGGER.debug(f"End Time:  {self.end_time}")
 
                 PyFunceble.INTERN["ci_initiated"] = True
-            elif "autosave" in PyFunceble.INTERN:
+            elif "auto_save" in PyFunceble.INTERN:
                 self.start_time = datetime.fromtimestamp(
                     PyFunceble.INTERN["auto_save"]["start_time"]
                 )
