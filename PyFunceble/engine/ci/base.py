@@ -189,7 +189,7 @@ class CIBase:
         """
 
         for command, allow_stdout in commands:
-            if allow_stdout:
+            if allow_stdout or PyFunceble.LOGGER.authorized:
                 PyFunceble.LOGGER.debug(f"Executing: {repr(command)}")
                 PyFunceble.helpers.Command(command).run_to_stdout()
             else:
@@ -218,10 +218,11 @@ class CIBase:
 
         if self.authorized:
 
-            command = f"git push origin {PyFunceble.CONFIGURATION.ci_branch}"
+            commands = [
+                (f"git push origin {PyFunceble.CONFIGURATION.ci_branch}", False)
+            ]
 
-            PyFunceble.helpers.Command(command).execute()
-            PyFunceble.LOGGER.info(f"Executed: {command}")
+            self.exec_commands(commands)
 
             if exit_it:
                 sys.exit(0)
@@ -235,10 +236,14 @@ class CIBase:
             PyFunceble.output.Percentage().log()
             self.permissions()
 
-            command = (
-                f"git add --all && git commit -a "
-                f'-m "{PyFunceble.CONFIGURATION.ci_autosave_final_commit} [ci skip]"'
-            )
+            commands = [
+                ("git add --all", True),
+                (
+                    "git commit -a -m "
+                    f'"{PyFunceble.CONFIGURATION.ci_autosave_final_commit} [ci skip]"',
+                    True,
+                ),
+            ]
 
             if PyFunceble.CONFIGURATION.command_before_end:
                 PyFunceble.LOGGER.info(
@@ -250,26 +255,31 @@ class CIBase:
                 ).run_to_stdout()
                 self.permissions()
 
-            PyFunceble.LOGGER.info(f"Executing: {command}")
-
-            PyFunceble.helpers.Command(command).run_to_stdout()
-            self.push(exit_it=False)
-
-            # We now merge to the destination branch.
-            commands = [
-                (
-                    f'git checkout "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
-                    True,
-                ),
-                (f'git pull origin "{PyFunceble.CONFIGURATION.ci_branch}"', False),
-                (
-                    f'git push origin "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
-                    False,
-                ),
-            ]
-
             self.exec_commands(commands)
-            sys.exit(0)
+
+            if (
+                PyFunceble.CONFIGURATION.ci_distribution_branch
+                != PyFunceble.CONFIGURATION.ci_branch
+            ):
+                self.push(exit_it=False)
+
+                # We now merge to the destination branch.
+                commands = [
+                    (
+                        f'git checkout "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
+                        True,
+                    ),
+                    (f'git pull origin "{PyFunceble.CONFIGURATION.ci_branch}"', False),
+                    (
+                        f'git push origin "{PyFunceble.CONFIGURATION.ci_distribution_branch}"',
+                        False,
+                    ),
+                ]
+
+                self.exec_commands(commands)
+                sys.exit(0)
+            else:
+                self.push()
 
     def not_end_commit(self):
         """
