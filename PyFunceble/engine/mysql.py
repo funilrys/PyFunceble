@@ -333,7 +333,7 @@ class MySQL:
         Creates the tables of the database and apply the patches.
         """
 
-        if self.authorized:
+        if self.authorized and "db_tables_initiated" not in PyFunceble.INTERN:
             with self.get_connection() as cursor:
                 for statement in self.parse_mysql_sql_file():
                     cursor.execute(statement)
@@ -341,3 +341,5 @@ class MySQL:
                 PyFunceble.LOGGER.info(
                     "Created the missing tables. Applied all patched"
                 )
+
+            PyFunceble.INTERN["db_tables_initiated"] = True
