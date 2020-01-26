@@ -129,9 +129,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         Provides the current CI to use.
         """
 
-        available_ci_engines = [TravisCI(), GitLabCI()]
-
-        for ci_engine in available_ci_engines:
+        for ci_engine in [TravisCI(), GitLabCI()]:
             if ci_engine.authorized:
                 return ci_engine
 
