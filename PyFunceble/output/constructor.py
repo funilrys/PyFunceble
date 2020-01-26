@@ -524,7 +524,7 @@ class Constructor:
         if not PyFunceble.helpers.Directory(directory).exists():
             # The given directory does not exist.
 
-            ci_engine = PyFunceble.engine.AutoSave().current_ci_engine
+            ci_engine = PyFunceble.engine.AutoSave.get_current_ci()
 
             if ci_engine:
                 # We update the permission.

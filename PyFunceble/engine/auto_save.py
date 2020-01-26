@@ -81,10 +81,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
     time_exceed = False
 
     def __init__(self, start_time=None):
-        self.available_ci_engines = [TravisCI(), GitLabCI()]
-
         self.current_ci_engine = self.get_current_ci()
-
         PyFunceble.LOGGER.info(f"Current CI engine: {self.current_ci_engine}")
 
         if self.current_ci_engine:
@@ -123,12 +120,15 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                 PyFunceble.LOGGER.debug(f"Start Time (Shared): {self.start_time}")
                 PyFunceble.LOGGER.debug(f"End Time (Shared):  {self.end_time}")
 
-    def get_current_ci(self):
+    @classmethod
+    def get_current_ci(cls):
         """
         Provides the current CI to use.
         """
 
-        for ci_engine in self.available_ci_engines:
+        available_ci_engines = [TravisCI(), GitLabCI()]
+
+        for ci_engine in available_ci_engines:
             if ci_engine.authorized:
                 return ci_engine
 
@@ -139,7 +139,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         Checks if the end time is exceed.
         """
 
-        if self.authorized:
+        if self.authorized and hasattr(self, "end_time"):
             # We are authorized to operate.
 
             if not self.time_exceed and datetime.now() >= self.end_time:
@@ -149,8 +149,10 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
 
                 # We update the time exceed marker.
                 self.time_exceed = True
+        else:
+            self.time_exceed = False
 
-        PyFunceble.LOGGER.debug(f"Time exceed: {self.time_exceed}")
+            PyFunceble.LOGGER.debug(f"Time exceed: {self.time_exceed}")
 
         return self.time_exceed
 
