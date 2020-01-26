@@ -103,10 +103,25 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                     minutes=int(PyFunceble.CONFIGURATION.ci_autosave_minutes)
                 )
 
+                PyFunceble.INTERN["auto_save"] = {
+                    "start_time": self.start_time.timestamp(),
+                    "end_time": self.end_time.timestamp(),
+                }
+
                 PyFunceble.LOGGER.debug(f"Start Time: {self.start_time}")
                 PyFunceble.LOGGER.debug(f"End Time:  {self.end_time}")
 
                 PyFunceble.INTERN["ci_initiated"] = True
+            elif "autosave" in PyFunceble.INTERN:
+                self.start_time = datetime.fromtimestamp(
+                    PyFunceble.INTERN["auto_save"]["start_time"]
+                )
+                self.end_time = datetime.fromtimestamp(
+                    PyFunceble.INTERN["auto_save"]["end_time"]
+                )
+
+                PyFunceble.LOGGER.debug(f"Start Time (Shared): {self.start_time}")
+                PyFunceble.LOGGER.debug(f"End Time (Shared):  {self.end_time}")
 
     def get_current_ci(self):
         """
