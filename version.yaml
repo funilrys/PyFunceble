@@ -1,4 +1,4 @@
-current_version: '2.55.1.dev (Green Galago: Skitterbug)'
+current_version: '2.56.0.dev (Green Galago: Skitterbug)'
 deprecated:
 - 0.0.0
 - 0.0.1
@@ -183,6 +183,7 @@ deprecated:
 - 2.51.1
 - 2.52.0
 - 2.53.6
+- 2.55.1
 force_update:
     minimal_version:
     - 0.0.0
