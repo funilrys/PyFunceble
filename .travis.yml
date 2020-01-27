@@ -143,7 +143,7 @@ jobs:
         - PYTHON_VERSION="3.8.1"
         - TOXENV="py38"
       addons:
-          mariadb: '10.1'
+          mariadb: '10.4'
       before_script:
         - sudo systemctl restart mysql
         - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
