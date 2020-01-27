@@ -242,6 +242,18 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 test_control.add_argument(
+                    "--cooldown-time",
+                    type=float,
+                    default=0,
+                    help="Switch the value of the cooldown time to apply between each test. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.cooldown_time)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
                     "--http",
                     action="store_true",
                     help="Switch the value of the usage of HTTP code. %s"
@@ -301,7 +313,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 test_control.add_argument(
                     "-t",
                     "--timeout",
-                    type=int,
+                    type=float,
                     default=0,
                     help="Switch the value of the timeout. %s"
                     % (
@@ -880,6 +892,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                         "generate_complements"
                     )
 
+                if args.cooldown_time >= 0:
+                    PyFunceble.CONFIGURATION.cooldown_time = args.cooldown_time
+
                 if args.database:
                     PyFunceble.CONFIGURATION.inactive_database = preset.switch(
                         "inactive_database"
@@ -1021,6 +1036,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 if args.syntax:
                     PyFunceble.CONFIGURATION.syntax = preset.switch("syntax")
 
+                if args.timeout >= 0:
+                    PyFunceble.CONFIGURATION.timeout = args.timeout
+
                 if args.use_reputation_data:
                     PyFunceble.CONFIGURATION.use_reputation_data = preset.switch(
                         "use_reputation_data"
@@ -1059,6 +1077,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 PyFunceble.core.CLI.colorify_logo(home=True)
 
                 preset.timeout()
+                preset.cooldown_time()
                 preset.dns_lookup_over_tcp()
 
                 if args.clean:

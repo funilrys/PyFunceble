@@ -172,6 +172,9 @@ class MultiprocessCore(
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
 
+        if PyFunceble.CONFIGURATION.cooldown_time:
+            PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
+
         if PyFunceble.CONFIGURATION.syntax:
             result = APICore(
                 subject, complete=True, is_parent=False, db_file_name=self.file

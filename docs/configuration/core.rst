@@ -65,6 +65,18 @@
 .. note::
     Understand by final commit the commit which will deliver the last element we have to test.
 
+:code:`cooldow_time`
+^^^^^^^^^^^^^^^^^^^^
+
+    **Type:**: :code:`float`
+
+    **Default value:** :code:`null`
+
+    **Description:** Set the cooldown time to apply between each test.
+
+.. note::
+    This index take only effect from the CLI. Not from the API.
+
 :code:`custom_ip`
 ^^^^^^^^^^^^^^^^^
 

@@ -269,6 +269,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
 
+        if PyFunceble.CONFIGURATION.cooldown_time:
+            PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
+
         if PyFunceble.CONFIGURATION.syntax:
             if "url" in self.file_type:
                 result = PyFunceble.status.UrlSyntax(

@@ -83,6 +83,7 @@ class Preset:  # pragma: no cover
         "quiet",
         "reputation",
         "timeout",
+        "cooldown_time",
         "use_reputation_data",
         "whois_database",
     ]
@@ -96,6 +97,7 @@ class Preset:  # pragma: no cover
         self.dns_lookup_over_tcp()
         self.dns_nameserver()
 
+        self.cooldown_time()
         self.multiprocess()
 
         self.syntax_test()
@@ -450,3 +452,23 @@ class Preset:  # pragma: no cover
             self.disable(should_be_disabled)
 
             PyFunceble.HTTP_CODE.active = False
+
+    def cooldown_time(self):
+        """
+        Ensures that we always have a correct cooldown time.
+        """
+
+        if (
+            self.__are_we_allowed_to_overwrite("cooldown_time")
+            and PyFunceble.CONFIGURATION.cooldown_time
+            and not isinstance(PyFunceble.CONFIGURATION.cooldown_time, float)
+        ):
+            PyFunceble.CONFIGURATION.cooldown_time = float(
+                PyFunceble.CONFIGURATION.cooldown_time
+            )
+
+        if (
+            PyFunceble.CONFIGURATION.cooldown_time is not None
+            and PyFunceble.CONFIGURATION.cooldown_time <= 0
+        ):
+            PyFunceble.CONFIGURATION.cooldown_time = None

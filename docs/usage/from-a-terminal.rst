@@ -149,6 +149,15 @@ This argument activates or deactivates the auto-continue subsystem.
 Indeed, as we can automatically continue if the script has been stopped,
 this switch allows us to disable or enable the usage of that specific subsystem.
 
+:code:`--cooldown-time`
+"""""""""""""""""""""""
+
+    Switch the value of the cooldown time to apply between each test.
+
+    **Default value:** :code:`None`
+
+This argument apply a number of seconds to sleep before/between each test.
+
 :code:`--http`
 """"""""""""""
 
@@ -687,10 +696,10 @@ Global overview
 
     usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
-                    [--idna] [--mining] [-c] [--http] [--local] [-ns] [-nw]
-                    [--syntax] [-t TIMEOUT] [--reputation]
-                    [--use-reputation-data] [-ua USER_AGENT] [-vsc]
-                    [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
+                    [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
+                    [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
+                    [--reputation] [--use-reputation-data] [-ua USER_AGENT]
+                    [-vsc] [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
                     [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
@@ -740,6 +749,9 @@ Global overview
         -c, --auto-continue, --continue
                                 Switch the value of the auto continue mode.
                                 Configured value: True
+        --cooldown-time COOLDOWN_TIME
+                                Switch the value of the cooldown time to apply between each test.
+                                Configured value: None
         --http                Switch the value of the usage of HTTP code.
                                 Configured value: True
         --local               Switch the value of the local network testing.
@@ -771,7 +783,7 @@ Global overview
                                 Make all DNS query with TCP.
                                 Configured value: False
 
-        Databases:
+    Databases:
         -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
                                 Configured value: True
         --database-type DATABASE_TYPE

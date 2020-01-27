@@ -107,6 +107,9 @@ class SimpleCore(CLICore):
         if isinstance(subject, list):
             return [self.test(x, subject_type) for x in subject]
 
+        if PyFunceble.CONFIGURATION.cooldown_time:
+            PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
+
         if PyFunceble.CONFIGURATION.syntax:
             if subject_type in ["url"]:
                 return PyFunceble.status.UrlSyntax(subject, whois_db=self.whois_db)
