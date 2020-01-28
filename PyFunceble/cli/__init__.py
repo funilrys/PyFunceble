@@ -1103,16 +1103,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 # We compare the versions (upstream and local) and in between.
                 PyFunceble.core.CLI.compare_version_and_print_messages()
 
-                if not PyFunceble.abstracts.Version.is_local_cloned():
-                    # We are not into the cloned version.
-
-                    # We run the merging logic.
-                    #
-                    # Note: Actually, it compares the local and the upstream configuration.
-                    # if a new key is present, it proposes the enduser to merge upstream
-                    # into the local configuration.
-                    PyFunceble.cconfig.Merge(PyFunceble.CONFIG_DIRECTORY)
-
                 # We call our Core which will handle all case depending of the configuration or
                 # the used command line arguments.
                 Dispatcher(

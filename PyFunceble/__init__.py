@@ -698,6 +698,16 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         # we initiate the directory structure.
         output.Constructor()
 
+    if not abstracts.Version.is_local_cloned():
+        # We are not into the cloned version.
+
+        # We run the merging logic.
+        #
+        # Note: Actually, it compares the local and the upstream configuration.
+        # if a new key is present, it proposes the enduser to merge upstream
+        # into the local configuration.
+        cconfig.Merge(CONFIG_DIRECTORY)
+
 
 def is_domain_malicious(subject):  # pragma: no cover
     """
