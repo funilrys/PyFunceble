@@ -466,9 +466,3 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.cooldown_time = float(
                 PyFunceble.CONFIGURATION.cooldown_time
             )
-
-        if (
-            PyFunceble.CONFIGURATION.cooldown_time is not None
-            and PyFunceble.CONFIGURATION.cooldown_time <= 0
-        ):
-            PyFunceble.CONFIGURATION.cooldown_time = None

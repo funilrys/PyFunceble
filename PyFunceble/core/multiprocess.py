@@ -172,7 +172,7 @@ class MultiprocessCore(
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
 
-        if PyFunceble.CONFIGURATION.cooldown_time:
+        if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
             PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
         if PyFunceble.CONFIGURATION.syntax:

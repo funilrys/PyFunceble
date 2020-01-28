@@ -107,7 +107,7 @@ class SimpleCore(CLICore):
         if isinstance(subject, list):
             return [self.test(x, subject_type) for x in subject]
 
-        if PyFunceble.CONFIGURATION.cooldown_time:
+        if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
             PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
         if PyFunceble.CONFIGURATION.syntax:
