@@ -371,7 +371,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     nargs="+",
                     help="Set one or more specific DNS servers to use during the test, "
                     "separated by spaces.\n\nYou can give the port along with "
-                    "the DNS server if needed. %s"
+                    "the DNS server if needed. But, if omitted, the default "
+                    "port (53) will be used. %s"
                     % (
                         current_value_format
                         + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))

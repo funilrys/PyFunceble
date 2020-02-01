@@ -167,11 +167,19 @@
           - dns2.example.org
 
 .. note::
-    You can give the port along with the DNS server if needed.
+    You can specify a port number to use to the DNS server if needed.
+
+    As example:
+
+    ::
+
+        - 127.0.1.53:5353
 
 .. warning::
-    We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
-    as :code:`INACTIVE`.
+    We expect a DNS server(s). If no DNS server(s) is given. You'll almost for certain get all
+    results as :code:`INACTIVE`
+
+    This could happens in case you use :code:`--dns -f`
 
 :code:`filter`
 ^^^^^^^^^^^^^^

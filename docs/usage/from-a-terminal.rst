@@ -271,11 +271,19 @@ DNS (resolver) control
     **Default value:** :code:`Follow OS DNS` ==> :code:`None`
 
 .. warning::
-    We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
-    as :code:`INACTIVE`.
+    We expect a DNS server(s). If no DNS server(s) is given. You'll almost for certain get all
+    results as :code:`INACTIVE`
+
+    This could happens in case you use :code:`--dns -f`
 
 .. note::
-    You can give the port along with the DNS server if needed.
+    You can specify a port number to use to the DNS server if needed.
+
+    As example:
+
+    ::
+
+        - 127.0.1.53:5353
 
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
@@ -782,7 +790,7 @@ Global overview
     DNS (resolver) control:
         --dns DNS [DNS ...]   Set one or more specific DNS servers to use during the test, separated by spaces.
 
-                                You can give the port along with the DNS server if needed.
+                                You can give the port along with the DNS server if needed. But, if omitted, the default port (53) will be used.
                                 Configured value: OS (declared) DNS server
         --dns-lookup-over-tcp
                                 Make all DNS query with TCP.
