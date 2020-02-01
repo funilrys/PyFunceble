@@ -90,8 +90,13 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We share the status code.
         self.status_code = http_status_code
 
-        # We set the header that we will send when communicating with webservers.
-        self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
+        user_agent = PyFunceble.engine.UserAgent().get()
+
+        if user_agent:
+            # We set the header that we will send when communicating with webservers.
+            self.headers = {"User-Agent": user_agent}
+        else:
+            self.headers = {}
 
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_down = {

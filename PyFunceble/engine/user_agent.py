@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the engine interfaces.
+Provides a simple way to get the latest or the defined User-Agent.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,10 +58,55 @@ License:
     SOFTWARE.
 """
 
-from .auto_continue import AutoContinue
-from .auto_save import AutoSave
-from .logger import Logger
-from .mining import Mining
-from .mysql import MySQL
-from .sort import Sort
-from .user_agent import UserAgent
+
+import PyFunceble
+
+
+class UserAgent:
+    """
+    A simple interface to get the user agent to use.
+    """
+
+    def __init__(self):
+        self.dumped = PyFunceble.helpers.Dict().from_json_file(
+            PyFunceble.CONFIG_DIRECTORY
+            + PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
+        )
+
+    def get(self):
+        """
+        Provides the user agent to use.
+        """
+
+        if not PyFunceble.CONFIGURATION.user_agent.custom:
+            if (
+                not PyFunceble.CONFIGURATION.user_agent.browser
+                or PyFunceble.CONFIGURATION.user_agent.browser not in self.dumped
+            ):
+                raise PyFunceble.exceptions.UserAgentBrowserNotFound(
+                    PyFunceble.CONFIGURATION.user_agent.browser
+                )
+
+            if (
+                not PyFunceble.CONFIGURATION.user_agent.platform
+                or PyFunceble.CONFIGURATION.user_agent.platform
+                not in self.dumped[PyFunceble.CONFIGURATION.user_agent.browser]
+            ):
+                raise PyFunceble.exceptions.UserAgentPlatformNotFound(
+                    PyFunceble.CONFIGURATION.user_agent.platform
+                )
+
+            if not self.dumped[PyFunceble.CONFIGURATION.user_agent.browser][
+                PyFunceble.CONFIGURATION.user_agent.platform
+            ]:
+                raise PyFunceble.exceptions.UserAgentNotFound(
+                    "Browser: "
+                    f"{PyFunceble.CONFIGURATION.user_agent.browser}; "
+                    f"Platform: {PyFunceble.CONFIGURATION.user_agent.platform}"
+                )
+
+            return self.dumped[PyFunceble.CONFIGURATION.user_agent.browser][
+                PyFunceble.CONFIGURATION.user_agent.platform
+            ]
+
+        return PyFunceble.CONFIGURATION.user_agent.custom

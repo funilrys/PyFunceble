@@ -64,3 +64,4 @@ from .directory_structure import DirectoryStructureDownloader as DirectoryStruct
 from .iana import IANADownloader as IANA
 from .ipv4_reputation import IPv4ReputationDownloader as IPv4Reputation
 from .publicsuffix import PublicSuffixDownloader as PublicSuffix
+from .user_agents import UserAgentsDownloader as UserAgents

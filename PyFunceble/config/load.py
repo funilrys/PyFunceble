@@ -221,6 +221,9 @@ Install and load the default configuration at the mentioned location? [y/n] "
         # We install the latest directory structure file.
         PyFunceble.downloader.DirectoryStructure()
 
+        # We install the lated user agents file.
+        PyFunceble.downloader.UserAgents()
+
     def __set_it(self, custom):
         """
         Sets the configuration at its final location and load the complementary infos.

@@ -597,15 +597,6 @@
 .. warning::
     This only have an effect when used along with the availability test.
 
-:code:`user_agent`
-^^^^^^^^^^^^^^^^^^
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"`
-
-    **Description:** Set the User-Agent to use every time we are requesting something from a web server other than our API.
-
 :code:`verify_ssl_certificate`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

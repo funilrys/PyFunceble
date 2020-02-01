@@ -100,6 +100,11 @@ class Infrastructure:
     :type: str
     """
 
+    USER_AGENT_FILENAME = "user_agents.json"
+    """
+    Sets the name of our own copy of the user agents file.
+    """
+
     IPV4_REPUTATION_FILENAME = "ipv4_reputation.data"
     """
     Sets the name of our own copy of the IPv4 reputation data file.

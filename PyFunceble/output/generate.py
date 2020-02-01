@@ -146,11 +146,13 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
             PyFunceble.OUTPUT_DIRECTORY + PyFunceble.OUTPUTS.parent_directory
         )
 
-        if PyFunceble.CONFIGURATION.user_agent:
+        user_agent = PyFunceble.engine.UserAgent().get()
+
+        if user_agent:
             # The user-agent (from the configuration file) is not empty.
 
             # We initiate the header to use with our request.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
+            self.headers = {"User-Agent": user_agent}
         else:
             # The user-agent (from the configuration file) is empty.
 

@@ -162,3 +162,24 @@ class NoDownloadLinkGiven(PyFuncebleInternalException):
     """
     Describes the fact that no download link was declared.
     """
+
+
+class UserAgentNotFound(PyFuncebleInternalException):
+    """
+    Describes the fact that we could not find a user
+    agent to work with.
+    """
+
+
+class UserAgentBrowserNotFound(PyFuncebleInternalException):
+    """
+    Describes the fact that we could not find a valid
+    browser to work with.
+    """
+
+
+class UserAgentPlatformNotFound(PyFuncebleInternalException):
+    """
+    Describes the fact that we could not find a valid
+    browser to work with.
+    """

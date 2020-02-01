@@ -100,12 +100,14 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
         PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
 
-        if PyFunceble.CONFIGURATION.user_agent:
+        user_agent = PyFunceble.engine.UserAgent().get()
+
+        if user_agent:
             # The user-agent is given.
 
             # We append the user agent to the header we are going to parse with
             # the request.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
+            self.headers = {"User-Agent": user_agent}
 
         if self.authorized:
             # We are authorized to operate.

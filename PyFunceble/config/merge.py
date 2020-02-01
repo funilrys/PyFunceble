@@ -118,8 +118,19 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         if (
             self._is_local_version_different_from_upstream()
             or self._should_links_be_updated()
+            or self._should_we_update_user_agent()
         ):
             self._load()
+
+    def _should_we_update_user_agent(self):
+        """
+        Checks if we have to update the user
+        agent index.
+        """
+
+        return "user_agent" not in self.local_config or not isinstance(
+            self.local_config["user_agent"], dict
+        )
 
     def _should_links_be_updated(self):
         """
@@ -167,6 +178,14 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
 
             self.new_config["links"][index] = self.upstream_config["links"][index]
 
+    def _merge_user_agent(self):
+        """
+        Simply merge the new user agent layout.
+        """
+
+        if self._should_we_update_user_agent():
+            self.new_config["user_agent"] = self.upstream_config["user_agent"]
+
     def _merge_values(self):
         """
         Simply merge the older into the new one.
@@ -213,6 +232,7 @@ class Merge:  # pragma: no cover pylint: disable=too-few-public-methods
         self.new_config = PyFunceble.helpers.Dict(self.new_config).remove_key(to_remove)
 
         self._merge_links()
+        self._merge_user_agent()
 
     def _save(self):
         """

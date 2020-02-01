@@ -120,12 +120,14 @@ class HTTPCode:  # pylint: disable=too-few-public-methods
         # We set the default status code.
         self.default = PyFunceble.HTTP_CODE.not_found_default
 
-        if PyFunceble.CONFIGURATION.user_agent:
+        user_agent = PyFunceble.engine.UserAgent().get()
+
+        if user_agent:
             # The user-agent is given.
 
             # We append the user agent to the header we are going to parse with
             # the request.
-            self.headers = {"User-Agent": PyFunceble.CONFIGURATION.user_agent}
+            self.headers = {"User-Agent": user_agent}
         else:
             # The user-agent is not given or is empty.
 

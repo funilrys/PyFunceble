@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the engine interfaces.
+Provides the downloader of the user agents file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -58,10 +58,26 @@ License:
     SOFTWARE.
 """
 
-from .auto_continue import AutoContinue
-from .auto_save import AutoSave
-from .logger import Logger
-from .mining import Mining
-from .mysql import MySQL
-from .sort import Sort
-from .user_agent import UserAgent
+import PyFunceble
+
+from .base import DownloaderBase
+
+
+class UserAgentsDownloader(DownloaderBase):
+    """
+    Provides the downloader of the user agents file.
+    """
+
+    DOWNTIME_INDEX = "user_agents"
+    REDOWNLOAD_AFTER = 1
+
+    def __init__(self):
+        self.download_link = PyFunceble.CONFIGURATION.links.user_agents
+        self.destination = (
+            f"{PyFunceble.CONFIG_DIRECTORY}"
+            f"{PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME}"
+        )
+
+        super().__init__()
+
+        self.process()
