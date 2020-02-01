@@ -274,6 +274,9 @@ DNS (resolver) control
     We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
     as :code:`INACTIVE`.
 
+.. note::
+    You can give the port along with the DNS server if needed.
+
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
 
@@ -778,6 +781,8 @@ Global overview
 
     DNS (resolver) control:
         --dns DNS [DNS ...]   Set one or more specific DNS servers to use during the test, separated by spaces.
+
+                                You can give the port along with the DNS server if needed.
                                 Configured value: OS (declared) DNS server
         --dns-lookup-over-tcp
                                 Make all DNS query with TCP.

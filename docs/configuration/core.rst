@@ -166,6 +166,9 @@
           - dns1.example.org
           - dns2.example.org
 
+.. note::
+    You can give the port along with the DNS server if needed.
+
 .. warning::
     We expect DNS server(s). If a non-DNS server is given. You'll get almost all results
     as :code:`INACTIVE`.

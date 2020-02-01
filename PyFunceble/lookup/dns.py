@@ -78,14 +78,20 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, dns_server=None, lifetime=3, tcp=False):
+        self.given_dns_server = dns_server
         self.resolver = self.__get_resolver(dns_server)
 
+        self.update_nameserver(dns_server)
         self.update_lifetime(lifetime)
         self.tcp = tcp
 
         PyFunceble.LOGGER.debug(
             f"DNS Resolver Nameservers: {self.resolver.nameservers}"
         )
+        PyFunceble.LOGGER.debug(
+            f"DNS Resolver (Nameservers) Port: {self.resolver.nameserver_ports}"
+        )
+        PyFunceble.LOGGER.debug(f"DNS Resolver Port: {self.resolver.port}")
         PyFunceble.LOGGER.debug(f"DNS Resolver timeout: {self.resolver.timeout}")
         PyFunceble.LOGGER.debug(f"DNS Resolver lifetime: {self.resolver.lifetime}")
         PyFunceble.LOGGER.debug(f"DNS Resolver over TCP: {self.tcp}")
@@ -95,7 +101,8 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             "given_dns_server": dns_server,
         }
 
-    def __get_resolver(self, dns_server):
+    @classmethod
+    def __get_resolver(cls, dns_server):
         """
         Provides the configured dns resolver.
         """
@@ -104,13 +111,12 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             # A dns server is given.
 
             PyFunceble.LOGGER.info(
-                f"DNS Server explicitly given, providing the given one."
+                f"DNS Server explicitly given, generating a new configurable resolver."
             )
             PyFunceble.LOGGER.debug(f"Given DNS server: {dns_server}")
 
             # We initiate and configure the resolver.
             resolver = dns.resolver.Resolver(configure=False)
-            resolver.nameservers = self.__get_dns_servers_from(dns_server)
 
             return resolver
 
@@ -142,10 +148,60 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         """
 
         if nameserver:
-            nameservers = self.__get_dns_servers_from(nameserver)
-            self.resolver.nameservers = nameservers
+            nameserver = (
+                [nameserver]
+                if not isinstance(nameserver, (list, tuple))
+                else nameserver
+            )
 
-            PyFunceble.LOGGER.info(f"Switched DNS nameserver to: {nameservers}")
+            self.resolver.nameserver_ports = {
+                z: y
+                for x, y in self.__get_server_and_port_from(nameserver)
+                for z in self.__get_dns_servers_from(x)
+            }
+
+            self.resolver.nameservers = list(self.resolver.nameserver_ports.keys())
+
+            PyFunceble.LOGGER.info(
+                f"Switched Resolver nameserver to: {self.resolver.nameservers}"
+            )
+            PyFunceble.LOGGER.info(
+                f"Switched Resolver nameserver port to: {self.resolver.nameserver_ports}"
+            )
+
+    def __get_server_and_port_from(self, inputed_dns):
+        """
+        Given a list or an input representing dns server,
+        we split the server from the port.
+
+        :param inputed_dns: The inputed DNS server(s).
+        :type input: str, list, tuple
+
+        :return:
+            A tuple with:
+
+            (The DNS, the port)
+        :rtype: tuple
+        """
+
+        if isinstance(inputed_dns, (list, tuple)):
+            result = []
+
+            for dns_server in inputed_dns:
+                result.append(self.__get_server_and_port_from(dns_server))
+
+            return result
+
+        if ":" in inputed_dns:
+            splited = inputed_dns.split(":")
+
+            if len(splited) > 1 and splited[-1] and splited[-1].isdigit():
+                return ":".join(splited[:-1]), int(splited[-1])
+
+            if not splited[-1]:
+                return ":".join(splited[:-1]), 53
+
+        return inputed_dns, 53
 
     def __get_dns_servers_from(self, inputed_dns):  # pragma: no cover
         """
