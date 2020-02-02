@@ -369,10 +369,10 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 dns_control_group.add_argument(
                     "--dns",
                     nargs="+",
-                    help="Set one or more specific DNS servers to use during the test, "
-                    "separated by spaces.\n\nYou can give the port along with "
-                    "the DNS server if needed. But, if omitted, the default "
-                    "port (53) will be used. %s"
+                    help="Set one or more DNS server(s) to use during testing. "
+                    "Separated by spaces.\n\nTo specify a port number for the "
+                    "DNS server you append it as :port [ip:port].\n\n"
+                    "If no port is specified, the default DNS port (53) is used. %s"
                     % (
                         current_value_format
                         + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))
