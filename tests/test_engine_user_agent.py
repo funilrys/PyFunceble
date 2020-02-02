@@ -166,13 +166,12 @@ class TestUserAgent(TestCase):
         Tests of the case that the end-user give us a custom user agent.
         """
 
-        expected = "Hello, World!"
-        old = PyFunceble.CONFIGURATION.user_agent.copy()
-        PyFunceble.CONFIGURATION.user_agent.custom = "Hello, World!"
+        expected = self.user_agent.dumped[PyFunceble.CONFIGURATION.user_agent.browser][
+            PyFunceble.CONFIGURATION.user_agent.platform
+        ]
+        actual = self.user_agent.get()
 
-        self.assertEqual(expected, self.user_agent.get())
-
-        PyFunceble.CONFIGURATION.user_agent = old
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
