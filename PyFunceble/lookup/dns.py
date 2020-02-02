@@ -169,7 +169,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 f"Switched Resolver nameserver port to: {self.resolver.nameserver_ports}"
             )
 
-    def __get_server_and_port_from(self, inputed_dns):
+    def __get_server_and_port_from(self, inputed_dns):  # pragma: no cover
         """
         Given a list or an input representing dns server,
         we split the server from the port.

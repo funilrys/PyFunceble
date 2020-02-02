@@ -17,6 +17,7 @@ omit =
     PyFunceble/core/file.py
     PyFunceble/core/multiprocess.py
     PyFunceble/core/simple.py
+    PyFunceble/downloader/*.py
     PyFunceble/engine/auto_save.py
     PyFunceble/engine/mysql.py
     PyFunceble/helpers/download.py
