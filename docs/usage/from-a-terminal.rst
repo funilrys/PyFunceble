@@ -788,9 +788,11 @@ Global overview
                                 Configured value: False
 
     DNS (resolver) control:
-        --dns DNS [DNS ...]   Set one or more specific DNS servers to use during the test, separated by spaces.
-
-                                You can give the port along with the DNS server if needed. But, if omitted, the default port (53) will be used.
+        --dns DNS [DNS ...]     Set one or more DNS server(s) to use during testing. Separated by spaces.
+                                To specify a port number for the DNS server you append it as :port [ip:port].
+                                
+                                If no port is specified, the default DNS port (53) is used.
+                                
                                 Configured value: OS (declared) DNS server
         --dns-lookup-over-tcp
                                 Make all DNS query with TCP.
