@@ -34,7 +34,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io//en/dev/!
 
 Want a local copy? We get you covered!
 
@@ -292,6 +292,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io//en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
