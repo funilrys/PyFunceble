@@ -27,10 +27,12 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
+-   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
 
+.. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@hawkeye116477: https://github.com/hawkeye116477

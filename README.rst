@@ -162,6 +162,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   ScriptTiger - `@ScriptTiger`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
+-   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
@@ -262,6 +263,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@asciinema: https://github.com/asciinema
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
