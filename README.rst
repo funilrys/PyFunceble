@@ -51,9 +51,6 @@ ___________________________________________
 What can PyFunceble do?
 -----------------------
 
-What can PyFunceble do?
-=======================
-
 - Test of the availability of a domain.
 - Test of the availability of an IPv4.
 - Test of the availability of an IPv6.
@@ -105,13 +102,34 @@ ___________________________________________
 Supporting the project
 ----------------------
 
-`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of :coffee:!
+
+`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of coffee!
 
 This project helps you and/or you like it?
 
+GitHub Sponsor
+""""""""""""""
+`@funilrys`_ is part of the GitHub Sponsor program!
+
+*GitHub will match all donation for the coming months!*
+
+.. image:: https://github.com/PyFunceble/logo/raw/master/pyfunceble_github.png
+    :target: https://github.com/sponsors/funilrys
+    :height: 70px
+
+`Sponsor me`_!
+
+Ko-Fi
+"""""
+
+Don't want to use the GitHub Sponsor program ?
+Single donation are welcome too!
+
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
-    :height: 36px
+    :height: 70px
+
+`Buy me a coffee`_!
 
 ___________________________________________
 
@@ -249,6 +267,7 @@ License
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft
+.. _@funilrys: https://github.com/funilrys
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@kennethreitz: https://github.com/kennethreitz
@@ -274,3 +293,5 @@ License
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
+.. _Sponsor me: https://github.com/sponsors/funilrys
+.. _Buy me a coffee: https://github.com/sponsors/funilrys
