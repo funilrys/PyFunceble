@@ -104,3 +104,23 @@ How to use the :code:`mysql` or :code:`mariadb` format?
 .. note::
     If the environment variables are not found, you will be asked to prompt the 
     information.
+
+Known limitations with MySQL and MariaDB
+----------------------------------------
+
+Do to a default setting that prevent users from creating stored functions that 
+will cause unsafe events to be written into the binary log, you will need to 
+contact your database manger (maybe your self) and ask them to
+
+1. set :code:`set global log_bin_trust_function_creators=1;` for your database **or**
+
+2. Import the given SQL script your self as SUPER-PRIVILIDGED user such as root.
+
+Search string:
+
+``pymysql.err.InternalError: (1419, 'You do not have the SUPER privilege and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)')``
+
+``You do not have the SUPER privilege and binary logging is enabled``
+
+.. note::
+    You can find the respective *.sql scripts at <https://github.com/funilrys/PyFunceble/tree/dev/db_types>
