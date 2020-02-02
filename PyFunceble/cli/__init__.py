@@ -159,7 +159,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--file",
                     type=str,
                     help="Read a local or remote (RAW link) file and test all domains inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it,\n "
                     "and test the content of the given RAW link as if it was a locally stored file.",
                 )
 
@@ -168,7 +168,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--url-file",
                     type=str,
                     help="Read a local or remote (RAW link) file and test all (full) URLs inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it,\n "
                     "and test the content of the given RAW link as if it was a locally stored file. "
                     "\n\nThis argument test if an URL is available. It ONLY test full URLs.",
                 )
@@ -350,7 +350,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--user-agent",
                     type=str,
                     help="Set the user-agent to use and set every time we "
-                    "interact with everything which is not the logs sharing system.",
+                    "interact with everything which\nis not the logs sharing system.",
                 )
 
                 test_control.add_argument(
