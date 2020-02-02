@@ -3,10 +3,10 @@
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
 --------------------------------------------------------------------------
 
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
@@ -34,7 +34,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/master/!
 
 Want a local copy? We get you covered!
 
@@ -292,6 +292,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

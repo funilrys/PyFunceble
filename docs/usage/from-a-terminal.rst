@@ -77,7 +77,7 @@ Source
 
     ::
 
-        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.travis/lists/url`
+        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/master/.travis/lists/url`
 
     will download the given URL and test for it's content assuming that each line represent a URL to test.
 
@@ -885,6 +885,6 @@ Global overview
         --directory-structure
                                 Generate the directory and files that are needed and which does not exist in the current directory.
 
-    For an in depth usage, examplation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
+    For an in depth usage, examplation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/master/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html
