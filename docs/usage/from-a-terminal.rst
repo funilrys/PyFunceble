@@ -177,7 +177,8 @@ You don't want to take the result of the HTTP code execution in consideration? T
 
     **Default value:** :code:`False`
 
-Want to run a test over a local or private network? This argument will disable the limitation which does not apply to private networks.
+Want to run a test over a local or private network? This argument will disable the limitation which does not apply to 
+private networks.
 
 :code:`-ns` | :code:`--no-special`
 """"""""""""""""""""""""""""""""""
@@ -186,7 +187,8 @@ Want to run a test over a local or private network? This argument will disable t
 
     **Default value:** :code:`False`
 
-Don't want to use/apply the SPECIAL rules - which are explaines in the source column section ? This argument disable them all.
+Don't want to use/apply the SPECIAL rules - which are explaines in the source column section ? This argument disable 
+them all.
 
 
 :code:`-nw` | :code:`--no-whois`
@@ -256,7 +258,8 @@ This argument will set the default timeout to apply everywhere it is possible to
     .. warning::
         If you activate the verification of the SSL/TLS certificate, you may get **false positive** results.
 
-        Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you will always get :code:`INACTIVE` as output.
+        Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you 
+	will always get :code:`INACTIVE` as output.
 
 
 DNS (resolver) control
@@ -303,7 +306,8 @@ Databases
 
     **Default value:** :code:`True`
 
-This argument will disable or enable the usage of a database which saves all `INACTIVE` and `INVALID` domain of the given file over time.
+This argument will disable or enable the usage of a database which saves all `INACTIVE` and `INVALID` domain of the 
+given file over time.
 
 .. note::
     The database is retested every x day(s), where x is the number set in :code:`-dbr "something"`.
@@ -334,7 +338,8 @@ This argument let us use different types of database.
     **Default value:** :code:`1`
 
 .. note::
-    This argument is only used if :code:`-db` or :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`-db` or :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are 
+    activated.
 
 :code:`-wdb` | :code:`--whois-database`
 """""""""""""""""""""""""""""""""""""""
@@ -358,17 +363,17 @@ Output control
 ::
 
 
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
+    Domain                                                             Status      Expiration Date   Source     HTTP Code
+    ------------------------------------------------------------------ ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io                                          ACTIVE      Unknown           NSLOOKUP   302
 
 **When deactivated:**
 
 ::
 
-    Domain                                                                                               Status      HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302
+    Domain                                                             Status      HTTP Code
+    ------------------------------------------------------------------ ----------- ----------
+    pyfunceble.readthedocs.io                                          ACTIVE      302
 
 :code:`-ex` | :code:`--execution`
 """""""""""""""""""""""""""""""""
@@ -418,18 +423,18 @@ This argument will let the system know if it has to generate the hosts file vers
 
 ::
 
-    Domain                                                                                               Status      HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302
+    Domain                                                             Status      HTTP Code
+    ------------------------------------------------------------------ ----------- ----------
+    pyfunceble.readthedocs.io                                          ACTIVE      302
 
 **When deactivated:**
 
 ::
 
 
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
+    Domain                                                             Status      Expiration Date   Source     HTTP Code
+    ------------------------------------------------------------------ ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io                                          ACTIVE      Unknown           NSLOOKUP   302
 
 :code:`-nf` | :code:`--no-files`
 """"""""""""""""""""""""""""""""
@@ -535,7 +540,8 @@ Want to speed up the test time? This argument will allow the usage of multiple p
     With the :code:`end` value, the merging of cross process data is made at the very end of the current instance.
 
 .. note::
-    With the :code:`live` value, the merging of cross process data is made after the processing of the maximal number of process.
+    With the :code:`live` value, the merging of cross process data is made after the processing of the maximal number 
+    of process.
 
     Which means that if you allow 5 processes, we will run 5 tests, merge, run 5 tests, merge and so on until the end.
 
@@ -607,7 +613,8 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which have to be executed when we reached the 
+    end of the given file.
 
 .. note::
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
@@ -620,7 +627,8 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end 
+    of the given file.
 
 .. note::
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
@@ -638,7 +646,8 @@ This argument allows us to set a custom commit message which is going to be used
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are used.
 
 .. note::
-    This argument is only used if we have to split the work into multiple processes because a list is too long or the timeout is reached.
+    This argument is only used if we have to split the work into multiple processes because a list is too long or the 
+    timeout is reached.
 
 .. warning::
     Please avoid the usage of :code:`[ci skip]` here.
@@ -698,7 +707,8 @@ As it is sometimes needed to clean our :code:`output/` directory, this argument 
 Want to start without anything? This argument generates the output directory automatically for you!
 
 .. note::
-    In case of a file or directory not found issue, it's recommended to remove the :code:`dir_structure.json` along with the `output/` directory before using this argument.
+    In case of a file or directory not found issue, it's recommended to remove the :code:`dir_structure.json` along 
+    with the `output/` directory before using this argument.
 
 Global overview
 ^^^^^^^^^^^^^^^
@@ -782,7 +792,8 @@ Global overview
                                 Switch the value of the reputation data usage.
                                 Configured value: False
         -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
+                                Set the user-agent to use and set every time we interact with everything 
+				which is not the logs sharing system.
         -vsc, --verify-ssl-certificate
                                 Switch the value of the verification of the SSL/TLS certificate when testing for URL.
                                 Configured value: False
@@ -799,7 +810,8 @@ Global overview
                                 Configured value: False
 
     Databases:
-        -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
+        -db, --database		Switch the value of the usage of a database to store inactive domains of the 
+				currently tested list.
                                 Configured value: True
         --database-type DATABASE_TYPE
                                 Tell us the type of database to use.
@@ -809,7 +821,8 @@ Global overview
                                 Set the numbers of days between each retest of domains present into inactive-db.json.
                                 Configured value: 1
         -wdb, --whois-database
-                                Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
+                                Switch the value of the usage of a database to store whois data in order to avoid whois 
+				servers rate limit.
                                 Configured value: True
 
     Output control:
@@ -885,8 +898,11 @@ Global overview
         --clean               Clean all files under the output directory.
         --clean-all           Clean all files under the output directory along with all file generated by PyFunceble.
         --directory-structure
-                                Generate the directory and files that are needed and which does not exist in the current directory.
+				Generate the directory and files that are needed and which does not exist 
+				in the current directory.
 
-    For an in depth usage, examplation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io//en/dev/
+    For an in depth usage, examplation and examples of the arguments, you should read the documentation at 
+    https://pyfunceble.readthedocs.io//en/dev/
 
-    Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html
+    Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && 
+    https://pyfunceble.github.io/special-thanks.html
