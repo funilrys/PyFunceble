@@ -74,7 +74,7 @@ class Package:
     """
 
 
-    VERSION = "3.0.1.dev (Teal Blauwbok)"
+    VERSION = "3.0.0.dev (Teal Blauwbok)"
 
     """
     Sets the package version.
