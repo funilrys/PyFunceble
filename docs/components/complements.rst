@@ -31,4 +31,4 @@ to
 
     generate_complements: True
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--complementsF` argument from the CLI to activate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--complements` argument from the CLI to activate it.

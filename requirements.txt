@@ -1,7 +1,9 @@
 colorama
+cryptography
 dnspython
 domain2idna>=1.6.1
 PyMySQL
+python-box
 python-dotenv
 PyYAML
 requests

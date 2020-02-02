@@ -3,13 +3,17 @@ What can PyFunceble do?
 
 - Test of the availability of a domain.
 - Test of the availability of an IPv4.
+- Test of the availability of an IPv6.
 - Test of the availability of a URL.
 - Test of the availability of a domain/DNS name in a private or local network.
 - Test of the availability of an IPv4 in a private or local network.
+- Test of the availability of an IPv6 in a private or local network.
 - Test of the availability of a URL in a private or local network.
 - Test of the syntax of a domain.
 - Test of the syntax of an IPv4.
+- Test of the syntax of an IPv6.
 - Test of the syntax of a URL.
+- Test of the AlienVault's reputation of an IPv4.
 - Test of domain or IP which are present into an Adblock formatted file.
 - Test from a given raw link.
 - Test using multiprocessing (from CLI only).
@@ -28,10 +32,11 @@ What can PyFunceble do?
 - Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
 - Print the execution time on screen and file.
 - Customization of the different option via command-line arguments or configuration file.
-- Continuous tests under Travis CI with the help of an auto saving and database system.
+- Continuous tests under Travis CI or GitLab CI/CI
 
+  - ... with the help of an auto saving and database system.
   - Set branch to push the result to for the autosaving system.
-  - Set the minimal time before we autosave in order to avoid Travis CI limitation.
+  - Set the minimal time before we autosave in order to avoid CI/CD limitation.
   - Set a command to execute at the end of the test.
   - Set the commit message for the autosaving system.
 

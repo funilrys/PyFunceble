@@ -2,7 +2,7 @@ Whois Lookup
 ============
 
 .. note::
-    While testing using PyFunceble, subdomains and IPv4 are not used against our whois lookup logic.
+    While testing using PyFunceble, subdomains, IPv4 and IPv6 are not used against our whois lookup logic.
 
 Why do we need it?
 ------------------
@@ -14,7 +14,7 @@ How does it work?
 -----------------
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.whois_lookup.WhoisLookup`!
+    Want to read the code ? It's here :func:`~PyFunceble.lookup.whois.WhoisLookup`!
 
 For us the only relevant part is the extraction of the expiration date. Indeed, it's an indicator if a domains
 is still owned by someone, we use it first to get the availability of domains.

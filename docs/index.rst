@@ -1,8 +1,8 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
     :alt: PyFunceble logo
 
-The tool to check the availability or syntax of domains, IPv4 or URL.
-=====================================================================
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+===========================================================================
 
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
@@ -14,7 +14,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
     :target: https://github.com/funilrys/PyFunceble/releases/latest
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -54,7 +54,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Facts
 
-   facts/they-use-it
+   facts/they-use-d-it
    facts/faq
    facts/known_issues
    facts/contact
@@ -63,41 +63,31 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :maxdepth: 3
    :caption: Use Dead-Hosts if you can't!
 
-   dead-hosts/why
-   dead-hosts/how
-   dead-hosts/history
+   dead-hosts/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Installation
 
-   installation/requirements
-   installation/stable
-   installation/dev
-   installation/first-steps
+   installation/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Update
 
-   update/stable
-   update/dev
+   update/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Configuration
 
-   configuration/location
-   configuration/auto
-   configuration/indexes
+   configuration/index
 
 .. toctree::
    :maxdepth: 3
    :caption: Usage
 
-   usage/from-a-terminal
-   usage/from-travis-ci
-   usage/with-our-python-api
+   usage/index
 
 .. toctree::
    :maxdepth: 3
@@ -151,8 +141,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Contributing
 
    contributing/submit
-   contributing/before_commit
-   contributing/the_commit
    contributing/coding_conventions
 
 .. toctree::
@@ -160,40 +148,21 @@ As an example, its auto-continue system coupled with its auto-save system allows
    :caption: Code documentation
 
    code/logic-representation
-   code/helpers
-   code/adblock
-   code/api_core
-   code/auto_continue
-   code/auto_save
    code/check
-   code/clean
-   code/cli_core
+   code/exceptions
+   code/abstracts
+   code/cli
    code/config
-   code/directory_structure
-   code/dispatcher
-   code/dns_lookup
-   code/execution_time
-   code/expiration_date
-   code/file_core
-   code/generate
-   code/http_code
-   code/iana
-   code/inactive_db
-   code/logs
-   code/mining
-   code/percentage
-   code/preset
-   code/prints
-   code/production
-   code/publicsuffix
-   code/referer
-   code/simple_core
-   code/sort
-   code/sqlite
+   code/converter
+   code/core
+   code/database
+   code/downloader
+   code/engine
+   code/extractor
+   code/helpers
+   code/lookup
+   code/output
    code/status
-   code/whois_db
-   code/whois_lookup
-
 
 Indices and tables
 ==================

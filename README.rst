@@ -1,7 +1,7 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
-The tool to check the availability or syntax of domains, IPv4 or URL
---------------------------------------------------------------------
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
+--------------------------------------------------------------------------
 
 .. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
     :target: https://travis-ci.com/funilrys/PyFunceble
@@ -10,7 +10,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
     :target: https://github.com/funilrys/PyFunceble/releases/latest
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -53,15 +53,20 @@ What can PyFunceble do?
 
 - Test of the availability of a domain.
 - Test of the availability of an IPv4.
-- Test of the availability of an URL.
+- Test of the availability of an IPv6.
+- Test of the availability of a URL.
 - Test of the availability of a domain/DNS name in a private or local network.
 - Test of the availability of an IPv4 in a private or local network.
-- Test of the availability of an URL in a private or local network.
+- Test of the availability of an IPv6 in a private or local network.
+- Test of the availability of a URL in a private or local network.
 - Test of the syntax of a domain.
 - Test of the syntax of an IPv4.
-- Test of the syntax of an URL.
+- Test of the syntax of an IPv6.
+- Test of the syntax of a URL.
+- Test of the AlienVault's reputation of an IPv4.
 - Test of domain or IP which are present into an Adblock formatted file.
 - Test from a given raw link.
+- Test using multiprocessing (from CLI only).
 - Save test result(s) on file(s) (hosts file, plain text and/or JSON format).
 - Show test result(s) on screen.
 - Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`, :code:`INVALID`)
@@ -77,17 +82,18 @@ What can PyFunceble do?
 - Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
 - Print the execution time on screen and file.
 - Customization of the different option via command-line arguments or configuration file.
-- Continuous tests under Travis CI with the help of an auto saving and database system.
+- Continuous tests under Travis CI or GitLab CI/CI
 
+  - ... with the help of an auto saving and database system.
   - Set branch to push the result to for the autosaving system.
-  - Set the minimal time before we autosave in order to avoid Travis CI limitation.
+  - Set the minimal time before we autosave in order to avoid CI/CD limitation.
   - Set a command to execute at the end of the test.
   - Set the commit message for the autosaving system.
 
 - ... and a lot more!
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
 Please report to the `documentation for more GIF`_.
 
@@ -96,13 +102,34 @@ ___________________________________________
 Supporting the project
 ----------------------
 
-`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of :coffee:!
+
+`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of coffee!
 
 This project helps you and/or you like it?
 
+GitHub Sponsor
+""""""""""""""
+`@funilrys`_ is part of the GitHub Sponsor program!
+
+*GitHub will match all donation for the coming months!*
+
+.. image:: https://github.com/PyFunceble/logo/raw/master/pyfunceble_github.png
+    :target: https://github.com/sponsors/funilrys
+    :height: 70px
+
+`Sponsor me`_!
+
+Ko-Fi
+"""""
+
+Don't want to use the GitHub Sponsor program ?
+Single donation are welcome too!
+
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
-    :height: 36px
+    :height: 70px
+
+`Buy me a coffee`_!
 
 ___________________________________________
 
@@ -126,11 +153,15 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
+-   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Odyseus - `@Odyseus`_
+-   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
+-   sjhgvr - `@sjhgvr`_
 -   ScriptTiger - `@ScriptTiger`_
 -   speedmann - `@speedmann`_
+-   spirillen - `@spirillen`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
@@ -168,8 +199,9 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Adam Warner - `@PromoFaux`_
 -   Adblock Plus - `@adblockplus`_
 -   asciinema - `@asciinema`_
--   Daniel - `@dnmTX`_
 -   Bob Halley - `@rthalley`_ (`DNSPython`_)
+-   Chris Griffith - `@cdgriffith`_ (`Box`_)
+-   Daniel - `@dnmTX`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
 -   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
@@ -181,6 +213,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Saurabh Kumar - `@theskumar`_ (`python-dotenv`_)
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
+-   spirillen - `@spirillen`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
 -   `yWorks`_ - (`yEd Graph Editor`_)
 
@@ -192,7 +225,7 @@ License
 
     MIT License
 
-    Copyright (c) 2017, 2018, 2019 Nissar Chababy
+    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -212,6 +245,7 @@ License
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
+.. _Box: https://github.com/cdgriffith/Box
 .. _colorama: https://github.com/tartley/colorama
 .. _Dead-Hosts: https://github.com/dead-hosts
 .. _DNSPython: https://github.com/rthalley/dnspython
@@ -229,21 +263,27 @@ License
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@asciinema: https://github.com/asciinema
+.. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft
+.. _@funilrys: https://github.com/funilrys
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@kennethreitz: https://github.com/kennethreitz
+.. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@Odyseus: https://github.com/Odyseus
+.. _@opav: https://github.com/opav
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@rthalley: https://github.com/rthalley
 .. _@ScriptTiger: https://github.com/ScriptTiger
+.. _@sjhgvr: https://github.com/sjhgvr
 .. _@SMed79: https://github.com/SMed79
 .. _@speedmann: https://github.com/speedmann
+.. _@spirillen: https://github.com/spirillen
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@Wally3K: https://github.com/WaLLy3K
@@ -253,3 +293,5 @@ License
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
+.. _Sponsor me: https://github.com/sponsors/funilrys
+.. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

@@ -1,5 +1,5 @@
 Using the PyFunceble (Python) API
-=================================
+---------------------------------
 
 If you are working with a python script, module or even class,
 you can integrate **PyFunceble** to your main logic by importing
@@ -9,7 +9,7 @@ This section will present some example of the way you can interact
 with PyFunceble from anything written in Python.
 
 Get the availability of domains or IP
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.
@@ -78,7 +78,7 @@ Get the availability of domains or IP
         print_result(domain, PyFunceble(domain))
 
 Get the availability of URL
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.
@@ -143,7 +143,7 @@ Get the availability of URL
         print_result(url, PyFunceble(url))
 
 Complete dataset while getting the avaibility of domains, IPs or URL
---------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While using our API, you can request to see/get everything with the help of the :code:`complete=True` argument.
 
@@ -169,7 +169,7 @@ You'll then get the following :code:`dict` as output.
     }
 
 Set custom configuration index while getting the avaibility of domains, IPs or URL
-----------------------------------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 While using PyFunceble, you might want to set or overwritte a default behaviour.
 
@@ -197,7 +197,7 @@ As example, you can do it like follow:
     ## We can then play with PyFunceble and/or other business logic ...
 
 Locally
-^^^^^^^
+"""""""
 
 To set globally simply parse your configuration along with the test method.
 
@@ -218,7 +218,7 @@ As example, you can do it like follow:
 
 
 Check the syntax of domains
----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.
@@ -284,7 +284,7 @@ Check the syntax of domains
 
 
 Check the syntax of IPv4s
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.
@@ -294,7 +294,7 @@ Check the syntax of IPv4s
     """
     This is an example which respond to the following problematic(s):
 
-        * How can I check the syntax of an IPv4 with PyFunceble ?
+        * How can I check the syntax of an IPv4/IPv6 with PyFunceble ?
     """
 
     # We want some coloration so we import the tool do to that :)
@@ -304,7 +304,7 @@ Check the syntax of IPv4s
     # We import the configuration loader.
     from PyFunceble import load_config
     # We import the test method of the PyFunceble API.
-    from PyFunceble import is_ipv4 as PyFunceble
+    from PyFunceble import is_ip as PyFunceble
 
     # We initiate the list of IPs we are going to test.
     IPS = ["216.58.207.46", "257.58.207.46"]
@@ -342,7 +342,7 @@ Check the syntax of IPv4s
         print_syntax_result(ip, PyFunceble(ip))
 
 Check the syntax of URLs
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.

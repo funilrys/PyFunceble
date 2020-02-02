@@ -8,17 +8,27 @@ omit =
     /home/travis/virtualenv/*
     *.eggs/*
     */distutils/*
+    PyFunceble/config/*
 
     # omit the following file
-    PyFunceble/api_core.py
-    PyFunceble/auto_save.py
-    PyFunceble/config.py
-    PyFunceble/dispatcher.py
-    PyFunceble/production.py
-    PyFunceble/simple_core.py
-    PyFunceble/whois.py
-    PyFunceble/sqlite.py
-    PyFunceble/mysql.py
+    PyFunceble/cli/dispatcher.py
+    PyFunceble/cli/production.py
+    PyFunceble/core/api.py
+    PyFunceble/core/file.py
+    PyFunceble/core/multiprocess.py
+    PyFunceble/core/simple.py
+    PyFunceble/downloader/*.py
+    PyFunceble/engine/auto_save.py
+    PyFunceble/engine/mysql.py
+    PyFunceble/helpers/download.py
+    PyFunceble/lookup/requests.py
+    PyFunceble/lookup/ipv4_reputation.py
+    PyFunceble/output/clean.py
+    PyFunceble/output/constructor.py
+    PyFunceble/output/generate.py
+    PyFunceble/output/logs.py
+    PyFunceble/status/*
+    PyFunceble/engine/ci/*
 
 [report]
 # This should be False one we move into production
@@ -42,17 +52,18 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
+    if tcp is None:
 
     # Don't complain for those blocks
-    PyFunceble\.CONFIGURATION\["db_type"\] == "sqlite"
-    PyFunceble\.CONFIGURATION\["db_type"\] == "mariadb"
-    PyFunceble\.CONFIGURATION\["db_type"\] in \["mariadb", "mysql"\]
-    PyFunceble\.CONFIGURATION\["db_type"\] in \["sqlite", "mariadb", "mysql"\]
+    PyFunceble\.CONFIGURATION\.db_type == "mariadb"
+    PyFunceble\.CONFIGURATION\.db_type in \["mariadb", "mysql"\]
 
     # Don't complain about those.
     _json
     _mysql
     _sqlite
+    PyFunceble\.Logger\(\)
+    Logger\(\)
 
 
 ignore_errors = True

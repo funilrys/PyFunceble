@@ -5,7 +5,7 @@ HTTP Code
   This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
 
 .. note::
-  A :code:`***` in this column means that it was impossible to catch the HTTP status code from the web server.
+  A :code:`XXX` in this column means that it was impossible to catch the HTTP status code from the web server.
 
 .. note::
   The Status Codes we give to PyFunceble to test with can be fully customized in your own :code:`.PyFunceble.yaml`.
@@ -14,7 +14,7 @@ As active
 ---------
 
 .. note::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
+  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
 
 .. warning::
   While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status

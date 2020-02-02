@@ -8,9 +8,10 @@ HTTP Code
 
 This source is returned when **all the following cases** are met:
 
-- We can't extract the expiration date from :func:`PyFunceble.whois.Whois.request`.
+- We can't extract the expiration date from :func:`~PyFunceble.whois.Whois.request`.
 - The :code:`INACTIVE` status is the one returned by other methods.
-- :func:`PyFunceble.http_code.HTTPCode.get` outputs is one the following :code:`[100, 101, 200, 201, 202, 203, 204, 205, 206]`.
+- :func:`~PyFunceble.http_code.HTTPCode.get` outputs is different from the default one
+  (:code:`XXX`) and the other methods provides the :code:`INACTIVE` status.
 
 SYNTAX
 ------
@@ -21,7 +22,7 @@ The usage of this source comes from the comparison of the element against our do
 DNSLOOKUP
 ---------
 
-This source is always returned when the taken decision of the status of the domain/IP comes from :func:`PyFunceble.dns_lookup.DNSLookup.request` outputs.
+This source is always returned when the taken decision of the status of the domain/IP comes from :func:`~PyFunceble.dns_lookup.DNSLookup.request` outputs.
 
 SPECIAL
 -------
@@ -31,12 +32,12 @@ So I introduced the SPECIAL source.
 
 
 .. note::
-    Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :func:`PyFunceble.http_code.HTTPCode.get`.
+    Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :func:`~PyFunceble.http_code.HTTPCode.get`.
 
 .. warning::
     Do not want those rules ? You can use following to disable them.
 
-    * :code:`-ns`|:code:`--no-special` arguments from the CLI.
+    * :code:`-ns|--no-special` arguments from the CLI.
     * :code:`no_special: True` into your local configuration file.
 
 :code:`*.blogspot.*`
@@ -51,8 +52,8 @@ So I introduced the SPECIAL source.
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
-:code:`*.doubleclick.net`
-^^^^^^^^^^^^^^^^^^^^^^^^^
+:code:`*.github.io`
+^^^^^^^^^^^^^^^^^^^
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
@@ -80,3 +81,15 @@ IP with range
 ^^^^^^^^^^^^^
 
 - All IPv4 with a range (for example :code:`0.0.0.0/24`) are returned as :code:`ACTIVE`
+- All IPv6 with a range (for example :code:`2001:db8::/43`) are returned as :code:`ACTIVE`
+
+Reputation
+^^^^^^^^^^
+
+If the :code:`--use-reputation-data` argument is activated
+or the :code:`use_reputation_data` index of your
+configuration file is active, the following apply.
+
+- All IPv4 and IPv6 which are present into the AlienVault public
+  reputation data are returned as :code:`ACTIVE`
+

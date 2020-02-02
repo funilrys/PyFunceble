@@ -1,5 +1,5 @@
 Why Dead-Hosts?
-===============
+---------------
 
 We are conscient that PyFunceble may run for days, that's why we
 offer you to request your list to be `tested at Dead-Hosts`_.

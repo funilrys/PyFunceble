@@ -1,11 +1,15 @@
 # Enable / disable the adblock format decoding.
 adblock: False
+# Enable / disable a more aggresive decoding of the adblock format (WARNING: This is experimental)
+aggressive: False
 # Enable / disable the auto continue system.
 auto_continue: True
 # Set the command to run before each commit (except the final one).
 command: ""
 # Set the command to run before the final commit.
 command_before_end: ""
+# Set the number of seconds to wait between each test.
+cooldown_time: null
 # Set the custom IP to use when we generate a line in the hosts file format.
 custom_ip: "0.0.0.0"
 # Set the number of day(s) between each retest of the INACTIVE and INVALID elements which are present into inactive_db.json
@@ -14,6 +18,8 @@ days_between_db_retest: 1
 db_type: json
 # Enable / disable the generation of debug file(s).
 debug: False
+# Enable / disable the DNS Lookup through the TCP protocol.
+dns_lookup_over_tcp: False
 # Set the DNS server to use. If None is given we use the one given by the OS.
 # Note:
 #   The following format is expected if you want to give custom dns server.
@@ -52,6 +58,8 @@ maximal_processes: 25
 mining: False
 # Enable / Disable the usage of multiple processes.
 multiprocess: False
+# Set the merging mode. Available: end, live
+multiprocess_merging_mode: end
 # Enable / Disable the generation of any file(s).
 no_files: False
 # Enable / Disable the usage of the SPECIAL rule(s).
@@ -62,8 +70,11 @@ no_whois: False
 plain_list_domain: False
 # Enable / Disable the generation of output on screen.
 quiet: False
-# Set the timeout to apply to every HTTP status code requests.
-seconds_before_http_timeout: 3
+# Enable/Disable the usage of the reputation data.
+use_reputation_data: False
+# Enable/Disable the reputation checking mode.
+# In this mode we only check against the reputation.
+reputation: False
 # Enable / disable the logs sharing.
 share_logs: False
 # Enable / disable the output of the execution time.
@@ -77,20 +88,30 @@ split: True
 # Enable / disable the syntax checking mode.
 # In this mode we do not check for the availability. It's just syntax check.
 syntax: False
-# Enable / disable the Travis CI autosave system.
-travis: False
+# Set the timeout to apply when a timeout can be set.
+timeout: 5
+# Enable / disable the CI autosave system.
+ci: False
 # Set the default commit message we have to use when have to save but we did not finished the test.
-travis_autosave_commit: "PyFunceble - AutoSave"
+ci_autosave_commit: "PyFunceble - AutoSave"
 # Set the default final commit message we have to usve when have to save and we finished the test.
-travis_autosave_final_commit: "PyFunceble - Results"
+ci_autosave_final_commit: "PyFunceble - Results"
 # Set the minimum of minutes we have to run before to automatically save our test results.
-travis_autosave_minutes: 15
-# Set the git branch where we are going to push our results.
-travis_branch: master
+ci_autosave_minutes: 15
+# Set the git branch where we are going to work from.
+ci_branch: master
+# Set the destination branch. The destination branch is the branch which will merge the travis_branch at the very end.
+# So for example:
+#   We have a `dev` branch which can be used as processing branch.
+#   We have a `master` branch (our distribution branch) which is used to distribute the results.
+ci_distribution_branch: master
 # Activate/Deactivate the generation of unified files for the results logs.
 unified: False
 # Set the default user agent use when requesting the HTTP code.
-user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
+user_agent:
+  browser: chrome
+  platform: linux
+  custom: null
 # Enable / disable the verification of the certificate when testing for URL.
 verify_ssl_certificate: False
 # Enable / disable the usage of a database to store the hash of the whois record
@@ -105,12 +126,10 @@ outputs:
     public_suffix: public-suffix.json
     mining: mining.json
     whois_db: whois_db.json
-    sqlite: pyfunceble.db
 
   db_type:
     directory: db_types
     files:
-      sqlite: sqlite.sql
       mariadb: mariadb.sql
       mysql: mysql.sql
 
@@ -191,14 +210,24 @@ status:
       - strange
       - suspicious
       - hum
+    malicious:
+      - malicious
+      - bad_actor
+    sane:
+      - sane
+      - safe
+    not_malicious:
   official:
     up: ACTIVE
     down: INACTIVE
     invalid: INVALID
     valid: VALID
+    malicious: MALICIOUS
+    sane: SANE
 
 http_codes:
   active: True
+  not_found_default: "XXX"
   list:
     up:
       - 100
@@ -250,10 +279,11 @@ links:
   api_no_referer: "https://pyfunceble.funilrys.com/api/no-referer"
   config: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"
   dir_structure: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/dir_structure_production.json"
-  iana: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json"
+  iana: "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"
+  ipv4_reputation: "https://reputation.alienvault.com/reputation.data"
   mariadb: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/db_types/mariadb.sql"
   mysql: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/db_types/mysql.sql"
-  psl: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/public-suffix.json"
+  psl: "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/requirements.txt"
-  sqlite: "https://raw.githubusercontent.com/funilrys/PyFunceble/master/db_types/sqlite.sql"
+  user_agents: "https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json"

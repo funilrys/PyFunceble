@@ -1,10 +1,12 @@
 From a Travis CI container
-==========================
+--------------------------
 
-As we offer an argument named :code:`--travis` to activate the usage of PyFunceble in a Travis CI instance, we document here what you need to know!
+As we offer an argument named :code:`--ci` to activate 
+the usage of PyFunceble in a Travis CI instance,
+we document here what you need to know!
 
 Configuration
--------------
+^^^^^^^^^^^^^
 
 .. note::
    This part only present a commented :code:`.travis.yml` so that you can understand where to start.
@@ -25,10 +27,6 @@ Configuration
             - GIT_NAME: Travis CI
             # This is the Git Email we have to set. (git config user.email)
             - GIT_EMAIL: dead-hosts@funilrys.com
-            # This is the full slug of the repository we are working with.
-            - TRAVIS_REPO_SLUG: dead-hosts/repository-structure
-            # This is the branch we have to checkout and push to.
-            - GIT_BRANCH: master
 
     # This is the language we use.
     language: python
@@ -58,9 +56,9 @@ Configuration
         # We move inside it.
         - cd PyFunceble-tests
         # We test the file `my_awesome_list` which is located inside the current directory.
-        # Note: we precise the `--travis` argument here,
+        # Note: we precise the `--ci` argument here,
         #     but you work without it if you set `travis: true` inside your `.PyFunceble.yaml`
-        - PyFunceble --travis -f my_awesome_list --plain
+        - PyFunceble --ci -f my_awesome_list --plain
 
     # The following initiate email notification logic.
     notifications:
@@ -69,7 +67,7 @@ Configuration
         on_failure:   always
 
 Getting a GitHub token
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 For the :code:`secure` index of the :code:`.travis.yml` file, you have to generate a `new GitHub token`_.
 
@@ -80,8 +78,8 @@ After you got your token, please write it or save it in a safe place as you're g
 
 .. _new GitHub token: https://github.com/settings/tokens/new
 
-Encrypting the token future usage under the Travis CI container
----------------------------------------------------------------
+Encrypting the token for future usage under the Travis CIs' containers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To encrypt the token simply replace and execute the following according to your personal case.
 

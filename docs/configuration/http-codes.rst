@@ -1,5 +1,5 @@
 :code:`http_codes`
-------------------
+^^^^^^^^^^^^^^^^^^
 
     **Type:** :code:`dict`
 
@@ -22,7 +22,7 @@
     **Description:** Categorize the http status code as mentioned in the documentation related to the :code:`HTTP Code` column.
 
 :code:`http_codes[list][up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -42,7 +42,7 @@
     **Description:** List the HTTP status codes which are considered as :code:`ACTIVE`.
 
 :code:`http_codes[list][potentially_down]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 
@@ -64,7 +64,7 @@
 
 
 :code:`http_codes[list][potentially_up]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`list`
 

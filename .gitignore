@@ -104,10 +104,15 @@ venv.bak/
 .mypy_cache/
 
 # Project related
+.pyfunceble_intern_downtime.json
 .pyfunceble-env
 .PyFunceble.yaml
 dir_structure.json
+iana-domains-db.json
 inactive_db.json
 mining.json
+public-suffix.json
 pyfunceble.db
 whois_db.json
+ipv4_reputation.data
+user_agents.json

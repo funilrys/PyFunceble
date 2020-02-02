@@ -1,8 +1,8 @@
 Location
-========
+--------
 
 Problematics
-------------
+^^^^^^^^^^^^
 
 * How can we create a more efficient way to work with configuration?
 * How can we make the configuration file(s) available globally so that PyFunceble can be run everywhere in the user workspace?
@@ -10,7 +10,7 @@ Problematics
 To answer those problematics, we moved the configuration location elsewhere in the place where most users expect to have their configuration file(s).
 
 Repository clone
-----------------
+^^^^^^^^^^^^^^^^
 
 If you cloned the repository and you're trying to test from a cloned directory (the one with for example :code:`CONTRIBUTING.md`) we consider the configuration directory as the current one.
 
@@ -18,7 +18,7 @@ If you cloned the repository and you're trying to test from a cloned directory (
     This behavior allows us to not modify the way we develop PyFunceble.
 
 Travis CI
----------
+^^^^^^^^^
 
 Under `Travis CI`_, we search or initiate the configuration at the directory we are currently located.
 
@@ -30,8 +30,22 @@ Under `Travis CI`_, we search or initiate the configuration at the directory we 
 
 .. _Travis CI: https://travis-ci.org/
 
+GitLab CI/CD
+^^^^^^^^^^^^
+
+Under `GitLab CI/CD`_, we search or initiate the configuration at the directory we are currently located.
+
+.. warning::
+    We don't care about the distribution, as long as the :code:`PROJECT_CI` and :code:`GITLAB_CI` environment variables are set,
+    we search or initiate the configuration in the current directory.
+
+.. note::
+    If you want to force the directory where we should work, you can initiate the :code:`PYFUNCEBLE_CONFIG_DIR` environment variable with the path where we should work.
+
+.. _GitLab CI/CD: https://docs.gitlab.com/ee/ci/
+
 Linux and MacOS (Darwin Kernel)
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Under Linux and MacOS, we look for the following directories in their order. If any configuration directory is found, the system proposes you to install them automatically on the first configuration file.
 
@@ -46,7 +60,7 @@ Under Linux and MacOS, we look for the following directories in their order. If 
     But if the :code:`~/.config` directory does not exist, we fallback to :code:`~/.PyFunceble` as the configuration location.
 
 Windows
--------
+^^^^^^^
 
 As mentioned by `Pat Altimore's`_ Blog, we used the :code:`Per user configuration files synchronized across domain joined machines via Active Directory Roaming` section in order to understand what we should do to find our configuration directory.
 
@@ -69,7 +83,7 @@ Under Windows, we look for the following directories in their order. If any conf
     But if the :code:`%APPDATA%` directory does not exist, we fall back to the current directory as the configuration location.
 
 Custom location
----------------
+^^^^^^^^^^^^^^^
 
 Sometimes, you may find yourself in a position where you absolutely do not want PyFunceble to use its default configuration location.
 

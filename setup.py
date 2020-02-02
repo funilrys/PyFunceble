@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -56,7 +56,7 @@ License:
 
     MIT License
 
-    Copyright (c) 2017, 2018, 2019 Nissar Chababy
+    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -110,9 +110,15 @@ def _get_version():
     """
 
     to_match = comp(r'VERSION\s=\s"(.*)"\n')
-    extracted = to_match.findall(
-        open("PyFunceble/__init__.py", encoding="utf-8").read()
-    )[0]
+
+    try:
+        extracted = to_match.findall(
+            open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
+        )[0]
+    except FileNotFoundError:  # pragma: no cover
+        extracted = to_match.findall(
+            open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
+        )[0]
 
     return ".".join([x for x in extracted.split(".") if x.isdigit()])
 
@@ -131,25 +137,46 @@ if __name__ == "__main__":
         version=_get_version(),
         python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
-        description="The tool to check the availability or syntax of domains, IPv4 or URL.",
+        description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",
         long_description=_get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
         license="https://git.io/vh1mP",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=["PyFunceble"],
+        packages=[
+            "PyFunceble.abstracts",
+            "PyFunceble.cli",
+            "PyFunceble.config",
+            "PyFunceble.converter",
+            "PyFunceble.core",
+            "PyFunceble.database",
+            "PyFunceble.downloader",
+            "PyFunceble.engine.ci",
+            "PyFunceble.engine",
+            "PyFunceble.extractor",
+            "PyFunceble.helpers",
+            "PyFunceble.lookup",
+            "PyFunceble.output",
+            "PyFunceble.status.availability",
+            "PyFunceble.status.reputation",
+            "PyFunceble.status.syntax",
+            "PyFunceble.status",
+            "PyFunceble",
+        ],
         keywords=[
-            "Python",
+            "availability",
+            "dns",
             "domain",
             "IP",
-            "availability",
-            "syntax",
-            "syntax-checker",
-            "PyFunceble",
-            "WHOIS",
+            "IPv4",
+            "IPv6",
             "nslookup",
-            "dns",
+            "PyFunceble",
+            "Python",
+            "syntax-checker",
+            "syntax",
+            "WHOIS",
         ],
         classifiers=[
             "Environment :: Console",
@@ -163,8 +190,8 @@ if __name__ == "__main__":
         test_suite="setup._test_suite",
         entry_points={
             "console_scripts": [
-                "PyFunceble=PyFunceble:_command_line",
-                "pyfunceble=PyFunceble:_command_line",
+                "PyFunceble=PyFunceble.cli:tool",
+                "pyfunceble=PyFunceble.cli:tool",
             ]
         },
     )

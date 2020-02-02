@@ -1,6 +1,5 @@
-# pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4 or URL.
+The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 
 ::
 
@@ -12,7 +11,7 @@ The tool to check the availability or syntax of domains, IPv4 or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-This submodule will provide a checking logic.
+Provides the syntax checker interface.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -38,7 +37,7 @@ License:
 
     MIT License
 
-    Copyright (c) 2017, 2018, 2019 Nissar Chababy
+    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -58,19 +57,44 @@ License:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 """
-# pylint: enable=line-too-long
+
+from ipaddress import (
+    AddressValueError,
+    IPv4Address,
+    IPv6Address,
+    ip_address,
+    ip_interface,
+    ip_network,
+)
 
 from domain2idna import get as domain2idna
 
 import PyFunceble
-from PyFunceble.helpers import Regex
 
 
 class Check:
     """
-    Provide severar "checker" around URL, IP or domain syntax..
+    Provides our syntax checkers.
 
     :param str subject: The subject (URL, IP or domain) to check.
+    """
+
+    # pylint: disable=line-too-long
+    SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS = ["onion"]
+    """
+    Specifies the extension which are specified as "Special-Use Domain Names"
+    and supported by our project.
+
+    :type: list
+
+    .. seealso::
+       * `RFC6761`_
+       * `IANA Special-Use Domain Names`_ assignments.
+       * `RFC7686`_
+
+    .. _RFC6761: https://tools.ietf.org/html/rfc6761
+    .. _RFC7686: https://tools.ietf.org/html/rfc6761
+    .. _IANA Special-Use Domain Names: https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.txt
     """
 
     def __init__(self, subject):
@@ -80,19 +104,16 @@ class Check:
         self, return_base=False, return_formatted=False
     ):  # pylint: disable=too-many-branches
         """
-        Check if the given subject is a valid URL.
-
-        :param str url: The url to validate.
+        Checks if the given subject is a valid URL.
 
         :param bool return_base:
             Allow us the return of the url base (if URL formatted correctly).
 
         :param bool return_formatted:
-            Allow us to get the URL converted to IDNA if the conversion
-            is activated.
+            Allow us to get the formatted URL as response.
 
         :return: The validity or the base if asked.
-        :rtype: bool|str
+        :rtype: bool, str
         """
 
         # We initiate a variable which will save the initial base in case
@@ -107,11 +128,11 @@ class Check:
                 regex = r"(^(http:\/\/|https:\/\/)(.+?(?=\/)|.+?$))"
 
                 # We extract the url base with the help of the initiated regex.
-                initial_base = base = Regex(
-                    self.subject, regex, return_data=True, rematch=True
-                ).match()[2]
+                initial_base = base = PyFunceble.helpers.Regex(regex).match(
+                    self.subject, return_match=True, rematch=True
+                )[2]
 
-                if PyFunceble.CONFIGURATION["idna_conversion"]:
+                if PyFunceble.CONFIGURATION.idna_conversion:
                     # We have to convert the domain to IDNA.
 
                     # We convert the initial base to IDNA.
@@ -130,13 +151,13 @@ class Check:
                     domain_status = Check(splited_base[0]).is_domain()
 
                     # We check if the url base is a valid IP.
-                    ip_status = Check(splited_base[0]).is_ipv4()
+                    ip_status = Check(splited_base[0]).is_ip()
                 else:
                     # We check if the url base is a valid domain.
                     domain_status = Check(base).is_domain()
 
                     # We check if the url base is a valid IP.
-                    ip_status = Check(base).is_ipv4()
+                    ip_status = Check(base).is_ip()
 
                 if domain_status or ip_status:
                     # * The url base is a valid domain.
@@ -146,20 +167,15 @@ class Check:
                     if splited_base:
                         initial_base = base = splited_base[0]
 
-                    if PyFunceble.CONFIGURATION["idna_conversion"] and return_formatted:
+                    if PyFunceble.CONFIGURATION.idna_conversion and return_formatted:
                         # * We have to convert to IDNA.
                         # and
                         # * We have to return the converted full URL.
 
                         # We return the converted full URL.
-                        return Regex(
-                            self.subject,
-                            initial_base,
-                            escape=True,
-                            return_data=True,
-                            replace_with=base,
-                            occurences=1,
-                        ).replace()
+                        return PyFunceble.helpers.Regex(
+                            initial_base, escape=True
+                        ).replace_match(self.subject, base, occurences=1)
 
                     if return_formatted:
                         # * We do not have to convert to IDNA.
@@ -193,10 +209,15 @@ class Check:
         self, subdomain_check=False
     ):  # pylint:disable=too-many-return-statements, too-many-branches
         """
-        Check if the given subject is a valid domain.
+        Checks if the given subject is a valid domain.
 
         :param bool subdomain_check:
-            Activate the subdomain checking.
+            Activates the subdomain checking.
+
+            .. warning::
+                Do not manually use.
+
+                Please report to :py:func:`~PyFunceble.check.Check.is_subdomain`.
 
         :return: The validity.
         :rtype: bool
@@ -220,16 +241,24 @@ class Check:
                 except IndexError:
                     pass
 
-            if not extension or extension not in PyFunceble.INTERN["iana_db"]:
+            if not extension or (
+                extension not in PyFunceble.IANALOOKUP
+                and extension not in self.SPECIAL_USE_DOMAIN_NAMES_EXTENSIONS
+            ):
                 # * The extension is not found.
                 # or
                 # * The extension is not into the IANA database.
+                # or
+                # * The extension is not into our mapping of
+                #   the "Special-Use Domain Names" specification.
 
                 # We return false.
                 return False
 
             if (
-                Regex(self.subject, regex_valid_domains, return_data=False).match()
+                PyFunceble.helpers.Regex(regex_valid_domains).match(
+                    self.subject, return_match=False
+                )
                 and not subdomain_check
             ):
                 # * The element pass the domain validation.
@@ -242,10 +271,10 @@ class Check:
             # The element did not pass the domain validation. That means that
             # it has invalid character or the position of - or _ are not right.
 
-            if extension in PyFunceble.INTERN["psl_db"]:
+            if extension in PyFunceble.PSLOOOKUP:
                 # The extension is into the psl database.
 
-                for suffix in PyFunceble.INTERN["psl_db"][extension]:
+                for suffix in PyFunceble.PSLOOOKUP[extension]:
                     # We loop through the element of the extension into the psl database.
 
                     try:
@@ -282,9 +311,9 @@ class Check:
                             # We check if it passes our subdomain regex.
                             # * True: It's a valid domain.
                             # * False: It's an invalid domain.
-                            return Regex(
-                                to_check, regex_valid_subdomains, return_data=False
-                            ).match()
+                            return PyFunceble.helpers.Regex(
+                                regex_valid_subdomains
+                            ).match(to_check, return_match=False)
 
                     except ValueError:
                         # In case of a value error because the position is not found,
@@ -314,9 +343,9 @@ class Check:
                 # We check if it passes our subdomain regex.
                 # * True: It's a valid domain.
                 # * False: It's an invalid domain.
-                return Regex(
-                    to_check, regex_valid_subdomains, return_data=False
-                ).match()
+                return PyFunceble.helpers.Regex(regex_valid_subdomains).match(
+                    to_check, return_match=False
+                )
 
         except (ValueError, AttributeError):
             # In case of a value or attribute error we ignore them.
@@ -327,7 +356,7 @@ class Check:
 
     def is_subdomain(self):
         """
-        Check if the given subject is a valid subdomain.
+        Checks if the given subject is a valid subdomain.
 
         :return: The validity.
         :rtype: bool
@@ -336,50 +365,108 @@ class Check:
         # We return the status of the check.
         return self.is_domain(subdomain_check=True)
 
-    def is_ipv4(self):
+    def is_ip(self):
         """
-        Check if the given subject is a valid IPv4.
+        Checks if the given subject is a valid IPv4 or IPv6.
 
         :return: The validity.
         :rtype: bool
-
-        .. note::
-            We only test IPv4 because for now we only them for now.
         """
 
-        # We initate our regex which will match for valid IPv4.
-        regex_ipv4 = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
+        return self.is_ipv4() or self.is_ipv6()
 
-        # We check if it passes our IPv4 regex.
-        # * True: It's a valid IPv4.
-        # * False: It's an invalid IPv4.
-        return Regex(self.subject, regex_ipv4, return_data=False).match()
+    def is_ipv4(self):
+        """
+        Checks if the given subject is a valid IPv4.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        try:
+            try:
+                return ip_address(self.subject).version == 4
+            except ValueError:
+                try:
+                    return ip_interface(self.subject).version == 4
+                except ValueError:
+                    return ip_network(self.subject, strict=False).version == 4
+        except ValueError:
+            return False
+
+    def is_ipv6(self):
+        """
+        Checks if the given subject is a valid IPv6.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        try:
+            try:
+                return ip_address(self.subject).version == 6
+            except ValueError:
+                try:
+                    return ip_interface(self.subject).version == 6
+                except ValueError:
+                    return ip_network(self.subject, strict=False).version == 6
+        except ValueError:
+            return False
+
+    def is_ip_range(self):  # pragma: no cover
+        """
+        Checks if the given subject is a valid IPv4 or IPv6 range.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        return self.is_ipv4_range() or self.is_ipv6_range()
 
     def is_ipv4_range(self):
         """
-        Check if the given subject is a valid IPv4 range.
+        Checks if the given subject is a valid IPv4 range.
 
         :return: The validity.
         :rtype: bool
-
-        .. note::
-            We only test IPv4 because for now we only them for now.
         """
 
         if self.is_ipv4():
-            # We initate our regex which will match for valid IPv4 ranges.
-            regex_ipv4_range = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.([0-9]{1,}\/[0-9]{1,})$"  # pylint: disable=line-too-long
+            if "/" in self.subject:
+                block = int(self.subject.split("/")[-1])
 
-            # We check if it passes our regex.
-            # * True: It's an IPv4 range.
-            # * False: It's not an IPv4 range.
-            return Regex(self.subject, regex_ipv4_range, return_data=False).match()
+                return 0 <= block <= 32
         return False
+
+    def is_ipv6_range(self):
+        """
+        Checks if the given subject is a valid IPv6 range.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        if self.is_ipv6():
+            if "/" in self.subject:
+                block = int(self.subject.split("/")[-1])
+
+                return 0 <= block <= 128
+        return False
+
+    def is_reserved_ip(self):  # pragma: no cover
+        """
+        Checks if the given subject is a reserved IPv4 or IPv6.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        return self.is_reserved_ipv4() or self.is_reserved_ipv6()
 
     # pylint: disable=line-too-long
     def is_reserved_ipv4(self):
         """
-        Check if the given subject is a reserved IPv4.
+        Checks if the given subject is a reserved IPv4.
 
         .. note::
             This method has been written on basis of the following links:
@@ -440,10 +527,53 @@ class Check:
             # We get a single regex out of the list of regex.
             reserved_regex = "({0})".format("|".join(reserved))
 
-            # We check if it passes our regex.
-            # * True: It's reserved.
-            # * False: It's not reserved.
-            return Regex(self.subject, reserved_regex, return_data=False).match()
+            try:
+                address = IPv4Address(self.subject)
+
+                # We check if it passes our regex.
+                # * True: It's reserved.
+                # * False: It's not reserved.
+                return (
+                    address.is_multicast
+                    or address.is_private
+                    or address.is_unspecified
+                    or address.is_reserved
+                    or address.is_loopback
+                    or address.is_link_local
+                    or not address.is_global
+                    or PyFunceble.helpers.Regex(reserved_regex).match(
+                        self.subject, return_match=False
+                    )
+                )
+            except AddressValueError:  # pragma: no cover
+                return PyFunceble.helpers.Regex(reserved_regex).match(
+                    self.subject, return_match=False
+                )
 
         # We return False, we are not working with an IPv4
+        return False
+
+    def is_reserved_ipv6(self):
+        """
+        Checks if the given subject is a reserved IPv6.
+
+        :return: The validity.
+        :rtype: bool
+        """
+
+        if self.is_ipv6():
+            try:
+                address = IPv6Address(self.subject)
+
+                return (
+                    address.is_multicast
+                    or address.is_private
+                    or address.is_unspecified
+                    or address.is_reserved
+                    or address.is_loopback
+                    or address.is_link_local
+                    or not address.is_global
+                )
+            except AddressValueError:
+                pass
         return False

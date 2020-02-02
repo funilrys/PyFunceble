@@ -1,27 +1,189 @@
 env:
-  matrix:
-    - PYTHON_VERSION="3.6.0"
-    - PYTHON_VERSION="3.6.1"
-    - PYTHON_VERSION="3.6.2"
-    - PYTHON_VERSION="3.6.3"
-    - PYTHON_VERSION="3.6.4"
-    - PYTHON_VERSION="3.6.5"
-    - PYTHON_VERSION="3.6.6"
-    - PYTHON_VERSION="3.6.7"
-    - PYTHON_VERSION="3.6.8"
-    - PYTHON_VERSION="3.7.0"
-    - PYTHON_VERSION="3.7.1"
-    - PYTHON_VERSION="3.7.2"
-    - PYTHON_VERSION="3.7.3"
   global:
     - PYFUNCEBLE_AUTO_CONFIGURATION="PyFunceble"
 
-language: generic
-sudo: false
+jobs:
+  include:
+    - stage: "Code Tests"
+      language: generic
+      os: linux
+      dist: bionic
+      name: "Code Test with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code Test with Python 3.8.1 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Code Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code Test with Python 3.8.0 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.0"
+        - TOXENV="py38"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Code Test with Python 3.7.6 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.7.6"
+        - TOXENV="py37"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code Test with Python 3.7.6 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.7.6"
+        - TOXENV="py37"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Code Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.7.5"
+        - TOXENV="py37"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code Test with Python 3.7.5 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.7.5"
+        - TOXENV="py37"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Code test with Python 3.6.10 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.6.10"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code test with Python 3.6.10 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.6.10"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Code test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.6.9"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Code test with Python 3.6.9 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.6.9"
+        - TOXENV="py36"
+      script:
+        - tox --current-env
 
-os:
-  - linux
-  - osx
+
+
+    - stage: "CLI (running) Tests"
+      language: generic
+      os: linux
+      dist: bionic
+      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env -c tox_run.ini
+    - language: generic
+      os: osx
+      osx_image: xcode11.2
+      name: "Run with Python 3.8.1 under macOS 10.14 (Mojave)"
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      script:
+        - tox --current-env -c tox_run.ini
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      env:
+        - PYTHON_VERSION="3.8.1"
+        - TOXENV="py38"
+      addons:
+          mariadb: '10.4'
+      before_script:
+        - sudo systemctl restart mysql
+        - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+        - sudo mysql -u root -h localhost -e "CREATE USER 'root'@'%' IDENTIFIED BY ''"
+        - sudo mysql -u root -h localhost -e "CREATE USER 'pyfunceble'@'localhost' IDENTIFIED BY 'pyfunceble';"
+        - sudo mysql -u root -h localhost -e "GRANT ALL PRIVILEGES ON pyfunceble.* TO 'pyfunceble'@'localhost';"
+
+        - mkdir -p "tests_dir"
+        - echo 'PYFUNCEBLE_DB_CHARSET=utf8mb4' > tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_HOST="/var/run/mysqld/mysqld.sock"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_NAME="pyfunceble"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_PASSWORD="pyfunceble"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_PORT="3306"' >> tests_dir/.pyfunceble-env
+        - echo 'PYFUNCEBLE_DB_USERNAME="pyfunceble"' >> tests_dir/.pyfunceble-env
+      script:
+        - tox --current-env -c tox_run_mariadb.ini
+
+
+    - language: generic
+      stage: "Deployments"
+      os: linux
+      dist: bionic
+      name: "Deployment to PyPi"
+      script:
+        - echo "Hello, World!"
+      after_success:
+        - echo "Hello, World!"
+      env:
+        - PYTHON_VERSION="3.8.1"
+      deploy:
+        provider: pypi
+        user: funilrys
+        password:
+          secure: IG1FlVINvTCO7jscSz4aQMRABBcZVFGNBfDB0giAhtNV/Nr98jSyLZXETx7yquD93dFZpL58HXcPRxoa3hemyBLcTc0ATMsNBM48IrN3xaxfPytlQQn7aocKdZLAMbriCo7CO4x4O00lu3Cx2tAZtZMaDGYN+KpWIR9V+dXF1hHLj7owilko3YVXiXXamlOZmkdv28PcACQlJ7QLLYxTY3o/LuLrCOvo3zc+Ao0JfKpOv9Fm41keUS51Ek5QWXFaO7VNho6CXV7/5rJbF9w1flkM7GEUH78pjs+KpwBV7auwFYMerYPq5GVPiL117y9ojXxfF+B1qY1flreugCgSRJQKhzvfgSlgGhM93GG2yPpQu6LGIIZJ0MMcXldheY1JOzVMddXYbFTeG3j+/0a9EF47G9ZUeCiY3uCmaqaIuMvuby+Ze0XsHqrOkN+uALtgmrJuhDgiJvY1+qAIo56jBcaTYcOs+xqkFbqviltNjqriH3uFRhXZUpVQchd49eq6m+OyEu4jcYH9Pn1qHdwKBKU/KCRbYy9zAj5gso/HrSRaMrjMGUcdlzNEWKHVstnBPIq+9xnZ5Zeb7ev6i2vTH3WVHQoAFRGvNv/K7+zRMt0iDK2H9SCg3mi4v1c/JwUuY6Oht/PXwbbJ8sAIVAs+3P+FrEBIjkkbtjjPDHaA9rg=
+        distributions: sdist bdist_wheel
+        skip_existing: true
+        on:
+          all_branches: true
+          condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
+
 
 matrix:
   fast_finish: true
@@ -32,52 +194,20 @@ install:
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels conda-forge
   - conda update -q conda
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
-  - python -VV
+  - python --version --version
   - pip --version
-  - pip install pylint coverage coveralls codacy-coverage
-
-script:
-  - python setup.py install
-  - coverage run setup.py test
-  - coverage xml # Needed for codacy.
-  - echo "Lint PyFunceble" && pylint PyFunceble
-  - echo "Lint tests" && pylint tests/*.py
-  - PyFunceble -v
-  - PyFunceble --clean
-  - PyFunceble --clean-all
-  - rm -R output && PyFunceble --directory-structure && ls -al output
-  - PyFunceble -ex -d github.com
-  - PyFunceble -ex -s -f .travis/lists/simple -m
-  - PyFunceble -ex --syntax -f .travis/lists/simple -m
-  - PyFunceble -ex -f .travis/lists/simple --json --plain -m
-  - PyFunceble -ex -f .travis/lists/simple -m  # Normally, all inactive are not tested anymore.
-  - PyFunceble -ex --database -f .travis/lists/simple  -m  # And they will be retested.
-  - PyFunceble -ex --database --filter ".info$" -f .travis/lists/simple -m  # Only .info domains should be tested.
-  - PyFunceble -ex --adblock -a -f .travis/lists/adblock -m
-  - PyFunceble -ex --link https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts -m
-  - python .travis/complementary/basic_example.py
-  - python .travis/complementary/basic_example_syntax.py
-  - python .travis/complementary/advanced_example.py
-  - python .travis/complementary/loop_example.py
-  - python .travis/complementary/custom_configuration.py
+  - conda --version
+  - conda install coverage coveralls codacy-coverage pylint unittest2
+  - pip install tox-current-env
+  - pip install -e .
 
 after_success:
   - python-codacy-coverage -r coverage.xml
   - coveralls
-
-deploy:
-  provider: pypi
-  user: funilrys
-  password:
-    secure: IG1FlVINvTCO7jscSz4aQMRABBcZVFGNBfDB0giAhtNV/Nr98jSyLZXETx7yquD93dFZpL58HXcPRxoa3hemyBLcTc0ATMsNBM48IrN3xaxfPytlQQn7aocKdZLAMbriCo7CO4x4O00lu3Cx2tAZtZMaDGYN+KpWIR9V+dXF1hHLj7owilko3YVXiXXamlOZmkdv28PcACQlJ7QLLYxTY3o/LuLrCOvo3zc+Ao0JfKpOv9Fm41keUS51Ek5QWXFaO7VNho6CXV7/5rJbF9w1flkM7GEUH78pjs+KpwBV7auwFYMerYPq5GVPiL117y9ojXxfF+B1qY1flreugCgSRJQKhzvfgSlgGhM93GG2yPpQu6LGIIZJ0MMcXldheY1JOzVMddXYbFTeG3j+/0a9EF47G9ZUeCiY3uCmaqaIuMvuby+Ze0XsHqrOkN+uALtgmrJuhDgiJvY1+qAIo56jBcaTYcOs+xqkFbqviltNjqriH3uFRhXZUpVQchd49eq6m+OyEu4jcYH9Pn1qHdwKBKU/KCRbYy9zAj5gso/HrSRaMrjMGUcdlzNEWKHVstnBPIq+9xnZ5Zeb7ev6i2vTH3WVHQoAFRGvNv/K7+zRMt0iDK2H9SCg3mi4v1c/JwUuY6Oht/PXwbbJ8sAIVAs+3P+FrEBIjkkbtjjPDHaA9rg=
-  distributions: sdist bdist_wheel
-  skip_existing: true
-  on:
-    all_branches: true
-    condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
 
 notifications:
   on_success: change
