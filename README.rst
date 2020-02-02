@@ -294,4 +294,4 @@ License
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
-.. _Buy me a coffee: https://github.com/sponsors/funilrys
+.. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

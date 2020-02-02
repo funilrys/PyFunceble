@@ -36,4 +36,4 @@ Single donation are welcome too!
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _Dead-Hosts: https://github.com/dead-hosts
 .. _Sponsor me: https://github.com/sponsors/funilrys
-.. _Buy me a coffee: https://github.com/sponsors/funilrys
+.. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
