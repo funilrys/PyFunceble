@@ -37,14 +37,14 @@ simultaneous process to run.
 
         $ lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
     
-    **or**
+    or
     
     ::
-	$ $(nproc --ignore=1)
+	$ ``$(nproc --ignore=1)``
 	
 	This will count the number of CPU threads subtracted 1 to use for DB, 
 	SQL. If you runs PyFunceble on your workstation you might subtract 2 
-	threads, or you computer will "die"
+	threads, or you computer will be pretty "dead"
 	
 	See also ``man nproc`` or ``nproc --help``
 
