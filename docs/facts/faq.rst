@@ -1,8 +1,8 @@
 Frequently Asked Questions
 ==========================
 
-How to speed up a bit the process/test?
-----------------------------------------
+How to speed up the test process?
+---------------------------------
 
 .. warning::
     Beware, when talking about speed a lot a thing have to be taken in consideration.
@@ -21,8 +21,10 @@ I have multiple CPU
 
 Simply use the :code:`-m | --multiprocess` argument to activate
 the usage of multiple processes.
-You can in addition to that use the :code:`-p | --processes`
-argument to tell set the number of simultaneous process to run.
+You should in addition to the :code:`-m` specify the :code:`-p | --processes`
+argument as the default value is 25 simultaneous processes. This number will 
+exceed most users CPU capabilities. You should therefore specify the number of 
+simultaneous process to run.
 
 .. note::
     A good number for :code:`-p` is your number of :code:`CPU_cores -1`, to leave room for orther processes to work.
@@ -34,6 +36,17 @@ argument to tell set the number of simultaneous process to run.
     ::
 
         $ lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
+    
+    **or**
+    
+    ::
+	$ $(nproc --ignore=1)
+	
+	This will count the number of CPU threads subtracted 1 to use for DB, 
+	SQL. If you runs PyFunceble on your workstation you might subtract 2 
+	threads, or you computer will "die"
+	
+	See also ``man nproc`` or ``nproc --help``
 
 .. warning::
     DO NOT try to exceed your total number of CPU cores (as :code:`-p | --processes`),
@@ -43,7 +56,7 @@ I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In case you only have a single core, you should disable the usage of
-the WHOIS lookup by adding the :code:`-.no-whois` to your command line
+the WHOIS lookup by adding the :code:`-no-whois` to your command line
 or switching the value of :code:`no_whois` to :code:`True` in your
 configuration file.
 
@@ -60,9 +73,13 @@ use the equivalent of :code:`nslookup` and the
 
 .. warning::
 
-    PyFunceble request the WHOIS record in order to avoid specific false positive case.
-    If the usage of WHOIS request is disabled, all domains which are still registered
-    but not assigned to an IP address, would be flagged as :code:`INACTIVE`.
+    PyFunceble request the WHOIS record in order to avoid specific false 
+    positive cases.
+    If the usage of WHOIS request is disabled, all domains which are still 
+    registered but not assigned to an IP address, would be flagged as 
+    :code:`INACTIVE`.
 
-    It's not a problem if you keep/use the database system because the domain will be retested over time.
-    But please keep in mind that without the database system the accuracy of the result is not guaranteed.
+    It's not a problem if you keep/use the database system because the domain 
+    will be retested over time.
+    But please keep in mind, that without the database system, the accuracy 
+    of the result is not guaranteed.
