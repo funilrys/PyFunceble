@@ -108,13 +108,14 @@ How to use the :code:`mysql` or :code:`mariadb` format?
 Known limitations with MySQL and MariaDB
 ----------------------------------------
 
-Do to a default setting that prevent users from creating stored functions that 
-will cause unsafe events to be written into the binary log, you will need to 
-contact your database manger (maybe your self) and ask them to
+MySQL's default settings prevent users from creating stored functions that 
+can cause unsafe events to be written into the binary log. You will need to 
+contact your database manager (maybe your self) and ask them to or do this 
+your self.
 
 1. set :code:`set global log_bin_trust_function_creators=1;` for your database **or**
 
-2. Import the given SQL script your self as SUPER-PRIVILIDGED user such as root.
+2. Import the matching SQL script your self, as SUPER-PRIVILIDGED user such as root.
 
 Search string:
 
