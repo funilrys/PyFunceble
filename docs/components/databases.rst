@@ -82,7 +82,7 @@ How to use the :code:`mysql` or :code:`mariadb` format?
     :code:`/var/run/mysqld/mysqld.sock`.
     This have been done to make:
 
-      1. It easier to use it in conjunction with a supported CI 
+      1. It easier to use the :code:`socket` in conjunction with a supported CI 
 	  environment/platform.
       2. Leaving more space on the IP-stack on local DB installations.
       3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on 
@@ -108,14 +108,27 @@ How to use the :code:`mysql` or :code:`mariadb` format?
 Known limitations with MySQL and MariaDB
 ----------------------------------------
 
-MySQL's default settings prevent users from creating stored functions that 
-can cause unsafe events to be written into the binary log. You will need to 
-contact your database manager (maybe your self) and ask them to or do this 
-your self.
+MySQL and MariaDB's default settings prevent ordinary users from creating 
+stored functions, which can cause unsafe events to be written into the 
+binary log.
 
-1. set :code:`set global log_bin_trust_function_creators=1;` for your database **or**
+You will need to contact your database manager (maybe your self) and ask 
+them to set this value (ad: 1) or even better, ask them to import the SQL script 
+directly into the database.
 
-2. Import the matching SQL script your self, as SUPER-PRIVILIDGED user such as root.
+If you are running your own database server, the recommendation is you import 
+the equivalent SQL script directly into the database, as log_bin is used 
+for ex. clustering. Turning this value into `1`, might cause security issues later on, 
+as you have lowered the servers default security level of trust.
+
+1. Import the matching SQL script manually as a `SUPER-PRIVILEGED` user such as root.
+   **or**
+
+2. Set :code:`set global log_bin_trust_function_creators=1;` for your database.
+
+.. warning::
+     We will not recommended this for safety reasons, as it can exposes you 
+     for security or stability issues later on, if you run other SQL scripts.
 
 Search string:
 
