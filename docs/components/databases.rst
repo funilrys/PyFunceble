@@ -38,14 +38,14 @@ Warnings around Database (self) management
     indexed into the whois database file/table.
 
 Databases types
-===============
+---------------
 
 Since PyFunceble :code:`2.0.0` (equivalent of :code:`>=1.18.0.dev`),
 we offer multiple database types which are (as per configuration) :code:`json`
 (default), :code:`mariadb` and :code:`mysql`.
 
 Why different database types?
------------------------------
+"""""""""""""""""""""""""""""
 
 With the introduction of the multiprocessing logic, it became natural to
 introduce other database format as it's a nightmare to update a JSON formatted
@@ -57,7 +57,7 @@ It's great while working with a single CPU/process but as soon as we get out of
 that scope it become unmanageable.
 
 How to use the :code:`mysql` or :code:`mariadb` format?
--------------------------------------------------------
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 1. Create a new user, password and database (optional) for PyFunceble to work
    with.
@@ -114,7 +114,7 @@ How to use the :code:`mysql` or :code:`mariadb` format?
     You can find the respective *.sql scripts at https://github.com/funilrys/PyFunceble/tree/dev/db_types
 
 Known limitations with MySQL and MariaDB
-========================================
+----------------------------------------
 
 MySQL and MariaDB's default settings prevent ordinary users from creating
 stored functions, which can cause unsafe events to be written into the
@@ -139,7 +139,7 @@ as you have lowered the servers default security level of trust.
      for security or stability issues later on, if you run other SQL scripts.
 
 Search string
-=============
+-------------
 
 ::
 
