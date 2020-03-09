@@ -662,7 +662,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--processes",
                     type=int,
                     help="Set the number of simultaneous processes to use while "
-                    "using multiple processes. %s"
+                    "using multiple processes.\nIf omited, the number of "
+                    "available CPU cores will be used instead.%s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.maximal_processes)

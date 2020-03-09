@@ -596,6 +596,9 @@ processes for testing.
     DO not try to exceed your number of CPU if you want to keep your machine
     somehow alive and healthy!!
 
+.. note::
+    If omitted, the number of available CPU cores will be used instead.
+
 
 CI / CD
 ^^^^^^^
@@ -925,6 +928,7 @@ Global overview
                                 Configured value: 'end'
         -p PROCESSES, --processes PROCESSES
                                 Set the number of simultaneous processes to use while using multiple processes.
+                                If omitted, the number of available CPU cores will be used instead.
                                 Configured value: 25
 
     CI / CD:

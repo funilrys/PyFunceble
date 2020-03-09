@@ -323,8 +323,8 @@
     **Description:** Set the number of maximal simultaneous processes to use/create/run.
 
 .. warning::
-    If you do not explicitly set the :code:`^^processes` argument,
-    we overwrite the default to the number of available CPU.
+    If you omit the :code:`--processes` argument,
+    we overwrite the default with the number of available CPU.
 
 :code:`mining`
 ^^^^^^^^^^^^^^
