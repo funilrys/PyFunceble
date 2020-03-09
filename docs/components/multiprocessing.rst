@@ -36,7 +36,7 @@ We test multiple subjects at the same time over several processes (1 process = 1
     While using the JSON format for the database you might have to wait a bit at the very end
     as we need to merge all data we generated across the past created processes.
 
-    Therefore, we recommend using the SQLite or even better the MySQL/MariaDB format which will get rid of that
+    Therefore, we recommend using the MySQL/MariaDB format which will get rid of that
     as everything is saved/synchronized at an almost real-time scale.
 
 How to use it?
