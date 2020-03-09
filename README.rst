@@ -34,7 +34,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io//en/dev/!
 
 Want a local copy? We get you covered!
 
@@ -162,6 +162,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   ScriptTiger - `@ScriptTiger`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
+-   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
@@ -262,6 +263,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@asciinema: https://github.com/asciinema
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
@@ -292,6 +294,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io//en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

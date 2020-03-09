@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io//en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -105,7 +105,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 epilog = (
                     f"{Style.BRIGHT}{Fore.YELLOW}For an in depth usage, examplation and examples of the arguments, "
-                    f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io/en/dev/"
+                    f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io//en/dev/"
                     f"{Style.RESET_ALL}\n\n"
                     f"Crafted with {Fore.RED}♥{Fore.RESET} by "
                     f"{Style.BRIGHT}{Fore.CYAN}Nissar Chababy (@funilrys){Style.RESET_ALL} "

@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io//en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -410,7 +410,7 @@ class CLICore:
             print(Fore.GREEN + Style.BRIGHT + "You are sharing your logs!")
             print(
                 Fore.MAGENTA + Style.BRIGHT + "Please find more about it at "
-                "https://pyfunceble.readthedocs.io/en/dev/logs-sharing.html !"
+                "https://pyfunceble.readthedocs.io//en/dev/logs-sharing.html !"
             )
 
     @classmethod

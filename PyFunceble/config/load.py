@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io//en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -100,7 +100,6 @@ class Load:  # pragma: no cover pylint: disable=too-few-public-methods
 
         if "config_loaded" not in PyFunceble.INTERN:
             self.__load_it()
-            self.__fix_paths()
 
         self.__set_it(custom)
         self.__download_them_all()
@@ -352,6 +351,8 @@ Install and load the default configuration at the mentioned location? [y/n] "
 
             # We raise the exception we were handling.
             raise PyFunceble.exceptions.ConfigurationFileNotFound()
+
+        self.__fix_paths()
 
     def _install_production_config(self):
         """
