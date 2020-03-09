@@ -22,9 +22,14 @@ I have multiple CPU
 Simply use the :code:`-m | --multiprocess` argument to activate
 the usage of multiple processes.
 You should in addition to the :code:`-m` specify the :code:`-p | --processes`
-argument as the default value is 25 simultaneous processes. This number will 
-exceed most users CPU capabilities. You should therefore specify the number of 
-simultaneous process to run.
+argument.
+
+If :code:`-p | --processes` is avoided, the script will use the number of 
+available CPU cores.
+
+You might therefore which to specify the number of simultaneous processes to
+be used, otherwise your will be "unable" to use the computer/server for other
+things while running PyFunceble as all of your CPU threads is used by PyFunceble.
 
 .. note::
     A good number for :code:`-p` is your number of :code:`CPU_cores -1`, to leave room for orther processes to work.
@@ -40,6 +45,7 @@ simultaneous process to run.
     or
     
     ::
+    
 	$ ``$(nproc --ignore=1)``
 	
 	This will count the number of CPU threads subtracted 1 to use for DB, 
@@ -56,7 +62,7 @@ I do not have multiple CPU
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In case you only have a single core, you should disable the usage of
-the WHOIS lookup by adding the :code:`-no-whois` to your command line
+the WHOIS lookup by adding the :code:`--no-whois` to your command line
 or switching the value of :code:`no_whois` to :code:`True` in your
 configuration file.
 
