@@ -43,7 +43,7 @@ to
 Since :version:`3.0.0` it is possible to assign a specific port to use with the 
 DNS-Server.
 
-.. example::
+.. hint::
 
     --dns 95.216.209.53:53 116.203.32.67:53 9.9.9.9:853
 
