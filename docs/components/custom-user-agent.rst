@@ -23,7 +23,7 @@ Simply give us your custom user agent
         platform: linux
         custom: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--uset-agent` argument from the CLI.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--user-agent` argument from the CLI.
 
 What if we don't give a custom User-Agent?
 ------------------------------------------
