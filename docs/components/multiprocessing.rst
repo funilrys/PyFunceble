@@ -79,8 +79,8 @@ Merging mode
     * :code:`end`
     * :code:`live`
 
-With the `end` mode, we merge all data at the very end of the current instance.
-With the `live` mode, we merge all data while testing.
+With the :code:`end` mode, we merge all data at the very end of the current instance.
+With the :code:`live` mode, we merge all data while testing.
 
 Simply update the default value of
 
