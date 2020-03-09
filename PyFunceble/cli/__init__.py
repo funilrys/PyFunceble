@@ -104,7 +104,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 epilog = (
-                    f"{Style.BRIGHT}{Fore.YELLOW}For an in depth usage, examplation and examples of the arguments, "
+                    f"{Style.BRIGHT}{Fore.YELLOW}For an in-depth usage, explanation and examples of the arguments, "
                     f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io//en/dev/"
                     f"{Style.RESET_ALL}\n\n"
                     f"Crafted with {Fore.RED}♥{Fore.RESET} by "
@@ -291,7 +291,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-nw",
                     "--no-whois",
                     action="store_true",
-                    help="Switch the value the usage of whois to test domain's status. %s"
+                    help="Switch the value of the usage of WHOIS to test the domain's status. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.no_whois)
@@ -386,7 +386,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 dns_control_group.add_argument(
                     "--dns-lookup-over-tcp",
                     action="store_true",
-                    help="Make all DNS query with TCP. "
+                    help="Make all DNS queries with TCP. "
                     "%s"
                     % (
                         current_value_format
@@ -437,7 +437,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--whois-database",
                     action="store_true",
                     help="Switch the value of the usage of a database to store "
-                    "whois data in order to avoid whois servers rate limit. %s"
+                    "whois data to avoid whois servers rate limit. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.whois_database)
@@ -637,7 +637,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-m",
                     "--multiprocess",
                     action="store_true",
-                    help="Switch the value of the usage of multiple process. %s"
+                    help="Switch the value of the usage of multiple processes. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.multiprocess)
