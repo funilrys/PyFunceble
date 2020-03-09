@@ -16,7 +16,13 @@ How does it work?
 For domains
 ^^^^^^^^^^^
 
-We request the :code:`NS` record for domains.
+In order:
+
+1. Request the :code:`NS` record.
+2. If not found, request the :code:`A` record.
+3. If not found, request the :code:`AAAA` record.
+4. If not found, request the :code:`CNAME` record.
+5. If not found, request the :code:`DNAME` record.
 
 .. warning::
     If none is found, we call the UNIX/C equivalent of :code:`getaddrinfo()`.
