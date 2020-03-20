@@ -107,17 +107,27 @@ class APICore:
         # We share the db file name.
         self.db_file_name = db_file_name
 
-        # We load the global configuration
-        # if it was not alreay done.
-        PyFunceble.load_config(
-            generate_directory_structure=False, custom=self.configuration
-        )
+        if (
+            "api_config_loaded" not in PyFunceble.INTERN
+            or self.configuration != PyFunceble.INTERN["api_config_loaded"]
+        ):
+            # We load the global configuration
+            # if it was not alreay done.
+            PyFunceble.load_config(
+                generate_directory_structure=False, custom=self.configuration
+            )
 
-        # We update the configuration with the given
-        # configuration.
-        preset = PyFunceble.cconfig.Preset()
-        preset.init_all()
-        preset.api()
+            # We update the configuration with the given
+            # configuration.
+            preset = PyFunceble.cconfig.Preset()
+            preset.init_all()
+            preset.api()
+
+            PyFunceble.INTERN["api_config_loaded"] = (
+                self.configuration.copy()
+                if isinstance(self.configuration, dict)
+                else dict()
+            )
 
         # We get an instance of the DB connection.
         self.mysql_db = PyFunceble.engine.MySQL()
