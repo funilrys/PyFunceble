@@ -116,6 +116,8 @@ user_agent:
 verify_ssl_certificate: False
 # Enable / disable the usage of a database to store the hash of the whois record
 whois_database: True
+# Enable / Disable the detection and test of wildcard subjects.
+wildcard: False
 
 outputs:
   default_files:

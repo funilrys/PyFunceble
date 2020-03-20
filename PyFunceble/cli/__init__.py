@@ -366,6 +366,20 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
+                test_control.add_argument(
+                    "--wildcard",
+                    action="store_true",
+                    help="Switch the value of the wildcards test.\n\n"
+                    "When used, wildcards will be proprely tested.\n\n"
+                    f"{Fore.MAGENTA}{Style.BRIGHT}Warning: This is not taken in consideration if the "
+                    f"'--syntax' argument is not given.{Style.RESET_ALL} %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.wildcard)
+                        + Style.RESET_ALL
+                    ),
+                )
+
                 dns_control_group.add_argument(
                     "--dns",
                     nargs="+",
@@ -1076,6 +1090,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.whois_database = preset.switch(
                         "whois_database"
                     )
+
+                if args.wildcard:
+                    PyFunceble.CONFIGURATION.wildcard = preset.switch("wildcard")
 
                 PyFunceble.core.CLI.colorify_logo(home=True)
 

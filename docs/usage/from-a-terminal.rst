@@ -279,6 +279,16 @@ to set a timeout.
         invalid and the domain is still alive, you will always get
         :code:`INACTIVE` as output.
 
+:code:`wildcard`
+""""""""""""""""
+
+    Switch the value of the wildcards test.
+
+    **Default value:** :code:`False`
+
+    .. warning::
+        This argument is not taken into consideration if the :code:`--syntax` argument
+        is not given.
 
 DNS (resolver) control
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -780,7 +790,8 @@ Global overview
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
                     [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
                     [--reputation] [--use-reputation-data] [-ua USER_AGENT]
-                    [-vsc] [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
+                    [-vsc] [--wildcard] [--dns DNS [DNS ...]]
+                    [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
                     [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
@@ -814,7 +825,7 @@ Global overview
                                 If remote (RAW link) file is given, PyFunceble will download it,
                                 and test the content of the given RAW link as if it was a locally stored file.
 
-                                This argument test if an URL is available. It ONLY test full URLs.
+                            This argument test if an URL is available. It ONLY test full URLs.
 
     Source filtering, decoding, conversion and expansion:
         -ad, --adblock        Switch the decoding of the adblock format.
@@ -858,6 +869,12 @@ Global overview
                                 is not the logs sharing system.
         -vsc, --verify-ssl-certificate
                                 Switch the value of the verification of the SSL/TLS certificate when testing for URL.
+                                Configured value: False
+        --wildcard            Switch the value of the wildcards test.
+
+                                When used, wildcards will be proprely tested.
+
+                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
                                 Configured value: False
 
     DNS (resolver) control:
@@ -928,7 +945,7 @@ Global overview
                                 Configured value: 'end'
         -p PROCESSES, --processes PROCESSES
                                 Set the number of simultaneous processes to use while using multiple processes.
-                                If omitted, the number of available CPU cores will be used instead.
+                                If omited, the number of available CPU cores will be used instead.
                                 Configured value: 25
 
     CI / CD:

@@ -628,3 +628,15 @@
     **Default value:** :code:`True`
 
     **Description:** Enable / Disable the usage of the whois database to avoid/bypass whois server requests rate limit.
+
+:code:`wildcard`
+^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the test of wildcards when testing for syntax.
+
+.. warning::
+    This is not taken into consideration if :code:`syntax` is set to :code:`False`.
