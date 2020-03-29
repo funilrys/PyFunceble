@@ -1,14 +1,14 @@
 Abstracts
-=========
+---------
 
 Problematic
------------
+^^^^^^^^^^^
 
 How can we work with abstracted data and information which are
 not directly related to our project main logic?
 
 Documentation
--------------
+^^^^^^^^^^^^^
 
 .. automodule:: PyFunceble.abstracts
    :members:
@@ -16,7 +16,7 @@ Documentation
 
 
 :code:`Infrastructure()`
-^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""
 
 .. autoclass:: PyFunceble.abstracts.infrastructure.Infrastructure
     :members:
@@ -24,14 +24,14 @@ Documentation
 
 
 :code:`Package()`
-^^^^^^^^^^^^^^^^^
+"""""""""""""""""
 
 .. autoclass:: PyFunceble.abstracts.package.Package
     :members:
     :private-members:
 
 :code:`Platform()`
-^^^^^^^^^^^^^^^^^^
+""""""""""""""""""
 
 .. autoclass:: PyFunceble.abstracts.platform.Platform
     :members:
@@ -39,7 +39,7 @@ Documentation
 
 
 :code:`Version()`
-^^^^^^^^^^^^^^^^^
+"""""""""""""""""
 
 .. autoclass:: PyFunceble.abstracts.package.Version
     :members:

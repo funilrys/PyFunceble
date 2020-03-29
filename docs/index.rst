@@ -101,24 +101,8 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Code documentation
 
-   code/logic-representation
-   code/check
-   code/exceptions
-   code/abstracts
-   code/cli
-   code/config
-   code/converter
-   code/core
-   code/database
-   code/downloader
-   code/engine
-   code/extractor
-   code/helpers
-   code/lookup
-   code/output
-   code/status
+   code/index
 
 Indices and tables
 ==================
