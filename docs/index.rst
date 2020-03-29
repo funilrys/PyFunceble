@@ -36,7 +36,6 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Preface
 
    what-can-we-do
    contributors
@@ -45,14 +44,12 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Respect
 
    respect/license
    respect/code-of-conduct
 
 .. toctree::
    :maxdepth: 3
-   :caption: Facts
 
    facts/they-use-d-it
    facts/faq
@@ -61,50 +58,38 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Use Dead-Hosts if you can't!
 
    dead-hosts/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Installation
 
    installation/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Update
 
    update/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Configuration
 
    configuration/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Usage
 
    usage/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Our (CLI) columns
 
-   columns/subject
-   columns/status
-   columns/expiration_date
-   columns/source
-   columns/http_code
+   responses/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: API documentation
 
-   api/endpoints
-   api/file_generation
+   api/index
 
 .. toctree::
    :maxdepth: 3
