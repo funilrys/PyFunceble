@@ -1,5 +1,5 @@
 HTTP Code
-=========
+---------
 
 .. note::
   This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
@@ -11,17 +11,17 @@ HTTP Code
   The Status Codes we give to PyFunceble to test with can be fully customized in your own :code:`.PyFunceble.yaml`.
 
 As active
----------
+^^^^^^^^^
 
 .. note::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
+  While testing for domain and IP, a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/ACTIVE` directory.
 
 .. warning::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
+  While testing for domain and IP, a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
   updated to :code:`ACTIVE`.
 
 .. warning::
-  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
+  While testing for URL, if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
 
 - 100 - Continue
 - 101 - Switching Protocols
@@ -34,17 +34,17 @@ As active
 - 206 - Partial Content
 
 As potentially active
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/POTENTIALLY_ACTIVE` directory.
+  While testing for domain and IP, a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/POTENTIALLY_ACTIVE` directory.
 
 .. warning::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
+  While testing for domain and IP, a subject which has an HTTP code listed below and a global status :code:`INACTIVE` or :code:`INVALID` will get its status
   updated to :code:`ACTIVE`.
 
 .. warning::
-  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
+  While testing for URL, if the extracted HTTP code is in the following list, the global status will be :code:`ACTIVE`.
 
 - 000
 - 300 - Multiple Choices
@@ -70,13 +70,13 @@ As potentially active
 - 505 - HTTP Version Not Supported
 
 As inactive or potentially inactive
------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
-  While testing for domain(s) and IP(s), a subject which has an HTTP code listed below, we be saved/logged into the :code:`output/Analytic/POTENTIALLY_INACTIVE` directory.
+  While testing for domain and IP, a subject which has an HTTP code listed below, will be saved/logged into the :code:`output/Analytic/POTENTIALLY_INACTIVE` directory.
 
 .. warning::
-  While testing for URL(s), if the extracted HTTP code is in the following list, the global status will be :code:`INACTIVE`.
+  While testing for URL, if the extracted HTTP code is in the following list, the global status will be :code:`INACTIVE`.
 
 - 400 - Bad Request
 - 401 - Unauthorized
