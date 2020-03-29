@@ -1,19 +1,19 @@
 Multiprocessing
-===============
+---------------
 
 
 .. warning::
     This component is not activated by default.
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Many people around the web who talked about PyFunceble were talking about one thing: We take time to run.
 
 This component allows you to use more than one process if your machine has multiple CPU.
 
 .. note::
-    If you use this component you have to take some limits into consideration:
+    If you use this component you have to consider some limits:
 
     * Your connection speed.
     * Your machine.
@@ -28,7 +28,7 @@ This component allows you to use more than one process if your machine has multi
     * Test with DNS LOOKUP only - without WHOIS.
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 We test multiple subjects at the same time over several processes (1 process = 1 subject tested) and generate our results normally.
 
@@ -40,10 +40,10 @@ We test multiple subjects at the same time over several processes (1 process = 1
     as everything is saved/synchronized at an almost real-time scale.
 
 How to use it?
---------------
+^^^^^^^^^^^^^^
 
 Activation
-^^^^^^^^^^
+""""""""""
 
 You can simply change
 
@@ -58,7 +58,7 @@ to
     multiprocess: True
 
 Number of processes to create
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""
 
 Simply update the default value of
 
@@ -72,7 +72,7 @@ Simply update the default value of
     we overwrite the default to the number of available CPU.
 
 Merging mode
-^^^^^^^^^^^^
+""""""""""""
 
 2 merging cross process (data) merging mode are available:
 

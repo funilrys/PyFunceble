@@ -1,8 +1,8 @@
 Databases
-=========
+---------
 
 Why do we use "databases"?
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We use databases to store data while we run the tests. When globally talking
 about databases, we are indirectly talking about the following subsystems.
@@ -13,32 +13,32 @@ about databases, we are indirectly talking about the following subsystems.
 * WhoisDB
 
 .. warning::
-    There is a different for what we are talking about here and the
+    There is a difference between what we are talking here and the
     :code:`--database` argument which only enable/disable the InactiveDB
     subsystem.
 
 How do we manage them?
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 They consist of simple JSON files which are read and updated on the fly.
 
 Warnings around Database (self) management
-------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. warning::
     If you plan to delete everything and still manage to use PyFunceble in the
     future, please use the :code:`--clean-all` argument.
 
-    Indeed, it will delete everything which is related to what we generated
+    Indeed, it will delete everything which is related to what we generated,
     except things like the whois database file/table which saves (almost)
     static data which can be reused in the future.
 
-    Actually, deleting for example the whois database file/table will just make
+    Deleting, for example, the whois database file/table will just make
     your test run for a much longer time if you retest subject that used to be
     indexed into the whois database file/table.
 
 Databases types
----------------
+^^^^^^^^^^^^^^^
 
 Since PyFunceble :code:`2.0.0` (equivalent of :code:`>=1.18.0.dev`),
 we offer multiple database types which are (as per configuration) :code:`json`
@@ -111,10 +111,10 @@ How to use the :code:`mysql` or :code:`mariadb` format?
     information.
 
 .. note::
-    You can find the respective *.sql scripts at https://github.com/funilrys/PyFunceble/tree/dev/db_types
+    You can find the respective :code:`*.sql` scripts at https://github.com/funilrys/PyFunceble/tree/dev/db_types
 
 Known limitations with MySQL and MariaDB
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 MySQL and MariaDB's default settings prevent ordinary users from creating
 stored functions, which can cause unsafe events to be written into the
@@ -139,7 +139,7 @@ as you have lowered the servers default security level of trust.
      for security or stability issues later on, if you run other SQL scripts.
 
 Search string
--------------
+^^^^^^^^^^^^^
 
 ::
 

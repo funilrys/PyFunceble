@@ -1,18 +1,18 @@
 Directory Structure
-===================
+-------------------
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 As we wanted the end-user to be able to work from everywhere into the filesystem,
 we created a logic which will create and keep the :code:`output/` directory which complies
 with our code.
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.output.constructor.Constructor`!
+    Want to read the code ? It's here :func:`PyFunceble.output.constructor.Constructor`!
 
 After each version, the maintainer does a :code:`--production` which will prepare the repository
 for production.
@@ -30,6 +30,6 @@ version.
 
 
 How to generate it manually?
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can't. But using the :code:`--dir-structure` argument will do the job on purpose.

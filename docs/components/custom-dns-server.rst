@@ -1,24 +1,24 @@
 Custom DNS Server
-=================
+-----------------
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Some times the testing environment is setup to use DNS-server which isn't
 suited for running a PyFunceble test of actually expired or active domains or
-Urls. This could by example be your own DNS-Firewall.
+urls. This could by example be your own DNS-Firewall.
 
 To avoid these situations, the program allows you to setup test DNS-Server.
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 Thanks to :code:`python-dns` we can parse the given DNS server.
 
 How to use it?
---------------
+^^^^^^^^^^^^^^
 
-By default PyFunceble will use the system wide DNS settings. This can be
+By default, PyFunceble will use the system-wide DNS settings. This can be
 changed with the ability to configure which DNS-Servers you like PyFunceble to
 use doing the test.
 
@@ -37,8 +37,6 @@ to
         - "9.9.9.9"
         - "149.112.112.112"
 
-
-.. version:: 3.0.0
 
 Since :code:`v3.0.0` it is possible to assign a specific port to use with the
 DNS-Server.

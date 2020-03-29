@@ -1,33 +1,33 @@
 
 Sorting
-=======
+-------
 
 .. note::
     While using the multiprocessing option, the data are tested as given.
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Because sorted is better, we sort by default!
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 .. note::
     Want to read the code ? It's here: :func:`~PyFunceble.engine.sort.Sort`!
 
 Alphabetically
-^^^^^^^^^^^^^^
+""""""""""""""
 
 This is the default one. The default python :code:`sorted()` function is used for that purpose.
 
 Hierarchically
-^^^^^^^^^^^^^^
+""""""""""""""
 
 The objective of this is to provide sorting by service/domains.
 
 .. note::
-    This is a simplified version of what we actually do.
+    This is a simplified version of what we do.
 
 1. Let's say we have :code:`aaa.bbb.ccc.tdl`.
     .. note::
@@ -40,7 +40,7 @@ The objective of this is to provide sorting by service/domains.
 
 
 How to activate the hierarchical sorting?
------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Simply change
 

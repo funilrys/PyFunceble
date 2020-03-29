@@ -26,8 +26,6 @@ PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 
 
 Its main objective is to provide the availability of domains, IPs and since recently URL by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
 
-PyFunceble is currently running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, block lists or even AdBlock filter lists.
-
 PyFunceble provides some useful features for continuous testing.
 
 As an example, its auto-continue system coupled with its auto-save system allows it to run nice and smoothly under Travis CI without even reaching Travis CI time restriction. In the other side, its internal inactive database system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs being automatically retested over time on next run.
@@ -93,40 +91,13 @@ As an example, its auto-continue system coupled with its auto-save system allows
 
 .. toctree::
    :maxdepth: 3
-   :caption: Components
 
-   components/adblock
-   components/auto-continue
-   components/auto-save
-   components/certificate-verification
-   components/clean
-   components/complements
-   components/config
-   components/custom-dns-server
-   components/custom-user-agent
-   components/databases
-   components/directory-structure
-   components/dns-lookup
-   components/environment-variables
-   components/execution-time
-   components/filter
-   components/iana
-   components/local
-   components/logs-sharing
-   components/mining
-   components/multiprocessing
-   components/output-files
-   components/percentage
-   components/public-suffix
-   components/sorting
-   components/whois-lookup
+   components/index
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contributing
 
-   contributing/submit
-   contributing/coding_conventions
+   contributing/index
 
 .. toctree::
    :maxdepth: 3
