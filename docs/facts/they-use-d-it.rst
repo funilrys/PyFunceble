@@ -1,7 +1,7 @@
 They use-d PyFunceble!
 ======================
 
-Just a list of tool/repository/code/infrastructure which uses or used 
+Just a list of tool/repository/code/infrastructure which uses or used
 PyFunceble!
 
 * `.pl-host-file`_
@@ -10,6 +10,7 @@ PyFunceble!
 * `add.Risk`_
 * `add.Spam`_
 * `adfilt`_
+* `Asads-Hosts`_
 * `Badd-Boyz-Hosts`_
 * `Badger Sett`_
 * `blacklist`_
@@ -40,6 +41,7 @@ PyFunceble!
 .. _add.Risk : https://github.com/FadeMind/hosts.extras/tree/master/add.Risk
 .. _add.Spam : https://github.com/FadeMind/hosts.extras/tree/master/add.Spam
 .. _adfilt : https://github.com/DandelionSprout/adfilt
+.. _Asads-Hosts : https://github.com/asaddon/Asads-Hosts
 .. _Badd-Boyz-Hosts : https://github.com/mitchellkrogza/Badd-Boyz-Hosts
 .. _Badger Sett : https://github.com/EFForg/badger-sett
 .. _Blacklist : https://github.com/anudeepND/blacklist
