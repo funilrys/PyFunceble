@@ -602,6 +602,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 output_control_group.add_argument(
+                    "--dots",
+                    action="store_true",
+                    help="Prints dots to stdout instead of giving the impression that we hang on. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.print_dots)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
                     "-q",
                     "--quiet",
                     action="store_true",
@@ -1029,6 +1040,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.plain_list_domain = preset.switch(
                         "plain_list_domain"
                     )
+
+                if args.dots:
+                    PyFunceble.CONFIGURATION.print_dots = preset.switch("print_dots")
 
                 if args.processes:
                     PyFunceble.CONFIGURATION.maximal_processes = args.processes

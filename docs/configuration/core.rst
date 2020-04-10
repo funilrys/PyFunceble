@@ -402,6 +402,18 @@
 .. warning::
     Do not touch this index unless you a have good reason to.
 
+:code:`print_dots`
+^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the printing of dots (:code:`.`) for the skipped subjects.
+
+.. note::
+    The idea is to not given the impression that we hang. Because most of the time, we don't.
+
 :code:`quiet`
 ^^^^^^^^^^^^^
 

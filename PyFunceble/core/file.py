@@ -499,7 +499,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 mining=self.mining,
                 whois_db=self.whois_db,
             )
-        elif self.autosave.authorized:
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             # We are under a CI/CD environment.
 
             # We print a dot.

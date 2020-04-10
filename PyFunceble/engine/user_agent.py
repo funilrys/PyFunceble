@@ -109,4 +109,4 @@ class UserAgent:
                 PyFunceble.CONFIGURATION.user_agent.platform
             ]
 
-        return PyFunceble.CONFIGURATION.user_agent.custom
+        return PyFunceble.CONFIGURATION.user_agent.custom  # pragma: no cover

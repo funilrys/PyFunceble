@@ -321,7 +321,7 @@ class MultiprocessCore(
             )
             process.name = f"PyF {subject}"
             process.start()
-        elif self.autosave.authorized:
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             print(".", end="")
 
         PyFunceble.CONFIGURATION.update(original_config)

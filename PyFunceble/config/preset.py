@@ -78,12 +78,13 @@ class Preset:  # pragma: no cover
     # We do not update it.
     do_not_overwrite_if_customized = [
         "ci",
+        "cooldown_time",
         "inactive_database",
         "no_files",
+        "print_dots",
         "quiet",
         "reputation",
         "timeout",
-        "cooldown_time",
         "use_reputation_data",
         "whois_database",
     ]

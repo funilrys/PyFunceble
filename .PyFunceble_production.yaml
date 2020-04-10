@@ -68,6 +68,8 @@ no_special: False
 no_whois: False
 # Enable / Disable the generation of the plain list of element sorted by statuses.
 plain_list_domain: False
+# Enable / Disable the printing of dots in the output.
+print_dots: False
 # Enable / Disable the generation of output on screen.
 quiet: False
 # Enable/Disable the usage of the reputation data.

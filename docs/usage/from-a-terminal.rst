@@ -410,6 +410,14 @@ Output control
     ----------------------------- ----------- ----------
     pyfunceble.readthedocs.io     ACTIVE      302
 
+:code:`--dots`
+""""""""""""""
+
+    Output dots (:code:`.`) to :code:`stdout` instead of giving the impression
+    that we hang on.
+
+    **Default value:** :code:`False`
+
 :code:`-ex` | :code:`--execution`
 """""""""""""""""""""""""""""""""
 
@@ -795,8 +803,8 @@ Global overview
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
                     [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
-                    [-nu] [--percentage] [--plain] [-q] [--share-logs] [-s]
-                    [--split] [-m]
+                    [-nu] [--percentage] [--plain] [--dots] [-q] [--share-logs]
+                    [-s] [--split] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
                     [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
                     [--ci-branch CI_BRANCH]
@@ -825,7 +833,7 @@ Global overview
                                 If remote (RAW link) file is given, PyFunceble will download it,
                                 and test the content of the given RAW link as if it was a locally stored file.
 
-                            This argument test if an URL is available. It ONLY test full URLs.
+                                This argument test if an URL is available. It ONLY test full URLs.
 
     Source filtering, decoding, conversion and expansion:
         -ad, --adblock        Switch the decoding of the adblock format.
@@ -926,6 +934,8 @@ Global overview
         --percentage          Switch the value of the percentage output mode.
                                 Configured value: True
         --plain               Switch the value of the generation of the plain list of domains.
+                                Configured value: False
+        --dots                Prints dots to stdout intead of giving the impression that we hang on.
                                 Configured value: False
         -q, --quiet           Run the script in quiet mode.
                                 Configured value: False
