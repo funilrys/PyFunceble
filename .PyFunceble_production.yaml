@@ -25,8 +25,8 @@ dns_lookup_over_tcp: False
 #   The following format is expected if you want to give custom dns server.
 #
 #       dns_server:
-#         - "1.1.1.1" # First DNS server.
-#         - "1.0.0.1" # Second DNS server.
+#         - "8.8.8.8" # First DNS server.
+#         - "8.4.4.8" # Second DNS server.
 dns_server: null
 # Set the element to filter.
 filter: ""

@@ -105,14 +105,14 @@ class TestDNSLookup(TestCase):
         Tests the initiation of a custom nameserver.
         """
 
-        dns_lookup = Dns(lifetime=5, dns_server="1.1.1.1")
+        dns_lookup = Dns(lifetime=5, dns_server="8.8.8.8")
 
-        expected = ["1.1.1.1"]
+        expected = ["8.8.8.8"]
         actual = dns_lookup.resolver.nameservers
 
         self.assertEqual(expected, actual)
 
-        self.dns_lookup.update_nameserver("1.1.1.1")
+        self.dns_lookup.update_nameserver("8.8.8.8")
         actual = dns_lookup.resolver.nameservers
 
         self.assertEqual(expected, actual)
@@ -750,7 +750,7 @@ class TestDNSLookupPTR(TestCase):
         """
 
         self.dns_lookup = Dns()
-        self.subject = "1.1.1.1"
+        self.subject = "8.8.8.8"
 
     def test_record_given_not_str(self):
         """
@@ -770,7 +770,7 @@ class TestDNSLookupPTR(TestCase):
         self.assertIsInstance(actual, list)
         self.assertNotEqual([], actual)
 
-        actual = self.dns_lookup.ptr_record("1.1.1.1.in-addr.arpa.", reverse_name=False)
+        actual = self.dns_lookup.ptr_record("8.8.8.8.in-addr.arpa.", reverse_name=False)
 
         self.assertIsInstance(actual, list)
         self.assertNotEqual([], actual)

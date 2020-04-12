@@ -1,4 +1,4 @@
-current_version: 3.0.7.dev (Teal Blauwbok)
+current_version: 3.0.8.dev (Teal Blauwbok)
 deprecated:
 - 1.0.0
 - 1.2.1
@@ -125,7 +125,7 @@ messages:
     2.10.0:
     -   message: 🌟 🎉 🍰 We now support IPv6! 🍰 🎉 🌟
         type: info
-        until: 4.0.0
+        until: 3.1.0
     2.49.1:
     -   message: A manual intervention is needed. Find more at https://git.io/Je1Q6
             !

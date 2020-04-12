@@ -150,7 +150,15 @@ class MultiprocessCore(
         super().__init__(file, file_content_type=file_content_type)
 
     # pylint: disable=arguments-differ
-    def test(self, subject, file_content_type, configuration, manager_data, intern):
+    def test(
+        self,
+        subject,
+        file_content_type,
+        configuration,
+        manager_data,
+        intern,
+        ignore_inactive_db_check=False,
+    ):
         """
         Tests the given subject and return the result.
         """
@@ -172,39 +180,45 @@ class MultiprocessCore(
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
 
-        if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
-            PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
+        if not self.should_be_ignored(
+            subject,
+            self.autocontinue,
+            self.inactive_db,
+            ignore_inactive_db_check=ignore_inactive_db_check,
+        ):
+            if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
+                PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
-        if PyFunceble.CONFIGURATION.syntax:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).syntax(file_content_type)
-        elif PyFunceble.CONFIGURATION.reputation:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).reputation(file_content_type)
-        else:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).availability(file_content_type)
+            if PyFunceble.CONFIGURATION.syntax:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).syntax(file_content_type)
+            elif PyFunceble.CONFIGURATION.reputation:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).reputation(file_content_type)
+            else:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).availability(file_content_type)
 
-        self.generate_complement_status_file(result["tested"], result["status"])
-        self.save_into_database(result, self.file, self.mysql_db)
+            self.generate_complement_status_file(result["tested"], result["status"])
+            self.save_into_database(result, self.file, self.mysql_db)
 
-        if manager_data is not None:
-            manager_data.append(result)
-        else:
-            self.post_test_treatment(
-                result,
-                self.file_type,
-                complements_test_started=self.complements_test_started,
-                auto_continue_db=self.autocontinue,
-                inactive_db=self.inactive_db,
-                mining=self.mining,
-                whois_db=self.whois_db,
-            )
-
-        return result
+            if manager_data is not None:
+                manager_data.append(result)
+            else:
+                self.post_test_treatment(
+                    result,
+                    self.file_type,
+                    complements_test_started=self.complements_test_started,
+                    auto_continue_db=self.autocontinue,
+                    inactive_db=self.inactive_db,
+                    mining=self.mining,
+                    whois_db=self.whois_db,
+                )
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            print(".", end="")
 
     def __merge_processes_data(self, manager_data):
         """
@@ -212,7 +226,10 @@ class MultiprocessCore(
         """
 
         if manager_data is not None:
-            if not self.autosave.authorized:
+            if (
+                not self.autosave.authorized
+                and PyFunceble.CONFIGURATION.multiprocess_merging_mode != "live"
+            ):
                 print(
                     Fore.MAGENTA
                     + Style.BRIGHT
@@ -303,26 +320,19 @@ class MultiprocessCore(
             default_box_attr=None,
         )
 
-        if not self.should_be_ignored(
-            subject,
-            self.autocontinue,
-            self.inactive_db,
-            ignore_inactive_db_check=ignore_inactive_db_check,
-        ):
-            process = OurProcessWrapper(
-                target=self.test,
-                args=(
-                    subject,
-                    self.file_type,
-                    configuration,
-                    manager_data,
-                    original_intern,
-                ),
-            )
-            process.name = f"PyF {subject}"
-            process.start()
-        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-            print(".", end="")
+        process = OurProcessWrapper(
+            target=self.test,
+            args=(
+                subject,
+                self.file_type,
+                configuration,
+                manager_data,
+                original_intern,
+                ignore_inactive_db_check,
+            ),
+        )
+        process.name = f"PyF {subject}"
+        process.start()
 
         PyFunceble.CONFIGURATION.update(original_config)
         PyFunceble.INTERN.update(original_intern)
