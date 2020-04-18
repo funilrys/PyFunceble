@@ -63,6 +63,7 @@ from os import path
 from os import sep as directory_separator
 from time import sleep
 
+from colorama import Fore
 from dotenv import load_dotenv
 
 import PyFunceble.abstracts as abstracts
@@ -184,12 +185,7 @@ HTTP_CODE = None
 # We initiate the location where we are going to get all links.
 LINKS = None
 # We initiate a location which will have all internal data.
-INTERN = {
-    "counter": {
-        "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
-        "percentage": {"down": 0, "invalid": 0, "up": 0},
-    }
-}
+INTERN = None
 # We initiate the location of the Logger.
 LOGGER = None
 # We initiate the location of the HTTP requests.
@@ -200,6 +196,8 @@ DNSLOOKUP = None
 PSLOOOKUP = None
 # We initiate the IANA lookup.
 IANALOOKUP = None
+# We initate the loader.
+LOADER = None
 
 load_dotenv()
 load_dotenv(CONFIG_DIRECTORY + ".env")
@@ -689,21 +687,20 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
             pyfunceble.configuration.update(config_given_by_user)
     """
 
-    # We load and download the different configuration file if they are non
-    # existant.
-    cconfig.Load(CONFIG_DIRECTORY, custom)
+    if not LOADER:
+        loader = cconfig.Loader()
+        loader.set_path_to_config(CONFIG_DIRECTORY)
+        loader.get_config()
+        loader.set_custom_config(custom)
+    elif not LOADER.was_configuration_loaded():
+        LOADER.set_path_to_config(CONFIG_DIRECTORY)
+        LOADER.get_config()
+        LOADER.set_custom_config(custom)
+    else:
+        LOADER.set_custom_config(custom)
 
     if generate_directory_structure:
-        # If we are not under test which means that we want to save informations,
-        # we initiate the directory structure.
         output.Constructor()
-
-    # We run the merging logic.
-    #
-    # Note: Actually, it compares the local and the upstream configuration.
-    # if a new key is present, it proposes the enduser to merge upstream
-    # into the local configuration.
-    cconfig.Merge(CONFIG_DIRECTORY)
 
 
 def is_domain_malicious(subject):  # pragma: no cover

@@ -937,6 +937,14 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
         elif "ci_initiated" in PyFunceble.INTERN or PyFunceble.CONFIGURATION.print_dots:
             # We are under a CI/CD environment.
 
+            print(
+                "YULU",
+                self.subject,
+                PyFunceble.CONFIGURATION.quiet,
+                "ci_initiated" in PyFunceble.INTERN,
+            )
+            PyFunceble.LOGGER.info(f"Generation of output file for {self.subject!r}.")
+
             # We print a dot.
             print(".", end="")
 

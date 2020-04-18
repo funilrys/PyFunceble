@@ -58,6 +58,5 @@ License:
     SOFTWARE.
 """
 
-from .load import Load
-from .merge import Merge
+from .loader import Loader
 from .preset import Preset

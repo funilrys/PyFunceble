@@ -79,6 +79,8 @@ class TestExecutionTime(StdoutBase):
     Tests of PyFunceble.cli.execution time
     """
 
+    # pylint: disable=unsupported-assignment-operation, unsubscriptable-object
+
     def setUp(self):
         """
         Setups everything needed for the tests

@@ -79,6 +79,8 @@ class TestCLICore(StdoutBase):
     Tests of the PyFunceble.core.cli.
     """
 
+    # pylint: disable=unsubscriptable-object
+
     def setUp(self):
         """
         Setups everything needed for the tests.

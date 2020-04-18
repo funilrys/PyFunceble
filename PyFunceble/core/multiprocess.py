@@ -63,7 +63,6 @@ from itertools import chain
 from multiprocessing import Manager, Pipe, Process, active_children
 from traceback import format_exc
 
-from box import Box
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
 from domain2idna import get as domain2idna
@@ -154,26 +153,22 @@ class MultiprocessCore(
         self,
         subject,
         file_content_type,
-        configuration,
+        loader,
         manager_data,
         intern,
         ignore_inactive_db_check=False,
+        custom=None,
     ):
         """
         Tests the given subject and return the result.
         """
 
-        PyFunceble.CONFIGURATION = None
-        PyFunceble.INTERN = {
-            "counter": {
-                "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
-                "percentage": {"down": 0, "invalid": 0, "up": 0},
-            }
-        }
+        PyFunceble.LOADER = loader
+
+        PyFunceble.LOADER.set_custom_config(custom)
+        PyFunceble.LOADER.inject_all()
 
         initiate_colorama(True)
-
-        PyFunceble.load_config(custom=configuration)
 
         PyFunceble.INTERN.update(intern)
 
@@ -218,6 +213,7 @@ class MultiprocessCore(
                     whois_db=self.whois_db,
                 )
         elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            PyFunceble.LOGGER.info(f"Skipped {subject!r}.")
             print(".", end="")
 
     def __merge_processes_data(self, manager_data):
@@ -301,40 +297,32 @@ class MultiprocessCore(
         Starts a new process.
         """
 
-        original_config = Box(
-            PyFunceble.CONFIGURATION.copy(), default_box=True, default_box_attr=None
-        )
+        original_config = PyFunceble.CONFIGURATION.copy()
         original_intern = PyFunceble.INTERN.copy()
-
-        configuration = PyFunceble.CONFIGURATION.copy()
-
-        configuration = Box(
-            PyFunceble.helpers.Merge(
-                {
-                    "api_file_generation": PyFunceble.CONFIGURATION.db_type == "json",
-                    "inactive_database": False,
-                    "auto_continue": False,
-                }
-            ).into(configuration),
-            default_box=True,
-            default_box_attr=None,
-        )
 
         process = OurProcessWrapper(
             target=self.test,
             args=(
                 subject,
                 self.file_type,
-                configuration,
+                PyFunceble.LOADER,
                 manager_data,
                 original_intern,
                 ignore_inactive_db_check,
+                {
+                    "api_file_generation": PyFunceble.CONFIGURATION.db_type == "json",
+                    "inactive_database": False,
+                    "auto_continue": False,
+                    "quiet": PyFunceble.CONFIGURATION.quiet,
+                },
             ),
         )
         process.name = f"PyF {subject}"
         process.start()
 
-        PyFunceble.CONFIGURATION.update(original_config)
+        PyFunceble.LOADER.config.update(original_config)
+        PyFunceble.LOADER.inject_all()
+
         PyFunceble.INTERN.update(original_intern)
 
     # pylint: disable=too-many-nested-blocks,too-many-branches
@@ -412,9 +400,9 @@ class MultiprocessCore(
             ):
                 active = active_children()
 
-                PyFunceble.LOGGER.info(
-                    f"Active processes: {[x.name for x in reversed(active)]}"
-                )
+                # PyFunceble.LOGGER.info(
+                #     f"Active processes: {[x.name for x in reversed(active)]}"
+                # )
 
             if PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live":
                 if not finished and not self.autosave.is_time_exceed():

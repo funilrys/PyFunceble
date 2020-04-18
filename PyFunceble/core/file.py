@@ -502,6 +502,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             # We are under a CI/CD environment.
 
+            PyFunceble.LOGGER.info(f"Skipped {subject!r}.")
+
             # We print a dot.
             print(".", end="")
 

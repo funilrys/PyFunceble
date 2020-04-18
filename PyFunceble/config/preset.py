@@ -173,10 +173,8 @@ class Preset:  # pragma: no cover
 
         return not (
             index in cls.do_not_overwrite_if_customized
-            and "custom_loaded" in PyFunceble.INTERN
-            and PyFunceble.INTERN["custom_loaded"]
-            and "custom_config_loaded" in PyFunceble.INTERN
-            and index in PyFunceble.INTERN["custom_config_loaded"]
+            and PyFunceble.LOADER.custom_loaded
+            and index in PyFunceble.LOADER.custom_loaded
         )
 
     @classmethod

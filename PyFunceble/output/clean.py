@@ -247,6 +247,6 @@ class Clean:
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all
             ):  # pragma: no cover
-                PyFunceble.cconfig.Load(PyFunceble.CONFIG_DIRECTORY)
+                PyFunceble.load_config()
 
                 PyFunceble.LOGGER.info(f"Reloaded configuration.")
