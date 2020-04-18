@@ -73,7 +73,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.0.10.dev (Teal Blauwbok)"
+    VERSION = "3.0.11.dev (Teal Blauwbok)"
 
     """
     Sets the package version.

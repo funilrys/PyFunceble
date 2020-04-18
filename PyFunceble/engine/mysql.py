@@ -211,7 +211,7 @@ class MySQL:
         :param str env_file_location: The location of the file we have to update.
         """
 
-        if not self.initiated:
+        if not self.initiated and envs:
             file_instance = PyFunceble.helpers.File(env_file_location)
 
             try:
