@@ -118,3 +118,10 @@ class Infrastructure:
 
     :type: str
     """
+
+    REPO_LINK = "https://git.io/vpZoI"
+    """
+    Sets the link to the repository.
+
+    :type: str
+    """
