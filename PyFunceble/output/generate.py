@@ -962,9 +962,10 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
             # We print on screen if needed.
             self._prints_status_screen()
 
+        # We increase the percentage count.
+        PyFunceble.output.Percentage(self.status).count()
+
         if self.file_production:
-            # We increase the percentage count.
-            PyFunceble.output.Percentage(self.status).count()
 
             # We print or generate the  splitted files.
             self.prints_status_file()
