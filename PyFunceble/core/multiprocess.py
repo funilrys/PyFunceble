@@ -198,7 +198,7 @@ class MultiprocessCore(
                 ).availability(file_content_type)
 
             self.generate_complement_status_file(result["tested"], result["status"])
-            self.save_into_database(result, self.file, self.mysql_db)
+            self.save_into_database(result, self.file)
 
             if manager_data is not None:
                 manager_data.append(result)

@@ -229,20 +229,21 @@ class Clean:
                 "mysql",
             ]:  # pragma: no cover
 
-                mysql_db = PyFunceble.engine.MySQL()
+                with PyFunceble.engine.MySQL() as connection:
+                    for database_name in [
+                        y
+                        for x, y in PyFunceble.engine.MySQL.tables.items()
+                        if x not in to_avoid
+                    ]:
+                        lquery = query.format(database_name)
 
-                for database_name in [
-                    y for x, y in mysql_db.tables.items() if x not in to_avoid
-                ]:
-                    lquery = query.format(database_name)
+                        with connection.cursor() as cursor:
+                            cursor.execute(lquery, {"file_path": file_path})
 
-                    with mysql_db.get_connection() as cursor:
-                        cursor.execute(lquery, {"file_path": file_path})
-
-                        PyFunceble.LOGGER.info(
-                            "Cleaned the data related to "
-                            f"{repr(file_path)} from the {database_name} table."
-                        )
+                            PyFunceble.LOGGER.info(
+                                "Cleaned the data related to "
+                                f"{repr(file_path)} from the {database_name} table."
+                            )
 
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all

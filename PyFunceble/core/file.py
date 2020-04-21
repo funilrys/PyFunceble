@@ -98,15 +98,14 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         self.file = self.download_link(file)
         self.file_type = file_content_type.lower()
 
-        self.inactive_db = PyFunceble.database.Inactive(
-            self.file, mysql_db=self.mysql_db, parent_process=True
-        )
-        self.mining = PyFunceble.engine.Mining(self.file, mysql_db=self.mysql_db)
+        self.inactive_db = PyFunceble.database.Inactive(self.file, parent_process=True)
+        self.mining = PyFunceble.engine.Mining(self.file)
         self.autocontinue = PyFunceble.engine.AutoContinue(
-            self.file, parent_process=True, mysql_db=self.mysql_db
+            self.file, parent_process=True
         )
 
-    def download_link(self, input_file):  # pragma: no cover
+    @classmethod
+    def download_link(cls, input_file):  # pragma: no cover
         """
         Downloads the file if it is an URL and return the name of the new file to test.
         """
@@ -115,12 +114,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             # We get the destination.
             destination = input_file.split("/")[-1]
 
-            if (
-                input_file
-                and PyFunceble.engine.AutoContinue(
-                    destination, mysql_db=self.mysql_db
-                ).is_empty()
-            ):
+            if input_file and PyFunceble.engine.AutoContinue(destination).is_empty():
                 # The given file is an URL.
 
                 if (
@@ -189,9 +183,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 "http_status_code, whois_server, file_path "
                 "FROM {0} WHERE status = %(official_status)s "
                 "AND file_path = %(file_path)s ORDER BY subject ASC"
-            ).format(self.mysql_db.tables["tested"])
+            ).format(PyFunceble.engine.MySQL.tables["tested"])
 
-            with self.mysql_db.get_connection() as cursor:
+            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                 cursor.execute(
                     to_select, {"official_status": status, "file_path": self.file}
                 )
@@ -318,7 +312,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             ).get()
 
         self.generate_complement_status_file(result["tested"], result["status"])
-        self.save_into_database(result, self.file, self.mysql_db)
+        self.save_into_database(result, self.file)
 
         return result
 

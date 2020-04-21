@@ -77,7 +77,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     # Save the filename we are working with.
     filename = None
 
-    def __init__(self, filename, parent_process=False, mysql_db=None):
+    def __init__(self, filename, parent_process=False):
         # We get the operation authorization.
         self.authorized = self.authorization()
         self.database_file = ""
@@ -86,16 +86,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
         # We preset the filename namespace.
         self.database[self.filename] = {}
 
-        # We get the mysql connection.
-        self.mysql_db = mysql_db
-
         self.table_name = self.get_table_name()
 
         # We share if we are under the parent process.
         self.parent = parent_process
 
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
-        PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
         PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
 
         if self.authorized:
@@ -164,7 +160,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     "WHERE subject = %(subject)s AND file_path = %(file)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"subject": index, "file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -193,13 +189,14 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             and not PyFunceble.CONFIGURATION.no_files
         )
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["auto_continue"]
+            return PyFunceble.engine.MySQL.tables["auto_continue"]
         return None
 
     def is_empty(self):
@@ -225,7 +222,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -285,7 +282,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     bytes(self.filename + subject + status, "utf-8")
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
 
                     query = (
                         "INSERT INTO {0} "
@@ -306,7 +303,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.LOGGER.info(
                             f"Inserted into the database: \n {playload}"
                         )
-                    except self.mysql_db.errors:
+                    except PyFunceble.engine.MySQL.errors:
                         query = (
                             "UPDATE {0} "
                             "SET subject = %(subject)s "
@@ -385,7 +382,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
                     PyFunceble.LOGGER.info(
@@ -442,7 +439,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         "AND file_path = %(file)s "
                     ).format(self.table_name)
 
-                    with self.mysql_db.get_connection() as cursor:
+                    with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                         cursor.execute(
                             query,
                             {
@@ -491,7 +488,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
                     fetched = cursor.fetchall()
@@ -554,7 +551,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             "AND is_complement = %(is_complement)s".format(self.table_name)
         )
 
-        with self.mysql_db.get_connection() as cursor:
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
             cursor.execute(query, {"file": self.filename, "is_complement": int(True)})
             fetched = cursor.fetchall()
 
@@ -584,10 +581,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             for subject in result
         ]
 
-        with self.mysql_db.get_connection() as cursor:
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
             try:
                 cursor.executemany(query, to_execute)
-            except self.mysql_db.errors:
+            except PyFunceble.engine.MySQL.errors:
                 pass
 
         return result

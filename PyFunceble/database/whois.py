@@ -73,7 +73,7 @@ class WhoisDB:
     database_file = None
     authorized = False
 
-    def __init__(self, mysql_db=None, parent_process=False):
+    def __init__(self, parent_process=False):
         # Get the authorization.
         self.authorized = self.authorization()
         self.database_file = ""
@@ -85,10 +85,8 @@ class WhoisDB:
             )
 
         self.parent = parent_process
-        self.mysql_db = mysql_db
         self.table_name = self.get_table_name()
 
-        PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
         PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
         PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
@@ -110,7 +108,7 @@ class WhoisDB:
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"subject": index})
 
                     fetched = cursor.fetchone()
@@ -139,7 +137,7 @@ class WhoisDB:
                         self.table_name
                     )
 
-                    with self.mysql_db.get_connection() as cursor:
+                    with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                         cursor.execute(query, {"subject": index})
 
                         fetched = cursor.fetchone()
@@ -190,7 +188,7 @@ class WhoisDB:
             )
         )
 
-        with self.mysql_db.get_connection() as cursor:
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
             playload = {
                 "subject": index,
                 "expiration_date": value["expiration_date"],
@@ -202,7 +200,7 @@ class WhoisDB:
             try:
                 cursor.execute(query, playload)
                 PyFunceble.LOGGER.info(f"Inserted into the database: \n {playload}")
-            except self.mysql_db.errors:
+            except PyFunceble.engine.MySQL.errors:
                 pass
 
     def __setitem__(self, index, value):
@@ -261,13 +259,14 @@ class WhoisDB:
         # We return the result.
         return result
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["whois"]
+            return PyFunceble.engine.MySQL.tables["whois"]
         return "whois"
 
     def load(self):
