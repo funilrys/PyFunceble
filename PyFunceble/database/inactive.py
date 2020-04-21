@@ -83,7 +83,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename, mysql_db=None, parent_process=False):
+    def __init__(self, filename, parent_process=False):
         self.one_day = timedelta(days=1)
         self.database_file = ""
 
@@ -109,13 +109,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             # We share the filename.
             self.filename = filename
 
-            # We get the db instance.
-            self.mysql_db = mysql_db
-
             self.table_name = self.get_table_name()
             self.to_retest = self.get_to_retest()
 
-            PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
             PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
             PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
@@ -146,7 +142,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "WHERE subject = %(subject)s AND file_path = %(file)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"subject": subject, "file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -204,13 +200,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         return PyFunceble.CONFIGURATION.inactive_database
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["inactive"]
+            return PyFunceble.engine.MySQL.tables["inactive"]
         return "inactive"
 
     def _merge(self):
@@ -396,8 +393,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
-
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     playload = {
                         "file": self.filename,
                         "subject": subject,
@@ -411,7 +407,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.LOGGER.info(
                             f"Inserted into the database: \n {playload}"
                         )
-                    except self.mysql_db.errors:
+                    except PyFunceble.engine.MySQL.errors:
                         query = (
                             "UPDATE {0} "
                             "SET subject = %(subject)s, status = %(status)s "
@@ -470,7 +466,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "AND subject = %(subject)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": subject})
 
                     PyFunceble.LOGGER.info(
@@ -484,7 +480,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         Executes the query to get the list to retest or already tested.
         """
 
-        with self.mysql_db.get_connection() as cursor:
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
             cursor.execute(query, {"file": self.filename, "days": self.days})
             fetched = cursor.fetchall()
 
@@ -521,7 +517,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "SELECT * FROM {0} WHERE file_path = %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, self.mysql_db.int_cast_type)
+                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
 
                 return self.__execute_query_retest_already_tested(query)
         return set()
@@ -554,7 +550,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "SELECT * FROM {0} WHERE file_path= %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, self.mysql_db.int_cast_type)
+                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
 
                 return self.__execute_query_retest_already_tested(query)
         return set()

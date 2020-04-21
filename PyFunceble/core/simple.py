@@ -97,7 +97,7 @@ class SimpleCore(CLICore):
             for data in dataset:
                 self.__save_in_database(data)
         else:
-            self.save_into_database(dataset, None, self.mysql_db)
+            self.save_into_database(dataset, None)
 
     def test(self, subject, subject_type):  # pylint: disable=too-many-return-statements
         """

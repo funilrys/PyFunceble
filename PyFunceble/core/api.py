@@ -129,17 +129,12 @@ class APICore:
                 else dict()
             )
 
-        # We get an instance of the DB connection.
-        self.mysql_db = PyFunceble.engine.MySQL()
-
         # We create an instance of the whois database.
-        self.whois_db = PyFunceble.database.Whois(
-            mysql_db=self.mysql_db, parent_process=is_parent
-        )
+        self.whois_db = PyFunceble.database.Whois(parent_process=is_parent)
 
         # We create an instance of the inactive database.
         self.inactive_db = PyFunceble.database.Inactive(
-            db_file_name, mysql_db=self.mysql_db, parent_process=is_parent
+            db_file_name, parent_process=is_parent
         )
 
     def __inactive_database_management(self, subject, status):
@@ -201,7 +196,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -266,7 +261,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -304,7 +299,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -495,7 +490,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a complete copy of the data.

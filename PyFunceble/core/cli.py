@@ -79,16 +79,13 @@ class CLICore:
         self.list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
         self.list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
 
-        self.mysql_db = PyFunceble.engine.MySQL()
         self.preset = PyFunceble.cconfig.Preset()
         self.preset.init_all()
 
         self.autosave = PyFunceble.engine.AutoSave(
             start_time=PyFunceble.INTERN["start"]
         )
-        self.whois_db = PyFunceble.database.Whois(
-            mysql_db=self.mysql_db, parent_process=True
-        )
+        self.whois_db = PyFunceble.database.Whois(parent_process=True)
 
         # We initiate a variable which will tell us when
         # we start testing for complements.
@@ -164,13 +161,13 @@ class CLICore:
                 file_instance.write("\n".join(to_write), overwrite=True)
 
     @classmethod
-    def save_into_database(cls, output, filename, mysql_db):  # pragma: no cover
+    def save_into_database(cls, output, filename):  # pragma: no cover
         """
         Saves the current status inside the database.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            table_name = mysql_db.tables["tested"]
+            table_name = PyFunceble.engine.MySQL.tables["tested"]
 
             if not filename:
                 filename = "simple"
@@ -206,7 +203,7 @@ class CLICore:
                 "WHERE digest = %(digest)s"
             ).format(table_name)
 
-            with mysql_db.get_connection() as cursor:
+            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                 to_set = PyFunceble.helpers.Merge({"file_path": filename}).into(output)
 
                 to_set["digest"] = PyFunceble.helpers.Hash(algo="sha256").data(
@@ -221,7 +218,7 @@ class CLICore:
 
                 try:
                     cursor.execute(to_insert, to_set)
-                except mysql_db.errors:
+                except PyFunceble.engine.MySQL.errors:
                     cursor.execute(to_update, to_set)
 
                 PyFunceble.LOGGER.debug(
