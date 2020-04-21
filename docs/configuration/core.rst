@@ -101,6 +101,18 @@
 .. note::
     This index has no effect if :code:`inactive_database` is set to :code:`False`.
 
+:code:`days_between_inactive_db_clean`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`28`
+
+    **Description:**  Set the numbers of days since the introduction of a subject into :code:`inactive-db.json` for it to qualifies for deletion.
+
+.. note::
+    This index has no effect if :code:`inactive_database` is set to :code:`False`.
+
 :code:`db_type`
 ^^^^^^^^^^^^^^^
 

@@ -447,6 +447,19 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 database_control_group.add_argument(
+                    "-dbc",
+                    "--days-between-db-clean",
+                    type=int,
+                    help="Set the numbers of days since the introduction of a subject "
+                    "into inactive-db.json for it to qualifies for deletion. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.days_between_inactive_db_clean)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                database_control_group.add_argument(
                     "-wdb",
                     "--whois-database",
                     action="store_true",
@@ -944,6 +957,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 if args.days_between_db_retest:
                     PyFunceble.CONFIGURATION.days_between_db_retest = (
                         args.days_between_db_retest
+                    )
+
+                if args.days_between_db_clean:
+                    PyFunceble.CONFIGURATION.days_between_inactive_db_clean = (
+                        args.days_between_db_clean
                     )
 
                 if args.dns:

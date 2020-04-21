@@ -61,12 +61,13 @@ License:
 # pylint: enable=line-too-long
 
 from datetime import datetime, timedelta
-from time import sleep
 from unittest import TestCase
 from unittest import main as launch_tests
+from unittest.mock import Mock, patch
 
 import PyFunceble
 from PyFunceble.database.inactive import InactiveDB
+from time_zone import TZ
 
 
 class TestInactiveDB(TestCase):
@@ -118,58 +119,251 @@ class TestInactiveDB(TestCase):
         """
 
         # We also test the merging.
-        self.inactive_db.database = {
+        to_write = {
             self.file_to_test: {
-                "to_test": {"google.com": PyFunceble.STATUS.official.invalid}
+                "0": {"example.com": PyFunceble.STATUS.official.invalid}
             },
             "this_is_another_ghost": {
-                "190": {"||google.com^": PyFunceble.STATUS.official.invalid}
+                "190": {"||example.com^": PyFunceble.STATUS.official.invalid}
+            },
+            "this_is_a_well_informed_ghost": {
+                "example.com": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
             },
         }
 
         expected = {
             self.file_to_test: {
-                "0": {
-                    "mÿethèrwallét.com": PyFunceble.STATUS.official.invalid,
-                    "||google.com^": PyFunceble.STATUS.official.invalid,
-                }
+                "example.com": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
             },
             "this_is_another_ghost": {
-                "0": {"||google.com^": PyFunceble.STATUS.official.invalid},
-                "190": {"||google.com^": PyFunceble.STATUS.official.invalid},
+                "||example.com^": {
+                    "included_at_epoch": 190.0,
+                    "included_at_iso": "1970-01-01T01:03:10",
+                    "last_retested_at_epoch": 190.0,
+                    "last_retested_at_iso": "1970-01-01T01:03:10",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
             },
-            "this_is_a_hidden_ghost": {
-                "200": {"200.com": PyFunceble.STATUS.official.invalid}
+            "this_is_a_well_informed_ghost": {
+                "example.com": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
             },
         }
 
-        PyFunceble.helpers.Dict(expected.copy()).to_json_file(self.storage_file)
-        expected[self.file_to_test][
-            str(
-                int(
-                    (
-                        datetime.now() - timedelta(days=1) - timedelta(seconds=100)
-                    ).timestamp()
-                )
-            )
-        ] = {"google.com": PyFunceble.STATUS.official.invalid}
+        PyFunceble.helpers.Dict(to_write).to_json_file(self.storage_file)
 
         self.inactive_db.load()
 
         self.assertEqual(expected, self.inactive_db.database)
 
+    def test_clean(self):
+        """
+        Tests the cleaning process
+        """
+
+        to_write = {
+            self.file_to_test: {
+                "example.com": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
+        }
+
+        PyFunceble.helpers.Dict(to_write).to_json_file(self.storage_file)
+
+        self.inactive_db.load()
+        self.inactive_db.parent = True
+        self.inactive_db.clean()
+        self.inactive_db.parent = False
+
+        expected = {self.file_to_test: {}}
+
+        self.assertEqual(expected, self.inactive_db.database)
+
+    def test_get_to_retest(self):
+        """
+        Tests the method which is supposed to provides the list
+        of subject to restest.
+        """
+
+        today = datetime.now()
+        past = today - timedelta(days=100)
+        to_write = {
+            self.file_to_test: {
+                "example.com": {
+                    "included_at_epoch": today.timestamp(),
+                    "included_at_iso": today.isoformat(),
+                    "last_retested_at_epoch": today.timestamp(),
+                    "last_retested_at_iso": today.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.org": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.net": {
+                    "included_at_epoch": past.timestamp(),
+                    "included_at_iso": past.isoformat(),
+                    "last_retested_at_epoch": past.timestamp(),
+                    "last_retested_at_iso": past.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
+        }
+
+        PyFunceble.helpers.Dict(to_write).to_json_file(self.storage_file)
+
+        self.inactive_db.load()
+
+        expected = {"example.org", "example.net"}
+
+        self.assertEqual(expected, self.inactive_db.get_to_retest())
+
+        self.inactive_db.remove("example.org")
+        self.inactive_db.remove("example.net")
+
+        expected = set()
+
+        self.assertEqual(expected, self.inactive_db.get_to_retest())
+
+    def test_get_already_tested(self):
+        """
+        Tests of the method which gives us the list of already
+        tested subject.
+        """
+
+        today = datetime.now()
+        past = today - timedelta(days=300)
+        to_write = {
+            self.file_to_test: {
+                "example.com": {
+                    "included_at_epoch": today.timestamp(),
+                    "included_at_iso": today.isoformat(),
+                    "last_retested_at_epoch": today.timestamp(),
+                    "last_retested_at_iso": today.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.org": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.net": {
+                    "included_at_epoch": past.timestamp(),
+                    "included_at_iso": past.isoformat(),
+                    "last_retested_at_epoch": past.timestamp(),
+                    "last_retested_at_iso": past.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
+        }
+
+        PyFunceble.helpers.Dict(to_write).to_json_file(self.storage_file)
+
+        self.inactive_db.load()
+
+        expected = {"example.com", "example.org"}
+
+        self.assertEqual(expected, self.inactive_db.get_already_tested())
+
+        self.inactive_db.remove("example.com")
+        self.inactive_db.remove("example.org")
+
+        expected = set()
+
+        self.assertEqual(expected, self.inactive_db.get_already_tested())
+
+        self.inactive_db.authorized = False
+
+        self.assertEqual(expected, self.inactive_db.get_already_tested())
+
+    def test_get_to_clean(self):
+        """
+        Tests of the method which gives us the list of subject to clean.
+        """
+
+        today = datetime.now()
+        past = today - timedelta(days=300)
+        to_write = {
+            self.file_to_test: {
+                "example.com": {
+                    "included_at_epoch": today.timestamp(),
+                    "included_at_iso": today.isoformat(),
+                    "last_retested_at_epoch": today.timestamp(),
+                    "last_retested_at_iso": today.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.org": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "example.net": {
+                    "included_at_epoch": past.timestamp(),
+                    "included_at_iso": past.isoformat(),
+                    "last_retested_at_epoch": past.timestamp(),
+                    "last_retested_at_iso": past.isoformat(),
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
+        }
+
+        PyFunceble.helpers.Dict(to_write).to_json_file(self.storage_file)
+
+        self.inactive_db.load()
+
+        excepted = {"example.net", "example.org"}
+
+        self.assertEqual(excepted, self.inactive_db.get_to_clean())
+
+        excepted = set()
+        self.inactive_db.authorized = False
+
+        self.assertEqual(excepted, self.inactive_db.get_to_clean())
+
     def test_save(self):
         """
-        Tests teh case that we save the database.
+        Tests the case that we save the database.
         """
 
         expected = {
             self.file_to_test: {
-                "0": {
-                    "mÿethèrwallét.com": PyFunceble.STATUS.official.invalid,
-                    "||google.com^": PyFunceble.STATUS.official.invalid,
-                }
-            }
+                "example.com": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
         }
 
         self.inactive_db.database = expected.copy()
@@ -192,20 +386,31 @@ class TestInactiveDB(TestCase):
 
         self.assertEqual(expected, self.inactive_db.database)
 
-    def test_add_tested_path_does_not_exists(self):
+    @patch("datetime.datetime")
+    def test_add_tested_path_does_not_exists(self, datetime_patch):
         """
-        Tests the addition method for the case that teh flle
+        Tests the addition method for the case that the flle
         we are testing is not indexed.
         """
 
         self.inactive_db.database = {}
 
+        our_value = datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
+        datetime_patch = Mock(wraps=datetime)
+        datetime_patch.now = Mock(return_value=our_value)
+        patcher = patch("PyFunceble.database.inactive.datetime", new=datetime_patch)
+        patcher.start()
+
         subject = "hello.world"
 
         expected = {
             self.file_to_test: {
-                str(int(datetime.now().timestamp())): {
-                    subject: PyFunceble.STATUS.official.down
+                subject: {
+                    "included_at_epoch": our_value.timestamp(),
+                    "included_at_iso": our_value.isoformat(),
+                    "last_retested_at_epoch": our_value.timestamp(),
+                    "last_retested_at_iso": our_value.isoformat(),
+                    "status": PyFunceble.STATUS.official.down,
                 }
             }
         }
@@ -215,14 +420,17 @@ class TestInactiveDB(TestCase):
 
         subject = "world.hello"
 
-        sleep(2)
-
-        expected[self.file_to_test][str(int(datetime.now().timestamp()))] = {
-            subject: PyFunceble.STATUS.official.down
-        }
+        expected[self.file_to_test][subject] = expected[self.file_to_test][
+            "hello.world"
+        ].copy()
 
         self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
         self.assertEqual(expected, self.inactive_db.database)
+
+        self.inactive_db.add(subject, PyFunceble.STATUS.official.down)
+        self.assertEqual(expected, self.inactive_db.database)
+
+        patcher.stop()
 
     def test_remove(self):
         """
@@ -233,10 +441,14 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {
             self.file_to_test: {
-                str(int(datetime.now().timestamp())): {
-                    subject: PyFunceble.STATUS.official.down
-                }
-            }
+                subject: {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
         }
 
         expected = {self.file_to_test: {}}
@@ -253,10 +465,14 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.database = {
             self.file_to_test: {
-                str(int(datetime.now().timestamp())): {
-                    subject: PyFunceble.STATUS.official.down
-                }
-            }
+                subject: {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+            },
         }
 
         expected = True
@@ -276,23 +492,41 @@ class TestInactiveDB(TestCase):
 
         expected = {
             self.file_to_test: {
-                str(int(datetime.now().timestamp())): {
-                    "hello.world": PyFunceble.STATUS.official.down,
-                    "world.hello": PyFunceble.STATUS.official.down,
-                }
-            }
+                "hello.world": {
+                    "included_at_epoch": 190.0,
+                    "included_at_iso": "1970-01-01T01:03:10",
+                    "last_retested_at_epoch": 190.0,
+                    "last_retested_at_iso": "1970-01-01T01:03:10",
+                    "status": PyFunceble.STATUS.official.invalid,
+                },
+                "world.hello": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.down,
+                },
+            },
         }
 
         self.inactive_db.database = {
             self.file_to_test: {
-                str(int(datetime.now().timestamp())): {
-                    "world.hello": PyFunceble.STATUS.official.down
-                }
-            }
+                "world.hello": {
+                    "included_at_epoch": 0.0,
+                    "included_at_iso": "1970-01-01T01:00:00",
+                    "last_retested_at_epoch": 0.0,
+                    "last_retested_at_iso": "1970-01-01T01:00:00",
+                    "status": PyFunceble.STATUS.official.down,
+                },
+            },
         }
 
-        self.inactive_db[str(int(datetime.now().timestamp()))] = {
-            "hello.world": PyFunceble.STATUS.official.down
+        self.inactive_db["hello.world"] = {
+            "included_at_epoch": 190.0,
+            "included_at_iso": "1970-01-01T01:03:10",
+            "last_retested_at_epoch": 190.0,
+            "last_retested_at_iso": "1970-01-01T01:03:10",
+            "status": PyFunceble.STATUS.official.invalid,
         }
 
         self.assertEqual(expected, self.inactive_db.database)

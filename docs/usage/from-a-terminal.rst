@@ -375,6 +375,19 @@ This argument let us use different types of database.
     :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are
     activated.
 
+:code:`-dbc "something"` | :code:`--days-between-db-clean`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    Set the numbers of days since the introduction of a subject into
+    inactive-db.json for it to qualifies for deletion.
+
+    **Default value:** :code:`28`
+
+.. note::
+    This argument is only used if :code:`-db`  or
+    :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are
+    activated.
+
 :code:`-wdb` | :code:`--whois-database`
 """""""""""""""""""""""""""""""""""""""
 
@@ -801,10 +814,10 @@ Global overview
                     [-vsc] [--wildcard] [--dns DNS [DNS ...]]
                     [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
-                    [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
-                    [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
-                    [-nu] [--percentage] [--plain] [--dots] [-q] [--share-logs]
-                    [-s] [--split] [-m]
+                    [-dbr DAYS_BETWEEN_DB_RETEST] [-dbc DAYS_BETWEEN_DB_CLEAN]
+                    [-wdb] [-a] [-ex] [--hierarchical] [-h] [-ip IP] [--json]
+                    [--less] [-nf] [-nl] [-nu] [--percentage] [--plain] [--dots]
+                    [-q] [--share-logs] [-s] [--split] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
                     [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
                     [--ci-branch CI_BRANCH]
@@ -906,6 +919,9 @@ Global overview
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of days between each retest of domains present into inactive-db.json.
                                 Configured value: 1
+        -dbc DAYS_BETWEEN_DB_CLEAN, --days-between-db-clean DAYS_BETWEEN_DB_CLEAN
+                                Set the numbers of days since the introduction of a subject into inactive-db.json for it to qualifies for deletion.
+                                Configured value: 28
         -wdb, --whois-database
                                 Switch the value of the usage of a database to store whois data to avoid whois servers rate limit.
                                 Configured value: True
@@ -935,7 +951,7 @@ Global overview
                                 Configured value: True
         --plain               Switch the value of the generation of the plain list of domains.
                                 Configured value: False
-        --dots                Prints dots to stdout intead of giving the impression that we hang on.
+        --dots                Prints dots to stdout instead of giving the impression that we hang on.
                                 Configured value: False
         -q, --quiet           Run the script in quiet mode.
                                 Configured value: False

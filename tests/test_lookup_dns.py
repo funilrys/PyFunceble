@@ -228,7 +228,7 @@ class TestDNSLookupA(TestCase):
         """
 
         self.dns_lookup = Dns()
-        self.subject = "example.org"
+        self.subject = "github.com"
 
     def test_record_given_not_str(self):
         """
