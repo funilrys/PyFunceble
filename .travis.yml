@@ -8,72 +8,36 @@ jobs:
       language: generic
       os: linux
       dist: bionic
-      name: "Code Test with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.2"
         - TOXENV="py38"
       script:
         - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Code Test with Python 3.8.1 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.8.2 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.1"
-        - TOXENV="py38"
-      script:
-        - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.8.0"
-        - TOXENV="py38"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code Test with Python 3.8.0 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.8.0"
+        - PYTHON_VERSION="3.8.2"
         - TOXENV="py38"
       script:
         - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Code Test with Python 3.7.6 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.7.7 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.7.6"
+        - PYTHON_VERSION="3.7.7"
         - TOXENV="py37"
       script:
         - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Code Test with Python 3.7.6 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.7.7 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.7.6"
-        - TOXENV="py37"
-      script:
-        - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.7.5"
-        - TOXENV="py37"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code Test with Python 3.7.5 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.7.5"
+        - PYTHON_VERSION="3.7.7"
         - TOXENV="py37"
       script:
         - tox --current-env
@@ -95,55 +59,35 @@ jobs:
         - TOXENV="py36"
       script:
         - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.6.9"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code test with Python 3.6.9 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.6.9"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-
-
 
     - stage: "CLI (running) Tests"
       language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Run with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.2"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Run with Python 3.8.1 under macOS 10.14 (Mojave)"
+      name: "Run with Python 3.8.2 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.2"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      name: "Run with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.2"
         - TOXENV="py38"
       addons:
-          mariadb: '10.4'
+        mariadb: "10.4"
       before_script:
         - sudo systemctl restart mysql
         - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -161,7 +105,6 @@ jobs:
       script:
         - tox --current-env -c tox_run_mariadb.ini
 
-
     - language: generic
       stage: "Deployments"
       os: linux
@@ -172,7 +115,7 @@ jobs:
       after_success:
         - echo "Hello, World!"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.2"
       deploy:
         provider: pypi
         user: funilrys
@@ -183,7 +126,6 @@ jobs:
         on:
           all_branches: true
           condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
-
 
 matrix:
   fast_finish: true
