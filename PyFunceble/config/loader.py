@@ -468,7 +468,6 @@ class Loader:
         PyFunceble.downloader.PublicSuffix()
         PyFunceble.downloader.UserAgents()
         PyFunceble.downloader.DirectoryStructure()
-        PyFunceble.downloader.DBType()
 
     def inject_all(self) -> None:
         """

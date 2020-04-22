@@ -104,6 +104,8 @@ class Preset:  # pragma: no cover
         self.syntax_test()
         self.reputation_data()
 
+        self.db_types()
+
     @classmethod
     def switch(
         cls, variable, custom=False
@@ -292,6 +294,15 @@ class Preset:  # pragma: no cover
 
         if PyFunceble.CONFIGURATION.maximal_processes < 1:
             PyFunceble.CONFIGURATION.maximal_processes = 1
+
+    @classmethod
+    def db_types(cls):
+        """
+        Ensure that the files are downloaded when the db types is not
+        the JSON one.
+        """
+
+        PyFunceble.downloader.DBType()
 
     @classmethod
     def multiprocess_merging_mode(cls):
