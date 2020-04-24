@@ -100,28 +100,16 @@ class MySQL:
 
         self.authorized = self.authorization()
 
-        self.pyfunceble_env_location = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.abstracts.Infrastructure.ENV_FILENAME
-        )
-        self.env_content = self.parse_env_file(self.pyfunceble_env_location)
-
         if self.authorized:
+            self.pyfunceble_env_location = (
+                PyFunceble.CONFIG_DIRECTORY
+                + PyFunceble.abstracts.Infrastructure.ENV_FILENAME
+            )
+            self.env_content = self.parse_env_file(self.pyfunceble_env_location)
+
             self.pre_initiated = False
             self.post_initiated = False
             self.db_tables_initiated = False
-
-            PyFunceble.downloader.DBType()
-
-    @classmethod
-    def get_int_cast_type(cls):
-        """
-        Provides the right integer casting.
-        """
-
-        if PyFunceble.CONFIGURATION.db_type == "mariadb":
-            return "INTEGER"
-        return "SIGNED"
 
     def __enter__(self):
         self.init_pre_connection()
@@ -154,6 +142,16 @@ class MySQL:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.connection.close()
+
+    @classmethod
+    def get_int_cast_type(cls):
+        """
+        Provides the right integer casting.
+        """
+
+        if PyFunceble.CONFIGURATION.db_type == "mariadb":
+            return "INTEGER"
+        return "SIGNED"
 
     @classmethod
     def authorization(cls):

@@ -508,13 +508,14 @@ class Loader:
         Loads the configuration.
         """
 
-        try:
-            self.__load_central_config()
-        except PyFunceble.exceptions.ConfigurationFileNotFound:
-            if not self.are_we_allowed_to_install_upstream():
-                raise PyFunceble.exceptions.ConfigurationFileNotFound()
+        if "links" not in self.config or "outputs" not in self.config:
+            try:
+                self.__load_central_config()
+            except PyFunceble.exceptions.ConfigurationFileNotFound:
+                if not self.are_we_allowed_to_install_upstream():
+                    raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
-            self.create_config_file_from_upstream()
-            self.__load_central_config()
+                self.create_config_file_from_upstream()
+                self.__load_central_config()
 
         self.inject_all()

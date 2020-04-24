@@ -165,6 +165,9 @@ class MultiprocessCore(
 
         PyFunceble.LOADER = loader
 
+        if not PyFunceble.LOADER.was_configuration_loaded():
+            PyFunceble.LOADER.get_config()
+
         PyFunceble.LOADER.set_custom_config(custom)
         PyFunceble.LOADER.inject_all()
 

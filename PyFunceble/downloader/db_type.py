@@ -78,15 +78,18 @@ class DBTypeDownloader(DownloaderBase):
         destination_directory = (
             f"{PyFunceble.CONFIG_DIRECTORY}"
             f"{PyFunceble.CONFIGURATION.outputs.db_type.directory}"
-            f"{directory_separator}"
         )
+
+        if not destination_directory.endswith(directory_separator):
+            destination_directory += directory_separator
+
         destination_dir_instance = PyFunceble.helpers.Directory(destination_directory)
 
         not_supported_db_types = ["json"]
 
         self.destination = (
             f"{destination_directory}"
-            f"{PyFunceble.CONFIGURATION.outputs.db_type.files[PyFunceble.CONFIGURATION.db_type]}"
+            f"{PyFunceble.OUTPUTS.db_type.files[PyFunceble.CONFIGURATION.db_type]}"
         )
 
         if not is_cloned_version and (
