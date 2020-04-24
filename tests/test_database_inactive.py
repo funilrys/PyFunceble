@@ -113,18 +113,23 @@ class TestInactiveDB(TestCase):
 
         self.assertEqual(expected, self.inactive_db.database)
 
-    def test_load_file_exists(self):
+    @patch("datetime.datetime")
+    def test_load_file_exists(self, datetime_patch):
         """
         Tests the case that we load the file.
         """
 
+        our_value = datetime(1970, 1, 1, 1, 3, 10, 0, tzinfo=TZ("+", hours=1).get())
+        datetime_patch = Mock(wraps=datetime)
+        datetime_patch.now = Mock(return_value=our_value)
+        datetime_patch.fromtimestamp = Mock(return_value=our_value)
+        patcher = patch("PyFunceble.database.inactive.datetime", new=datetime_patch)
+        patcher.start()
+
         # We also test the merging.
         to_write = {
             self.file_to_test: {
-                "0": {"example.com": PyFunceble.STATUS.official.invalid}
-            },
-            "this_is_another_ghost": {
-                "190": {"||example.com^": PyFunceble.STATUS.official.invalid}
+                "190": {"example.com": PyFunceble.STATUS.official.invalid}
             },
             "this_is_a_well_informed_ghost": {
                 "example.com": {
@@ -140,19 +145,10 @@ class TestInactiveDB(TestCase):
         expected = {
             self.file_to_test: {
                 "example.com": {
-                    "included_at_epoch": 0.0,
-                    "included_at_iso": "1970-01-01T01:00:00",
-                    "last_retested_at_epoch": 0.0,
-                    "last_retested_at_iso": "1970-01-01T01:00:00",
-                    "status": PyFunceble.STATUS.official.invalid,
-                },
-            },
-            "this_is_another_ghost": {
-                "||example.com^": {
-                    "included_at_epoch": 190.0,
-                    "included_at_iso": "1970-01-01T01:03:10",
-                    "last_retested_at_epoch": 190.0,
-                    "last_retested_at_iso": "1970-01-01T01:03:10",
+                    "included_at_epoch": our_value.timestamp(),
+                    "included_at_iso": our_value.isoformat(),
+                    "last_retested_at_epoch": our_value.timestamp(),
+                    "last_retested_at_iso": our_value.isoformat(),
                     "status": PyFunceble.STATUS.official.invalid,
                 },
             },
@@ -172,6 +168,8 @@ class TestInactiveDB(TestCase):
         self.inactive_db.load()
 
         self.assertEqual(expected, self.inactive_db.database)
+
+        patcher.stop()
 
     def test_clean(self):
         """
