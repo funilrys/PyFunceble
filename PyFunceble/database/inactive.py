@@ -219,15 +219,15 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                     if database_low_key.isdigit():
                         last_test_date = datetime.fromtimestamp(float(database_low_key))
-                        subject, status = list(data.items())[0]
 
-                        to_set[subject] = {
-                            "included_at_epoch": last_test_date.timestamp(),
-                            "included_at_iso": last_test_date.isoformat(),
-                            "last_retested_at_epoch": last_test_date.timestamp(),
-                            "last_retested_at_iso": last_test_date.isoformat(),
-                            "status": status,
-                        }
+                        for subject, status in data.items():
+                            to_set[subject] = {
+                                "included_at_epoch": last_test_date.timestamp(),
+                                "included_at_iso": last_test_date.isoformat(),
+                                "last_retested_at_epoch": last_test_date.timestamp(),
+                                "last_retested_at_iso": last_test_date.isoformat(),
+                                "status": status,
+                            }
                     else:
                         to_set[database_low_key] = data
 
