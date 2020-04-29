@@ -660,9 +660,14 @@ argument is suited for your needs!
 :code:`--ci-branch`
 """""""""""""""""""
 
-    Switch the branch name where we are going to push.
+    Switch the branch name where we are going to push the temponary results.
 
     **Default value:** :code:`master`
+
+.. note::
+    Curently the branch need to exist, but there are beeing worked on a path
+    to have PyFunceble to create the sub-branch and finally merge it into the
+    :code:`--ci-distribution-branch`
 
 :code:`--ci-distribution-branch`
 """"""""""""""""""""""""""""""""
