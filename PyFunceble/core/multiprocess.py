@@ -334,6 +334,8 @@ class MultiprocessCore(
         Tests the content of the given file.
         """
 
+        self.print_header()
+
         finished = False
         index = "funilrys"
 
@@ -355,12 +357,7 @@ class MultiprocessCore(
                     if isinstance(line, tuple):
                         index, line = line
 
-                    if PyFunceble.CONFIGURATION.adblock:
-                        subjects = PyFunceble.converter.AdBlock(
-                            line, aggressive=PyFunceble.CONFIGURATION.aggressive
-                        ).get_converted()
-                    else:
-                        subjects = PyFunceble.converter.File(line).get_converted()
+                    subjects = self.get_subjects(line)
 
                     if isinstance(subjects, list):
                         for subject in subjects:
@@ -427,14 +424,20 @@ class MultiprocessCore(
         Runs the test of the content of the given file.
         """
 
-        self.print_header()
-
-        with open(self.file, "r", encoding="utf-8") as file_stream:
+        with open(self.file, "r", encoding="utf-8") as file_stream, open(
+            self.construct_and_get_shadow_file(file_stream), "r", encoding="utf-8"
+        ) as shadow_file:
             with Manager() as manager:
-                self.__run_multiprocess_test(file_stream, manager)
+                self.__run_multiprocess_test(shadow_file, manager)
 
         if self.autocontinue.is_empty():
-            with open(self.file, "r", encoding="utf-8") as file_stream:
+            with open(self.file, "r", encoding="utf-8") as file_stream, open(
+                self.construct_and_get_shadow_file(
+                    file_stream, ignore_inactive_db_check=True
+                ),
+                "r",
+                encoding="utf-8",
+            ) as shadow_file:
                 with Manager() as manager:
                     self.__run_multiprocess_test(
                         file_stream, manager, ignore_inactive_db_check=True
