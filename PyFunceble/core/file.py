@@ -58,6 +58,8 @@ License:
     SOFTWARE.
 """
 
+from tempfile import NamedTemporaryFile
+
 from domain2idna import get as domain2idna
 
 import PyFunceble
@@ -459,22 +461,23 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         Runs the logic to run at the end of all test.
         """
 
-        auto_continue_db.update_counters()
-
         if test_completed:
+            auto_continue_db.update_counters()
             self.generate_files()
             self.sort_generated_files()
             auto_continue_db.clean()
+            auto_save.process(test_completed=test_completed)
         elif auto_save.is_time_exceed():
             self.generate_files()
             self.sort_generated_files()
-
-        auto_save.process(test_completed=test_completed)
+            auto_save.process(test_completed=test_completed)
 
     def __run_single_test(self, subject, ignore_inactive_db_check=False):
         """
         Run a test for a single subject.
         """
+
+        self.print_header()
 
         if not self.should_be_ignored(
             subject,
@@ -503,9 +506,11 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
         self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
-    def __test_line(self, line, ignore_inactive_db_check=False):
+    @classmethod
+    def get_subjects(cls, line):
         """
-        Tests a given line.
+        Given a line, we give the list of subjects
+        to test.
         """
 
         if PyFunceble.CONFIGURATION.adblock:
@@ -514,6 +519,15 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             ).get_converted()
         else:
             subjects = PyFunceble.converter.File(line).get_converted()
+
+        return subjects
+
+    def __test_line(self, line, ignore_inactive_db_check=False):
+        """
+        Tests a given line.
+        """
+
+        subjects = self.get_subjects(line)
 
         if isinstance(subjects, list):
             for subject in subjects:
@@ -525,21 +539,88 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 subjects, ignore_inactive_db_check=ignore_inactive_db_check
             )
 
+    def construct_and_get_shadow_file(
+        self, file_stream, ignore_inactive_db_check=False
+    ):
+        """
+        Provides a path to a file which contain the list to file.
+
+        The idea is to do a comparison between what we already tested
+        and what we still have to test.
+        """
+
+        with NamedTemporaryFile(delete=False) as temp_file:
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                print("")
+
+            for line in file_stream:
+                subjects = self.get_subjects(line)
+
+                if isinstance(subjects, list):
+                    comparison = [
+                        self.should_be_ignored(
+                            x,
+                            auto_continue_db=self.autocontinue,
+                            inactive_db=self.inactive_db,
+                            ignore_inactive_db_check=ignore_inactive_db_check,
+                        )
+                        for x in subjects
+                    ]
+                else:
+                    comparison = [
+                        self.should_be_ignored(
+                            subjects,
+                            auto_continue_db=self.autocontinue,
+                            inactive_db=self.inactive_db,
+                            ignore_inactive_db_check=ignore_inactive_db_check,
+                        )
+                    ]
+
+                if all(comparison):
+                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                        print("I", end="")
+
+                    continue
+
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("S", end="")
+
+                temp_file.write(line.encode("utf-8"))
+
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                print("")
+
+            return temp_file.name
+
     def run_test(self):
         """
         Run the test of the content of the given file.
         """
 
-        self.print_header()
-
-        with open(self.file, "r", encoding="utf-8") as file_stream:
-            for subject in file_stream:
+        with open(self.file, "r", encoding="utf-8") as file_stream, open(
+            self.construct_and_get_shadow_file(file_stream), "r"
+        ) as shadow_file:
+            for subject in shadow_file:
                 self.__test_line(subject)
 
+            shadow_file_name = shadow_file.name
+
+        PyFunceble.helpers.File(shadow_file_name).delete()
+
         if self.autocontinue.is_empty():
-            with open(self.file, "r", encoding="utf-8") as file_stream:
-                for subject in file_stream:
+            with open(self.file, "r", encoding="utf-8") as file_stream, open(
+                self.construct_and_get_shadow_file(
+                    file_stream, ignore_inactive_db_check=True
+                ),
+                "r",
+                encoding="utf-8",
+            ) as shadow_file:
+                for subject in shadow_file:
                     self.__test_line(subject, ignore_inactive_db_check=True)
+
+                shadow_file_name = shadow_file.name
+
+        PyFunceble.helpers.File(shadow_file_name).delete()
 
         for subject in self.inactive_db.get_to_retest():
             self.__test_line(subject)
