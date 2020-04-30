@@ -740,7 +740,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--ci-branch",
                     type=str,
                     default="master",
-                    help="Switch the branch name where we are going to push. %s"
+                    help="Switch the branch name where we are going to push the temporary results. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.ci_branch)
