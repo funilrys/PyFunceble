@@ -986,7 +986,7 @@ Global overview
         --ci                  Switch the value of the CI mode.
                                 Configured value: False
         --ci-branch CI_BRANCH
-                                Switch the branch name where we are going to push.
+                                Switch the branch name where we are going to push the temporary results.
                                 Configured value: 'master'
         --ci-distribution-branch CI_DISTRIBUTION_BRANCH
                                 Switch the branch name where we are going to push the final results.
