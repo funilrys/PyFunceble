@@ -45,7 +45,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io///en/master/
+    https://pyfunceble.readthedocs.io////en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -133,7 +133,7 @@ def _get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble",
+        name="PyFunceble-dev",
         version=_get_version(),
         python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
@@ -181,7 +181,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 5 - Production/Stable",
+            "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
