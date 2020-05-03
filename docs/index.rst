@@ -7,10 +7,10 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
     :height: 30px
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
