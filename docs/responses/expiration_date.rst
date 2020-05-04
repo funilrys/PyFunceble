@@ -3,6 +3,9 @@ Expiration Date
 
 Give us the expiration date of the tested element.
 
+.. note::
+    The API equivalent is :code:`expiration_date`.
+
 Unknown (CLI)
 ^^^^^^^^^^^^^
 

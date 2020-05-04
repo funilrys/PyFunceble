@@ -2,6 +2,9 @@ HTTP Code
 ---------
 
 .. note::
+    The API equivalent is :code:`http_status_code`.
+
+.. note::
   This section reflects exactly what the code does. So any changes made here should also be reported to the code or at least the configuration file.
 
 .. note::

@@ -3,6 +3,9 @@ Source
 
 Give us the source of the status.
 
+.. note::
+    The API equivalent is :code:`status_source`.
+
 HTTP Code
 ^^^^^^^^^
 

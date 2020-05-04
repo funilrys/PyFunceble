@@ -3,6 +3,9 @@ Status
 
 Give us the test result/status of the tested element.
 
+.. note::
+    The API equivalent is :code:`status`.
+
 ACTIVE
 ^^^^^^
 
