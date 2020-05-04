@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io////en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -485,6 +485,10 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             to_update = PyFunceble.helpers.Regex(regex).replace_match(
                 to_update, replacement
             )
+
+        to_update = PyFunceble.helpers.Regex(r"/{1,}en/(dev|master)").replace_match(
+            to_update, "/en/\\1"
+        )
 
         # We finally overwrite the file to fix with the filtered.
         # content.

@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io////en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -58,14 +58,8 @@ License:
     SOFTWARE.
 """
 
-from ipaddress import (
-    AddressValueError,
-    IPv4Address,
-    IPv6Address,
-    ip_address,
-    ip_interface,
-    ip_network,
-)
+from ipaddress import (AddressValueError, IPv4Address, IPv6Address, ip_address,
+                       ip_interface, ip_network)
 
 from domain2idna import get as domain2idna
 

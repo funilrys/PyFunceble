@@ -1009,6 +1009,6 @@ Global overview
         --directory-structure
                                 Generate the directory and files that are needed and which does not exist in the current directory.
 
-    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io////en/dev/
+    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html

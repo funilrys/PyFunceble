@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io////en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -73,7 +73,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.1.1.dev (Teal Blauwbok: Ladybug)"
+    VERSION = "3.1.2.dev (Teal Blauwbok: Ladybug)"
     """
     Sets the package version.
 
