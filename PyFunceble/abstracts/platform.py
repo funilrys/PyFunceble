@@ -82,7 +82,7 @@ class Platform:  # pragma: no cover
 
     MAC = ["darwin"]
     """
-    Provides teh list of supported MAC platform.
+    Provides the list of supported MAC platform.
 
     :type: list
     """

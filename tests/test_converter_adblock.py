@@ -116,6 +116,15 @@ class TestAdblockDecode(TestCase):
             "facebook.com##.search": ["facebook.com"],
             "||test.hello.world^$domain=hello.world": ["test.hello.world"],
             "||test.hwllo.world^$third-party": ["test.hwllo.world"],
+            "||examplae.com": ["examplae.com"],
+            "||examplbe.com^": ["examplbe.com"],
+            "||examplce.com$third-party": ["examplce.com"],
+            "||examplde.com^$third-party": ["examplde.com"],
+            '##[href^="https://examplee.com/"]': ["examplee.com"],
+            "||examplfe.com^examplge.com": ["examplfe.com"],
+            "||examplhe.com$script,image": ["examplhe.com"],
+            "||examplie.com^$domain=domain1.com|domain2.com": ["examplie.com"],
+            "||examplje.com^$third-party,image": ["examplje.com"],
         }
 
         PyFunceble.load_config()

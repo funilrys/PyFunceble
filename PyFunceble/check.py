@@ -58,8 +58,14 @@ License:
     SOFTWARE.
 """
 
-from ipaddress import (AddressValueError, IPv4Address, IPv6Address, ip_address,
-                       ip_interface, ip_network)
+from ipaddress import (
+    AddressValueError,
+    IPv4Address,
+    IPv6Address,
+    ip_address,
+    ip_interface,
+    ip_network,
+)
 
 from domain2idna import get as domain2idna
 
