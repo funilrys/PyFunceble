@@ -250,4 +250,4 @@ class Clean:
             ):  # pragma: no cover
                 PyFunceble.load_config()
 
-                PyFunceble.LOGGER.info(f"Reloaded configuration.")
+                PyFunceble.LOGGER.info("Reloaded configuration.")

@@ -109,7 +109,7 @@ class Constructor:
         and portable for user.
         """
 
-        PyFunceble.LOGGER.info(f"Backing up the directory structure..")
+        PyFunceble.LOGGER.info("Backing up the directory structure..")
 
         # We set the current output directory path.
         output_path = self.base + PyFunceble.OUTPUTS.parent_directory
@@ -158,7 +158,7 @@ class Constructor:
             self.base + "dir_structure_production.json"
         )
 
-        PyFunceble.LOGGER.info(f"Backup saved into dir_structure_production.json")
+        PyFunceble.LOGGER.info("Backup saved into dir_structure_production.json")
 
     def _restore_replace(self):
         """

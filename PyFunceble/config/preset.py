@@ -266,7 +266,7 @@ class Preset:  # pragma: no cover
             PyFunceble.INTERN["counter"]["number"][status] = 0
             PyFunceble.INTERN["counter"]["percentage"][status] = 0
 
-        PyFunceble.LOGGER.debug(f"Counter resetted.")
+        PyFunceble.LOGGER.debug("Counter resetted.")
 
     def syntax_test(self):
         """

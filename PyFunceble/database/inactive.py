@@ -276,10 +276,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized and self.parent:
-            PyFunceble.LOGGER.info(f"Started to clean old entry from the database.")
+            PyFunceble.LOGGER.info("Started to clean old entry from the database.")
             for subject in self.get_to_clean():
                 self.remove(subject)
-            PyFunceble.LOGGER.info(f"Finished to clean old entry from the database.")
+            PyFunceble.LOGGER.info("Finished to clean old entry from the database.")
 
     def initiate(self):
         """

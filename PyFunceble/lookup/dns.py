@@ -111,7 +111,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             # A dns server is given.
 
             PyFunceble.LOGGER.info(
-                f"DNS Server explicitly given, generating a new configurable resolver."
+                "DNS Server explicitly given, generating a new configurable resolver."
             )
             PyFunceble.LOGGER.debug(f"Given DNS server: {dns_server}")
 
@@ -123,7 +123,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         # A dns server is not given.
 
         PyFunceble.LOGGER.info(
-            f"DNS Server not explicitly given, providing the systemwide one."
+            "DNS Server not explicitly given, providing the systemwide one."
         )
 
         # We configure everything with what the OS gives us.

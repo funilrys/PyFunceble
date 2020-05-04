@@ -205,7 +205,7 @@ class CIBase:
             PyFunceble.helpers.Command("git log -1").execute(), return_match=False
         ):
 
-            PyFunceble.LOGGER.info(f"Bypass given. Ending process.")
+            PyFunceble.LOGGER.info("Bypass given. Ending process.")
 
             self.end_commit()
 

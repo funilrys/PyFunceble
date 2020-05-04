@@ -211,10 +211,10 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     self.filename not in self.database
                     or not self.database[self.filename]
                 ):
-                    PyFunceble.LOGGER.info(f"File to test was not previously indexed.")
+                    PyFunceble.LOGGER.info("File to test was not previously indexed.")
                     return True
 
-                PyFunceble.LOGGER.info(f"File to test was previously indexed.")
+                PyFunceble.LOGGER.info("File to test was previously indexed.")
                 return False
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
@@ -228,14 +228,14 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     fetched = cursor.fetchone()
 
                 if fetched["COUNT(*)"] == 0:
-                    PyFunceble.LOGGER.info(f"File to test was not previously indexed.")
+                    PyFunceble.LOGGER.info("File to test was not previously indexed.")
                     return True
 
-                PyFunceble.LOGGER.info(f"File to test was previously indexed.")
+                PyFunceble.LOGGER.info("File to test was previously indexed.")
                 return False
 
         PyFunceble.LOGGER.info(  # pragma: no cover
-            f"Could not check if the file to test "
+            "Could not check if the file to test "
             "was previously indexed. Unauthorized action."
         )
         return False  # pragma: no cover

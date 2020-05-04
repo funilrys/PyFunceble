@@ -70,7 +70,7 @@ class DBTypeDownloader(DownloaderBase):
     Provides the downloader of the desired database type file.
     """
 
-    DOWNTIME_INDEX = f"db_type"
+    DOWNTIME_INDEX = "db_type"
     REDOWNLOAD_AFTER = 0
 
     def __init__(self):
