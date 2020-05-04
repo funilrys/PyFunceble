@@ -115,7 +115,7 @@ class SimpleCore(CLICore):
                 return PyFunceble.status.UrlSyntax(subject, whois_db=self.whois_db)
 
             return PyFunceble.status.DomainAndIpSyntax(
-                subject, whois_db=self.whois_db
+                subject.lower(), whois_db=self.whois_db
             ).get()
 
         if PyFunceble.CONFIGURATION.reputation:
@@ -123,7 +123,7 @@ class SimpleCore(CLICore):
                 return PyFunceble.status.UrlReputation(subject, whois_db=self.whois_db)
 
             return PyFunceble.status.DomainAndIPReputation(
-                subject, whois_db=self.whois_db
+                subject.lower(), whois_db=self.whois_db
             ).get()
 
         if subject_type in ["url"]:
@@ -132,7 +132,7 @@ class SimpleCore(CLICore):
             ).get()
 
         return PyFunceble.status.DomainAndIpAvailability(
-            subject, whois_db=self.whois_db
+            subject.lower(), whois_db=self.whois_db
         ).get()
 
     def domain(self):

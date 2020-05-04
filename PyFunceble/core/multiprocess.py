@@ -187,6 +187,9 @@ class MultiprocessCore(
             if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
                 PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
+            if file_content_type in ["domain"]:
+                subject = subject.lower()
+
             if PyFunceble.CONFIGURATION.syntax:
                 result = APICore(
                     subject, complete=True, is_parent=False, db_file_name=self.file

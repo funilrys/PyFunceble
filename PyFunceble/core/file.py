@@ -278,7 +278,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 ).get()
             else:
                 result = PyFunceble.status.DomainAndIpSyntax(
-                    subject,
+                    subject.lower(),
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,
                     filename=self.file,
@@ -293,7 +293,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 ).get()
             else:
                 result = PyFunceble.status.DomainAndIPReputation(
-                    subject,
+                    subject.lower(),
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,
                     filename=self.file,
@@ -307,7 +307,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             ).get()
         else:
             result = PyFunceble.status.DomainAndIpAvailability(
-                subject,
+                subject.lower(),
                 whois_db=self.whois_db,
                 inactive_db=self.inactive_db,
                 filename=self.file,
