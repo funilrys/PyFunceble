@@ -121,7 +121,7 @@ stored functions, which can cause unsafe events to be written into the
 binary log.
 
 You will need to contact your database manager (maybe your self) and ask
-them to set this value (ad: 1) or even better, ask them to import the SQL script
+them to either: set this value (ad: 1) or even better, ask them to import the SQL script
 directly into the database.
 
 If you are running your own database server, the recommendation is you import
