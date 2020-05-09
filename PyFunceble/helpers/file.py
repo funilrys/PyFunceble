@@ -62,6 +62,8 @@ from os import path, remove, stat
 from shutil import copy as shutil_copy
 from shutil import move as shutil_move
 
+from .directory import Directory
+
 
 class File:
     """
@@ -156,6 +158,8 @@ class File:
 
         if isinstance(data, str):
             if overwrite or not self.exists(file_path=file_path):
+                Directory(path.dirname(file_path)).create()
+
                 with open(file_path, "w", encoding=encoding) as file_stream:
                     file_stream.write(data)
             else:

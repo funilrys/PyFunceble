@@ -142,7 +142,7 @@ class Directory:
             dir_path = self.path
 
         try:
-            if not self.exists(dir_path=dir_path):
+            if dir_path and not self.exists(dir_path=dir_path):
                 makedirs(dir_path)
         except FileExistsError:
             pass
