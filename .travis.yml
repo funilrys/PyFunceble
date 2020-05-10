@@ -138,7 +138,7 @@ jobs:
         - cd ${HOME} && unzip master.zip && cd docker-master
         - pip install -e .
         - pyfunceble-docker-builder --version
-        - cd ${HOME}/funilrys/PyFunceble
+        - cd ${HOME}/build/funilrys/PyFunceble
         - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --version)" --pyfunceble-version="$(python setup.py --name)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish
 
 matrix:
