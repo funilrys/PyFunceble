@@ -126,6 +126,20 @@ jobs:
         on:
           all_branches: true
           condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Deployment to Docker"
+      env:
+        - PYTHON_VERSION="3.8.2"
+        - DOCKER_PYTHON_VERSION="3.8"
+      script:
+        - wget https://github.com/PyFunceble/docker/archive/master.zip -O ${HOME}/master.zip
+        - cd ${HOME}/master.zip && unzip master.zip && cd docker-master
+        - pip install -e .
+        - pyfunceble-docker-builder --version
+        - cd ${HOME}/funilrys/PyFunceble
+        - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --version)" --pyfunceble-version="$(python setup.py --name)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish
 
 matrix:
   fast_finish: true
