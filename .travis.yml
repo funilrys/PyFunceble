@@ -135,7 +135,7 @@ jobs:
         - DOCKER_PYTHON_VERSION="3.8"
       script:
         - wget https://github.com/PyFunceble/docker/archive/master.zip -O ${HOME}/master.zip
-        - cd ${HOME}/master.zip && unzip master.zip && cd docker-master
+        - cd ${HOME} && unzip master.zip && cd docker-master
         - pip install -e .
         - pyfunceble-docker-builder --version
         - cd ${HOME}/funilrys/PyFunceble
