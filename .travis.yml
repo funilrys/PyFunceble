@@ -130,6 +130,8 @@ jobs:
       os: linux
       dist: bionic
       name: "Deployment to Docker"
+      services:
+        - docker
       env:
         - PYTHON_VERSION="3.8.2"
         - DOCKER_PYTHON_VERSION="3.8"
