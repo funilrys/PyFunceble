@@ -130,8 +130,6 @@ jobs:
       os: linux
       dist: bionic
       name: "Deployment to Docker"
-      services:
-        - docker
       env:
         - PYTHON_VERSION="3.8.2"
         - DOCKER_PYTHON_VERSION="3.8"
@@ -141,7 +139,7 @@ jobs:
         - pip install -e .
         - pyfunceble-docker-builder --version
         - cd ${TRAVIS_BUILD_DIR}
-        - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --name)" --pyfunceble-version="$(python setup.py --version)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish
+        - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --name)" --pyfunceble-version="$(python setup.py --version)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish -d
 
 matrix:
   fast_finish: true
