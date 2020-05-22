@@ -29,6 +29,10 @@ Source
 
         $ PyFunceble -d example.org example.net
 
+.. note::
+    When this option is used, no output files are
+    generated.
+
 :code:`-url "something"` | :code:`--url "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -228,7 +232,7 @@ This argument allows you to disable it!
 :code:`-t "something"` | :code:`--timeout "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    Switch the value of the timeout.
+    Switch the value of the timeout in seconds.
 
     **Default value:** :code:`5`
 
