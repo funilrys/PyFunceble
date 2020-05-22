@@ -815,7 +815,7 @@ Global overview
 
 ::
 
-    usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
+    usage: pyfunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
                     [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
@@ -845,6 +845,8 @@ Global overview
     Source:
         -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
                                 Test one or more domains, separated by spaces.
+
+                                When this option is used, no output files are generated.
         -u URL [URL ...], --url URL [URL ...]
                                 Test one or more full URL, separated by spaces.
         -f FILE, --file FILE  Read a local or remote (RAW link) file and test all domains inside it.
@@ -887,7 +889,7 @@ Global overview
         --syntax              Switch the value of the syntax test mode.
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
-                                Switch the value of the timeout.
+                                Switch the value of the timeout in seconds.
                                 Configured value: 5
         --reputation          Switch the value of the reputation test mode.
                                 Configured value: False

@@ -143,7 +143,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--domain",
                     type=str,
                     nargs="+",
-                    help="Test one or more domains, separated by spaces.",
+                    help="Test one or more domains, separated by spaces.\n\n"
+                    "When this option is used, no output files are generated.",
                 )
 
                 source_group.add_argument(
@@ -315,7 +316,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--timeout",
                     type=float,
                     default=0,
-                    help="Switch the value of the timeout. %s"
+                    help="Switch the value of the timeout in seconds. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.timeout)
