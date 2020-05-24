@@ -163,5 +163,8 @@ after_success:
   - coveralls
 
 notifications:
-  on_success: change
-  on_failure: always
+  email:
+    on_failure: always
+    on_success: change
+    recipients:
+      - pyfunceble@outlook.com
