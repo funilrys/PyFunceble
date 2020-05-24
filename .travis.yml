@@ -8,18 +8,18 @@ jobs:
       language: generic
       os: linux
       dist: bionic
-      name: "Code Test with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Code Test with Python 3.8.2 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.8.3 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env
@@ -64,27 +64,27 @@ jobs:
       language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Run with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Run with Python 3.8.2 under macOS 10.14 (Mojave)"
+      name: "Run with Python 3.8.3 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.2 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      name: "Run with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       addons:
         mariadb: "10.4"
@@ -115,7 +115,7 @@ jobs:
       after_success:
         - echo "Hello, World!"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
       deploy:
         provider: pypi
         user: funilrys
@@ -131,7 +131,7 @@ jobs:
       dist: bionic
       name: "Deployment to Docker"
       env:
-        - PYTHON_VERSION="3.8.2"
+        - PYTHON_VERSION="3.8.3"
         - DOCKER_PYTHON_VERSION="3.8"
       script:
         - wget https://github.com/PyFunceble/docker/archive/master.zip -O ${HOME}/master.zip
