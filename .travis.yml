@@ -142,6 +142,25 @@ jobs:
         - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --name)" --pyfunceble-version="$(python setup.py --version)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
       after_success:
         - echo "Hello, World!"
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Deployment to Anaconda Cloud"
+      env:
+        - PYTHON_VERSION="3.8.3"
+      before_install:
+        - wget https://raw.githubusercontent.com/PyFunceble/conda-builder/master/build-and-push-it -O ${TRAVIS_BUILD_DIR}/build-and-push-it
+      before_script:
+        - export pkgVersion=$(python3 setup.py --version)
+        - export pkgName=$(python3 setup.py --name)
+        - sed -i "s/%%version%%/${pkgVersion}/g" meta.yaml
+        - sed -i "s/%%pkg_name%%/${pkgName,,}/g" meta.yaml
+        - chmod +x build-and-push-it
+        - export CONDA_BUILD_DIR=${TRAVIS_BUILD_DIR}
+      script:
+        - ./build-and-push-it "${pkgName,,}" "${pkgVersion,,}"
+      after_success:
+        - echo "Hello, World!"
 
 install:
   - export PATH="${HOME}/miniconda/bin:${PATH}"

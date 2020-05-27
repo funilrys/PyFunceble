@@ -1,0 +1,83 @@
+{% set name = "%%pkg_name%%" %}
+{% set version = "%%version%%" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  path: ./
+
+build:
+  number: 0
+  entry_points:
+    - PyFunceble=PyFunceble.cli:tool
+    - pyfunceble=PyFunceble.cli:tool
+  noarch: python
+  script: "{{ PYTHON }} -m pip install . -vv"
+
+requirements:
+  host:
+    - colorama
+    - cryptography
+    - dnspython
+    - domain2idna >=1.6.1
+    - pip
+    - pymysql
+    - python
+    - python-box
+    - python-dotenv
+    - pyyaml
+    - requests
+    - setuptools
+  run:
+    - colorama
+    - cryptography
+    - dnspython
+    - domain2idna >=1.6.1
+    - pymysql
+    - python
+    - python-box
+    - python-dotenv
+    - pyyaml
+    - requests
+    - setuptools
+
+test:
+  imports:
+    - PyFunceble
+    - PyFunceble.abstracts
+    - PyFunceble.cli
+    - PyFunceble.config
+    - PyFunceble.converter
+    - PyFunceble.core
+    - PyFunceble.database
+    - PyFunceble.downloader
+    - PyFunceble.engine
+    - PyFunceble.engine.ci
+    - PyFunceble.extractor
+    - PyFunceble.helpers
+    - PyFunceble.lookup
+    - PyFunceble.output
+    - PyFunceble.status
+    - PyFunceble.status.availability
+    - PyFunceble.status.reputation
+    - PyFunceble.status.syntax
+  commands:
+    - PyFunceble --help
+    - pyfunceble --help
+    - PyFunceble -d github.com
+    - PyFunceble -u https://github.com/pyfunceble
+
+about:
+  home: "https://github.com/funilrys/PyFunceble"
+  license: MIT
+  license_family: MIT
+  license_file:
+  summary: "The tool to check the availability or syntax of domains, IPv4, IPv6 or URL."
+  doc_url:
+  dev_url:
+
+extra:
+  recipe-maintainers:
+    - funilrys
