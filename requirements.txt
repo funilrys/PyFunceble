@@ -6,6 +6,5 @@ PyMySQL
 python-box
 python-dotenv
 PyYAML
-requests
+requests<3
 setuptools
-urllib3
