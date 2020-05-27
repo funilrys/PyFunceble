@@ -153,7 +153,7 @@ jobs:
       before_script:
         - export pkgVersion=$(python3 setup.py --version)
         - export pkgName=$(python3 setup.py --name)
-        - sed -i "s/%%version%%/${pkgVersion}/g" meta.yaml
+        - sed -i "s/%%version%%/${pkgVersion,,}/g" meta.yaml
         - sed -i "s/%%pkg_name%%/${pkgName,,}/g" meta.yaml
         - chmod +x build-and-push-it
         - export CONDA_BUILD_DIR=${TRAVIS_BUILD_DIR}
