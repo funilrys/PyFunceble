@@ -558,12 +558,15 @@ class CLICore:
 
                 for single_message in data:
                     if "until_date" in single_message:
-                        until_date = (
-                            datetime.strptime(
-                                single_message["until_date"], iso_dateformat
-                            )
-                            - datetime.now(tz=local_timezone)
-                        ).days
+                        try:
+                            until_date = (
+                                datetime.strptime(
+                                    single_message["until_date"], iso_dateformat
+                                )
+                                - datetime.now(tz=local_timezone)
+                            ).days
+                        except ValueError:
+                            until_date = 0
 
                     if "until" in single_message:
                         until_comparison = PyFunceble.abstracts.Version.compare(
