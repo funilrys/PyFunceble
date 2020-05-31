@@ -174,7 +174,7 @@ install:
   - python --version --version
   - pip --version
   - conda --version
-  - conda install coverage coveralls codacy-coverage pylint unittest2
+  - conda install coverage coveralls conda-forge::codacy-coverage pylint unittest2
   - pip install tox-current-env
   - pip install -e .
 
