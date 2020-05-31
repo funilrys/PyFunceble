@@ -21,10 +21,10 @@ requirements:
     - colorama
     - cryptography
     - dnspython
-    - domain2idna >=1.6.1
+    - domain2idna
     - pip
     - pymysql
-    - python
+    - python >=3.6,<4
     - python-box
     - python-dotenv
     - pyyaml
@@ -34,9 +34,9 @@ requirements:
     - colorama
     - cryptography
     - dnspython
-    - domain2idna >=1.6.1
+    - domain2idna
     - pymysql
-    - python
+    - python >=3.6,<4
     - python-box
     - python-dotenv
     - pyyaml

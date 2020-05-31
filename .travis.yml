@@ -153,12 +153,13 @@ jobs:
       before_script:
         - export pkgVersion=$(python3 setup.py --version)
         - export pkgName=$(python3 setup.py --name)
-        - sed -i "s/%%version%%/${pkgVersion,,}/g" meta.yaml
-        - sed -i "s/%%pkg_name%%/${pkgName,,}/g" meta.yaml
         - chmod +x build-and-push-it
         - export CONDA_BUILD_DIR=${TRAVIS_BUILD_DIR}
       script:
-        - ./build-and-push-it "${pkgName,,}" "${pkgVersion,,}"
+        - >
+            ./build-and-push-it "${pkgName,,}" "${pkgVersion,,}"
+            --override-channels -c pyfunceble -c conda-forge --variants
+            '{"python": ["3.6", "3.7", "3.8"]}'
       after_success:
         - echo "Hello, World!"
 
