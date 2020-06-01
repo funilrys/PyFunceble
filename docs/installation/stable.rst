@@ -53,6 +53,15 @@ With your favorite AUR helper
 
     $ yourFavoriteAurHelper -S pyfunceble
 
+Using :code:`conda`
+^^^^^^^^^^^^^^^^^^^
+
+Our repository is located at https://anaconda.org/pyfunceble/pyfunceble
+
+::
+
+   conda install -c conda-forge -c pyfunceble pyfunceble
+
 Pure Python method
 ^^^^^^^^^^^^^^^^^^
 

@@ -108,7 +108,7 @@ The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunc
 Using :code:`conda`
 """""""""""""""""""
 
-Our repository is located at https://anaconda.org/pyfunceble/repo
+Our repository is located at https://anaconda.org/pyfunceble/pyfunceble-dev
 
 ::
 
