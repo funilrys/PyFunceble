@@ -71,6 +71,24 @@ With your favorite AUR helper
 
     $ yourFavoriteAurHelper -Syu python-pyfunceble-dev
 
+Using docker (hub)
+""""""""""""""""""
+
+The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble-dev
+
+::
+
+   $ docker pull pyfunceble/pyfunceble-dev
+
+Using :code:`conda`
+"""""""""""""""""""
+
+Our repository is located at https://anaconda.org/pyfunceble/repo
+
+::
+
+   conda update -c conda-forge -c pyfunceble pyfunceble-dev
+
 Pure Python method
 """"""""""""""""""
 

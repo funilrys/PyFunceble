@@ -81,9 +81,9 @@ With makepkg
 
 ::
 
-    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev
-    $ makepkg
-    $ sudo pacman -U pyfunceble-dev*.tar.xz
+   $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev
+   $ makepkg
+   $ sudo pacman -U pyfunceble-dev*.tar.xz
 
 With your favorite AUR helper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +95,24 @@ With your favorite AUR helper
 ::
 
     $ yourFavoriteAurHelper -S pyfunceble-dev
+
+Using docker (hub)
+""""""""""""""""""
+
+The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble-dev
+
+::
+
+   $ docker pull pyfunceble/pyfunceble-dev
+
+Using :code:`conda`
+"""""""""""""""""""
+
+Our repository is located at https://anaconda.org/pyfunceble/repo
+
+::
+
+   conda install -c conda-forge -c pyfunceble pyfunceble-dev
 
 Pure Python method
 """"""""""""""""""
