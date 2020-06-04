@@ -644,8 +644,8 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
 
                     # We conmplete the output directory.
                     output = output % (
-                        PyFunceble.OUTPUTS.analytic.directories.status,
-                        PyFunceble.OUTPUTS.analytic.filenames.status,
+                        PyFunceble.OUTPUTS.analytic.directories[status],
+                        PyFunceble.OUTPUTS.analytic.filenames[status],
                     )
 
                     # We generate the different file(s).
