@@ -8,8 +8,9 @@ Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble-dev :code:`>=1.18.0`), 
 the following files into the (local) list of environment variables.
 
 1. :code:`.env` (current directory)
-2. :code:`.env` (configuration directory)
-3. :code:`.pyfunceble-env` (configuration directory)
+2. :code:`.pyfunceble-env` (current directory)
+3. :code:`.env` (configuration directory)
+4. :code:`.pyfunceble-env` (configuration directory)
 
 To quote the `python-dotenv`_ documentation, a :code:`.env` should look like the following:
 
@@ -51,6 +52,8 @@ Here is the list of environment variables we use and how we use them if they are
 | :code:`PYFUNCEBLE_CONFIG_DIR`         | Tell us the location of the directory to use as the configuration directory.                                         |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_OUTPUT_DIR`         | Same as :code:`PYFUNCEBLE_CONFIG_DIR` it's just present for retro-compatibility.                                     |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_OUTPUT_LOCATION`    | Tell us where we should generate the :code:`output/` directory.                                                            |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`APPDATA`                       | Used under Windows to construct/get the configuration directory if :code:`PYFUNCEBLE_CONFIG_DIR` is not found.       |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+

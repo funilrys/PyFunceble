@@ -52,7 +52,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from os import path
+from os import getcwd, path
 from os import sep as directory_separator
 from unittest import TestCase
 from unittest import main as launch_tests
@@ -64,6 +64,27 @@ class TestDirectory(TestCase):
     """
     Tests of PyFunceble.helpers.directory.
     """
+
+    def test_get_current(self):
+        """
+        Tests the method which let us get the current directory.
+        """
+
+        expected = getcwd()
+        actual = Directory.get_current()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_current_with_end_sep(self):
+        """
+        Tests the method which let us get the current directory for the
+        case that we want to have the directory separator at the end.
+        """
+
+        expected = getcwd() + directory_separator
+        actual = Directory.get_current(with_end_sep=True)
+
+        self.assertEqual(expected, actual)
 
     def tests_create_and_delete(self):
         """

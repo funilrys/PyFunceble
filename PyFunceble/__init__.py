@@ -78,6 +78,8 @@ NAME = abstracts.Package.NAME
 # We set out project version.
 VERSION = abstracts.Package.VERSION
 
+load_dotenv(".env")
+load_dotenv(abstracts.Infrastructure.ENV_FILENAME)
 
 if helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
@@ -161,9 +163,25 @@ if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
     # the directory separator, we append it to the end.
     CONFIG_DIRECTORY += directory_separator
 
-# We set the location of the `output` directory which should always be in the current
-# directory.
-OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+load_dotenv(CONFIG_DIRECTORY + ".env")
+load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
+
+if helpers.EnvironmentVariable(
+    "PYFUNCEBLE_OUTPUT_LOCATION"
+).exists():  # pragma: no cover
+    # We set the location of the `output/` directory.
+    OUTPUT_DIRECTORY = helpers.EnvironmentVariable(
+        "PYFUNCEBLE_OUTPUT_LOCATION"
+    ).get_value()
+else:  # pragma: no cover
+    # We set the location of the `output` directory which should always be in the current
+    # directory.
+    OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+
+if not OUTPUT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
+    # Again for safety, if the directory we are working with does not ends with
+    # the directory separator, we append it to the end.
+    OUTPUT_DIRECTORY += directory_separator
 
 # We initiate the location where we are going to save our whole configuration content.
 CONFIGURATION = None
@@ -190,10 +208,6 @@ PSLOOOKUP = None
 IANALOOKUP = None
 # We initate the loader.
 LOADER = None
-
-load_dotenv()
-load_dotenv(CONFIG_DIRECTORY + ".env")
-load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """
