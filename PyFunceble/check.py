@@ -304,6 +304,16 @@ class Check:
 
                         # We are not checking if it is a subdomain.
 
+                        if suffix.count(".") >= 2:
+                            # There is more than 2 level.
+
+                            # We check if it passes our subdomain regex.
+                            # * True: It's a valid domain.
+                            # * False: It's an invalid domain.
+                            return PyFunceble.helpers.Regex(
+                                regex_valid_subdomains
+                            ).match(self.subject[:last_point_index], return_match=False)
+
                         if "." in to_check:
                             # There is a point into the new element to check.
 
@@ -314,6 +324,9 @@ class Check:
                                 regex_valid_subdomains
                             ).match(to_check, return_match=False)
 
+                        return PyFunceble.helpers.Regex(regex_valid_domains).match(
+                            to_check, return_match=False
+                        )
                     except ValueError:
                         # In case of a value error because the position is not found,
                         # we continue to the next element.

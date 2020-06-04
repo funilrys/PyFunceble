@@ -126,6 +126,8 @@ class TestCheck(TestCase):
             "xn--cryptopi-ux0d.com",
             "xn--cyptopia-4e0d.com.",
             "xn--cyptopia-4e0d.com",
+            "www.hello_world.blogspot.co.nz",
+            "hello_world.blogspot.co.nz",
         ]
 
         self.not_valid_domain = [
@@ -157,6 +159,7 @@ class TestCheck(TestCase):
             "world-hello",
             "world.hello:80",
             "world@hello.com",
+            "hello_world.co.za",
         ]
 
     def test_is_url(self):
@@ -171,7 +174,7 @@ class TestCheck(TestCase):
 
             actual = Check(to_test).is_url()
 
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual, to_test)
 
             to_test = "http://{0}:8080/helloworld".format(domain)
 
@@ -218,7 +221,7 @@ class TestCheck(TestCase):
 
             actual = Check(to_check).is_url(return_base=True)
 
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual, to_check)
 
     def test_is_url_get_not_base(self):
         """
