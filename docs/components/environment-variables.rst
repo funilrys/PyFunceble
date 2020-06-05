@@ -53,7 +53,7 @@ Here is the list of environment variables we use and how we use them if they are
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_OUTPUT_DIR`         | Same as :code:`PYFUNCEBLE_CONFIG_DIR` it's just present for retro-compatibility.                                     |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_OUTPUT_LOCATION`    | Tell us where we should generate the :code:`output/` directory.                                                            |
+| :code:`PYFUNCEBLE_OUTPUT_LOCATION`    | Tell us where we should generate the :code:`output/` directory.                                                      |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`APPDATA`                       | Used under Windows to construct/get the configuration directory if :code:`PYFUNCEBLE_CONFIG_DIR` is not found.       |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
