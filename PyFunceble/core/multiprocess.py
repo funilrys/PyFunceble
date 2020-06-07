@@ -52,7 +52,8 @@ License:
 
 import sys
 from itertools import chain
-from multiprocessing import Manager, Pipe, Process, active_children
+from multiprocessing import Manager, Pipe, Pool, Process, active_children
+from tempfile import NamedTemporaryFile
 from traceback import format_exc
 
 from colorama import Fore, Style
@@ -413,6 +414,40 @@ class MultiprocessCore(
 
                 self.__merge_processes_data(manager_data)
                 break
+
+    def construct_and_get_shadow_file(
+        self, file_stream, ignore_inactive_db_check=False
+    ):
+        """
+        Provides a path to a file which contain the list to file.
+
+        The idea is to do a comparison between what we already tested
+        and what we still have to test.
+        """
+
+        with NamedTemporaryFile(delete=False) as temp_file:
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                print("")
+
+            with Pool(PyFunceble.CONFIGURATION.maximal_processes) as pool:
+                pool.starmap(
+                    self.write_in_shadow_file_if_needed,
+                    [
+                        (
+                            x,
+                            temp_file.name,
+                            ignore_inactive_db_check,
+                            self.autocontinue,
+                            self.inactive_db,
+                        )
+                        for x in file_stream
+                    ],
+                )
+
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                print("")
+
+            return temp_file.name
 
     def run_test(self):
         """

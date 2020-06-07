@@ -512,6 +512,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         else:
             subjects = PyFunceble.converter.File(line).get_converted()
 
+        if isinstance(subjects, str):
+            return [subjects]
         return subjects
 
     def __test_line(self, line, ignore_inactive_db_check=False):
@@ -531,6 +533,62 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 subjects, ignore_inactive_db_check=ignore_inactive_db_check
             )
 
+    def write_in_shadow_file_if_needed(
+        self,
+        line,
+        temp_file,
+        ignore_inactive_db_check=False,
+        autocontinue=None,
+        inactive_db=None,
+    ):
+        """
+        Checks if the given line should be in the
+        shadow file.
+        """
+
+        subjects = self.get_subjects(line)
+
+        if autocontinue is None:
+            autocontinue = self.autocontinue
+        if inactive_db is None:
+            inactive_db = self.inactive_db
+
+        if isinstance(subjects, list):
+            comparison = [
+                self.should_be_ignored(
+                    x,
+                    auto_continue_db=autocontinue,
+                    inactive_db=inactive_db,
+                    ignore_inactive_db_check=ignore_inactive_db_check,
+                )
+                for x in subjects
+            ]
+        else:
+            comparison = [
+                self.should_be_ignored(
+                    subjects,
+                    auto_continue_db=autocontinue,
+                    inactive_db=inactive_db,
+                    ignore_inactive_db_check=ignore_inactive_db_check,
+                )
+            ]
+
+        if all(comparison) and (
+            self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots
+        ):
+            print("I", end="")
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            print("S", end="")
+
+            to_write = (
+                "\n".join([subjects[x] for x, _ in enumerate(comparison) if comparison])
+                + "\n"
+            )
+
+            if isinstance(temp_file, str):
+                temp_file = open(temp_file, "a+b")
+            temp_file.write(to_write.encode("utf-8"))
+
     def construct_and_get_shadow_file(
         self, file_stream, ignore_inactive_db_check=False
     ):
@@ -546,38 +604,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 print("")
 
             for line in file_stream:
-                subjects = self.get_subjects(line)
-
-                if isinstance(subjects, list):
-                    comparison = [
-                        self.should_be_ignored(
-                            x,
-                            auto_continue_db=self.autocontinue,
-                            inactive_db=self.inactive_db,
-                            ignore_inactive_db_check=ignore_inactive_db_check,
-                        )
-                        for x in subjects
-                    ]
-                else:
-                    comparison = [
-                        self.should_be_ignored(
-                            subjects,
-                            auto_continue_db=self.autocontinue,
-                            inactive_db=self.inactive_db,
-                            ignore_inactive_db_check=ignore_inactive_db_check,
-                        )
-                    ]
-
-                if all(comparison):
-                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                        print("I", end="")
-
-                    continue
-
-                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                    print("S", end="")
-
-                temp_file.write(line.encode("utf-8"))
+                self.write_in_shadow_file_if_needed(
+                    line, temp_file, ignore_inactive_db_check=ignore_inactive_db_check
+                )
 
             if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                 print("")
