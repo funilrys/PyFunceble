@@ -3,6 +3,8 @@
 The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
 --------------------------------------------------------------------------
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.png
+    :target: https://github.com/ambv/black
 .. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
 .. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
@@ -11,12 +13,16 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
-.. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
-    :target: https://github.com/funilrys/PyFunceble/releases/latest
+.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
+    :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://img.shields.io/badge/code%20style-black-000000.png
-    :target: https://github.com/ambv/black
+.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
