@@ -415,6 +415,22 @@ class MultiprocessCore(
                 self.__merge_processes_data(manager_data)
                 break
 
+    def work_process(self, *args):
+        """
+        Work process for :code`construct_and_get_shadow_file`.
+        """
+
+        PyFunceble.LOADER = args[-2]
+
+        if not PyFunceble.LOADER.was_configuration_loaded():
+            PyFunceble.LOADER.get_config()
+
+        PyFunceble.LOADER.inject_all()
+
+        PyFunceble.INTERN.update(args[-1])
+
+        self.write_in_shadow_file_if_needed(*args[:-2])
+
     def construct_and_get_shadow_file(
         self, file_stream, ignore_inactive_db_check=False
     ):
@@ -425,18 +441,6 @@ class MultiprocessCore(
         and what we still have to test.
         """
 
-        def work_process(*args):
-            PyFunceble.LOADER = args[-2]
-
-            if not PyFunceble.LOADER.was_configuration_loaded():
-                PyFunceble.LOADER.get_config()
-
-            PyFunceble.LOADER.inject_all()
-
-            PyFunceble.INTERN.update(args[-1])
-
-            self.write_in_shadow_file_if_needed(*args[:-2])
-
         def start_process(*args):
 
             original_config = PyFunceble.CONFIGURATION.copy()
@@ -445,7 +449,7 @@ class MultiprocessCore(
             args += (PyFunceble.LOADER,)
             args += (origin_intern,)
 
-            process = OurProcessWrapper(target=work_process, args=args)
+            process = OurProcessWrapper(target=self.work_process, args=args)
             process.name = f"PyF shadow {line}"
             process.start()
 
