@@ -580,6 +580,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             print("S", end="")
 
+        if not all(comparison):
             to_write = (
                 "\n".join([subjects[x] for x, _ in enumerate(comparison) if comparison])
                 + "\n"

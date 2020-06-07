@@ -425,13 +425,27 @@ class MultiprocessCore(
         and what we still have to test.
         """
 
+        def work_process(*args):
+            PyFunceble.LOADER = args[-2]
+
+            if not PyFunceble.LOADER.was_configuration_loaded():
+                PyFunceble.LOADER.get_config()
+
+            PyFunceble.LOADER.inject_all()
+
+            PyFunceble.INTERN.update(args[-1])
+
+            self.write_in_shadow_file_if_needed(*args[:-2])
+
         def start_process(*args):
+
             original_config = PyFunceble.CONFIGURATION.copy()
             origin_intern = PyFunceble.INTERN.copy()
 
-            process = OurProcessWrapper(
-                target=self.write_in_shadow_file_if_needed, args=args
-            )
+            args += (PyFunceble.LOADER,)
+            args += (origin_intern,)
+
+            process = OurProcessWrapper(target=work_process, args=args)
             process.name = f"PyF shadow {line}"
             process.start()
 
