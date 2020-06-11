@@ -224,6 +224,7 @@ class MultiprocessCore(
             if (
                 not self.autosave.authorized
                 and PyFunceble.CONFIGURATION.multiprocess_merging_mode != "live"
+                and not PyFunceble.CONFIGURATION.quiet
             ):
                 print(
                     Fore.MAGENTA
