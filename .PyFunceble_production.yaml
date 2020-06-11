@@ -79,6 +79,9 @@ use_reputation_data: False
 # Enable/Disable the reputation checking mode.
 # In this mode we only check against the reputation.
 reputation: False
+# Enable / Disable the usage and generation of a shadow file before a file
+# test starts.
+shadow_file: False
 # Enable / disable the logs sharing.
 share_logs: False
 # Enable / disable the output of the execution time.

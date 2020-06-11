@@ -293,6 +293,32 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 test_control.add_argument(
+                    "--reputation",
+                    action="store_true",
+                    help="Switch the value of the reputation test mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.reputation)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
+                    "--shadow-file",
+                    "--shadow",
+                    action="store_true",
+                    help="Switch the value of the usage and generation of a shadow file "
+                    "before a file test starts.\n\nA shadow file is a file which only "
+                    "contain the actual list of subject to test. For its generation we check each "
+                    "subjects as we normally do on-the-fly. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.shadow_file)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
                     "--syntax",
                     action="store_true",
                     help="Switch the value of the syntax test mode. %s"
@@ -312,17 +338,6 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.timeout)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                test_control.add_argument(
-                    "--reputation",
-                    action="store_true",
-                    help="Switch the value of the reputation test mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.reputation)
                         + Style.RESET_ALL
                     ),
                 )
@@ -1065,6 +1080,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.reputation:
                     PyFunceble.CONFIGURATION.reputation = preset.switch("reputation")
+
+                if args.shadow_file:
+                    PyFunceble.CONFIGURATION.shadow_file = preset.switch("shadow_file")
 
                 if args.share_logs:
                     PyFunceble.CONFIGURATION.share_logs = preset.switch("share_logs")

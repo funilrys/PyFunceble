@@ -457,47 +457,50 @@ class MultiprocessCore(
             PyFunceble.LOADER.inject_all()
             PyFunceble.INTERN.update(origin_intern)
 
-        with NamedTemporaryFile(delete=False) as temp_file:
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                print("")
+        if PyFunceble.CONFIGURATION.shadow_file:
+            with NamedTemporaryFile(delete=False) as temp_file:
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
 
-            finished = False
+                finished = False
 
-            while True:
-                while (
-                    len(active_children()) <= PyFunceble.CONFIGURATION.maximal_processes
-                ):
-                    try:
-                        line = next(file_stream)
+                while True:
+                    while (
+                        len(active_children())
+                        <= PyFunceble.CONFIGURATION.maximal_processes
+                    ):
+                        try:
+                            line = next(file_stream)
 
-                        start_process(
-                            line,
-                            temp_file.name,
-                            ignore_inactive_db_check,
-                            self.autocontinue,
-                            self.inactive_db,
-                        )
+                            start_process(
+                                line,
+                                temp_file.name,
+                                ignore_inactive_db_check,
+                                self.autocontinue,
+                                self.inactive_db,
+                            )
 
+                            active_children()
+                            continue
+                        except StopIteration:
+                            finished = True
+                            break
+
+                    while len(
                         active_children()
-                        continue
-                    except StopIteration:
-                        finished = True
+                    ) >= PyFunceble.CONFIGURATION.maximal_processes and "shadow" in " ".join(
+                        [x.name for x in reversed(active_children())]
+                    ):
+                        active_children()
+
+                    if finished:
                         break
 
-                while len(
-                    active_children()
-                ) >= PyFunceble.CONFIGURATION.maximal_processes and "shadow" in " ".join(
-                    [x.name for x in reversed(active_children())]
-                ):
-                    active_children()
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
 
-                if finished:
-                    break
-
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                print("")
-
-            return temp_file.name
+                return temp_file.name
+        return file_stream.name
 
     def run_test(self):
         """

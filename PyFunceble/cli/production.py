@@ -448,9 +448,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",
                 "/en/%s" % "dev": "en/%s" % "master",
-                "/(d[dmw]/pyfunceble-%s.png" % "dev": "/\\1/pyfunceble.png",
-                "/(packages)/pyfunceble-%s.png" % "dev": "/\\1/pyfunceble.png",
-                "/(v)/pyfunceble-%s.png" % "dev": "/\\1/pyfunceble.png",
+                r"/pyfunceble-%s.png" % "dev": r"/pyfunceble.png",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -460,9 +458,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "PyFunceble/%s/" % "master": r"PyFunceble\/%s\/" % "dev",
                 "=%s" % "master": "=%s" % "dev",
                 "/en/%s" % "master": "en/%s" % "dev",
-                "/(d[dmw]/pyfunceble.png": "/\\1/pyfunceble-%s.png" % "dev",
-                "/(packages)/pyfunceble.png": "/\\1/pyfunceble-%s.png" % "dev",
-                "/(v)/pyfunceble.png": "/\\1/pyfunceble-%s.png" % "dev",
+                r"/pyfunceble.png": r"/(d[dmw])/pyfunceble-%s.png" % "dev",
             }
         else:
             # The current version is not the master nor the dev version.

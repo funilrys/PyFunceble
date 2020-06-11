@@ -459,6 +459,18 @@
 .. warning::
     If this index is set to :code:`True`, we **ONLY** check for reputation, not availability nor syntax.
 
+:code:`shadow_file`
+^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the usage and generation of a shadow file before a the test of a file.
+
+.. note::
+    The shadow file, will just contain the actual list of subjects to test.
+
 :code:`share_logs`
 ^^^^^^^^^^^^^^^^^^
 

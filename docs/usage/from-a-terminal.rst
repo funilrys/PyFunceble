@@ -216,6 +216,33 @@ column section? This argument disables them all.
 Don't want to use or take into consideration the results from :code:`whois`?
 This argument allows you to disable it!
 
+:code:`--reputation`
+""""""""""""""""""""
+
+    Switch the value of the reputation test mode.
+
+    **Default value:** :code:`False`
+
+.. warning::
+    This will disable all other forms of test,
+    will check against AlienVault's reputation data
+    and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
+
+:code:`--shadow-file` | :code:`--shadow`
+""""""""""""""""""""""""""""""""""""""""
+
+    Switch the value of the usage and generation of a shadow file before
+    a file test starts.
+
+    A shadow file is a file which only contain the actual list of subject
+    to test. For its generation we check each subjects as we normally do
+    on-the-fly.
+
+    **Default value:** :code:`False`
+
+.. note::
+    The shadow file, will just contain the actual list of subjects to test.
+
 :code:`--syntax`
 """"""""""""""""
 
@@ -238,18 +265,6 @@ This argument allows you to disable it!
 
 This argument will set the default timeout to apply everywhere it is possible
 to set a timeout.
-
-:code:`--reputation`
-""""""""""""""""""""
-
-    Switch the value of the reputation test mode.
-
-    **Default value:** :code:`False`
-
-.. warning::
-    This will disable all other forms of test,
-    will check against AlienVault's reputation data
-    and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
 
 :code:`--use-reputation-data`
 """""""""""""""""""""""""""""

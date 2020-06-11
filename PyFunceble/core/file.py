@@ -600,19 +600,23 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         and what we still have to test.
         """
 
-        with NamedTemporaryFile(delete=False) as temp_file:
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                print("")
+        if PyFunceble.CONFIGURATION.shadow_file:
+            with NamedTemporaryFile(delete=False) as temp_file:
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
 
-            for line in file_stream:
-                self.write_in_shadow_file_if_needed(
-                    line, temp_file, ignore_inactive_db_check=ignore_inactive_db_check
-                )
+                for line in file_stream:
+                    self.write_in_shadow_file_if_needed(
+                        line,
+                        temp_file,
+                        ignore_inactive_db_check=ignore_inactive_db_check,
+                    )
 
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                print("")
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
 
-            return temp_file.name
+                return temp_file.name
+        return file_stream.name
 
     def run_test(self):
         """
