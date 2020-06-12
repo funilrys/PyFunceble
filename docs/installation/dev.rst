@@ -112,7 +112,7 @@ Our repository is located at https://anaconda.org/pyfunceble/pyfunceble-dev
 
 ::
 
-   conda install -c conda-forge -c pyfunceble pyfunceble-dev
+   conda install -c conda-forge -c pyfunceble pyfunceble-dev=3
 
 Pure Python method
 """"""""""""""""""
