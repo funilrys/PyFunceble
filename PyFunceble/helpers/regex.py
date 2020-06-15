@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+from re import MULTILINE
 from re import compile as re_compile
 from re import escape as re_escape
 from re import sub as re_sub
@@ -130,7 +131,7 @@ class Regex:
             return True
         return False
 
-    def replace_match(self, data, replacement, occurences=0):
+    def replace_match(self, data, replacement, occurences=0, multiline=False):
         """
         Replaces the string which match the regex string with
         the given replacement.
@@ -147,5 +148,11 @@ class Regex:
         """
 
         if replacement:
-            return re_sub(self.regex, replacement, data, occurences)
+            return re_sub(
+                self.regex,
+                replacement,
+                data,
+                occurences,
+                flags=MULTILINE if multiline else 0,
+            )
         return data

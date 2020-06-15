@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -45,7 +45,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -125,11 +125,11 @@ def _get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble-dev",
+        name="PyFunceble",
         version=_get_version(),
         python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
-        description="The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.",
+        description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=_get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
@@ -163,6 +163,7 @@ if __name__ == "__main__":
             "IP",
             "IPv4",
             "IPv6",
+            "URL",
             "nslookup",
             "PyFunceble",
             "Python",
@@ -173,7 +174,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 4 - Beta",
+            "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",

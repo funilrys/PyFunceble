@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/

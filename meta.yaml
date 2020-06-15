@@ -74,7 +74,7 @@ about:
   license: MIT
   license_family: MIT
   license_file:
-  summary: "The tool to check the availability or syntax of domains, IPv4, IPv6 or URL."
+  summary: "The tool to check the availability or syntax of domain, IP or URL."
   doc_url:
   dev_url:
 

@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -447,8 +447,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",
-                "/en/%s" % "dev": "en/%s" % "master",
-                r"/pyfunceble-%s.png" % "dev": r"/pyfunceble-dev.png",
+                "/en/%s" % "dev": r"en\/%s" % "master",
+                "/pyfunceble-%s.png" % "dev": r"\/pyfunceble.png",
+                "/project/pyfunceble-%s" % "dev": r"\/project\/pyfunceble$",
+                "pypistats.org/packages/pyfunceble-%s"
+                % "dev": r"pypistats\.org\/packages\/pyfunceble$s",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -457,8 +460,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "master": r"PyFunceble\/%s\/" % "dev",
                 "=%s" % "master": "=%s" % "dev",
-                "/en/%s" % "master": "en/%s" % "dev",
-                r"/pyfunceble-dev.png": r"/(d[dmw])/pyfunceble-%s.png" % "dev",
+                "/en/%s" % "master": r"en\/%s" % "dev",
+                "/pyfunceble.png": r"\/pyfunceble-%s.png" % "dev",
+                "/project/pyfunceble": r"/project\/pyfunceble-%s$" % "dev",
+                "pypistats.org/packages/pyfunceble": r"pypistats\.org\/packages\/pyfunceble-%s$"
+                % "dev",
             }
         else:
             # The current version is not the master nor the dev version.
@@ -477,7 +483,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We process the replacement.
             to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
+                to_update, replacement, multiline=True
             )
 
         to_update = PyFunceble.helpers.Regex(r"/{1,}en/(dev|master)").replace_match(
@@ -530,7 +536,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # And we process the replacement.
             to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
+                to_update, replacement, multiline=True
             )
 
         # We finally replace the content of the file with the filtered
