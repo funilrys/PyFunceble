@@ -6,24 +6,24 @@ The tool to check the availability or syntax of domain, IP or URL.
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
-.. image:: https://img.shields.io/pypi/v/pyfunceble.png
-    :target: https://pypi.org/project/pyfunceble
+.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
+    :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: http://img.shields.io/pypi/dd/pyfunceble.png
-    :target: https://pypistats.org/packages/pyfunceble
-.. image:: http://img.shields.io/pypi/dw/pyfunceble.png
-    :target: https://pypistats.org/packages/pyfunceble
-.. image:: http://img.shields.io/pypi/dm/pyfunceble.png
-    :target: https://pypistats.org/packages/pyfunceble
+.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble-dev
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 

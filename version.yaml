@@ -1,4 +1,4 @@
-current_version: '3.2.1. (Teal Blauwbok: Moth)'
+current_version: '3.2.1.dev (Teal Blauwbok: Moth)'
 deprecated:
 - 1.0.0
 - 1.2.1
