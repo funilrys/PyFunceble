@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -399,7 +399,7 @@ class CLICore:
             print(Fore.GREEN + Style.BRIGHT + "You are sharing your logs!")
             print(
                 Fore.MAGENTA + Style.BRIGHT + "Please find more about it at "
-                "https://pyfunceble.readthedocs.io/en/dev/logs-sharing.html !"
+                "https://pyfunceble.readthedocs.io/en/master/logs-sharing.html !"
             )
 
     @classmethod
@@ -411,7 +411,7 @@ class CLICore:
         # We initiate the link to the upstream version file.
         # It is hard coded because we may not have the chance to have the
         # configuration file everytime we need it.
-        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"  # pylint: disable=line-too-long
+        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"  # pylint: disable=line-too-long
 
         upstream_link = PyFunceble.converter.InternalUrl(upstream_link).get_converted()
 
@@ -673,4 +673,4 @@ class CLICore:
         cls.__print_messages(upstream_version)
 
         # One may use the following as behavior debugger.
-        # cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))
+        cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))
