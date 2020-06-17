@@ -1,4 +1,4 @@
-current_version: '3.2.2. (Teal Blauwbok: Bombardier)'
+current_version: '3.2.2.dev (Teal Blauwbok: Bombardier)'
 deprecated:
 - 1.0.0
 - 1.2.1
