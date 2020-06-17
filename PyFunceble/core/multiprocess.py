@@ -514,6 +514,11 @@ class MultiprocessCore(
             with Manager() as manager:
                 self.__run_multiprocess_test(shadow_file, manager)
 
+                shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
+
         if self.autocontinue.is_empty():
             with open(self.file, "r", encoding="utf-8") as file_stream, open(
                 self.construct_and_get_shadow_file(
@@ -526,6 +531,11 @@ class MultiprocessCore(
                     self.__run_multiprocess_test(
                         file_stream, manager, ignore_inactive_db_check=True
                     )
+
+                    shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         with Manager() as manager:
             self.__run_multiprocess_test(

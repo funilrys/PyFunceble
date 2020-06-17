@@ -631,7 +631,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
             shadow_file_name = shadow_file.name
 
-        PyFunceble.helpers.File(shadow_file_name).delete()
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         if self.autocontinue.is_empty():
             with open(self.file, "r", encoding="utf-8") as file_stream, open(
@@ -646,7 +647,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
 
                 shadow_file_name = shadow_file.name
 
-        PyFunceble.helpers.File(shadow_file_name).delete()
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         for subject in self.inactive_db.get_to_retest():
             self.__test_line(subject)
