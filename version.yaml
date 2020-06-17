@@ -134,7 +134,9 @@ messages:
         type: warning
         until_date: '2020-03-30T00:00:00+01:00'
     3.2.0:
-    -   message: 🚨 ⚠️ ⚡ 🚨 A critical bug has been fixed. We recommend you to update
-            to PyFunceble v3.2.2 or later! 🚨 ⚡ ⚠️ 🚨
+    -   message: >
+            🚨 ⚠️ ⚡ 🚨 A critical bug has been fixed.
+            We recommend you to update to PyFunceble v3.2.2 or later!
+            Find more about it at https://git.io/Jfdov !
         type: warning
         until: 3.2.2
