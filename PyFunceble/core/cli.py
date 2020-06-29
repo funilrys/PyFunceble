@@ -673,4 +673,4 @@ class CLICore:
         cls.__print_messages(upstream_version)
 
         # One may use the following as behavior debugger.
-        cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))
+        # cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))
