@@ -95,6 +95,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             r"\.blogspot\.": self.__blogspot,
             r"\.canalblog\.com$": self.__special_down_404,
             r"\.github\.io$": self.__special_down_404,
+            r"\.hpg.com.br$": self.__special_down_404,
             r"\.liveadvert\.com$": self.__special_down_404,
             r"\.skyrock\.com$": self.__special_down_404,
             r"\.tumblr\.com$": self.__special_down_404,

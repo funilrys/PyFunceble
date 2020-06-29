@@ -60,6 +60,11 @@ So I introduced the SPECIAL source.
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
+:code:`*.hpg.com.br`
+""""""""""""""""""""
+
+- All :code:`404` are returned as :code:`INACTIVE`
+
 :code:`*.liveadvert.com`
 """"""""""""""""""""""""
 
