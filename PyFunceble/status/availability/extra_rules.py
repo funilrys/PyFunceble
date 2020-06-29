@@ -98,6 +98,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             r"\.liveadvert\.com$": self.__special_down_404,
             r"\.skyrock\.com$": self.__special_down_404,
             r"\.tumblr\.com$": self.__special_down_404,
+            r"\.wix\.com$": self.__special_down_404,
         }
 
         # We set a list of regex and methods to call if matched.
