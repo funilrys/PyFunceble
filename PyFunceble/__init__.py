@@ -48,7 +48,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 import warnings
 from datetime import datetime
 from os import path
@@ -58,19 +57,21 @@ from time import sleep
 from colorama import Fore
 from dotenv import load_dotenv
 
-import PyFunceble.abstracts as abstracts
-import PyFunceble.config as cconfig
-import PyFunceble.converter as converter
-import PyFunceble.core as core
-import PyFunceble.database as database
-import PyFunceble.downloader as downloader
-import PyFunceble.engine as engine
-import PyFunceble.exceptions as exceptions
-import PyFunceble.extractor as extractor
-import PyFunceble.helpers as helpers
-import PyFunceble.lookup as lookup
-import PyFunceble.output as output
-import PyFunceble.status as status
+from PyFunceble import abstracts
+from PyFunceble import config as cconfig
+from PyFunceble import (
+    converter,
+    core,
+    database,
+    downloader,
+    engine,
+    exceptions,
+    extractor,
+    helpers,
+    lookup,
+    output,
+    status,
+)
 from PyFunceble.check import Check
 
 # We set our project name.

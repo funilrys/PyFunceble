@@ -49,8 +49,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import PyFunceble.helpers as helpers
+from PyFunceble import helpers
 from PyFunceble.check import Check
 from PyFunceble.exceptions import WrongParameterType
 

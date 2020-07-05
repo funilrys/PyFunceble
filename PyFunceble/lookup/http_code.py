@@ -49,11 +49,10 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 import socket
 
-import urllib3.exceptions as urllib3_exceptions
 from urllib3 import disable_warnings
+from urllib3 import exceptions as urllib3_exceptions
 
 import PyFunceble
 

@@ -49,8 +49,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import PyFunceble.helpers as helpers
+from PyFunceble import helpers
 
 
 class Package:
@@ -65,7 +64,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.2.5.dev (Teal Blauwbok: Bombardier)"
+    VERSION = "3.2.6.dev (Teal Blauwbok: Bombardier)"
     """
     Sets the package version.
 

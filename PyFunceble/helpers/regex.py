@@ -49,10 +49,10 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 from re import MULTILINE
 from re import compile as re_compile
 from re import escape as re_escape
+from re import split as re_split
 from re import sub as re_sub
 
 
@@ -147,7 +147,7 @@ class Regex:
         :rtype: str
         """
 
-        if replacement:
+        if isinstance(replacement, str):
             return re_sub(
                 self.regex,
                 replacement,
@@ -156,3 +156,13 @@ class Regex:
                 flags=MULTILINE if multiline else 0,
             )
         return data
+
+    def split(self, data):
+        """
+        Split the reference of the given regex.
+
+        :param str data: The data to work with.
+        :rtype: list
+        """
+
+        return re_split(self.regex, data)

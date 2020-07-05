@@ -49,9 +49,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import PyFunceble.converter as converter
-import PyFunceble.helpers as helpers
+from PyFunceble import converter, helpers
 
 from .base import ExtractorBase
 
