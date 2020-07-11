@@ -97,6 +97,12 @@ class Infrastructure:
     Sets the name of our own copy of the user agents file.
     """
 
+    HASHES_FILENAME = "hashes_tracker.json"
+    """
+    Sets the name of the file which will save the hashes of the
+    files we are testing.
+    """
+
     IPV4_REPUTATION_FILENAME = "ipv4_reputation.data"
     """
     Sets the name of our own copy of the IPv4 reputation data file.

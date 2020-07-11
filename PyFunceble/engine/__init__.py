@@ -52,6 +52,7 @@ License:
 
 from .auto_continue import AutoContinue
 from .auto_save import AutoSave
+from .hashes_tracker import HashesTracker
 from .logger import Logger
 from .mining import Mining
 from .mysql import MySQL

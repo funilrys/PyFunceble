@@ -326,7 +326,9 @@ class MultiprocessCore(
         PyFunceble.INTERN.update(original_intern)
 
     # pylint: disable=too-many-nested-blocks,too-many-branches
-    def __run_multiprocess_test(self, stream, manager, ignore_inactive_db_check=False):
+    def __run_multiprocess_test(
+        self, stream, manager, ignore_inactive_db_check=False, tracker=None
+    ):
         """
         Tests the content of the given file.
         """
@@ -341,11 +343,14 @@ class MultiprocessCore(
         else:
             manager_data = None
 
+        minimum_position = tracker.get_position() if tracker else 0
+        file_position = 0
+
         while True:
             active = active_children()
 
             while (
-                len(active) <= PyFunceble.CONFIGURATION.maximal_processes
+                len(active_children()) <= PyFunceble.CONFIGURATION.maximal_processes
                 and not self.autosave.is_time_exceed()
             ):
                 try:
@@ -353,6 +358,24 @@ class MultiprocessCore(
 
                     if isinstance(line, tuple):
                         index, line = line
+
+                    if (
+                        tracker
+                        and tracker.authorized
+                        and file_position < minimum_position
+                    ):
+                        file_position += len(line)
+
+                        if (
+                            self.autosave.authorized
+                            or PyFunceble.CONFIGURATION.print_dots
+                        ):
+                            PyFunceble.LOGGER.info(
+                                f"Skipped {line!r}: insufficient position."
+                            )
+                            print(".", end="")
+
+                        continue
 
                     subjects = self.get_subjects(line)
 
@@ -380,40 +403,46 @@ class MultiprocessCore(
                             # the mining database.
                             self.mining.remove(index, subjects)
 
-                    active = active_children()
+                    if tracker and tracker.authorized:
+                        file_position += len(line)
+
                     continue
                 except StopIteration:
                     finished = True
-                    active = active_children()
-
                     break
 
             self.__check_exception(active_children(), manager_data)
 
             while len(
-                active
+                active_children()
             ) >= PyFunceble.CONFIGURATION.maximal_processes and "PyF" in " ".join(
                 [x.name for x in reversed(active)]
             ):
-                active = active_children()
+                continue
 
-                # PyFunceble.LOGGER.info(
-                #     f"Active processes: {[x.name for x in reversed(active)]}"
-                # )
+            if (
+                PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live"
+                and not finished
+                and not self.autosave.is_time_exceed()
+            ):
+                while "PyF" in " ".join([x.name for x in reversed(active)]):
+                    active = active_children()
 
-            if PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live":
-                if not finished and not self.autosave.is_time_exceed():
-                    while "PyF" in " ".join([x.name for x in reversed(active)]):
-                        active = active_children()
+                self.__merge_processes_data(manager_data)
 
-                    self.__merge_processes_data(manager_data)
-                    continue
+                if tracker:
+                    tracker.set_position(file_position)
 
+                continue
             if finished or self.autosave.is_time_exceed():
                 while "PyF" in " ".join([x.name for x in reversed(active)]):
                     active = active_children()
 
                 self.__merge_processes_data(manager_data)
+
+                if tracker:
+                    tracker.set_position(file_position)
+
                 break
 
     def work_process(self, *args):
@@ -511,8 +540,10 @@ class MultiprocessCore(
         with open(self.file, "r", encoding="utf-8") as file_stream, open(
             self.construct_and_get_shadow_file(file_stream), "r", encoding="utf-8"
         ) as shadow_file:
+            tracker = PyFunceble.engine.HashesTracker(shadow_file.name)
+
             with Manager() as manager:
-                self.__run_multiprocess_test(shadow_file, manager)
+                self.__run_multiprocess_test(shadow_file, manager, tracker=tracker)
 
                 shadow_file_name = shadow_file.name
 
@@ -553,3 +584,4 @@ class MultiprocessCore(
             self.__run_multiprocess_test(chain(self.mining.list_of_mined()), manager)
 
         self.cleanup(self.autocontinue, self.autosave, test_completed=True)
+        tracker.reset_position()

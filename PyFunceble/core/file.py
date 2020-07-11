@@ -626,8 +626,27 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         with open(self.file, "r", encoding="utf-8") as file_stream, open(
             self.construct_and_get_shadow_file(file_stream), "r"
         ) as shadow_file:
-            for subject in shadow_file:
-                self.__test_line(subject)
+            tracker = PyFunceble.engine.HashesTracker(shadow_file.name)
+
+            minimum_position = tracker.get_position()
+            file_position = 0
+
+            for line in shadow_file:
+                if tracker.authorized and file_position < minimum_position:
+                    file_position += len(line)
+
+                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                        PyFunceble.LOGGER.info(
+                            f"Skipped {line!r}: insufficient position."
+                        )
+                        print(".", end="")
+
+                    continue
+
+                self.__test_line(line)
+
+                file_position += len(line)
+                tracker.set_position(file_position)
 
             shadow_file_name = shadow_file.name
 
@@ -642,8 +661,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 "r",
                 encoding="utf-8",
             ) as shadow_file:
-                for subject in shadow_file:
-                    self.__test_line(subject, ignore_inactive_db_check=True)
+                for line in shadow_file:
+                    self.__test_line(line, ignore_inactive_db_check=True)
 
                 shadow_file_name = shadow_file.name
 
@@ -665,3 +684,4 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.mining.remove(index, subject)
 
         self.cleanup(self.autocontinue, self.autosave, test_completed=True)
+        tracker.reset_position()
