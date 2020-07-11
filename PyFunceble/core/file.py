@@ -554,7 +554,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             inactive_db = self.inactive_db
 
         if isinstance(subjects, list):
-            comparison = [
+            comparison = {
                 self.should_be_ignored(
                     x,
                     auto_continue_db=autocontinue,
@@ -562,16 +562,16 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                     ignore_inactive_db_check=ignore_inactive_db_check,
                 )
                 for x in subjects
-            ]
+            }
         else:
-            comparison = [
+            comparison = {
                 self.should_be_ignored(
                     subjects,
                     auto_continue_db=autocontinue,
                     inactive_db=inactive_db,
                     ignore_inactive_db_check=ignore_inactive_db_check,
                 )
-            ]
+            }
 
         if all(comparison) and (
             self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots

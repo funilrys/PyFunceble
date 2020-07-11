@@ -38,10 +38,15 @@ So I introduced the SPECIAL source.
     Please consider all 3 digits number that are listed in this section as the HTTP status code catched by :func:`PyFunceble.lookup.http_code.HTTPCode.get`.
 
 .. warning::
-    Do not want those rules ? You can use following to disable them.
+    Do not want those rules ? You can use the following to disable them.
 
     * :code:`-ns|--no-special` arguments from the CLI.
     * :code:`no_special: True` into your local configuration file.
+
+:code:`*.000webhostapp.com`
+"""""""""""""""""""""""""""
+
+- All :code:`410` are returned as :code:`INACTIVE`.
 
 :code:`*.blogspot.*`
 """"""""""""""""""""

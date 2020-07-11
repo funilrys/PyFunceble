@@ -92,20 +92,21 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_down = {
-            r"\.blogspot\.": self.__blogspot,
-            r"\.canalblog\.com$": self.__special_down_404,
-            r"\.github\.io$": self.__special_down_404,
-            r"\.hpg.com.br$": self.__special_down_404,
-            r"\.liveadvert\.com$": self.__special_down_404,
-            r"\.skyrock\.com$": self.__special_down_404,
-            r"\.tumblr\.com$": self.__special_down_404,
-            r"\.wix\.com$": self.__special_down_404,
+            r"\.000webhostapp\.com": [self.__special_down_410],
+            r"\.blogspot\.": [self.__blogspot],
+            r"\.canalblog\.com$": [self.__special_down_404],
+            r"\.github\.io$": [self.__special_down_404],
+            r"\.hpg.com.br$": [self.__special_down_404],
+            r"\.liveadvert\.com$": [self.__special_down_404],
+            r"\.skyrock\.com$": [self.__special_down_404],
+            r"\.tumblr\.com$": [self.__special_down_404],
+            r"\.wix\.com$": [self.__special_down_404],
         }
 
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_up = {
-            r"\.blogspot\.": self.__blogspot,
-            r"\.wordpress\.com$": self.__wordpress_dot_com,
+            r"\.blogspot\.": [self.__blogspot],
+            r"\.wordpress\.com$": [self.__wordpress_dot_com],
         }
 
         PyFunceble.LOGGER.debug(f"[{self.subject}] Headers:\n{self.headers}")
@@ -131,6 +132,19 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         """
 
         if self.status_code == 404:
+            return PyFunceble.STATUS.official.down, "SPECIAL"
+        return None
+
+    def __special_down_410(self):
+        """
+        Set what we return for the SPECIAL status de-escalation
+        when the 410 status code is caught.
+
+        :return: :code:`(new status, new source)`
+        :rtype: tuple
+        """
+
+        if self.status_code == 410:
             return PyFunceble.STATUS.official.down, "SPECIAL"
         return None
 
@@ -261,7 +275,9 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We return None, there is no changes.
         return None
 
-    def __handle_potentially_inactive(self, previous_state):
+    def __handle_potentially_inactive(
+        self, previous_state
+    ):  # pylint: disable=too-many-nested-blocks
         """
         Handle the potentially inactive case.
 
@@ -282,34 +298,33 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
             # * The extracted http status code is in the list of
             #   potentially down list.
 
-            # We generate the analytics files.
             PyFunceble.output.Generate(
                 self.subject, self.subject_type, previous_state
             ).analytic_file("potentially_down")
 
             if not PyFunceble.CONFIGURATION.no_special:
-                # We are authorized to play with the SPEICIAL rules.
+                # We are authorized to play with the SPECIAL rules.
 
-                for regx in self.regexes_active_to_inactive_potentially_down:
-                    # We loop through the list of available regex.
+                for (
+                    regx,
+                    methods,
+                ) in self.regexes_active_to_inactive_potentially_down.items():
+                    for method in methods:
+                        if PyFunceble.helpers.Regex(regx).match(
+                            self.subject, return_match=False
+                        ):
+                            # The element we are currently testing match the
+                            # regex we are currently reading.
 
-                    if PyFunceble.helpers.Regex(regx).match(
-                        self.subject, return_match=False
-                    ):
-                        # The element we are currently testing match the
-                        # regex we are currently reading.
+                            # We get the output of the function associated
+                            # with the regex.
+                            output = method()
 
-                        # We get the output of the function associated
-                        # with the regex.
-                        output = self.regexes_active_to_inactive_potentially_down[
-                            regx
-                        ]()
+                            if output is not None:
+                                # The output is not None.
 
-                        if output is not None:
-                            # The output is not None.
-
-                            # We return the new source and state.
-                            return output
+                                # We return the new source and state.
+                                return output
 
         # We return None, there is no changes.
         return None
@@ -327,17 +342,21 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         if (
             PyFunceble.HTTP_CODE.active
             and self.status_code in PyFunceble.HTTP_CODE.list.potentially_up
+            and not PyFunceble.CONFIGURATION.no_special
         ):
             # * The http status code request is activated.
             # and
             # * The extracted http status code is into the list of potentially up codes.
+            # and
+            # * We are authorized to play with the SPECIAL rules.
 
-            if not PyFunceble.CONFIGURATION.no_special:
-                # We are authorized to play with the SPEICIAL rules.
+            for (
+                regx,
+                methods,
+            ) in self.regexes_active_to_inactive_potentially_up.items():
+                # We loop through the list of available regex.
 
-                for regx in self.regexes_active_to_inactive_potentially_up:
-                    # We loop through the list of available regex.
-
+                for method in methods:
                     if PyFunceble.helpers.Regex(regex=regx).match(
                         self.subject, return_match=False
                     ):
@@ -346,7 +365,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
 
                         # We get the output of the function associated
                         # with the regex.
-                        output = self.regexes_active_to_inactive_potentially_up[regx]()
+                        output = method()
 
                         if output is not None:
                             # The output is not None.
