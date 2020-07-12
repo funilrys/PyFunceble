@@ -66,8 +66,7 @@ class IANADownloader(DownloaderBase):
     def __init__(self):
         self.download_link = PyFunceble.CONFIGURATION.links.iana
         self.destination = (
-            f"{PyFunceble.CONFIG_DIRECTORY}"
-            f"{PyFunceble.abstracts.Infrastructure.IANA_FILENAME}"
+            f"{PyFunceble.CONFIG_DIRECTORY}{PyFunceble.OUTPUTS.default_files.iana}"
         )
 
         super().__init__()

@@ -142,38 +142,59 @@ class Clean:
         # We initate the result variable.
         result = []
 
-        if PyFunceble.CONFIGURATION.db_type == "json":
-            # We initiate the directory we have to look for.
-            directory = PyFunceble.CONFIG_DIRECTORY
+        # We initiate the directory we have to look for.
+        directory = PyFunceble.CONFIG_DIRECTORY
 
-            # We append the dir_structure file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.dir_structure
-                )
-            )
+        # We append the dir_structure file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.dir_structure)
+        )
 
-            # We append the iana file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana)
-            )
+        # We append the iana file.
+        result.append("{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana))
 
-            # We append the public suffix file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.public_suffix
-                )
-            )
+        # We append the public suffix file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.public_suffix)
+        )
 
-            # We append the inactive database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
-            )
+        # We append the inactive database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
+        )
 
-            # We append the mining database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        # We append the mining database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        )
+
+        # We append the hashes tracker file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.HASHES_FILENAME
             )
+        )
+
+        # We append the user agent file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
+            )
+        )
+
+        # We append our downtime file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.DOWN_FILENAME
+            )
+        )
+
+        # We append the ipv4 reputation file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME,
+            )
+        )
 
         return result
 

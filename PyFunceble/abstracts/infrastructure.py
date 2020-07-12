@@ -85,13 +85,6 @@ class Infrastructure:
     :type: str
     """
 
-    IANA_FILENAME = "iana-domains-db.json"
-    """
-    Sets the name of our own IANA database file.
-
-    :type: str
-    """
-
     USER_AGENT_FILENAME = "user_agents.json"
     """
     Sets the name of our own copy of the user agents file.
