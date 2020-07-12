@@ -583,5 +583,5 @@ class MultiprocessCore(
         with Manager() as manager:
             self.__run_multiprocess_test(chain(self.mining.list_of_mined()), manager)
 
-        self.cleanup(self.autocontinue, self.autosave, test_completed=True)
         tracker.reset_position()
+        self.cleanup(self.autocontinue, self.autosave, test_completed=True)

@@ -683,5 +683,5 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.__test_line(subject)
             self.mining.remove(index, subject)
 
-        self.cleanup(self.autocontinue, self.autosave, test_completed=True)
         tracker.reset_position()
+        self.cleanup(self.autocontinue, self.autosave, test_completed=True)
