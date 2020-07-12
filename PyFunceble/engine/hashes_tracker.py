@@ -98,6 +98,9 @@ class HashesTracker:
         if self.authorized and file_destination.exists():
             self.tracker = PyFunceble.helpers.Dict.from_json_file(file_destination.path)
 
+            if self.filename not in self.tracker:
+                self.tracker[self.filename] = dict()
+
             PyFunceble.LOGGER.info(f"Loaded {self.hashes_file!r} in memory.")
 
     def save(self):
