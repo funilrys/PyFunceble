@@ -188,6 +188,15 @@ class TestMining(TestCase):
         self.mining.remove("example.org", "www.facebook.com")
         self.assertEqual(expected, self.mining.database)
 
+        expected = {
+            self.file_to_test_instance.path: {
+                "myètherwället.com": ["www.facebook.com", "facebook.com"],
+            }
+        }
+        del self.mining["example.org"]
+
+        self.assertEqual(expected, self.mining.database)
+
     def test_list_of_mined(self):
         """
         Tests the method which let us get the list of previously mined

@@ -55,14 +55,19 @@ License:
 from os import cpu_count
 
 from colorama import Fore, Style
+from sqlalchemy.exc import OperationalError
 
 import PyFunceble
+from PyFunceble.engine.database.loader import credential, session
+from PyFunceble.engine.database.migrations import Alembic
 
 
 class Preset:  # pragma: no cover
     """
     Checks or update the global configuration based on some events.
     """
+
+    # pylint: disable=too-many-public-methods
 
     # List all index which can be superset.
     # In other words if an index which is listed here
@@ -96,7 +101,7 @@ class Preset:  # pragma: no cover
         self.syntax_test()
         self.reputation_data()
 
-        self.db_types()
+        self.upgrade_database()
 
     @classmethod
     def switch(
@@ -288,15 +293,6 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.maximal_processes = 1
 
     @classmethod
-    def db_types(cls):
-        """
-        Ensure that the files are downloaded when the db types is not
-        the JSON one.
-        """
-
-        PyFunceble.downloader.DBType()
-
-    @classmethod
     def multiprocess_merging_mode(cls):
         """
         Ensures that a valid merging mode is given.
@@ -310,7 +306,7 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
 
         if PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]:
-            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
+            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "live"
 
     def simple_domain(self):
         """
@@ -468,3 +464,21 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.cooldown_time = float(
                 PyFunceble.CONFIGURATION.cooldown_time
             )
+
+    @classmethod
+    def upgrade_database(cls):
+        """
+        Ensures that the database always have the latest state.
+        """
+
+        if (
+            PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]
+            and "migration_started" not in PyFunceble.CONFIGURATION
+        ):
+            with session.Session() as db_session:
+                try:
+                    Alembic(credential.Credential(), db_session).upgrade()
+                except OperationalError:
+                    pass
+
+            PyFunceble.CONFIGURATION["migration_started"] = True

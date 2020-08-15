@@ -55,25 +55,6 @@
 
     **Description:** Set the upstream link to the IANA zone file configuration file.
 
-:code:`links[mariadb]`
-""""""""""""""""""""""
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mariadb.sql`
-
-    **Description:** Set the upstream link to the MariaDB table constructor file.
-
-
-:code:`links[mysql]`
-""""""""""""""""""""
-
-    **Type:** :code:`string`
-
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mysql.sql`
-
-    **Description:** Set the upstream link to the MySQL table constructor file.
-
 :code:`links[psl]`
 """"""""""""""""""
 

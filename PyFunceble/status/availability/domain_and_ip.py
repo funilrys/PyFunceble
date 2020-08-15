@@ -80,15 +80,16 @@ class DomainAndIp(GathererBase):
         if not self.status.whois_server:
             return None, None
 
+        expiration_date_from_database, whois_record = None, None
+
         if self.whois_db:
-            expiration_date_from_database = self.whois_db.get_expiration_date(
-                self.subject
-            )
-        else:
-            expiration_date_from_database = None
+            (
+                expiration_date_from_database,
+                whois_record,
+            ) = self.whois_db.get_expiration_date(self.subject)
 
         if expiration_date_from_database:
-            return expiration_date_from_database, "DATE EXTRACTED FROM WHOIS DATABASE"
+            return expiration_date_from_database, whois_record
 
         whois_record = PyFunceble.lookup.Whois(
             self.subject,
@@ -117,7 +118,12 @@ class DomainAndIp(GathererBase):
 
             if self.whois_db:
                 # We save the whois record into the database.
-                self.whois_db.add(self.subject, expiration_date, whois_record)
+                self.whois_db.add(
+                    self.subject,
+                    expiration_date,
+                    self.status.whois_server,
+                    whois_record,
+                )
         except PyFunceble.exceptions.WrongParameterType:
             expiration_date = None
 

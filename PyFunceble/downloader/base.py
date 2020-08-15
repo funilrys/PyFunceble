@@ -115,7 +115,7 @@ class DownloaderBase:
         Updates the current download time.
         """
 
-        current_datetime = datetime.now()
+        current_datetime = datetime.utcnow()
 
         self.all_downtimes[self.DOWNTIME_INDEX] = {
             "iso": current_datetime.isoformat(),
@@ -165,11 +165,11 @@ class DownloaderBase:
 
         if (
             self.REDOWNLOAD_AFTER <= 0
-            and (datetime.now() - last_download).seconds < 3600
+            and (datetime.utcnow() - last_download).seconds < 3600
         ):
             return False
 
-        if last_download + timedelta(days=self.REDOWNLOAD_AFTER) <= datetime.now():
+        if last_download + timedelta(days=self.REDOWNLOAD_AFTER) <= datetime.utcnow():
             return True
 
         return False

@@ -215,7 +215,7 @@ class MultiprocessCore(
             PyFunceble.LOGGER.info(f"Skipped {subject!r}.")
             print(".", end="")
 
-    def __merge_processes_data(self, manager_data):
+    def __merge_processes_data(self, manager_data, tracker=None):
         """
         Reads all results and put them at the right location.
         """
@@ -245,6 +245,9 @@ class MultiprocessCore(
                     mining=self.mining,
                     whois_db=self.whois_db,
                 )
+
+                if tracker:
+                    tracker.add_position(len(test_output["tested"]))
 
             manager_data[:] = []
 
@@ -297,33 +300,70 @@ class MultiprocessCore(
         Starts a new process.
         """
 
-        original_config = PyFunceble.CONFIGURATION.copy()
-        original_intern = PyFunceble.INTERN.copy()
+        if subject in self.autocontinue:
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                PyFunceble.LOGGER.info(f"Skipped {subject!r}: already tested.")
+                print(".", end="")
 
-        process = OurProcessWrapper(
-            target=self.test,
-            args=(
-                subject,
-                self.file_type,
-                PyFunceble.LOADER,
-                manager_data,
-                original_intern,
-                ignore_inactive_db_check,
-                {
-                    "api_file_generation": PyFunceble.CONFIGURATION.db_type == "json",
-                    "inactive_database": False,
-                    "auto_continue": False,
-                    "quiet": PyFunceble.CONFIGURATION.quiet,
-                },
-            ),
-        )
-        process.name = f"PyF {subject}"
-        process.start()
+        else:
+            original_config = PyFunceble.CONFIGURATION.copy()
+            original_intern = PyFunceble.INTERN.copy()
 
-        PyFunceble.LOADER.config.update(original_config)
-        PyFunceble.LOADER.inject_all()
+            process = OurProcessWrapper(
+                target=self.test,
+                args=(
+                    subject,
+                    self.file_type,
+                    PyFunceble.LOADER,
+                    manager_data,
+                    original_intern,
+                    ignore_inactive_db_check,
+                    {
+                        "api_file_generation": PyFunceble.CONFIGURATION.db_type
+                        == "json",
+                        "inactive_database": False,
+                        "auto_continue": False,
+                        "quiet": PyFunceble.CONFIGURATION.quiet,
+                    },
+                ),
+            )
+            process.name = f"PyF {subject}"
+            process.start()
 
-        PyFunceble.INTERN.update(original_intern)
+            PyFunceble.LOADER.config.update(original_config)
+            PyFunceble.LOADER.inject_all()
+
+            PyFunceble.INTERN.update(original_intern)
+
+    def __process_live_merging(self, finished, manager_data, tracker):
+        """
+        Processes the live merging.
+        """
+
+        if (
+            PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live"
+            and not finished
+            and not self.autosave.is_time_exceed()
+        ):
+            self.__merge_processes_data(manager_data, tracker=tracker)
+
+            return True
+
+        return False
+
+    def __process_end_merging(self, finished, manager_data, tracker):
+        """
+        Processes the end merging.
+        """
+
+        if finished or self.autosave.is_time_exceed():
+            while "PyF" in " ".join([x.name for x in reversed(active_children())]):
+                continue
+
+            self.__merge_processes_data(manager_data, tracker=tracker)
+
+            return True
+        return False
 
     # pylint: disable=too-many-nested-blocks,too-many-branches
     def __run_multiprocess_test(
@@ -347,8 +387,6 @@ class MultiprocessCore(
         file_position = 0
 
         while True:
-            active = active_children()
-
             while (
                 len(active_children()) <= PyFunceble.CONFIGURATION.maximal_processes
                 and not self.autosave.is_time_exceed()
@@ -416,33 +454,15 @@ class MultiprocessCore(
             while len(
                 active_children()
             ) >= PyFunceble.CONFIGURATION.maximal_processes and "PyF" in " ".join(
-                [x.name for x in reversed(active)]
+                [x.name for x in reversed(active_children())]
             ):
+                self.__process_live_merging(finished, manager_data, tracker)
                 continue
 
-            if (
-                PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live"
-                and not finished
-                and not self.autosave.is_time_exceed()
-            ):
-                while "PyF" in " ".join([x.name for x in reversed(active)]):
-                    active = active_children()
-
-                self.__merge_processes_data(manager_data)
-
-                if tracker:
-                    tracker.set_position(file_position)
-
+            if self.__process_live_merging(finished, manager_data, tracker):
                 continue
-            if finished or self.autosave.is_time_exceed():
-                while "PyF" in " ".join([x.name for x in reversed(active)]):
-                    active = active_children()
 
-                self.__merge_processes_data(manager_data)
-
-                if tracker:
-                    tracker.set_position(file_position)
-
+            if self.__process_end_merging(finished, manager_data, tracker):
                 break
 
     def work_process(self, *args):

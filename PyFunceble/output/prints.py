@@ -216,7 +216,7 @@ class Prints:
 
             # We initiate the information about the generation date of this file.
             date_of_generation = (
-                "# Date of generation: %s\n\n" % datetime.now().isoformat()
+                "# Date of generation: %s\n\n" % datetime.utcnow().isoformat()
             )
 
             # We initiate a variable which will save the list of

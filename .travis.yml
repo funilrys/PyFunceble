@@ -127,6 +127,7 @@ jobs:
           all_branches: true
           condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
     - language: generic
+      if: branch =~ ^dev|master$
       os: linux
       dist: bionic
       name: "Deployment to Docker"
@@ -143,6 +144,7 @@ jobs:
       after_success:
         - echo "Hello, World!"
     - language: generic
+      if: branch =~ ^dev|master$
       os: linux
       dist: bionic
       name: "Deployment to Anaconda Cloud"

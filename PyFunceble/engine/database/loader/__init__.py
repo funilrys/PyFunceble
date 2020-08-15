@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the downloader of the desired database type file.
+Provides everything related to the database connection and contruction.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,54 +50,4 @@ License:
     limitations under the License.
 """
 
-from os import sep as directory_separator
-
-import PyFunceble
-
-from .base import DownloaderBase
-
-
-class DBTypeDownloader(DownloaderBase):
-    """
-    Provides the downloader of the desired database type file.
-    """
-
-    DOWNTIME_INDEX = "db_type"
-    REDOWNLOAD_AFTER = 0
-
-    def __init__(self):
-        is_cloned_version = PyFunceble.abstracts.Version.is_local_cloned()
-        destination_directory = (
-            f"{PyFunceble.CONFIG_DIRECTORY}"
-            f"{PyFunceble.CONFIGURATION.outputs.db_type.directory}"
-        )
-
-        if not destination_directory.endswith(directory_separator):
-            destination_directory += directory_separator
-
-        destination_dir_instance = PyFunceble.helpers.Directory(destination_directory)
-
-        not_supported_db_types = ["json"]
-
-        self.destination = (
-            f"{destination_directory}"
-            f"{PyFunceble.OUTPUTS.db_type.files[PyFunceble.CONFIGURATION.db_type]}"
-        )
-
-        if not is_cloned_version and (
-            PyFunceble.CONFIGURATION.db_type not in not_supported_db_types
-        ):
-            destination_dir_instance.delete()
-
-            if PyFunceble.CONFIGURATION.db_type not in not_supported_db_types:
-                destination_dir_instance.create()
-
-                self.DOWNTIME_INDEX += f"_{PyFunceble.CONFIGURATION.db_type}"  # pylint: disable=invalid-name
-
-                self.download_link = PyFunceble.converter.InternalUrl(
-                    PyFunceble.CONFIGURATION.links[PyFunceble.CONFIGURATION.db_type]
-                ).get_converted()
-
-                super().__init__()
-
-                self.process()
+from . import credential, session

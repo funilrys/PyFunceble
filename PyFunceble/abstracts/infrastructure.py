@@ -116,3 +116,17 @@ class Infrastructure:
 
     :type: str
     """
+
+    ALEMBIC_DIRECTORY_NAME = "alembic"
+    """
+    Sets the name of the alembic related directory.
+
+    :type: str
+    """
+
+    ALEMBIC_CONFIG_FILENAME = "alembic.ini"
+    """
+    Sets the name of the alembic configuration file.
+
+    :type: str
+    """

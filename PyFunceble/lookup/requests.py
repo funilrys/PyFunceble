@@ -50,9 +50,11 @@ License:
     limitations under the License.
 """
 
+import warnings
 from urllib.parse import urlparse
 
 import requests
+from urllib3.exceptions import InsecureRequestWarning
 
 import PyFunceble
 
@@ -260,6 +262,8 @@ class Requests:
         self.session.mount(
             "http://", HostAdapter(max_retries=self.pyfunceble_max_retry)
         )
+
+        warnings.simplefilter("ignore", InsecureRequestWarning)
 
     def get(self, url, **kwargs):
         """

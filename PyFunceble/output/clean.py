@@ -54,6 +54,8 @@ from os import sep as directory_separator
 from os import walk
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
 
 
 class Clean:
@@ -227,36 +229,54 @@ class Clean:
 
                 PyFunceble.LOGGER.info(f"Deleted: {file}")
 
-            if clean_all:  # pragma: no cover
-                to_avoid = ["whois"]
-            else:
-                to_avoid = ["whois", "auto_continue", "inactive", "mining"]
-
-            if not file_path:
-                query = "DELETE FROM {0}"
-            else:  # pragma: no cover
-                query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
-
             if PyFunceble.CONFIGURATION.db_type in [
                 "mariadb",
                 "mysql",
             ]:  # pragma: no cover
 
-                with PyFunceble.engine.MySQL() as connection:
-                    for database_name in [
-                        y
-                        for x, y in PyFunceble.engine.MySQL.tables.items()
-                        if x not in to_avoid
-                    ]:
-                        lquery = query.format(database_name)
+                with session.Session() as db_session:
+                    if file_path:
+                        # pylint: disable=no-member, singleton-comparison
 
-                        with connection.cursor() as cursor:
-                            cursor.execute(lquery, {"file_path": file_path})
-
-                            PyFunceble.LOGGER.info(
-                                "Cleaned the data related to "
-                                f"{repr(file_path)} from the {database_name} table."
+                        to_delete = (
+                            db_session.query(Status)
+                            .join(File)
+                            .filter(File.path == file_path)
+                            .filter(File.test_completed == True)
+                            .filter(
+                                Status.status.in_(PyFunceble.core.CLI.get_up_statuses())
                             )
+                            .all()
+                        )
+
+                        for row in to_delete:
+                            delete_query = Status.__table__.delete().where(
+                                Status.id == row.id
+                            )
+                            db_session.execute(delete_query)
+                            db_session.commit()
+
+                        file_object = (
+                            db_session.query(File).filter(File.path == file_path).one()
+                        )
+
+                        file_object.test_completed = False
+
+                        db_session.add(file_object)
+                        db_session.commit()
+                    else:
+                        to_delete = db_session.query(  # pylint: disable=no-member
+                            File
+                        ).all()
+
+                        for row in to_delete:
+                            # pylint: disable=no-member
+
+                            delete_query = File.__table__.delete().where(
+                                File.id == row.id
+                            )
+                            db_session.execute(delete_query)
+                            db_session.commit()
 
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all

@@ -55,6 +55,5 @@ from .auto_save import AutoSave
 from .hashes_tracker import HashesTracker
 from .logger import Logger
 from .mining import Mining
-from .mysql import MySQL
 from .sort import Sort
 from .user_agent import UserAgent

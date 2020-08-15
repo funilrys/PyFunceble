@@ -1,6 +1,9 @@
 recursive-include PyFunceble *.py
+recursive-include PyFunceble/data *
 recursive-include docs *.rst Makefile *.bat *.py
 recursive-include tests *.py
+global-exclude __pycache__
+global-exclude *.py[co]
 include LICENSE
 include CODE_OF_CONDUCT.rst
 include CONTRIBUTING.rst
