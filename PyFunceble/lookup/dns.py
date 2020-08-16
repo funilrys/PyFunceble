@@ -126,6 +126,8 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         Updates the lifetime of a query.
         """
 
+        self.resolver.timout = 2.0
+
         if isinstance(lifetime, (int, float)):
             if lifetime == self.resolver.timeout:
                 self.resolver.lifetime = float(lifetime) + 2.0
