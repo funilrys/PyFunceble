@@ -349,12 +349,13 @@ class Loader:
         except (FileNotFoundError, TypeError):
             raise PyFunceble.exceptions.ConfigurationFileNotFound()
 
-        self.fix_paths()
         if (
             self.is_current_version_different_from_upstream()
             and self.are_we_allowed_to_merge_upstream()
         ):
             self.__merge_upstream()
+
+        self.fix_paths()
 
         self.config.update(self.custom_config)
         self.custom_loaded = self.custom_config
