@@ -8,7 +8,7 @@ from PyFunceble import test as PyFunceble
 from PyFunceble import url_test as PyFuncebleURL
 
 CONFIG = {"no_whois": True, "db_type": "json"}
-SUBJECTS = ["google.com", "github.com", "example.org", "8.8.8.8", "8.4.4.8"]
+SUBJECTS = ["google.com", "github.com", "example.org", "8.8.8.8", "8.8.4.4"]
 
 for subject in SUBJECTS:
     output = PyFunceble(subject=subject, complete=True, config=CONFIG)

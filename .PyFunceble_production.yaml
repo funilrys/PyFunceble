@@ -28,7 +28,7 @@ dns_lookup_over_tcp: False
 #
 #       dns_server:
 #         - "8.8.8.8" # First DNS server.
-#         - "8.4.4.8" # Second DNS server.
+#         - "8.8.4.4" # Second DNS server.
 dns_server: null
 # Set the element to filter.
 filter: ""
