@@ -54,8 +54,9 @@ from os import sep as directory_separator
 
 import pymysql
 import pymysql.cursors
+from colorama import Fore, Style
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 import PyFunceble
 
@@ -83,6 +84,8 @@ class CleanupOldTables:
     def __init__(self, credentials, db_session):
         self.credentials = credentials
         self.db_session = db_session
+
+        self.autosave_authorized = PyFunceble.engine.AutoSave().authorized
 
     @property
     def authorized(self):
@@ -209,17 +212,19 @@ class CleanupOldTables:
                     self.db_session.add(status)
                     self.db_session.commit()
                     self.db_session.refresh(status)
-
-                    old_connection = self.get_old_connection()
-                    with old_connection.cursor() as cursor:
-                        statement = (
-                            "DELETE FROM pyfunceble_tested WHERE id = %(status_id)s"
-                        )
-                        # pylint: disable=no-member
-                        cursor.execute(statement, {"status_id": status.id})
-                    old_connection.close()
                 except IntegrityError:
                     pass
+
+                old_connection = self.get_old_connection()
+                with old_connection.cursor() as cursor:
+                    statement = "DELETE FROM pyfunceble_tested WHERE id = %(status_id)s"
+                    # pylint: disable=no-member
+                    cursor.execute(statement, {"status_id": status.id})
+                old_connection.close()
+
+                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')
+                    print(".", end="")
 
     def __start_autocontinue_migration(self):
         """
@@ -236,22 +241,52 @@ class CleanupOldTables:
             old_connection.close()
 
             for data in result:
-                status = (
-                    self.db_session.query(Status)
-                    .filter(Status.tested == data["subject"])
-                    .one()
-                )
+                try:
+                    self.db_session.rollback()
+                    file = (
+                        self.db_session.query(File)
+                        .filter(File.path == data["file_path"])
+                        .one()
+                    )
+                except NoResultFound:
+                    file = File(path=data["file_path"])
+
+                    self.db_session.add(file)
+                    self.db_session.commit()
+                    self.db_session.refresh(file)
+
+                try:
+                    status = (
+                        self.db_session.query(Status)
+                        .join(File)
+                        .filter(File.path == data["file_path"])
+                        .filter(Status.tested == data["subject"])
+                        .one()
+                    )
+                except NoResultFound:
+                    status = Status(
+                        tested=data["subject"], status=data["subject"], file_id=file.id
+                    )
 
                 status.is_complement = data["is_complement"]
 
-                self.db_session.add(status)
-                self.db_session.commit()
+                try:
+                    self.db_session.add(status)
+                    self.db_session.commit()
+                except IntegrityError:
+                    pass
 
                 old_connection = self.get_old_connection()
                 with old_connection.cursor() as cursor:
                     statement = "DELETE FROM pyfunceble_auto_continue WHERE id = %(id)s"
                     cursor.execute(statement, {"id": data["id"]})
                 old_connection.close()
+
+                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(
+                        f'Switched {data["subject"]} (AUTOCONTINUE) to SQLAlchemy.'
+                    )
+                    print(".", end="")
 
     def __start_whois_migration(self):
         """
@@ -278,6 +313,8 @@ class CleanupOldTables:
                     )
                 except NoResultFound:
                     continue
+                except MultipleResultsFound:
+                    pass
 
                 whois_record = WhoisRecord(
                     subject=data["subject"],
@@ -289,14 +326,23 @@ class CleanupOldTables:
                     state=data["state"],
                 )
 
-                self.db_session.add(whois_record)
-                self.db_session.commit()
+                try:
+                    self.db_session.add(whois_record)
+                    self.db_session.commit()
+                except IntegrityError:
+                    pass
 
                 old_connection = self.get_old_connection()
                 with old_connection.cursor() as cursor:
                     statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
                     cursor.execute(statement, {"id": data["id"]})
                 old_connection.close()
+
+                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(
+                        f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.'
+                    )
+                    print(".", end="")
 
     def __delete_old_tables(self):
         """
@@ -311,14 +357,20 @@ class CleanupOldTables:
                     cursor.execute(statement)
                 old_connection.close()
 
+            if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                PyFunceble.LOGGER.info(f"Deleted {table} from the database.")
+                print(".", end="")
+
     def start(self):
         """
         Starts the migration of old data into the new structure.
         """
 
         if self.authorized:
+            print(f"{Fore.MAGENTA}{Style.BRIGHT}Starting switch to SQLAlchemy ...")
             self.__start_tested_migration()
             self.__start_autocontinue_migration()
             self.__start_whois_migration()
 
             self.__delete_old_tables()
+            print(f"{Fore.MAGENTA}{Style.BRIGHT}Finished switch to SQLAlchemy!")

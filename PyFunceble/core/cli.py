@@ -204,6 +204,7 @@ class CLICore:
                 try:
                     status = (
                         db_session.query(Status)
+                        .filter(Status.file_id == file.id)
                         .filter(Status.tested == status_input["tested"])
                         .one()
                     )

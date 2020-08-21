@@ -69,7 +69,7 @@ class Status(DatabaseBase):
         nullable=False,
     )
 
-    tested = Column(Text, nullable=False, unique=True)
+    tested = Column(Text, nullable=False, index=True)
     _status = Column(Text, nullable=True)
     status = Column(Text, nullable=True)
     _status_source = Column(Text, nullable=True)

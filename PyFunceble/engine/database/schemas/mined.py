@@ -72,7 +72,7 @@ class Mined(DatabaseBase):
         nullable=False,
     )
 
-    mined = Column(Text, nullable=False, unique=True)
+    mined = Column(Text, nullable=False, index=True)
 
     subject = relationship("Status", uselist=False, back_populates="mined")
     file = relationship("File", uselist=False, back_populates="mined")
