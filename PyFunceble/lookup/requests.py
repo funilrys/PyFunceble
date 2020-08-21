@@ -132,21 +132,23 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
             f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
         )
 
-        if parsed_url.scheme == "https" and hostname_ip:
+        if hostname_ip:
             request.url = request.url.replace(
-                f"https://{parsed_url.hostname}", f"https://{hostname_ip}"
+                f"{parsed_url.scheme}://{parsed_url.hostname}",
+                f"{parsed_url.scheme}://{hostname_ip}",
             )
 
-            self.poolmanager.connection_pool_kw["server_hostname"] = parsed_url.hostname
-            self.poolmanager.connection_pool_kw["assert_hostname"] = parsed_url.hostname
+            if parsed_url.scheme == "https":
+                self.poolmanager.connection_pool_kw[
+                    "server_hostname"
+                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw[
+                    "assert_hostname"
+                ] = parsed_url.hostname
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.
             request.headers["Host"] = parsed_url.hostname
-        elif parsed_url.scheme == "http" and hostname_ip:
-            request.url = request.url.replace(
-                f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
-            )
         else:
             self.poolmanager.connection_pool_kw.pop(
                 "server_hostname", "pyfunceble-not-resolved"
@@ -157,7 +159,10 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
 
             request.url = "https://pyfunceble-not-resolved"
 
-        return super(HostSSLAdapter, self).send(request, **kwargs)
+        response = super(HostSSLAdapter, self).send(request, **kwargs)
+        response.url = response.url.replace(hostname_ip, parsed_url.hostname)
+
+        return response
 
 
 class HostAdapter(requests.adapters.HTTPAdapter):
@@ -212,21 +217,19 @@ class HostAdapter(requests.adapters.HTTPAdapter):
             f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
         )
 
-        if parsed_url.scheme == "http" and hostname_ip:
+        if hostname_ip:
             request.url = request.url.replace(
-                f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
+                f"{parsed_url.scheme}://{parsed_url.hostname}",
+                f"{parsed_url.scheme}://{hostname_ip}",
             )
 
-            # Ensure that the Hosts header is present. Otherwise, connection might
-            # not work.
-            request.headers["Host"] = parsed_url.hostname
-        elif parsed_url.scheme == "https" and hostname_ip:
-            request.url = request.url.replace(
-                f"https://{parsed_url.hostname}", f"https://{hostname_ip}"
-            )
-
-            self.poolmanager.connection_pool_kw["server_hostname"] = parsed_url.hostname
-            self.poolmanager.connection_pool_kw["assert_hostname"] = parsed_url.hostname
+            if parsed_url.scheme == "https":
+                self.poolmanager.connection_pool_kw[
+                    "server_hostname"
+                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw[
+                    "assert_hostname"
+                ] = parsed_url.hostname
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.
@@ -241,7 +244,12 @@ class HostAdapter(requests.adapters.HTTPAdapter):
 
             request.url = "http://pyfunceble-not-resolved"
 
-        return super(HostAdapter, self).send(request, **kwargs)
+        request.before_resolution = parsed_url.hostname
+
+        response = super(HostAdapter, self).send(request, **kwargs)
+        response.url = response.url.replace(hostname_ip, parsed_url.hostname)
+
+        return response
 
 
 class Requests:

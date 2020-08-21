@@ -160,7 +160,11 @@ class TestMining(TestCase):
 
         self.mining["www.google.com"] = ["github.com"]
 
-        expected[self.file_to_test_instance.path]["www.google.com"].append("github.com")
+        expected = {
+            self.file_to_test_instance.path: {
+                "www.google.com": ["facebook.com", "github.com", "www.facebook.com"]
+            }
+        }
 
         self.assertEqual(expected, self.mining.database)
 

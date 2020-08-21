@@ -94,6 +94,8 @@ class CLICore:
         list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
         list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
 
+        list_of_up_statuses.extend([x.upper() for x in list_of_up_statuses])
+
         return list_of_up_statuses
 
     @classmethod
