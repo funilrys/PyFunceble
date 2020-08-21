@@ -143,6 +143,10 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             self.database[self.filename][index].extend(value)
                         else:  # pragma: no cover
                             self.database[self.filename][index].append(value)
+
+                        self.database[self.filename][index] = PyFunceble.helpers.List(
+                            self.database[self.filename][index]
+                        ).format()
                     else:  # pragma: no cover
                         self.database[self.filename][index] = value
                 else:
@@ -164,13 +168,23 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             .one()
                         )
 
-                        mined = Mined(
-                            subject_id=status.id, mined=value, file_id=status.file_id
+                        in_db = (
+                            db_session.query(Mined)
+                            .filter(Mined.mined == value)
+                            .filter(Mined.subject_id == status.id)
+                            .all()
                         )
 
-                        db_session.add(mined)
-                        db_session.commit()
-                        db_session.refresh(mined)
+                        if not in_db:
+                            mined = Mined(
+                                subject_id=status.id,
+                                mined=value,
+                                file_id=status.file_id,
+                            )
+
+                            db_session.add(mined)
+                            db_session.commit()
+                            db_session.refresh(mined)
                     except NoResultFound:
                         pass
 
@@ -237,13 +251,19 @@ class Mining:  # pylint: disable=too-many-instance-attributes
             verify = PyFunceble.CONFIGURATION.verify_ssl_certificate
 
         try:
-            return PyFunceble.REQUESTS.get(
+            result = PyFunceble.REQUESTS.get(
                 url,
                 headers=cls.headers,
                 timeout=PyFunceble.CONFIGURATION.timeout,
                 verify=verify,
                 allow_redirects=True,
             ).history
+
+            for element in result.copy():
+                if "location" in element.headers:
+                    result.append(element.headers["location"])
+
+            return result
         except (
             PyFunceble.REQUESTS.exceptions.ConnectionError,
             PyFunceble.REQUESTS.exceptions.Timeout,
@@ -254,7 +274,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         ):
             PyFunceble.LOGGER.exception()
 
-            return []
+        return []
 
     def list_of_mined(self):
         """
@@ -377,28 +397,25 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
             if subject_type == "domain":
                 to_get = "http://{0}:80".format(subject)
-                secure_to_get = "https://{0}:443".format(subject)
             elif subject_type == "url":
                 to_get = subject
-                secure_to_get = None
+
             else:
                 raise ValueError("Unknown subject type {0}".format(repr(subject_type)))
 
             history = self.get_history(to_get)
-
-            if secure_to_get:
-                history.extend(self.get_history(secure_to_get, verify=True))
-
-            history = PyFunceble.helpers.List(history).format()
 
             PyFunceble.LOGGER.debug(f"(Not processed) Mined:\n{history}")
 
             for element in history:
                 # We loop through the list of requests history.
 
-                # We get the url from the currently read
-                # request.
-                url = element.url
+                try:
+                    # We get the url from the currently read
+                    # request.
+                    url = element.url
+                except AttributeError:
+                    url = element
 
                 # We create a variable which will save the
                 # local result.
@@ -439,6 +456,8 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                             # We remove it.
                             local_result = local_result[: local_result.find(":443")]
+                    elif subject_type == "url" and local_result.endswith("/"):
+                        local_result = local_result[:-1]
 
                     if local_result != subject:
                         # The local result is differnt from the
