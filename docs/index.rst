@@ -18,12 +18,12 @@ The tool to check the availability or syntax of domain, IP or URL.
     :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
-.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
-.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/month
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/week
+    :target: https://pepy.tech/project/pyfunceble-dev
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
