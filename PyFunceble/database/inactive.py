@@ -51,6 +51,7 @@ License:
 """
 
 from datetime import datetime, timedelta
+from multiprocessing import get_start_method
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -368,6 +369,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if PyFunceble.CONFIGURATION.db_type == "json":
                 result = set()
 
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 for subject, info in self.database[self.filename].items():
                     if (
                         "last_retested_at_epoch" in info
@@ -420,6 +427,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         if self.authorized and PyFunceble.CONFIGURATION.days_between_db_retest >= 0:
             if PyFunceble.CONFIGURATION.db_type == "json":
                 result = set()
+
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
 
                 for subject, info in self.database[self.filename].items():
                     if (

@@ -51,6 +51,7 @@ License:
 """
 
 from datetime import datetime
+from multiprocessing import get_start_method
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -439,6 +440,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 try:
                     return {
                         y

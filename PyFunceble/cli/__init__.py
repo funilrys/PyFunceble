@@ -1123,6 +1123,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.user_agent:
                     PyFunceble.CONFIGURATION.user_agent.custom = args.user_agent
+                else:
+                    PyFunceble.CONFIGURATION.user_agent.custom = None
 
                 if args.verify_ssl_certificate:
                     PyFunceble.CONFIGURATION.verify_ssl_certificate = (
