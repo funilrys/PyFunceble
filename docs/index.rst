@@ -2,7 +2,7 @@
     :alt: PyFunceble logo
 
 The tool to check the availability or syntax of domain, IP or URL.
-===========================================================================
+==================================================================
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
