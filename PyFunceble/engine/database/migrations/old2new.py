@@ -102,23 +102,22 @@ class CleanupOldTables:
         Get the row of the database.
         """
 
-        fetcher_connection = self.get_old_connection()
-
         statement += f" LIMIT {limit}"
 
         while True:
+            fetcher_connection = self.get_old_connection()
             with fetcher_connection.cursor() as cursor:
                 cursor.execute(statement)
 
                 db_result = cursor.fetchall()
+
+            fetcher_connection.close()
 
             if not db_result:
                 break
 
             for result in db_result:
                 yield result
-
-        fetcher_connection.close()
 
     def get_old_connection(self):
         """
