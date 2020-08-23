@@ -51,6 +51,7 @@ License:
 """
 
 from os import sep as directory_separator
+from threading import Thread, active_count
 
 import pymysql
 import pymysql.cursors
@@ -81,9 +82,8 @@ class CleanupOldTables:
         "pyfunceble_whois",
     ]
 
-    def __init__(self, credentials, db_session):
+    def __init__(self, credentials):
         self.credentials = credentials
-        self.db_session = db_session
 
         self.autosave_authorized = PyFunceble.engine.AutoSave().authorized
 
@@ -96,6 +96,29 @@ class CleanupOldTables:
         return PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"] and any(
             [self.does_table_exists(x) for x in self.old_tables]
         )
+
+    def __get_rows(self, statement, limit=20):
+        """
+        Get the row of the database.
+        """
+
+        fetcher_connection = self.get_old_connection()
+
+        statement += f" LIMIT {limit}"
+
+        while True:
+            with fetcher_connection.cursor() as cursor:
+                cursor.execute(statement)
+
+                db_result = cursor.fetchall()
+
+            if not db_result:
+                break
+
+            for result in db_result:
+                yield result
+
+        fetcher_connection.close()
 
     def get_old_connection(self):
         """
@@ -157,74 +180,169 @@ class CleanupOldTables:
         old_connection.close()
         return True
 
+    @classmethod
+    def __join_threads(cls, threads):
+        """
+        Join all the given threads.
+        """
+
+        for thread in threads:
+            thread.join()
+
+    @classmethod
+    def __process_migration(cls, action_method, data):
+        """
+        Process the migration.
+        """
+
+        threads = []
+
+        if PyFunceble.CONFIGURATION.multiprocess:
+            if active_count() <= PyFunceble.CONFIGURATION.maximal_processes:
+                new_thread = Thread(target=action_method, args=(data,))
+                new_thread.start()
+
+                threads.append(new_thread)
+            else:
+                for index, thread in enumerate(threads):
+                    thread.join()
+                    if not thread.is_alive():
+                        del threads[index]
+                        break
+        else:
+            action_method(data)
+
+        return threads
+
+    def __tested_migration(self, data):
+        """
+        Runs the actual migration for a dataset.
+        """
+
+        PyFunceble.LOGGER.debug(f"Switching:\n{data}")
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
+            try:
+                file = (
+                    db_session.query(File).filter(File.path == data["file_path"]).one()
+                )
+            except NoResultFound:
+                file = File(path=data["file_path"])
+
+                db_session.add(file)
+                db_session.commit()
+                db_session.refresh(file)
+
+            status = Status(
+                file_id=file.id,
+                created=data["created"],
+                modified=data["modified"],
+                tested=data["tested"],
+                _status=data["_status"],
+                status=data["status"],
+                _status_source=data["_status_source"],
+                status_source=data["status_source"],
+                domain_syntax_validation=data["domain_syntax_validation"],
+                expiration_date=data["expiration_date"],
+                http_status_code=data["http_status_code"],
+                ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
+                ipv4_syntax_validation=data["ipv4_syntax_validation"],
+                ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
+                ipv6_syntax_validation=data["ipv6_syntax_validation"],
+                subdomain_syntax_validation=data["subdomain_syntax_validation"],
+                url_syntax_validation=data["url_syntax_validation"],
+                is_complement=False,
+                test_completed=True,
+            )
+
+            try:
+                db_session.add(status)
+                db_session.commit()
+                db_session.refresh(status)
+            except IntegrityError:
+                pass
+
+        old_connection = self.get_old_connection()
+        with old_connection.cursor() as cursor:
+            statement = "DELETE FROM pyfunceble_tested WHERE id = %(status_id)s"
+            # pylint: disable=no-member
+            cursor.execute(statement, {"status_id": status.id})
+        old_connection.close()
+
+        if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+            PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')
+            print(".", end="")
+
     def __start_tested_migration(self):
         """
         Starts the migration of the tested data.
         """
 
         if self.does_table_exists("pyfunceble_tested"):
-            old_connection = self.get_old_connection()
-            with old_connection.cursor() as cursor:
-                statement = "SELECT * FROM pyfunceble_tested"
-                cursor.execute(statement)
+            PyFunceble.LOGGER.info("Starting to switch (tested) SQLAlchemy.")
 
-                result = cursor.fetchall()
-            old_connection.close()
+            statement = "SELECT * FROM pyfunceble_tested"
 
-            for data in result:
-                try:
-                    self.db_session.rollback()
-                    file = (
-                        self.db_session.query(File)
-                        .filter(File.path == data["file_path"])
-                        .one()
-                    )
-                except NoResultFound:
-                    file = File(path=data["file_path"])
+            threads = []
 
-                    self.db_session.add(file)
-                    self.db_session.commit()
-                    self.db_session.refresh(file)
+            for data in self.__get_rows(statement):
+                threads.extend(self.__process_migration(self.__tested_migration, data))
 
+            self.__join_threads(threads)
+
+            PyFunceble.LOGGER.info("Finished to switch (tested) SQLAlchemy.")
+
+    def __autocontinue_migration(self, data):
+        """
+        Runs the actual migration of the given dataset.
+        """
+
+        PyFunceble.LOGGER.debug(f"Switching:\n{data}")
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
+            try:
+                file = (
+                    db_session.query(File).filter(File.path == data["file_path"]).one()
+                )
+            except NoResultFound:
+                file = File(path=data["file_path"])
+
+                db_session.add(file)
+                db_session.commit()
+                db_session.refresh(file)
+
+            try:
+                status = (
+                    db_session.query(Status)
+                    .join(File)
+                    .filter(File.path == data["file_path"])
+                    .filter(Status.tested == data["subject"])
+                    .one()
+                )
+            except NoResultFound:
                 status = Status(
-                    file_id=file.id,
-                    created=data["created"],
-                    modified=data["modified"],
-                    tested=data["tested"],
-                    _status=data["_status"],
-                    status=data["status"],
-                    _status_source=data["_status_source"],
-                    status_source=data["status_source"],
-                    domain_syntax_validation=data["domain_syntax_validation"],
-                    expiration_date=data["expiration_date"],
-                    http_status_code=data["http_status_code"],
-                    ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
-                    ipv4_syntax_validation=data["ipv4_syntax_validation"],
-                    ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
-                    ipv6_syntax_validation=data["ipv6_syntax_validation"],
-                    subdomain_syntax_validation=data["subdomain_syntax_validation"],
-                    url_syntax_validation=data["url_syntax_validation"],
-                    is_complement=False,
-                    test_completed=True,
+                    tested=data["subject"], status=data["subject"], file_id=file.id
                 )
 
-                try:
-                    self.db_session.add(status)
-                    self.db_session.commit()
-                    self.db_session.refresh(status)
-                except IntegrityError:
-                    pass
+            status.is_complement = data["is_complement"]
 
-                old_connection = self.get_old_connection()
-                with old_connection.cursor() as cursor:
-                    statement = "DELETE FROM pyfunceble_tested WHERE id = %(status_id)s"
-                    # pylint: disable=no-member
-                    cursor.execute(statement, {"status_id": status.id})
-                old_connection.close()
+            try:
+                db_session.add(status)
+                db_session.commit()
+            except IntegrityError:
+                pass
 
-                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
-                    PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')
-                    print(".", end="")
+        old_connection = self.get_old_connection()
+        with old_connection.cursor() as cursor:
+            statement = "DELETE FROM pyfunceble_auto_continue WHERE id = %(id)s"
+            cursor.execute(statement, {"id": data["id"]})
+        old_connection.close()
+
+        if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+            PyFunceble.LOGGER.info(
+                f'Switched {data["subject"]} (AUTOCONTINUE) to SQLAlchemy.'
+            )
+            print(".", end="")
 
     def __start_autocontinue_migration(self):
         """
@@ -232,61 +350,74 @@ class CleanupOldTables:
         """
 
         if self.does_table_exists("pyfunceble_auto_continue"):
+            PyFunceble.LOGGER.info("Starting to switch (autocontinue) SQLAlchemy.")
+
+            statement = "SELECT * FROM pyfunceble_auto_continue"
+
+            threads = []
+
+            for data in self.__get_rows(statement):
+                threads.extend(
+                    self.__process_migration(self.__autocontinue_migration, data)
+                )
+
+            self.__join_threads(threads)
+            PyFunceble.LOGGER.info("Starting to switch (autocontinue) SQLAlchemy.")
+
+    def __whois_migration(self, data):
+        """
+        Runs the actual migration of the given dataset.
+        """
+
+        PyFunceble.LOGGER.debug(f"Switching:\n{data}")
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
+            try:
+                _ = (
+                    db_session.query(Status)
+                    .filter(Status.tested == data["subject"])
+                    .one()
+                )
+            except NoResultFound:
+                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(f'Skipped {data["subject"]} (WHOIS).')
+                    print(".", end="")
+                return None
+            except MultipleResultsFound:
+                pass
+
+            if not PyFunceble.CONFIGURATION.store_whois_record:
+                data["record"] = None
+
+            whois_record = WhoisRecord(
+                subject=data["subject"],
+                modified=data["modified"],
+                created=data["created"],
+                expiration_date=data["expiration_date"],
+                epoch=data["expiration_date_epoch"],
+                record=data["record"],
+                state=data["state"],
+            )
+
+            try:
+                db_session.add(whois_record)
+                db_session.commit()
+            except IntegrityError:
+                pass
+
             old_connection = self.get_old_connection()
             with old_connection.cursor() as cursor:
-                statement = "SELECT * FROM pyfunceble_auto_continue"
-                cursor.execute(statement)
-
-                result = cursor.fetchall()
+                statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
+                cursor.execute(statement, {"id": data["id"]})
             old_connection.close()
 
-            for data in result:
-                try:
-                    self.db_session.rollback()
-                    file = (
-                        self.db_session.query(File)
-                        .filter(File.path == data["file_path"])
-                        .one()
-                    )
-                except NoResultFound:
-                    file = File(path=data["file_path"])
+            if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                PyFunceble.LOGGER.info(
+                    f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.'
+                )
+                print(".", end="")
 
-                    self.db_session.add(file)
-                    self.db_session.commit()
-                    self.db_session.refresh(file)
-
-                try:
-                    status = (
-                        self.db_session.query(Status)
-                        .join(File)
-                        .filter(File.path == data["file_path"])
-                        .filter(Status.tested == data["subject"])
-                        .one()
-                    )
-                except NoResultFound:
-                    status = Status(
-                        tested=data["subject"], status=data["subject"], file_id=file.id
-                    )
-
-                status.is_complement = data["is_complement"]
-
-                try:
-                    self.db_session.add(status)
-                    self.db_session.commit()
-                except IntegrityError:
-                    pass
-
-                old_connection = self.get_old_connection()
-                with old_connection.cursor() as cursor:
-                    statement = "DELETE FROM pyfunceble_auto_continue WHERE id = %(id)s"
-                    cursor.execute(statement, {"id": data["id"]})
-                old_connection.close()
-
-                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
-                    PyFunceble.LOGGER.info(
-                        f'Switched {data["subject"]} (AUTOCONTINUE) to SQLAlchemy.'
-                    )
-                    print(".", end="")
+        return None
 
     def __start_whois_migration(self):
         """
@@ -294,55 +425,18 @@ class CleanupOldTables:
         """
 
         if self.does_table_exists("pyfunceble_whois"):
-            old_connection = self.get_old_connection()
-            with old_connection.cursor() as cursor:
-                statement = "SELECT * FROM pyfunceble_whois"
-                cursor.execute(statement)
+            PyFunceble.LOGGER.info("Starting to switch (whois) SQLAlchemy.")
 
-                result = cursor.fetchall()
-            old_connection.close()
+            statement = "SELECT * FROM pyfunceble_whois"
 
-            for data in result:
+            threads = []
 
-                try:
-                    self.db_session.rollback()
-                    _ = (
-                        self.db_session.query(Status)
-                        .filter(Status.tested == data["subject"])
-                        .one()
-                    )
-                except NoResultFound:
-                    continue
-                except MultipleResultsFound:
-                    pass
+            for data in self.__get_rows(statement):
+                threads.extend(self.__process_migration(self.__whois_migration, data))
 
-                whois_record = WhoisRecord(
-                    subject=data["subject"],
-                    modified=data["modified"],
-                    created=data["created"],
-                    expiration_date=data["expiration_date"],
-                    epoch=data["expiration_date_epoch"],
-                    record=data["record"],
-                    state=data["state"],
-                )
+            self.__join_threads(threads)
 
-                try:
-                    self.db_session.add(whois_record)
-                    self.db_session.commit()
-                except IntegrityError:
-                    pass
-
-                old_connection = self.get_old_connection()
-                with old_connection.cursor() as cursor:
-                    statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
-                    cursor.execute(statement, {"id": data["id"]})
-                old_connection.close()
-
-                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
-                    PyFunceble.LOGGER.info(
-                        f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.'
-                    )
-                    print(".", end="")
+            PyFunceble.LOGGER.info("Starting to switch (whois) SQLAlchemy.")
 
     def __delete_old_tables(self):
         """
@@ -351,14 +445,15 @@ class CleanupOldTables:
 
         for table in self.old_tables:
             if self.does_table_exists(table):
+                PyFunceble.LOGGER.info(f"Starting deletion of {table}.")
                 old_connection = self.get_old_connection()
                 with old_connection.cursor() as cursor:
                     statement = f"DROP TABLE {table}"
                     cursor.execute(statement)
                 old_connection.close()
+                PyFunceble.LOGGER.info(f"Finished deletion of {table}.")
 
             if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
-                PyFunceble.LOGGER.info(f"Deleted {table} from the database.")
                 print(".", end="")
 
     def start(self):
