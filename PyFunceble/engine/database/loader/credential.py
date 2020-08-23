@@ -199,7 +199,7 @@ class Credential:
                         self.credentials[internal] = user_input
                         self.decoded_env_file_content[environment_var.name] = user_input
                     else:
-                        self.credentials[internal] = user_input
+                        self.credentials[internal] = data["default"]
                         self.decoded_env_file_content[environment_var.name] = data[
                             "default"
                         ]

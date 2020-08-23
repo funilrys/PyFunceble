@@ -159,7 +159,7 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
 
             request.url = "https://pyfunceble-not-resolved"
 
-        response = super(HostSSLAdapter, self).send(request, **kwargs)
+        response = super().send(request, **kwargs)
         response.url = response.url.replace(hostname_ip, parsed_url.hostname)
 
         return response
@@ -246,7 +246,7 @@ class HostAdapter(requests.adapters.HTTPAdapter):
 
         request.before_resolution = parsed_url.hostname
 
-        response = super(HostAdapter, self).send(request, **kwargs)
+        response = super().send(request, **kwargs)
         response.url = response.url.replace(hostname_ip, parsed_url.hostname)
 
         return response

@@ -77,7 +77,7 @@ class OurProcessWrapper(Process):
     """
 
     def __init__(self, *args, **kwargs):
-        super(OurProcessWrapper, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.conn1, self.conn2 = Pipe()
         self._exception_receiver = None

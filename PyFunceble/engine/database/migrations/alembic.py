@@ -112,7 +112,7 @@ class Alembic:
         if self.authorized:
             command.upgrade(self.alembic_config, revision)
 
-            CleanupOldTables(self.credentials, self.db_session).start()
+            CleanupOldTables(self.credentials).start()
             self.db_session.close()
 
     def downgrade(self, revision="head"):

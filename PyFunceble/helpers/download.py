@@ -107,5 +107,5 @@ class Download:
             raise Exception(
                 f"Unable to download {req.url} (status code: {req.status_code})."
             )
-        except requests.exceptions.ConnectionError:
-            raise NoInternetConnection()
+        except requests.exceptions.ConnectionError as exception:
+            raise NoInternetConnection() from exception

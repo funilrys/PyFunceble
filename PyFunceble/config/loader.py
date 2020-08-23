@@ -346,8 +346,8 @@ class Loader:
             self.config.update(
                 PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
             )
-        except (FileNotFoundError, TypeError):
-            raise PyFunceble.exceptions.ConfigurationFileNotFound()
+        except (FileNotFoundError, TypeError) as exception:
+            raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
 
         if (
             self.is_current_version_different_from_upstream()
@@ -513,9 +513,9 @@ class Loader:
         if "links" not in self.config or "outputs" not in self.config:
             try:
                 self.__load_central_config()
-            except PyFunceble.exceptions.ConfigurationFileNotFound:
+            except PyFunceble.exceptions.ConfigurationFileNotFound as exception:
                 if not self.are_we_allowed_to_install_upstream():
-                    raise PyFunceble.exceptions.ConfigurationFileNotFound()
+                    raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
 
                 self.create_config_file_from_upstream()
                 self.__load_central_config()
