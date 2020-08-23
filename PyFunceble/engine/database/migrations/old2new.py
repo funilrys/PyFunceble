@@ -50,8 +50,8 @@ License:
     limitations under the License.
 """
 
+from multiprocessing import active_children
 from os import sep as directory_separator
-from threading import Thread, active_count
 
 import pymysql
 import pymysql.cursors
@@ -180,13 +180,13 @@ class CleanupOldTables:
         return True
 
     @classmethod
-    def __join_threads(cls, threads):
+    def __wait_for_all_process_to_finish(cls):
         """
-        Join all the given threads.
+        Wait until all migration process finished.
         """
 
-        for thread in threads:
-            thread.join()
+        while "Migration" in " ".join([x.name for x in reversed(active_children())]):
+            continue
 
     @classmethod
     def __process_migration(cls, action_method, data):
@@ -194,24 +194,26 @@ class CleanupOldTables:
         Process the migration.
         """
 
-        threads = []
-
         if PyFunceble.CONFIGURATION.multiprocess:
-            if active_count() <= PyFunceble.CONFIGURATION.maximal_processes:
-                new_thread = Thread(target=action_method, args=(data,))
-                new_thread.start()
+            if len(active_children()) <= PyFunceble.CONFIGURATION.maximal_processes:
+                new_process = PyFunceble.core.multiprocess.OurProcessWrapper(
+                    target=action_method, args=(data,)
+                )
+                try:
+                    new_process.name = f'PyF DB Migration {data["tested"]}'
+                except KeyError:
+                    new_process.name = f'PyF DB Migration {data["subject"]}'
+                new_process.start()
 
-                threads.append(new_thread)
             else:
-                for index, thread in enumerate(threads):
-                    thread.join()
-                    if not thread.is_alive():
-                        del threads[index]
-                        break
+                while len(
+                    active_children()
+                ) >= PyFunceble.CONFIGURATION.maximal_processes and "Migration" in " ".join(
+                    [x.name for x in reversed(active_children())]
+                ):
+                    active_children()
         else:
             action_method(data)
-
-        return threads
 
     def __tested_migration(self, data):
         """
@@ -282,16 +284,14 @@ class CleanupOldTables:
 
             statement = "SELECT * FROM pyfunceble_tested"
 
-            threads = []
-
             for data in self.__get_rows(statement):
                 if self.autosave.is_time_exceed():
-                    self.__join_threads(threads)
+                    self.__wait_for_all_process_to_finish()
                     self.autosave.process()
 
-                threads.extend(self.__process_migration(self.__tested_migration, data))
+                self.__process_migration(self.__tested_migration, data)
 
-            self.__join_threads(threads)
+            self.__wait_for_all_process_to_finish()
 
             PyFunceble.LOGGER.info("Finished to switch (tested) SQLAlchemy.")
 
@@ -357,18 +357,14 @@ class CleanupOldTables:
 
             statement = "SELECT * FROM pyfunceble_auto_continue"
 
-            threads = []
-
             for data in self.__get_rows(statement):
                 if self.autosave.is_time_exceed():
-                    self.__join_threads(threads)
+                    self.__wait_for_all_process_to_finish()
                     self.autosave.process()
 
-                threads.extend(
-                    self.__process_migration(self.__autocontinue_migration, data)
-                )
+                self.__process_migration(self.__autocontinue_migration, data)
 
-            self.__join_threads(threads)
+            self.__wait_for_all_process_to_finish()
             PyFunceble.LOGGER.info("Starting to switch (autocontinue) SQLAlchemy.")
 
     def __whois_migration(self, data):
@@ -436,16 +432,14 @@ class CleanupOldTables:
 
             statement = "SELECT * FROM pyfunceble_whois"
 
-            threads = []
-
             for data in self.__get_rows(statement):
                 if self.autosave.is_time_exceed():
-                    self.__join_threads(threads)
+                    self.__wait_for_all_process_to_finish()
                     self.autosave.process()
 
-                threads.extend(self.__process_migration(self.__whois_migration, data))
+                self.__process_migration(self.__whois_migration, data)
 
-            self.__join_threads(threads)
+            self.__wait_for_all_process_to_finish()
 
             PyFunceble.LOGGER.info("Starting to switch (whois) SQLAlchemy.")
 
