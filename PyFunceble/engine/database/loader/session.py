@@ -66,7 +66,7 @@ class Session:
     def __init__(self):
         self.credentials = Credential()
         self.engine = create_engine(
-            self.credentials.get_uri(), pool_pre_ping=True, pool_recycle=3599
+            self.credentials.get_uri(), pool_pre_ping=True, pool_recycle=180
         )
         self.session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
