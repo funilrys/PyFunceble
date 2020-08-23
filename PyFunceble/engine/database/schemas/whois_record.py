@@ -64,5 +64,5 @@ class WhoisRecord(DatabaseBase):
     expiration_date = Column(Text, nullable=False)
     epoch = Column(Integer, nullable=False)
     state = Column(String(80), nullable=False)
-    record = Column(Text, nullable=False)
+    record = Column(Text, nullable=True)
     server = Column(Text, nullable=True)
