@@ -85,7 +85,7 @@ class CleanupOldTables:
     def __init__(self, credentials):
         self.credentials = credentials
 
-        self.autosave_authorized = PyFunceble.engine.AutoSave().authorized
+        self.autosave = PyFunceble.engine.AutoSave()
 
     @property
     def authorized(self):
@@ -268,7 +268,7 @@ class CleanupOldTables:
             cursor.execute(statement, {"status_id": status.id})
         old_connection.close()
 
-        if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+        if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')
             print(".", end="")
 
@@ -285,6 +285,10 @@ class CleanupOldTables:
             threads = []
 
             for data in self.__get_rows(statement):
+                if self.autosave.is_time_exceed():
+                    self.__join_threads(threads)
+                    self.autosave.process()
+
                 threads.extend(self.__process_migration(self.__tested_migration, data))
 
             self.__join_threads(threads)
@@ -337,7 +341,7 @@ class CleanupOldTables:
             cursor.execute(statement, {"id": data["id"]})
         old_connection.close()
 
-        if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+        if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(
                 f'Switched {data["subject"]} (AUTOCONTINUE) to SQLAlchemy.'
             )
@@ -356,6 +360,10 @@ class CleanupOldTables:
             threads = []
 
             for data in self.__get_rows(statement):
+                if self.autosave.is_time_exceed():
+                    self.__join_threads(threads)
+                    self.autosave.process()
+
                 threads.extend(
                     self.__process_migration(self.__autocontinue_migration, data)
                 )
@@ -378,7 +386,7 @@ class CleanupOldTables:
                     .one()
                 )
             except NoResultFound:
-                if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                     PyFunceble.LOGGER.info(f'Skipped {data["subject"]} (WHOIS).')
                     print(".", end="")
                 return None
@@ -410,7 +418,7 @@ class CleanupOldTables:
                 cursor.execute(statement, {"id": data["id"]})
             old_connection.close()
 
-            if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                 PyFunceble.LOGGER.info(
                     f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.'
                 )
@@ -431,6 +439,10 @@ class CleanupOldTables:
             threads = []
 
             for data in self.__get_rows(statement):
+                if self.autosave.is_time_exceed():
+                    self.__join_threads(threads)
+                    self.autosave.process()
+
                 threads.extend(self.__process_migration(self.__whois_migration, data))
 
             self.__join_threads(threads)
@@ -452,7 +464,7 @@ class CleanupOldTables:
                 old_connection.close()
                 PyFunceble.LOGGER.info(f"Finished deletion of {table}.")
 
-            if self.autosave_authorized or PyFunceble.CONFIGURATION.print_dots:
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                 print(".", end="")
 
     def start(self):
