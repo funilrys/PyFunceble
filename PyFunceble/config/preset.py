@@ -286,11 +286,14 @@ class Preset:  # pragma: no cover
     @classmethod
     def maximal_processes(cls):
         """
-        Ensures that the number of maximal processes is alway >= 1.
+        Ensures that the number of maximal processes is alway >= 2.
+        If not, we don't authorize the multiprocessing.
         """
 
-        if PyFunceble.CONFIGURATION.maximal_processes < 1:
-            PyFunceble.CONFIGURATION.maximal_processes = 1
+        if PyFunceble.CONFIGURATION.multiprocess:
+            if PyFunceble.CONFIGURATION.maximal_processes < 2:
+                PyFunceble.CONFIGURATION.multiprocess = False
+                PyFunceble.CONFIGURATION.maximal_processes = 1
 
     @classmethod
     def multiprocess_merging_mode(cls):
@@ -371,6 +374,7 @@ class Preset:  # pragma: no cover
         Prepares the global configuration for a test with multiple processes.
         """
 
+        self.maximal_processes()
         if PyFunceble.CONFIGURATION.multiprocess:
             if (
                 "multiprocess_warning_printed" not in PyFunceble.INTERN
@@ -394,7 +398,6 @@ class Preset:  # pragma: no cover
                     )
 
                 PyFunceble.INTERN["multiprocess_warning_printed"] = True
-            self.maximal_processes()
             self.multiprocess_merging_mode()
 
     @classmethod
