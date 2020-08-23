@@ -341,6 +341,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     except NoResultFound:
                         pass
 
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+
                     # Now we only replace the test_completed
                     # flag for the inactive/invalid one.
                     to_update = (
@@ -354,9 +357,11 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         .all()
                     )
 
-                    for status_object in to_update:
-                        status_object.test_completed = False
+                for status_object in to_update:
+                    status_object.test_completed = False
 
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         db_session.add(status_object)
                         db_session.commit()
 
@@ -546,6 +551,8 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     db_session.commit()
                     db_session.refresh(file)
 
+            with session.Session() as db_session:
+                # pylint: disable=no-member, singleton-comparison
                 try:
                     status = (
                         db_session.query(Status).filter(Status.tested == subject).one()

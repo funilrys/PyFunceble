@@ -234,10 +234,10 @@ class Clean:
                 "mysql",
             ]:  # pragma: no cover
 
-                with session.Session() as db_session:
-                    if file_path:
-                        # pylint: disable=no-member, singleton-comparison
+                if file_path:
 
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         to_delete = (
                             db_session.query(Status)
                             .join(File)
@@ -249,28 +249,38 @@ class Clean:
                             .all()
                         )
 
-                        for row in to_delete:
+                    for row in to_delete:
+                        with session.Session() as db_session:
+                            # pylint: disable=no-member, singleton-comparison
                             delete_query = Status.__table__.delete().where(
                                 Status.id == row.id
                             )
                             db_session.execute(delete_query)
                             db_session.commit()
 
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         file_object = (
                             db_session.query(File).filter(File.path == file_path).one()
                         )
 
-                        file_object.test_completed = False
+                    file_object.test_completed = False
 
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         db_session.add(file_object)
                         db_session.commit()
-                    else:
+                else:
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         to_delete = db_session.query(  # pylint: disable=no-member
                             File
                         ).all()
 
-                        for row in to_delete:
-                            # pylint: disable=no-member
+                    for row in to_delete:
+                        # pylint: disable=no-member
+                        with session.Session() as db_session:
+                            # pylint: disable=no-member, singleton-comparison
 
                             delete_query = File.__table__.delete().where(
                                 File.id == row.id

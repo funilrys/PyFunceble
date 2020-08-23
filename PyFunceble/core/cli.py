@@ -203,6 +203,8 @@ class CLICore:
                     db_session.commit()
                     db_session.refresh(file)
 
+            with session.Session() as db_session:
+                # pylint: disable=no-member
                 try:
                     status = (
                         db_session.query(Status)
@@ -213,15 +215,17 @@ class CLICore:
                 except NoResultFound:
                     status = Status(file_id=file.id)
 
-                for index, value in status_input.items():
-                    setattr(status, index, value)
+            for index, value in status_input.items():
+                setattr(status, index, value)
 
-                status.test_completed = True
+            status.test_completed = True
 
+            with session.Session() as db_session:
+                # pylint: disable=no-member
                 db_session.add(status)
                 db_session.commit()
 
-                PyFunceble.LOGGER.debug(f"Saved into database:\n{output}")
+            PyFunceble.LOGGER.debug(f"Saved into database:\n{output}")
 
     @classmethod
     def get_simple_coloration(cls, status):

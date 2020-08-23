@@ -70,14 +70,13 @@ class Alembic:
     configured = False
     alembic_config = None
 
-    def __init__(self, credentials, db_session):
+    def __init__(self, credentials):
         self.migration_directory = resource_filename(
             f"PyFunceble.data.{PyFunceble.abstracts.Infrastructure.ALEMBIC_DIRECTORY_NAME}",
             "__init__.py",
         ).replace("__init__.py", "")
 
         self.credentials = credentials
-        self.db_session = db_session
         self.configure()
 
     @property
@@ -113,7 +112,6 @@ class Alembic:
             command.upgrade(self.alembic_config, revision)
 
             CleanupOldTables(self.credentials).start()
-            self.db_session.close()
 
     def downgrade(self, revision="head"):
         """
@@ -122,5 +120,3 @@ class Alembic:
 
         if self.authorized:
             command.downgrade(self.alembic_config, revision)
-
-            self.db_session.close()

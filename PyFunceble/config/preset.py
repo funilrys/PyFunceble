@@ -58,7 +58,7 @@ from colorama import Fore, Style
 from sqlalchemy.exc import OperationalError
 
 import PyFunceble
-from PyFunceble.engine.database.loader import credential, session
+from PyFunceble.engine.database.loader import credential
 from PyFunceble.engine.database.migrations import Alembic
 
 
@@ -478,10 +478,9 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]
             and "migration_started" not in PyFunceble.CONFIGURATION
         ):
-            with session.Session() as db_session:
-                try:
-                    Alembic(credential.Credential(), db_session).upgrade()
-                except OperationalError:
-                    pass
+            try:
+                Alembic(credential.Credential()).upgrade()
+            except OperationalError:
+                pass
 
             PyFunceble.CONFIGURATION["migration_started"] = True

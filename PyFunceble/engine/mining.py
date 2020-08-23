@@ -167,26 +167,28 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             .filter(Status.tested == index)
                             .one()
                         )
+                    except NoResultFound:
+                        pass
 
-                        in_db = (
-                            db_session.query(Mined)
-                            .filter(Mined.mined == value)
-                            .filter(Mined.subject_id == status.id)
-                            .all()
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+                    in_db = (
+                        db_session.query(Mined)
+                        .filter(Mined.mined == value)
+                        .filter(Mined.subject_id == status.id)
+                        .all()
+                    )
+
+                    if not in_db:
+                        mined = Mined(
+                            subject_id=status.id, mined=value, file_id=status.file_id,
                         )
 
-                        if not in_db:
-                            mined = Mined(
-                                subject_id=status.id,
-                                mined=value,
-                                file_id=status.file_id,
-                            )
-
+                        with session.Session() as db_session:
+                            # pylint: disable=no-member, singleton-comparison
                             db_session.add(mined)
                             db_session.commit()
                             db_session.refresh(mined)
-                    except NoResultFound:
-                        pass
 
     def __delitem__(self, index):
         if self.authorized:
@@ -214,19 +216,22 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         .all()
                     )
 
-                    for row in to_delete:
-                        # pylint: disable=no-member
+                for row in to_delete:
+                    # pylint: disable=no-member
+
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
                         delete_query = Mined.__table__.delete().where(
                             Mined.id == row.id
                         )
                         db_session.execute(delete_query)
                         db_session.commit()
 
-                    PyFunceble.LOGGER.info(
-                        "Cleaned the data related to "
-                        f"{repr(index)} and {repr(self.filename)} "
-                        f"from the database."
-                    )
+                PyFunceble.LOGGER.info(
+                    "Cleaned the data related to "
+                    f"{repr(index)} and {repr(self.filename)} "
+                    f"from the database."
+                )
 
     @classmethod
     def authorization(cls):
@@ -516,19 +521,21 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                                 .all()
                             )
 
-                            for row in to_delete:
+                        for row in to_delete:
+                            with session.Session() as db_session:
+                                # pylint: disable=no-member, singleton-comparison
                                 delete_query = Mined.__table__.delete().where(
                                     Mined.id == row.id
                                 )
                                 db_session.execute(delete_query)
                                 db_session.commit()
 
-                            PyFunceble.LOGGER.info(
-                                "Cleaned the data related to "
-                                f"{repr(subject)}, {repr(history_member)} (mined) and "
-                                f"{repr(self.filename)} and from "
-                                f"the database."
-                            )
+                        PyFunceble.LOGGER.info(
+                            "Cleaned the data related to "
+                            f"{repr(subject)}, {repr(history_member)} (mined) and "
+                            f"{repr(self.filename)} and from "
+                            f"the database."
+                        )
                 else:  # pragma: no cover
                     break
 

@@ -234,28 +234,30 @@ class CleanupOldTables:
                 db_session.commit()
                 db_session.refresh(file)
 
-            status = Status(
-                file_id=file.id,
-                created=data["created"],
-                modified=data["modified"],
-                tested=data["tested"],
-                _status=data["_status"],
-                status=data["status"],
-                _status_source=data["_status_source"],
-                status_source=data["status_source"],
-                domain_syntax_validation=data["domain_syntax_validation"],
-                expiration_date=data["expiration_date"],
-                http_status_code=data["http_status_code"],
-                ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
-                ipv4_syntax_validation=data["ipv4_syntax_validation"],
-                ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
-                ipv6_syntax_validation=data["ipv6_syntax_validation"],
-                subdomain_syntax_validation=data["subdomain_syntax_validation"],
-                url_syntax_validation=data["url_syntax_validation"],
-                is_complement=False,
-                test_completed=True,
-            )
+        status = Status(
+            file_id=file.id,
+            created=data["created"],
+            modified=data["modified"],
+            tested=data["tested"],
+            _status=data["_status"],
+            status=data["status"],
+            _status_source=data["_status_source"],
+            status_source=data["status_source"],
+            domain_syntax_validation=data["domain_syntax_validation"],
+            expiration_date=data["expiration_date"],
+            http_status_code=data["http_status_code"],
+            ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
+            ipv4_syntax_validation=data["ipv4_syntax_validation"],
+            ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
+            ipv6_syntax_validation=data["ipv6_syntax_validation"],
+            subdomain_syntax_validation=data["subdomain_syntax_validation"],
+            url_syntax_validation=data["url_syntax_validation"],
+            is_complement=False,
+            test_completed=True,
+        )
 
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
             try:
                 db_session.add(status)
                 db_session.commit()
@@ -314,6 +316,8 @@ class CleanupOldTables:
                 db_session.commit()
                 db_session.refresh(file)
 
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
             try:
                 status = (
                     db_session.query(Status)
@@ -327,8 +331,10 @@ class CleanupOldTables:
                     tested=data["subject"], status=data["subject"], file_id=file.id
                 )
 
-            status.is_complement = data["is_complement"]
+        status.is_complement = data["is_complement"]
 
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
             try:
                 db_session.add(status)
                 db_session.commit()
@@ -389,36 +395,36 @@ class CleanupOldTables:
             except MultipleResultsFound:
                 pass
 
-            if not PyFunceble.CONFIGURATION.store_whois_record:
-                data["record"] = None
+        if not PyFunceble.CONFIGURATION.store_whois_record:
+            data["record"] = None
 
-            whois_record = WhoisRecord(
-                subject=data["subject"],
-                modified=data["modified"],
-                created=data["created"],
-                expiration_date=data["expiration_date"],
-                epoch=data["expiration_date_epoch"],
-                record=data["record"],
-                state=data["state"],
-            )
+        whois_record = WhoisRecord(
+            subject=data["subject"],
+            modified=data["modified"],
+            created=data["created"],
+            expiration_date=data["expiration_date"],
+            epoch=data["expiration_date_epoch"],
+            record=data["record"],
+            state=data["state"],
+        )
 
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            # pylint: disable=no-member
             try:
                 db_session.add(whois_record)
                 db_session.commit()
             except IntegrityError:
                 pass
 
-            old_connection = self.get_old_connection()
-            with old_connection.cursor() as cursor:
-                statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
-                cursor.execute(statement, {"id": data["id"]})
-            old_connection.close()
+        old_connection = self.get_old_connection()
+        with old_connection.cursor() as cursor:
+            statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
+            cursor.execute(statement, {"id": data["id"]})
+        old_connection.close()
 
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                PyFunceble.LOGGER.info(
-                    f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.'
-                )
-                print(".", end="")
+        if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            PyFunceble.LOGGER.info(f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.')
+            print(".", end="")
 
         return None
 

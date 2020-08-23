@@ -183,8 +183,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                     .all()
                 )
 
-                if fetched:
-                    for data in fetched:
+            if fetched:
+                for data in fetched:
+                    with session.Session() as db_session:
                         try:
                             # pylint: disable=no-member
                             whois_record = (
@@ -196,26 +197,26 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                         except NoResultFound:
                             whois_server = None
 
-                        generate = PyFunceble.output.Generate(
-                            data.tested,
-                            f"file_{self.file_type}",
-                            data.status,
-                            source=data.status_source,
-                            expiration_date=data.expiration_date,
-                            http_status_code=data.http_status_code,
-                            whois_server=whois_server,
-                            filename=self.file,
-                            end=True,
-                        )
+                    generate = PyFunceble.output.Generate(
+                        data.tested,
+                        f"file_{self.file_type}",
+                        data.status,
+                        source=data.status_source,
+                        expiration_date=data.expiration_date,
+                        http_status_code=data.http_status_code,
+                        whois_server=whois_server,
+                        filename=self.file,
+                        end=True,
+                    )
 
-                        if include_entries_without_changes:
-                            generate.status_file(exclude_file_generation=False)
-                        else:
-                            generate.status_file(
-                                exclude_file_generation=self.inactive_db.authorized
-                                and data.status not in self.list_of_up_statuses
-                                and data.tested in self.inactive_db.to_retest
-                            )
+                    if include_entries_without_changes:
+                        generate.status_file(exclude_file_generation=False)
+                    else:
+                        generate.status_file(
+                            exclude_file_generation=self.inactive_db.authorized
+                            and data.status not in self.list_of_up_statuses
+                            and data.tested in self.inactive_db.to_retest
+                        )
 
     def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
