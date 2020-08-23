@@ -58,11 +58,11 @@ from unittest import main as launch_tests
 from unittest.mock import Mock, patch
 
 from colorama import Back, Fore
+from stdout_base import StdoutBase
+from time_zone import TZ
 
 import PyFunceble
 from PyFunceble.output import Prints
-from stdout_base import StdoutBase
-from time_zone import TZ
 
 
 class TestPrints(StdoutBase):

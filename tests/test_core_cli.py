@@ -59,11 +59,11 @@ from unittest.mock import Mock, patch
 
 from colorama import Fore, Style
 from colorama import init as init_colorama
+from stdout_base import StdoutBase
+from time_zone import TZ
 
 import PyFunceble
 from PyFunceble.core import CLI
-from stdout_base import StdoutBase
-from time_zone import TZ
 
 
 class TestCLICore(StdoutBase):

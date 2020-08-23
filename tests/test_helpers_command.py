@@ -55,9 +55,10 @@ License:
 import sys
 from unittest import main as launch_tests
 
+from stdout_base import StdoutBase
+
 from PyFunceble.abstracts import Platform
 from PyFunceble.helpers import Command
-from stdout_base import StdoutBase
 
 
 class TestCommand(StdoutBase):

@@ -60,10 +60,10 @@ from unittest.mock import patch
 
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
+from stdout_base import StdoutBase
 
 import PyFunceble
 from PyFunceble.cli.execution_time import ExecutionTime
-from stdout_base import StdoutBase
 
 
 class TestExecutionTime(StdoutBase):

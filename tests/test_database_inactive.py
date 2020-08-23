@@ -57,9 +57,10 @@ from unittest import TestCase
 from unittest import main as launch_tests
 from unittest.mock import Mock, patch
 
+from time_zone import TZ
+
 import PyFunceble
 from PyFunceble.database.inactive import InactiveDB
-from time_zone import TZ
 
 
 class TestInactiveDB(TestCase):
