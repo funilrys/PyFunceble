@@ -40,13 +40,13 @@ things while running PyFunceble as all of your CPU threads is used by PyFunceble
 
     ::
 
-        $ lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
+        $: lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
 
     or
 
     ::
 
-	$ ``$(nproc --ignore=1)``
+	$: nproc --ignore=1
 
 	This will count the number of CPU threads subtracted 1 to use for DB,
 	SQL. If you runs PyFunceble on your workstation you might subtract 2
@@ -55,7 +55,7 @@ things while running PyFunceble as all of your CPU threads is used by PyFunceble
 	See also ``man nproc`` or ``nproc --help``
 
 .. warning::
-    DO NOT try to exceed your total number of CPU cores (as :code:`-p | --processes`),
+    DO NOT try to exceed your total number of CPU cores with (:code:`-p | --processes`),
     if you want to keep your machine somehow alive and healthy.
 
 I do not have multiple CPU
