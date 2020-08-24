@@ -905,6 +905,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.less = args.less
                 elif not args.all:
                     PyFunceble.CONFIGURATION.less = args.all
+                    PyFunceble.CONFIGURATION.print_dots = True
 
                 if args.adblock:
                     PyFunceble.CONFIGURATION.adblock = preset.switch("adblock")
