@@ -1,6 +1,6 @@
 # pylint:disable=invalid-name, cyclic-import
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -25,7 +25,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -34,50 +34,44 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
-
 import warnings
 from datetime import datetime
 from os import path
 from os import sep as directory_separator
 from time import sleep
 
+from colorama import Fore
 from dotenv import load_dotenv
 
-import PyFunceble.abstracts as abstracts
-import PyFunceble.config as cconfig
-import PyFunceble.converter as converter
-import PyFunceble.core as core
-import PyFunceble.database as database
-import PyFunceble.downloader as downloader
-import PyFunceble.engine as engine
-import PyFunceble.exceptions as exceptions
-import PyFunceble.extractor as extractor
-import PyFunceble.helpers as helpers
-import PyFunceble.lookup as lookup
-import PyFunceble.output as output
-import PyFunceble.status as status
+from PyFunceble import abstracts
+from PyFunceble import config as cconfig
+from PyFunceble import (
+    converter,
+    core,
+    database,
+    downloader,
+    engine,
+    exceptions,
+    extractor,
+    helpers,
+    lookup,
+    output,
+    status,
+)
 from PyFunceble.check import Check
 
 # We set our project name.
@@ -85,6 +79,8 @@ NAME = abstracts.Package.NAME
 # We set out project version.
 VERSION = abstracts.Package.VERSION
 
+load_dotenv(".env")
+load_dotenv(abstracts.Infrastructure.ENV_FILENAME)
 
 if helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
     # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
@@ -168,9 +164,25 @@ if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
     # the directory separator, we append it to the end.
     CONFIG_DIRECTORY += directory_separator
 
-# We set the location of the `output` directory which should always be in the current
-# directory.
-OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+load_dotenv(CONFIG_DIRECTORY + ".env")
+load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
+
+if helpers.EnvironmentVariable(
+    "PYFUNCEBLE_OUTPUT_LOCATION"
+).exists():  # pragma: no cover
+    # We set the location of the `output/` directory.
+    OUTPUT_DIRECTORY = helpers.EnvironmentVariable(
+        "PYFUNCEBLE_OUTPUT_LOCATION"
+    ).get_value()
+else:  # pragma: no cover
+    # We set the location of the `output` directory which should always be in the current
+    # directory.
+    OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+
+if not OUTPUT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
+    # Again for safety, if the directory we are working with does not ends with
+    # the directory separator, we append it to the end.
+    OUTPUT_DIRECTORY += directory_separator
 
 # We initiate the location where we are going to save our whole configuration content.
 CONFIGURATION = None
@@ -184,12 +196,7 @@ HTTP_CODE = None
 # We initiate the location where we are going to get all links.
 LINKS = None
 # We initiate a location which will have all internal data.
-INTERN = {
-    "counter": {
-        "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
-        "percentage": {"down": 0, "invalid": 0, "up": 0},
-    }
-}
+INTERN = None
 # We initiate the location of the Logger.
 LOGGER = None
 # We initiate the location of the HTTP requests.
@@ -200,10 +207,8 @@ DNSLOOKUP = None
 PSLOOOKUP = None
 # We initiate the IANA lookup.
 IANALOOKUP = None
-
-load_dotenv()
-load_dotenv(CONFIG_DIRECTORY + ".env")
-load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
+# We initate the loader.
+LOADER = None
 
 # We initiate the CLI logo of PyFunceble.
 ASCII_PYFUNCEBLE = """
@@ -689,21 +694,20 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
             pyfunceble.configuration.update(config_given_by_user)
     """
 
-    # We load and download the different configuration file if they are non
-    # existant.
-    cconfig.Load(CONFIG_DIRECTORY, custom)
+    if not LOADER:
+        loader = cconfig.Loader()
+        loader.set_path_to_config(CONFIG_DIRECTORY)
+        loader.get_config()
+        loader.set_custom_config(custom)
+    elif not LOADER.was_configuration_loaded():
+        LOADER.set_path_to_config(CONFIG_DIRECTORY)
+        LOADER.get_config()
+        LOADER.set_custom_config(custom)
+    else:
+        LOADER.set_custom_config(custom)
 
     if generate_directory_structure:
-        # If we are not under test which means that we want to save informations,
-        # we initiate the directory structure.
         output.Constructor()
-
-    # We run the merging logic.
-    #
-    # Note: Actually, it compares the local and the upstream configuration.
-    # if a new key is present, it proposes the enduser to merge upstream
-    # into the local configuration.
-    cconfig.Merge(CONFIG_DIRECTORY)
 
 
 def is_domain_malicious(subject):  # pragma: no cover

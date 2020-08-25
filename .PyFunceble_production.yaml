@@ -12,6 +12,8 @@ command_before_end: ""
 cooldown_time: null
 # Set the custom IP to use when we generate a line in the hosts file format.
 custom_ip: "0.0.0.0"
+# Set the number of day(s) a subject has to stay in the inactive database before being cleaned.
+days_between_inactive_db_clean: 28
 # Set the number of day(s) between each retest of the INACTIVE and INVALID elements which are present into inactive_db.json
 days_between_db_retest: 1
 # Set the db type to use.
@@ -25,8 +27,8 @@ dns_lookup_over_tcp: False
 #   The following format is expected if you want to give custom dns server.
 #
 #       dns_server:
-#         - "1.1.1.1" # First DNS server.
-#         - "1.0.0.1" # Second DNS server.
+#         - "8.8.8.8" # First DNS server.
+#         - "8.4.4.8" # Second DNS server.
 dns_server: null
 # Set the element to filter.
 filter: ""
@@ -68,6 +70,8 @@ no_special: False
 no_whois: False
 # Enable / Disable the generation of the plain list of element sorted by statuses.
 plain_list_domain: False
+# Enable / Disable the printing of dots in the output.
+print_dots: False
 # Enable / Disable the generation of output on screen.
 quiet: False
 # Enable/Disable the usage of the reputation data.
@@ -75,6 +79,9 @@ use_reputation_data: False
 # Enable/Disable the reputation checking mode.
 # In this mode we only check against the reputation.
 reputation: False
+# Enable / Disable the usage and generation of a shadow file before a file
+# test starts.
+shadow_file: False
 # Enable / disable the logs sharing.
 share_logs: False
 # Enable / disable the output of the execution time.
@@ -116,6 +123,8 @@ user_agent:
 verify_ssl_certificate: False
 # Enable / disable the usage of a database to store the hash of the whois record
 whois_database: True
+# Enable / Disable the detection and test of wildcard subjects.
+wildcard: False
 
 outputs:
   default_files:

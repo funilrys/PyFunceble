@@ -1,11 +1,11 @@
 File generation while using the API
-===================================
+-----------------------------------
 
 You may want to test using the API but still want the result structured normally like a CLI usage.
 For that case simply add the following.
 
 Global configuration load
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -23,7 +23,7 @@ Global configuration load
 
 
 Local configuration load
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 

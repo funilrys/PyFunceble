@@ -1,22 +1,22 @@
 Cleaning
-========
+--------
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 Because we constantly need to clean files which are not needed before starting a new test,
 we embedded our cleaning logic.
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.output.clean.Clean`!
+    Want to read the code ? It's here :func:`PyFunceble.output.clean.Clean`!
 
 It has an internal map of what has to be deleted and how.
 
 How to clean?
--------------
+^^^^^^^^^^^^^
 
 For a simple clean, run PyFunceble with the :code:`--clean` argument.
 
@@ -24,7 +24,7 @@ For a complete cleaning, run PyFunceble with the :code:`--clean-all` argument.
 
 
 Differences between simple and complete cleaning?
--------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The :code:`--clean` logic cleans the :code:`output/` directory along with the :code:`pyfunceble_tested` table
 when the :code:`mariadb` or :code:`mysql` database type are choosen.

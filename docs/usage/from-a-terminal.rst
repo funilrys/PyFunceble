@@ -21,7 +21,7 @@ Source
 
 .. note::
 
-    This argument take 1 or more values.
+    This argument takes 1 or more values.
 
     As example:
 
@@ -29,16 +29,21 @@ Source
 
         $ PyFunceble -d example.org example.net
 
+.. note::
+    When this option is used, no output files are
+    generated.
+
 :code:`-url "something"` | :code:`--url "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 
     Test one or more full URL, separated by spaces.
 
 .. note::
-    When we test the availability of a URL, we (only) check the HTTP status code of the given URL.
+    When we test the availability of a URL, we (only) check the HTTP status
+    code of the given URL.
 
 .. note::
-    This argument take 1 or more values.
+    This argument takes 1 or more values.
 
     As example:
 
@@ -51,10 +56,11 @@ Source
 
     Read a local or remote (RAW link) file and test all domains inside it.
     If remote (RAW link) file is given, PyFunceble will download it,
-    and test the content of the given RAW link as if it was a locally stored file.
+    and test the content of the given RAW link as if it was a locally stored
+    file.
 
 .. note::
-   The system understand the following format:
+   The system understands the following format:
 
     - plain list of subjects.
     - hosts file format.
@@ -64,14 +70,15 @@ Source
 
     Read a local or remote (RAW link) file and test all (full) URLs inside it.
     If remote (RAW link) file is given, PyFunceble will download it,
-    and test the content of the given RAW link as if it was a locally stored file.
+    and test the content of the given RAW link as if it was a locally stored
+    file.
 
 .. note::
     We consider one line as one URL to test.
 
 .. note::
     This argument test if a URL which is inside the given file is available.
-    It ONLY test full URLs.
+    It ONLY tests full URLs.
 
     As example:
 
@@ -79,11 +86,12 @@ Source
 
         $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.travis/lists/url`
 
-    will download the given URL and test for it's content assuming that each line represent a URL to test.
+    will download the given URL and test for its content assuming that each
+    line represents a URL to test.
 
 .. warning::
-    A test with this argument consist of the comparison of the status code.
-    No WHOIS record will be request nor DNS Lookup will be done.
+    A test with this argument consists of the comparison of the status code.
+    No WHOIS record will be requested nor DNS Lookup will be done.
 
 Source filtering, decoding, conversion and expansion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -95,13 +103,15 @@ Source filtering, decoding, conversion and expansion
 
     **Default value:** :code:`False`
 
-If this argument is activated the system will extract all domains or IP from the given adblock file.
+If this argument is activated the system will extract all domains or
+IP from the given adblock file.
 
 :code:`--complements`
 """""""""""""""""""""
 
     Switch the value of the generation and test of the complements.
-    A complement is for example :code:`example.org` if :code:`www.example.org` is given and vice-versa.
+    A complement is for example :code:`example.org` if :code:`www.example.org`
+    is given and vice-versa.
 
     **Default value:** :code:`False`
 
@@ -110,7 +120,8 @@ If this argument is activated the system will extract all domains or IP from the
 
     Domain to filter (regex).
 
-Want to test all :code:`blogspot` from your list? This argument allows you to do that!
+Want to test all :code:`blogspot` from your list? This argument allows you to
+do that!
 
 .. note::
     This argument should be a regex expression.
@@ -133,7 +144,8 @@ This argument allows the conversion of the domains using `domain2idna`_
 
     **Default value:** :code:`False`
 
-Want to find domain or URL linked to a domain in your list? This argument will exactly do that.
+Want to find domain or URL linked to a domain in your list? This argument will
+exactly do that.
 
 Test control
 ^^^^^^^^^^^^
@@ -147,16 +159,17 @@ Test control
 
 This argument activates or deactivates the auto-continue subsystem.
 Indeed, as we can automatically continue if the script has been stopped,
-this switch allows us to disable or enable the usage of that specific subsystem.
+this switch allows us to disable or enable the usage of that specific
+subsystem.
 
 :code:`--cooldown-time`
 """""""""""""""""""""""
 
-    Switch the value of the cooldown time to apply between each test.
+    Switch the value of the cool-down time to apply between each test.
 
     **Default value:** :code:`None`
 
-This argument apply a number of seconds to sleep before/between each test.
+This argument applies a number of seconds to sleep before/between each test.
 
 :code:`--http`
 """"""""""""""
@@ -165,10 +178,12 @@ This argument apply a number of seconds to sleep before/between each test.
 
     **Default value:** :code:`True`
 
-You don't want to take the result of the HTTP code execution in consideration? This argument allows you to disable that!
+You don't want to take the result of the HTTP code execution into consideration?
+This argument allows you to disable that!
 
 .. note::
-    If activated the subsystem will bypass the HTTP status code extraction logic-representation.rst
+    If activated the subsystem will bypass the HTTP status code extraction
+    logic-representation.rst
 
 :code:`--local`
 """""""""""""""
@@ -177,7 +192,8 @@ You don't want to take the result of the HTTP code execution in consideration? T
 
     **Default value:** :code:`False`
 
-Want to run a test over a local or private network? This argument will disable the limitation which does not apply to private networks.
+Want to run a test over a local or private network? This argument will disable
+the limitation which does not apply to private networks.
 
 :code:`-ns` | :code:`--no-special`
 """"""""""""""""""""""""""""""""""
@@ -186,38 +202,19 @@ Want to run a test over a local or private network? This argument will disable t
 
     **Default value:** :code:`False`
 
-Don't want to use/apply the SPECIAL rules - which are explaines in the source column section ? This argument disable them all.
+Don't want to use/apply the SPECIAL rules - which are explained in the source
+column section? This argument disables them all.
 
 
 :code:`-nw` | :code:`--no-whois`
 """"""""""""""""""""""""""""""""
 
-    Switch the value the usage of whois to test domain's status.
+    Switch the value of the usage of WHOIS to test the domain's status.
 
     **Default value:** :code:`False`
 
-Don't want to use or take in consideration the results from :code:`whois`? This argument allows you to disable it!
-
-:code:`--syntax`
-""""""""""""""""
-
-    Switch the value of the syntax test mode.
-
-    **Default value:** :code:`False`
-
-.. warning::
-    This will disable all other form of test,
-    will validate the syntax of a given test subject,
-    and output its results in plain format into :code:`output/domains/{VALID,INVALID}/list`
-
-:code:`-t "something"` | :code:`--timeout "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-    Switch the value of the timeout.
-
-    **Default value:** :code:`5`
-
-This argument will set the default timeout to apply everywhere it is possible to set a timeout.
+Don't want to use or take into consideration the results from :code:`whois`?
+This argument allows you to disable it!
 
 :code:`--reputation`
 """"""""""""""""""""
@@ -227,37 +224,90 @@ This argument will set the default timeout to apply everywhere it is possible to
     **Default value:** :code:`False`
 
 .. warning::
-    This will disable all other form of test,
-    will checks against AlienVault's reputation data
+    This will disable all other forms of test,
+    will check against AlienVault's reputation data
     and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
 
-:code:`--use-reputation-data`
-"""""""""""""""""""""""""""""
+:code:`--shadow-file` | :code:`--shadow`
+""""""""""""""""""""""""""""""""""""""""
 
-    Switch teh value of the reputation data usage.
+    Switch the value of the usage and generation of a shadow file before
+    a file test starts.
+
+    A shadow file is a file which only contain the actual list of subject
+    to test. For its generation we check each subjects as we normally do
+    on-the-fly.
+
+    **Default value:** :code:`False`
+
+.. note::
+    The shadow file, will just contain the actual list of subjects to test.
+
+:code:`--syntax`
+""""""""""""""""
+
+    Switch the value of the syntax test mode.
 
     **Default value:** :code:`False`
 
 .. warning::
-    This only have an effect when used along with the availability test.
+    This will disable all other forms of test,
+    will validate the syntax of a given test subject,
+    and output its results in plain format into
+    :code:`output/domains/{VALID,INVALID}/list`
+
+:code:`-t "something"` | :code:`--timeout "something"`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    Switch the value of the timeout in seconds.
+
+    **Default value:** :code:`5`
+
+This argument will set the default timeout to apply everywhere it is possible
+to set a timeout.
+
+:code:`--use-reputation-data`
+"""""""""""""""""""""""""""""
+
+    Switch the value of the reputation data usage.
+
+    **Default value:** :code:`False`
+
+.. warning::
+    This only affects when used along with the availability test.
 
 :code:`-ua "something"` | :code:`--user-agent "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
+    Set the user-agent to use and set every time we interact with everything
+    which is not the logs sharing system.
 
 :code:`-vsc` | :code:`--verify-ssl-certificate`
 """""""""""""""""""""""""""""""""""""""""""""""
 
-    Switch the value of the verification of the SSL/TLS certificate when testing for URL.
+    Switch the value of the verification of the SSL/TLS certificate when
+    testing for URL.
 
     **Default value:** :code:`False`
 
     .. warning::
-        If you activate the verification of the SSL/TLS certificate, you may get **false positive** results.
+        If you activate the verification of the SSL/TLS certificate, you may get
+        **false-positive** results.
 
-        Indeed if the certificate is not registered to the CA or is simply invalid and the domain is still alive, you will always get :code:`INACTIVE` as output.
+        Indeed if the certificate is not registered to the CA or is simply
+        invalid and the domain is still alive, you will always get
+        :code:`INACTIVE` as output.
 
+:code:`wildcard`
+""""""""""""""""
+
+    Switch the value of the wildcards test.
+
+    **Default value:** :code:`False`
+
+    .. warning::
+        This argument is not taken into consideration if the :code:`--syntax` argument
+        is not given.
 
 DNS (resolver) control
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -265,16 +315,17 @@ DNS (resolver) control
 :code:`--dns`
 """""""""""""
 
-    Set one or more specific DNS servers to use during the test, separated by spacees.
+    Set one or more specific DNS servers to use during the test. Separated by
+    spaces.
 
 
     **Default value:** :code:`Follow OS DNS` ==> :code:`None`
 
 .. warning::
-    We expect a DNS server(s). If no DNS server(s) is given. You'll almost for certain get all
-    results as :code:`INACTIVE`
+    We expect a DNS server(s). If no DNS server(s) is given. You'll almost for
+    certain get all results as :code:`INACTIVE`
 
-    This could happens in case you use :code:`--dns -f`
+    This could happen in case you use :code:`--dns -f`
 
 .. note::
     You can specify a port number to use to the DNS server if needed.
@@ -288,7 +339,7 @@ DNS (resolver) control
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
 
-    Make all DNS query through TCP instead of UDP.
+    Make all DNS queries through TCP instead of UDP.
 
     **Default value:** :code:`False`
 
@@ -299,20 +350,24 @@ Databases
 :code:`-db` | :code:`--database`
 """"""""""""""""""""""""""""""""
 
-    Switch the value of the usage of a database to store inactive domains of the currently tested list.
+    Switch the value of the usage of a database to store inactive domains of
+    the currently tested list.
 
     **Default value:** :code:`True`
 
-This argument will disable or enable the usage of a database which saves all `INACTIVE` and `INVALID` domain of the given file over time.
+This argument will disable or enable the usage of a database which saves all
+:code:`INACTIVE` and :code:`INVALID` domain of the given file over time.
 
 .. note::
-    The database is retested every x day(s), where x is the number set in :code:`-dbr "something"`.
+    The database is retested every x day(s), where x is the number set in
+    :code:`-dbr "something"`.
 
 :code:`--database-type`
 """""""""""""""""""""""
 
     Tell us the type of database to use.
-    You can choose between the following: :code:`json`, :code:`mariadb`, :code:`mysql`.
+    You can choose between the following: :code:`json`, :code:`mariadb`,
+    :code:`mysql`.
 
     **Default value:** :code:`json`
 
@@ -329,17 +384,34 @@ This argument let us use different types of database.
 :code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    Set the numbers of days between each retest of domains present into the database of `INACTIVE` and `INVALID` domains.
+    Set the numbers of days between each retest of domains present into the
+    database of `INACTIVE` and `INVALID` domains.
 
     **Default value:** :code:`1`
 
 .. note::
-    This argument is only used if :code:`-db` or :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`-db` or
+    :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are
+    activated.
+
+:code:`-dbc "something"` | :code:`--days-between-db-clean`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+    Set the numbers of days since the introduction of a subject into
+    inactive-db.json for it to qualifies for deletion.
+
+    **Default value:** :code:`28`
+
+.. note::
+    This argument is only used if :code:`-db`  or
+    :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are
+    activated.
 
 :code:`-wdb` | :code:`--whois-database`
 """""""""""""""""""""""""""""""""""""""
 
-    Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
+    Switch the value of the usage of a database to store whois data to
+    avoid whois servers rate limit.
 
     **Default value:** :code:`True`
 
@@ -358,17 +430,25 @@ Output control
 ::
 
 
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
+    Domain                        Status      Expiration Date   Source     HTTP Code
+    ----------------------------- ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io     ACTIVE      Unknown           NSLOOKUP   302
 
 **When deactivated:**
 
 ::
 
-    Domain                                                                                               Status      HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302
+    Domain                        Status      HTTP Code
+    ----------------------------- ----------- ----------
+    pyfunceble.readthedocs.io     ACTIVE      302
+
+:code:`--dots`
+""""""""""""""
+
+    Output dots (:code:`.`) to :code:`stdout` instead of giving the impression
+    that we hang on.
+
+    **Default value:** :code:`False`
 
 :code:`-ex` | :code:`--execution`
 """""""""""""""""""""""""""""""""
@@ -377,7 +457,8 @@ Output control
 
     **Default value:** :code:`False`
 
-Want to know the execution time of your test? Well, this argument will let you know!
+Want to know the execution time of your test? Well, this argument will let
+you know!
 
 :code:`--hierarchical`
 """"""""""""""""""""""
@@ -395,12 +476,13 @@ This argument will output the result listed in a hierarchical order.
 
     **Default value:** :code:`True`
 
-This argument will let the system know if it has to generate the hosts file version of each status.
+This argument will let the system know if it has to generate the hosts file
+version of each status.
 
 :code:`-ip "something"`
 """""""""""""""""""""""
 
-    Change the IP to print with the hosts files.
+    Change the IP to print in the hosts files with the given one.
 
     **Default value:** :code:`0.0.0.0`
 
@@ -418,36 +500,39 @@ This argument will let the system know if it has to generate the hosts file vers
 
 ::
 
-    Domain                                                                                               Status      HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      302
+    Domain                                                 Status      HTTP Code
+    ------------------------------------------------------ ----------- ----------
+    pyfunceble.readthedocs.io                              ACTIVE      302
 
 **When deactivated:**
 
 ::
 
 
-    Domain                                                                                               Status      Expiration Date   Source     HTTP Code
-    ---------------------------------------------------------------------------------------------------- ----------- ----------------- ---------- ----------
-    pyfunceble.readthedocs.io                                                                            ACTIVE      Unknown           NSLOOKUP   302
+    Domain                       Status      Expiration Date   Source     HTTP Code
+    ---------------------------- ----------- ----------------- ---------- ----------
+    pyfunceble.readthedocs.io    ACTIVE      Unknown           NSLOOKUP   302
 
 :code:`-nf` | :code:`--no-files`
 """"""""""""""""""""""""""""""""
 
-    Switch the value the production of output files.
+    Switch the value of the production of output files.
 
     **Default value:** :code:`False`
 
-Want to disable the production of the outputted files? This argument is for you!
+Want to disable the production of the outputted files? This argument is for
+you!
 
 :code:`-nl` | :code:`--no-logs`
 """""""""""""""""""""""""""""""
 
-    Switch the value of the production of logs files in the case we encounter some errors.
+    Switch the value of the production of logs files in the case we encounter
+    some errors.
 
     **Default value:** :code:`False`
 
-Don't want any logs to go out of PyFunceble? This argument disables every logs subsystem.
+Don't want any logs to go out of PyFunceble? This argument disables every log
+subsystem.
 
 :code:`-nu` | :code:`--no-unified`
 """"""""""""""""""""""""""""""""""
@@ -465,7 +550,8 @@ This argument disables the generation of `result.txt`.
 
     **Default value:** :code:`True`
 
-This argument will disable or enable the generation of the percentage of each status.
+This argument will disable or enable the generation of the percentage of each
+status.
 
 :code:`--plain`
 """""""""""""""
@@ -474,7 +560,8 @@ This argument will disable or enable the generation of the percentage of each st
 
     **Default value:** :code:`False:`
 
-Want to get a list with all domain for each status? The activation of this argument does the work while testing!
+Want to get a list with all domains for each status? The activation of this
+argument does the work while testing!
 
 :code:`-q` | :code:`--quiet`
 """"""""""""""""""""""""""""
@@ -492,7 +579,8 @@ You prefer to run a program silently? This argument is for you!
 
     **Default value:** :code:`False`
 
-Want to make PyFunceble a better tool? Share your logs with our API which collect all logs!
+Want to make PyFunceble a better tool? Share your logs with our API which
+collect all logs!
 
 :code:`-s` | :code:`--simple`
 """""""""""""""""""""""""""""
@@ -501,7 +589,8 @@ Want to make PyFunceble a better tool? Share your logs with our API which collec
 
     **Default value:** :code:`False`
 
-Want as less as possible data on screen? This argument returns as less as possible on screen!
+Want as less as possible data on screen? This argument returns as less as
+possible on screen!
 
 :code:`--split`
 """""""""""""""
@@ -510,7 +599,8 @@ Want as less as possible data on screen? This argument returns as less as possib
 
     **Default value:** :code:`True`
 
-Want to get the logs (copy of what you see on screen) on different files? This argument is suited to you!
+Want to get the logs (copy of what you see on screen) on different files?
+This argument is suited to you!
 
 Multiprocessing
 ^^^^^^^^^^^^^^^
@@ -518,37 +608,46 @@ Multiprocessing
 :code:`-m` | :code:`--multiprocess`
 """""""""""""""""""""""""""""""""""
 
-    Switch the value of the usage of multiple process.
+    Switch the value of the usage of multiple processes.
 
     **Default value:** :code:`False`
 
-Want to speed up the test time? This argument will allow the usage of multiple processes for testing.
+Want to speed up the test time? This argument will allow the usage of multiple
+processes for testing.
 
 :code:`--multiprocess-merging-mode`
 """""""""""""""""""""""""""""""""""
 
-    Sets the multiprocess merging mode. You can choose between the following `live|ends`.
+    Sets the multiprocess merging mode. You can choose between the following
+    `live|ends`.
 
     **Default value:** :code:`end`
 
 .. note::
-    With the :code:`end` value, the merging of cross process data is made at the very end of the current instance.
+    With the :code:`end` value, the merging of cross-process data is made at
+    the very end of the current instance.
 
 .. note::
-    With the :code:`live` value, the merging of cross process data is made after the processing of the maximal number of process.
+    With the :code:`live` value, the merging of cross-process data is made
+    after the processing of the maximal number of processes.
 
-    Which means that if you allow 5 processes, we will run 5 tests, merge, run 5 tests, merge and so on until the end.
+    Which means that if you allow 5 processes, we will run 5 tests, merge,
+    run 5 tests, merge and so on until the end.
 
 :code:`-p` | :code:`--processes`
 """"""""""""""""""""""""""""""""
 
-    Set the number of simultaneous processes to use while using multiple processes.
+    Set the number of simultaneous processes to use while using multiple
+    processes.
 
     **Default value:** :code:`25`
 
 .. warning::
     DO not try to exceed your number of CPU if you want to keep your machine
     somehow alive and healthy!!
+
+.. note::
+    If omitted, the number of available CPU cores will be used instead.
 
 
 CI / CD
@@ -557,7 +656,8 @@ CI / CD
 :code:`--autosave-minutes`
 """"""""""""""""""""""""""
 
-    Update the minimum of munutes before we start committing to upstream under the CI mode.
+    Update the minimum of minutes before we start committing to upstream under
+    the CI mode.
 
     **Default value:** :code:`15`
 
@@ -569,21 +669,27 @@ CI / CD
     **Default value:** :code:`False`
 
 .. note::
-    If you combine this argument with the :code:`--quiet` argument, the test will
-    output a dotted line, were each dot (:code:`.`) represent one test result
-    or an input which was skiped because it was previously tested.
+    If you combine this argument with the :code:`--quiet` argument, the test
+    will output a dotted line, where each dot (:code:`.`) represent one test
+    result or input which was skipped because it was previously tested.
 
-Want to use PyFunceble under a supporter CI infrastructure/network? This argument is suited for your need!
+Want to use PyFunceble under a supporter CI infrastructure/network? This
+argument is suited for your needs!
 
 :code:`--ci-branch`
 """""""""""""""""""
 
-    Switch the branch name where we are going to push.
+    Switch the branch name where we are going to push the temporary results.
 
     **Default value:** :code:`master`
 
+.. note::
+    Currently the branch need to exist, but there are being worked on a path
+    to have PyFunceble to create the sub-branch and finally merge it into the
+    :code:`--ci-distribution-branch`
+
 :code:`--ci-distribution-branch`
-""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""
 
     Switch the branch name where we are going to push the final results.
 
@@ -594,10 +700,11 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     that this branch will get the (final) result only when the test is finished
     under the given :code:`--ci-branch`.
 
-    As example, this allow us to have 2 branches:
+    As an example, this allows us to have 2 branches:
 
     - :code:`proceessing` (CI branch), for the tests with PyFunceble.
-    - :code:`master` (CI distribution branch), for the distribution of the results of PyFunceble.
+    - :code:`master` (CI distribution branch), for the distribution of the
+      results of PyFunceble.
 
 :code:`--cmd` "something"
 """""""""""""""""""""""""
@@ -607,10 +714,12 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which
+    have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are activated.
 
 :code:`--cmd-before-end "something"`
 """"""""""""""""""""""""""""""""""""
@@ -620,10 +729,12 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
     **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which
+    have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are activated.
 
 :code:`--commit-autosave-message "something"`
 """""""""""""""""""""""""""""""""""""""""""""
@@ -632,13 +743,16 @@ Want to use PyFunceble under a supporter CI infrastructure/network? This argumen
 
     **Default value:** :code:`PyFunceble - AutoSave`
 
-This argument allows us to set a custom commit message which is going to be used as commit message when saving.
+This argument allows us to set a custom commit message which is going to be
+used as a commit message when saving.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are used.
 
 .. note::
-    This argument is only used if we have to split the work into multiple processes because a list is too long or the timeout is reached.
+    This argument is only used if we have to split the work into multiple
+    processes because a list is too long or the timeout is reached.
 
 .. warning::
     Please avoid the usage of :code:`[ci skip]` here.
@@ -651,10 +765,12 @@ This argument allows us to set a custom commit message which is going to be used
     **Default value:** :code:`PyFunceble - Results`
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`  (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are used.
 
 .. note::
-    This argument is only used if we reached the end of the list we are or have to test.
+    This argument is only used if we reached the end of the list we are or
+    have to test.
 
 
 Unique actions
@@ -665,57 +781,67 @@ Unique actions
 
     Clean all files under the output directory.
 
-As it is sometimes needed to clean our :code:`output/` directory, this argument does the job automatically.
+As it is sometimes needed to clean our :code:`output/` directory, this
+argument does the job automatically.
 
 .. warning::
-    This argument delete everything which are :code:`.keep` or :code:`.gitignore`
+    This argument delete everything which are :code:`.keep` or
+    :code:`.gitignore`
 
 :code:`--clean-all`
 """""""""""""""""""
 
-    Clean all files under the output directory along with all file generated by PyFunceble.
+    Clean all files under the output directory along with all file generated
+    by PyFunceble.
 
 .. warning::
-    This really deletes almost everything we generated without any warning.
+    This deletes almost everything we generated without any warning.
 
 .. note::
-    We don't delete the whois database file/table because they are (almost) static data which
-    are shared accross launches in your environment.
+    We don't delete the whois database file/table because they are (almost)
+    static data which are shared across launches in your environment.
 
 .. warning::
-    If you plan to clean manually do not delete the whois database file or table as it will
-    make your test finish under a much longer time as usual for you.
+    If you plan to clean manually do not delete the whois database file or
+    table as it will make your test finish under a much longer time as usual
+    for you.
 
 .. warning::
-    If you don't combine this argument alongside with the :code:`--database-type` argument or its configurable equivalent,
-    this argument will only clean the JSON formatted databases.
+    If you don't combine this argument alongside with the :code:`--database-type`
+    argument or its configurable equivalent, this argument will only clean the
+    JSON formatted databases.
 
 :code:`--directory-structure`
 """""""""""""""""""""""""""""
 
-    Generate the directory and files that are needed and which does not exist in the current directory.
+    Generate the directory and files that are needed and which does not exist
+    in the current directory.
 
-Want to start without anything? This argument generates the output directory automatically for you!
+Want to start without anything? This argument generates the output directory
+automatically for you!
 
 .. note::
-    In case of a file or directory not found issue, it's recommended to remove the :code:`dir_structure.json` along with the `output/` directory before using this argument.
+    In case of a file or directory not found issue, it's recommended to remove
+    the :code:`dir_structure.json` along with the `output/` directory before
+    using this argument.
 
 Global overview
 ^^^^^^^^^^^^^^^
 
 ::
 
-    usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
+    usage: pyfunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
                     [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
                     [--reputation] [--use-reputation-data] [-ua USER_AGENT]
-                    [-vsc] [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
+                    [-vsc] [--wildcard] [--dns DNS [DNS ...]]
+                    [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
-                    [-dbr DAYS_BETWEEN_DB_RETEST] [-wdb] [-a] [-ex]
-                    [--hierarchical] [-h] [-ip IP] [--json] [--less] [-nf] [-nl]
-                    [-nu] [--percentage] [--plain] [-q] [--share-logs] [-s]
-                    [--split] [-m]
+                    [-dbr DAYS_BETWEEN_DB_RETEST] [-dbc DAYS_BETWEEN_DB_CLEAN]
+                    [-wdb] [-a] [-ex] [--hierarchical] [-h] [-ip IP] [--json]
+                    [--less] [-nf] [-nl] [-nu] [--percentage] [--plain] [--dots]
+                    [-q] [--share-logs] [-s] [--split] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
                     [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
                     [--ci-branch CI_BRANCH]
@@ -725,7 +851,7 @@ Global overview
                     [--commit-results-message COMMIT_RESULTS_MESSAGE] [--clean]
                     [--clean-all] [--directory-structure] [--help] [-v]
 
-    PyFunceble - The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+    PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
     optional arguments:
         --help                Show this help message and exit.
@@ -734,13 +860,17 @@ Global overview
     Source:
         -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
                                 Test one or more domains, separated by spaces.
+
+                                When this option is used, no output files are generated.
         -u URL [URL ...], --url URL [URL ...]
                                 Test one or more full URL, separated by spaces.
         -f FILE, --file FILE  Read a local or remote (RAW link) file and test all domains inside it.
-                                If remote (RAW link) file is given, PyFunceble will download it, and test the content of the given RAW link as if it was a locally stored file.
+                                If remote (RAW link) file is given, PyFunceble will download it,
+                                and test the content of the given RAW link as if it was a locally stored file.
         -uf URL_FILE, --url-file URL_FILE
                                 Read a local or remote (RAW link) file and test all (full) URLs inside it.
-                                If remote (RAW link) file is given, PyFunceble will download it, and test the content of the given RAW link as if it was a locally stored file.
+                                If remote (RAW link) file is given, PyFunceble will download it,
+                                and test the content of the given RAW link as if it was a locally stored file.
 
                                 This argument test if an URL is available. It ONLY test full URLs.
 
@@ -769,12 +899,12 @@ Global overview
                                 Configured value: True
         -ns, --no-special     Switch the value of the usage of the SPECIAL rules.
                                 Configured value: False
-        -nw, --no-whois       Switch the value the usage of whois to test domain's status.
+        -nw, --no-whois       Switch the value of the usage of WHOIS to test the domain's status.
                                 Configured value: False
         --syntax              Switch the value of the syntax test mode.
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
-                                Switch the value of the timeout.
+                                Switch the value of the timeout in seconds.
                                 Configured value: 5
         --reputation          Switch the value of the reputation test mode.
                                 Configured value: False
@@ -782,18 +912,27 @@ Global overview
                                 Switch the value of the reputation data usage.
                                 Configured value: False
         -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set every time we interact with everything which is not the logs sharing system.
+                                Set the user-agent to use and set every time we interact with everything which
+                                is not the logs sharing system.
         -vsc, --verify-ssl-certificate
                                 Switch the value of the verification of the SSL/TLS certificate when testing for URL.
                                 Configured value: False
+        --wildcard            Switch the value of the wildcards test.
+
+                                When used, wildcards will be proprely tested.
+
+                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
+                                Configured value: False
 
     DNS (resolver) control:
-        --dns DNS [DNS ...]   Set one or more specific DNS servers to use during the test, separated by spaces.
+        --dns DNS [DNS ...]   Set one or more DNS server(s) to use during testing. Separated by spaces.
 
-                                You can give the port along with the DNS server if needed. But, if omitted, the default port (53) will be used.
+                                To specify a port number for the DNS server you append it as :port [ip:port].
+
+                                If no port is specified, the default DNS port (53) is used.
                                 Configured value: OS (declared) DNS server
         --dns-lookup-over-tcp
-                                Make all DNS query with TCP.
+                                Make all DNS queries with TCP.
                                 Configured value: False
 
     Databases:
@@ -806,8 +945,11 @@ Global overview
         -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
                                 Set the numbers of days between each retest of domains present into inactive-db.json.
                                 Configured value: 1
+        -dbc DAYS_BETWEEN_DB_CLEAN, --days-between-db-clean DAYS_BETWEEN_DB_CLEAN
+                                Set the numbers of days since the introduction of a subject into inactive-db.json for it to qualifies for deletion.
+                                Configured value: 28
         -wdb, --whois-database
-                                Switch the value of the usage of a database to store whois data in order to avoid whois servers rate limit.
+                                Switch the value of the usage of a database to store whois data to avoid whois servers rate limit.
                                 Configured value: True
 
     Output control:
@@ -835,6 +977,8 @@ Global overview
                                 Configured value: True
         --plain               Switch the value of the generation of the plain list of domains.
                                 Configured value: False
+        --dots                Prints dots to stdout instead of giving the impression that we hang on.
+                                Configured value: False
         -q, --quiet           Run the script in quiet mode.
                                 Configured value: False
         --share-logs          Switch the value of the sharing of logs.
@@ -845,7 +989,7 @@ Global overview
                                 Configured value: True
 
     Multiprocessing:
-        -m, --multiprocess    Switch the value of the usage of multiple process.
+        -m, --multiprocess    Switch the value of the usage of multiple processes.
                                 Configured value: False
         --multiprocess-merging-mode MULTIPROCESS_MERGING_MODE
                                 Sets the multiprocess merging mode.
@@ -853,6 +997,7 @@ Global overview
                                 Configured value: 'end'
         -p PROCESSES, --processes PROCESSES
                                 Set the number of simultaneous processes to use while using multiple processes.
+                                If omited, the number of available CPU cores will be used instead.
                                 Configured value: 25
 
     CI / CD:
@@ -862,7 +1007,7 @@ Global overview
         --ci                  Switch the value of the CI mode.
                                 Configured value: False
         --ci-branch CI_BRANCH
-                                Switch the branch name where we are going to push.
+                                Switch the branch name where we are going to push the temporary results.
                                 Configured value: 'master'
         --ci-distribution-branch CI_DISTRIBUTION_BRANCH
                                 Switch the branch name where we are going to push the final results.
@@ -885,6 +1030,6 @@ Global overview
         --directory-structure
                                 Generate the directory and files that are needed and which does not exist in the current directory.
 
-    For an in depth usage, examplation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io//en/dev/
+    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html

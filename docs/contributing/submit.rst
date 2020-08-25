@@ -1,5 +1,5 @@
-Submitting changes
-==================
+Submit changes
+--------------
 
 Before anything, please keep in mind the following. If one or more of those conditions are not filled.
 Your Pull Request to PyFunceble may not be merged.

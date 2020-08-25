@@ -1,21 +1,21 @@
 AdBlock/Filter list decoding
-============================
+----------------------------
 
 .. warning::
     This component is not activated by default.
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 As some people may want to test the content of their AdBlock/Filter list, we offer a way to decode them!
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`~PyFunceble.converter.adblock.AdBlock.get_converted`!
+    Want to read the code ? It's here :func:`PyFunceble.converter.adblock.AdBlock.get_converted`!
 
-We keep it simple by trying to comply with the "`Adblock Plus filters explained`_" documentation.
+We keep it simple by trying to comply with the `Adblock Plus filters explained`_ documentation.
 For us, the relevant parts are the one which defines/explains which domains are being blocked from a given rule.
 
 .. note::
@@ -23,7 +23,7 @@ For us, the relevant parts are the one which defines/explains which domains are 
 
 
 How to use it?
---------------
+^^^^^^^^^^^^^^
 
 You can simply change
 

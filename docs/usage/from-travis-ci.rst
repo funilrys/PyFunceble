@@ -22,6 +22,8 @@ Configuration
         global:
             # The following is your encrypted GitHub API key.
             # Indeed as we are going to push to the repository, this is needed.
+            #- GH_TOKEN: # This can be set in the travis-ci https://travis-ci.com/repo/settings as 'Environment Variables'
+            # or as below: secure: encrypted code
             - secure: QQdKFquFFojFT9XJ1XZp4EMoDTVoXFgqZq8XU+sCVf+pJQR6d/oKBp8rnSTCnZizWOQXUjGXUUxUpSG/dYGyBLjo3rH3rsn9ciZHVfubxbwK860w4sqibl4DvhCv2rdsFtvzXnhm4P9OL3i+krKdewh9fxpNyUU58qOgfnS7mK9FcFhb8z5ak2sxU2XRZedwm6Ro0oyVKs8kFkL4YaADfNyAHlGTfr9rVmE52WXQXQENktb9gFgR2A8ZnmLy0BCMZGkPDShJnjRDWD4DErtasLmLQvWpzOBwdbVJTY6U9KDRXVNdC9lp5E5Ba/dc0y36q6vjfgJR+QchetOtHgNbKYbLB8c26Di90OZCFJsxMNcl1Wct4qFPXkFGvjXrISW6pbdPL5Plto0Ig3iLiulhYOPVArysMIk9ymtSXP+WE7VWX01LQ1fEkIoSfeVZ2caTnCmTsoHVGRRe978CojKaT7yU45kb15hcyDrzptQ8EP2hfxeh5F7KtueQ6Rsb9LFDZMkMDKflZn6a+bRhESlmWWmYB9stzGzTurQA1E1bcSACJ8A8hG5nHBzZYJ2S+OY0PE7UdyOJ0JK0qe/67d+F9ocQdIoFpDDTdgIjHerQnD2wRg1aKPzLDb4jJTpqgr5ssPrqUAKl3st7gyaAZzCEADPDnIBDjOJS+mFWbx9DKgc=
             # This is the Git name we have to set. (git config user.name)
             - GIT_NAME: Travis CI
@@ -46,12 +48,14 @@ Configuration
         - pip3
 
     install:
-        # We install the development version of PyFunceble. If you prefer the stable version replace `pyfunceble-dev` with `pyfunceble`.
+        # We install the development version of PyFunceble. If you prefer the stable version replace 
+        # `pyfunceble-dev` with `pyfunceble`.
         - pip3 install pyfunceble-dev
 
     # Our tests start here.
     script:
-        # Let's say we want our results and our PyFunceble infrastructure to be saved in a directory called `PyFunceble-tests`
+        # Let's say we want our results and our PyFunceble infrastructure to be saved in a directory 
+        # called `PyFunceble-tests`
 
         # We move inside it.
         - cd PyFunceble-tests
@@ -71,7 +75,8 @@ Getting a GitHub token
 
 For the :code:`secure` index of the :code:`.travis.yml` file, you have to generate a `new GitHub token`_.
 
-After you got your token, please write it or save it in a safe place as you're going to need it every time you're going to interact with Travis CI.
+After you got your token, please write it or save it in a safe place as you're going to need it 
+every time you're going to interact with Travis CI.
 
 .. note::
     The scope to set is :code:`public_repo` but you can also set others depending on your needs.
@@ -88,7 +93,10 @@ To encrypt the token simply replace and execute the following according to your 
     $ travis encrypt 'GH_TOKEN=theGeneratedToken' -r 'The content of TRAVIS_REPO_SLUG' --add
 
 .. warning::
-    Please do not execute the following explicitly without replacing :code:`theGeneratedToken` with your previously generated GitHub token and :code:`The content of TRAVIS_REPO_SLUG` with your repository slug.
+    Please do not execute the following explicitly without replacing :code:`theGeneratedToken` 
+    with your previously generated GitHub token and :code:`The content of TRAVIS_REPO_SLUG` with 
+    your repository slug.
 
 .. note::
-    The usage of :code:`--add` ensure that the :code:`travis` program automatically add the :code:`secure` index to the :code:`.travis.yml` file.
+    The usage of :code:`--add` ensure that the :code:`travis` program automatically add the :code:`secure` 
+    index to the :code:`.travis.yml` file.

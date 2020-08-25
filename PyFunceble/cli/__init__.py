@@ -1,6 +1,6 @@
 # pylint: disable=too-many-lines, line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,27 +36,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import argparse
@@ -100,12 +92,12 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 description = (
                     f"{Style.BRIGHT}{Fore.GREEN}PyFunceble{Style.RESET_ALL} - "
-                    "The tool to check the availability or syntax of domains, IPv4, IPv6 or URL."
+                    "The tool to check the availability or syntax of domain, IP or URL."
                 )
 
                 epilog = (
-                    f"{Style.BRIGHT}{Fore.YELLOW}For an in depth usage, examplation and examples of the arguments, "
-                    f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io//en/dev/"
+                    f"{Style.BRIGHT}{Fore.YELLOW}For an in-depth usage, explanation and examples of the arguments, "
+                    f"you should read the documentation at{Fore.GREEN} https://pyfunceble.readthedocs.io/en/dev/"
                     f"{Style.RESET_ALL}\n\n"
                     f"Crafted with {Fore.RED}♥{Fore.RESET} by "
                     f"{Style.BRIGHT}{Fore.CYAN}Nissar Chababy (@funilrys){Style.RESET_ALL} "
@@ -143,7 +135,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--domain",
                     type=str,
                     nargs="+",
-                    help="Test one or more domains, separated by spaces.",
+                    help="Test one or more domains, separated by spaces.\n\n"
+                    "When this option is used, no output files are generated.",
                 )
 
                 source_group.add_argument(
@@ -159,7 +152,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--file",
                     type=str,
                     help="Read a local or remote (RAW link) file and test all domains inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it,\n "
                     "and test the content of the given RAW link as if it was a locally stored file.",
                 )
 
@@ -168,7 +161,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--url-file",
                     type=str,
                     help="Read a local or remote (RAW link) file and test all (full) URLs inside it."
-                    "\nIf remote (RAW link) file is given, PyFunceble will download it, "
+                    "\nIf remote (RAW link) file is given, PyFunceble will download it,\n "
                     "and test the content of the given RAW link as if it was a locally stored file. "
                     "\n\nThis argument test if an URL is available. It ONLY test full URLs.",
                 )
@@ -291,10 +284,36 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-nw",
                     "--no-whois",
                     action="store_true",
-                    help="Switch the value the usage of whois to test domain's status. %s"
+                    help="Switch the value of the usage of WHOIS to test the domain's status. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.no_whois)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
+                    "--reputation",
+                    action="store_true",
+                    help="Switch the value of the reputation test mode. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.reputation)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
+                    "--shadow-file",
+                    "--shadow",
+                    action="store_true",
+                    help="Switch the value of the usage and generation of a shadow file "
+                    "before a file test starts.\n\nA shadow file is a file which only "
+                    "contain the actual list of subject to test. For its generation we check each "
+                    "subjects as we normally do on-the-fly. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.shadow_file)
                         + Style.RESET_ALL
                     ),
                 )
@@ -315,21 +334,10 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--timeout",
                     type=float,
                     default=0,
-                    help="Switch the value of the timeout. %s"
+                    help="Switch the value of the timeout in seconds. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.timeout)
-                        + Style.RESET_ALL
-                    ),
-                )
-
-                test_control.add_argument(
-                    "--reputation",
-                    action="store_true",
-                    help="Switch the value of the reputation test mode. %s"
-                    % (
-                        current_value_format
-                        + repr(PyFunceble.CONFIGURATION.reputation)
                         + Style.RESET_ALL
                     ),
                 )
@@ -350,7 +358,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--user-agent",
                     type=str,
                     help="Set the user-agent to use and set every time we "
-                    "interact with everything which is not the logs sharing system.",
+                    "interact with everything which\nis not the logs sharing system.",
                 )
 
                 test_control.add_argument(
@@ -366,13 +374,27 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
+                test_control.add_argument(
+                    "--wildcard",
+                    action="store_true",
+                    help="Switch the value of the wildcards test.\n\n"
+                    "When used, wildcards will be proprely tested.\n\n"
+                    f"{Fore.MAGENTA}{Style.BRIGHT}Warning: This is not taken in consideration if the "
+                    f"'--syntax' argument is not given.{Style.RESET_ALL} %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.wildcard)
+                        + Style.RESET_ALL
+                    ),
+                )
+
                 dns_control_group.add_argument(
                     "--dns",
                     nargs="+",
-                    help="Set one or more specific DNS servers to use during the test, "
-                    "separated by spaces.\n\nYou can give the port along with "
-                    "the DNS server if needed. But, if omitted, the default "
-                    "port (53) will be used. %s"
+                    help="Set one or more DNS server(s) to use during testing. "
+                    "Separated by spaces.\n\nTo specify a port number for the "
+                    "DNS server you append it as :port [ip:port].\n\n"
+                    "If no port is specified, the default DNS port (53) is used. %s"
                     % (
                         current_value_format
                         + repr(", ".join(PyFunceble.CONFIGURATION.dns_server))
@@ -386,7 +408,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 dns_control_group.add_argument(
                     "--dns-lookup-over-tcp",
                     action="store_true",
-                    help="Make all DNS query with TCP. "
+                    help="Make all DNS queries with TCP. "
                     "%s"
                     % (
                         current_value_format
@@ -433,11 +455,24 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 database_control_group.add_argument(
+                    "-dbc",
+                    "--days-between-db-clean",
+                    type=int,
+                    help="Set the numbers of days since the introduction of a subject "
+                    "into inactive-db.json for it to qualifies for deletion. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.days_between_inactive_db_clean)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                database_control_group.add_argument(
                     "-wdb",
                     "--whois-database",
                     action="store_true",
                     help="Switch the value of the usage of a database to store "
-                    "whois data in order to avoid whois servers rate limit. %s"
+                    "whois data to avoid whois servers rate limit. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.whois_database)
@@ -588,6 +623,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 output_control_group.add_argument(
+                    "--dots",
+                    action="store_true",
+                    help="Prints dots to stdout instead of giving the impression that we hang on. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.print_dots)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                output_control_group.add_argument(
                     "-q",
                     "--quiet",
                     action="store_true",
@@ -637,7 +683,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "-m",
                     "--multiprocess",
                     action="store_true",
-                    help="Switch the value of the usage of multiple process. %s"
+                    help="Switch the value of the usage of multiple processes. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.multiprocess)
@@ -662,7 +708,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--processes",
                     type=int,
                     help="Set the number of simultaneous processes to use while "
-                    "using multiple processes. %s"
+                    "using multiple processes.\nIf omited, the number of "
+                    "available CPU cores will be used instead.%s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.maximal_processes)
@@ -701,7 +748,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--ci-branch",
                     type=str,
                     default="master",
-                    help="Switch the branch name where we are going to push. %s"
+                    help="Switch the branch name where we are going to push the temporary results. %s"
                     % (
                         current_value_format
                         + repr(PyFunceble.CONFIGURATION.ci_branch)
@@ -920,6 +967,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                         args.days_between_db_retest
                     )
 
+                if args.days_between_db_clean:
+                    PyFunceble.CONFIGURATION.days_between_inactive_db_clean = (
+                        args.days_between_db_clean
+                    )
+
                 if args.dns:
                     PyFunceble.CONFIGURATION.dns_server = args.dns
 
@@ -1015,6 +1067,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                         "plain_list_domain"
                     )
 
+                if args.dots:
+                    PyFunceble.CONFIGURATION.print_dots = preset.switch("print_dots")
+
                 if args.processes:
                     PyFunceble.CONFIGURATION.maximal_processes = args.processes
                 else:
@@ -1025,6 +1080,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.reputation:
                     PyFunceble.CONFIGURATION.reputation = preset.switch("reputation")
+
+                if args.shadow_file:
+                    PyFunceble.CONFIGURATION.shadow_file = preset.switch("shadow_file")
 
                 if args.share_logs:
                     PyFunceble.CONFIGURATION.share_logs = preset.switch("share_logs")
@@ -1075,6 +1133,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.whois_database = preset.switch(
                         "whois_database"
                     )
+
+                if args.wildcard:
+                    PyFunceble.CONFIGURATION.wildcard = preset.switch("wildcard")
 
                 PyFunceble.core.CLI.colorify_logo(home=True)
 

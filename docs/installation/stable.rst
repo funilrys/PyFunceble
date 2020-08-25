@@ -53,6 +53,24 @@ With your favorite AUR helper
 
     $ yourFavoriteAurHelper -S pyfunceble
 
+Using docker (hub)
+^^^^^^^^^^^^^^^^^^
+
+The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble
+
+::
+
+   $ docker pull pyfunceble/pyfunceble
+
+Using :code:`conda`
+^^^^^^^^^^^^^^^^^^^
+
+Our repository is located at https://anaconda.org/pyfunceble/pyfunceble
+
+::
+
+   conda install -c conda-forge -c pyfunceble pyfunceble=3
+
 Pure Python method
 ^^^^^^^^^^^^^^^^^^
 

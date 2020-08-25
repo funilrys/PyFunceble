@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 from datetime import datetime, timedelta
@@ -70,72 +62,49 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     :param str filename: The name of the file we are processing.
     """
 
-    # We initiate a variable which will save the
-    # cache about who are present or not into the database.
     is_present_cache = {}
-
-    # Saves the whole database content.
     database = {}
-
-    # Save the operation authorization.
     authorized = False
-
-    # Save the filename we are operating.
     filename = None
 
-    def __init__(self, filename, mysql_db=None, parent_process=False):
+    def __init__(self, filename, parent_process=False):
         self.one_day = timedelta(days=1)
         self.database_file = ""
 
-        # We get the authorization status.
         self.authorized = self.authorization()
-        # We share the parent state.
         self.parent = parent_process
 
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
 
         if self.authorized:
-            # We convert the number of days between the database retest
-            # to seconds.
             self.days = timedelta(days=PyFunceble.CONFIGURATION.days_between_db_retest)
+            self.days_between_clean = timedelta(
+                days=PyFunceble.CONFIGURATION.days_between_inactive_db_clean
+            )
 
             if PyFunceble.CONFIGURATION.db_type == "json":
-                # We set the path to the inactive database file.
                 self.database_file = "{0}{1}".format(
                     PyFunceble.CONFIG_DIRECTORY,
                     PyFunceble.OUTPUTS.default_files.inactive_db,
                 )
 
-            # We share the filename.
             self.filename = filename
-
-            # We get the db instance.
-            self.mysql_db = mysql_db
 
             self.table_name = self.get_table_name()
             self.to_retest = self.get_to_retest()
 
-            PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
             PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
             PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
-            # We initiate the database.
             self.initiate()
 
     def __contains__(self, subject):
         if self.authorized:
-            # We are authorized to operate.
-
             if PyFunceble.CONFIGURATION.db_type == "json":
                 if subject not in self.is_present_cache:
                     self.is_present_cache[subject] = False
-
-                    for element in [
-                        x for x in self.database[self.filename].keys() if x.isdigit()
-                    ]:
-                        if subject in self[element]:
-                            self.is_present_cache[subject] = True
-                            break
+                    if self[subject]:
+                        self.is_present_cache[subject] = True
 
                 return self.is_present_cache[subject]
 
@@ -146,7 +115,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "WHERE subject = %(subject)s AND file_path = %(file)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"subject": subject, "file": self.filename})
 
                     fetched = cursor.fetchone()
@@ -155,46 +124,52 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         return False  # pragma: no cover
 
-    def __getitem__(self, index):
+    def __getitem__(self, subject):
         if (
             self.authorized
             and PyFunceble.CONFIGURATION.db_type == "json"
             and self.filename in self.database
-            and index in self.database[self.filename]
+            and subject in self.database[self.filename]
         ):
-            return self.database[self.filename][index]
-        return []
+            return self.database[self.filename][subject]
+        return {}
 
-    def __setitem__(self, index, value):
+    def __setitem__(self, subject, data):
         if PyFunceble.CONFIGURATION.db_type == "json":
-            actual_state = self[index]
+            actual_state = self[subject]
 
             if actual_state:
-                if isinstance(actual_state, dict):
-                    if isinstance(value, dict):  # pragma: no cover
-                        self.database[self.filename][index] = PyFunceble.helpers.Merge(
-                            value
-                        ).into(self.database[self.filename][index])
-                    else:  # pragma: no cover
-                        self.database[self.filename][index] = value
-                elif isinstance(actual_state, list):  # pragma: no cover
-                    if isinstance(value, list):
-                        PyFunceble.helpers.Merge(value).into(
-                            self.database[self.filename][index], strict=False
+                if isinstance(actual_state, dict):  # pragma: no cover
+                    if isinstance(data, dict):
+                        self.database[self.filename][
+                            subject
+                        ] = PyFunceble.helpers.Merge(data).into(
+                            self.database[self.filename][subject]
                         )
                     else:  # pragma: no cover
-                        self.database[self.filename][index].append(value)
+                        self.database[self.filename][subject] = data
+                elif isinstance(actual_state, list):  # pragma: no cover
+                    if isinstance(data, list):
+                        PyFunceble.helpers.Merge(data).into(
+                            self.database[self.filename][subject], strict=False
+                        )
+                    else:  # pragma: no cover
+                        self.database[self.filename][subject].append(data)
 
-                    self.database[self.filename][index] = PyFunceble.helpers.List(
-                        self.database[self.filename][index]
+                    self.database[self.filename][subject] = PyFunceble.helpers.List(
+                        self.database[self.filename][subject]
                     ).format()
                 else:  # pragma: no cover
-                    self.database[self.filename][index] = value
+                    self.database[self.filename][subject] = data
             else:
                 if self.filename not in self.database:
-                    self.database[self.filename] = {index: value}
+                    self.database[self.filename] = {subject: data}
                 else:
-                    self.database[self.filename][index] = value
+                    self.database[self.filename][subject] = data
+
+    def __delitem__(self, subject):
+        if PyFunceble.CONFIGURATION.db_type == "json" and self[subject]:
+            del self.database[self.filename][subject]
 
     @classmethod
     def authorization(cls):
@@ -204,13 +179,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         return PyFunceble.CONFIGURATION.inactive_database
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["inactive"]
+            return PyFunceble.engine.MySQL.tables["inactive"]
         return "inactive"
 
     def _merge(self):
@@ -220,51 +196,37 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
-            # We are authorized to operate.
-
-            # We get the content of the database.
             database_content = PyFunceble.helpers.Dict().from_json_file(
                 self.database_file
             )
 
-            # We get the database top keys.
-            database_top_keys = [
+            for database_top_key in [
                 x for x in database_content.keys() if database_content[x]
-            ]
+            ]:
 
-            for database_top_key in database_top_keys:
-                # We loop through the list of database top keys.
+                for database_low_key, data in database_content[
+                    database_top_key
+                ].items():
+                    to_set = {}
 
-                # We get the list of lower indexes.
-                database_low_keys = database_content[database_top_key].keys()
+                    if database_low_key.isdigit():
+                        last_test_date = datetime.fromtimestamp(float(database_low_key))
 
-                for database_low_key in database_low_keys:
-                    # We loop through the lower keys.
-
-                    if isinstance(
-                        database_content[database_top_key][database_low_key], list
-                    ):  # pragma: no cover
-                        to_set = {
-                            x: ""
-                            for x in database_content[database_top_key][
-                                database_low_key
-                            ]
-                        }
+                        for subject, status in data.items():
+                            to_set[subject] = {
+                                "included_at_epoch": last_test_date.timestamp(),
+                                "included_at_iso": last_test_date.isoformat(),
+                                "last_retested_at_epoch": last_test_date.timestamp(),
+                                "last_retested_at_iso": last_test_date.isoformat(),
+                                "status": status,
+                            }
                     else:
-                        to_set = database_content[database_top_key][database_low_key]
+                        to_set[database_low_key] = data
 
                     if database_top_key not in self.database:
-                        self.database[database_top_key] = {database_low_key: to_set}
+                        self.database[database_top_key] = to_set
                     else:
-                        if database_low_key in self.database[database_top_key]:
-                            self.database[database_top_key][
-                                database_low_key
-                            ] = PyFunceble.helpers.Merge(to_set).into(
-                                self.database[database_top_key][database_low_key],
-                                strict=False,
-                            )
-                        else:  # pragma: no cover
-                            self.database[database_top_key][database_low_key] = to_set
+                        self.database[database_top_key].update(to_set)
 
             PyFunceble.LOGGER.info("Merged possible old to the new format")
 
@@ -274,37 +236,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized and PyFunceble.CONFIGURATION.db_type == "json":
-            # We are authorized to operate.
-
             if PyFunceble.helpers.File(self.database_file).exists():
-                # The database file exists.
-
                 self._merge()
-
-                if (
-                    self.filename in self.database
-                    and "to_test" in self.database[self.filename]
-                ):
-                    new_time = str(
-                        int(
-                            (
-                                datetime.now() - self.one_day - timedelta(seconds=100)
-                            ).timestamp()
-                        )
-                    )
-                    self.database[self.filename][new_time] = self.database[
-                        self.filename
-                    ]["to_test"]
-
-                    del self.database[self.filename]["to_test"]
             else:
-                # The database file do not exists.
-
-                # We initiate an empty database.
                 self.database = {self.filename: {}}
 
             if self.filename not in self.database:  # pragma: no cover
-                # We create the current file namepace
                 self.database[self.filename] = {}
 
             PyFunceble.LOGGER.info(
@@ -321,12 +258,20 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             and self.parent
             and PyFunceble.CONFIGURATION.db_type == "json"
         ):
-            # We are authorized to operate.
-
-            # We save the current database state into the database file.
             PyFunceble.helpers.Dict(self.database).to_json_file(self.database_file)
 
             PyFunceble.LOGGER.info(f"Saved database into {repr(self.database_file)}.")
+
+    def clean(self):
+        """
+        Cleans everything which is not needed anymore.
+        """
+
+        if self.authorized and self.parent:
+            PyFunceble.LOGGER.info("Started to clean old entry from the database.")
+            for subject in self.get_to_clean():
+                self.remove(subject)
+            PyFunceble.LOGGER.info("Finished to clean old entry from the database.")
 
     def initiate(self):
         """
@@ -334,17 +279,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized:
-            # * We are authorized to operate.
-            # and
-            # * The filename is already in the database.
-
-            # We load the database.
             self.load()
-
+            self.clean()
             self.save()
 
     @classmethod
-    def timestamp(cls):
+    def datetime(cls):
         """
         Gets the timestamp where we are going to save our current list.
 
@@ -352,8 +292,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         :rtype: int|str
         """
 
-        # We return the current time.
-        return int(datetime.now().timestamp())
+        return datetime.now()
 
     def add(self, subject, status):
         """
@@ -364,26 +303,29 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized:
-            # We are authorized to operate.
-
             if PyFunceble.CONFIGURATION.db_type == "json":
-                # We get the timestamp to use as index.
-                timestamp = str(self.timestamp())
+                current_datetime = self.datetime()
 
-                if self.filename in self.database:
-                    # * The file path is not into the database.
-
-                    self.remove(subject)
-
-                # We initiate the file path and its content into the database.
-                self[timestamp] = {subject: status}
+                if self[subject]:
+                    self[subject] = {
+                        "status": status,
+                        "last_retested_at_iso": current_datetime.isoformat(),
+                        "last_retested_at_epoch": current_datetime.timestamp(),
+                    }
+                else:
+                    self[subject] = {
+                        "status": status,
+                        "included_at_iso": current_datetime.isoformat(),
+                        "last_retested_at_iso": current_datetime.isoformat(),
+                        "included_at_epoch": current_datetime.timestamp(),
+                        "last_retested_at_epoch": current_datetime.timestamp(),
+                    }
 
                 PyFunceble.LOGGER.info(
                     f"Indexed {repr(subject)} with the status "
                     f"{repr(status)} into {repr(self.filename)} database's."
                 )
 
-                # And we save the database.
                 self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 digest = PyFunceble.helpers.Hash(algo="sha256").data(
@@ -396,8 +338,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                     "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
-
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     playload = {
                         "file": self.filename,
                         "subject": subject,
@@ -411,7 +352,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.LOGGER.info(
                             f"Inserted into the database: \n {playload}"
                         )
-                    except self.mysql_db.errors:
+                    except PyFunceble.engine.MySQL.errors:
                         query = (
                             "UPDATE {0} "
                             "SET subject = %(subject)s, status = %(status)s "
@@ -436,56 +377,44 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         if self.authorized:
-            # We are authorized to operate.
-
             if PyFunceble.CONFIGURATION.db_type == "json":
-                for data in self.database[self.filename]:
-                    # We loop through the index of the file database.
+                if self[subject]:
+                    del self[subject]
 
-                    if subject in self[data]:
-                        # The currently tested element into the currently read index.
-
-                        self[data] = PyFunceble.helpers.Dict(self[data]).remove_key(
-                            subject
-                        )
-
-                        PyFunceble.LOGGER.info(
-                            "Cleaned the data related to " f"{repr(subject)}."
-                        )
-
-                to_delete = [
-                    x for x, y in self.database[self.filename].items() if not y
-                ]
-
-                for index in to_delete:
-                    del self.database[self.filename][index]
-
-                # And we save the data into the database.
-                self.save()
+                    PyFunceble.LOGGER.info(
+                        "Cleaned the data related to " f"{repr(subject)}."
+                    )
+                    self.save()
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                # We construct the query we are going to execute.
                 query = (
                     "DELETE FROM {0} "
                     "WHERE file_path = %(file)s "
                     "AND subject = %(subject)s"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": subject})
 
                     PyFunceble.LOGGER.info(
                         "Cleaned the data related to "
                         f"{repr(subject)} and {repr(self.filename)} from "
-                        "the {repr(self.table_name)} table."
+                        f"the {repr(self.table_name)} table."
                     )
 
-    def __execute_query_retest_already_tested(self, query):  # pragma: no cover
+    def __execute_query(self, query):  # pragma: no cover
         """
         Executes the query to get the list to retest or already tested.
         """
 
-        with self.mysql_db.get_connection() as cursor:
-            cursor.execute(query, {"file": self.filename, "days": self.days})
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                query,
+                {
+                    "file": self.filename,
+                    "days": self.days,
+                    "days_between_clean": self.days_between_clean,
+                },
+            )
             fetched = cursor.fetchall()
 
             if fetched:
@@ -493,7 +422,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
         return set()
 
-    def get_to_retest(self):  # pylint: pragma: no cover
+    def get_to_retest(self):
         """
         Returns a set of subject to restest.
         """
@@ -502,31 +431,41 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             "Getting the list of subjects to retest (DATASET WONT BE LOGGED)"
         )
 
-        if self.authorized:
+        if (
+            self.authorized
+            and PyFunceble.CONFIGURATION.days_between_db_retest >= 0
+            and self.filename in self.database
+        ):
             if PyFunceble.CONFIGURATION.db_type == "json":
-                try:
-                    return {
-                        z
-                        for x, y in self.database[self.filename].items()
-                        if x.isdigit()
-                        and datetime.now()
-                        > datetime.fromtimestamp(float(x)) + self.days
-                        for z in y.keys()
-                    }
-                except KeyError:
-                    return set()
+                result = set()
+
+                for subject, info in self.database[self.filename].items():
+                    if (
+                        "last_retested_at_epoch" in info
+                        and info["last_retested_at_epoch"]
+                    ):
+                        if (
+                            datetime.now()
+                            > datetime.fromtimestamp(info["last_retested_at_epoch"])
+                            + self.days
+                        ):
+                            result.add(subject)
+                    else:
+                        result.add(subject)
+
+                return result
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 query = (
                     "SELECT * FROM {0} WHERE file_path = %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, self.mysql_db.int_cast_type)
+                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
 
-                return self.__execute_query_retest_already_tested(query)
+                return self.__execute_query(query)
         return set()
 
-    def get_already_tested(self):  # pragma: no cover
+    def get_already_tested(self):
         """
         Returns a set of already tested subjects.
         """
@@ -535,26 +474,82 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             "Getting the list of already tested (DATASET WONT BE LOGGED)"
         )
 
-        if self.authorized:
+        if (
+            self.authorized
+            and PyFunceble.CONFIGURATION.days_between_db_retest >= 0
+            and self.filename in self.database
+        ):
             if PyFunceble.CONFIGURATION.db_type == "json":
-                try:
-                    return {
-                        z
-                        for x, y in self.database[self.filename].items()
-                        if x.isdigit()
-                        and datetime.now()
-                        < datetime.fromtimestamp(float(x)) + self.days
-                        for z in y.keys()
-                    }
-                except KeyError:
-                    return set()
+                result = set()
 
-            if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
+                for subject, info in self.database[self.filename].items():
+                    if (
+                        "last_retested_at_epoch" in info
+                        and info["last_retested_at_epoch"]
+                    ):
+                        if (
+                            datetime.now()
+                            < datetime.fromtimestamp(info["last_retested_at_epoch"])
+                            + self.days
+                        ):
+                            result.add(subject)
+                    else:
+                        result.add(subject)
+                return result
+
+            if PyFunceble.CONFIGURATION.db_type in [
+                "mariadb",
+                "mysql",
+            ]:  # pragma: no cover
                 query = (
                     "SELECT * FROM {0} WHERE file_path= %(file)s "
                     "AND CAST(UNIX_TIMESTAMP() AS {1}) "
                     "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, self.mysql_db.int_cast_type)
+                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
 
-                return self.__execute_query_retest_already_tested(query)
+                return self.__execute_query(query)
+        return set()
+
+    def get_to_clean(self):
+        """
+        Returns a set of subject to clean from the database.
+        """
+
+        PyFunceble.LOGGER.info(
+            "Getting the list of subject to clean (DATASET WONT BE LOGGED)"
+        )
+
+        if (
+            self.authorized
+            and PyFunceble.CONFIGURATION.days_between_inactive_db_clean >= 0
+            and self.filename in self.database
+        ):
+            if PyFunceble.CONFIGURATION.db_type == "json":
+                result = set()
+
+                for subject, info in self.database[self.filename].items():
+                    if "included_at_epoch" in info and info["included_at_epoch"]:
+                        if (
+                            datetime.now()
+                            > datetime.fromtimestamp(info["included_at_epoch"])
+                            + self.days_between_clean
+                        ):
+                            result.add(subject)
+                    else:
+                        result.add(subject)
+
+                return result
+
+            if PyFunceble.CONFIGURATION.db_type in [
+                "mariadb",
+                "mysql",
+            ]:  # pragma: no cover
+
+                query = (
+                    "SELECT * FROM {0} WHERE file_path= %(file)s "
+                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
+                    "> (CAST(UNIX_TIMESTAMP(created) AS {1}) + CAST(%(days_between_clean)s AS {1}))"
+                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
+
+                return self.__execute_query(query)
         return set()

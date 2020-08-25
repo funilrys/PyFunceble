@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import PyFunceble
@@ -113,23 +105,28 @@ class APICore:
             generate_directory_structure=False, custom=self.configuration
         )
 
-        # We update the configuration with the given
-        # configuration.
-        preset = PyFunceble.cconfig.Preset()
-        preset.init_all()
-        preset.api()
+        if (
+            "api_config_loaded" not in PyFunceble.INTERN
+            or self.configuration != PyFunceble.INTERN["api_config_loaded"]
+        ):
+            # We update the configuration with the given
+            # configuration.
+            preset = PyFunceble.cconfig.Preset()
+            preset.init_all()
+            preset.api()
 
-        # We get an instance of the DB connection.
-        self.mysql_db = PyFunceble.engine.MySQL()
+            PyFunceble.INTERN["api_config_loaded"] = (
+                self.configuration.copy()
+                if isinstance(self.configuration, dict)
+                else dict()
+            )
 
         # We create an instance of the whois database.
-        self.whois_db = PyFunceble.database.Whois(
-            mysql_db=self.mysql_db, parent_process=is_parent
-        )
+        self.whois_db = PyFunceble.database.Whois(parent_process=is_parent)
 
         # We create an instance of the inactive database.
         self.inactive_db = PyFunceble.database.Inactive(
-            db_file_name, mysql_db=self.mysql_db, parent_process=is_parent
+            db_file_name, parent_process=is_parent
         )
 
     def __inactive_database_management(self, subject, status):
@@ -191,7 +188,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -256,7 +253,7 @@ class APICore:
             ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -294,7 +291,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a copy of the compelte data.
@@ -485,7 +482,7 @@ class APICore:
         ).get()
 
         self.__inactive_database_management(self.subject, data["status"])
-        CLICore.save_into_database(data, self.db_file_name, self.mysql_db)
+        CLICore.save_into_database(data, self.db_file_name)
 
         if self.complete:
             # The user want a complete copy of the data.

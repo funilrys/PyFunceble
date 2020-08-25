@@ -3,16 +3,15 @@ Discovered an issue?
 
 Want to talk with `@funilrys`_ about it? Contact `@funilrys on Keybase`_.
 
-Want to make it public? Fill a `new issue`_.
+Want to make it public? Fill out a `new issue`_.
 
-Don't want to fill an issue on GitHub?
+Don't want to fill out an issue on GitHub?
 Let's discuss it on our `issues team`_ on Keybase.
 
 Need help?
 ==========
 
-Do you need help with the usage or application of PyFunceble? We can help!
-
+Do you need help with the usage of PyFunceble? We can help!
 
 Want to talk with `@funilrys`_ about it? Contact `@funilrys on Keybase`_.
 
@@ -21,12 +20,12 @@ Otherwise, let's discuss it on our `support team`_ on Keybase!
 Need information?
 =================
 
-Since recently, you can get information and discuss about PyFunceble
-on our `main Keybase team`_. We try to keep it up-to-date with
-some information about the development and news about PyFunceble.
+You can get information and discuss about PyFunceble on our 
+`main Keybase team`_. @Funilrys (me) will do his best to keep it up-to-date 
+with some information about the development and other news about PyFunceble.
 
-If you need more broad information which does not fit in our
-`support team`_ or `issues team`_, that's the place to ask!
+If you need more information, the  `support team`_ or `issues team`_, is the 
+place to ask!
 
 .. _@funilrys: https://github.com/funilrys
 .. _@funilrys on Keybase: https://keybase.io/funilrys

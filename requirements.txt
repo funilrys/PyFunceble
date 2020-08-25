@@ -1,11 +1,10 @@
 colorama
 cryptography
 dnspython
-domain2idna>=1.6.1
+domain2idna
 PyMySQL
-python-box
+python-box[all]
 python-dotenv
 PyYAML
-requests
+requests<3
 setuptools
-urllib3

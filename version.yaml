@@ -1,4 +1,4 @@
-current_version: 3.0.1.dev (Teal Blauwbok)
+current_version: '3.2.10.dev (Teal Blauwbok: Bombardier)'
 deprecated:
 - 1.0.0
 - 1.2.1
@@ -109,6 +109,8 @@ deprecated:
 - 2.56.0
 - 2.57.2
 - 2.58.0
+- 3.0.21
+- 3.1.20
 force_update:
     minimal_version:
     - 0.0.0
@@ -125,9 +127,17 @@ messages:
     2.10.0:
     -   message: 🌟 🎉 🍰 We now support IPv6! 🍰 🎉 🌟
         type: info
-        until: 4.0.0
+        until: 3.1.0
     2.49.1:
     -   message: A manual intervention is needed. Find more at https://git.io/Je1Q6
             !
         type: warning
         until_date: '2020-03-30T00:00:00+01:00'
+    3.2.0:
+    -   message: '🚨 ⚠️ ⚡ 🚨 A critical bug has been fixed. We recommend you to update
+            to PyFunceble v3.2.2 or later! Find more about it at https://git.io/Jfdov
+            !
+
+            '
+        type: warning
+        until: 3.2.2

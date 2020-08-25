@@ -8,72 +8,36 @@ jobs:
       language: generic
       os: linux
       dist: bionic
-      name: "Code Test with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Code Test with Python 3.8.1 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.8.3 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.1"
-        - TOXENV="py38"
-      script:
-        - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code Test with Python 3.8.0 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.8.0"
-        - TOXENV="py38"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code Test with Python 3.8.0 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.8.0"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env
     - language: generic
       os: linux
       dist: bionic
-      name: "Code Test with Python 3.7.6 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Code Test with Python 3.7.7 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.7.6"
+        - PYTHON_VERSION="3.7.7"
         - TOXENV="py37"
       script:
         - tox --current-env
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Code Test with Python 3.7.6 under macOS 10.14 (Mojave)"
+      name: "Code Test with Python 3.7.7 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.7.6"
-        - TOXENV="py37"
-      script:
-        - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code Test with Python 3.7.5 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.7.5"
-        - TOXENV="py37"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code Test with Python 3.7.5 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.7.5"
+        - PYTHON_VERSION="3.7.7"
         - TOXENV="py37"
       script:
         - tox --current-env
@@ -95,55 +59,35 @@ jobs:
         - TOXENV="py36"
       script:
         - tox --current-env
-    - language: generic
-      os: linux
-      dist: bionic
-      name: "Code test with Python 3.6.9 under Ubuntu 18.04 (Bionic Beaver)"
-      env:
-        - PYTHON_VERSION="3.6.9"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-    - language: generic
-      os: osx
-      osx_image: xcode11.2
-      name: "Code test with Python 3.6.9 under macOS 10.14 (Mojave)"
-      env:
-        - PYTHON_VERSION="3.6.9"
-        - TOXENV="py36"
-      script:
-        - tox --current-env
-
-
 
     - stage: "CLI (running) Tests"
       language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver)"
+      name: "Run with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: osx
       osx_image: xcode11.2
-      name: "Run with Python 3.8.1 under macOS 10.14 (Mojave)"
+      name: "Run with Python 3.8.3 under macOS 10.14 (Mojave)"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
       os: linux
       dist: bionic
-      name: "Run with Python 3.8.1 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
+      name: "Run with Python 3.8.3 under Ubuntu 18.04 (Bionic Beaver) with MariaDB as DB Type."
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.3"
         - TOXENV="py38"
       addons:
-          mariadb: '10.4'
+        mariadb: "10.4"
       before_script:
         - sudo systemctl restart mysql
         - sudo mysql -u root -h localhost -e "CREATE DATABASE pyfunceble DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -161,7 +105,6 @@ jobs:
       script:
         - tox --current-env -c tox_run_mariadb.ini
 
-
     - language: generic
       stage: "Deployments"
       os: linux
@@ -172,7 +115,7 @@ jobs:
       after_success:
         - echo "Hello, World!"
       env:
-        - PYTHON_VERSION="3.8.1"
+        - PYTHON_VERSION="3.8.3"
       deploy:
         provider: pypi
         user: funilrys
@@ -183,10 +126,42 @@ jobs:
         on:
           all_branches: true
           condition: "${TRAVIS_BRANCH} =~ ^dev|master$"
-
-
-matrix:
-  fast_finish: true
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Deployment to Docker"
+      env:
+        - PYTHON_VERSION="3.8.3"
+        - DOCKER_PYTHON_VERSION="3.8"
+      script:
+        - wget https://github.com/PyFunceble/docker/archive/master.zip -O ${HOME}/master.zip
+        - cd ${HOME} && unzip master.zip && cd docker-master
+        - pip install -e .
+        - pyfunceble-docker-builder --version
+        - cd ${TRAVIS_BUILD_DIR}
+        - pyfunceble-docker-builder -b ${HOME}/docker-master/builder -p "$(python setup.py --name)" --pyfunceble-version="$(python setup.py --version)" --python-version="${DOCKER_PYTHON_VERSION}" --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+      after_success:
+        - echo "Hello, World!"
+    - language: generic
+      os: linux
+      dist: bionic
+      name: "Deployment to Anaconda Cloud"
+      env:
+        - PYTHON_VERSION="3.8.3"
+      before_install:
+        - wget https://raw.githubusercontent.com/PyFunceble/conda-builder/master/build-and-push-it -O ${TRAVIS_BUILD_DIR}/build-and-push-it
+      before_script:
+        - export pkgVersion=$(python3 setup.py --version)
+        - export pkgName=$(python3 setup.py --name)
+        - chmod +x build-and-push-it
+        - export CONDA_BUILD_DIR=${TRAVIS_BUILD_DIR}
+      script:
+        - >
+            ./build-and-push-it "${pkgName,,}" "${pkgVersion,,}"
+            --override-channels -c pyfunceble -c conda-forge --variants
+            '{"python": ["3.6", "3.7", "3.8"]}'
+      after_success:
+        - echo "Hello, World!"
 
 install:
   - export PATH="${HOME}/miniconda/bin:${PATH}"
@@ -194,14 +169,13 @@ install:
   - bash miniconda.sh -b -p ${HOME}/miniconda
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
   - conda update -q conda
   - conda create -q -n test-environment python="${PYTHON_VERSION}"
   - source activate test-environment
   - python --version --version
   - pip --version
   - conda --version
-  - conda install coverage coveralls codacy-coverage pylint unittest2
+  - conda install coverage coveralls conda-forge::codacy-coverage pylint unittest2
   - pip install tox-current-env
   - pip install -e .
 
@@ -210,5 +184,8 @@ after_success:
   - coveralls
 
 notifications:
-  on_success: change
-  on_failure: always
+  email:
+    on_failure: always
+    on_success: change
+    recipients:
+      - pyfunceble@outlook.com

@@ -1,31 +1,31 @@
 Logic representation
-====================
+--------------------
 
-Don't have time to review the code and want to know exactly what PyFunceble does in general? 
+Don't have time to review the code and want to know exactly what PyFunceble does in general?
 This flowchart is there for you!
 
 .. note::
-    This is a simplified version of what we actually do.
+    This is a simplified version of what we do.
 
 .. note::
     The diagrams were generated with the help of `yEd Graph Editor`_.
 
 Domain testing
---------------
+^^^^^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/domain.png
     :alt: PyFunceble Logic representation for domain testing
     :target: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/domain.png
 
 IP testing
-----------
+^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/ip.png
     :alt: PyFunceble Logic representation for IP testing
     :target: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/ip.png
 
 URL testing
------------
+^^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/PyFunceble/graphmls/dev/dist/url.png
     :alt: PyFunceble Logic representation for URL testing

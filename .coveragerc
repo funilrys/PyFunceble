@@ -20,6 +20,7 @@ omit =
     PyFunceble/downloader/*.py
     PyFunceble/engine/auto_save.py
     PyFunceble/engine/mysql.py
+    PyFunceble/engine/hashes_tracker.py
     PyFunceble/helpers/download.py
     PyFunceble/lookup/requests.py
     PyFunceble/lookup/ipv4_reputation.py

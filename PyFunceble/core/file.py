@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -34,29 +34,22 @@ Project homepage:
 License:
 ::
 
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    MIT License
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
+
+from tempfile import NamedTemporaryFile
 
 from domain2idna import get as domain2idna
 
@@ -98,15 +91,14 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         self.file = self.download_link(file)
         self.file_type = file_content_type.lower()
 
-        self.inactive_db = PyFunceble.database.Inactive(
-            self.file, mysql_db=self.mysql_db, parent_process=True
-        )
-        self.mining = PyFunceble.engine.Mining(self.file, mysql_db=self.mysql_db)
+        self.inactive_db = PyFunceble.database.Inactive(self.file, parent_process=True)
+        self.mining = PyFunceble.engine.Mining(self.file)
         self.autocontinue = PyFunceble.engine.AutoContinue(
-            self.file, parent_process=True, mysql_db=self.mysql_db
+            self.file, parent_process=True
         )
 
-    def download_link(self, input_file):  # pragma: no cover
+    @classmethod
+    def download_link(cls, input_file):  # pragma: no cover
         """
         Downloads the file if it is an URL and return the name of the new file to test.
         """
@@ -115,12 +107,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             # We get the destination.
             destination = input_file.split("/")[-1]
 
-            if (
-                input_file
-                and PyFunceble.engine.AutoContinue(
-                    destination, mysql_db=self.mysql_db
-                ).is_empty()
-            ):
+            if input_file and PyFunceble.engine.AutoContinue(destination).is_empty():
                 # The given file is an URL.
 
                 if (
@@ -189,9 +176,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 "http_status_code, whois_server, file_path "
                 "FROM {0} WHERE status = %(official_status)s "
                 "AND file_path = %(file_path)s ORDER BY subject ASC"
-            ).format(self.mysql_db.tables["tested"])
+            ).format(PyFunceble.engine.MySQL.tables["tested"])
 
-            with self.mysql_db.get_connection() as cursor:
+            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                 cursor.execute(
                     to_select, {"official_status": status, "file_path": self.file}
                 )
@@ -282,7 +269,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 ).get()
             else:
                 result = PyFunceble.status.DomainAndIpSyntax(
-                    subject,
+                    subject.lower(),
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,
                     filename=self.file,
@@ -297,7 +284,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 ).get()
             else:
                 result = PyFunceble.status.DomainAndIPReputation(
-                    subject,
+                    subject.lower(),
                     whois_db=self.whois_db,
                     inactive_db=self.inactive_db,
                     filename=self.file,
@@ -311,14 +298,14 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             ).get()
         else:
             result = PyFunceble.status.DomainAndIpAvailability(
-                subject,
+                subject.lower(),
                 whois_db=self.whois_db,
                 inactive_db=self.inactive_db,
                 filename=self.file,
             ).get()
 
         self.generate_complement_status_file(result["tested"], result["status"])
-        self.save_into_database(result, self.file, self.mysql_db)
+        self.save_into_database(result, self.file)
 
         return result
 
@@ -465,22 +452,24 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         Runs the logic to run at the end of all test.
         """
 
-        auto_continue_db.update_counters()
-
         if test_completed:
+            auto_continue_db.update_counters()
             self.generate_files()
             self.sort_generated_files()
             auto_continue_db.clean()
+            auto_save.process(test_completed=test_completed)
         elif auto_save.is_time_exceed():
+            auto_continue_db.update_counters()
             self.generate_files()
             self.sort_generated_files()
-
-        auto_save.process(test_completed=test_completed)
+            auto_save.process(test_completed=test_completed)
 
     def __run_single_test(self, subject, ignore_inactive_db_check=False):
         """
         Run a test for a single subject.
         """
+
+        self.print_header()
 
         if not self.should_be_ignored(
             subject,
@@ -499,17 +488,21 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 mining=self.mining,
                 whois_db=self.whois_db,
             )
-        elif self.autosave.authorized:
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             # We are under a CI/CD environment.
+
+            PyFunceble.LOGGER.info(f"Skipped {subject!r}.")
 
             # We print a dot.
             print(".", end="")
 
         self.cleanup(self.autocontinue, self.autosave, test_completed=False)
 
-    def __test_line(self, line, ignore_inactive_db_check=False):
+    @classmethod
+    def get_subjects(cls, line):
         """
-        Tests a given line.
+        Given a line, we give the list of subjects
+        to test.
         """
 
         if PyFunceble.CONFIGURATION.adblock:
@@ -518,6 +511,17 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             ).get_converted()
         else:
             subjects = PyFunceble.converter.File(line).get_converted()
+
+        if isinstance(subjects, str):
+            return [subjects]
+        return subjects
+
+    def __test_line(self, line, ignore_inactive_db_check=False):
+        """
+        Tests a given line.
+        """
+
+        subjects = self.get_subjects(line)
 
         if isinstance(subjects, list):
             for subject in subjects:
@@ -529,21 +533,141 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 subjects, ignore_inactive_db_check=ignore_inactive_db_check
             )
 
+    def write_in_shadow_file_if_needed(
+        self,
+        line,
+        temp_file,
+        ignore_inactive_db_check=False,
+        autocontinue=None,
+        inactive_db=None,
+    ):
+        """
+        Checks if the given line should be in the
+        shadow file.
+        """
+
+        subjects = self.get_subjects(line)
+
+        if autocontinue is None:
+            autocontinue = self.autocontinue
+        if inactive_db is None:
+            inactive_db = self.inactive_db
+
+        if isinstance(subjects, list):
+            comparison = {
+                self.should_be_ignored(
+                    x,
+                    auto_continue_db=autocontinue,
+                    inactive_db=inactive_db,
+                    ignore_inactive_db_check=ignore_inactive_db_check,
+                )
+                for x in subjects
+            }
+        else:
+            comparison = {
+                self.should_be_ignored(
+                    subjects,
+                    auto_continue_db=autocontinue,
+                    inactive_db=inactive_db,
+                    ignore_inactive_db_check=ignore_inactive_db_check,
+                )
+            }
+
+        if all(comparison) and (
+            self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots
+        ):
+            print("I", end="")
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            print("S", end="")
+
+        if not all(comparison):
+            to_write = (
+                "\n".join([subjects[x] for x, _ in enumerate(comparison) if comparison])
+                + "\n"
+            )
+
+            if isinstance(temp_file, str):
+                temp_file = open(temp_file, "a+b")
+            temp_file.write(to_write.encode("utf-8"))
+
+    def construct_and_get_shadow_file(
+        self, file_stream, ignore_inactive_db_check=False
+    ):
+        """
+        Provides a path to a file which contain the list to file.
+
+        The idea is to do a comparison between what we already tested
+        and what we still have to test.
+        """
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            with NamedTemporaryFile(delete=False) as temp_file:
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
+
+                for line in file_stream:
+                    self.write_in_shadow_file_if_needed(
+                        line,
+                        temp_file,
+                        ignore_inactive_db_check=ignore_inactive_db_check,
+                    )
+
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
+
+                return temp_file.name
+        return file_stream.name
+
     def run_test(self):
         """
         Run the test of the content of the given file.
         """
 
-        self.print_header()
+        with open(self.file, "r", encoding="utf-8") as file_stream, open(
+            self.construct_and_get_shadow_file(file_stream), "r"
+        ) as shadow_file:
+            tracker = PyFunceble.engine.HashesTracker(shadow_file.name)
 
-        with open(self.file, "r", encoding="utf-8") as file_stream:
-            for subject in file_stream:
-                self.__test_line(subject)
+            minimum_position = tracker.get_position()
+            file_position = 0
+
+            for line in shadow_file:
+                if tracker.authorized and file_position < minimum_position:
+                    file_position += len(line)
+
+                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                        PyFunceble.LOGGER.info(
+                            f"Skipped {line!r}: insufficient position."
+                        )
+                        print(".", end="")
+
+                    continue
+
+                self.__test_line(line)
+
+                file_position += len(line)
+                tracker.set_position(file_position)
+
+            shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         if self.autocontinue.is_empty():
-            with open(self.file, "r", encoding="utf-8") as file_stream:
-                for subject in file_stream:
-                    self.__test_line(subject, ignore_inactive_db_check=True)
+            with open(self.file, "r", encoding="utf-8") as file_stream, open(
+                self.construct_and_get_shadow_file(
+                    file_stream, ignore_inactive_db_check=True
+                ),
+                "r",
+                encoding="utf-8",
+            ) as shadow_file:
+                for line in shadow_file:
+                    self.__test_line(line, ignore_inactive_db_check=True)
+
+                shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         for subject in self.inactive_db.get_to_retest():
             self.__test_line(subject)
@@ -559,4 +683,5 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.__test_line(subject)
             self.mining.remove(index, subject)
 
+        tracker.reset_position()
         self.cleanup(self.autocontinue, self.autosave, test_completed=True)

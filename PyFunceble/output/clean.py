@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 from os import sep as directory_separator
@@ -150,38 +142,59 @@ class Clean:
         # We initate the result variable.
         result = []
 
-        if PyFunceble.CONFIGURATION.db_type == "json":
-            # We initiate the directory we have to look for.
-            directory = PyFunceble.CONFIG_DIRECTORY
+        # We initiate the directory we have to look for.
+        directory = PyFunceble.CONFIG_DIRECTORY
 
-            # We append the dir_structure file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.dir_structure
-                )
-            )
+        # We append the dir_structure file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.dir_structure)
+        )
 
-            # We append the iana file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana)
-            )
+        # We append the iana file.
+        result.append("{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana))
 
-            # We append the public suffix file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.public_suffix
-                )
-            )
+        # We append the public suffix file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.public_suffix)
+        )
 
-            # We append the inactive database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
-            )
+        # We append the inactive database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
+        )
 
-            # We append the mining database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        # We append the mining database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        )
+
+        # We append the hashes tracker file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.HASHES_FILENAME
             )
+        )
+
+        # We append the user agent file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
+            )
+        )
+
+        # We append our downtime file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.DOWN_FILENAME
+            )
+        )
+
+        # We append the ipv4 reputation file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME,
+            )
+        )
 
         return result
 
@@ -229,24 +242,25 @@ class Clean:
                 "mysql",
             ]:  # pragma: no cover
 
-                mysql_db = PyFunceble.engine.MySQL()
+                with PyFunceble.engine.MySQL() as connection:
+                    for database_name in [
+                        y
+                        for x, y in PyFunceble.engine.MySQL.tables.items()
+                        if x not in to_avoid
+                    ]:
+                        lquery = query.format(database_name)
 
-                for database_name in [
-                    y for x, y in mysql_db.tables.items() if x not in to_avoid
-                ]:
-                    lquery = query.format(database_name)
+                        with connection.cursor() as cursor:
+                            cursor.execute(lquery, {"file_path": file_path})
 
-                    with mysql_db.get_connection() as cursor:
-                        cursor.execute(lquery, {"file_path": file_path})
-
-                        PyFunceble.LOGGER.info(
-                            "Cleaned the data related to "
-                            f"{repr(file_path)} from the {database_name} table."
-                        )
+                            PyFunceble.LOGGER.info(
+                                "Cleaned the data related to "
+                                f"{repr(file_path)} from the {database_name} table."
+                            )
 
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all
             ):  # pragma: no cover
-                PyFunceble.cconfig.Load(PyFunceble.CONFIG_DIRECTORY)
+                PyFunceble.load_config()
 
-                PyFunceble.LOGGER.info(f"Reloaded configuration.")
+                PyFunceble.LOGGER.info("Reloaded configuration.")

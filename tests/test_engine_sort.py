@@ -1,6 +1,6 @@
 # pylint:disable=line-too-long
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io//en/dev/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,27 +36,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 # pylint: enable=line-too-long
 
@@ -133,6 +125,80 @@ class TestSort(TestCase):
             "https://hello",
         ]
 
+    def test_standard_numeric_sorting(self):
+        """
+        Tests the standard numeric sorting.
+        """
+
+        given = [
+            "1.example.com",
+            "2.example.com",
+            "3.example.com",
+            "11.example.com",
+            "12.example.com",
+            "10.example.com",
+        ]
+
+        given_url = [f"http://{x}" for x in given]
+
+        expected = [
+            "1.example.com",
+            "2.example.com",
+            "3.example.com",
+            "10.example.com",
+            "11.example.com",
+            "12.example.com",
+        ]
+
+        expected_url = [f"http://{x}" for x in expected]
+
+        actual = List(given).custom_format(Sort.standard)
+
+        self.assertEqual(expected, actual)
+
+        actual_url = List(given_url).custom_format(Sort.standard)
+
+        self.assertEqual(expected_url, actual_url)
+
+    def test_hierarchical_numeric_sorting(self):
+        """
+        Tests the hierarchical numeric sorting.
+        """
+
+        given = [
+            "1.example.com",
+            "2.example.com",
+            "3.example.com",
+            "11.example.com",
+            "12.example.com",
+            "10.example.com",
+            "hello.1.example.com",
+            "hello.2.example.com",
+            "hello.3.example.com",
+            "hello.11.example.com",
+            "hello.12.example.com",
+            "hello.10.example.com",
+        ]
+
+        expected = [
+            "1.example.com",
+            "hello.1.example.com",
+            "2.example.com",
+            "hello.2.example.com",
+            "3.example.com",
+            "hello.3.example.com",
+            "10.example.com",
+            "hello.10.example.com",
+            "11.example.com",
+            "hello.11.example.com",
+            "12.example.com",
+            "hello.12.example.com",
+        ]
+
+        actual = List(given).custom_format(Sort.hierarchical)
+
+        self.assertEqual(expected, actual)
+
     def test_standard_sorting(self):
         """
         Tests standard sorting.
@@ -145,9 +211,9 @@ class TestSort(TestCase):
             "ade.googlesyndication.com",
             "adservice.google.com",
             "chart.googleapis.com",
+            "google.com",
             "googleadservices.com",
             "google-analytics.com",
-            "google.com",
             "hello",
             "hello_world.google.com",
             "imasdk.googleapis.com",
@@ -161,44 +227,18 @@ class TestSort(TestCase):
             "tpc.googlesyndication.com",
             "www.googleadservices.com",
             "www.google-analytics.com",
-            "www-google-analytics.l.google.com",
             "www.googletagmanager.com",
             "www.googletagservices.com",
+            "www-google-analytics.l.google.com",
         ]
         actual = List(self.data_list).custom_format(Sort.standard)
 
         self.assertEqual(expected, actual)
 
-        expected = [
-            "https://0.gravatar.com",
-            "https://1.gravatar.com",
-            "https://ad-creatives-public.commondatastorage.googleapis.com",
-            "https://ade.googlesyndication.com",
-            "https://adservice.google.com",
-            "https://chart.googleapis.com",
-            "https://googleadservices.com",
-            "https://google-analytics.com",
-            "https://google.com",
-            "https://hello",
-            "https://hello_world.google.com",
-            "https://imasdk.googleapis.com",
-            "https://pagead2.googleadservices.com",
-            "https://pagead2.googlesyndication.com",
-            "https://partner.googleadservices.com",
-            "https://redirector.googlevideo.com",
-            "https://s0-2mdn-net.l.google.com",
-            "https://ssl.google-analytics.com",
-            "https://ssl-google-analytics.l.google.com",
-            "https://tpc.googlesyndication.com",
-            "https://www.googleadservices.com",
-            "https://www.google-analytics.com",
-            "https://www-google-analytics.l.google.com",
-            "https://www.googletagmanager.com",
-            "https://www.googletagservices.com",
-        ]
-        actual = List(self.data_url_list).custom_format(Sort.standard)
+        expected_url = [f"https://{x}" for x in expected]
+        actual_url = List(self.data_url_list).custom_format(Sort.standard)
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected_url, actual_url)
 
     def test_hierarchical_sorting(self):
         """
@@ -206,8 +246,12 @@ class TestSort(TestCase):
         """
 
         expected = [
-            "chart.googleapis.com",
-            "ad-creatives-public.commondatastorage.googleapis.com",
+            "google.com",
+            "adservice.google.com",
+            "hello_world.google.com",
+            "s0-2mdn-net.l.google.com",
+            "ssl-google-analytics.l.google.com",
+            "www-google-analytics.l.google.com",
             "googleadservices.com",
             "pagead2.googleadservices.com",
             "partner.googleadservices.com",
@@ -215,12 +259,9 @@ class TestSort(TestCase):
             "google-analytics.com",
             "ssl.google-analytics.com",
             "www.google-analytics.com",
-            "google.com",
-            "adservice.google.com",
-            "hello_world.google.com",
-            "s0-2mdn-net.l.google.com",
-            "ssl-google-analytics.l.google.com",
-            "www-google-analytics.l.google.com",
+            "chart.googleapis.com",
+            "ad-creatives-public.commondatastorage.googleapis.com",
+            "imasdk.googleapis.com",
             "ade.googlesyndication.com",
             "pagead2.googlesyndication.com",
             "tpc.googlesyndication.com",
@@ -230,42 +271,17 @@ class TestSort(TestCase):
             "0.gravatar.com",
             "1.gravatar.com",
             "hello",
-            "imasdk.googleapis.com",
         ]
+
         actual = List(self.data_list).custom_format(Sort.hierarchical)
 
         self.assertEqual(expected, actual)
 
-        expected = [
-            "https://chart.googleapis.com",
-            "https://ad-creatives-public.commondatastorage.googleapis.com",
-            "https://googleadservices.com",
-            "https://pagead2.googleadservices.com",
-            "https://partner.googleadservices.com",
-            "https://www.googleadservices.com",
-            "https://google-analytics.com",
-            "https://ssl.google-analytics.com",
-            "https://www.google-analytics.com",
-            "https://google.com",
-            "https://adservice.google.com",
-            "https://hello_world.google.com",
-            "https://s0-2mdn-net.l.google.com",
-            "https://ssl-google-analytics.l.google.com",
-            "https://www-google-analytics.l.google.com",
-            "https://ade.googlesyndication.com",
-            "https://pagead2.googlesyndication.com",
-            "https://tpc.googlesyndication.com",
-            "https://www.googletagmanager.com",
-            "https://www.googletagservices.com",
-            "https://redirector.googlevideo.com",
-            "https://0.gravatar.com",
-            "https://1.gravatar.com",
-            "https://hello",
-            "https://imasdk.googleapis.com",
-        ]
-        actual = List(self.data_url_list).custom_format(Sort.hierarchical)
+        expected_url = [f"https://{x}" for x in expected]
 
-        self.assertEqual(expected, actual)
+        actual_url = List(self.data_url_list).custom_format(Sort.hierarchical)
+
+        self.assertEqual(expected_url, actual_url)
 
 
 if __name__ == "__main__":

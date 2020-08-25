@@ -1,7 +1,5 @@
-.. _api:
-
 Enpoints
-========
+--------
 
 .. note::
     This section document what you can call directly when you use PyFunceble as an imported module.
