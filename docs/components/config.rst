@@ -1,17 +1,17 @@
 Configuration
-=============
+-------------
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
-As we wanted to be hybrid and allow different modes and option, we introduced the configuration logic.
+As we wanted to be hybrid and allow different modes and options, we introduced the configuration logic.
 
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the configuration loader code ? It's here :func:`~PyFunceble.config.load.Load`!
+    Want to read the configuration loader code ? It's here :func:`PyFunceble.config.load.Load`!
 
 We first look for the :code:`.PyFunceble.yaml`. If not found, we get/generate it.
 Then we parse it to the system.
@@ -30,6 +30,6 @@ Then we parse it to the system.
     set indexes.
 
 How to configure?
------------------
+^^^^^^^^^^^^^^^^^
 
 Update the :code:`.PyFunceble.yaml` file or use the CLI.

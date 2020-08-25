@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 from datetime import datetime
@@ -73,7 +65,7 @@ class WhoisDB:
     database_file = None
     authorized = False
 
-    def __init__(self, mysql_db=None, parent_process=False):
+    def __init__(self, parent_process=False):
         # Get the authorization.
         self.authorized = self.authorization()
         self.database_file = ""
@@ -85,10 +77,8 @@ class WhoisDB:
             )
 
         self.parent = parent_process
-        self.mysql_db = mysql_db
         self.table_name = self.get_table_name()
 
-        PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
         PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
         PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
@@ -110,7 +100,7 @@ class WhoisDB:
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"subject": index})
 
                     fetched = cursor.fetchone()
@@ -139,7 +129,7 @@ class WhoisDB:
                         self.table_name
                     )
 
-                    with self.mysql_db.get_connection() as cursor:
+                    with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                         cursor.execute(query, {"subject": index})
 
                         fetched = cursor.fetchone()
@@ -190,7 +180,7 @@ class WhoisDB:
             )
         )
 
-        with self.mysql_db.get_connection() as cursor:
+        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
             playload = {
                 "subject": index,
                 "expiration_date": value["expiration_date"],
@@ -202,7 +192,7 @@ class WhoisDB:
             try:
                 cursor.execute(query, playload)
                 PyFunceble.LOGGER.info(f"Inserted into the database: \n {playload}")
-            except self.mysql_db.errors:
+            except PyFunceble.engine.MySQL.errors:
                 pass
 
     def __setitem__(self, index, value):
@@ -261,13 +251,14 @@ class WhoisDB:
         # We return the result.
         return result
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["whois"]
+            return PyFunceble.engine.MySQL.tables["whois"]
         return "whois"
 
     def load(self):

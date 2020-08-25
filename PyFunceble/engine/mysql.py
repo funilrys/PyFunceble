@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 
@@ -73,7 +65,7 @@ class MySQL:
     Provides our way to work with our mysql/mariadb database.
     """
 
-    # pylint: disable=no-member
+    # pylint: disable=no-member,too-many-instance-attributes
 
     variables = {
         "host": {"env": "PYFUNCEBLE_DB_HOST", "default": "localhost"},
@@ -93,29 +85,65 @@ class MySQL:
     }
 
     errors = pymysql.err.IntegrityError
+    connection = None
 
     def __init__(self):
         warnings.simplefilter("ignore")
 
         self.authorized = self.authorization()
 
-        self.pyfunceble_env_location = (
-            PyFunceble.CONFIG_DIRECTORY
-            + PyFunceble.abstracts.Infrastructure.ENV_FILENAME
-        )
-        self.env_content = self.parse_env_file(self.pyfunceble_env_location)
-
         if self.authorized:
-            self.initiated = False
+            self.pyfunceble_env_location = (
+                PyFunceble.CONFIG_DIRECTORY
+                + PyFunceble.abstracts.Infrastructure.ENV_FILENAME
+            )
+            self.env_content = self.parse_env_file(self.pyfunceble_env_location)
 
-            PyFunceble.downloader.DBType()
+            self.pre_initiated = False
+            self.post_initiated = False
+            self.db_tables_initiated = False
 
-            self.create_tables_and_apply_patches()
+    def __enter__(self):
+        self.init_pre_connection()
 
-            if PyFunceble.CONFIGURATION.db_type == "mariadb":
-                self.int_cast_type = "INTEGER"
-            else:
-                self.int_cast_type = "SIGNED"
+        if directory_separator not in self._host or "/" not in self._host:
+            self.connection = pymysql.connect(
+                host=self._host,
+                port=self._port,
+                user=self._username,
+                password=self._password,
+                db=self._name,
+                charset=self._charset,
+                cursorclass=pymysql.cursors.DictCursor,
+                autocommit=True,
+            )
+        else:
+            self.connection = pymysql.connect(
+                unix_socket=self._host,
+                user=self._username,
+                password=self._password,
+                db=self._name,
+                charset=self._charset,
+                cursorclass=pymysql.cursors.DictCursor,
+                autocommit=True,
+            )
+
+        self.init_post_connection()
+
+        return self.connection
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.connection.close()
+
+    @classmethod
+    def get_int_cast_type(cls):
+        """
+        Provides the right integer casting.
+        """
+
+        if PyFunceble.CONFIGURATION.db_type == "mariadb":
+            return "INTEGER"
+        return "SIGNED"
 
     @classmethod
     def authorization(cls):
@@ -211,7 +239,7 @@ class MySQL:
         :param str env_file_location: The location of the file we have to update.
         """
 
-        if not self.initiated:
+        if not self.pre_initiated and envs:
             file_instance = PyFunceble.helpers.File(env_file_location)
 
             try:
@@ -240,68 +268,53 @@ class MySQL:
 
             file_instance.write(content, overwrite=True)
 
-    def get_connection(self):
+    def init_pre_connection(self):
         """
-        Provides the connection to the database.
+        Initiate everything needed before the connection.
         """
 
-        if self.authorized:
-            if not self.initiated:
-                for (description, data) in self.variables.items():
-                    environment_var = PyFunceble.helpers.EnvironmentVariable(
-                        data["env"]
+        if "mysql" in PyFunceble.INTERN:
+            self.__dict__.update(PyFunceble.INTERN["mysql"].copy())
+
+        if self.authorized and not self.pre_initiated:
+            for (description, data) in self.variables.items():
+                environment_var = PyFunceble.helpers.EnvironmentVariable(data["env"])
+                if environment_var.exists():
+                    setattr(
+                        self, "_{0}".format(description), environment_var.get_value(),
                     )
-                    if environment_var.exists():
-                        setattr(
-                            self,
-                            "_{0}".format(description),
-                            environment_var.get_value(),
-                        )
+                else:
+                    message = "[MySQL/MariaDB] Please give us your DB {0} ({1}): ".format(
+                        description.capitalize(), repr(data["default"])
+                    )
+
+                    if description != "password":
+                        user_input = input(message)
                     else:
-                        message = "[MySQL/MariaDB] Please give us your DB {0} ({1}): ".format(
-                            description.capitalize(), repr(data["default"])
-                        )
+                        user_input = getpass(message)
 
-                        if description != "password":
-                            user_input = input(message)
-                        else:
-                            user_input = getpass(message)
+                    if user_input:
+                        setattr(self, "_{0}".format(description), user_input)
+                        self.env_content[data["env"]] = user_input
+                    else:
+                        setattr(self, "_{0}".format(description), data["default"])
+                        self.env_content[data["env"]] = data["default"]
 
-                        if user_input:
-                            setattr(self, "_{0}".format(description), user_input)
-                            self.env_content[data["env"]] = user_input
-                        else:
-                            setattr(self, "_{0}".format(description), data["default"])
-                            self.env_content[data["env"]] = data["default"]
+            # pylint: disable = attribute-defined-outside-init
+            self._port = int(self._port)
+            self.save_to_env_file(self.env_content, self.pyfunceble_env_location)
+            self.pre_initiated = True
 
-                # pylint: disable = attribute-defined-outside-init
-                self._port = int(self._port)
-                self.save_to_env_file(self.env_content, self.pyfunceble_env_location)
-                self.initiated = True
+    def init_post_connection(self):
+        """
+        Initiate everything needed after the connection.
+        """
 
-            if directory_separator not in self._host or "/" not in self._host:
-                return pymysql.connect(
-                    host=self._host,
-                    port=self._port,
-                    user=self._username,
-                    password=self._password,
-                    db=self._name,
-                    charset=self._charset,
-                    cursorclass=pymysql.cursors.DictCursor,
-                    autocommit=True,
-                )
+        if self.authorized and not self.post_initiated:
+            self.create_tables_and_apply_patches()
+            self.post_initiated = True
 
-            return pymysql.connect(
-                unix_socket=self._host,
-                user=self._username,
-                password=self._password,
-                db=self._name,
-                charset=self._charset,
-                cursorclass=pymysql.cursors.DictCursor,
-                autocommit=True,
-            )
-
-        return None
+            PyFunceble.INTERN["mysql"] = self.__dict__.copy()
 
     def are_tables_present(self):
         """
@@ -333,8 +346,8 @@ class MySQL:
         Creates the tables of the database and apply the patches.
         """
 
-        if self.authorized and "db_tables_initiated" not in PyFunceble.INTERN:
-            with self.get_connection() as cursor:
+        if self.authorized and not self.db_tables_initiated:
+            with self.connection.cursor() as cursor:
                 for statement in self.parse_mysql_sql_file():
                     cursor.execute(statement)
 
@@ -342,4 +355,4 @@ class MySQL:
                     "Created the missing tables. Applied all patched"
                 )
 
-            PyFunceble.INTERN["db_tables_initiated"] = True
+            self.db_tables_initiated = True

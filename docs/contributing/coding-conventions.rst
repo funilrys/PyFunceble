@@ -1,11 +1,11 @@
 Coding conventions
-==================
+------------------
 
 Format
-------
+^^^^^^
 
 1. We should format our code with `Black`_, *The uncompromising Python code formatter*.
-2. We should write **docstrings** for every public method, function and class.
+2. We should write **docstrings** for every public method, function and classes.
    It does not have to be elaborate. Just explain what it simply does!
 
 ::
@@ -13,7 +13,7 @@ Format
     $ black PyFunceble && black tests
 
 Linting
--------
+^^^^^^^
 
 Our code should pass a :code:`pylint` check without any issue (exit 0).
 
@@ -22,7 +22,7 @@ Our code should pass a :code:`pylint` check without any issue (exit 0).
     $ pylint PyFunceble && pylint tests
 
 Coverage
---------
+^^^^^^^^
 
 Our code should have at least 60% of coverage.
 
@@ -34,7 +34,7 @@ Our code should have at least 60% of coverage.
     $ coverage run setup.py test && coverage report -m
 
 Distribution
-------------
+^^^^^^^^^^^^
 
 Our code should be shipped (after each commit) with a new version and a new :code:`version.yaml` file.
 That file should **ALWAYS** be generated with the following.
@@ -49,7 +49,7 @@ That file should **ALWAYS** be generated with the following.
     $ PyFunceble --production
 
 Commit
-------
+^^^^^^
 
 All your commits should be - when possible - be signed with **PGP**. (More information can be found on `GitHub documentation`_)
 Please note the usage of :code:`-S` into the commit command which means that we sign the commit.
@@ -65,7 +65,7 @@ The commit message may be formatted like follow:
     Paragraphs with some details/context (if needed).
 
 Git Hook
---------
+^^^^^^^^
 
 If one may want to automate the process.
 

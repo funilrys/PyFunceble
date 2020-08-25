@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import sys
@@ -79,16 +71,13 @@ class CLICore:
         self.list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
         self.list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
 
-        self.mysql_db = PyFunceble.engine.MySQL()
         self.preset = PyFunceble.cconfig.Preset()
         self.preset.init_all()
 
         self.autosave = PyFunceble.engine.AutoSave(
             start_time=PyFunceble.INTERN["start"]
         )
-        self.whois_db = PyFunceble.database.Whois(
-            mysql_db=self.mysql_db, parent_process=True
-        )
+        self.whois_db = PyFunceble.database.Whois(parent_process=True)
 
         # We initiate a variable which will tell us when
         # we start testing for complements.
@@ -164,13 +153,13 @@ class CLICore:
                 file_instance.write("\n".join(to_write), overwrite=True)
 
     @classmethod
-    def save_into_database(cls, output, filename, mysql_db):  # pragma: no cover
+    def save_into_database(cls, output, filename):  # pragma: no cover
         """
         Saves the current status inside the database.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            table_name = mysql_db.tables["tested"]
+            table_name = PyFunceble.engine.MySQL.tables["tested"]
 
             if not filename:
                 filename = "simple"
@@ -206,7 +195,7 @@ class CLICore:
                 "WHERE digest = %(digest)s"
             ).format(table_name)
 
-            with mysql_db.get_connection() as cursor:
+            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                 to_set = PyFunceble.helpers.Merge({"file_path": filename}).into(output)
 
                 to_set["digest"] = PyFunceble.helpers.Hash(algo="sha256").data(
@@ -221,7 +210,7 @@ class CLICore:
 
                 try:
                     cursor.execute(to_insert, to_set)
-                except mysql_db.errors:
+                except PyFunceble.engine.MySQL.errors:
                     cursor.execute(to_update, to_set)
 
                 PyFunceble.LOGGER.debug(
@@ -561,12 +550,15 @@ class CLICore:
 
                 for single_message in data:
                     if "until_date" in single_message:
-                        until_date = (
-                            datetime.strptime(
-                                single_message["until_date"], iso_dateformat
-                            )
-                            - datetime.now(tz=local_timezone)
-                        ).days
+                        try:
+                            until_date = (
+                                datetime.strptime(
+                                    single_message["until_date"], iso_dateformat
+                                )
+                                - datetime.now(tz=local_timezone)
+                            ).days
+                        except ValueError:
+                            until_date = 0
 
                     if "until" in single_message:
                         until_comparison = PyFunceble.abstracts.Version.compare(
@@ -681,4 +673,4 @@ class CLICore:
         cls.__print_messages(upstream_version)
 
         # One may use the following as behavior debugger.
-        # cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))
+        cls.__print_messages(PyFunceble.helpers.Dict().from_yaml_file("version.yaml"))

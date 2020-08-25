@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -36,27 +36,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import sys
@@ -455,7 +447,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "dev": r"PyFunceble\/%s\/" % "master",
                 "=%s" % "dev": "=%s" % "master",
-                "/en/%s" % "dev": "en/%s" % "master",
+                "/en/%s" % "dev": r"en\/%s" % "master",
+                "/pyfunceble-%s.png" % "dev": r"\/pyfunceble-dev.png",
+                "/project/pyfunceble-%s" % "dev": r"\/project\/pyfunceble$",
+                "pypistats.org/packages/pyfunceble-%s"
+                % "dev": r"pypistats\.org\/packages\/pyfunceble$",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -464,7 +460,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             regexes = {
                 "PyFunceble/%s/" % "master": r"PyFunceble\/%s\/" % "dev",
                 "=%s" % "master": "=%s" % "dev",
-                "/en/%s" % "master": "en/%s" % "dev",
+                "/en/%s" % "master": r"en\/%s" % "dev",
+                "/pyfunceble-dev.png": r"\/pyfunceble-%s.png" % "dev",
+                "/project/pyfunceble": r"/project\/pyfunceble-%s$" % "dev",
+                "pypistats.org/packages/pyfunceble": r"pypistats\.org\/packages\/pyfunceble-%s$"
+                % "dev",
             }
         else:
             # The current version is not the master nor the dev version.
@@ -483,8 +483,12 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # We process the replacement.
             to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
+                to_update, replacement, multiline=True
             )
+
+        to_update = PyFunceble.helpers.Regex(r"/{1,}en/(dev|master)").replace_match(
+            to_update, "/en/\\1"
+        )
 
         # We finally overwrite the file to fix with the filtered.
         # content.
@@ -532,7 +536,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
 
             # And we process the replacement.
             to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
+                to_update, replacement, multiline=True
             )
 
         # We finally replace the content of the file with the filtered

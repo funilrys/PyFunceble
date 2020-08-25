@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,27 +35,19 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import socket
@@ -79,9 +71,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
     filename = None
     headers = {}
 
-    def __init__(
-        self, filename, mysql_db=None, parent_process=False
-    ):  # pragma: no cover
+    def __init__(self, filename, parent_process=False):  # pragma: no cover
         # We get the authorization to operate.
         self.authorized = self.authorization()
         self.database_file = ""
@@ -92,12 +82,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
         # We share the state.
         self.parent = parent_process
 
-        self.mysql_db = mysql_db
-
         self.table_name = self.get_table_name()
 
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
-        PyFunceble.LOGGER.debug(f"DB: {self.mysql_db}")
         PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
 
         user_agent = PyFunceble.engine.UserAgent().get()
@@ -137,7 +124,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     "AND subject = %(subject)s "
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": index})
 
                     fetched = cursor.fetchall()
@@ -181,7 +168,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     "VALUES (%(file)s, %(subject)s, %(mined)s, %(digest)s)"
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     for val in value:
                         digest = sha256(
                             bytes(self.filename + index + val, "utf-8")
@@ -199,7 +186,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             PyFunceble.LOGGER.info(
                                 f"Inserted into the database: \n {playload}"
                             )
-                        except self.mysql_db.errors:
+                        except PyFunceble.engine.MySQL.errors:
                             pass
 
     def __delitem__(self, index):  # pragma: no cover
@@ -222,7 +209,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     "AND subject = %(subject)s "
                 ).format(self.table_name)
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename, "subject": index})
 
                     PyFunceble.LOGGER.info(
@@ -270,13 +257,14 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
             return []
 
-    def get_table_name(self):
+    @classmethod
+    def get_table_name(cls):
         """
         Returns the name of the table to use.
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return self.mysql_db.tables["mining"]
+            return PyFunceble.engine.MySQL.tables["mining"]
         return "mining"
 
     def list_of_mined(self):
@@ -325,7 +313,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                     self.table_name
                 )
 
-                with self.mysql_db.get_connection() as cursor:
+                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                     cursor.execute(query, {"file": self.filename})
 
         # We return the result.
@@ -497,7 +485,7 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                             "AND mined = %(mined)s"
                         ).format(self.table_name)
 
-                        with self.mysql_db.get_connection() as cursor:
+                        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
                             cursor.execute(
                                 query,
                                 {

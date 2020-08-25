@@ -20,6 +20,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   jawz101 - `@jawz101`_
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
+-   NeolithEra - `@NeolithEra`_
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
@@ -27,16 +28,19 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
+-   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
 
+.. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
+.. _@NeolithEra: https://github.com/NeolithEra
 .. _@Odyseus: https://github.com/Odyseus
 .. _@opav: https://github.com/opav
 .. _@sjhgvr: https://github.com/sjhgvr

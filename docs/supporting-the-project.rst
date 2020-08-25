@@ -2,9 +2,11 @@ Supporting the project
 ======================
 
 
-`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of coffee!
+`PyFunceble`_, `Dead-Hosts`_, and all other analogue projects are powered by my 
+free time and a lot of coffee!
 
-This project helps you and/or you like it?
+If you like this project and/or it have helped you. Please consider buying me 
+more coffee.
 
 GitHub Sponsor
 --------------

@@ -1,8 +1,10 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
+The tool to check the availability or syntax of domain, IP or URL
 --------------------------------------------------------------------------
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.png
+    :target: https://github.com/ambv/black
 .. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
     :target: https://travis-ci.com/funilrys/PyFunceble
 .. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
@@ -11,12 +13,16 @@ The tool to check the availability or syntax of domains, IPv4, IPv6 or URL
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
-.. image:: https://img.shields.io/github/release/funilrys/PyFunceble/all.png
-    :target: https://github.com/funilrys/PyFunceble/releases/latest
+.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
+    :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://img.shields.io/badge/code%20style-black-000000.png
-    :target: https://github.com/ambv/black
+.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble
+.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble
+.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
+    :target: https://pypistats.org/packages/pyfunceble
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
@@ -51,41 +57,46 @@ ___________________________________________
 What can PyFunceble do?
 -----------------------
 
-- Test of the availability of a domain.
-- Test of the availability of an IPv4.
-- Test of the availability of an IPv6.
-- Test of the availability of a URL.
-- Test of the availability of a domain/DNS name in a private or local network.
-- Test of the availability of an IPv4 in a private or local network.
-- Test of the availability of an IPv6 in a private or local network.
-- Test of the availability of a URL in a private or local network.
-- Test of the syntax of a domain.
-- Test of the syntax of an IPv4.
-- Test of the syntax of an IPv6.
-- Test of the syntax of a URL.
-- Test of the AlienVault's reputation of an IPv4.
+- Test the availability of a domain.
+- Test the availability of an IPv4.
+- Test the availability of an IPv6.
+- Test the availability of a URL.
+- Test the availability of a domain/DNS name in a private or local network.
+- Test the availability of an IPv4 in a private or local network.
+- Test the availability of an IPv6 in a private or local network.
+- Test the availability of a URL in a private or local network.
+- Test the syntax of a domain.
+- Test the syntax of an IPv4.
+- Test the syntax of an IPv6.
+- Test the syntax of a URL.
+- Test the AlienVault's reputation of an IPv4.
 - Test of domain or IP which are present into an Adblock formatted file.
 - Test from a given raw link.
 - Test using multiprocessing (from CLI only).
-- Save test result(s) on file(s) (hosts file, plain text and/or JSON format).
+- Save test result(s) in file(s) (hosts file, plain text and/or JSON format).
+- Save test result in a SQL database.
 - Show test result(s) on screen.
-- Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`, :code:`INVALID`)
+- Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`,
+  :code:`INVALID`)
 - Sort outputs hierarchically.
 - "Mining" of domain or IP which are related to the tested element.
 - Auto-continuation of tests in case of system crash or script stop.
 - Filtering of a file content.
 
-  - This feature will let us for example test all blogspot domain of the given file no matter the content of the file.
+  - This feature will let us for example test all blogspot domain of the given
+    file no matter the content of the file.
 
 - Set the user-agent to use for the tests.
-- Give some analytic depending of the HTTP status code (:code:`ACTIVE`, :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
+- Give some analytic depending of the HTTP status code (:code:`ACTIVE`,
+  :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
 - Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
 - Print the execution time on screen and file.
-- Customization of the different option via command-line arguments or configuration file.
+- Customisation of the different option via command-line arguments or
+  configuration file.
 - Continuous tests under Travis CI or GitLab CI/CI
 
   - ... with the help of an auto saving and database system.
-  - Set branch to push the result to for the autosaving system.
+  - Set the branch to push the result to. For the autosaving system.
   - Set the minimal time before we autosave in order to avoid CI/CD limitation.
   - Set a command to execute at the end of the test.
   - Set the commit message for the autosaving system.
@@ -155,6 +166,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   jawz101 - `@jawz101`_
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
+-   NeolithEra - `@NeolithEra`_
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
@@ -162,6 +174,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   ScriptTiger - `@ScriptTiger`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
+-   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
@@ -223,27 +236,19 @@ License
 -------
 ::
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 .. _Box: https://github.com/cdgriffith/Box
 .. _colorama: https://github.com/tartley/colorama
@@ -262,6 +267,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
+.. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@asciinema: https://github.com/asciinema
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
@@ -273,6 +279,7 @@ License
 .. _@kennethreitz: https://github.com/kennethreitz
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
+.. _@NeolithEra: https://github.com/NeolithEra
 .. _@Odyseus: https://github.com/Odyseus
 .. _@opav: https://github.com/opav
 .. _@pi-hole: https://github.com/pi-hole/pi-hole

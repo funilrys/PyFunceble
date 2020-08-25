@@ -1,13 +1,13 @@
 CLI
-===
+---
 
 Problematic
------------
+^^^^^^^^^^^
 
 How can we easily work and distribute some CLI related logic?
 
 Documentation
--------------
+^^^^^^^^^^^^^
 
 .. automodule:: PyFunceble.cli
    :members:
@@ -15,14 +15,14 @@ Documentation
 
 
 :code:`Dispatcher()`
-^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""
 
 .. autoclass:: PyFunceble.cli.dispatcher.Dispatcher
     :members:
     :private-members:
 
 :code:`ExecutionTime()`
-^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""
 
 .. autoclass:: PyFunceble.cli.execution_time.ExecutionTime
     :members:

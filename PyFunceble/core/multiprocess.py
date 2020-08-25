@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domains, IPv4, IPv6 or URL.
+The tool to check the availability or syntax of domain, IP or URL.
 
 ::
 
@@ -35,35 +35,27 @@ License:
 ::
 
 
-    MIT License
+    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
 
-    Copyright (c) 2017, 2018, 2019, 2020 Nissar Chababy
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 """
 
 import sys
 from itertools import chain
 from multiprocessing import Manager, Pipe, Process, active_children
+from tempfile import NamedTemporaryFile
 from traceback import format_exc
 
-from box import Box
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
 from domain2idna import get as domain2idna
@@ -150,61 +142,78 @@ class MultiprocessCore(
         super().__init__(file, file_content_type=file_content_type)
 
     # pylint: disable=arguments-differ
-    def test(self, subject, file_content_type, configuration, manager_data, intern):
+    def test(
+        self,
+        subject,
+        file_content_type,
+        loader,
+        manager_data,
+        intern,
+        ignore_inactive_db_check=False,
+        custom=None,
+    ):
         """
         Tests the given subject and return the result.
         """
 
-        PyFunceble.CONFIGURATION = None
-        PyFunceble.INTERN = {
-            "counter": {
-                "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
-                "percentage": {"down": 0, "invalid": 0, "up": 0},
-            }
-        }
+        PyFunceble.LOADER = loader
+
+        if not PyFunceble.LOADER.was_configuration_loaded():
+            PyFunceble.LOADER.get_config()
+
+        PyFunceble.LOADER.set_custom_config(custom)
+        PyFunceble.LOADER.inject_all()
 
         initiate_colorama(True)
-
-        PyFunceble.load_config(custom=configuration)
 
         PyFunceble.INTERN.update(intern)
 
         if PyFunceble.CONFIGURATION.idna_conversion:
             subject = domain2idna(subject)
 
-        if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
-            PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
+        if not self.should_be_ignored(
+            subject,
+            self.autocontinue,
+            self.inactive_db,
+            ignore_inactive_db_check=ignore_inactive_db_check,
+        ):
+            if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
+                PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
-        if PyFunceble.CONFIGURATION.syntax:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).syntax(file_content_type)
-        elif PyFunceble.CONFIGURATION.reputation:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).reputation(file_content_type)
-        else:
-            result = APICore(
-                subject, complete=True, is_parent=False, db_file_name=self.file
-            ).availability(file_content_type)
+            if file_content_type in ["domain"]:
+                subject = subject.lower()
 
-        self.generate_complement_status_file(result["tested"], result["status"])
-        self.save_into_database(result, self.file, self.mysql_db)
+            if PyFunceble.CONFIGURATION.syntax:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).syntax(file_content_type)
+            elif PyFunceble.CONFIGURATION.reputation:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).reputation(file_content_type)
+            else:
+                result = APICore(
+                    subject, complete=True, is_parent=False, db_file_name=self.file
+                ).availability(file_content_type)
 
-        if manager_data is not None:
-            manager_data.append(result)
-        else:
-            self.post_test_treatment(
-                result,
-                self.file_type,
-                complements_test_started=self.complements_test_started,
-                auto_continue_db=self.autocontinue,
-                inactive_db=self.inactive_db,
-                mining=self.mining,
-                whois_db=self.whois_db,
-            )
+            self.generate_complement_status_file(result["tested"], result["status"])
+            self.save_into_database(result, self.file)
 
-        return result
+            if manager_data is not None:
+                manager_data.append(result)
+            else:
+                self.post_test_treatment(
+                    result,
+                    self.file_type,
+                    complements_test_started=self.complements_test_started,
+                    auto_continue_db=self.autocontinue,
+                    inactive_db=self.inactive_db,
+                    mining=self.mining,
+                    whois_db=self.whois_db,
+                )
+        elif self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+            PyFunceble.LOGGER.info(f"Skipped {subject!r}.")
+            print(".", end="")
 
     def __merge_processes_data(self, manager_data):
         """
@@ -212,7 +221,11 @@ class MultiprocessCore(
         """
 
         if manager_data is not None:
-            if not self.autosave.authorized:
+            if (
+                not self.autosave.authorized
+                and PyFunceble.CONFIGURATION.multiprocess_merging_mode != "live"
+                and not PyFunceble.CONFIGURATION.quiet
+            ):
                 print(
                     Fore.MAGENTA
                     + Style.BRIGHT
@@ -284,47 +297,32 @@ class MultiprocessCore(
         Starts a new process.
         """
 
-        original_config = Box(
-            PyFunceble.CONFIGURATION.copy(), default_box=True, default_box_attr=None
-        )
+        original_config = PyFunceble.CONFIGURATION.copy()
         original_intern = PyFunceble.INTERN.copy()
 
-        configuration = PyFunceble.CONFIGURATION.copy()
-
-        configuration = Box(
-            PyFunceble.helpers.Merge(
+        process = OurProcessWrapper(
+            target=self.test,
+            args=(
+                subject,
+                self.file_type,
+                PyFunceble.LOADER,
+                manager_data,
+                original_intern,
+                ignore_inactive_db_check,
                 {
                     "api_file_generation": PyFunceble.CONFIGURATION.db_type == "json",
                     "inactive_database": False,
                     "auto_continue": False,
-                }
-            ).into(configuration),
-            default_box=True,
-            default_box_attr=None,
+                    "quiet": PyFunceble.CONFIGURATION.quiet,
+                },
+            ),
         )
+        process.name = f"PyF {subject}"
+        process.start()
 
-        if not self.should_be_ignored(
-            subject,
-            self.autocontinue,
-            self.inactive_db,
-            ignore_inactive_db_check=ignore_inactive_db_check,
-        ):
-            process = OurProcessWrapper(
-                target=self.test,
-                args=(
-                    subject,
-                    self.file_type,
-                    configuration,
-                    manager_data,
-                    original_intern,
-                ),
-            )
-            process.name = f"PyF {subject}"
-            process.start()
-        elif self.autosave.authorized:
-            print(".", end="")
+        PyFunceble.LOADER.config.update(original_config)
+        PyFunceble.LOADER.inject_all()
 
-        PyFunceble.CONFIGURATION.update(original_config)
         PyFunceble.INTERN.update(original_intern)
 
     # pylint: disable=too-many-nested-blocks,too-many-branches
@@ -332,6 +330,8 @@ class MultiprocessCore(
         """
         Tests the content of the given file.
         """
+
+        self.print_header()
 
         finished = False
         index = "funilrys"
@@ -354,12 +354,7 @@ class MultiprocessCore(
                     if isinstance(line, tuple):
                         index, line = line
 
-                    if PyFunceble.CONFIGURATION.adblock:
-                        subjects = PyFunceble.converter.AdBlock(
-                            line, aggressive=PyFunceble.CONFIGURATION.aggressive
-                        ).get_converted()
-                    else:
-                        subjects = PyFunceble.converter.File(line).get_converted()
+                    subjects = self.get_subjects(line)
 
                     if isinstance(subjects, list):
                         for subject in subjects:
@@ -402,9 +397,9 @@ class MultiprocessCore(
             ):
                 active = active_children()
 
-                PyFunceble.LOGGER.info(
-                    f"Active processes: {[x.name for x in reversed(active)]}"
-                )
+                # PyFunceble.LOGGER.info(
+                #     f"Active processes: {[x.name for x in reversed(active)]}"
+                # )
 
             if PyFunceble.CONFIGURATION.multiprocess_merging_mode == "live":
                 if not finished and not self.autosave.is_time_exceed():
@@ -421,23 +416,126 @@ class MultiprocessCore(
                 self.__merge_processes_data(manager_data)
                 break
 
+    def work_process(self, *args):
+        """
+        Work process for :code`construct_and_get_shadow_file`.
+        """
+
+        PyFunceble.LOADER = args[-2]
+
+        if not PyFunceble.LOADER.was_configuration_loaded():
+            PyFunceble.LOADER.get_config()
+
+        PyFunceble.LOADER.inject_all()
+
+        PyFunceble.INTERN.update(args[-1])
+
+        self.write_in_shadow_file_if_needed(*args[:-2])
+
+    def construct_and_get_shadow_file(
+        self, file_stream, ignore_inactive_db_check=False
+    ):
+        """
+        Provides a path to a file which contain the list to file.
+
+        The idea is to do a comparison between what we already tested
+        and what we still have to test.
+        """
+
+        def start_process(*args):
+
+            original_config = PyFunceble.CONFIGURATION.copy()
+            origin_intern = PyFunceble.INTERN.copy()
+
+            args += (PyFunceble.LOADER,)
+            args += (origin_intern,)
+
+            process = OurProcessWrapper(target=self.work_process, args=args)
+            process.name = f"PyF shadow {line}"
+            process.start()
+
+            PyFunceble.LOADER.config.update(original_config)
+            PyFunceble.LOADER.inject_all()
+            PyFunceble.INTERN.update(origin_intern)
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            with NamedTemporaryFile(delete=False) as temp_file:
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
+
+                finished = False
+
+                while True:
+                    while (
+                        len(active_children())
+                        <= PyFunceble.CONFIGURATION.maximal_processes
+                    ):
+                        try:
+                            line = next(file_stream)
+
+                            start_process(
+                                line,
+                                temp_file.name,
+                                ignore_inactive_db_check,
+                                self.autocontinue,
+                                self.inactive_db,
+                            )
+
+                            active_children()
+                            continue
+                        except StopIteration:
+                            finished = True
+                            break
+
+                    while len(
+                        active_children()
+                    ) >= PyFunceble.CONFIGURATION.maximal_processes and "shadow" in " ".join(
+                        [x.name for x in reversed(active_children())]
+                    ):
+                        active_children()
+
+                    if finished:
+                        break
+
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    print("")
+
+                return temp_file.name
+        return file_stream.name
+
     def run_test(self):
         """
         Runs the test of the content of the given file.
         """
 
-        self.print_header()
-
-        with open(self.file, "r", encoding="utf-8") as file_stream:
+        with open(self.file, "r", encoding="utf-8") as file_stream, open(
+            self.construct_and_get_shadow_file(file_stream), "r", encoding="utf-8"
+        ) as shadow_file:
             with Manager() as manager:
-                self.__run_multiprocess_test(file_stream, manager)
+                self.__run_multiprocess_test(shadow_file, manager)
+
+                shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         if self.autocontinue.is_empty():
-            with open(self.file, "r", encoding="utf-8") as file_stream:
+            with open(self.file, "r", encoding="utf-8") as file_stream, open(
+                self.construct_and_get_shadow_file(
+                    file_stream, ignore_inactive_db_check=True
+                ),
+                "r",
+                encoding="utf-8",
+            ) as shadow_file:
                 with Manager() as manager:
                     self.__run_multiprocess_test(
                         file_stream, manager, ignore_inactive_db_check=True
                     )
+
+                    shadow_file_name = shadow_file.name
+
+        if PyFunceble.CONFIGURATION.shadow_file:
+            PyFunceble.helpers.File(shadow_file_name).delete()
 
         with Manager() as manager:
             self.__run_multiprocess_test(

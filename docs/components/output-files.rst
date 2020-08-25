@@ -1,21 +1,21 @@
 Outputed Files
-==============
+--------------
 
 .. note::
     This section does not cover the logs files.
 
 Why do we need it?
-------------------
+^^^^^^^^^^^^^^^^^^
 
 We need a way to deliver our results.
 
 How does it work?
------------------
+^^^^^^^^^^^^^^^^^
 
 After testing a given subject, we generate its output file based on what's needed.
 
 Host format
-^^^^^^^^^^^
+"""""""""""
 
 This is the default output file.
 
@@ -41,7 +41,7 @@ into your personal :code:`.PyFunceble.yaml` or use the :code:`--hosts` argument 
 
 
 Plain format
-^^^^^^^^^^^^
+""""""""""""
 
 A line is formatted like :code:`example.org`.
 .
@@ -61,7 +61,7 @@ to
 into your personal :code:`.PyFunceble.yaml` or use the :code:`--plain` argument from the CLI to activate it.
 
 JSON format
-^^^^^^^^^^^^
+"""""""""""
 
 Need it? Simply change
 

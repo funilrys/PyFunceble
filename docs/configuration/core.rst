@@ -101,6 +101,18 @@
 .. note::
     This index has no effect if :code:`inactive_database` is set to :code:`False`.
 
+:code:`days_between_inactive_db_clean`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`28`
+
+    **Description:**  Set the numbers of days since the introduction of a subject into :code:`inactive-db.json` for it to qualifies for deletion.
+
+.. note::
+    This index has no effect if :code:`inactive_database` is set to :code:`False`.
+
 :code:`db_type`
 ^^^^^^^^^^^^^^^
 
@@ -323,8 +335,8 @@
     **Description:** Set the number of maximal simultaneous processes to use/create/run.
 
 .. warning::
-    If you do not explicitly set the :code:`^^processes` argument,
-    we overwrite the default to the number of available CPU.
+    If you omit the :code:`--processes` argument,
+    we overwrite the default with the number of available CPU.
 
 :code:`mining`
 ^^^^^^^^^^^^^^
@@ -402,6 +414,18 @@
 .. warning::
     Do not touch this index unless you a have good reason to.
 
+:code:`print_dots`
+^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the printing of dots (:code:`.`) for the skipped subjects.
+
+.. note::
+    The idea is to not given the impression that we hang. Because most of the time, we don't.
+
 :code:`quiet`
 ^^^^^^^^^^^^^
 
@@ -434,6 +458,18 @@
 
 .. warning::
     If this index is set to :code:`True`, we **ONLY** check for reputation, not availability nor syntax.
+
+:code:`shadow_file`
+^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the usage and generation of a shadow file before a the test of a file.
+
+.. note::
+    The shadow file, will just contain the actual list of subjects to test.
 
 :code:`share_logs`
 ^^^^^^^^^^^^^^^^^^
@@ -628,3 +664,15 @@
     **Default value:** :code:`True`
 
     **Description:** Enable / Disable the usage of the whois database to avoid/bypass whois server requests rate limit.
+
+:code:`wildcard`
+^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the test of wildcards when testing for syntax.
+
+.. warning::
+    This is not taken into consideration if :code:`syntax` is set to :code:`False`.
