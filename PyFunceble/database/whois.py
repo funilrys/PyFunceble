@@ -147,7 +147,7 @@ class WhoisDB:
     def __setitem_json(self, index, value):
         actual_value = self[index]
 
-        if "record" in value:
+        if not PyFunceble.CONFIGURATION.store_whois_record and "record" in value:
             del value["record"]
 
         if isinstance(actual_value, dict):
@@ -180,9 +180,12 @@ class WhoisDB:
             except NoResultFound:
                 record = WhoisRecord(subject=index,)
 
-            for db_key, db_value in value.items():
-                setattr(record, db_key, db_value)
+        for db_key, db_value in value.items():
+            if not PyFunceble.CONFIGURATION.store_whois_record and db_key == "record":
+                continue
+            setattr(record, db_key, db_value)
 
+        with session.Session() as db_session:
             # pylint: disable=no-member
             db_session.add(record)
             db_session.commit()

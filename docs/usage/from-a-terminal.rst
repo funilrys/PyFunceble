@@ -595,11 +595,21 @@ possible on screen!
 :code:`--split`
 """""""""""""""
 
-    Switch the value of the split of the generated output
+    Switch the value of the split of the generated output.
 
     **Default value:** :code:`True`
 
 Want to get the logs (copy of what you see on screen) on different files?
+This argument is suited to you!
+
+:code:`--store-whois`
+"""""""""""""""""""""
+
+    Switch the value of the WHOIS record storage in the WHOIS DB.
+
+    **Default value:** :code:`False`
+
+Want to get the full WHOIS record in your database?
 This argument is suited to you!
 
 Multiprocessing
@@ -830,18 +840,18 @@ Global overview
 
 ::
 
-    usage: pyfunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
+    usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
-                    [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
-                    [--reputation] [--use-reputation-data] [-ua USER_AGENT]
-                    [-vsc] [--wildcard] [--dns DNS [DNS ...]]
-                    [--dns-lookup-over-tcp] [-db]
+                    [--http] [--local] [-ns] [-nw] [--reputation]
+                    [--shadow-file] [--syntax] [-t TIMEOUT]
+                    [--use-reputation-data] [-ua USER_AGENT] [-vsc] [--wildcard]
+                    [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-dbc DAYS_BETWEEN_DB_CLEAN]
                     [-wdb] [-a] [-ex] [--hierarchical] [-h] [-ip IP] [--json]
                     [--less] [-nf] [-nl] [-nu] [--percentage] [--plain] [--dots]
-                    [-q] [--share-logs] [-s] [--split] [-m]
+                    [-q] [--share-logs] [-s] [--split] [--store-whois] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
                     [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
                     [--ci-branch CI_BRANCH]
@@ -901,13 +911,18 @@ Global overview
                                 Configured value: False
         -nw, --no-whois       Switch the value of the usage of WHOIS to test the domain's status.
                                 Configured value: False
+        --reputation          Switch the value of the reputation test mode.
+                                Configured value: False
+        --shadow-file, --shadow
+                                Switch the value of the usage and generation of a shadow file before a file test starts.
+
+                                A shadow file is a file which only contain the actual list of subject to test. For its generation we check each subjects as we normally do on-the-fly.
+                                Configured value: False
         --syntax              Switch the value of the syntax test mode.
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
                                 Switch the value of the timeout in seconds.
                                 Configured value: 5
-        --reputation          Switch the value of the reputation test mode.
-                                Configured value: False
         --use-reputation-data
                                 Switch the value of the reputation data usage.
                                 Configured value: False
@@ -987,6 +1002,8 @@ Global overview
                                 Configured value: False
         --split               Switch the value of the split of the generated output files.
                                 Configured value: True
+        --store-whois         Switch the value of the WHOIS record storage in the WHOIS DB.
+                                Configured value: False
 
     Multiprocessing:
         -m, --multiprocess    Switch the value of the usage of multiple processes.

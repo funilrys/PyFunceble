@@ -92,6 +92,8 @@ show_percentage: True
 simple: False
 # Enable / disable the split of the results files.
 split: True
+# Enable / disable the storage of the whole WHOIS record.
+store_whois_record: False
 # Enable / disable the syntax checking mode.
 # In this mode we do not check for the availability. It's just syntax check.
 syntax: False
