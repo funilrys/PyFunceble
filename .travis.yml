@@ -124,6 +124,8 @@ jobs:
           secure: IG1FlVINvTCO7jscSz4aQMRABBcZVFGNBfDB0giAhtNV/Nr98jSyLZXETx7yquD93dFZpL58HXcPRxoa3hemyBLcTc0ATMsNBM48IrN3xaxfPytlQQn7aocKdZLAMbriCo7CO4x4O00lu3Cx2tAZtZMaDGYN+KpWIR9V+dXF1hHLj7owilko3YVXiXXamlOZmkdv28PcACQlJ7QLLYxTY3o/LuLrCOvo3zc+Ao0JfKpOv9Fm41keUS51Ek5QWXFaO7VNho6CXV7/5rJbF9w1flkM7GEUH78pjs+KpwBV7auwFYMerYPq5GVPiL117y9ojXxfF+B1qY1flreugCgSRJQKhzvfgSlgGhM93GG2yPpQu6LGIIZJ0MMcXldheY1JOzVMddXYbFTeG3j+/0a9EF47G9ZUeCiY3uCmaqaIuMvuby+Ze0XsHqrOkN+uALtgmrJuhDgiJvY1+qAIo56jBcaTYcOs+xqkFbqviltNjqriH3uFRhXZUpVQchd49eq6m+OyEu4jcYH9Pn1qHdwKBKU/KCRbYy9zAj5gso/HrSRaMrjMGUcdlzNEWKHVstnBPIq+9xnZ5Zeb7ev6i2vTH3WVHQoAFRGvNv/K7+zRMt0iDK2H9SCg3mi4v1c/JwUuY6Oht/PXwbbJ8sAIVAs+3P+FrEBIjkkbtjjPDHaA9rg=
         distributions: sdist bdist_wheel
         skip_existing: true
+        on:
+          all_branches: true
     - language: generic
       if: branch =~ ^dev|master$
       os: linux
