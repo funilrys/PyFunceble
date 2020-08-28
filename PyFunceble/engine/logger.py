@@ -80,6 +80,9 @@ class Logger:  # pragma: no cover
         self.on_screen = (
             on_screen
             or PyFunceble.helpers.EnvironmentVariable(
+                "PYFUNCEBLE_DEBUG_ON_SCREEN"
+            ).exists()
+            or PyFunceble.helpers.EnvironmentVariable(
                 "DEBUG_PYFUNCEBLE_ON_SCREEN"
             ).exists()
         )
@@ -96,7 +99,11 @@ class Logger:  # pragma: no cover
         return (
             debug
             or self.on_screen
+            or PyFunceble.helpers.EnvironmentVariable("PYFUNCEBLE_DEBUG").exists()
             or PyFunceble.helpers.EnvironmentVariable("DEBUG_PYFUNCEBLE").exists()
+            or PyFunceble.helpers.EnvironmentVariable(
+                "PYFUNCEBLE_DEBUG_ON_SCREEN"
+            ).exists()
             or PyFunceble.helpers.EnvironmentVariable(
                 "DEBUG_PYFUNCEBLE_ON_SCREEN"
             ).exists()
