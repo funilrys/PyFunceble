@@ -51,8 +51,10 @@ License:
 """
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
-from ..exceptions import NoInternetConnection
+from ..exceptions import NoInternetConnection, UnableToDownload
 from .file import File
 
 
@@ -60,11 +62,15 @@ class Download:
     """
     Simplification of the downloads.
 
-    :param str url: The url to download.
-    :param bool verify_certificate: Allows/Disallows the certificate verification.
+    :param str url:
+        The url to download.
+    :param bool verify_certificate:
+        Allows/Disallows the certificate verification.
+    :param int retry:
+        The number of time we have to retry before raising an exception.
     """
 
-    def __init__(self, url, verify_certificate=True):
+    def __init__(self, url, verify_certificate=True, retry=3):
         if not isinstance(url, str):
             raise TypeError(f"<url> must be {str}, {type(url)} given.")
 
@@ -75,6 +81,14 @@ class Download:
 
         self.url = url
         self.certificate_verification = verify_certificate
+
+        if not isinstance(retry, int):
+            raise TypeError(f"<retry> should be {int}, {type(retry)} given.")
+
+        if retry <= 0:
+            retry = 1
+
+        self.retry = retry
 
     def text(self, destination=None):
         """
@@ -93,8 +107,16 @@ class Download:
         :raise NoInternetConnection: When no connection could be made.
         """
 
+        session = requests.Session()
+
+        retries = Retry(total=self.retry, backoff_factor=3)
+        adapter = HTTPAdapter(max_retries=retries)
+
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
+
         try:
-            req = requests.get(self.url, verify=self.certificate_verification)
+            req = session.get(self.url, verify=self.certificate_verification)
 
             if req.status_code == 200:
                 response = req.text
@@ -104,8 +126,8 @@ class Download:
 
                 return response
 
-            raise Exception(
-                f"Unable to download {req.url} (status code: {req.status_code})."
+            raise UnableToDownload(
+                f"{req.url} (retries: {self.retry} | status code: {req.status_code})"
             )
         except requests.exceptions.ConnectionError as exception:
-            raise NoInternetConnection() from exception
+            raise NoInternetConnection(self.url) from exception

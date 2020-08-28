@@ -50,9 +50,14 @@ License:
     limitations under the License.
 """
 
+import sys
 from datetime import datetime, timedelta
 
+from colorama import Fore, Style
+
 import PyFunceble
+
+from ..exceptions import UnableToDownload
 
 
 class DownloaderBase:
@@ -181,8 +186,12 @@ class DownloaderBase:
         :rtype: str, None
         """
 
-        if self.is_last_download_expired() and PyFunceble.helpers.Download(
-            self.download_link
-        ).text(destination=self.destination):
-            self.update_downtime()
-            self.save_downtimes()
+        try:
+            if self.is_last_download_expired() and PyFunceble.helpers.Download(
+                self.download_link
+            ).text(destination=self.destination):
+                self.update_downtime()
+                self.save_downtimes()
+        except UnableToDownload as exception:
+            print(f"{Fore.RED}{Style.BRIGHT}Could not downlod {str(exception)}")
+            sys.exit(1)

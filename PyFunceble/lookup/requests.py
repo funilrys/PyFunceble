@@ -262,7 +262,10 @@ class Requests:
     exceptions = requests.exceptions
     pyfunceble_max_retry = False
 
-    def __init__(self):
+    def __init__(self, max_retries=None):
+        if max_retries and isinstance(max_retries, int):
+            self.pyfunceble_max_retry = max_retries
+
         self.session = requests.Session()
         self.session.mount(
             "https://", HostSSLAdapter(max_retries=self.pyfunceble_max_retry)
