@@ -679,6 +679,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
+                output_control_group.add_argument(
+                    "--store-whois",
+                    action="store_true",
+                    help="Switch the value of the WHOIS record storage in the WHOIS DB. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.store_whois_record)
+                        + Style.RESET_ALL
+                    ),
+                )
+
                 multiprocessing_group.add_argument(
                     "-m",
                     "--multiprocess",
@@ -1093,6 +1104,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.split:
                     PyFunceble.CONFIGURATION.split = preset.switch("split")
+
+                if args.store_whois:
+                    PyFunceble.CONFIGURATION.store_whois_record = preset.switch(
+                        "store_whois_record"
+                    )
 
                 if args.syntax:
                     PyFunceble.CONFIGURATION.syntax = preset.switch("syntax")
