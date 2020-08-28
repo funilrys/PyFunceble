@@ -609,8 +609,26 @@ This argument is suited to you!
 
     **Default value:** :code:`False`
 
-Want to get the full WHOIS record in your database?
-This argument is suited to you!
+The difference between :code:`False` or :code:`True` is whether
+we are saving a full dump of the `WHOIS` reply into the database.
+
+If you for some reason believes you need to fill up your database
+with a complete dump of the whois reply, this is the right value
+to switch on.
+
+.. warning::
+    Before switching this value, you should read these comments
+    carefully...
+    
+    You can test the amount of data by running :code:`whois mypdns.org`
+    from your Linux terminal, to see an example of what will be stored
+    in the database.
+    
+    You're hearby warned...
+    
+    `store_whois_record comment <https://github.com/funilrys/PyFunceble/issues/57#issuecomment-682597793>`_
+    
+    `Brainstorm whois data comment <https://github.com/funilrys/PyFunceble/issues/108#issuecomment-682522516>`_
 
 Multiprocessing
 ^^^^^^^^^^^^^^^
