@@ -124,9 +124,10 @@ class Infrastructure:
     :type: str
     """
 
-    ALEMBIC_CONFIG_FILENAME = "alembic.ini"
+    CI_MIGRATION_TRIGGER_FILE = ".trigger"
     """
-    Sets the name of the alembic configuration file.
+    Sets the name of the file to write into for the case that
+    we are migrating to sqlalchemy from inside a CI engine.
 
     :type: str
     """
