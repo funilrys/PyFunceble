@@ -609,9 +609,10 @@ This argument is suited to you!
 
     **Default value:** :code:`False`
 
-This argument is suited to you!
+The difference between :code:`False` or :code:`True` is whether
+we are saving a full dump of the `WHOIS` reply into the database.
 
-If you for some reason believes you need to fill up your databse
+If you for some reason believes you need to fill up your database
 with a complete dump of the whois reply, this is the right value
 to switch on.
 
@@ -619,11 +620,9 @@ to switch on.
     Before switching this value, you should read these comments
     carefully...
     
-    This will copy a full text dump of the whois reply.
-    
     You can test the amount of data by running :code:`whois mypdns.org`
-    from your Linux terminal, to see what will be stored inside the
-    database
+    from your Linux terminal, to see an example of what will be stored
+    in the database.
     
     You're hearby warned...
     
