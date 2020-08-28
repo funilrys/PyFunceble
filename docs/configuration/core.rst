@@ -536,7 +536,12 @@
     **Description:** Enable / disable the storage of the WHOIS record into the WHOIS DB.
 
 .. warning::
-    This does not disable the WHOIS DB. It just block the storage of the full record.
+    This does not disable the WHOIS DB functionality. It just not storing the full
+    :code:`WHOIS` reply in the database.
+
+.. note: See also `storing-whois <usage/index.html#store-whois>`_ for more information
+
+
 
 :code:`syntax`
 ^^^^^^^^^^^^^^

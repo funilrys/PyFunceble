@@ -50,7 +50,7 @@ Simply run the following and enjoy the documentation!
 
     $ cd docs/
     $ make html
-    $ chromium _build/html/index.html # Chromium or whatever browser you use.
+    $ palemoon _build/html/index.html # palemoon or whatever browser you use.
 
 ___________________________________________
 
