@@ -496,7 +496,11 @@ class CleanupOldTables:
         """
 
         if self.authorized:
-            print(f"{Fore.MAGENTA}{Style.BRIGHT}Starting switch to SQLAlchemy ...")
+            print(f"{Fore.MAGENTA}{Style.BRIGHT}Starting switch to SQLAlchemy.")
+            print(
+                f"{Fore.GREEN}{Style.BRIGHT}Please find more about it at https://git.io/JULsD ."
+            )
+
             self.__start_tested_migration()
             self.__start_autocontinue_migration()
             self.__start_whois_migration()
