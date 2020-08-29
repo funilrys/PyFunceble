@@ -93,6 +93,7 @@ class ExtraRules:  # pylint: disable=too-few-public-methods # pragma: no cover
         # We set a list of regex and methods to call if matched.
         self.regexes_active_to_inactive_potentially_down = {
             r"\.000webhostapp\.com": [self.__special_down_410],
+            r"\.angelfire\.com$": [self.__special_down_404],
             r"\.blogspot\.": [self.__blogspot],
             r"\.canalblog\.com$": [self.__special_down_404],
             r"\.github\.io$": [self.__special_down_404],
