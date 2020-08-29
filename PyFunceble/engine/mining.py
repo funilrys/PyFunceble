@@ -179,16 +179,16 @@ class Mining:  # pylint: disable=too-many-instance-attributes
                         .all()
                     )
 
-                    if not in_db:
-                        mined = Mined(
-                            subject_id=status.id, mined=value, file_id=status.file_id,
-                        )
+                if not in_db:
+                    mined = Mined(
+                        subject_id=status.id, mined=value, file_id=status.file_id,
+                    )
 
-                        with session.Session() as db_session:
-                            # pylint: disable=no-member, singleton-comparison
-                            db_session.add(mined)
-                            db_session.commit()
-                            db_session.refresh(mined)
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
+                        db_session.add(mined)
+                        db_session.commit()
+                        db_session.refresh(mined)
 
     def __delitem__(self, index):
         if self.authorized:

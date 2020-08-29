@@ -173,11 +173,10 @@ class CleanupOldTables:
             )
 
             result = cursor.fetchone()
-
-            if result["COUNT(*)"] != 1:
-                old_connection.close()
-                return False
         old_connection.close()
+
+        if result["COUNT(*)"] != 1:
+            return False
         return True
 
     @classmethod
