@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/master/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -445,7 +445,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "/en/%s" % "dev": r"en\/%s" % "master",
                 "/pyfunceble-%s.png" % "dev": r"\/pyfunceble-dev.png",
                 "/project/pyfunceble-%s" % "dev": r"\/project\/pyfunceble$",
-                "/badge/pyfunceble-%s" % "dev": r"\/badge\/pyfunceble$",
+                "/badge/pyfunceble-%s\\1"
+                % "dev": r"\/badge\/pyfunceble(/month|/week|)$",
+                "/blob/%s/" % "dev": r"\/blob\/%s\/" % "master",
+                "/pypi/v/pyfunceble-%s.png" % "dev": r"\/pypi\/v\/pyfunceble\.png$",
+                "/\\1/%s/" % "dev": r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "master",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -457,7 +461,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "/en/%s" % "master": r"en\/%s" % "dev",
                 "/pyfunceble-dev.png": r"\/pyfunceble-%s.png" % "dev",
                 "/project/pyfunceble": r"/project\/pyfunceble-%s$" % "dev",
-                "/badge/pyfunceble": r"/badge\/pyfunceble-%s$" % "dev",
+                "/badge/pyfunceble\\1": r"/badge\/pyfunceble-%s(/month|/week|)$"
+                % "dev",
+                "/blob/%s/" % "master": r"\/blob\/%s\/" % "dev",
+                "/pypi/v/pyfunceble.png": r"\/pypi\/v\/pyfunceble-%s\.png$" % "dev",
+                "/\\1/%s/" % "master": r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev",
             }
         else:
             # The current version is not the master nor the dev version.
