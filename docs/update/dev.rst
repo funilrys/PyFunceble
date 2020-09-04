@@ -8,7 +8,7 @@ IMPORTANT INFORMATION for :code:`dev >= 3.2.11`
 
 ::
 
-   When you update from dev@3.2.10 or master@3.2.??
+   When you update from dev@<=3.2.10 or master@<=3.2.2
    to newer release, there will be made a SQL
    conversion of the databases table layout.
    This can take up a sagnificent amount of time
