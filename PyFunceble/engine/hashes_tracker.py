@@ -64,7 +64,6 @@ class HashesTracker:
 
     def __init__(self, filename):
         self.filename = filename
-        self.authorized = self.authorization()
 
         self.tracker[filename] = dict()
 
@@ -80,8 +79,8 @@ class HashesTracker:
             self.__set_current_hash()
             self.__reset_if_changed()
 
-    @classmethod
-    def authorization(cls):
+    @property
+    def authorized(self):
         """
         Provides the execution authorization.
         """
@@ -121,7 +120,7 @@ class HashesTracker:
         """
 
         if self.authorized:
-            hash_datetime = datetime.now().isoformat()
+            hash_datetime = datetime.utcnow().isoformat()
 
             hashes = PyFunceble.helpers.Hash().file(self.filename)
 
@@ -155,9 +154,22 @@ class HashesTracker:
             )
         return False
 
+    def add_position(self, position):
+        """
+        Adds the given position to the previous one.
+        """
+
+        if self.authorized:
+            try:
+                self.tracker[self.filename]["position"] += position
+            except KeyError:
+                self.tracker[self.filename]["position"] = position
+
+            self.save()
+
     def set_position(self, position):
         """
-        Saves the position.
+        Sets the position.
         """
 
         if self.authorized:

@@ -51,14 +51,17 @@ License:
 """
 
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from os import sep as directory_separator
 from os import walk
 from random import choice
 
 from colorama import Fore, Style
+from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
 
 
 class CLICore:
@@ -67,9 +70,7 @@ class CLICore:
     """
 
     def __init__(self):
-        self.list_of_up_statuses = PyFunceble.STATUS.list.up
-        self.list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
-        self.list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
+        self.list_of_up_statuses = self.get_up_statuses()
 
         self.preset = PyFunceble.cconfig.Preset()
         self.preset.init_all()
@@ -82,6 +83,20 @@ class CLICore:
         # We initiate a variable which will tell us when
         # we start testing for complements.
         self.complements_test_started = False
+
+    @classmethod
+    def get_up_statuses(cls):
+        """
+        Provides the list of up statuses.
+        """
+
+        list_of_up_statuses = PyFunceble.STATUS.list.up
+        list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
+        list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
+
+        list_of_up_statuses.extend([x.upper() for x in list_of_up_statuses])
+
+        return list_of_up_statuses
 
     @classmethod
     def sort_generated_files(cls):  # pragma: no cover
@@ -157,65 +172,60 @@ class CLICore:
         """
         Saves the current status inside the database.
         """
-
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            table_name = PyFunceble.engine.MySQL.tables["tested"]
+            output = output.copy()
+            if (
+                isinstance(output["http_status_code"], str)
+                and not output["http_status_code"].isdigit()
+            ):
+                output["http_status_code"] = None
+
+            output["tested_at"] = datetime.utcnow()
 
             if not filename:
                 filename = "simple"
 
-            to_insert = (
-                "INSERT INTO {0} "
-                "(tested, file_path, _status, status, _status_source, status_source, "
-                "domain_syntax_validation, expiration_date, http_status_code, "
-                "ipv4_range_syntax_validation, ipv4_syntax_validation, "
-                "ipv6_range_syntax_validation, ipv6_syntax_validation, "
-                "subdomain_syntax_validation, url_syntax_validation, whois_server, digest) "
-                "VALUES (%(tested)s, %(file_path)s, %(_status)s, %(status)s, %(_status_source)s, "
-                "%(status_source)s, %(domain_syntax_validation)s, "
-                "%(expiration_date)s, %(http_status_code)s, "
-                "%(ipv4_range_syntax_validation)s, %(ipv4_syntax_validation)s, "
-                "%(ipv6_range_syntax_validation)s, %(ipv6_syntax_validation)s, "
-                "%(subdomain_syntax_validation)s, "
-                "%(url_syntax_validation)s, %(whois_server)s, %(digest)s)"
-            ).format(table_name)
+            status_input = output.copy()
 
-            to_update = (
-                "UPDATE {0} SET _status = %(_status)s, status = %(status)s, "
-                "_status_source = %(_status_source)s, status_source = %(status_source)s, "
-                "domain_syntax_validation = %(domain_syntax_validation)s, "
-                "expiration_date = %(expiration_date)s, http_status_code = %(http_status_code)s, "
-                "ipv4_range_syntax_validation = %(ipv4_range_syntax_validation)s, "
-                "ipv4_syntax_validation = %(ipv4_syntax_validation)s, "
-                "ipv6_range_syntax_validation = %(ipv6_range_syntax_validation)s, "
-                "ipv6_syntax_validation = %(ipv6_syntax_validation)s, "
-                "subdomain_syntax_validation = %(subdomain_syntax_validation)s, "
-                "url_syntax_validation = %(url_syntax_validation)s, "
-                "whois_server = %(whois_server)s "
-                "WHERE digest = %(digest)s"
-            ).format(table_name)
+            undesirable_status = ["dns_lookup", "whois_record", "whois_server"]
 
-            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                to_set = PyFunceble.helpers.Merge({"file_path": filename}).into(output)
+            for index in undesirable_status:
+                del status_input[index]
 
-                to_set["digest"] = PyFunceble.helpers.Hash(algo="sha256").data(
-                    bytes(to_set["file_path"] + to_set["tested"], "utf-8")
-                )
-
-                if (
-                    isinstance(to_set["http_status_code"], str)
-                    and not to_set["http_status_code"].isdigit()
-                ):
-                    to_set["http_status_code"] = None
-
+            with session.Session() as db_session:
+                # pylint: disable=no-member
                 try:
-                    cursor.execute(to_insert, to_set)
-                except PyFunceble.engine.MySQL.errors:
-                    cursor.execute(to_update, to_set)
+                    file = db_session.query(File).filter(File.path == filename).one()
+                except NoResultFound:
+                    file = File(path=filename)
 
-                PyFunceble.LOGGER.debug(
-                    f"Saved into the {repr(table_name)} table:\n{to_set}"
-                )
+                    db_session.add(file)
+                    db_session.commit()
+                    db_session.refresh(file)
+
+            with session.Session() as db_session:
+                # pylint: disable=no-member
+                try:
+                    status = (
+                        db_session.query(Status)
+                        .filter(Status.file_id == file.id)
+                        .filter(Status.tested == status_input["tested"])
+                        .one()
+                    )
+                except NoResultFound:
+                    status = Status(file_id=file.id)
+
+            for index, value in status_input.items():
+                setattr(status, index, value)
+
+            status.test_completed = True
+
+            with session.Session() as db_session:
+                # pylint: disable=no-member
+                db_session.add(status)
+                db_session.commit()
+
+            PyFunceble.LOGGER.debug(f"Saved into database:\n{output}")
 
     @classmethod
     def get_simple_coloration(cls, status):
@@ -354,7 +364,7 @@ class CLICore:
         Prints a friendly message.
         """
 
-        random = int(choice(str(int(datetime.now().timestamp()))))
+        random = int(choice(str(int(datetime.utcnow().timestamp()))))
 
         if not PyFunceble.CONFIGURATION.quiet and not PyFunceble.CONFIGURATION.simple:
             print("\n" + Fore.GREEN + Style.BRIGHT + "Thanks for using PyFunceble!")
@@ -541,7 +551,7 @@ class CLICore:
             and not PyFunceble.CONFIGURATION.quiet
         ):
             messages = upstream_version["messages"]
-            local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
+            local_timezone = datetime.utcnow().astimezone().tzinfo
 
             for minimal_version, data in messages.items():
                 comparison = PyFunceble.abstracts.Version.compare(minimal_version)

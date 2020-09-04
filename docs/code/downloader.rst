@@ -27,14 +27,6 @@ Documentation
     :members:
     :private-members:
 
-
-:code:`DBTypeDownloader()`
-""""""""""""""""""""""""""
-
-.. autoclass:: PyFunceble.downloader.db_type.DBTypeDownloader
-    :members:
-    :private-members:
-
 :code:`DirectoryStructureDownloader()`
 """"""""""""""""""""""""""""""""""""""
 

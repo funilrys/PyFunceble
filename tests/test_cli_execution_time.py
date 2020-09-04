@@ -60,10 +60,10 @@ from unittest.mock import patch
 
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
+from stdout_base import StdoutBase
 
 import PyFunceble
 from PyFunceble.cli.execution_time import ExecutionTime
-from stdout_base import StdoutBase
 
 
 class TestExecutionTime(StdoutBase):
@@ -136,7 +136,7 @@ class TestExecutionTime(StdoutBase):
 
         PyFunceble.CONFIGURATION.show_execution_time = True
 
-        start_time = datetime.now()
+        start_time = datetime.utcnow()
         PyFunceble.INTERN["start"] = start_time.timestamp()
         PyFunceble.INTERN["end"] = (start_time + timedelta(seconds=15)).timestamp()
 
@@ -162,7 +162,7 @@ class TestExecutionTime(StdoutBase):
         Tests the calculation method with more consequent data.
         """
 
-        start_time = datetime.now()
+        start_time = datetime.utcnow()
         PyFunceble.INTERN["start"] = start_time.timestamp()
         PyFunceble.INTERN["end"] = (
             start_time + timedelta(days=1, hours=50)
@@ -204,7 +204,7 @@ class TestExecutionTime(StdoutBase):
         PyFunceble.CONFIGURATION.show_percentage = False
         PyFunceble.INTERN["file_to_test"] = "this_is_a_ghost"
 
-        start_time = datetime.now()
+        start_time = datetime.utcnow()
         PyFunceble.INTERN["start"] = start_time.timestamp()
         PyFunceble.INTERN["end"] = (start_time + timedelta(seconds=15)).timestamp()
 

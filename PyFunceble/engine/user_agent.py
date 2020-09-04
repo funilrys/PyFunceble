@@ -70,7 +70,7 @@ class UserAgent:
         Provides the user agent to use.
         """
 
-        if not PyFunceble.CONFIGURATION.user_agent.custom:
+        if "custom" not in PyFunceble.CONFIGURATION.user_agent:
             if (
                 not PyFunceble.CONFIGURATION.user_agent.browser
                 or PyFunceble.CONFIGURATION.user_agent.browser not in self.dumped

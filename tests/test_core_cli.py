@@ -59,11 +59,11 @@ from unittest.mock import Mock, patch
 
 from colorama import Fore, Style
 from colorama import init as init_colorama
+from stdout_base import StdoutBase
+from time_zone import TZ
 
 import PyFunceble
 from PyFunceble.core import CLI
-from stdout_base import StdoutBase
-from time_zone import TZ
 
 
 class TestCLICore(StdoutBase):
@@ -219,7 +219,7 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(
+        datetime_patch.utcnow = Mock(
             return_value=datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
         )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
@@ -246,7 +246,7 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(
+        datetime_patch.utcnow = Mock(
             return_value=datetime(1970, 1, 1, 1, 0, 3, 0, tzinfo=TZ("+", hours=1).get())
         )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()

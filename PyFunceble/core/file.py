@@ -52,8 +52,12 @@ License:
 from tempfile import NamedTemporaryFile
 
 from domain2idna import get as domain2idna
+from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
+from PyFunceble.engine.database.schemas.whois_record import WhoisRecord
 
 from .cli import CLICore
 
@@ -107,24 +111,22 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             # We get the destination.
             destination = input_file.split("/")[-1]
 
-            if input_file and PyFunceble.engine.AutoContinue(destination).is_empty():
+            if input_file and (
+                not PyFunceble.helpers.File(destination).exists()
+                or PyFunceble.engine.AutoContinue(destination).is_empty()
+                or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
+            ):
                 # The given file is an URL.
 
-                if (
-                    not PyFunceble.helpers.File(destination).exists()
-                    or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
-                ):
-                    # The filename does not exist in the current directory
-                    # or the currently number of tested is equal to 0.
+                # The filename does not exist in the current directory
+                # or the currently number of tested is equal to 0.
 
-                    # We download the content of the link.
-                    PyFunceble.helpers.Download(input_file).text(
-                        destination=destination
-                    )
+                # We download the content of the link.
+                PyFunceble.helpers.Download(input_file).text(destination=destination)
 
-                    PyFunceble.LOGGER.info(
-                        f"Downloaded {repr(input_file)} into {repr(destination)}"
-                    )
+                PyFunceble.LOGGER.info(
+                    f"Downloaded {repr(input_file)} into {repr(destination)}"
+                )
 
             return destination
         return input_file
@@ -170,43 +172,51 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-
-            to_select = (
-                "SELECT tested as subject, status, status_source, expiration_date, "
-                "http_status_code, whois_server, file_path "
-                "FROM {0} WHERE status = %(official_status)s "
-                "AND file_path = %(file_path)s ORDER BY subject ASC"
-            ).format(PyFunceble.engine.MySQL.tables["tested"])
-
-            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                cursor.execute(
-                    to_select, {"official_status": status, "file_path": self.file}
+            with session.Session() as db_session:
+                fetched = (
+                    # pylint: disable=no-member, singleton-comparison
+                    db_session.query(Status)
+                    .join(File)
+                    .filter(File.path == self.file)
+                    .filter(Status.status == status)
+                    .filter(Status.test_completed == True)
+                    .all()
                 )
 
-                fetched = cursor.fetchall()
-
-                if fetched:
-                    for data in fetched:
-                        generate = PyFunceble.output.Generate(
-                            data["subject"],
-                            f"file_{self.file_type}",
-                            data["status"],
-                            source=data["status_source"],
-                            expiration_date=data["expiration_date"],
-                            http_status_code=data["http_status_code"],
-                            whois_server=data["whois_server"],
-                            filename=self.file,
-                            end=True,
-                        )
-
-                        if include_entries_without_changes:
-                            generate.status_file(exclude_file_generation=False)
-                        else:
-                            generate.status_file(
-                                exclude_file_generation=self.inactive_db.authorized
-                                and data["status"] not in self.list_of_up_statuses
-                                and data["subject"] in self.inactive_db.to_retest
+            if fetched:
+                for data in fetched:
+                    with session.Session() as db_session:
+                        try:
+                            # pylint: disable=no-member
+                            whois_record = (
+                                db_session.query(WhoisRecord)
+                                .filter(WhoisRecord.subject == data.tested)
+                                .one()
                             )
+                            whois_server = whois_record.server
+                        except NoResultFound:
+                            whois_server = None
+
+                    generate = PyFunceble.output.Generate(
+                        data.tested,
+                        f"file_{self.file_type}",
+                        data.status,
+                        source=data.status_source,
+                        expiration_date=data.expiration_date,
+                        http_status_code=data.http_status_code,
+                        whois_server=whois_server,
+                        filename=self.file,
+                        end=True,
+                    )
+
+                    if include_entries_without_changes:
+                        generate.status_file(exclude_file_generation=False)
+                    else:
+                        generate.status_file(
+                            exclude_file_generation=self.inactive_db.authorized
+                            and data.status not in self.list_of_up_statuses
+                            and data.tested in self.inactive_db.to_retest
+                        )
 
     def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
@@ -425,6 +435,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             whois_db.add(
                 test_output["tested"],
                 test_output["expiration_date"],
+                test_output["whois_server"],
                 test_output["whois_record"],
             )
 
@@ -452,16 +463,14 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         Runs the logic to run at the end of all test.
         """
 
-        if test_completed:
+        if test_completed or auto_save.is_time_exceed():
             auto_continue_db.update_counters()
             self.generate_files()
             self.sort_generated_files()
-            auto_continue_db.clean()
-            auto_save.process(test_completed=test_completed)
-        elif auto_save.is_time_exceed():
-            auto_continue_db.update_counters()
-            self.generate_files()
-            self.sort_generated_files()
+
+            if test_completed:
+                auto_continue_db.clean()
+
             auto_save.process(test_completed=test_completed)
 
     def __run_single_test(self, subject, ignore_inactive_db_check=False):

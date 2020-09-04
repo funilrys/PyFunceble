@@ -88,6 +88,12 @@ class NoInternetConnection(PyFuncebleExternalException):
     """
 
 
+class UnableToDownload(PyFuncebleExternalException):
+    """
+    Describes a failing download.
+    """
+
+
 class ConfigurationFileNotFound(PyFuncebleExternalException):
     """
     Describes a missing configuration file.

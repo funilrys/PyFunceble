@@ -526,6 +526,23 @@
 .. note::
     Understand with "results files" the mirror of what is shown on screen.
 
+:code:`store_whois_record`
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the storage of the WHOIS record into the WHOIS DB.
+
+.. warning::
+    This does not disable the WHOIS DB functionality. It just not storing the full
+    :code:`WHOIS` reply in the database.
+
+.. note: See also `storing-whois <usage/index.html#store-whois>`_ for more information
+
+
+
 :code:`syntax`
 ^^^^^^^^^^^^^^
 

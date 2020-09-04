@@ -87,7 +87,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                 self.current_ci_engine.bypass()
 
                 if start_time is None:
-                    self.start_time = datetime.now()
+                    self.start_time = datetime.utcnow()
                 else:
                     self.start_time = datetime.fromtimestamp(int(start_time))
 
@@ -135,7 +135,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         if self.authorized and hasattr(self, "end_time"):
             # We are authorized to operate.
 
-            if not self.time_exceed and datetime.now() >= self.end_time:
+            if not self.time_exceed and datetime.utcnow() >= self.end_time:
                 # * We did not tested previously if the time exceed.
                 # and
                 # * The time exceed.

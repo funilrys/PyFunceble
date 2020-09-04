@@ -72,6 +72,8 @@ class Loader:
         "iana": "funilrys/PyFunceble",
     }
 
+    DELETED_LINKS: list = ["mysql", "mariadb"]
+
     intern: dict = {
         "counter": {
             "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
@@ -254,12 +256,13 @@ class Loader:
         if not PyFunceble.helpers.Dict(local).has_same_keys_as(upstream):
             return True
 
-        if "links" not in local:
+        if "links" not in local or "db_type" in local["outputs"]:
             return True
 
         for index, value in local["links"].items():
             if (
                 index not in self.UPDATED_LINKS
+                or index not in self.DELETED_LINKS
                 or self.UPDATED_LINKS[index] not in value
             ):
                 continue
@@ -308,8 +311,15 @@ class Loader:
 
             new_config["links"][index] = upstream["links"][index]
 
+        for index in self.DELETED_LINKS:
+            if index in new_config["links"]:
+                del new_config["links"][index]
+
         if not isinstance(local["user_agent"], dict):
             new_config["user_agent"] = upstream["user_agent"]
+
+        if "db_type" in new_config["outputs"]:
+            del new_config["outputs"]["db_type"]
 
         PyFunceble.helpers.Dict(new_config).to_yaml_file(self.path_to_config)
 
@@ -336,15 +346,16 @@ class Loader:
             self.config.update(
                 PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
             )
-        except (FileNotFoundError, TypeError):
-            raise PyFunceble.exceptions.ConfigurationFileNotFound()
+        except (FileNotFoundError, TypeError) as exception:
+            raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
 
-        self.fix_paths()
         if (
             self.is_current_version_different_from_upstream()
             and self.are_we_allowed_to_merge_upstream()
         ):
             self.__merge_upstream()
+
+        self.fix_paths()
 
         self.config.update(self.custom_config)
         self.custom_loaded = self.custom_config
@@ -429,7 +440,6 @@ class Loader:
             "splited",
             "json",
             "complements",
-            "db_type",
         ]:
             try:
                 self.config["outputs"][main_key][
@@ -503,9 +513,9 @@ class Loader:
         if "links" not in self.config or "outputs" not in self.config:
             try:
                 self.__load_central_config()
-            except PyFunceble.exceptions.ConfigurationFileNotFound:
+            except PyFunceble.exceptions.ConfigurationFileNotFound as exception:
                 if not self.are_we_allowed_to_install_upstream():
-                    raise PyFunceble.exceptions.ConfigurationFileNotFound()
+                    raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
 
                 self.create_config_file_from_upstream()
                 self.__load_central_config()

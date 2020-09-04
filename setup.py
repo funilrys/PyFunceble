@@ -72,7 +72,7 @@ License:
 from re import compile as comp
 from unittest import TestLoader
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def _test_suite():
@@ -136,26 +136,7 @@ if __name__ == "__main__":
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=[
-            "PyFunceble.abstracts",
-            "PyFunceble.cli",
-            "PyFunceble.config",
-            "PyFunceble.converter",
-            "PyFunceble.core",
-            "PyFunceble.database",
-            "PyFunceble.downloader",
-            "PyFunceble.engine.ci",
-            "PyFunceble.engine",
-            "PyFunceble.extractor",
-            "PyFunceble.helpers",
-            "PyFunceble.lookup",
-            "PyFunceble.output",
-            "PyFunceble.status.availability",
-            "PyFunceble.status.reputation",
-            "PyFunceble.status.syntax",
-            "PyFunceble.status",
-            "PyFunceble",
-        ],
+        packages=find_packages(exclude=("tests")),
         keywords=[
             "availability",
             "dns",

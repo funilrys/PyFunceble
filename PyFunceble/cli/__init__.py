@@ -679,6 +679,17 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     ),
                 )
 
+                output_control_group.add_argument(
+                    "--store-whois",
+                    action="store_true",
+                    help="Switch the value of the WHOIS record storage in the WHOIS DB. %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.store_whois_record)
+                        + Style.RESET_ALL
+                    ),
+                )
+
                 multiprocessing_group.add_argument(
                     "-m",
                     "--multiprocess",
@@ -905,6 +916,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     PyFunceble.CONFIGURATION.less = args.less
                 elif not args.all:
                     PyFunceble.CONFIGURATION.less = args.all
+                    PyFunceble.CONFIGURATION.print_dots = True
 
                 if args.adblock:
                     PyFunceble.CONFIGURATION.adblock = preset.switch("adblock")
@@ -1093,6 +1105,11 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 if args.split:
                     PyFunceble.CONFIGURATION.split = preset.switch("split")
 
+                if args.store_whois:
+                    PyFunceble.CONFIGURATION.store_whois_record = preset.switch(
+                        "store_whois_record"
+                    )
+
                 if args.syntax:
                     PyFunceble.CONFIGURATION.syntax = preset.switch("syntax")
 
@@ -1123,6 +1140,8 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.user_agent:
                     PyFunceble.CONFIGURATION.user_agent.custom = args.user_agent
+                else:
+                    PyFunceble.CONFIGURATION.user_agent.custom = None
 
                 if args.verify_ssl_certificate:
                     PyFunceble.CONFIGURATION.verify_ssl_certificate = (

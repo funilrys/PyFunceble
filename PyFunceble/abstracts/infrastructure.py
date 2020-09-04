@@ -116,3 +116,18 @@ class Infrastructure:
 
     :type: str
     """
+
+    ALEMBIC_DIRECTORY_NAME = "alembic"
+    """
+    Sets the name of the alembic related directory.
+
+    :type: str
+    """
+
+    CI_MIGRATION_TRIGGER_FILE = ".trigger"
+    """
+    Sets the name of the file to write into for the case that
+    we are migrating to sqlalchemy from inside a CI engine.
+
+    :type: str
+    """

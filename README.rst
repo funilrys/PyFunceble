@@ -1,7 +1,7 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
 The tool to check the availability or syntax of domain, IP or URL
---------------------------------------------------------------------------
+-----------------------------------------------------------------
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
@@ -17,12 +17,12 @@ The tool to check the availability or syntax of domain, IP or URL
     :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
-.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
-.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/month
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/week
+    :target: https://pepy.tech/project/pyfunceble-dev
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
@@ -50,7 +50,7 @@ Simply run the following and enjoy the documentation!
 
     $ cd docs/
     $ make html
-    $ chromium _build/html/index.html # Chromium or whatever browser you use.
+    $ palemoon _build/html/index.html # palemoon or whatever browser you use.
 
 ___________________________________________
 

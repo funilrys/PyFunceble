@@ -65,7 +65,7 @@ class Logs:
 
     def __init__(self, output=None):
         self.output = output
-        self.current_time = str(datetime.now().timestamp())
+        self.current_time = str(datetime.utcnow().timestamp())
 
     @classmethod
     def _get_content(cls, file):

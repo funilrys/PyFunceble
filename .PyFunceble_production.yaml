@@ -28,7 +28,7 @@ dns_lookup_over_tcp: False
 #
 #       dns_server:
 #         - "8.8.8.8" # First DNS server.
-#         - "8.4.4.8" # Second DNS server.
+#         - "8.8.4.4" # Second DNS server.
 dns_server: null
 # Set the element to filter.
 filter: ""
@@ -92,6 +92,8 @@ show_percentage: True
 simple: False
 # Enable / disable the split of the results files.
 split: True
+# Enable / disable the storage of the whole WHOIS record.
+store_whois_record: False
 # Enable / disable the syntax checking mode.
 # In this mode we do not check for the availability. It's just syntax check.
 syntax: False
@@ -135,12 +137,6 @@ outputs:
     public_suffix: public-suffix.json
     mining: mining.json
     whois_db: whois_db.json
-
-  db_type:
-    directory: db_types
-    files:
-      mariadb: mariadb.sql
-      mysql: mysql.sql
 
   domains:
     directory: domains
@@ -290,8 +286,6 @@ links:
   dir_structure: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/dir_structure_production.json"
   iana: "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"
   ipv4_reputation: "https://reputation.alienvault.com/reputation.data"
-  mariadb: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mariadb.sql"
-  mysql: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/db_types/mysql.sql"
   psl: "https://raw.githubusercontent.com/PyFunceble/public-suffix/master/public-suffix.json"
   repo: "https://github.com/funilrys/PyFunceble"
   requirements: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/requirements.txt"
