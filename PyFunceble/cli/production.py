@@ -231,11 +231,6 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             + "configuration"
             + directory_separator
             + "links.rst",
-            # We fix the urls in the db_types directory.
-            PyFunceble.CONFIG_DIRECTORY
-            + directory_separator
-            + "db_types"
-            + directory_separator,
         ]
 
         for fix_it in to_fix:
