@@ -4,7 +4,7 @@ Stable version
 Using :code:`pip`
 ^^^^^^^^^^^^^^^^^
 
-IMPORTANT INFORMATION for :code:`master >= 3.2.2`
+IMPORTANT INFORMATION for :code:`master >= 3.3.0`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. warning::
