@@ -102,8 +102,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 PyFunceble.VERSION, return_non_digits=True
             )
 
-            if self._is_version_greater() or not PyFunceble.abstracts.Version.literally_compare(
-                PyFunceble.VERSION, self.data_version_yaml["current_version"]
+            if (
+                self._is_version_greater()
+                or not PyFunceble.abstracts.Version.literally_compare(
+                    PyFunceble.VERSION, self.data_version_yaml["current_version"]
+                )
             ):
                 # * The local version is greater than the older one.
                 # or

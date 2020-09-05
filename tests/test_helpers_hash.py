@@ -127,7 +127,8 @@ class TestHash(TestCase):
         expected = None
         for algo in self.expected_hashed:
             self.assertEqual(
-                expected, Hash(algo=algo).file(self.file),
+                expected,
+                Hash(algo=algo).file(self.file),
             )
 
     def test_hash_file(self):
@@ -151,7 +152,8 @@ class TestHash(TestCase):
 
         for algo, expected in self.expected_hashed.items():
             self.assertEqual(
-                expected, Hash(algo=algo).file(self.file),
+                expected,
+                Hash(algo=algo).file(self.file),
             )
 
         file_instance.delete()

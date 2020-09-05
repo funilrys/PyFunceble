@@ -169,7 +169,10 @@ class CleanupOldTables:
 
             cursor.execute(
                 statement,
-                {"database_name": self.credentials["name"], "table_name": table_name,},
+                {
+                    "database_name": self.credentials["name"],
+                    "table_name": table_name,
+                },
             )
 
             result = cursor.fetchone()

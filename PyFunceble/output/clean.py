@@ -194,7 +194,8 @@ class Clean:
         # We append the ipv4 reputation file.
         result.append(
             "{0}{1}".format(
-                directory, PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME,
+                directory,
+                PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME,
             )
         )
 

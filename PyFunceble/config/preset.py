@@ -302,10 +302,14 @@ class Preset:  # pragma: no cover
         """
 
         # pylint: disable=line-too-long
-        if not PyFunceble.CONFIGURATION.multiprocess_merging_mode or PyFunceble.CONFIGURATION.multiprocess_merging_mode.lower() not in [
-            "end",
-            "live",
-        ]:
+        if (
+            not PyFunceble.CONFIGURATION.multiprocess_merging_mode
+            or PyFunceble.CONFIGURATION.multiprocess_merging_mode.lower()
+            not in [
+                "end",
+                "live",
+            ]
+        ):
             PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
 
         if PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]:

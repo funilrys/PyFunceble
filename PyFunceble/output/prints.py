@@ -719,10 +719,14 @@ class Prints:
             for data in self.header_constructor(to_print, False):
                 # We loop through the formatted data.
 
-                if self.template.lower() in PyFunceble.STATUS.list.generic or self.template in [
-                    "Less",
-                    "Percentage",
-                ]:
+                if (
+                    self.template.lower() in PyFunceble.STATUS.list.generic
+                    or self.template
+                    in [
+                        "Less",
+                        "Percentage",
+                    ]
+                ):
                     # * The template is in the list of generic status.
                     # or
                     # * The template is in a specific list.

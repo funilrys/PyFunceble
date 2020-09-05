@@ -181,7 +181,9 @@ class Mining:  # pylint: disable=too-many-instance-attributes
 
                 if not in_db:
                     mined = Mined(
-                        subject_id=status.id, mined=value, file_id=status.file_id,
+                        subject_id=status.id,
+                        mined=value,
+                        file_id=status.file_id,
                     )
 
                     with session.Session() as db_session:

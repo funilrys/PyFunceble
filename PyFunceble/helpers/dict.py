@@ -205,7 +205,12 @@ class Dict:
         return None
 
     def to_json_file(
-        self, file_path, ensure_ascii=False, indent=4, sort_keys=True, encoding="utf-8",
+        self,
+        file_path,
+        ensure_ascii=False,
+        indent=4,
+        sort_keys=True,
+        encoding="utf-8",
     ):
         """
         Converts the given :code:`dict` to JSON and save the result
@@ -255,7 +260,10 @@ class Dict:
         """
 
         return dumps(
-            self.main, ensure_ascii=ensure_ascii, indent=indent, sort_keys=sort_keys,
+            self.main,
+            ensure_ascii=ensure_ascii,
+            indent=indent,
+            sort_keys=sort_keys,
         )
 
     @classmethod

@@ -245,7 +245,8 @@ class TestMining(TestCase):
         )
 
         self.assertEqual(
-            expected, actual,
+            expected,
+            actual,
         )
 
 

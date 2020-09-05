@@ -137,7 +137,8 @@ class TestUserAgent(TestCase):
         ] = None
 
         self.assertRaises(
-            PyFunceble.exceptions.UserAgentNotFound, lambda: self.user_agent.get(),
+            PyFunceble.exceptions.UserAgentNotFound,
+            lambda: self.user_agent.get(),
         )
 
     def test_dumped_output(self):

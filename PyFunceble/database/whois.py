@@ -178,7 +178,9 @@ class WhoisDB:
                     .one()
                 )
             except NoResultFound:
-                record = WhoisRecord(subject=index,)
+                record = WhoisRecord(
+                    subject=index,
+                )
 
         for db_key, db_value in value.items():
             if not PyFunceble.CONFIGURATION.store_whois_record and db_key == "record":

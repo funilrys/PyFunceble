@@ -741,7 +741,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 ci_group.add_argument(
-                    "--travis", action="store_true", help=argparse.SUPPRESS,
+                    "--travis",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
                 )
 
                 ci_group.add_argument(
@@ -860,7 +862,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 unique_group.add_argument(
-                    "--iana", action="store_true", help=argparse.SUPPRESS,
+                    "--iana",
+                    action="store_true",
+                    help=argparse.SUPPRESS,
                 )
 
                 unique_group.add_argument(
