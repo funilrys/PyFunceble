@@ -154,7 +154,7 @@ class Credential:
                 regex = f"{name}=.*"
 
                 if not content:
-                    content += f"{to_write}\n"
+                    content = f"{to_write}\n"
                     continue
 
                 if PyFunceble.helpers.Regex(f"^{regex}").get_matching_list(
