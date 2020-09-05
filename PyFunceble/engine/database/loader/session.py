@@ -52,6 +52,7 @@ License:
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 from .credential import Credential
 
@@ -62,23 +63,25 @@ class Session:
     """
 
     migration_effective = False
+    current_session = None
+    uri = None
 
     def __init__(self):
-        self.credentials = Credential()
-        self.engine = create_engine(
-            self.credentials.get_uri(), pool_pre_ping=True, pool_recycle=180
-        )
-        self.session = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
-
-        self.current_session = None
+        self.uri = Credential().get_uri()
 
     def __enter__(self):
-        self.create_new_session()
-
-        return self.current_session
+        return self.create_new_session()
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
+
+    def __make_session(self):
+        """
+        Provides a new session to work with.
+        """
+
+        engine = create_engine(self.uri, poolclass=NullPool)
+        return sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
     def query(self, *args, **kwargs):
         """
@@ -96,15 +99,17 @@ class Session:
             # pylint: disable=no-member
             self.current_session.close()
 
+            del self.current_session
+            self.current_session = None
+
     def create_new_session(self):
         """
         Provides a new session.
         """
 
-        if self.current_session is not None:
-            self.current_session.close()
-            self.current_session = None
+        # Close a previous connection (if exists).
+        self.close()
 
-        self.current_session = self.session()
+        self.current_session = self.__make_session()()
 
         return self.current_session
