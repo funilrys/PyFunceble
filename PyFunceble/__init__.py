@@ -672,7 +672,9 @@ def is_url(subject):  # pragma: no cover
     return None
 
 
-def load_config(generate_directory_structure=False, custom=None):  # pragma: no cover
+def load_config(
+    generate_directory_structure=False, custom=None, sanity_check=False
+):  # pragma: no cover
     """
     Load the configuration.
 
@@ -682,6 +684,9 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
 
     :param dict custom:
         A dict with the configuration index (from .PyFunceble.yaml) to update.
+
+    :param bool sanity_check:
+        Tell us to run the safety check of the configuration.
 
     .. note::
         If :code:`config` is given, the given :code:`dict` overwrite
@@ -705,6 +710,9 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         LOADER.set_custom_config(custom)
     else:
         LOADER.set_custom_config(custom)
+
+    if sanity_check:
+        cconfig.Preset().init_all()
 
     if generate_directory_structure:
         output.Constructor()
