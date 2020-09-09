@@ -157,6 +157,17 @@ class TestVersion(TestCase):
 
         self.assertEqual(expected, actual)
 
+    @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0.pre-dev (Hello, World)")
+    def test_is_not_local_dev_from_presence(self):
+        """
+        Tests if the local version is not the dev one.
+        """
+
+        expected = False
+        actual = Version.is_local_dev()
+
+        self.assertEqual(expected, actual)
+
     @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0. (Hello, World)")
     def test_is_not_local_dev(self):
         """
