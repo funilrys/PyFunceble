@@ -468,6 +468,38 @@ class TestCheck(TestCase):
 
             self.assertEqual(expected, actual, msg="%s is valid." % given_ip)
 
+    def test_is_ip_range_domain(self):
+        """
+        Test Check().is_ip_range() for the case that only domains are given.
+        """
+
+        expected = False
+        for domain in self.valid_domain:
+            to_check = domain
+            actual = Check(to_check).is_ip_range()
+
+            self.assertEqual(expected, actual, "%s an IP range." % domain)
+
+    def test_is_ip_range_mixed(self):
+        """
+        Test Check().is_ip_range()for the case that we give mixed dataset.
+        """
+
+        expected = True
+        subjects = [
+            "255.45.65.0/24",
+            "255.45.65.6/18",
+            "2001:db8::/128",
+            "2001:db8:1234::/48",
+            "2001:db8:a::/64",
+            "2001:db8:a::123/64",
+        ]
+
+        for to_check in subjects:
+            actual = Check(to_check).is_ip_range()
+
+            self.assertEqual(expected, actual, msg="%s is not an IP range." % to_check)
+
     def test_is_ipv4_range(self):
         """
         Test Check().is_ipv4_range() for the case that the IP is a range.
@@ -528,6 +560,87 @@ class TestCheck(TestCase):
             actual = Check(to_check).is_ipv6_range()
 
             self.assertEqual(expected, actual, msg="%s is not an IP range." % given_ip)
+
+    def test_is_reserved_ip_domain(self):
+        """
+        Test Check().is_reserved_ip() for the case that domains are given.
+        """
+
+        expected = False
+
+        for to_check in self.valid_domain:
+            actual = Check(to_check).is_reserved_ip()
+
+            self.assertEqual(expected, actual, msg="%s is a reserved IP." % to_check)
+
+    def test_is_reserver_ip_mixed(self):
+        """
+        Test Check().is_reserved_ip() for the case that mixed dataset are given.
+        """
+
+        expected = True
+
+        subjects = [
+            "0.45.23.59",
+            "10.39.93.13",
+            "100.64.35.85",
+            "127.57.91.13",
+            "169.254.98.65",
+            "172.16.17.200",
+            "192.0.0.145",
+            "192.0.2.39",
+            "192.168.21.99",
+            "192.175.48.25",
+            "192.31.196.176",
+            "192.52.193.245",
+            "192.88.99.30",
+            "198.18.145.234",
+            "198.51.100.212",
+            "203.0.113.103",
+            "224.134.13.24",
+            "240.214.30.11",
+            "255.255.255.255",
+            "::",
+            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "::1",
+            "::ffff:0.0.0.0",
+            "::ffff:255.255.255.255",
+            "::ffff:0:0.0.0.0",
+            "::ffff:0:255.255.255.255",
+            "64:ff9b::0.0.0.0",
+            "64:ff9b::255.255.255.255",
+            "100::",
+            "100::ffff:ffff:ffff:ffff",
+            "2001::",
+            "2001::ffff:ffff:ffff:ffff:ffff:ffff",
+            "2001:20::",
+            "2001:2f:ffff:ffff:ffff:ffff:ffff:ffff",
+            "2001:db8::",
+            "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff",
+            "fc00::",
+            "fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "fe80::",
+            "febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "ff00::",
+            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        ]
+
+        for to_check in subjects:
+            actual = Check(to_check).is_reserved_ip()
+
+            self.assertEqual(expected, actual)
+
+    def test_is_reserved_ipv4_wrong_input(self):
+        """
+        Test Check().is_reserved_ipv4() for the case that non IP dataset is given..
+        """
+
+        expected = False
+
+        for to_check in self.valid_domain:
+            actual = Check(to_check).is_reserved_ipv4()
+
+            self.assertEqual(expected, actual)
 
     def test_is_reserved_ipv4(self):
         """
