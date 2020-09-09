@@ -56,9 +56,9 @@ from multiprocessing import Manager, Pipe, Process, active_children
 from tempfile import NamedTemporaryFile
 from traceback import format_exc
 
+import domain2idna
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
-from domain2idna import get as domain2idna
 
 import PyFunceble
 
@@ -169,7 +169,7 @@ class MultiprocessCore(
         PyFunceble.INTERN.update(intern)
 
         if PyFunceble.CONFIGURATION.idna_conversion:
-            subject = domain2idna(subject)
+            subject = domain2idna.domain2idna(subject)
 
         if not self.should_be_ignored(
             subject,

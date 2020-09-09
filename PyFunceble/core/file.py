@@ -51,7 +51,7 @@ License:
 
 from tempfile import NamedTemporaryFile
 
-from domain2idna import get as domain2idna
+import domain2idna
 from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
@@ -264,7 +264,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
 
         if PyFunceble.CONFIGURATION.idna_conversion:
-            subject = domain2idna(subject)
+            subject = domain2idna.domain2idna(subject)
 
         if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
             PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)

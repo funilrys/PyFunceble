@@ -58,7 +58,7 @@ from ipaddress import (
     ip_network,
 )
 
-from domain2idna import get as domain2idna
+import domain2idna
 
 import PyFunceble
 
@@ -134,7 +134,7 @@ class Check:
                     # We have to convert the domain to IDNA.
 
                     # We convert the initial base to IDNA.
-                    base = domain2idna(base)
+                    base = domain2idna.domain2idna(base)
 
                 if ":" in base:
                     # The port is explicitly given.
@@ -424,7 +424,7 @@ class Check:
         except ValueError:
             return False
 
-    def is_ip_range(self):  # pragma: no cover
+    def is_ip_range(self):
         """
         Checks if the given subject is a valid IPv4 or IPv6 range.
 
@@ -464,7 +464,7 @@ class Check:
                 return 0 <= block <= 128
         return False
 
-    def is_reserved_ip(self):  # pragma: no cover
+    def is_reserved_ip(self):
         """
         Checks if the given subject is a reserved IPv4 or IPv6.
 
