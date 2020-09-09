@@ -70,6 +70,9 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, dns_server=None, lifetime=3, tcp=False):
+        if PyFunceble.CONFIGURATION is None:
+            PyFunceble.load_config()
+
         self.given_dns_server = dns_server
         self.resolver = self.__get_resolver(dns_server)
 
@@ -150,7 +153,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
 
             self.resolver.nameserver_ports = {
                 z: y
-                for x, y in self.__get_server_and_port_from(nameserver)
+                for x, y in self._get_server_and_port_from(nameserver)
                 for z in self.__get_dns_servers_from(x)
             }
 
@@ -163,7 +166,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 f"Switched Resolver nameserver port to: {self.resolver.nameserver_ports}"
             )
 
-    def __get_server_and_port_from(self, inputed_dns):  # pragma: no cover
+    def _get_server_and_port_from(self, inputed_dns):
         """
         Given a list or an input representing dns server,
         we split the server from the port.
@@ -182,7 +185,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
             result = []
 
             for dns_server in inputed_dns:
-                result.append(self.__get_server_and_port_from(dns_server))
+                result.append(self._get_server_and_port_from(dns_server))
 
             return result
 
@@ -222,7 +225,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             if PyFunceble.Check(inputed_dns).is_domain():
                 result.extend(
-                    [x.address for x in dns.resolver.Resolver().query(inputed_dns)]
+                    [x.address for x in dns.resolver.Resolver().resolve(inputed_dns)]
                 )
             else:
                 result.append(inputed_dns)
@@ -254,7 +257,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting A record of {repr(subject)}")
             # We get the A record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "A", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "A", tcp=tcp)]
             PyFunceble.LOGGER.info(f"Could get A record of {repr(subject)}: {result}")
 
             return result
@@ -286,7 +289,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting AAAA record of {repr(subject)}")
             # We get the A record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "AAAA", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "AAAA", tcp=tcp)]
             PyFunceble.LOGGER.info(
                 f"Could get AAAA record of {repr(subject)}: {result}"
             )
@@ -320,7 +323,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting CNAME record of {repr(subject)}")
             # We get the A record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "CNAME", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "CNAME", tcp=tcp)]
             PyFunceble.LOGGER.info(
                 f"Could get CNAME record of {repr(subject)}: {result}"
             )
@@ -354,7 +357,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting DNAME record of {repr(subject)}")
             # We get the A record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "DNAME", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "DNAME", tcp=tcp)]
             PyFunceble.LOGGER.info(
                 f"Could get DNAME record of {repr(subject)}: {result}"
             )
@@ -387,7 +390,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting MX record of {repr(subject)}")
             # We get the MX record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "MX", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "MX", tcp=tcp)]
 
             PyFunceble.LOGGER.info(f"Could get MX record of {repr(subject)}: {result}")
 
@@ -420,7 +423,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting NS record of {repr(subject)}")
             # We get the NS record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "NS", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "NS", tcp=tcp)]
             PyFunceble.LOGGER.info(f"Could get NS record of {repr(subject)}: {result}")
 
             return result
@@ -452,7 +455,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
         try:
             PyFunceble.LOGGER.info(f"Getting TXT record of {repr(subject)}")
             # We get the TXT record of the given subject.
-            result = [str(x) for x in self.resolver.query(subject, "TXT", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(subject, "TXT", tcp=tcp)]
             PyFunceble.LOGGER.info(f"Could get TXT record of {repr(subject)}: {result}")
 
             return result
@@ -490,7 +493,7 @@ class DNSLookup:  # pylint: disable=too-few-public-methods
                 to_request = subject
 
             # We get the PTR record of the currently read A record.
-            result = [str(x) for x in self.resolver.query(to_request, "PTR", tcp=tcp)]
+            result = [str(x) for x in self.resolver.resolve(to_request, "PTR", tcp=tcp)]
             PyFunceble.LOGGER.info(f"Could get PTR record of {repr(subject)}: {result}")
 
             return result
