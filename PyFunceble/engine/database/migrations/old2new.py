@@ -52,10 +52,7 @@ License:
 
 from datetime import datetime
 from multiprocessing import active_children
-from os import sep as directory_separator
 
-import pymysql
-import pymysql.cursors
 from colorama import Fore, Style
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
@@ -98,7 +95,8 @@ class CleanupOldTables:
             [self.does_table_exists(x) for x in self.old_tables]
         )
 
-    def __get_rows(self, statement, limit=20):
+    @classmethod
+    def __get_rows(cls, statement, limit=20):
         """
         Get the row of the database.
         """
@@ -106,49 +104,15 @@ class CleanupOldTables:
         statement += f" LIMIT {limit}"
 
         while True:
-            fetcher_connection = self.get_old_connection()
-            with fetcher_connection.cursor() as cursor:
-                cursor.execute(statement)
-
-                db_result = cursor.fetchall()
-
-            fetcher_connection.close()
+            with PyFunceble.engine.database.loader.session.Session() as db_session:
+                db_result = db_session.execute(statement)
+                db_result = [dict(x) for x in db_result.fetchall()]
 
             if not db_result:
                 break
 
             for result in db_result:
                 yield result
-
-    def get_old_connection(self):
-        """
-        Provides a connection, the old way.
-        """
-
-        if (
-            directory_separator not in self.credentials["host"]
-            or "/" not in self.credentials["host"]
-        ):
-            return pymysql.connect(
-                host=self.credentials["host"],
-                port=self.credentials["port"],
-                user=self.credentials["username"],
-                password=self.credentials["password"],
-                db=self.credentials["name"],
-                charset=self.credentials["charset"],
-                cursorclass=pymysql.cursors.DictCursor,
-                autocommit=True,
-            )
-
-        return pymysql.connect(
-            unix_socket=self.credentials["host"],
-            user=self.credentials["username"],
-            password=self.credentials["password"],
-            db=self.credentials["name"],
-            charset=self.credentials["charset"],
-            cursorclass=pymysql.cursors.DictCursor,
-            autocommit=True,
-        )
 
     def does_table_exists(self, table_name):
         """
@@ -158,16 +122,15 @@ class CleanupOldTables:
             The name of the table to check.
         """
 
-        old_connection = self.get_old_connection()
-        with old_connection.cursor() as cursor:
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
             statement = (
                 "SELECT COUNT(*) "
                 "FROM information_schema.tables "
-                "WHERE table_schema = %(database_name)s "
-                "AND table_name = %(table_name)s "
+                "WHERE table_schema = :database_name "
+                "AND table_name = :table_name "
             )
 
-            cursor.execute(
+            result = db_session.execute(
                 statement,
                 {
                     "database_name": self.credentials["name"],
@@ -175,8 +138,7 @@ class CleanupOldTables:
                 },
             )
 
-            result = cursor.fetchone()
-        old_connection.close()
+            result = dict(result.fetchone())
 
         if result["COUNT(*)"] != 1:
             return False
@@ -287,12 +249,11 @@ class CleanupOldTables:
             except IntegrityError:
                 pass
 
-        old_connection = self.get_old_connection()
-        with old_connection.cursor() as cursor:
-            statement = "DELETE FROM pyfunceble_tested WHERE id = %(status_id)s"
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            statement = "DELETE FROM pyfunceble_tested WHERE id = :status_id"
+
             # pylint: disable=no-member
-            cursor.execute(statement, {"status_id": status.id})
-        old_connection.close()
+            db_session.execute(statement, {"status_id": status.id})
 
         if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')
@@ -364,11 +325,10 @@ class CleanupOldTables:
             except IntegrityError:
                 pass
 
-        old_connection = self.get_old_connection()
-        with old_connection.cursor() as cursor:
-            statement = "DELETE FROM pyfunceble_auto_continue WHERE id = %(id)s"
-            cursor.execute(statement, {"id": data["id"]})
-        old_connection.close()
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            statement = "DELETE FROM pyfunceble_auto_continue WHERE id = :id"
+
+            db_session.execute(statement, {"id": data["id"]})
 
         if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(
@@ -440,11 +400,10 @@ class CleanupOldTables:
             except IntegrityError:
                 pass
 
-        old_connection = self.get_old_connection()
-        with old_connection.cursor() as cursor:
-            statement = "DELETE FROM pyfunceble_whois WHERE id = %(id)s"
-            cursor.execute(statement, {"id": data["id"]})
-        old_connection.close()
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            statement = "DELETE FROM pyfunceble_whois WHERE id = :id"
+
+            db_session.execute(statement, {"id": data["id"]})
 
         if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(f'Switched {data["subject"]} (WHOIS) to SQLAlchemy.')
@@ -482,12 +441,12 @@ class CleanupOldTables:
         for table in self.old_tables:
             if self.does_table_exists(table):
                 PyFunceble.LOGGER.info(f"Starting deletion of {table}.")
-                old_connection = self.get_old_connection()
-                with old_connection.cursor() as cursor:
+
+                with PyFunceble.engine.database.loader.session.Session() as db_session:
                     statement = f"DROP TABLE {table}"
-                    cursor.execute(statement)
-                old_connection.close()
-                PyFunceble.LOGGER.info(f"Finished deletion of {table}.")
+
+                    db_session.execute(statement)
+                    PyFunceble.LOGGER.info(f"Finished deletion of {table}.")
 
             if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                 print(".", end="")
