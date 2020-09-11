@@ -67,6 +67,9 @@ class TestCheck(TestCase):
 
     # pylint: disable=too-many-public-methods
 
+    SUPPORTED_RPZ_MARKER = [".rpz-client-ip", ".rpz-ip", ".rpz-nsdname", ".rpz-nsip"]
+    NOT_SUPPORTED_RPZ_MARKER = [".rpz-passthru"]
+
     def setUp(self):
         """
         Setup what we need for the tests.
@@ -751,6 +754,107 @@ class TestCheck(TestCase):
             actual = Check(to_check).is_reserved_ipv6()
 
             self.assertEqual(expected, actual, msg="%s is IPv6 reserved." % subject)
+
+    def test_wildcard_valid(self):
+        """
+        Test Check() for the case that the :code:`wildcard` mode is chosen and
+        a valid domain is given.
+        """
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
+
+        expected = True
+        for domain in self.valid_domain:
+            to_check = f"*.{domain}"
+            actual = Check(to_check).is_domain()
+
+            self.assertEqual(
+                expected, actual, msg="%s is not parsed properly." % to_check
+            )
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_wildcard_invalid(self):
+        """
+        Test Check() for the case that the :code:`wildcard` mode is chosen and
+        an invalid domain is given.
+        """
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
+
+        expected = False
+        for domain in self.not_valid_domain:
+            to_check = f"*.{domain}"
+            actual = Check(to_check).is_domain()
+
+            self.assertEqual(
+                expected, actual, msg="%s is not parsed properly." % to_check
+            )
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_rpz_valid(self):
+        """
+        Test Check() for the case that the :code:`rpz` mode is chosen and a
+        valid domain is given.
+        """
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
+
+        expected = True
+
+        for domain in self.valid_domain:
+            for marker in self.SUPPORTED_RPZ_MARKER:
+                to_check = f"{domain}{marker}"
+                actual = Check(to_check).is_domain()
+
+                self.assertEqual(
+                    expected, actual, msg="%s is not parsed properly." % to_check
+                )
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_rpz_unsupported_marker(self):
+        """
+        Test Check() for the case that the :code:`rpz` mode is chosen and an
+        unsupported marker is given.
+        """
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
+
+        expected = False
+
+        for domain in self.valid_domain:
+            for marker in self.NOT_SUPPORTED_RPZ_MARKER:
+                to_check = f"{domain}{marker}"
+                actual = Check(to_check).is_domain()
+
+                self.assertEqual(
+                    expected, actual, msg="%s is not parsed properly." % to_check
+                )
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_rpz_invalid(self):
+        """ "
+        Test Check() for the case that the :code:`rpz` mode is chosen and an
+        invalid domain is given.
+        """
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
+
+        expected = False
+
+        for domain in self.not_valid_domain:
+            for marker in self.SUPPORTED_RPZ_MARKER:
+                to_check = f"{domain}{marker}"
+                actual = Check(to_check).is_domain()
+
+                self.assertEqual(
+                    expected, actual, msg="%s is not parsed properly." % to_check
+                )
+
+        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
 
 
 if __name__ == "__main__":

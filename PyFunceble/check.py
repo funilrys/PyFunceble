@@ -91,12 +91,19 @@ class Check:
     def __init__(self, subject):
         self.subject = subject
 
-        if (
-            self.subject.startswith("*.")
-            and PyFunceble.CONFIGURATION.wildcard
-            and PyFunceble.CONFIGURATION.syntax
-        ):
-            self.subject = self.subject[2:]
+        if PyFunceble.CONFIGURATION.syntax:
+            if (
+                PyFunceble.CONFIGURATION.wildcard or PyFunceble.CONFIGURATION.rpz
+            ) and self.subject.startswith("*."):
+                self.subject = self.subject[2:]
+
+            if PyFunceble.CONFIGURATION.rpz:
+                to_remove = [".rpz-client-ip", ".rpz-ip", ".rpz-nsdname", ".rpz-nsip"]
+
+                for marker in to_remove:
+                    if self.subject.endswith(marker):
+                        self.subject = self.subject[: self.subject.find(marker)]
+                        break
 
     def is_url(
         self, return_base=False, return_formatted=False

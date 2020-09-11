@@ -113,7 +113,7 @@ class DomainAndIp(GathererBase):
                 PyFunceble.LOGGER.error(
                     "Expiration date of "
                     f"{repr(self.subject)} ({repr(expiration_date)}) "
-                    "was not converted proprely."
+                    "was not converted properly."
                 )
 
             if self.whois_db:

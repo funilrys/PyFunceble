@@ -304,6 +304,20 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                 )
 
                 test_control.add_argument(
+                    "--rpz",
+                    action="store_true",
+                    help="Switch the value of the RPZ policies test.\n\n"
+                    "When used, RPZ policies will be properly tested.\n\n"
+                    f"{Fore.MAGENTA}{Style.BRIGHT}Warning: This is not taken in consideration if the "
+                    f"'--syntax' argument is not given.{Style.RESET_ALL} %s"
+                    % (
+                        current_value_format
+                        + repr(PyFunceble.CONFIGURATION.rpz)
+                        + Style.RESET_ALL
+                    ),
+                )
+
+                test_control.add_argument(
                     "--shadow-file",
                     "--shadow",
                     action="store_true",
@@ -378,7 +392,7 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
                     "--wildcard",
                     action="store_true",
                     help="Switch the value of the wildcards test.\n\n"
-                    "When used, wildcards will be proprely tested.\n\n"
+                    "When used, wildcards will be properly tested.\n\n"
                     f"{Fore.MAGENTA}{Style.BRIGHT}Warning: This is not taken in consideration if the "
                     f"'--syntax' argument is not given.{Style.RESET_ALL} %s"
                     % (
@@ -1096,6 +1110,9 @@ def tool():  # pragma: no cover pylint: disable=too-many-branches,too-many-state
 
                 if args.reputation:
                     PyFunceble.CONFIGURATION.reputation = preset.switch("reputation")
+
+                if args.rpz:
+                    PyFunceble.CONFIGURATION.rpz = preset.switch("rpz")
 
                 if args.shadow_file:
                     PyFunceble.CONFIGURATION.shadow_file = preset.switch("shadow_file")
