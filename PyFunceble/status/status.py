@@ -145,8 +145,16 @@ class Status:
             "tested": self.subject,
             "url_syntax_validation": self.checker.is_url(),
             "whois_record": None,
-            "whois_server": PyFunceble.lookup.Referer(self.subject).get()[-1],
+            "whois_server": None,
         }
+
+        if (
+            not PyFunceble.CONFIGURATION.syntax
+            and not PyFunceble.CONFIGURATION.reputation
+        ):
+            pre_loading["whois_server"] = PyFunceble.lookup.Referer(self.subject).get()[
+                -1
+            ]
 
         for description, value in pre_loading.items():
             setattr(self, description, value)
