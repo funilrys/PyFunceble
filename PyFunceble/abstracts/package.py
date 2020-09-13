@@ -64,7 +64,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.3.1. (Teal Blauwbok: Grub)"
+    VERSION = "3.3.2. (Teal Blauwbok: Tick)"
     """
     Sets the package version.
 
@@ -213,7 +213,9 @@ class Version:
         Checks if the local version is the development version.
         """
 
-        return "dev" in Package.VERSION
+        return cls.split_versions(Package.VERSION, return_non_digits=True)[
+            -1
+        ].startswith("dev")
 
     @classmethod
     def is_local_cloned(cls):  # pragma: no cover

@@ -60,10 +60,15 @@ class UserAgent:
     """
 
     def __init__(self):
-        self.dumped = PyFunceble.helpers.Dict().from_json_file(
+        file_instance = PyFunceble.helpers.File(
             PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
         )
+
+        if not file_instance.exists():
+            PyFunceble.downloader.UserAgents()
+
+        self.dumped = PyFunceble.helpers.Dict().from_json_file(file_instance.path)
 
     def get(self):
         """
