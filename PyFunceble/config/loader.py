@@ -373,7 +373,7 @@ class Loader:
         while True:
             response = input(
                 f"{Style.BRIGHT}{self.path_to_config!r}{Style.RESET_ALL} was not found.\n"
-                "Install and load hte default configuration at the mentioned location? [y/n] "
+                "Install and load the default configuration at the mentioned location? [y/n] "
             ).lower()
 
             if response[0] not in ["y", "n"]:
