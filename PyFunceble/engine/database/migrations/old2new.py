@@ -253,7 +253,7 @@ class CleanupOldTables:
             statement = "DELETE FROM pyfunceble_tested WHERE id = :status_id"
 
             # pylint: disable=no-member
-            db_session.execute(statement, {"status_id": status.id})
+            db_session.execute(statement, {"status_id": data["id"]})
 
         if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
             PyFunceble.LOGGER.info(f'Switched {data["tested"]} to SQLAlchemy.')

@@ -71,6 +71,7 @@ jobs:
       script:
         - tox --current-env -c tox_run.ini
     - language: generic
+      if: branch =~ ^dev$
       os: osx
       osx_image: xcode12
       name: "Run with Python 3.8.5 under macOS 10.14 (Mojave)"

@@ -26,8 +26,8 @@ If applicable, add screenshots to help explain your problem.
 ## Versions
 
 **OS:** for example Arch Linux (5.0.5-arch1-1-ARCH)
-**Python Version:** for example 3.6.5
-**PyFunceble Version:** for example 1.2.0
+**Python Version:** for example 3.8.5
+**PyFunceble Version:** for example 3.3.0
 
 ## Additional context
 Add any other context about the problem here.
