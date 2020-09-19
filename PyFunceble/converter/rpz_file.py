@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the converters.
+Provides the conversion of the RPZ file format.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,12 +50,51 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
 
-from .adblock import AdBlock
-from .digit2digits import Digit2Digits
 from .file import File
-from .internal_url import InternalUrl
-from .month import Month
-from .rpz2subject import RPZ2Subject
-from .rpz_file import RPZFile
-from .wildcard2subject import Wildcard2Subject
+
+
+class RPZFile(File):
+    """
+    Converts an RPZ line to a subject to test.
+    """
+
+    comment_sign = ";"
+    special_chars = ["$", "@"]
+
+    def get_converted(self):
+        """
+        Provides the converted data.
+
+        .. warning::
+            This method returns return None if no subject
+            of interest was found.
+
+        :rtype: None, str, list
+        """
+
+        if isinstance(self.data_to_convert, list):
+            return [RPZFile(x).get_converted() for x in self.data_to_convert]
+
+        subject = self.data_to_convert.strip()
+
+        if (
+            subject
+            and not subject.startswith(self.comment_sign)
+            and not any(subject.startswith(x) for x in self.special_chars)
+        ):
+            if self.comment_sign in subject:
+                subject = subject[: subject.find(self.comment_sign)].strip()
+
+            if self.space_sign in subject or self.tab_sign in subject:
+                subject = subject.split()[0]
+
+                if subject.isdigit():
+                    return None
+                return subject
+
+            if subject.isdigit():
+                return None
+            return subject
+        return None

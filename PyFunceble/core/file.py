@@ -518,6 +518,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             subjects = PyFunceble.converter.AdBlock(
                 line, aggressive=PyFunceble.CONFIGURATION.aggressive
             ).get_converted()
+        elif PyFunceble.CONFIGURATION.rpz:
+            subjects = PyFunceble.converter.RPZFile(line).get_converted()
         else:
             subjects = PyFunceble.converter.File(line).get_converted()
 

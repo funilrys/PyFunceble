@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the converters.
+Provides some test related helpers.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,12 +50,32 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
 
-from .adblock import AdBlock
-from .digit2digits import Digit2Digits
-from .file import File
-from .internal_url import InternalUrl
-from .month import Month
-from .rpz2subject import RPZ2Subject
-from .rpz_file import RPZFile
-from .wildcard2subject import Wildcard2Subject
+
+def convert_ipv4_to_rpz(subject):
+    """
+    Converts the given IPv4 into a policy format which can later be used in the
+    tests.
+    """
+
+    return ".".join(reversed(subject.replace("/", ".").split(".")))
+
+
+def convert_ipv6_to_rpz(subject):
+    """
+    Converts the given IPV6 into a policy format which can later be used in the
+    tests.
+    """
+
+    starting_point = subject.replace("/", ".")
+
+    if "::" in starting_point:
+        splitted = starting_point.split("::")
+
+        if splitted[-1] and (splitted[-1].startswith(".") or "." in splitted[-1]):
+            starting_point = starting_point.replace("::", ".zz.")
+        else:
+            starting_point = starting_point.replace("::", ".zz")
+
+    return ".".join(reversed(starting_point.replace(":", ".").split(".")))

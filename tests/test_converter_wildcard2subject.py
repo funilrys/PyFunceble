@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the converters.
+Tests of PyFunceble.converters.wildcard2subject
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,12 +50,75 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
+from unittest import TestCase
+from unittest import main as launch_tests
 
-from .adblock import AdBlock
-from .digit2digits import Digit2Digits
-from .file import File
-from .internal_url import InternalUrl
-from .month import Month
-from .rpz2subject import RPZ2Subject
-from .rpz_file import RPZFile
-from .wildcard2subject import Wildcard2Subject
+from PyFunceble.converter.wildcard2subject import Wildcard2Subject
+
+
+class TestWildcard2Subject(TestCase):
+    """
+    Tests of PyFunceble.converter.wildcard2subject
+    """
+
+    def test_empty_string(self):
+        """
+        Tests of Wildcard2Subject for the case that an empty string is given.
+        """
+
+        given = ""
+        expected = None
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_wildcard(self):
+        """
+        Test of Wildcard2Subject for the case that a wildcard is given.
+        """
+
+        given = "*.example.org"
+        expected = "example.org"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_wildcard_at_the_end(self):
+        """
+        Test of Wildcard2Subject for the case that the wildcard is at the end
+        of the given string.
+        """
+
+        given = "example.org.*"
+        expected = "example.org.*"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_wildcard_on_both_end(self):
+        """
+        Test of Wildcard2Subject for the case that the wildcard is at both
+        end of the given string.
+        """
+
+        given = "*.example.org.*"
+        expected = "example.org.*"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_no_wildcard(self):
+        """
+        Test of Wildcard2Subject for the case that no wildcard is given.
+        """
+
+        given = "example.org"
+        expected = "example.org"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    launch_tests()

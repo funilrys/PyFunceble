@@ -89,21 +89,25 @@ class Check:
     """
 
     def __init__(self, subject):
-        self.subject = subject
+        self.subject = self._do_interpolation(subject)
 
-        if PyFunceble.CONFIGURATION.syntax:
-            if (
-                PyFunceble.CONFIGURATION.wildcard or PyFunceble.CONFIGURATION.rpz
-            ) and self.subject.startswith("*."):
-                self.subject = self.subject[2:]
+    @classmethod
+    def _do_interpolation(cls, subject):
+        """
+        Do the interpolation of the subject - if needed.
+        """
 
-            if PyFunceble.CONFIGURATION.rpz:
-                to_remove = [".rpz-client-ip", ".rpz-ip", ".rpz-nsdname", ".rpz-nsip"]
+        if not PyFunceble.CONFIGURATION.syntax:
+            return subject
 
-                for marker in to_remove:
-                    if self.subject.endswith(marker):
-                        self.subject = self.subject[: self.subject.find(marker)]
-                        break
+        result = subject
+
+        if PyFunceble.CONFIGURATION.wildcard and subject.startswith("*."):
+            result = PyFunceble.converter.Wildcard2Subject(subject).get_converted()
+
+        if PyFunceble.CONFIGURATION.rpz:
+            result = PyFunceble.converter.RPZ2Subject(subject).get_converted()
+        return result
 
     def is_url(
         self, return_base=False, return_formatted=False

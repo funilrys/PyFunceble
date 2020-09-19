@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the converters.
+Provides an easy way to convert wildcard subject into a testable subject.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,12 +50,42 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
 
-from .adblock import AdBlock
-from .digit2digits import Digit2Digits
-from .file import File
-from .internal_url import InternalUrl
-from .month import Month
-from .rpz2subject import RPZ2Subject
-from .rpz_file import RPZFile
-from .wildcard2subject import Wildcard2Subject
+from ..exceptions import WrongParameterType
+from .base import ConverterBase
+
+
+class Wildcard2Subject(ConverterBase):
+    """
+    Converts a given wildcard into a testable subject.
+    """
+
+    def __init__(self, data_to_convert):
+        if not isinstance(data_to_convert, str):
+            raise WrongParameterType(
+                f"<data_to_convert> should be {str}, {type(data_to_convert)} given."
+            )
+
+        super().__init__(data_to_convert)
+
+    def get_converted(self):
+        """
+        Provides the converted data.
+
+        .. warning::
+            This method returns return None if no subject
+            of interest was found.
+
+        :rtype: None, str, list
+        """
+
+        subject = self.data_to_convert.strip()
+
+        if not subject:
+            return None
+
+        if subject.startswith("*."):
+            return subject[2:]
+
+        return subject

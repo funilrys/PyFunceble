@@ -56,6 +56,9 @@ License:
 from unittest import TestCase
 from unittest import main as launch_tests
 
+import pyf_test_dataset
+import pyf_test_helpers
+
 import PyFunceble
 from PyFunceble.check import Check
 
@@ -77,94 +80,6 @@ class TestCheck(TestCase):
 
         PyFunceble.load_config(generate_directory_structure=False)
 
-        self.valid_domain = [
-            "_hello_.abuse.co.za.",
-            "_hello_.abuse.co.za",
-            "_hello_world_.abuse.co.za.",
-            "_hello_world_.abuse.co.za",
-            "_hello_world_.hello.eu.com.",
-            "_hello_world_.hello.eu.com",
-            "_hello-beautiful-world_.wold.eu.com.",
-            "_hello-beautiful-world_.wold.eu.com",
-            "_hello-world.abuse.co.za.",
-            "_hello-world.abuse.co.za",
-            "_hello._world.abuse.co.za.",
-            "_hello._world.abuse.co.za",
-            "_hello.abuse.co.za.",
-            "_hello.abuse.co.za",
-            "_world_.hello.eu.com.",
-            "_world_.hello.eu.com",
-            "_world.hello.eu.com.",
-            "_world.hello.eu.com",
-            "hello_.world.eu.com.",
-            "hello_.world.eu.com",
-            "hello_world.abuse.co.za.",
-            "hello_world.abuse.co.za",
-            "hello_world.world.com.",
-            "hello_world.world.com",
-            "hello_world.world.hello.com.",
-            "hello_world.world.hello.com",
-            "hello---world.com.",
-            "hello---world.com",
-            "hello-.abuse.co.za.",
-            "hello-.abuse.co.za",
-            "hello-world.com.",
-            "hello-world.com",
-            "hello.onion",
-            "hello.world_hello.world.com.",
-            "hello.world_hello.world.com",
-            "hello.world.com.",
-            "hello.world.com",
-            "hello.world.hello.com.",
-            "hello.world.hello.com",
-            "pogotowie-komputerowe-warszawa.com.pl",
-            "worl.hello.onion",
-            "xn--bittr-fsa6124c.com.",
-            "xn--bittr-fsa6124c.com",
-            "xn--bllogram-g80d.com.",
-            "xn--bllogram-g80d.com",
-            "xn--coinbse-30c.com.",
-            "xn--coinbse-30c.com",
-            "xn--cryptopi-ux0d.com.",
-            "xn--cryptopi-ux0d.com",
-            "xn--cyptopia-4e0d.com.",
-            "xn--cyptopia-4e0d.com",
-            "www.hello_world.blogspot.co.nz",
-            "hello_world.blogspot.co.nz",
-        ]
-
-        self.not_valid_domain = [
-            "_world._hello.eu.com",
-            "_world.hello_.eu.com",
-            "-hello-.abuse.co.za",
-            "-hello-world_.abuse.co.za",
-            "-hello-world_all-mine_.hello.eu.com",
-            "-hello.abuse.co.za",
-            "-hello.world",
-            "-world.hello",
-            "..",
-            ".",
-            "bịllogram.com",
-            "bittréẋ.com",
-            "coinbȧse.com",
-            "cryptopiạ.com",
-            "cṙyptopia.com",
-            "hello_world_.com",
-            "hello_world.com",
-            "hello-.world",
-            "hello-world",
-            "hello.-hello-world_.abuse.co.za",
-            "hello@world.com",
-            "httpWd",
-            "test.-hello-world_all-mine_.abuse.co.za",
-            "world_hello.com",
-            "world-.hello",
-            "world-hello",
-            "world.hello:80",
-            "world@hello.com",
-            "hello_world.co.za",
-        ]
-
     def test_is_url(self):
         """
         Test Check.is_url() for the case that the URL is valid.
@@ -172,7 +87,7 @@ class TestCheck(TestCase):
 
         expected = True
 
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             to_test = "http://{0}/helloworld".format(domain)
 
             actual = Check(to_test).is_url()
@@ -192,7 +107,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             to_check = "https://{0}/hello_world".format(domain)
             actual = Check(to_check).is_url()
 
@@ -206,7 +121,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             to_check = "{0}/hello_world".format(domain)
             actual = Check(to_check).is_url()
 
@@ -218,7 +133,7 @@ class TestCheck(TestCase):
         extract the url base.
         """
 
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             to_check = "http://{0}/hello_world".format(domain)
             expected = domain
 
@@ -235,7 +150,7 @@ class TestCheck(TestCase):
         expected = False
         PyFunceble.CONFIGURATION.idna_conversion = False
 
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             to_check = "http://{0}/hello_world".format(domain)
 
             actual = Check(to_check).is_url(return_base=True)
@@ -298,7 +213,7 @@ class TestCheck(TestCase):
 
         expected = True
 
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             to_check = domain
             actual = Check(to_check).is_domain()
 
@@ -312,7 +227,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             to_check = domain
             actual = Check(to_check).is_domain()
 
@@ -324,29 +239,9 @@ class TestCheck(TestCase):
         are valid.
         """
 
-        valid = [
-            "hello_world.world.com",
-            "hello_world.world.hello.com",
-            "hello.world_hello.world.com",
-            "hello.world.hello.com",
-            "hello_.world.eu.com",
-            "_world.hello.eu.com",
-            "_world_.hello.eu.com",
-            "_hello-beautiful-world_.wold.eu.com",
-            "_hello_world_.hello.eu.com",
-            "_hello.abuse.co.za",
-            "_hello_.abuse.co.za",
-            "_hello._world.abuse.co.za",
-            "_hello-world.abuse.co.za",
-            "_hello_world_.abuse.co.za",
-            "hello_world.abuse.co.za",
-            "hello-.abuse.co.za",
-            "hello.world.onion",
-        ]
-
         expected = True
 
-        for domain in valid:
+        for domain in pyf_test_dataset.VALID_SUBDOMAINS:
             to_check = domain
             actual = Check(to_check).is_subdomain()
 
@@ -358,24 +253,9 @@ class TestCheck(TestCase):
         are not valid.
         """
 
-        not_valid = [
-            "-hello.world",
-            "bịllogram.com",
-            "bittréẋ.com",
-            "coinbȧse.com",
-            "cryptopiạ.com",
-            "cṙyptopia.com",
-            "google.com",
-            "hello_world_.com",
-            "hello_world.com",
-            "hello-.world",
-            "hello-world",
-            "pogotowie-komputerowe-warszawa.com.pl",
-        ]
-
         expected = False
 
-        for domain in not_valid:
+        for domain in pyf_test_dataset.NOT_VALID_SUBDOMAINS:
             to_check = domain
             actual = Check(to_check).is_subdomain()
 
@@ -387,9 +267,8 @@ class TestCheck(TestCase):
         """
 
         expected = True
-        valid = ["15.47.85.65", "45.66.255.240", "255.45.65.0/24"]
 
-        for given_ip in valid:
+        for given_ip in pyf_test_dataset.VALID_IPV4:
             actual = Check(given_ip).is_ipv4()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % given_ip)
@@ -400,37 +279,8 @@ class TestCheck(TestCase):
         """
 
         expected = True
-        valid = [
-            "2001:db8::",
-            "2001:db8::1000",
-            "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-            "2001:db8:85a3:0:0:8a2e:370:7334",
-            "2001:db8:85a3::8a2e:370:7334",
-            "::1",
-            "::",
-            "2001:db8:1234::/48",
-            "2001:db8:1234:0000:0000:0000:0000:0000",
-            "2001:db8:1234:ffff:ffff:ffff:ffff:ffff",
-            "2001:db8:a::/64",
-            "2001:db8:a::123/64",
-            "2001:db8:85a3:8d3:1319:8a2e:370:7348",
-            "::/0",
-            "::/128",
-            "::1/128",
-            "::ffff:0:0/96",
-            "::ffff:0:0:0/96",
-            "64:ff9b::/96",
-            "100::/64",
-            "2001::/32",
-            "2001:20::/28",
-            "2001:db8::/32",
-            "2002::/16",
-            "fc00::/7",
-            "fe80::/10",
-            "ff00::/8",
-        ]
 
-        for given_ip in valid:
+        for given_ip in pyf_test_dataset.VALID_IPV6:
             actual = Check(given_ip).is_ipv6()
 
             self.assertEqual(expected, actual, msg="%s is invalid." % given_ip)
@@ -442,9 +292,8 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        not_valid = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
 
-        for given_ip in not_valid:
+        for given_ip in pyf_test_dataset.NOT_VALID_IPV4:
             to_check = given_ip
             actual = Check(to_check).is_ipv4()
 
@@ -456,16 +305,8 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        not_valid = [
-            "google.com",
-            "287.468.45.26",
-            "2001:db8::/4839",
-            "2001:::",
-            "2001:db8:85a3:8d3:1319:8a2e:370:7348f",
-            "2001:db8:85a3:8d3:1319:8a2e:370:7348/129",
-        ]
 
-        for given_ip in not_valid:
+        for given_ip in pyf_test_dataset.NOT_VALID_IPV6:
             to_check = given_ip
             actual = Check(to_check).is_ipv6()
 
@@ -477,7 +318,7 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             to_check = domain
             actual = Check(to_check).is_ip_range()
 
@@ -485,18 +326,13 @@ class TestCheck(TestCase):
 
     def test_is_ip_range_mixed(self):
         """
-        Test Check().is_ip_range()for the case that we give mixed dataset.
+        Test Check().is_ip_range()for the case that we give mixed pyf_test_dataset.
         """
 
         expected = True
-        subjects = [
-            "255.45.65.0/24",
-            "255.45.65.6/18",
-            "2001:db8::/128",
-            "2001:db8:1234::/48",
-            "2001:db8:a::/64",
-            "2001:db8:a::123/64",
-        ]
+        subjects = (
+            pyf_test_dataset.VALID_IPV4_RANGES + pyf_test_dataset.VALID_IPV6_RANGES
+        )
 
         for to_check in subjects:
             actual = Check(to_check).is_ip_range()
@@ -509,9 +345,8 @@ class TestCheck(TestCase):
         """
 
         expected = True
-        valid = ["255.45.65.0/24", "255.45.65.6/18"]
 
-        for given_ip in valid:
+        for given_ip in pyf_test_dataset.VALID_IPV4_RANGES:
             to_check = given_ip
             actual = Check(to_check).is_ipv4_range()
 
@@ -523,14 +358,8 @@ class TestCheck(TestCase):
         """
 
         expected = True
-        valid = [
-            "2001:db8::/128",
-            "2001:db8:1234::/48",
-            "2001:db8:a::/64",
-            "2001:db8:a::123/64",
-        ]
 
-        for given_ip in valid:
+        for given_ip in pyf_test_dataset.VALID_IPV6_RANGES:
             to_check = given_ip
             actual = Check(to_check).is_ipv6_range()
 
@@ -542,9 +371,8 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        not_valid = ["15.47.85.65", "45.66.255.240", "github.com"]
 
-        for given_ip in not_valid:
+        for given_ip in pyf_test_dataset.NOT_VALID_IPV4_RANGES:
             to_check = given_ip
             actual = Check(to_check).is_ipv4_range()
 
@@ -556,9 +384,8 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        not_valid = ["2001:db8::/129", "github.com", "2001:db8:a::"]
 
-        for given_ip in not_valid:
+        for given_ip in pyf_test_dataset.NOT_VALID_IPV6_RANGES:
             to_check = given_ip
             actual = Check(to_check).is_ipv6_range()
 
@@ -571,7 +398,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for to_check in self.valid_domain:
+        for to_check in pyf_test_dataset.VALID_DOMAINS:
             actual = Check(to_check).is_reserved_ip()
 
             self.assertEqual(expected, actual, msg="%s is a reserved IP." % to_check)
@@ -583,50 +410,7 @@ class TestCheck(TestCase):
 
         expected = True
 
-        subjects = [
-            "0.45.23.59",
-            "10.39.93.13",
-            "100.64.35.85",
-            "127.57.91.13",
-            "169.254.98.65",
-            "172.16.17.200",
-            "192.0.0.145",
-            "192.0.2.39",
-            "192.168.21.99",
-            "192.175.48.25",
-            "192.31.196.176",
-            "192.52.193.245",
-            "192.88.99.30",
-            "198.18.145.234",
-            "198.51.100.212",
-            "203.0.113.103",
-            "224.134.13.24",
-            "240.214.30.11",
-            "255.255.255.255",
-            "::",
-            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "::1",
-            "::ffff:0.0.0.0",
-            "::ffff:255.255.255.255",
-            "::ffff:0:0.0.0.0",
-            "::ffff:0:255.255.255.255",
-            "64:ff9b::0.0.0.0",
-            "64:ff9b::255.255.255.255",
-            "100::",
-            "100::ffff:ffff:ffff:ffff",
-            "2001::",
-            "2001::ffff:ffff:ffff:ffff:ffff:ffff",
-            "2001:20::",
-            "2001:2f:ffff:ffff:ffff:ffff:ffff:ffff",
-            "2001:db8::",
-            "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff",
-            "fc00::",
-            "fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "fe80::",
-            "febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "ff00::",
-            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-        ]
+        subjects = pyf_test_dataset.RESERVED_IPV4 + pyf_test_dataset.RESERVED_IPV6
 
         for to_check in subjects:
             actual = Check(to_check).is_reserved_ip()
@@ -640,7 +424,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for to_check in self.valid_domain:
+        for to_check in pyf_test_dataset.VALID_DOMAINS:
             actual = Check(to_check).is_reserved_ipv4()
 
             self.assertEqual(expected, actual)
@@ -650,29 +434,7 @@ class TestCheck(TestCase):
         Test Check().is_reserved_ipv4() for the case that a reserved IP is given.
         """
 
-        reserved = [
-            "0.45.23.59",
-            "10.39.93.13",
-            "100.64.35.85",
-            "127.57.91.13",
-            "169.254.98.65",
-            "172.16.17.200",
-            "192.0.0.145",
-            "192.0.2.39",
-            "192.168.21.99",
-            "192.175.48.25",
-            "192.31.196.176",
-            "192.52.193.245",
-            "192.88.99.30",
-            "198.18.145.234",
-            "198.51.100.212",
-            "203.0.113.103",
-            "224.134.13.24",
-            "240.214.30.11",
-            "255.255.255.255",
-        ]
-
-        for subject in reserved:
+        for subject in pyf_test_dataset.RESERVED_IPV4:
             expected = True
             actual = Check(subject).is_reserved_ipv4()
 
@@ -685,33 +447,7 @@ class TestCheck(TestCase):
         Test Check().is_reserved_ipv6() for the case that a reserved IP is given.
         """
 
-        reserved = [
-            "::",
-            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "::1",
-            "::ffff:0.0.0.0",
-            "::ffff:255.255.255.255",
-            "::ffff:0:0.0.0.0",
-            "::ffff:0:255.255.255.255",
-            "64:ff9b::0.0.0.0",
-            "64:ff9b::255.255.255.255",
-            "100::",
-            "100::ffff:ffff:ffff:ffff",
-            "2001::",
-            "2001::ffff:ffff:ffff:ffff:ffff:ffff",
-            "2001:20::",
-            "2001:2f:ffff:ffff:ffff:ffff:ffff:ffff",
-            "2001:db8::",
-            "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff",
-            "fc00::",
-            "fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "fe80::",
-            "febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-            "ff00::",
-            "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
-        ]
-
-        for subject in reserved:
+        for subject in pyf_test_dataset.RESERVED_IPV6:
             expected = True
             actual = Check(subject).is_reserved_ipv6()
 
@@ -725,9 +461,8 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        not_reserved = ["hello.world", "::1", "45.34.29.15"]
 
-        for subject in not_reserved:
+        for subject in pyf_test_dataset.NOT_RESERVED_IPV4:
             actual = Check(subject).is_reserved_ipv4()
 
             self.assertEqual(
@@ -740,20 +475,12 @@ class TestCheck(TestCase):
         """
 
         expected = False
-        valid = [
-            "2001:db8::/128",
-            "hello.world",
-            "2001:db8:1234::/48",
-            "2001:db8:a::/64",
-            "2001:db8:a::123/64",
-            "github.com",
-        ]
 
-        for subject in valid:
+        for subject in pyf_test_dataset.NOT_RESERVED_IPV6:
             to_check = subject
             actual = Check(to_check).is_reserved_ipv6()
 
-            self.assertEqual(expected, actual, msg="%s is IPv6 reserved." % subject)
+            self.assertEqual(expected, actual)
 
     def test_wildcard_valid(self):
         """
@@ -764,13 +491,11 @@ class TestCheck(TestCase):
         PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
 
         expected = True
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             to_check = f"*.{domain}"
             actual = Check(to_check).is_domain()
 
-            self.assertEqual(
-                expected, actual, msg="%s is not parsed properly." % to_check
-            )
+            self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
 
@@ -783,13 +508,11 @@ class TestCheck(TestCase):
         PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
 
         expected = False
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             to_check = f"*.{domain}"
             actual = Check(to_check).is_domain()
 
-            self.assertEqual(
-                expected, actual, msg="%s is not parsed properly." % to_check
-            )
+            self.assertEqual(expected, actual)
 
         PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
 
@@ -803,16 +526,67 @@ class TestCheck(TestCase):
 
         expected = True
 
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             for marker in self.SUPPORTED_RPZ_MARKER:
+                if "ip" in marker:
+                    continue
+
                 to_check = f"{domain}{marker}"
                 actual = Check(to_check).is_domain()
 
+                self.assertEqual(expected, actual)
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_rpz_valid_ipv4(self):
+        """
+        Test Check() for the case that an IPv4 is given.
+        """
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
+        expected = True
+
+        for valid_ip in pyf_test_dataset.VALID_IPV4:
+            subject = pyf_test_helpers.convert_ipv4_to_rpz(valid_ip)
+
+            for marker in self.SUPPORTED_RPZ_MARKER:
+                if "ip" not in marker:
+                    continue
+
+                to_check = f"{subject}{marker}"
+                actual = Check(to_check).is_ip()
+
                 self.assertEqual(
-                    expected, actual, msg="%s is not parsed properly." % to_check
+                    expected,
+                    actual,
                 )
 
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
+
+    def test_rpz_valid_ipv6(self):
+        """
+        Test Check() for the case that an IPv6 is given.
+        """
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
+        expected = True
+
+        for valid_ip in pyf_test_dataset.VALID_IPV6:
+            subject = pyf_test_helpers.convert_ipv6_to_rpz(valid_ip)
+
+            for marker in self.SUPPORTED_RPZ_MARKER:
+                if "ip" not in marker:
+                    continue
+
+                to_check = f"{subject}{marker}"
+                actual = Check(to_check).is_ip()
+
+                self.assertEqual(
+                    expected,
+                    actual,
+                )
+
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
 
     def test_rpz_unsupported_marker(self):
         """
@@ -824,7 +598,7 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for domain in self.valid_domain:
+        for domain in pyf_test_dataset.VALID_DOMAINS:
             for marker in self.NOT_SUPPORTED_RPZ_MARKER:
                 to_check = f"{domain}{marker}"
                 actual = Check(to_check).is_domain()
@@ -833,7 +607,7 @@ class TestCheck(TestCase):
                     expected, actual, msg="%s is not parsed properly." % to_check
                 )
 
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
 
     def test_rpz_invalid(self):
         """ "
@@ -845,8 +619,11 @@ class TestCheck(TestCase):
 
         expected = False
 
-        for domain in self.not_valid_domain:
+        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
             for marker in self.SUPPORTED_RPZ_MARKER:
+                if "ip" in marker:
+                    continue
+
                 to_check = f"{domain}{marker}"
                 actual = Check(to_check).is_domain()
 
@@ -854,7 +631,7 @@ class TestCheck(TestCase):
                     expected, actual, msg="%s is not parsed properly." % to_check
                 )
 
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
+        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
 
 
 if __name__ == "__main__":
