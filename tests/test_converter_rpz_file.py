@@ -83,38 +83,14 @@ class TestRPZFileLineConverter(TestCase):
             "hello.world.example.world. knock.knock.knock.knock. "
             "2020091304 3600 60 604800 60",
         ),
-        (
-            None,
-            "$TTL 3600"
-        ),
-        (
-            None,
-            "@ IN SOA exampledns.mydns. root.mydns. ("
-        ),
-        (
-            None,
-            "2020091801 ; serial number"
-        ),
-        (
-            None,
-            "3600       ; refresh 1 hour"
-        ),
-        (
-            None,
-            "600        ; retry 10 minutes"
-        ),
-        (
-            None,
-            "86400      ; expiry 1 week"
-        ),
-        (
-            None,
-            "600 )      ; min ttl 10 minutes"
-        ),
-        (
-            None,
-            "@ IN NS exampledns.mydns."
-        )
+        (None, "$TTL 3600"),
+        (None, "@ IN SOA exampledns.mydns. root.mydns. ("),
+        (None, "2020091801 ; serial number"),
+        (None, "3600       ; refresh 1 hour"),
+        (None, "600        ; retry 10 minutes"),
+        (None, "86400      ; expiry 1 week"),
+        (None, "600 )      ; min ttl 10 minutes"),
+        (None, "@ IN NS exampledns.mydns."),
     ]
 
     COMMENTED_LINES = [" ; Hello, World!", "; World, Hello! ", "    ; Hello, World!"]
