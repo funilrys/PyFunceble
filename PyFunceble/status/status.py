@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+import domain2idna
+
 import PyFunceble
 
 
@@ -62,7 +64,6 @@ class Status:
 
     :param str subject:
         The subject which we describe.
-
     :ivar str _status_source:
         The status source before the application
         of our extra rules (if activated).
@@ -110,6 +111,7 @@ class Status:
         "dns_lookup",
         "domain_syntax_validation",
         "expiration_date",
+        "given",
         "http_status_code",
         "ipv4_range_syntax_validation",
         "ipv4_syntax_validation",
@@ -125,12 +127,23 @@ class Status:
     ]
 
     def __init__(self, subject):
-        self.subject = subject
-        self.checker = PyFunceble.Check(self.subject)
+        given = subject
+
+        if PyFunceble.CONFIGURATION.wildcard:
+            subject = PyFunceble.converter.Wildcard2Subject(subject).get_converted()
+
+        if PyFunceble.CONFIGURATION.rpz:
+            subject = PyFunceble.converter.RPZ2Subject(subject).get_converted()
+
+        if PyFunceble.CONFIGURATION.idna_conversion:
+            subject = domain2idna.domain2idna(subject)
+
+        self.checker = PyFunceble.Check(subject)
 
         pre_loading = {
             "_status_source": None,
             "_status": None,
+            "given": given,
             "dns_lookup": None,
             "domain_syntax_validation": self.checker.is_domain(),
             "expiration_date": None,
@@ -142,10 +155,10 @@ class Status:
             "status_source": None,
             "status": None,
             "subdomain_syntax_validation": self.checker.is_subdomain(),
-            "tested": self.subject,
+            "tested": subject,
             "url_syntax_validation": self.checker.is_url(),
             "whois_record": None,
-            "whois_server": PyFunceble.lookup.Referer(self.subject).get()[-1],
+            "whois_server": PyFunceble.lookup.Referer(subject).get()[-1],
         }
 
         for description, value in pre_loading.items():

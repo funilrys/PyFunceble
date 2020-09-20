@@ -89,25 +89,7 @@ class Check:
     """
 
     def __init__(self, subject):
-        self.subject = self._do_interpolation(subject)
-
-    @classmethod
-    def _do_interpolation(cls, subject):
-        """
-        Do the interpolation of the subject - if needed.
-        """
-
-        if not PyFunceble.CONFIGURATION.syntax:
-            return subject
-
-        result = subject
-
-        if PyFunceble.CONFIGURATION.wildcard and subject.startswith("*."):
-            result = PyFunceble.converter.Wildcard2Subject(subject).get_converted()
-
-        if PyFunceble.CONFIGURATION.rpz:
-            result = PyFunceble.converter.RPZ2Subject(subject).get_converted()
-        return result
+        self.subject = subject
 
     def is_url(
         self, return_base=False, return_formatted=False

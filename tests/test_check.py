@@ -57,7 +57,6 @@ from unittest import TestCase
 from unittest import main as launch_tests
 
 import pyf_test_dataset
-import pyf_test_helpers
 
 import PyFunceble
 from PyFunceble.check import Check
@@ -69,9 +68,6 @@ class TestCheck(TestCase):
     """
 
     # pylint: disable=too-many-public-methods
-
-    SUPPORTED_RPZ_MARKER = [".rpz-client-ip", ".rpz-ip", ".rpz-nsdname", ".rpz-nsip"]
-    NOT_SUPPORTED_RPZ_MARKER = [".rpz-passthru"]
 
     def setUp(self):
         """
@@ -481,157 +477,6 @@ class TestCheck(TestCase):
             actual = Check(to_check).is_reserved_ipv6()
 
             self.assertEqual(expected, actual)
-
-    def test_wildcard_valid(self):
-        """
-        Test Check() for the case that the :code:`wildcard` mode is chosen and
-        a valid domain is given.
-        """
-
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
-
-        expected = True
-        for domain in pyf_test_dataset.VALID_DOMAINS:
-            to_check = f"*.{domain}"
-            actual = Check(to_check).is_domain()
-
-            self.assertEqual(expected, actual)
-
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_wildcard_invalid(self):
-        """
-        Test Check() for the case that the :code:`wildcard` mode is chosen and
-        an invalid domain is given.
-        """
-
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = True
-
-        expected = False
-        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
-            to_check = f"*.{domain}"
-            actual = Check(to_check).is_domain()
-
-            self.assertEqual(expected, actual)
-
-        PyFunceble.CONFIGURATION.wildcard = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_rpz_valid(self):
-        """
-        Test Check() for the case that the :code:`rpz` mode is chosen and a
-        valid domain is given.
-        """
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
-
-        expected = True
-
-        for domain in pyf_test_dataset.VALID_DOMAINS:
-            for marker in self.SUPPORTED_RPZ_MARKER:
-                if "ip" in marker:
-                    continue
-
-                to_check = f"{domain}{marker}"
-                actual = Check(to_check).is_domain()
-
-                self.assertEqual(expected, actual)
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_rpz_valid_ipv4(self):
-        """
-        Test Check() for the case that an IPv4 is given.
-        """
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
-        expected = True
-
-        for valid_ip in pyf_test_dataset.VALID_IPV4:
-            subject = pyf_test_helpers.convert_ipv4_to_rpz(valid_ip)
-
-            for marker in self.SUPPORTED_RPZ_MARKER:
-                if "ip" not in marker:
-                    continue
-
-                to_check = f"{subject}{marker}"
-                actual = Check(to_check).is_ip()
-
-                self.assertEqual(
-                    expected,
-                    actual,
-                )
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_rpz_valid_ipv6(self):
-        """
-        Test Check() for the case that an IPv6 is given.
-        """
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
-        expected = True
-
-        for valid_ip in pyf_test_dataset.VALID_IPV6:
-            subject = pyf_test_helpers.convert_ipv6_to_rpz(valid_ip)
-
-            for marker in self.SUPPORTED_RPZ_MARKER:
-                if "ip" not in marker:
-                    continue
-
-                to_check = f"{subject}{marker}"
-                actual = Check(to_check).is_ip()
-
-                self.assertEqual(
-                    expected,
-                    actual,
-                )
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_rpz_unsupported_marker(self):
-        """
-        Test Check() for the case that the :code:`rpz` mode is chosen and an
-        unsupported marker is given.
-        """
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
-
-        expected = False
-
-        for domain in pyf_test_dataset.VALID_DOMAINS:
-            for marker in self.NOT_SUPPORTED_RPZ_MARKER:
-                to_check = f"{domain}{marker}"
-                actual = Check(to_check).is_domain()
-
-                self.assertEqual(
-                    expected, actual, msg="%s is not parsed properly." % to_check
-                )
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
-
-    def test_rpz_invalid(self):
-        """ "
-        Test Check() for the case that the :code:`rpz` mode is chosen and an
-        invalid domain is given.
-        """
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = True
-
-        expected = False
-
-        for domain in pyf_test_dataset.NOT_VALID_DOMAINS:
-            for marker in self.SUPPORTED_RPZ_MARKER:
-                if "ip" in marker:
-                    continue
-
-                to_check = f"{domain}{marker}"
-                actual = Check(to_check).is_domain()
-
-                self.assertEqual(
-                    expected, actual, msg="%s is not parsed properly." % to_check
-                )
-
-        PyFunceble.CONFIGURATION.rpz = PyFunceble.CONFIGURATION.syntax = False
 
 
 if __name__ == "__main__":

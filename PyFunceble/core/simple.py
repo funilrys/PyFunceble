@@ -50,8 +50,6 @@ License:
     limitations under the License.
 """
 
-import domain2idna
-
 import PyFunceble
 
 from .cli import CLICore
@@ -68,11 +66,7 @@ class SimpleCore(CLICore):
         super().__init__()
 
         self.mining = PyFunceble.engine.Mining("simple")
-
-        if PyFunceble.CONFIGURATION.idna_conversion:
-            self.subject = domain2idna.domain2idna(subject)
-        else:
-            self.subject = subject
+        self.subject = subject
 
         if PyFunceble.CONFIGURATION.generate_complements:
             self.subject = PyFunceble.get_complements(self.subject, include_given=True)

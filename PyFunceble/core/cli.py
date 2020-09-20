@@ -185,12 +185,12 @@ class CLICore:
             if not filename:
                 filename = "simple"
 
-            status_input = output.copy()
+            output["tested"] = output["given"]
 
-            undesirable_status = ["dns_lookup", "whois_record", "whois_server"]
+            undesirable_status = ["dns_lookup", "whois_record", "whois_server", "given"]
 
             for index in undesirable_status:
-                del status_input[index]
+                del output[index]
 
             with session.Session() as db_session:
                 # pylint: disable=no-member
@@ -209,13 +209,13 @@ class CLICore:
                     status = (
                         db_session.query(Status)
                         .filter(Status.file_id == file.id)
-                        .filter(Status.tested == status_input["tested"])
+                        .filter(Status.tested == output["given"])
                         .one()
                     )
                 except NoResultFound:
                     status = Status(file_id=file.id)
 
-            for index, value in status_input.items():
+            for index, value in output.items():
                 setattr(status, index, value)
 
             status.test_completed = True

@@ -51,7 +51,6 @@ License:
 
 from tempfile import NamedTemporaryFile
 
-import domain2idna
 from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
@@ -198,7 +197,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                             whois_server = None
 
                     generate = PyFunceble.output.Generate(
-                        data.tested,
+                        data.given,
                         f"file_{self.file_type}",
                         data.status,
                         source=data.status_source,
@@ -263,9 +262,6 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         Tests the given subject and return it's results.
         """
 
-        if PyFunceble.CONFIGURATION.idna_conversion:
-            subject = domain2idna.domain2idna(subject)
-
         if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
             PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
 
@@ -314,7 +310,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 filename=self.file,
             ).get()
 
-        self.generate_complement_status_file(result["tested"], result["status"])
+        self.generate_complement_status_file(result["given"], result["status"])
         self.save_into_database(result, self.file)
 
         return result
@@ -396,22 +392,22 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
 
         if auto_continue_db:
-            auto_continue_db.add(test_output["tested"], test_output["status"])
+            auto_continue_db.add(test_output["given"], test_output["status"])
 
         if test_output["status"].lower() in self.list_of_up_statuses:
             if mining:
                 mining.mine(test_output["tested"], file_content_type)
 
-            if inactive_db and test_output["tested"] in inactive_db:
+            if inactive_db and test_output["given"] in inactive_db:
                 PyFunceble.output.Generate(
-                    test_output["tested"],
+                    test_output["given"],
                     f"file_{file_content_type}",
                     PyFunceble.STATUS.official.up,
                 ).analytic_file("suspicious")
 
-                inactive_db.remove(test_output["tested"])
+                inactive_db.remove(test_output["given"])
         elif inactive_db:
-            inactive_db.add(test_output["tested"], test_output["status"])
+            inactive_db.add(test_output["given"], test_output["status"])
 
         if (
             auto_continue_db
@@ -420,9 +416,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         ):
             if "complements" in auto_continue_db.database:
 
-                while test_output["tested"] in auto_continue_db.database["complements"]:
+                while test_output["given"] in auto_continue_db.database["complements"]:
                     auto_continue_db.database["complements"].remove(
-                        test_output["tested"]
+                        test_output["given"]
                     )
                     auto_continue_db.save()
 
@@ -444,7 +440,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             and PyFunceble.CONFIGURATION.multiprocess
         ):
             generate = PyFunceble.output.Generate(
-                test_output["tested"],
+                test_output["given"],
                 f"file_{self.file_type}",
                 test_output["status"],
                 source=test_output["status_source"],

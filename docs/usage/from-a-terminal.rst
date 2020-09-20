@@ -235,10 +235,6 @@ This argument allows you to disable it!
 
     **Default value:** :code:`False`
 
-    .. warning::
-        This argument is not taken into consideration if the :code:`--syntax` argument
-        is not given.
-
 :code:`--shadow-file` | :code:`--shadow`
 """"""""""""""""""""""""""""""""""""""""
 
@@ -315,10 +311,6 @@ to set a timeout.
     Switch the value of the wildcards test.
 
     **Default value:** :code:`False`
-
-    .. warning::
-        This argument is not taken into consideration if the :code:`--syntax` argument
-        is not given.
 
 DNS (resolver) control
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -945,9 +937,6 @@ Global overview
         --rpz                 Switch the value of the RPZ policies test.
 
                                 When used, RPZ policies will be properly tested.
-
-                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
-                                Configured value: False
         --shadow-file, --shadow
                                 Switch the value of the usage and generation of a shadow file before a file test starts.
 
@@ -970,9 +959,6 @@ Global overview
         --wildcard            Switch the value of the wildcards test.
 
                                 When used, wildcards will be properly tested.
-
-                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
-                                Configured value: False
 
     DNS (resolver) control:
         --dns DNS [DNS ...]   Set one or more DNS server(s) to use during testing. Separated by spaces.

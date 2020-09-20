@@ -56,7 +56,6 @@ from multiprocessing import Manager, Pipe, Process, active_children
 from tempfile import NamedTemporaryFile
 from traceback import format_exc
 
-import domain2idna
 from colorama import Fore, Style
 from colorama import init as initiate_colorama
 
@@ -168,9 +167,6 @@ class MultiprocessCore(
 
         PyFunceble.INTERN.update(intern)
 
-        if PyFunceble.CONFIGURATION.idna_conversion:
-            subject = domain2idna.domain2idna(subject)
-
         if not self.should_be_ignored(
             subject,
             self.autocontinue,
@@ -196,7 +192,7 @@ class MultiprocessCore(
                     subject, complete=True, is_parent=False, db_file_name=self.file
                 ).availability(file_content_type)
 
-            self.generate_complement_status_file(result["tested"], result["status"])
+            self.generate_complement_status_file(result["given"], result["status"])
             self.save_into_database(result, self.file)
 
             if manager_data is not None:
@@ -247,7 +243,7 @@ class MultiprocessCore(
                 )
 
                 if tracker:
-                    tracker.add_position(len(test_output["tested"]))
+                    tracker.add_position(len(test_output["given"]))
 
             manager_data[:] = []
 
