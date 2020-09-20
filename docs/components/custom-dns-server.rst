@@ -34,8 +34,10 @@ to
 ::
 
     dns_server:
-        - "8.8.8.8"
-        - "8.8.8.8"
+        - "9.9.9.9"
+        - "2620:fe::fe"
+        - "88.198.70.38"
+        - "2a01:4f8:140:5021::39"
 
 
 Since :code:`v3.0.0` it is possible to assign a specific port to use with the
