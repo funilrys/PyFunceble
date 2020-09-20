@@ -13,7 +13,8 @@ Thanks to those awesome organization(s), tool(s) and or people(s) for
 *   Their support
 *   Their testings reports
 
-which helped and/or still help me build, test and or make `PyFunceble`_ a better tool.
+which helped and/or still help me build, test and or make `PyFunceble`_
+a better tool.
 
 ::
 
@@ -43,7 +44,8 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Saurabh Kumar - `@theskumar`_ (`python-dotenv`_)
 -   ScriptTiger - `@ScriptTiger`_
 -   SMed79 - `@SMed79`_
--   spirillen - `@spirillen`_
+-   spirillen - `@spirillen`_ (`mypdns`_)
+-   sqlalchemy - `@sqlalchemy`_
 -   The YAML Project - `@yaml`_ (`pyyaml`_)
 -   `yWorks`_ - (`yEd Graph Editor`_)
 
@@ -69,13 +71,15 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 .. _@faressoft: https://github.com/faressoft
 .. _@kennethreitz: https://github.com/kennethreitz
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
+.. _@mypdns: https://www.mypdns.org/
 .. _@pi-hole: https://github.com/pi-hole/pi-hole
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@rthalley: https://github.com/rthalley
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
-.. _@spirillen: https://github.com/spirillen
+.. _@spirillen: https://www.mypdns.org/p/Spirillen/
+.. _@sqlalchemy:https://www.sqlalchemy.org/
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@yaml: https://github.com/yaml
