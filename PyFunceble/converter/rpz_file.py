@@ -60,7 +60,7 @@ class RPZFile(File):
     Converts an RPZ line to a subject to test.
     """
 
-    comment_sign = ";"
+    comment_sign = [";", "//", "#"]
     special_chars = ["$", "@"]
 
     def get_converted(self):
@@ -81,11 +81,12 @@ class RPZFile(File):
 
         if (
             subject
-            and not subject.startswith(self.comment_sign)
+            and not any(subject.startswith(x) for x in self.comment_sign)
             and not any(subject.startswith(x) for x in self.special_chars)
         ):
-            if self.comment_sign in subject:
-                subject = subject[: subject.find(self.comment_sign)].strip()
+            for comment_sign in self.comment_sign:
+                if comment_sign in subject:
+                    subject = subject[: subject.find(comment_sign)].strip()
 
             if self.space_sign in subject or self.tab_sign in subject:
                 subject = subject.split()[0]
