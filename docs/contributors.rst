@@ -1,7 +1,9 @@
 Contributors
 ============
 
-Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
+Thanks to those awesome peoples for their awesome and crazy idea(s),
+contribution(s) and or issue report which made or make `PyFunceble`_ a
+better tool.
 
 ::
 
@@ -46,7 +48,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@speedmann: https://github.com/speedmann
-.. _@spirillen: https://github.com/spirillen
+.. _@spirillen: https://www.mypdns.org/p/Spirillen/
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
