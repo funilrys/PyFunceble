@@ -262,7 +262,7 @@ class MultiprocessCore(
 
         exception_present = False
 
-        for process in processes:
+        for index, process in enumerate(processes):
             # We loop through the list of processes.
 
             try:
@@ -274,16 +274,21 @@ class MultiprocessCore(
                     _, traceback = process.exception
 
                     # We print the traceback.
-                    print(traceback)
-                    PyFunceble.LOGGER.error(traceback)
+                    print(f"\n{traceback}")
 
                     exception_present = True
+
+                    PyFunceble.LOGGER.error(traceback)
 
                 if exception_present:
                     # We kill the process.
                     process.terminate()
+
+                processes.pop(index)
             except AttributeError:
                 continue
+
+        processes[:] = []
 
         if exception_present:
             # We finally exit.
@@ -296,11 +301,11 @@ class MultiprocessCore(
         Starts a new process.
         """
 
-        if subject in self.autocontinue:
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                PyFunceble.LOGGER.info(f"Skipped {subject!r}: already tested.")
-                print(".", end="")
-
+        if subject in self.autocontinue and (
+            self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots
+        ):
+            PyFunceble.LOGGER.info(f"Skipped {subject!r}: already tested.")
+            print(".", end="")
         else:
             original_config = PyFunceble.CONFIGURATION.copy()
             original_intern = PyFunceble.INTERN.copy()
@@ -330,6 +335,10 @@ class MultiprocessCore(
             PyFunceble.LOADER.inject_all()
 
             PyFunceble.INTERN.update(original_intern)
+
+            return process
+
+        return None
 
     def __process_live_merging(self, finished, manager_data, tracker):
         """
@@ -381,6 +390,7 @@ class MultiprocessCore(
 
         minimum_position = tracker.get_position() if tracker else 0
         file_position = 0
+        processes = []
 
         while True:
             while (
@@ -415,10 +425,12 @@ class MultiprocessCore(
 
                     if isinstance(subjects, list):
                         for subject in subjects:
-                            self.__start_process(
-                                subject,
-                                manager_data,
-                                ignore_inactive_db_check=ignore_inactive_db_check,
+                            processes.append(
+                                self.__start_process(
+                                    subject,
+                                    manager_data,
+                                    ignore_inactive_db_check=ignore_inactive_db_check,
+                                )
                             )
 
                             if index != "funilrys":
@@ -426,10 +438,12 @@ class MultiprocessCore(
                                 # the mining database.
                                 self.mining.remove(index, subject)
                     else:
-                        self.__start_process(
-                            subjects,
-                            manager_data,
-                            ignore_inactive_db_check=ignore_inactive_db_check,
+                        processes.append(
+                            self.__start_process(
+                                subjects,
+                                manager_data,
+                                ignore_inactive_db_check=ignore_inactive_db_check,
+                            )
                         )
 
                         if index != "funilrys":
@@ -445,7 +459,7 @@ class MultiprocessCore(
                     finished = True
                     break
 
-            self.__check_exception(active_children(), manager_data)
+            self.__check_exception(processes, manager_data)
 
             while len(
                 active_children()
