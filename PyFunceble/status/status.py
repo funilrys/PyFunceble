@@ -143,10 +143,10 @@ class Status:
         pre_loading = {
             "_status_source": None,
             "_status": None,
-            "given": given,
             "dns_lookup": None,
             "domain_syntax_validation": self.checker.is_domain(),
             "expiration_date": None,
+            "given": given,
             "http_status_code": PyFunceble.HTTP_CODE.not_found_default,
             "ipv4_range_syntax_validation": self.checker.is_ipv4_range(),
             "ipv4_syntax_validation": self.checker.is_ipv4(),

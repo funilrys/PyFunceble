@@ -197,7 +197,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                             whois_server = None
 
                     generate = PyFunceble.output.Generate(
-                        data.given,
+                        data.tested,
                         f"file_{self.file_type}",
                         data.status,
                         source=data.status_source,

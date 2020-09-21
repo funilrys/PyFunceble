@@ -209,7 +209,7 @@ class CLICore:
                     status = (
                         db_session.query(Status)
                         .filter(Status.file_id == file.id)
-                        .filter(Status.tested == output["given"])
+                        .filter(Status.tested == output["tested"])
                         .one()
                     )
                 except NoResultFound:
