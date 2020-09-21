@@ -262,7 +262,7 @@ class MultiprocessCore(
 
         exception_present = False
 
-        for index, process in enumerate(processes):
+        for process in processes:
             # We loop through the list of processes.
 
             try:
@@ -284,7 +284,6 @@ class MultiprocessCore(
                     # We kill the process.
                     process.terminate()
 
-                processes.pop(index)
             except AttributeError:
                 continue
 
