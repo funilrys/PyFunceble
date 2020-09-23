@@ -333,33 +333,45 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             PyFunceble.LOGGER.debug(f"Ignored {subject} because not true.")
             return True
 
+        PyFunceble.LOGGER.debug(f"Continue. {subject} evaluates to {True}.")
+
         if subject.startswith(PyFunceble.converter.File.comment_sign):
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it starts with comment sign."
             )
             return True
 
-        if auto_continue_db and subject in auto_continue_db.get_already_tested():
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} does not starts with {PyFunceble.converter.File.comment_sign}."
+        )
+
+        if auto_continue_db and subject in auto_continue_db:
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it is into the list of already tested (autocontinue)."
             )
             return True
 
-        if (
-            not ignore_inactive_db_check
-            and inactive_db
-            and subject in inactive_db.get_already_tested()
-        ):
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} is not into the list of already tested (autocontinue)."
+        )
+
+        if not ignore_inactive_db_check and inactive_db and subject in inactive_db:
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it is into the list of already tested (inactive_db)."
             )
             return True
+
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} is not into the list of already tested (inactive_db)."
+        )
 
         if PyFunceble.helpers.Regex(cls.regex_ignore).match(
             subject, return_match=False
         ):
             PyFunceble.LOGGER.debug(f"Ignored {subject} because it match our regex.")
             return True
+
+        PyFunceble.LOGGER.debug(f"Continue. {subject} does not match our regex.")
 
         if (
             not PyFunceble.CONFIGURATION.local
@@ -370,6 +382,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             )
             return True
 
+        PyFunceble.LOGGER.debug(f"Continue. {subject} is not a reserved IP.")
+
         if PyFunceble.CONFIGURATION.filter and not PyFunceble.helpers.Regex(
             PyFunceble.CONFIGURATION.filter
         ).match(subject, return_match=False):
@@ -378,6 +392,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 f"match the given filter ({PyFunceble.CONFIGURATION.fileter})"
             )
             return True
+
+        PyFunceble.LOGGER.debug(f"Continue. {subject} (possibly) match a filter.")
 
         return False
 

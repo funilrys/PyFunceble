@@ -206,10 +206,46 @@ class CleanupOldTables:
 
         PyFunceble.LOGGER.debug(f"Switching:\n{data}")
         with PyFunceble.engine.database.loader.session.Session() as db_session:
-            # pylint: disable=no-member
             try:
                 file = (
                     db_session.query(File).filter(File.path == data["file_path"]).one()
+                )
+
+                # pylint: disable=protected-access
+                previously_saved = (
+                    file.subjects.filter(Status.tested == data["tested"])
+                    .filter(Status._status == data["_status"])
+                    .filter(Status.status == data["status"])
+                    .filter(Status._status_source == data["_status_source"])
+                    .filter(Status.status_source == data["status_source"])
+                    .filter(
+                        Status.domain_syntax_validation
+                        == data["domain_syntax_validation"]
+                    )
+                    .filter(Status.expiration_date == data["expiration_date"])
+                    .filter(Status.http_status_code == data["http_status_code"])
+                    .filter(
+                        Status.ipv4_range_syntax_validation
+                        == data["ipv4_range_syntax_validation"]
+                    )
+                    .filter(
+                        Status.ipv4_syntax_validation == data["ipv4_syntax_validation"]
+                    )
+                    .filter(
+                        Status.ipv6_range_syntax_validation
+                        == data["ipv6_range_syntax_validation"]
+                    )
+                    .filter(
+                        Status.ipv6_syntax_validation == data["ipv6_syntax_validation"]
+                    )
+                    .filter(
+                        Status.subdomain_syntax_validation
+                        == data["subdomain_syntax_validation"]
+                    )
+                    .filter(
+                        Status.url_syntax_validation == data["url_syntax_validation"]
+                    )
+                    .all()
                 )
             except NoResultFound:
                 file = File(path=data["file_path"])
@@ -218,36 +254,36 @@ class CleanupOldTables:
                 db_session.commit()
                 db_session.refresh(file)
 
-        status = Status(
-            file_id=file.id,
-            created=data["created"],
-            modified=data["modified"],
-            tested=data["tested"],
-            _status=data["_status"],
-            status=data["status"],
-            _status_source=data["_status_source"],
-            status_source=data["status_source"],
-            domain_syntax_validation=data["domain_syntax_validation"],
-            expiration_date=data["expiration_date"],
-            http_status_code=data["http_status_code"],
-            ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
-            ipv4_syntax_validation=data["ipv4_syntax_validation"],
-            ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
-            ipv6_syntax_validation=data["ipv6_syntax_validation"],
-            subdomain_syntax_validation=data["subdomain_syntax_validation"],
-            url_syntax_validation=data["url_syntax_validation"],
-            is_complement=False,
-            test_completed=True,
-        )
+                previously_saved = []
 
-        with PyFunceble.engine.database.loader.session.Session() as db_session:
-            # pylint: disable=no-member
-            try:
-                db_session.add(status)
-                db_session.commit()
-                db_session.refresh(status)
-            except IntegrityError:
-                pass
+            if not previously_saved:
+                status = Status(
+                    file_id=file.id,
+                    created=data["created"],
+                    modified=data["modified"],
+                    tested=data["tested"],
+                    _status=data["_status"],
+                    status=data["status"],
+                    _status_source=data["_status_source"],
+                    status_source=data["status_source"],
+                    domain_syntax_validation=data["domain_syntax_validation"],
+                    expiration_date=data["expiration_date"],
+                    http_status_code=data["http_status_code"],
+                    ipv4_range_syntax_validation=data["ipv4_range_syntax_validation"],
+                    ipv4_syntax_validation=data["ipv4_syntax_validation"],
+                    ipv6_range_syntax_validation=data["ipv6_range_syntax_validation"],
+                    ipv6_syntax_validation=data["ipv6_syntax_validation"],
+                    subdomain_syntax_validation=data["subdomain_syntax_validation"],
+                    url_syntax_validation=data["url_syntax_validation"],
+                    is_complement=False,
+                    test_completed=True,
+                )
+
+                try:
+                    file.subjects.append(status)
+                    db_session.commit()
+                except IntegrityError:
+                    pass
 
         with PyFunceble.engine.database.loader.session.Session() as db_session:
             statement = "DELETE FROM pyfunceble_tested WHERE id = :status_id"
@@ -300,27 +336,22 @@ class CleanupOldTables:
                 db_session.commit()
                 db_session.refresh(file)
 
-        with PyFunceble.engine.database.loader.session.Session() as db_session:
-            # pylint: disable=no-member
+            status_found_in_db = False
+
             try:
-                status = (
-                    db_session.query(Status)
-                    .join(File)
-                    .filter(File.path == data["file_path"])
-                    .filter(Status.tested == data["subject"])
-                    .one()
-                )
+                status = file.subjects.filter(Status.tested == data["subject"]).one()
+                status_found_in_db = True
             except NoResultFound:
                 status = Status(
                     tested=data["subject"], status=data["subject"], file_id=file.id
                 )
 
-        status.is_complement = data["is_complement"]
+            status.is_complement = data["is_complement"]
 
-        with PyFunceble.engine.database.loader.session.Session() as db_session:
-            # pylint: disable=no-member
             try:
-                db_session.add(status)
+                if not status_found_in_db:
+                    file.subjects.append(status)
+
                 db_session.commit()
             except IntegrityError:
                 pass

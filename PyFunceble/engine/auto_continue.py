@@ -130,6 +130,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 if self.filename in self.database:
                     for status, status_data in self.database[self.filename].items():
                         if status == "complements":
@@ -146,23 +152,23 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 with session.Session() as db_session:
-                    try:
-                        # pylint: disable=no-member, singleton-comparison
-                        _ = (
-                            db_session.query(Status)
-                            .join(File)
-                            .filter(Status.tested == index)
-                            .filter(File.path == self.filename)
-                            .one()
-                        )
-                    except NoResultFound:
+                    # pylint: disable=no-member, singleton-comparison
+                    result = (
+                        db_session.query(Status)
+                        .join(File)
+                        .filter(Status.tested == index)
+                        .filter(File.path == self.filename)
+                        .count()
+                        > 0
+                    )
+
+                    if result:
+                        PyFunceble.LOGGER.info(f"{index} is present into the database.")
+                    else:
                         PyFunceble.LOGGER.info(
                             f"{index} is not present into the database."
                         )
-                        return False
-
-                    PyFunceble.LOGGER.info(f"{index} is present into the database.")
-                    return True
+                    return result
 
         PyFunceble.LOGGER.info(
             f"Could not check if {index} is present into the database. "
@@ -336,34 +342,14 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                         file_object.test_completed = True
 
-                        db_session.add(file_object)
+                        for subject in file_object.subjects.filter(
+                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
+                        ).filter(Status.test_completed == True):
+                            subject.test_completed = False
+
                         db_session.commit()
                     except NoResultFound:
                         pass
-
-                with session.Session() as db_session:
-                    # pylint: disable=no-member, singleton-comparison
-
-                    # Now we only replace the test_completed
-                    # flag for the inactive/invalid one.
-                    to_update = (
-                        db_session.query(Status)
-                        .join(File)
-                        .filter(File.path == self.filename)
-                        .filter(
-                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
-                        )
-                        .filter(Status.test_completed == True)
-                        .all()
-                    )
-
-                for status_object in to_update:
-                    status_object.test_completed = False
-
-                    with session.Session() as db_session:
-                        # pylint: disable=no-member, singleton-comparison
-                        db_session.add(status_object)
-                        db_session.commit()
 
     def update_counters(self):  # pragma: no cover
         """
@@ -463,13 +449,16 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 with session.Session() as db_session:
                     # pylint: disable=no-member, singleton-comparison
-                    result = (
-                        db_session.query(Status)
-                        .join(File)
-                        .filter(File.path == self.filename)
-                        .filter(Status.test_completed == True)
-                        .all()
-                    )
+                    try:
+                        result = (
+                            db_session.query(Status)
+                            .join(File)
+                            .filter(File.path == self.filename)
+                            .filter(Status.test_completed == True)
+                            .all()
+                        )
+                    except NoResultFound:
+                        result = []
 
                     if result:
                         return {x.tested for x in result}
@@ -525,38 +514,28 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         with session.Session() as db_session:
             # pylint: disable=singleton-comparison,no-member
-            result = (
-                db_session.query(Status)
-                .join(File)
-                .filter(File.path == self.filename)
-                .filter(Status.is_complement == True)
-                .all()
-            )
 
-            if result:
-                result = [x.tested for x in result]
-            else:
+            try:
+                file = db_session.query(File).filter(File.path == self.filename).one()
+                result = [
+                    x.tested for x in file.subjects.filter(Status.is_complement == True)
+                ]
+            except NoResultFound:
+                file = File(path=self.filename)
+
+                db_session.add(file)
+                db_session.commit()
+                db_session.refresh(file)
+
+                result = []
+
+            if not result:
                 result = self.__generate_complements()
 
-        for subject in result:
-            with session.Session() as db_session:
+            for subject in result:
                 try:
-                    file = (
-                        db_session.query(File).filter(File.path == self.filename).one()
-                    )
-                except NoResultFound:
-                    file = File(path=self.filename)
-
-                    db_session.add(file)
-                    db_session.commit()
-                    db_session.refresh(file)
-
-            with session.Session() as db_session:
-                # pylint: disable=no-member, singleton-comparison
-                try:
-                    status = (
-                        db_session.query(Status).filter(Status.tested == subject).one()
-                    )
+                    _ = file.subjects.filter(Status.tested == subject).one()
+                    continue
                 except NoResultFound:
                     status = Status(
                         file_id=file.id,
@@ -566,8 +545,9 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         test_completed=False,
                     )
 
-                    db_session.add(status)
-                    db_session.commit()
+                    file.subjects.append(status)
+
+            db_session.commit()
 
         return result
 

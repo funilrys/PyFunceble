@@ -117,6 +117,7 @@ class Logger:  # pragma: no cover
 
         if self.authorized:
             self.formatter = logging.Formatter(self.format_to_apply)
+            self.other_formatter = logging.Formatter(self.root_logger_format)
 
             self.__set_output_directory(output_directory)
             self.__init_loggers()
@@ -153,6 +154,9 @@ class Logger:  # pragma: no cover
         # pylint: disable=attribute-defined-outside-init
 
         if self.authorized and not hasattr(self, "info_logger"):
+            self.sqlalchemy_logger = logging.getLogger("sqlalchemy")
+            self.sqlalchemy_logger.setLevel(logging.INFO)
+
             self.info_logger = logging.getLogger("PyFunceble.info")
             self.info_logger.setLevel(logging.INFO)
 
@@ -179,8 +183,7 @@ class Logger:  # pragma: no cover
 
                 current_logger = getattr(self, logger_name)
 
-                if not current_logger.hasHandlers():
-                    current_logger.addHandler(self.__get_handler(handler_type))
+                current_logger.addHandler(self.__get_handler(handler_type))
 
     @classmethod
     def get_origin_info(cls):
@@ -219,8 +222,9 @@ class Logger:  # pragma: no cover
         """
 
         handler_type = handler_type.upper()
+        specials = "SQLALCHEMY"
 
-        if hasattr(logging, handler_type):
+        if hasattr(logging, handler_type) or handler_type in specials:
             if self.on_screen:
                 handler = logging.StreamHandler()
             else:
@@ -230,9 +234,12 @@ class Logger:  # pragma: no cover
                     backupCount=10,
                 )
 
-            handler.setLevel(getattr(logging, handler_type))
-            handler.setFormatter(self.formatter)
-
+            if handler_type in specials:
+                handler.setLevel(logging.DEBUG)
+                handler.setFormatter(self.other_formatter)
+            else:
+                handler.setLevel(getattr(logging, handler_type))
+                handler.setFormatter(self.formatter)
             return handler
 
         return None

@@ -88,4 +88,10 @@ class Status(DatabaseBase):
     tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
 
     file = relationship("File", uselist=False, back_populates="subjects")
-    mined = relationship("Mined", uselist=True, back_populates="subject")
+    mined = relationship(
+        "Mined",
+        uselist=True,
+        back_populates="subject",
+        cascade="all, delete",
+        lazy="dynamic",
+    )

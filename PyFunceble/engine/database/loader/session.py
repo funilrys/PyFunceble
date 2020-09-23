@@ -54,7 +54,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
-from .credential import Credential
+from . import credential
 
 
 class Session:
@@ -67,7 +67,7 @@ class Session:
     uri = None
 
     def __init__(self):
-        self.uri = Credential().get_uri()
+        self.uri = credential.Credential().get_uri()
 
     def __enter__(self):
         return self.create_new_session()

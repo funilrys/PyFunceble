@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides our very own alembic interface.
+Provides the duplicates cleanup.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,75 +50,80 @@ License:
     limitations under the License.
 """
 
-from alembic import command
-from alembic.config import Config
-from pkg_resources import resource_filename
-
 import PyFunceble
 
-from .duplicates2single import Duplicates2Single
-from .old2new import CleanupOldTables
+from ..schemas.file import File
+from ..schemas.whois_record import WhoisRecord
 
 
-class Alembic:
+class Duplicates2Single:
     """
-    Provides our very own alambic handler.
+    Provides an interface which will cleanup duplicates in the migrated
+    data.
 
-    :param credentials:
-        A credentials instance
+    The reason behind this interface is the fact that we did an error
+    in the past which created duplicated in the database.
     """
 
-    configured = False
-    alembic_config = None
+    def __init__(self):
+        self.autosave = PyFunceble.engine.AutoSave()
 
-    def __init__(self, credentials):
-        self.migration_directory = resource_filename(
-            f"PyFunceble.data.{PyFunceble.abstracts.Infrastructure.ALEMBIC_DIRECTORY_NAME}",
-            "__init__.py",
-        ).replace("__init__.py", "")
-
-        self.credentials = credentials
-        self.configure()
-
-    @property
-    def authorized(self):
+    def __delete(self, db_session, entries):
         """
-        Provides the authorization to run.
+        Deletes the given entries from the database.
         """
 
-        return PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]
+        for row in entries:
+            db_session.delete(row)
+            db_session.commit()
 
-    def configure(self):
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                PyFunceble.LOGGER.info(f"Deleted {row}.")
+                print(".", end="")
+
+    def process_status_table(self):
         """
-        Configures alembic for our needs.
-        """
-
-        if self.authorized:
-            if self.alembic_config is None:
-                self.alembic_config = Config()
-
-            self.alembic_config.set_main_option(
-                "script_location", self.migration_directory
-            )
-            self.alembic_config.set_main_option(
-                "sqlalchemy.url", self.credentials.get_uri()
-            )
-
-    def upgrade(self, revision="head"):
-        """
-        Upgrades the database structure.
+        Process the deletion of duplicate into the :code:`pyfunceble_status`
+        table.
         """
 
-        if self.authorized:
-            command.upgrade(self.alembic_config, revision)
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            for row in db_session.query(File):
+                subjects = [x.tested for x in row.subjects]
 
-            Duplicates2Single().start()
-            CleanupOldTables(self.credentials).start()
+                for status in row.subjects:
+                    position = [x for x, y in enumerate(subjects) if y == status.tested]
 
-    def downgrade(self, revision="head"):
+                    if len(position) > 1:
+                        self.__delete(db_session, [row.subjects[x] for x in position])
+
+                if self.autosave.is_time_exceed():
+                    self.autosave.process()
+
+    def process_whois_record_table(self):
         """
-        Downgrades the database structure.
+        Process the deletion of duplicate into the :code:`pyfunceble_status`
+        table.
         """
 
-        if self.authorized:
-            command.downgrade(self.alembic_config, revision)
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            for row in db_session.query(WhoisRecord):
+                # pylint: disable=no-member
+                self.__delete(
+                    db_session,
+                    db_session.query(WhoisRecord)
+                    .filter(WhoisRecord.subject == row.subject)
+                    .filter(WhoisRecord.id != row.id)
+                    .all(),
+                )
+
+                if self.autosave.is_time_exceed():
+                    self.autosave.process()
+
+    def start(self):
+        """
+        Starts the process.
+        """
+
+        self.process_status_table()
+        self.process_whois_record_table()

@@ -103,6 +103,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, subject):
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 if subject not in self.is_present_cache:
                     self.is_present_cache[subject] = False
                     if self[subject]:
@@ -112,25 +118,30 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 with session.Session() as db_session:
-                    try:
-                        # pylint: disable=no-member
-                        data = (
-                            db_session.query(Status)
-                            .join(File)
-                            .filter(File.path == self.filename)
-                            .filter(Status.tested == subject)
-                            .filter(
-                                Status.status.notin_(
-                                    PyFunceble.core.CLI.get_up_statuses()
-                                )
-                            )
-                            .one()
-                        )
-                    except NoResultFound:
-                        data = []
+                    # pylint: disable=no-member
 
-                    if data:
-                        return True
+                    result = (
+                        db_session.query(Status)
+                        .join(File)
+                        .filter(File.path == self.filename)
+                        .filter(Status.tested == subject)
+                        .filter(
+                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
+                        )
+                        .count()
+                        > 0
+                    )
+
+                    if result:
+                        PyFunceble.LOGGER.info(
+                            f"{subject} is present into the database."
+                        )
+                    else:
+                        PyFunceble.LOGGER.info(
+                            f"{subject} is not present into the database."
+                        )
+
+                    return result
 
         return False  # pragma: no cover
 

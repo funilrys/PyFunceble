@@ -170,6 +170,7 @@ class WhoisDB:
     @classmethod
     def __setitem_mysql(cls, index, value):
         with session.Session() as db_session:
+            record_found_in_db = False
             try:
                 # pylint: disable=no-member
                 record = (
@@ -177,21 +178,24 @@ class WhoisDB:
                     .filter(WhoisRecord.subject == index)
                     .one()
                 )
+                record_found_in_db = True
             except NoResultFound:
                 record = WhoisRecord(
                     subject=index,
                 )
 
-        for db_key, db_value in value.items():
-            if not PyFunceble.CONFIGURATION.store_whois_record and db_key == "record":
-                continue
-            setattr(record, db_key, db_value)
+            for db_key, db_value in value.items():
+                if (
+                    not PyFunceble.CONFIGURATION.store_whois_record
+                    and db_key == "record"
+                ):
+                    continue
+                setattr(record, db_key, db_value)
 
-        with session.Session() as db_session:
-            # pylint: disable=no-member
-            db_session.add(record)
+            if not record_found_in_db:
+                db_session.add(record)
+
             db_session.commit()
-
             PyFunceble.LOGGER.info(f"Inserted into the database: \n {value}")
 
     def __setitem__(self, index, value):

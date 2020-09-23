@@ -90,13 +90,11 @@ class CLICore:
         Provides the list of up statuses.
         """
 
-        list_of_up_statuses = PyFunceble.STATUS.list.up
-        list_of_up_statuses.extend(PyFunceble.STATUS.list.valid)
-        list_of_up_statuses.extend(PyFunceble.STATUS.list.sane)
-
-        list_of_up_statuses.extend([x.upper() for x in list_of_up_statuses])
-
-        return list_of_up_statuses
+        return [
+            PyFunceble.STATUS.official.up,
+            PyFunceble.STATUS.official.valid,
+            PyFunceble.STATUS.official.sane,
+        ]
 
     @classmethod
     def sort_generated_files(cls):  # pragma: no cover
@@ -194,6 +192,8 @@ class CLICore:
 
             with session.Session() as db_session:
                 # pylint: disable=no-member
+                status_found_in_db = False
+
                 try:
                     file = db_session.query(File).filter(File.path == filename).one()
                 except NoResultFound:
@@ -203,26 +203,22 @@ class CLICore:
                     db_session.commit()
                     db_session.refresh(file)
 
-            with session.Session() as db_session:
-                # pylint: disable=no-member
                 try:
-                    status = (
-                        db_session.query(Status)
-                        .filter(Status.file_id == file.id)
-                        .filter(Status.tested == status_input["tested"])
-                        .one()
-                    )
+                    status = file.subjects.filter(
+                        Status.tested == status_input["tested"]
+                    ).one()
+                    status_found_in_db = True
                 except NoResultFound:
                     status = Status(file_id=file.id)
 
-            for index, value in status_input.items():
-                setattr(status, index, value)
+                for index, value in status_input.items():
+                    setattr(status, index, value)
 
-            status.test_completed = True
+                status.test_completed = True
 
-            with session.Session() as db_session:
-                # pylint: disable=no-member
-                db_session.add(status)
+                if not status_found_in_db:
+                    file.subjects.append(status)
+
                 db_session.commit()
 
             PyFunceble.LOGGER.debug(f"Saved into database:\n{output}")

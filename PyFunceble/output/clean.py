@@ -53,6 +53,8 @@ License:
 from os import sep as directory_separator
 from os import walk
 
+from sqlalchemy.orm.exc import NoResultFound
+
 import PyFunceble
 from PyFunceble.engine.database.loader import session
 from PyFunceble.engine.database.schemas import File, Status
@@ -239,55 +241,31 @@ class Clean:
 
                     with session.Session() as db_session:
                         # pylint: disable=no-member, singleton-comparison
-                        to_delete = (
-                            db_session.query(Status)
-                            .join(File)
-                            .filter(File.path == file_path)
-                            .filter(File.test_completed == True)
-                            .filter(
+
+                        try:
+                            file = (
+                                db_session.query(File)
+                                .filter(File.path == file_path)
+                                .filter(File.test_completed == True)
+                                .one()
+                            )
+
+                            for subject in file.subjects.filter(
                                 Status.status.in_(PyFunceble.core.CLI.get_up_statuses())
-                            )
-                            .all()
-                        )
+                            ):
+                                db_session.delete(subject)
 
-                    for row in to_delete:
-                        with session.Session() as db_session:
-                            # pylint: disable=no-member, singleton-comparison
-                            delete_query = Status.__table__.delete().where(
-                                Status.id == row.id
-                            )
-                            db_session.execute(delete_query)
+                            file.test_completed = False
+
                             db_session.commit()
-
-                    with session.Session() as db_session:
-                        # pylint: disable=no-member, singleton-comparison
-                        file_object = (
-                            db_session.query(File).filter(File.path == file_path).one()
-                        )
-
-                    file_object.test_completed = False
-
-                    with session.Session() as db_session:
-                        # pylint: disable=no-member, singleton-comparison
-                        db_session.add(file_object)
-                        db_session.commit()
+                        except NoResultFound:
+                            pass
                 else:
                     with session.Session() as db_session:
-                        # pylint: disable=no-member, singleton-comparison
-                        to_delete = db_session.query(  # pylint: disable=no-member
-                            File
-                        ).all()
+                        for file in db_session.query(File):
+                            db_session.delete(file)
 
-                    for row in to_delete:
-                        # pylint: disable=no-member
-                        with session.Session() as db_session:
-                            # pylint: disable=no-member, singleton-comparison
-
-                            delete_query = File.__table__.delete().where(
-                                File.id == row.id
-                            )
-                            db_session.execute(delete_query)
-                            db_session.commit()
+                        db_session.commit()
 
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all

@@ -64,5 +64,17 @@ class File(DatabaseBase):
     path = Column(Text, nullable=False, unique=True)
     test_completed = Column(Boolean(), default=False, nullable=False)
 
-    subjects = relationship("Status", uselist=True, back_populates="file")
-    mined = relationship("Mined", uselist=True, back_populates="file")
+    subjects = relationship(
+        "Status",
+        uselist=True,
+        back_populates="file",
+        cascade="all, delete",
+        lazy="dynamic",
+    )
+    mined = relationship(
+        "Mined",
+        uselist=True,
+        back_populates="file",
+        cascade="all, delete",
+        lazy="dynamic",
+    )
