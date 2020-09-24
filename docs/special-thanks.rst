@@ -79,7 +79,7 @@ a better tool.
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@SMed79: https://github.com/SMed79
 .. _@spirillen: https://www.mypdns.org/p/Spirillen/
-.. _@sqlalchemy:https://www.sqlalchemy.org/
+.. _@sqlalchemy: https://www.sqlalchemy.org/
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@yaml: https://github.com/yaml
