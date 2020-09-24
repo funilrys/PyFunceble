@@ -118,6 +118,9 @@ How to use the :code:`mariadb` or :code:`mysql` format?
 SQL Layout:
 ^^^^^^^^^^^
 
+**DRAFT**:
+^^^^^^^^^^
+
 The layout and data within the Sql database and how they are used should
 currently be following this patterns.
 
@@ -127,7 +130,7 @@ alembic_version
 pyfunceble_file
   - :code:`id` Primary key, auto_increment
   - :code:`created` creation date of the record
-  - :code:`modified` Data the record was last tested, altered
+  - :code:`modified` Date the record was last tested, (altered)
   - :code:`path` source of the file tested. URI or File_path
   - :code:`test_completed` (bool) this data is used for picking up a
     interrupted (broken) test or in CI for auto-continue :code:`-c`
@@ -135,7 +138,7 @@ pyfunceble_file
 pyfunceble_mined
   - :code:`id` Primary key, auto_increment
   - :code:`created` creation date of the record
-  - :code:`modified` Data the record was last tested, altered
+  - :code:`modified` Date the record was last tested, altered
   - :code:`subject_id` key_ref to :code:`pyfunceble_status.id`
   - :code:`file_id` key_ref to :code:`pyfunceble_file.id`
   - :code:`mined` the full fqdns results of a :code:`--mining` response
@@ -143,10 +146,10 @@ pyfunceble_mined
 pyfunceble_status
   - :code:`id` Primary key, auto_increment
   - :code:`created` creation date of the record
-  - :code:`modified` Data the record was last tested, altered
+  - :code:`modified` Date the record was last tested, altered
   - :code:`file_id` (one to many relation) to :code:`pyfunceble_file.id`
-    This is used to extract where a record comes from.
-  - :code:`tested` IS the actual record tested in full (domain/URI)
+    This is used to extracting where a record comes from.
+  - :code:`tested` Is the actual record tested in full (domain/URI)
   - :code:`_status` ACTIVE/INACTIVE status from the PyFunceble test (Twice??)
   - :code:`status` ACTIVE/INACTIVE status from the PyFunceble test (Twice??)
   - :code:`_status_source` The technique to determine the status WHOIS/DNSLOOKUP (Twice??)
