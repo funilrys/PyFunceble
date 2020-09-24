@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+from sqlalchemy.exc import StatementError
+
 import PyFunceble
 
 from ..schemas.file import File
@@ -74,12 +76,15 @@ class Duplicates2Single:
         """
 
         for row in entries:
-            db_session.delete(row)
-            db_session.commit()
+            try:
+                db_session.delete(row)
+                db_session.commit()
 
-            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                PyFunceble.LOGGER.info(f"Deleted {row}.")
-                print(".", end="")
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(f"Deleted {row}.")
+                    print(".", end="")
+            except StatementError:
+                continue
 
     def process_status_table(self):
         """
