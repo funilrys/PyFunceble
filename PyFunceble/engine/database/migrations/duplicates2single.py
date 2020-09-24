@@ -51,6 +51,7 @@ License:
 """
 
 from sqlalchemy.exc import StatementError
+from sqlalchemy.orm.exc import ObjectDeletedError
 
 import PyFunceble
 
@@ -97,10 +98,25 @@ class Duplicates2Single:
                 subjects = [x.tested for x in row.subjects]
 
                 for status in row.subjects:
-                    position = [x for x, y in enumerate(subjects) if y == status.tested]
+                    positions = []
 
-                    if len(position) > 1:
-                        self.__delete(db_session, [row.subjects[x] for x in position])
+                    for index, subject in enumerate(subjects):
+                        try:
+                            if subject == status.tested:
+                                positions.append(index)
+                        except ObjectDeletedError:
+                            continue
+
+                    if len(positions) > 1:
+                        to_delete = []
+
+                        for position in positions:
+                            try:
+                                to_delete.append(row.subjects[position])
+                            except IndexError:
+                                continue
+
+                        self.__delete(db_session, to_delete)
 
                 if self.autosave.is_time_exceed():
                     self.autosave.process()
