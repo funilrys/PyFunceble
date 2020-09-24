@@ -30,26 +30,3 @@ However, the right way to do this is by first locate where your's
 
 :code:`find /usr/lib/ -type f -iname 'libffi.so.*'` and then apply the
 softlink to :code:`libffi.so.7`
-
-Urllib3
-^^^^^^^
-
-On Debian 10 (Buster) and variants as Kubuntu 20.04, we have observed
-issues with urllib3 in combination with python version < :code:`3.8.5`
-
-The current workaround for this is to run PyFunceble from a virtual
-environment like MiniConda.
-
-  .. note::
-
-         See <https://github.com/funilrys/PyFunceble/issues/86> for
-         more details.
-
-  Search keys
-
-    urllib3.exceptions.NewConnectionError:
-    <urllib3.connection.VerifiedHTTPSConnection object at 0x7ff3d26ef4e0>:
-    Failed to establish a new connection: [Errno -2] Name or service not
-    known
-    
-    host='pyfunceble-not-resolved', port=443
