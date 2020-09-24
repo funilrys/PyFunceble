@@ -1,7 +1,7 @@
 alembic
 colorama
 cryptography
-dnspython
+dnspython>=2.0.0
 domain2idna
 inflection
 PyMySQL
