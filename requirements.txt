@@ -5,7 +5,7 @@ dnspython
 domain2idna
 inflection
 PyMySQL
-python-box[all]
+python-box[all]>=5.0.0
 python-dotenv
 PyYAML
 requests<3
