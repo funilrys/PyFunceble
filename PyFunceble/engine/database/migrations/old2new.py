@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
 from multiprocessing import active_children
 
 from colorama import Fore, Style
@@ -62,9 +61,10 @@ import PyFunceble
 from ..schemas.file import File
 from ..schemas.status import Status
 from ..schemas.whois_record import WhoisRecord
+from .base import MigrationaBase
 
 
-class CleanupOldTables:
+class CleanupOldTables(MigrationaBase):
     """
     Provides the interface which is in charge of cleaning the database.
 
@@ -83,7 +83,7 @@ class CleanupOldTables:
     def __init__(self, credentials):
         self.credentials = credentials
 
-        self.autosave = PyFunceble.engine.AutoSave()
+        super().__init__()
 
     @property
     def authorized(self):
@@ -143,34 +143,6 @@ class CleanupOldTables:
         if result["COUNT(*)"] != 1:
             return False
         return True
-
-    @classmethod
-    def __wait_for_all_process_to_finish(cls):
-        """
-        Wait until all migration process finished.
-        """
-
-        if PyFunceble.CONFIGURATION.multiprocess:
-            while "Migration" in " ".join(
-                [x.name for x in reversed(active_children())]
-            ):
-                continue
-
-    def __write_file_for_autocontinue(self):
-        """
-        Writes a file in order to force the CI engine to continue.
-        """
-
-        if self.autosave.authorized:
-            # Ensure that the output directory exist.
-            PyFunceble.output.Constructor()
-            with open(
-                f"{PyFunceble.OUTPUT_DIRECTORY}"
-                f"{PyFunceble.abstracts.Infrastructure.CI_MIGRATION_TRIGGER_FILE}",
-                "w",
-                encoding="utf-8",
-            ) as file_stream:
-                file_stream.write(datetime.utcnow().isoformat())
 
     @classmethod
     def __process_migration(cls, action_method, data):
@@ -306,14 +278,11 @@ class CleanupOldTables:
             statement = "SELECT * FROM pyfunceble_tested"
 
             for data in self.__get_rows(statement):
-                if self.autosave.is_time_exceed():
-                    self.__wait_for_all_process_to_finish()
-                    self.__write_file_for_autocontinue()
-                    self.autosave.process()
+                self.handle_autosaving()
 
                 self.__process_migration(self.__tested_migration, data)
 
-            self.__wait_for_all_process_to_finish()
+            self.wait_for_all_process_to_finish()
 
             PyFunceble.LOGGER.info("Finished to switch (tested) SQLAlchemy.")
 
@@ -378,14 +347,11 @@ class CleanupOldTables:
             statement = "SELECT * FROM pyfunceble_auto_continue"
 
             for data in self.__get_rows(statement):
-                if self.autosave.is_time_exceed():
-                    self.__wait_for_all_process_to_finish()
-                    self.__write_file_for_autocontinue()
-                    self.autosave.process()
+                self.handle_autosaving()
 
                 self.__process_migration(self.__autocontinue_migration, data)
 
-            self.__wait_for_all_process_to_finish()
+            self.wait_for_all_process_to_finish()
             PyFunceble.LOGGER.info("Starting to switch (autocontinue) SQLAlchemy.")
 
     def __whois_migration(self, data):
@@ -453,14 +419,11 @@ class CleanupOldTables:
             statement = "SELECT * FROM pyfunceble_whois"
 
             for data in self.__get_rows(statement):
-                if self.autosave.is_time_exceed():
-                    self.__wait_for_all_process_to_finish()
-                    self.__write_file_for_autocontinue()
-                    self.autosave.process()
+                self.handle_autosaving()
 
                 self.__process_migration(self.__whois_migration, data)
 
-            self.__wait_for_all_process_to_finish()
+            self.wait_for_all_process_to_finish()
 
             PyFunceble.LOGGER.info("Starting to switch (whois) SQLAlchemy.")
 

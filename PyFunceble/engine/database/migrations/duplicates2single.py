@@ -57,9 +57,10 @@ import PyFunceble
 
 from ..schemas.file import File
 from ..schemas.whois_record import WhoisRecord
+from .base import MigrationaBase
 
 
-class Duplicates2Single:
+class Duplicates2Single(MigrationaBase):
     """
     Provides an interface which will cleanup duplicates in the migrated
     data.
@@ -71,6 +72,8 @@ class Duplicates2Single:
     def __init__(self):
         self.autosave = PyFunceble.engine.AutoSave()
 
+        super().__init__()
+
     def __delete(self, db_session, entries):
         """
         Deletes the given entries from the database.
@@ -80,12 +83,12 @@ class Duplicates2Single:
             try:
                 db_session.delete(row)
                 db_session.commit()
-
-                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
-                    PyFunceble.LOGGER.info(f"Deleted {row}.")
-                    print(".", end="")
             except StatementError:
-                continue
+                pass
+
+            if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                PyFunceble.LOGGER.info(f"Deleted {row}.")
+                print(".", end="")
 
     def process_status_table(self):
         """
@@ -118,8 +121,7 @@ class Duplicates2Single:
 
                         self.__delete(db_session, to_delete)
 
-                if self.autosave.is_time_exceed():
-                    self.autosave.process()
+                self.handle_autosaving()
 
     def process_whois_record_table(self):
         """
@@ -138,8 +140,7 @@ class Duplicates2Single:
                     .all(),
                 )
 
-                if self.autosave.is_time_exceed():
-                    self.autosave.process()
+                self.handle_autosaving()
 
     def start(self):
         """
