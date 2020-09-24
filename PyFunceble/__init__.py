@@ -146,6 +146,11 @@ else:  # pragma: no cover
             #   * `APPDATA` is not into the environnement variables.
             # We set the current directory as the directory we are working with.
             CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+    else:
+        # We are under somethint we don't know about.
+
+        # We set the current directory as the directory we are working with.
+        CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 
     if not CONFIG_DIRECTORY.endswith(directory_separator):
         # If the directory we are working with does not ends with the directory
