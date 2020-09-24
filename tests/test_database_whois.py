@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2050 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -82,24 +82,26 @@ class TestWhoisDB(TestCase):
 
         self.our_dataset = {
             "google.com": {
-                "epoch": "1600034400",
-                "expiration_date": "14-sep-2020",
+                "epoch": "2546805600",
+                "expiration_date": "14-sep-2050",
                 "state": "future",
             },
             "example.com": {
-                "epoch": "1600034400",
-                "expiration_date": "14-sep-2020",
+                "epoch": "2546805600",
+                "expiration_date": "14-sep-2050",
                 "state": "future",
                 "record": "Hello, World!",
             },
             "github.com": {
-                "epoch": "1602194400",
-                "expiration_date": "09-oct-2020",
+                "epoch": "2548965600",
+                "expiration_date": "09-oct-2050",
                 "state": "future",
             },
         }
 
         PyFunceble.helpers.File(self.storage_file).delete()
+
+        PyFunceble.CONFIGURATION.no_whois = False
 
     def tearDown(self):
         """
@@ -228,12 +230,12 @@ class TestWhoisDB(TestCase):
 
         self.whois_db.database = self.our_dataset.copy()
 
-        expected = "14-sep-2020", None
+        expected = "14-sep-2050", None
         actual = self.whois_db.get_expiration_date("google.com")
 
         self.assertEqual(expected, actual)
 
-        expected = "14-sep-2020", "Hello, World!"
+        expected = "14-sep-2050", "Hello, World!"
         actual = self.whois_db.get_expiration_date("example.com")
 
         self.assertEqual(expected, actual)

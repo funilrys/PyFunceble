@@ -55,3 +55,6 @@ from .digit2digits import Digit2Digits
 from .file import File
 from .internal_url import InternalUrl
 from .month import Month
+from .rpz2subject import RPZ2Subject
+from .rpz_file import RPZFile
+from .wildcard2subject import Wildcard2Subject

@@ -79,7 +79,7 @@ class DomainAndIp(GathererBase):
         self.status["_status_source"] = self.status.status_source = "REPUTATION"
 
         if self.status.domain_syntax_validation or self.status.ipv4_syntax_validation:
-            if self.subject in PyFunceble.lookup.IPv4Reputation():
+            if self.status.tested in PyFunceble.lookup.IPv4Reputation():
                 self.status[
                     "_status"
                 ] = self.status.status = PyFunceble.STATUS.official.malicious
@@ -93,7 +93,7 @@ class DomainAndIp(GathererBase):
             ] = self.status.status = PyFunceble.STATUS.official.sane
 
         PyFunceble.output.Generate(
-            self.subject,
+            self.status.given,
             self.subject_type,
             self.status.status,
             source=self.status.status_source,
@@ -103,4 +103,4 @@ class DomainAndIp(GathererBase):
             or self.status.ipv6_syntax_validation,
         ).status_file()
 
-        PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.status.get()}")
+        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")

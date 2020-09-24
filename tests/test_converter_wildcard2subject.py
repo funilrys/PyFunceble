@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the status interface for URL syntax check.
+Tests of PyFunceble.converters.wildcard2subject
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,53 +50,75 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
+from unittest import TestCase
+from unittest import main as launch_tests
 
-import PyFunceble
-
-from ..gatherer_base import GathererBase
+from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 
 
-class Url(GathererBase):
+class TestWildcard2Subject(TestCase):
     """
-    Gather the syntax of the given URL.
+    Tests of PyFunceble.converter.wildcard2subject
     """
 
-    # pylint: disable=no-member
-
-    def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
-        super().__init__(
-            subject, filename=filename, whois_db=whois_db, inactive_db=inactive_db
-        )
-
-        self.subject_type += "url"
-
-        self.__gather()
-
-    def __gather(self):
+    def test_empty_string(self):
         """
-        Process the gathering.
+        Tests of Wildcard2Subject for the case that an empty string is given.
         """
 
-        self.status["_status_source"] = self.status.status_source = "SYNTAX"
+        given = ""
+        expected = None
+        actual = Wildcard2Subject(given).get_converted()
 
-        if self.status.url_syntax_validation:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.valid
-        else:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.invalid
+        self.assertEqual(expected, actual)
 
-        PyFunceble.output.Generate(
-            self.status.given,
-            self.subject_type,
-            self.status.status,
-            source=self.status.status_source,
-            whois_server=self.status.whois_server,
-            filename=self.filename,
-            ip_validation=self.status.ipv4_syntax_validation
-            or self.status.ipv6_syntax_validation,
-        ).status_file()
+    def test_wildcard(self):
+        """
+        Test of Wildcard2Subject for the case that a wildcard is given.
+        """
 
-        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")
+        given = "*.example.org"
+        expected = "example.org"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_wildcard_at_the_end(self):
+        """
+        Test of Wildcard2Subject for the case that the wildcard is at the end
+        of the given string.
+        """
+
+        given = "example.org.*"
+        expected = "example.org.*"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_wildcard_on_both_end(self):
+        """
+        Test of Wildcard2Subject for the case that the wildcard is at both
+        end of the given string.
+        """
+
+        given = "*.example.org.*"
+        expected = "example.org.*"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_no_wildcard(self):
+        """
+        Test of Wildcard2Subject for the case that no wildcard is given.
+        """
+
+        given = "example.org"
+        expected = "example.org"
+        actual = Wildcard2Subject(given).get_converted()
+
+        self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    launch_tests()

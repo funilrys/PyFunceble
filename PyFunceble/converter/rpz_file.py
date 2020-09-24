@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the status interface for URL syntax check.
+Provides the conversion of the RPZ file format.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,53 +50,52 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
 
-import PyFunceble
-
-from ..gatherer_base import GathererBase
+from .file import File
 
 
-class Url(GathererBase):
+class RPZFile(File):
     """
-    Gather the syntax of the given URL.
+    Converts an RPZ line to a subject to test.
     """
 
-    # pylint: disable=no-member
+    comment_sign = [";", "//", "#"]
+    special_chars = ["$", "@"]
 
-    def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
-        super().__init__(
-            subject, filename=filename, whois_db=whois_db, inactive_db=inactive_db
-        )
-
-        self.subject_type += "url"
-
-        self.__gather()
-
-    def __gather(self):
+    def get_converted(self):
         """
-        Process the gathering.
+        Provides the converted data.
+
+        .. warning::
+            This method returns return None if no subject
+            of interest was found.
+
+        :rtype: None, str, list
         """
 
-        self.status["_status_source"] = self.status.status_source = "SYNTAX"
+        if isinstance(self.data_to_convert, list):
+            return [RPZFile(x).get_converted() for x in self.data_to_convert]
 
-        if self.status.url_syntax_validation:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.valid
-        else:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.invalid
+        subject = self.data_to_convert.strip()
 
-        PyFunceble.output.Generate(
-            self.status.given,
-            self.subject_type,
-            self.status.status,
-            source=self.status.status_source,
-            whois_server=self.status.whois_server,
-            filename=self.filename,
-            ip_validation=self.status.ipv4_syntax_validation
-            or self.status.ipv6_syntax_validation,
-        ).status_file()
+        if (
+            subject
+            and not any(subject.startswith(x) for x in self.comment_sign)
+            and not any(subject.startswith(x) for x in self.special_chars)
+        ):
+            for comment_sign in self.comment_sign:
+                if comment_sign in subject:
+                    subject = subject[: subject.find(comment_sign)].strip()
 
-        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")
+            if self.space_sign in subject or self.tab_sign in subject:
+                subject = subject.split()[0]
+
+                if subject.isdigit():
+                    return None
+                return subject
+
+            if subject.isdigit():
+                return None
+            return subject
+        return None

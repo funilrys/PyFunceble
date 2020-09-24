@@ -459,6 +459,18 @@
 .. warning::
     If this index is set to :code:`True`, we **ONLY** check for reputation, not availability nor syntax.
 
+:code:`rpz`
+^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the test of RPZ policies when testing for syntax.
+
+.. warning::
+    This is not taken into consideration if :code:`syntax` is set to :code:`False`.
+
 :code:`shadow_file`
 ^^^^^^^^^^^^^^^^^^^
 

@@ -93,7 +93,7 @@ class DomainAndIp(GathererBase):
             ] = self.status.status = PyFunceble.STATUS.official.invalid
 
         PyFunceble.output.Generate(
-            self.subject,
+            self.status.given,
             self.subject_type,
             self.status.status,
             source=self.status.status_source,
@@ -103,4 +103,4 @@ class DomainAndIp(GathererBase):
             or self.status.ipv6_syntax_validation,
         ).status_file()
 
-        PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.status.get()}")
+        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")

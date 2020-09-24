@@ -431,7 +431,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_lookup_over_tcp(cls):
         """
-        Ensures that the DNS lookup over tcp is proprely set.
+        Ensures that the DNS lookup over tcp is properly set.
         """
 
         PyFunceble.DNSLOOKUP.tcp = PyFunceble.CONFIGURATION.dns_lookup_over_tcp
@@ -439,7 +439,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_nameserver(cls):
         """
-        Ensures that the DNS nameserver is proprely set.
+        Ensures that the DNS nameserver is properly set.
         """
 
         PyFunceble.DNSLOOKUP.update_nameserver(PyFunceble.CONFIGURATION.dns_server)

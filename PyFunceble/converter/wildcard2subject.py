@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the status interface for URL syntax check.
+Provides an easy way to convert wildcard subject into a testable subject.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,53 +50,42 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+# pylint: enable=line-too-long
 
-import PyFunceble
+from ..exceptions import WrongParameterType
+from .base import ConverterBase
 
-from ..gatherer_base import GathererBase
 
-
-class Url(GathererBase):
+class Wildcard2Subject(ConverterBase):
     """
-    Gather the syntax of the given URL.
+    Converts a given wildcard into a testable subject.
     """
 
-    # pylint: disable=no-member
+    def __init__(self, data_to_convert):
+        if not isinstance(data_to_convert, str):
+            raise WrongParameterType(
+                f"<data_to_convert> should be {str}, {type(data_to_convert)} given."
+            )
 
-    def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
-        super().__init__(
-            subject, filename=filename, whois_db=whois_db, inactive_db=inactive_db
-        )
+        super().__init__(data_to_convert)
 
-        self.subject_type += "url"
-
-        self.__gather()
-
-    def __gather(self):
+    def get_converted(self):
         """
-        Process the gathering.
+        Provides the converted data.
+
+        .. warning::
+            This method returns return None if no subject
+            of interest was found.
+
+        :rtype: None, str, list
         """
 
-        self.status["_status_source"] = self.status.status_source = "SYNTAX"
+        subject = self.data_to_convert.strip()
 
-        if self.status.url_syntax_validation:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.valid
-        else:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.invalid
+        if not subject:
+            return None
 
-        PyFunceble.output.Generate(
-            self.status.given,
-            self.subject_type,
-            self.status.status,
-            source=self.status.status_source,
-            whois_server=self.status.whois_server,
-            filename=self.filename,
-            ip_validation=self.status.ipv4_syntax_validation
-            or self.status.ipv6_syntax_validation,
-        ).status_file()
+        if subject.startswith("*."):
+            return subject[2:]
 
-        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")
+        return subject

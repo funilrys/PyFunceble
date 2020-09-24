@@ -91,13 +91,6 @@ class Check:
     def __init__(self, subject):
         self.subject = subject
 
-        if (
-            self.subject.startswith("*.")
-            and PyFunceble.CONFIGURATION.wildcard
-            and PyFunceble.CONFIGURATION.syntax
-        ):
-            self.subject = self.subject[2:]
-
     def is_url(
         self, return_base=False, return_formatted=False
     ):  # pylint: disable=too-many-branches

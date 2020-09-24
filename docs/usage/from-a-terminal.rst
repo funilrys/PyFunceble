@@ -228,6 +228,13 @@ This argument allows you to disable it!
     will check against AlienVault's reputation data
     and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
 
+:code:`--rpz`
+"""""""""""""
+
+    Switch the value of the RPZ policies test.
+
+    **Default value:** :code:`False`
+
 :code:`--shadow-file` | :code:`--shadow`
 """"""""""""""""""""""""""""""""""""""""
 
@@ -298,16 +305,12 @@ to set a timeout.
         invalid and the domain is still alive, you will always get
         :code:`INACTIVE` as output.
 
-:code:`wildcard`
-""""""""""""""""
+:code:`--wildcard`
+""""""""""""""""""
 
     Switch the value of the wildcards test.
 
     **Default value:** :code:`False`
-
-    .. warning::
-        This argument is not taken into consideration if the :code:`--syntax` argument
-        is not given.
 
 DNS (resolver) control
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -619,15 +622,15 @@ to switch on.
 .. warning::
     Before switching this value, you should read these comments
     carefully...
-    
+
     You can test the amount of data by running :code:`whois mypdns.org`
     from your Linux terminal, to see an example of what will be stored
     in the database.
-    
+
     You're hearby warned...
-    
+
     `store_whois_record comment <https://github.com/funilrys/PyFunceble/issues/57#issuecomment-682597793>`_
-    
+
     `Brainstorm whois data comment <https://github.com/funilrys/PyFunceble/issues/108#issuecomment-682522516>`_
 
 Multiprocessing
@@ -861,7 +864,7 @@ Global overview
     usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
-                    [--http] [--local] [-ns] [-nw] [--reputation]
+                    [--http] [--local] [-ns] [-nw] [--reputation] [--rpz]
                     [--shadow-file] [--syntax] [-t TIMEOUT]
                     [--use-reputation-data] [-ua USER_AGENT] [-vsc] [--wildcard]
                     [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
@@ -931,6 +934,9 @@ Global overview
                                 Configured value: False
         --reputation          Switch the value of the reputation test mode.
                                 Configured value: False
+        --rpz                 Switch the value of the RPZ policies test.
+
+                                When used, RPZ policies will be properly tested.
         --shadow-file, --shadow
                                 Switch the value of the usage and generation of a shadow file before a file test starts.
 
@@ -952,10 +958,7 @@ Global overview
                                 Configured value: False
         --wildcard            Switch the value of the wildcards test.
 
-                                When used, wildcards will be proprely tested.
-
-                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
-                                Configured value: False
+                                When used, wildcards will be properly tested.
 
     DNS (resolver) control:
         --dns DNS [DNS ...]   Set one or more DNS server(s) to use during testing. Separated by spaces.

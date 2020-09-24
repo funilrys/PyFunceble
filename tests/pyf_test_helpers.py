@@ -1,3 +1,4 @@
+# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -11,7 +12,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the status interface for URL syntax check.
+Provides some test related helpers.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -49,53 +50,32 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import PyFunceble
-
-from ..gatherer_base import GathererBase
+# pylint: enable=line-too-long
 
 
-class Url(GathererBase):
+def convert_ipv4_to_rpz(subject):
     """
-    Gather the syntax of the given URL.
+    Converts the given IPv4 into a policy format which can later be used in the
+    tests.
     """
 
-    # pylint: disable=no-member
+    return ".".join(reversed(subject.replace("/", ".").split(".")))
 
-    def __init__(self, subject, filename=None, whois_db=None, inactive_db=None):
-        super().__init__(
-            subject, filename=filename, whois_db=whois_db, inactive_db=inactive_db
-        )
 
-        self.subject_type += "url"
+def convert_ipv6_to_rpz(subject):
+    """
+    Converts the given IPV6 into a policy format which can later be used in the
+    tests.
+    """
 
-        self.__gather()
+    starting_point = subject.replace("/", ".")
 
-    def __gather(self):
-        """
-        Process the gathering.
-        """
+    if "::" in starting_point:
+        splitted = starting_point.split("::")
 
-        self.status["_status_source"] = self.status.status_source = "SYNTAX"
-
-        if self.status.url_syntax_validation:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.valid
+        if splitted[-1] and (splitted[-1].startswith(".") or "." in splitted[-1]):
+            starting_point = starting_point.replace("::", ".zz.")
         else:
-            self.status[
-                "_status"
-            ] = self.status.status = PyFunceble.STATUS.official.invalid
+            starting_point = starting_point.replace("::", ".zz")
 
-        PyFunceble.output.Generate(
-            self.status.given,
-            self.subject_type,
-            self.status.status,
-            source=self.status.status_source,
-            whois_server=self.status.whois_server,
-            filename=self.filename,
-            ip_validation=self.status.ipv4_syntax_validation
-            or self.status.ipv6_syntax_validation,
-        ).status_file()
-
-        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")
+    return ".".join(reversed(starting_point.replace(":", ".").split(".")))

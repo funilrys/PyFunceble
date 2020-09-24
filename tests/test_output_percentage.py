@@ -102,7 +102,7 @@ class TestPercentage(StdoutBase):
 
     def test_count(self):
         """
-        Tests if the counter can be set proprely.
+        Tests if the counter can be set properly.
         """
 
         expected = self.__preset_counters_and_get_expected()
