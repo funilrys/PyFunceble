@@ -136,7 +136,7 @@ if __name__ == "__main__":
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=find_packages(exclude=("tests")),
+        packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
         keywords=[
             "availability",
             "dns",
