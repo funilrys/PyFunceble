@@ -61,39 +61,13 @@ import PyFunceble
 from ..schemas.file import File
 from ..schemas.status import Status
 from ..schemas.whois_record import WhoisRecord
-from .base import MigrationaBase
+from .base import MigrationBase
 
 
-class CleanupOldTables(MigrationaBase):
+class CleanupOldTables(MigrationBase):
     """
     Provides the interface which is in charge of cleaning the database.
-
-    :param credentials:
-        A credentials object.
     """
-
-    old_tables = [
-        "pyfunceble_auto_continue",
-        "pyfunceble_inactive",
-        "pyfunceble_mining",
-        "pyfunceble_tested",
-        "pyfunceble_whois",
-    ]
-
-    def __init__(self, credentials):
-        self.credentials = credentials
-
-        super().__init__()
-
-    @property
-    def authorized(self):
-        """
-        Provides the authorization to run.
-        """
-
-        return PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"] and any(
-            [self.does_table_exists(x) for x in self.old_tables]
-        )
 
     @classmethod
     def __get_rows(cls, statement, limit=20):
@@ -113,36 +87,6 @@ class CleanupOldTables(MigrationaBase):
 
             for result in db_result:
                 yield result
-
-    def does_table_exists(self, table_name):
-        """
-        Checks if the table exists.
-
-        :param str table_name:
-            The name of the table to check.
-        """
-
-        with PyFunceble.engine.database.loader.session.Session() as db_session:
-            statement = (
-                "SELECT COUNT(*) "
-                "FROM information_schema.tables "
-                "WHERE table_schema = :database_name "
-                "AND table_name = :table_name "
-            )
-
-            result = db_session.execute(
-                statement,
-                {
-                    "database_name": self.credentials["name"],
-                    "table_name": table_name,
-                },
-            )
-
-            result = dict(result.fetchone())
-
-        if result["COUNT(*)"] != 1:
-            return False
-        return True
 
     @classmethod
     def __process_migration(cls, action_method, data):

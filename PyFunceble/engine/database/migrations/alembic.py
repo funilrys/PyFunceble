@@ -113,7 +113,7 @@ class Alembic:
             command.upgrade(self.alembic_config, revision)
 
             Duplicates2Single().start()
-            CleanupOldTables(self.credentials).start()
+            CleanupOldTables().start()
 
     def downgrade(self, revision="head"):
         """

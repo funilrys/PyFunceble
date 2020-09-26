@@ -51,16 +51,16 @@ License:
 """
 
 from sqlalchemy.exc import StatementError
-from sqlalchemy.orm.exc import ObjectDeletedError
 
 import PyFunceble
 
 from ..schemas.file import File
 from ..schemas.whois_record import WhoisRecord
-from .base import MigrationaBase
+from ..schemas.status import Status
+from .base import MigrationBase
 
 
-class Duplicates2Single(MigrationaBase):
+class Duplicates2Single(MigrationBase):
     """
     Provides an interface which will cleanup duplicates in the migrated
     data.
@@ -69,10 +69,15 @@ class Duplicates2Single(MigrationaBase):
     in the past which created duplicated in the database.
     """
 
-    def __init__(self):
-        self.autosave = PyFunceble.engine.AutoSave()
+    @property
+    def authorized(self):
+        """
+        Provides the authorization to run.
+        """
 
-        super().__init__()
+        return PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"] and any(
+            [self.does_table_exists(x) for x in self.old_tables]
+        )
 
     def __delete(self, db_session, entries):
         """
@@ -89,6 +94,7 @@ class Duplicates2Single(MigrationaBase):
             if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
                 PyFunceble.LOGGER.info(f"Deleted {row}.")
                 print(".", end="")
+        self.handle_autosaving()
 
     def process_status_table(self):
         """
@@ -98,28 +104,34 @@ class Duplicates2Single(MigrationaBase):
 
         with PyFunceble.engine.database.loader.session.Session() as db_session:
             for row in db_session.query(File):
-                subjects = [x.tested for x in row.subjects]
-
                 for status in row.subjects:
-                    positions = []
+                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                        PyFunceble.LOGGER.info(
+                            f"Checking for duplicate of {status.tested}."
+                        )
+                        print(".", end="")
 
-                    for index, subject in enumerate(subjects):
-                        try:
-                            if subject == status.tested:
-                                positions.append(index)
-                        except ObjectDeletedError:
-                            continue
+                    while True:
+                        # pylint: disable=no-member
+                        to_delete = (
+                            db_session.query(Status)
+                            .filter(Status.file_id == row.id)
+                            .filter(Status.tested == status.tested)
+                            .filter(Status.id != status.id)
+                            .limit(20)
+                            .all()
+                        )
 
-                    if len(positions) > 1:
-                        to_delete = []
+                        if not to_delete:
+                            PyFunceble.LOGGER.info(
+                                f"Continue. No duplicate (anymore) for {status.tested}."
+                            )
+                            break
 
-                        for position in positions:
-                            try:
-                                to_delete.append(row.subjects[position])
-                            except IndexError:
-                                continue
-
-                        self.__delete(db_session, to_delete)
+                        self.__delete(
+                            db_session,
+                            to_delete,
+                        )
 
                 self.handle_autosaving()
 
@@ -131,15 +143,30 @@ class Duplicates2Single(MigrationaBase):
 
         with PyFunceble.engine.database.loader.session.Session() as db_session:
             for row in db_session.query(WhoisRecord):
-                # pylint: disable=no-member
-                self.__delete(
-                    db_session,
-                    db_session.query(WhoisRecord)
-                    .filter(WhoisRecord.subject == row.subject)
-                    .filter(WhoisRecord.id != row.id)
-                    .all(),
-                )
+                if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                    PyFunceble.LOGGER.info(f"Checking for duplicate of {row.subject}.")
+                    print(".", end="")
 
+                while True:
+                    # pylint: disable=no-member
+                    to_delete = (
+                        db_session.query(WhoisRecord)
+                        .filter(WhoisRecord.subject == row.subject)
+                        .filter(WhoisRecord.id != row.id)
+                        .limit(20)
+                        .all()
+                    )
+
+                    if not to_delete:
+                        PyFunceble.LOGGER.info(
+                            f"Continue. No duplicate (anymore) for {row.subject}."
+                        )
+                        break
+
+                    self.__delete(
+                        db_session,
+                        to_delete,
+                    )
                 self.handle_autosaving()
 
     def start(self):
@@ -147,5 +174,6 @@ class Duplicates2Single(MigrationaBase):
         Starts the process.
         """
 
-        self.process_status_table()
-        self.process_whois_record_table()
+        if self.authorized:
+            self.process_status_table()
+            self.process_whois_record_table()

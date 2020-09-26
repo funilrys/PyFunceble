@@ -65,9 +65,7 @@ class Session:
     migration_effective = False
     current_session = None
     uri = None
-
-    def __init__(self):
-        self.uri = credential.Credential().get_uri()
+    credentials = None
 
     def __enter__(self):
         return self.create_new_session()
@@ -80,8 +78,31 @@ class Session:
         Provides a new session to work with.
         """
 
-        engine = create_engine(self.uri, poolclass=NullPool)
+        engine = create_engine(self.get_uri(), poolclass=NullPool)
         return sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+    def get_credentials(self):
+        """
+        Provides a credential object.
+        """
+
+        if not self.credentials:
+            self.credentials = credential.Credential()
+            self.credentials.load()
+
+        return self.credentials
+
+    def get_uri(self):
+        """
+        Provides the URI to communicate with.
+        """
+
+        if not self.credentials:
+            cred = self.get_credentials()
+        else:
+            cred = self.credentials
+
+        return cred.get_uri()
 
     def query(self, *args, **kwargs):
         """

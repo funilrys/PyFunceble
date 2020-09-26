@@ -57,13 +57,34 @@ from multiprocessing import active_children
 import PyFunceble
 
 
-class MigrationaBase:
+class MigrationBase:
     """
     Provides the base of all our (own) migration logic.
     """
 
+    old_tables = [
+        "pyfunceble_auto_continue",
+        "pyfunceble_inactive",
+        "pyfunceble_mining",
+        "pyfunceble_tested",
+        "pyfunceble_whois",
+    ]
+
     def __init__(self):
         self.autosave = PyFunceble.engine.AutoSave()
+        self.credentials = (
+            PyFunceble.engine.database.loader.session.Session().get_credentials()
+        )
+
+    @property
+    def authorized(self):
+        """
+        Provides the authorization to run.
+        """
+
+        return PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"] and any(
+            [self.does_table_exists(x) for x in self.old_tables]
+        )
 
     def write_file_for_autocontinue(self):
         """
@@ -102,3 +123,33 @@ class MigrationaBase:
             self.wait_for_all_process_to_finish()
             self.write_file_for_autocontinue()
             self.autosave.process()
+
+    def does_table_exists(self, table_name):
+        """
+        Checks if the table exists.
+
+        :param str table_name:
+            The name of the table to check.
+        """
+
+        with PyFunceble.engine.database.loader.session.Session() as db_session:
+            statement = (
+                "SELECT COUNT(*) "
+                "FROM information_schema.tables "
+                "WHERE table_schema = :database_name "
+                "AND table_name = :table_name "
+            )
+
+            result = db_session.execute(
+                statement,
+                {
+                    "database_name": self.credentials["name"],
+                    "table_name": table_name,
+                },
+            )
+
+            result = dict(result.fetchone())
+
+        if result["COUNT(*)"] != 1:
+            return False
+        return True
