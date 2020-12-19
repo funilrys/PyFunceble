@@ -129,13 +129,5 @@ jobs:
           pip install -r requirements.txt
           pip install tox
 
-      - name: Verify MariaDB connection
-        run: |
-          run: |
-          while [[ ! $(mysqladmin ping -h "${PYFUNCEBLE_DB_HOST}" -P "${PYFUNCEBLE_DB_PORT}") ]]
-          do
-            sleep 1
-          done
-
       - name: Run PyFunceble as defined by tox_run_mariadb.ini
         run: tox -c tox_run_mariadb.ini
