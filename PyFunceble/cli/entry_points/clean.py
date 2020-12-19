@@ -109,7 +109,7 @@ def cleaner() -> None:
 
     utility = FilesystemCleanup()
 
-    print(PyFunceble.cli.utils.ascii_logo.colorify("yellow"))
+    print(PyFunceble.cli.utils.ascii_logo.get_home_representation())
 
     to_cleanup = []
     directory_helper = DirectoryHelper()

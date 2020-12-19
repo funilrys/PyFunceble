@@ -110,7 +110,7 @@ def generator() -> None:
             print(f"{colorama.Fore.RED}{colorama.Style.BRIGHT}{str(exception)}")
             sys.exit(1)
 
-    print(PyFunceble.cli.utils.ascii_logo.colorify("yellow"))
+    print(PyFunceble.cli.utils.ascii_logo.get_home_representation())
 
     print(f"Generation of PSL into {utility.destination!r}", end=" ")
     try:

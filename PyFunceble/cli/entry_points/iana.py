@@ -106,7 +106,7 @@ def generator() -> None:
     if args.destination:
         utility.destination = args.destination
 
-    print(PyFunceble.cli.utils.ascii_logo.colorify("yellow"))
+    print(PyFunceble.cli.utils.ascii_logo.get_home_representation())
 
     print(f"Generation of IANA database into {utility.destination!r}", end=" ")
     try:
