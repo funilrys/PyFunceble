@@ -45,3 +45,36 @@ jobs:
 
       - name: Lint with Pylint
         run: pylint PyFunceble
+
+  run_cli:
+    needs: lint
+    name: Run PyFunceble with Python ${{ matrix.python_version }} under ${{ matrix.os }}
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7.9"
+          - "3.8.6"
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox
+
+      - name: Run PyFunceble as defined by tox_run.ini
+        run: tox -c tox_run.ini
