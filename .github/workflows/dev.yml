@@ -97,6 +97,14 @@ jobs:
           MYSQL_ROOT_PASSWORD: my_awesome_root_password
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
+    env:
+      PYFUNCEBLE_DB_CHARSET: utf8mb5
+      PYFUNCEBLE_DB_HOST: "127.0.0.1"
+      PYFUNCEBLE_DB_NAME: pyfunceble
+      PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
+      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_USERNAME: pyfunceble
+
     strategy:
       fail-fast: false
       matrix:
@@ -123,10 +131,3 @@ jobs:
 
       - name: Run PyFunceble as defined by tox_run_mariadb.ini
         run: tox -c tox_run_mariadb.ini
-        env:
-          PYFUNCEBLE_DB_CHARSET: utf8mb5
-          PYFUNCEBLE_DB_HOST: "127.0.0.1"
-          PYFUNCEBLE_DB_NAME: pyfunceble
-          PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-          PYFUNCEBLE_DB_PORT: "3306"
-          PYFUNCEBLE_DB_USERNAME: pyfunceble
