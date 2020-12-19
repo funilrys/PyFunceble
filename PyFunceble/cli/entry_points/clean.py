@@ -112,12 +112,15 @@ def cleaner() -> None:
     print(PyFunceble.cli.utils.ascii_logo.colorify("yellow"))
 
     to_cleanup = []
+    directory_helper = DirectoryHelper()
 
     if args.file:
         to_cleanup.append(get_destination_from_origin(args.file))
 
-    if args.all:
-        directory_helper = DirectoryHelper()
+    if (
+        args.all
+        and directory_helper.set_path(PyFunceble.cli.storage.OUTPUT_DIRECTORY).exists()
+    ):
         to_cleanup.extend(
             [
                 x
