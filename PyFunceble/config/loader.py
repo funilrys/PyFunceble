@@ -360,7 +360,7 @@ class ConfigLoader:
             PyFunceble.storage.HTTP_CODES = Box({})
             PyFunceble.storage.LINKS = Box({})
             self.custom_config = dict()
-        except AttributeError:
+        except (AttributeError, TypeError):
             pass
 
         return self
