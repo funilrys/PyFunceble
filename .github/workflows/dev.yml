@@ -4,10 +4,12 @@ on:
     branches:
       - dev
       - 4.0.0-dev
+      - test-github-actions
   push:
     branches:
       - dev
       - 4.0.0-dev
+      - test-github-actions
   schedule:
     - cron: "0 0 * * *"
 env:
