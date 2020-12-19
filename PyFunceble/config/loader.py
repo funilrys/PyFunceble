@@ -300,7 +300,6 @@ class ConfigLoader:
 
         return config
 
-    @functools.lru_cache
     def get_configured_value(self, entry: str) -> Any:
         """
         Provides the currently configured value.
