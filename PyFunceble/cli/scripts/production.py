@@ -287,7 +287,7 @@ class ProductionPrep:
         Updates the format of the source code using black.
         """
 
-        # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel, import-error
         import black
 
         def format_file(file: str) -> None:
@@ -334,6 +334,44 @@ class ProductionPrep:
                     continue
 
                 format_file(os.path.join(root, file))
+
+    @staticmethod
+    def update_documentation() -> "ProductionPrep":
+        """
+        Updates the code documentation.
+
+        :raise RuntimeError:
+            When one of the wanted directory is not found.
+        """
+
+        docs_dir_helper = DirectoryHelper("docs")
+        source_code_dir_helper = DirectoryHelper("PyFunceble")
+
+        if not docs_dir_helper.exists():
+            raise RuntimeError(f"{docs_dir_helper.realpath!r} not found.")
+
+        if not source_code_dir_helper.exists():
+            raise RuntimeError(f"{source_code_dir_helper.realpath!r} not found.")
+
+        header = "Code Documentation"
+        source_code_destination = os.path.join(docs_dir_helper.realpath, "code")
+
+        current_dir = docs_dir_helper.get_current()
+
+        CommandHelper(
+            f"sphinx-apidoc -f -H {header!r} -M -P -o "
+            f"{source_code_destination!r} {source_code_dir_helper.realpath}"
+        ).execute(raise_on_error=True)
+
+        os.chdir(docs_dir_helper.realpath)
+
+        docs_destination = os.path.join(docs_dir_helper.realpath, "_build")
+
+        CommandHelper(
+            f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination}"
+        ).execute(raise_on_error=False)
+
+        os.chdir(current_dir)
 
     def update_code_urls(self) -> "ProductionPrep":
         """
@@ -453,42 +491,6 @@ class ProductionPrep:
         DirectoryStructureBackup().start()
 
         return self
-
-    def update_documentation(self) -> "ProductionPrep":
-        """
-        Updates the code documentation.
-
-        :raise RuntimeError:
-            When one of the wanted directory is not found.
-        """
-
-        docs_dir_helper = DirectoryHelper("docs")
-        source_code_dir_helper = DirectoryHelper("PyFunceble")
-
-        if not docs_dir_helper.exists():
-            raise RuntimeError(f"{docs_dir_helper.realpath!r} not found.")
-
-        if not source_code_dir_helper.exists():
-            raise RuntimeError(f"{source_code_dir_helper.realpath!r} not found.")
-
-        header = "Code Documentation"
-        source_code_destination = os.path.join(docs_dir_helper.realpath, "code")
-
-        current_dir = docs_dir_helper.get_current()
-
-        CommandHelper(
-            f"sphinx-apidoc -f -H {header!r} -M -P -o {source_code_destination!r} {source_code_dir_helper.realpath}"
-        ).execute(raise_on_error=True)
-
-        os.chdir(docs_dir_helper.realpath)
-
-        docs_destination = os.path.join(docs_dir_helper.realpath, "_build")
-
-        CommandHelper(
-            f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination}"
-        ).execute(raise_on_error=False)
-
-        os.chdir(current_dir)
 
     def start(self) -> "ProductionPrep":
         """

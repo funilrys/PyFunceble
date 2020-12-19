@@ -51,6 +51,7 @@ License:
 """
 
 # pylint: skip-file
+# flake8: noqa
 
 from PyFunceble.database.schemas.autocontinue import Continue
 from PyFunceble.database.schemas.inactive import Inactive

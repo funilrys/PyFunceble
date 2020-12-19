@@ -51,7 +51,6 @@ License:
 """
 
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
-from PyFunceble.cli.continuous_integration.funilrys_dev import FunilrysDevCI
 from PyFunceble.cli.continuous_integration.gitlab_ci import GitLabCI
 from PyFunceble.cli.continuous_integration.travis_ci import TravisCI
 
@@ -61,7 +60,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
     A placeholder which provides the CI object to use.
     """
 
-    known_objects = [TravisCI, GitLabCI, FunilrysDevCI]
+    known_objects = [TravisCI, GitLabCI]
     result = None
 
     for known in known_objects:

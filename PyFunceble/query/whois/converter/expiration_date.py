@@ -132,13 +132,13 @@ class ExpirationDateExtractor(ConverterBase):
         # Date in format: 02.01.2017 15:00:00 // Month: jan
         "10": r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}",
         # Date in format: 02-Jan-2017 15:00:00 UTC
-        "11": r"([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{1}.*",  # pylint: disable=line-too-long
+        "11": r"([0-9]{2})-([A-Z]{1}[a-z]{2})-([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{1}.*",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: 2017/01/02 01:00:00 (+0900) // Month: jan
         "12": r"([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s\(.*\)",
         # Date in format: 2017/01/02 01:00:00 // Month: jan
         "13": r"([0-9]{4})\/([0-9]{2})\/([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}$",
         # Date in format: Mon Jan 02 15:00:00 GMT 2017
-        "14": r"[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{3}\s([0-9]{4})",  # pylint: disable=line-too-long
+        "14": r"[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s[A-Z]{3}\s([0-9]{4})",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: Mon Jan 02 2017
         "15": r"[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{2})\s([0-9]{4})",
         # Date in format: 2017-01-02T15:00:00 // Month: jan
@@ -146,20 +146,20 @@ class ExpirationDateExtractor(ConverterBase):
         # Date in format: 2017-01-02T15:00:00Z // Month: jan${'7}
         "17": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[A-Z].*",
         # Date in format: 2017-01-02T15:00:00+0200 // Month: jan
-        "18": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{4}",  # pylint: disable=line-too-long
+        "18": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{4}",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: 2017-01-02T15:00:00+0200.622265+03:00 //
         # Month: jan
-        "19": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[+-][0-9]{2}:[0-9]{2}",  # pylint: disable=line-too-long
+        "19": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[+-][0-9]{2}:[0-9]{2}",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: 2017-01-02T15:00:00+0200.622265 // Month: jan
         "20": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}$",
         # Date in format: 2017-01-02T23:59:59.0Z // Month: jan
-        "21": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[A-Z]",  # pylint: disable=line-too-long
+        "21": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9].*[A-Z]",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: 02-01-2017 // Month: jan
         "22": r"([0-9]{2})-([0-9]{2})-([0-9]{4})",
         # Date in format: 2017. 01. 02. // Month: jan
         "23": r"([0-9]{4})\.\s([0-9]{2})\.\s([0-9]{2})\.",
         # Date in format: 2017-01-02T00:00:00+13:00 // Month: jan
-        "24": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}",  # pylint: disable=line-too-long
+        "24": r"([0-9]{4})-([0-9]{2})-([0-9]{2})T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}",  # pylint: disable=line-too-long  # noqa: E501
         # Date in format: 20170102 // Month: jan
         "25": r"(?=[0-9]{8})(?=([0-9]{4})([0-9]{2})([0-9]{2}))",
         # Date in format: 02-Jan-2017
@@ -173,7 +173,7 @@ class ExpirationDateExtractor(ConverterBase):
         # Date in format: 2017-Jan-02.
         "30": r"([0-9]{4})-([A-Z]{1}[a-z]{2})-([0-9]{2})\.",
         # Date in format: Mon Jan 02 15:00:00 2017
-        "31": r"[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{1,2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s([0-9]{4})",  # pylint: disable=line-too-long
+        "31": r"[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{1,2})\s[0-9]{2}:[0-9]{2}:[0-9]{2}\s([0-9]{4})",  # pylint: disable=line-too-long   # noqa: E501
         # Date in format: Mon Jan 2017 15:00:00
         "32": r"()[a-zA-Z]{3}\s([a-zA-Z]{3})\s([0-9]{4})\s[0-9]{2}:[0-9]{2}:[0-9]{2}",
         # Date in format: January 02 2017-Jan-02

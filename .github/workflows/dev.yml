@@ -45,4 +45,3 @@ jobs:
 
       - name: Lint with Pylint
         run: pylint PyFunceble
-
