@@ -99,10 +99,10 @@ jobs:
 
     env:
       PYFUNCEBLE_DB_CHARSET: utf8mb5
-      PYFUNCEBLE_DB_HOST: localhost
+      PYFUNCEBLE_DB_HOST: "127.0.0.1"
       PYFUNCEBLE_DB_NAME: pyfunceble
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-      PYFUNCEBLE_DB_PORT: 3306
+      PYFUNCEBLE_DB_PORT: "3306"
       PYFUNCEBLE_DB_USERNAME: pyfunceble
 
     strategy:
