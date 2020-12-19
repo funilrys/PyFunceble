@@ -12,8 +12,6 @@ on:
       - test-github-actions
   schedule:
     - cron: "0 0 * * *"
-env:
-  PYFUNCEBLE_AUTO_CONFIGURATION: yes
 
 jobs:
   lint:
@@ -48,7 +46,7 @@ jobs:
 
   run_cli:
     needs: lint
-    name: Run PyFunceble with Python ${{ matrix.python_version }} under ${{ matrix.os }}
+    name: "[${{ matrix.os }}] Run PyFunceble with Python ${{ matrix.python_version }}"
 
     runs-on: "${{ matrix.os }}"
 
@@ -80,3 +78,65 @@ jobs:
 
       - name: Run PyFunceble as defined by tox_run.ini
         run: tox -c tox_run.ini
+
+  run_cli_mariadb:
+    needs: lint
+    name: "[${{ matrix.os }}] Run PyFunceble (with mariadb) with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: pyfunceble
+          MYSQL_PASSWORD: my_pyfunceble_password
+          MYSQL_DATABASE: pyfunceble
+          MYSQL_ROOT_PASSWORD: my_awesome_root_password
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    env:
+      PYFUNCEBLE_DB_CHARSET: utf8mb5
+      PYFUNCEBLE_DB_HOST: localhost
+      PYFUNCEBLE_DB_NAME: pyfunceble
+      PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
+      PYFUNCEBLE_DB_PORT: 3306
+      PYFUNCEBLE_DB_USERNAME: pyfunceble
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7.9"
+          - "3.8.6"
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox
+
+      - name: Verify MariaDB connection
+        run: |
+          while [[ ! mysqladmin ping -h "${PYFUNCEBLE_DB_HOST}" -P "${PYFUNCEBLE_DB_PORT}" --silent ]]
+          do
+            sleep 1
+          done
+
+      - name: Run PyFunceble as defined by tox_run_mariadb.ini
+        run: tox -c tox_run_mariadb.ini
