@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the converters base.
+Provides the base of all our converter class.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -50,26 +50,54 @@ License:
     limitations under the License.
 """
 
-from PyFunceble.exceptions import NoConversionMade
+from typing import Any, Optional
 
 
-class ConverterBase:  # pragma: no cover
+class ConverterBase:
     """
-    Provides the converter base.
-
-    :param data_to_convert: The data to convert.
+    Provides the base of all converter class.
     """
 
-    def __init__(self, data_to_convert):
-        self.data_to_convert = data_to_convert
+    _data_to_convert: Optional[Any] = None
 
-    def get_converted(self):
+    def __init__(self, data_to_convert: Optional[Any] = None) -> None:
+        if data_to_convert is not None:
+            self.data_to_convert = data_to_convert
+
+    @property
+    def data_to_convert(self) -> Optional[Any]:
+        """
+        Provides the current state of the :code:`_data_to_convert` attribute.
+        """
+
+        return self._data_to_convert
+
+    @data_to_convert.setter
+    def data_to_convert(self, value: Any) -> None:
+        """
+        Sets the data to convert / to work with.
+
+        :param value:
+            The value to set.
+        """
+
+        self._data_to_convert = value
+
+    def set_data_to_convert(self, value: Any) -> "ConverterBase":
+        """
+        Sets the data to convert / to work with.
+
+        :param value:
+            The value to set.
+        """
+
+        self.data_to_convert = value
+
+        return self
+
+    def get_converted(self) -> Optional[Any]:
         """
         Provides the converted data.
         """
 
-        if hasattr(self, "converted_data"):
-            # pylint: disable=no-member
-            return self.converted_data
-
-        raise NoConversionMade(self.data_to_convert)
+        raise NotImplementedError()

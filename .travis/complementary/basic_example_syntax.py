@@ -3,32 +3,43 @@ This is a basic example which checks syntax.
 """
 
 from PyFunceble import (
-    is_domain,
-    is_ipv4,
-    is_ipv4_range,
-    is_subdomain,
-    is_url,
-    load_config,
+    DomainSyntaxChecker,
+    IPv4SyntaxChecker,
+    SubDomainSyntaxChecker,
+    URLSyntaxChecker,
 )
 
-load_config(custom={"db_type": "json"})
+print(f"Starting syntax check using {DomainSyntaxChecker}")
+checker = DomainSyntaxChecker()
 
-print("Start of basic example for syntax check.")
-print("google.com", is_domain("google.com"))
-print("https://google.com", is_url("https://google.com"))
-print("216.58.207.46", is_ipv4("216.58.207.46"))
+for domain in ["google.com", "forest-jump"]:
+    print(f"{domain} VALID ? {checker.set_subject(domain).is_valid()}")
+print(f"Finished syntax check using {DomainSyntaxChecker}\n")
 
-print("forest-jump", is_domain("forest-jump"))
-print("https://forest-jump", is_url("https://forest-jump"))
-print("257.58.207.46", is_ipv4("257.58.207.46"))
-print("End of basic example for syntax check.")
+print(f"Starting syntax check using {URLSyntaxChecker}")
+checker = URLSyntaxChecker()
 
-print("\nStart of the subdomain check.")
-print("hello.google.com", is_subdomain(subject="hello.google.com"))
-print("google.com", is_subdomain(subject="google.com"))
-print("End of the subdomain check.")
+for domain in ["https://google.com", "https://forest-jump"]:
+    print(f"{domain} VALID ? {checker.set_subject(domain).is_valid()}")
+print(f"Finished syntax check using {URLSyntaxChecker}\n")
 
-print("\nStart of the IPv4 range check.")
-print("192.168.0.0/24", is_ipv4_range(subject="192.168.0.0/24"))
-print("192.168.0.0", is_ipv4_range(subject="192.168.0.0"))
-print("End of the IPv4 range check.")
+print(f"Starting syntax check using {IPv4SyntaxChecker}")
+checker = IPv4SyntaxChecker()
+
+for domain in ["216.58.207.46", "257.58.207.46"]:
+    print(f"{domain} VALID ? {checker.set_subject(domain).is_valid()}")
+print(f"Finished syntax check using {IPv4SyntaxChecker}\n")
+
+print(f"Starting syntax check (range) using {IPv4SyntaxChecker}")
+checker = IPv4SyntaxChecker()
+
+for domain in ["192.168.0.0/24", "192.168.0.0"]:
+    print(f"{domain} VALID range ? {checker.set_subject(domain).is_valid_range()}")
+print(f"Finished syntax check (range) using {IPv4SyntaxChecker}\n")
+
+print(f"Starting syntax check using {SubDomainSyntaxChecker}")
+checker = SubDomainSyntaxChecker()
+
+for domain in ["hello.google.com", "google.com"]:
+    print(f"{domain} VALID ? {checker.set_subject(domain).is_valid()}")
+print(f"Finished syntax check using {SubDomainSyntaxChecker}\n")

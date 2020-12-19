@@ -105,7 +105,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
 .. toctree::
    :maxdepth: 3
 
-   code/index
+   code/modules
 
 Indices and tables
 ==================

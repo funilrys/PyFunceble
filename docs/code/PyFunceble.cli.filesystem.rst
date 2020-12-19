@@ -1,0 +1,56 @@
+PyFunceble.cli.filesystem package
+=================================
+
+.. automodule:: PyFunceble.cli.filesystem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   PyFunceble.cli.filesystem.dir_structure
+   PyFunceble.cli.filesystem.printer
+
+Submodules
+----------
+
+PyFunceble.cli.filesystem.cleanup module
+----------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.cleanup
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.filesystem.counter module
+----------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.counter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.filesystem.dir\_base module
+------------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.dir_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.filesystem.status\_file module
+---------------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.status_file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

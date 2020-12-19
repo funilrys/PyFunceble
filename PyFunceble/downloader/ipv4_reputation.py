@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the downloader of the IPv4 reputation file.
+Provides the downloader of the latest user agents database file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -50,26 +50,29 @@ License:
     limitations under the License.
 """
 
-import PyFunceble
+import os
 
-from .base import DownloaderBase
+import PyFunceble.storage
+from PyFunceble.downloader.base import DownloaderBase
 
 
-class IPv4ReputationDownloader(DownloaderBase):
+class IPV4ReputationDownloader(DownloaderBase):
     """
-    Provides the downloader of the IPv4 reputation file.
+    Provides the downloader of our user agent file.
     """
 
-    DOWNTIME_INDEX = "ipv4_reputation"
-    REDOWNLOAD_AFTER = 1
+    DOWNTIME_INDEX: str = "ipv4_reputation"
+    DOWNLOAD_FREQUENCY: int = 1
 
-    def __init__(self):
-        self.download_link = PyFunceble.CONFIGURATION.links.ipv4_reputation
-        self.destination = (
-            f"{PyFunceble.CONFIG_DIRECTORY}"
-            f"{PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME}"
+    def __init__(self) -> None:
+        self.destination = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.storage.IPV4_REPUTATION_FILENAME,
         )
+        self.download_link = PyFunceble.storage.IPV4_REPUTATION_DUMP_LINK
 
         super().__init__()
 
-        self.process()
+    @property
+    def authorized(self) -> bool:
+        return True

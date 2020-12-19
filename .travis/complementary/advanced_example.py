@@ -2,36 +2,25 @@
 This is an advanced example which get more information about the tested element.
 """
 
-from json import dumps
+from PyFunceble import DomainAndIPAvailabilityChecker, URLAvailabilityChecker
 
-from PyFunceble import test as PyFunceble
-from PyFunceble import url_test as PyFuncebleURL
-
-CONFIG = {"no_whois": True, "db_type": "json"}
 SUBJECTS = ["google.com", "github.com", "example.org", "8.8.8.8", "8.8.4.4"]
 
+domain_ip_avail_checker = DomainAndIPAvailabilityChecker(use_whois_lookup=False)
+url_avail_checker = URLAvailabilityChecker()
+
 for subject in SUBJECTS:
-    output = PyFunceble(subject=subject, complete=True, config=CONFIG)
-    url_output = PyFuncebleURL(
-        subject="https://{}".format(subject), complete=True, config=CONFIG
-    )
+    domain_ip_avail_checker.subject = subject
+    url_avail_checker.subject = f"https://{subject}"
 
-    print("============== COMPLETE DATA: {0} ==============".format(output["tested"]))
-
-    print(dumps(output, indent=4, ensure_ascii=False, sort_keys=True))
-    print(
-        "=============================={0}===============".format(
-            "=" * len(output["tested"])
-        )
-    )
+    domain_ip_status = domain_ip_avail_checker.get_status()
+    url_status = url_avail_checker.get_status()
 
     print(
-        "============== COMPLETE DATA: {0} ==============".format(url_output["tested"])
+        f"============== COMPLETE DATA: {domain_ip_avail_checker.subject} "
+        "=============="
     )
+    print(domain_ip_status.to_json(), "\n\n")
 
-    print(dumps(output, indent=4, ensure_ascii=False, sort_keys=True))
-    print(
-        "=============================={0}===============".format(
-            "=" * len(url_output["tested"])
-        )
-    )
+    print(f"============== COMPLETE DATA: {url_avail_checker.subject} ==============")
+    print(url_status.to_json(), "\n\n")

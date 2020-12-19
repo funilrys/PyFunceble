@@ -108,12 +108,14 @@ venv.bak/
 .pyfunceble-env
 .PyFunceble.yaml
 dir_structure.json
+hashes_tracker.json
 iana-domains-db.json
 inactive_db.json
+inactive.csv
+ipv4_reputation.data
 mining.json
 public-suffix.json
 pyfunceble.db
-whois_db.json
-ipv4_reputation.data
 user_agents.json
-hashes_tracker.json
+whois_db.json
+whois.csv

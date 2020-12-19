@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the configuration loader and merger.
+Provides the configuration loader.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -50,474 +50,318 @@ License:
     limitations under the License.
 """
 
-from functools import wraps
-from os import sep as directory_separator
-from typing import Optional
+import copy
+import functools
+import os
+from typing import Any, Optional
+
+try:
+    import importlib.resources as package_resources
+except ImportError:  # pragma: no cover ## Retro compatibility
+    import importlib_resources as package_resources
 
 from box import Box
-from colorama import Fore, Style
 
-import PyFunceble
+import PyFunceble.cli.storage
+import PyFunceble.storage
+from PyFunceble.config.compare import ConfigComparison
+from PyFunceble.downloader.iana import IANADownloader
+from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
+from PyFunceble.downloader.user_agents import UserAgentsDownloader
+from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.file import FileHelper
+from PyFunceble.helpers.merge import Merge
 
 
-class Loader:
+class ConfigLoader:
     """
-    Loads the configuration(s) file(s).
+    Provides the interface which loads and updates the configuration (if needed).
+
+    :param merge_upstream:
+        Authorizes the merging of the upstream configuration.
     """
 
-    # pylint: disable=too-many-instance-attributes
+    path_to_config: Optional[str] = None
+    path_to_default_config: Optional[str] = None
 
-    UPDATED_LINKS: dict = {
-        "psl": "funilrys/PyFunceble",
-        "iana": "funilrys/PyFunceble",
-    }
+    _custom_config: dict = dict()
+    _merge_upstream: bool = False
 
-    DELETED_LINKS: list = ["mysql", "mariadb"]
+    file_helper: FileHelper = FileHelper()
+    dict_helper: DictHelper = DictHelper()
 
-    intern: dict = {
-        "counter": {
-            "number": {"down": 0, "invalid": 0, "tested": 0, "up": 0},
-            "percentage": {"down": 0, "invalid": 0, "up": 0},
-        },
-        "done": Fore.GREEN + "✔",
-        "error": Fore.RED + "✘",
-    }
+    def __init__(self, merge_upstream: Optional[bool] = None) -> None:
+        with package_resources.path(
+            "PyFunceble.data.infrastructure",
+            PyFunceble.storage.DISTRIBUTED_CONFIGURATION_FILENAME,
+        ) as file_path:
+            self.path_to_default_config = str(file_path)
 
-    path_to_config: str = None
-    path_to_default_config: str = None
+        self.path_to_config = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.storage.CONFIGURATION_FILENAME,
+        )
 
-    config: Box = Box({}, default_box=True, default_box_attr=None)
-    custom_config: dict = dict()
-    custom_loaded: dict = dict()
+        if merge_upstream is not None:
+            self.merge_upstream = merge_upstream
 
-    def __init__(self):
-        self.logger: Optional[PyFunceble.engine.Logger] = None
-        self.request_lookup: Optional[PyFunceble.lookup.Requests] = None
-        self.psl_lookup: Optional[PyFunceble.lookup.PublicSuffix] = None
-        self.iana_lookup: Optional[PyFunceble.lookup.Iana] = None
-        self.dns_lookup: Optional[PyFunceble.lookup.Dns] = None
+    def __del__(self) -> None:
+        self.destroy()
 
-        PyFunceble.downloader.Config()
-
-    def empty_custom_config(func):  # pylint: disable=no-self-argument
+    def reload_config(func):  # pylint: disable=no-self-argument
         """
-        Decorator which will empty the custom entries of the configuration
-        before calling the wrapped method.
+        Reload the configuration (if it was already loaded) after launching the
+        decorated method.
         """
 
-        @wraps(func)
+        @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            self.custom = dict()
+            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+            if self.is_already_loaded():
+                self.start()
+
+            return result
 
         return wrapper
 
-    def empty_config(func):  # pylint: disable=no-self-argument
+    @property
+    def custom_config(self) -> dict:
         """
-        Decorator which will empty the configuration
-        before calling the wrapped method.
-        """
-
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.config = Box({}, default_box=True, default_box_attr=None)
-
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
-
-    def load_all(func):  # pylint: disable=no-self-argument
-        """
-        Decorator which will load everything before calling
-        the wrapped method.
+        Provides the current state of the :code:`_custom_config` attribute.
         """
 
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.__load_them_all()  # pylint: disable=protected-access
+        return self._custom_config
 
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
-
-    def load_config_if_empty(func):  # pylint: disable=no-self-argument
+    @custom_config.setter
+    @reload_config
+    def custom_config(self, value: dict) -> None:
         """
-        Decorator which will load the configuration if
-        it was not loaded before.
+        Sets the custom configuration to set after loading.
+
+        Side Effect:
+            Directly inject into the configuration variables if it was already
+            loaded.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`dict`.
         """
 
-        @wraps(func)
-        def wrapper(self, *args, **kwargs):
-            if not self.was_configuration_loaded():
-                self.load_all()
+        if not isinstance(value, dict):
+            raise TypeError(f"<value> should be {dict}, {type(value)} given.")
 
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+        self._custom_config = value
 
-        return wrapper
+    def set_custom_config(self, value: dict) -> "ConfigLoader":
+        """
+        Sets the custom configuration to set after loading.
 
-    def was_configuration_loaded(self) -> bool:
+        Side Effect:
+            Directly inject into the configuration variables if it was already
+            loaded.
+        """
+
+        self.custom_config = value
+
+        return self
+
+    @property
+    def merge_upstream(self) -> bool:
+        """
+        Provides the current state of the :code:`_merge_upstream` attribute.
+        """
+
+        return self._merge_upstream
+
+    @merge_upstream.setter
+    def merge_upstream(self, value: bool) -> None:
+        """
+        Updates the value of :code:`_merge_upstream` attribute.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._merge_upstream = value
+
+    def set_merge_upstream(self, value: bool) -> "ConfigLoader":
+        """
+        Updates the value of :code:`_merge_upstream` attribute.
+        """
+
+        self.merge_upstream = value
+
+        return self
+
+    @staticmethod
+    def is_already_loaded() -> bool:
         """
         Checks if the configuration was already loaded.
         """
 
-        to_check = [
-            "CONFIGURATION",
-            "DNSLOOKUP",
-            "HTTP_CODE",
-            "IANALOOKUP",
-            "INTERN",
-            "LINKS",
-            "LOADER",
-            "LOGGER",
-            "OUTPUTS",
-            "PSLOOOKUP",
-            "REQUESTS",
-            "STATUS",
-        ]
+        return bool(PyFunceble.storage.CONFIGURATION)
 
-        return self.config and all(
-            [getattr(PyFunceble, x) is not None for x in to_check]
+    def config_file_exist(
+        self,
+    ) -> bool:  # pragma: no cover ## Existance checker already tested.
+        """
+        Checks if the config file exists.
+        """
+
+        return FileHelper(self.path_to_config).exists()
+
+    def default_config_file_exist(
+        self,
+    ) -> bool:  # pragma: no cover ## Existance checker already tested.
+        """
+        Checks if the default configuration file exists.
+        """
+
+        return self.file_helper.set_path(self.path_to_default_config).exists()
+
+    def install_missing_infrastructure_files(
+        self,
+    ) -> "ConfigLoader":  # pragma: no cover ## Copy method already tested
+        """
+        Installs the missing files (when needed).
+
+        .. note::
+            Installed if missing:
+                - The configuration file.
+                - The directory structure file.
+        """
+
+        if not self.is_already_loaded():
+            if not self.file_helper.set_path(self.path_to_config).exists():
+                self.file_helper.set_path(self.path_to_default_config).copy(
+                    self.path_to_config
+                )
+
+        return self
+
+    @classmethod
+    def download_dynamic_infrastructure_files(
+        cls,
+    ) -> "ConfigLoader":
+        """
+        Downloads all the dynamicly (generated) infrastructure files.
+
+        .. note::
+            Downloaded if missing:
+                - The IANA dump file.
+                - The Public Suffix dump file.
+        """
+
+        ## pragma: no cover ## Underlying download methods already tested.
+
+        if not cls.is_already_loaded():
+            IANADownloader().start()
+            PublicSuffixDownloader().start()
+            UserAgentsDownloader().start()
+
+    def get_config_file_content(self) -> dict:
+        """
+        Provides the content of the configuration file or the one already loaded.
+        """
+
+        def is_3_x_version(config: dict) -> bool:
+            """
+            Checks if the given configuration is an old one.
+
+            :param config:
+                The config to work with.
+            """
+
+            return "days_between_inactive_db_clean" in config
+
+        if not self.is_already_loaded():
+            self.install_missing_infrastructure_files()
+            self.download_dynamic_infrastructure_files()
+
+            config = self.dict_helper.from_yaml_file(self.path_to_config)
+        else:
+            config = copy.deepcopy(PyFunceble.storage.CONFIGURATION)
+
+        if self.merge_upstream or is_3_x_version(
+            config
+        ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
+
+            config = ConfigComparison(
+                local_config=config,
+                upstream_config=self.dict_helper.from_yaml_file(
+                    self.path_to_default_config
+                ),
+            ).get_merged()
+
+            self.dict_helper.set_subject(config).to_yaml_file(self.path_to_config)
+
+        return config
+
+    @functools.lru_cache
+    def get_configured_value(self, entry: str) -> Any:
+        """
+        Provides the currently configured value.
+
+        :param entry:
+            An entry to check.
+
+            multilevel should be separated with a point.
+
+        :raise RuntimeError:
+            When the configuration is not loaded yet.
+
+        :raise ValueError:
+            When the given :code:`entry` is not found.
+        """
+
+        if not self.is_already_loaded():
+            raise RuntimeError("Configuration not loaded, yet.")
+
+        flat_config = DictHelper(PyFunceble.storage.CONFIGURATION).flatten()
+
+        if entry not in flat_config:
+            raise ValueError(f"<entry> ({entry!r}) not in loaded configuration.")
+
+        return flat_config[entry]
+
+    def start(self) -> "ConfigLoader":
+        """
+        Starts the loading processIs.
+        """
+
+        config = self.get_config_file_content()
+
+        if self.custom_config:
+            config = Merge(self.custom_config).into(config)
+
+        PyFunceble.storage.CONFIGURATION = Box(
+            copy.deepcopy(config),
+        )
+        PyFunceble.storage.HTTP_CODES = Box(
+            copy.deepcopy(config["http_codes"]),
+        )
+        PyFunceble.storage.LINKS = Box(
+            copy.deepcopy(config["links"]),
         )
 
-    def set_path_to_config(self, value: str) -> None:
+        return self
+
+    def destroy(self) -> "ConfigLoader":
         """
-        Sets the path to the configuration file.
-        """
-
-        if not isinstance(value, str):
-            raise TypeError(f"<value> should be {str}, {type(value)} given.")
-
-        if not value.endswith(directory_separator):
-            value += directory_separator
-
-        self.path_to_config = (
-            f"{value}{PyFunceble.abstracts.Infrastructure.CONFIGURATION_FILENAME}"
-        )
-        self.path_to_default_config = (
-            f"{value}"
-            f"{PyFunceble.abstracts.Infrastructure.DEFAULT_CONFIGURATION_FILENAME}"
-        )
-
-    def get_path_to_config(self) -> Optional[str]:
-        """
-        Provides the path to the configuration file.
-        """
-
-        return self.path_to_config
-
-    def get_path_to_default_config(self) -> Optional[str]:
-        """
-        Provides the path to the default configuration file.
-        """
-
-        return self.path_to_default_config
-
-    @empty_custom_config
-    def set_custom_config(self, value: dict) -> None:
-        """
-        Sets the custom configuration to load.
-        """
-
-        if value is not None:
-            if not isinstance(value, dict):
-                raise TypeError(f"<value> should be {dict}, {type(value)} given.")
-
-            self.custom_config = value
-
-            if self.was_configuration_loaded():
-                self.config.update(self.custom_config)
-                self.custom_loaded.update(self.custom_config)
-
-    def get_custom_config(self) -> Optional[dict]:
-        """
-        Provides the currently set custom configuration.
-        """
-
-        return self.custom_config
-
-    @load_all
-    def get_config(self) -> Box:
-        """
-        Provides the configuration to use.
-        """
-
-        return self.config
-
-    def is_current_version_different_from_upstream(self) -> bool:
-        """
-        Checks if the local is different from the last download upstream
-        version.
-        """
-
-        local = PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
-        upstream = PyFunceble.helpers.Dict.from_yaml_file(self.path_to_default_config)
-
-        if not PyFunceble.helpers.Dict(local).has_same_keys_as(upstream):
-            return True
-
-        if "links" not in local or "db_type" in local["outputs"]:
-            return True
-
-        for index, value in local["links"].items():
-            if (
-                index not in self.UPDATED_LINKS
-                or index not in self.DELETED_LINKS
-                or self.UPDATED_LINKS[index] not in value
-            ):
-                continue
-
-            return True
-
-        if "user_agent" not in local:
-            return True
-
-        if not isinstance(local["user_agent"], dict):
-            return True
-
-        return False
-
-    def __merge_upstream(self):
-        """
-        Merges the upstream into the local scope.
-        """
-
-        old_to_new = {
-            "seconds_before_http_timeout": "timout",
-            "travis_autosave_final_commit": "travis_autosave_final_commit",
-            "travis_autosave_minutes": "travis_autosave_minutes",
-            "travis_branch": "ci_branch",
-            "travis_distribution_branch": "ci_distribution_branch",
-            "travis": "ci",
-        }
-
-        local = PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
-        upstream = PyFunceble.helpers.Dict.from_yaml_file(self.path_to_default_config)
-
-        new_config = PyFunceble.helpers.Merge(local).into(upstream)
-        new_config_copy = new_config.copy()
-
-        for old, new in old_to_new.items():
-            if old in new_config:
-                new_config[new] = new_config_copy[old]
-
-        new_config = PyFunceble.helpers.Dict(new_config).remove_key(
-            list(old_to_new.keys())
-        )
-
-        for index, value in self.UPDATED_LINKS.items():
-            if value in new_config["links"][index]:
-                continue
-
-            new_config["links"][index] = upstream["links"][index]
-
-        for index in self.DELETED_LINKS:
-            if index in new_config["links"]:
-                del new_config["links"][index]
-
-        if not isinstance(local["user_agent"], dict):
-            new_config["user_agent"] = upstream["user_agent"]
-
-        if "db_type" in new_config["outputs"]:
-            del new_config["outputs"]["db_type"]
-
-        PyFunceble.helpers.Dict(new_config).to_yaml_file(self.path_to_config)
-
-        if (
-            upstream["links"]["config"]
-            != PyFunceble.abstracts.Infrastructure.PROD_CONFIG_LINK
-        ):
-            PyFunceble.helpers.Dict(upstream).to_yaml_file(self.path_to_default_config)
-
-        self.config.update(new_config)
-
-    @empty_config
-    def __load_central_config(self) -> None:
-        """
-        Loads the central configuration file.
+        Destroys everything loaded.
         """
 
         try:
-            file_instance = PyFunceble.helpers.File(self.path_to_config)
-
-            if not file_instance.exists() or file_instance.is_empty():
-                raise FileNotFoundError(self.path_to_config)
-
-            self.config.update(
-                PyFunceble.helpers.Dict.from_yaml_file(self.path_to_config)
+            PyFunceble.storage.CONFIGURATION = Box(
+                {},
             )
-        except (FileNotFoundError, TypeError) as exception:
-            raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
+            PyFunceble.storage.HTTP_CODES = Box({})
+            PyFunceble.storage.LINKS = Box({})
+            self.custom_config = dict()
+        except AttributeError:
+            pass
 
-        if (
-            self.is_current_version_different_from_upstream()
-            and self.are_we_allowed_to_merge_upstream()
-        ):
-            self.__merge_upstream()
-
-        self.fix_paths()
-
-        self.config.update(self.custom_config)
-        self.custom_loaded = self.custom_config
-
-    def are_we_allowed_to_install_upstream(self) -> bool:
-        """
-        Checks if we are allowed to install the upstream configuration.
-        """
-
-        if PyFunceble.helpers.EnvironmentVariable(
-            "PYFUNCEBLE_AUTO_CONFIGURATION"
-        ).exists():
-            return True
-
-        while True:
-            response = input(
-                f"{Style.BRIGHT}{self.path_to_config!r}{Style.RESET_ALL} was not found.\n"
-                "Install and load the default configuration at the mentioned location? [y/n] "
-            ).lower()
-
-            if response[0] not in ["y", "n"]:
-                continue
-
-            if response[0] == "y":
-                return True
-
-            if response[0] == "n":
-                return False
-
-            break
-
-        return False
-
-    def are_we_allowed_to_merge_upstream(self) -> bool:
-        """
-        Checks if we are allowed to merge the upstream configuration.
-        """
-
-        if PyFunceble.helpers.EnvironmentVariable(
-            "PYFUNCEBLE_AUTO_CONFIGURATION"
-        ).exists():
-            return True
-
-        while True:
-            response = input(
-                f"{Style.BRIGHT}{Fore.RED}A configuration key is "
-                f"missing or a new version is available.{Style.RESET_ALL}\n"
-                f"Try to merge upstream configuration file "
-                f"into {Style.BRIGHT}{self.path_to_config!r}{Style.RESET_ALL}? [y/n] "
-            ).lower()
-
-            if response[0] not in ["y", "n"]:
-                continue
-
-            if response[0] == "y":
-                return True
-
-            if response[0] == "n":
-                return False
-
-            break
-
-        return False
-
-    def create_config_file_from_upstream(self) -> None:
-        """
-        Copy the production (upstream) configuration file into the
-        one we should use.
-        """
-
-        PyFunceble.helpers.File(self.path_to_default_config).copy(self.path_to_config)
-
-    def fix_paths(self) -> None:
-        """
-        Fixes all the paths. In other words, it ensures the the trailing
-        directory separator is always given.
-        """
-
-        for main_key in [
-            "domains",
-            "hosts",
-            "splited",
-            "json",
-            "complements",
-        ]:
-            try:
-                self.config["outputs"][main_key][
-                    "directory"
-                ] = PyFunceble.helpers.Directory(
-                    self.config["outputs"][main_key]["directory"]
-                ).fix_path()
-            except KeyError:
-                pass
-
-        for main_key in ["analytic", "logs"]:
-            for key, value in self.config["outputs"][main_key]["directories"].items():
-                self.config["outputs"][main_key]["directories"][
-                    key
-                ] = PyFunceble.helpers.Directory(value).fix_path()
-
-        self.config["outputs"]["parent_directory"] = PyFunceble.helpers.Directory(
-            self.config["outputs"]["parent_directory"]
-        ).fix_path()
-
-    @classmethod
-    def __download_complementary(cls) -> None:
-        """
-        Download the complementary files.
-        """
-
-        PyFunceble.downloader.IANA()
-        PyFunceble.downloader.PublicSuffix()
-        PyFunceble.downloader.UserAgents()
-        PyFunceble.downloader.DirectoryStructure()
-
-    def inject_all(self) -> None:
-        """
-        Inject everything at their final location.
-        """
-
-        PyFunceble.INTERN = self.intern
-        PyFunceble.CONFIGURATION = self.config
-        PyFunceble.STATUS = PyFunceble.CONFIGURATION.status
-        PyFunceble.OUTPUTS = PyFunceble.CONFIGURATION.outputs
-        PyFunceble.HTTP_CODE = PyFunceble.CONFIGURATION.http_codes
-        PyFunceble.LINKS = PyFunceble.CONFIGURATION.links
-
-        self.logger = PyFunceble.engine.Logger(debug=PyFunceble.CONFIGURATION.debug)
-        PyFunceble.LOGGER = self.logger
-
-        self.__download_complementary()
-
-        self.psl_lookup = PyFunceble.lookup.PublicSuffix()
-        PyFunceble.PSLOOOKUP = self.psl_lookup
-
-        self.request_lookup = PyFunceble.lookup.Requests()
-        PyFunceble.REQUESTS = self.request_lookup
-
-        self.iana_lookup = PyFunceble.lookup.Iana()
-        PyFunceble.IANALOOKUP = self.iana_lookup
-
-        self.dns_lookup = PyFunceble.lookup.Dns(
-            dns_server=PyFunceble.CONFIGURATION.dns_server,
-            lifetime=PyFunceble.CONFIGURATION.timeout,
-            tcp=PyFunceble.CONFIGURATION.dns_lookup_over_tcp,
-        )
-        PyFunceble.DNSLOOKUP = self.dns_lookup
-        PyFunceble.LOADER = self
-
-    def __load_them_all(self) -> None:
-        """
-        Loads the configuration.
-        """
-
-        if "links" not in self.config or "outputs" not in self.config:
-            try:
-                self.__load_central_config()
-            except PyFunceble.exceptions.ConfigurationFileNotFound as exception:
-                if not self.are_we_allowed_to_install_upstream():
-                    raise PyFunceble.exceptions.ConfigurationFileNotFound() from exception
-
-                self.create_config_file_from_upstream()
-                self.__load_central_config()
-
-        self.inject_all()
+        return self

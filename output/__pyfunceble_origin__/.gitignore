@@ -1,0 +1,7 @@
+*
+!.gitignore
+!Analytic/
+!domains/
+!hosts/
+!logs/
+!splitted/

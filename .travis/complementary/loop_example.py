@@ -7,11 +7,9 @@ Note:
 * You should always use PyFunceble().test() as it's the method which is especially
     suited for `__name__ != '__main__'` usage.
 """
-from PyFunceble import load_config
-from PyFunceble import test as PyFunceble
-from PyFunceble import url_test as PyFuncebleURL
 
-load_config(custom={"db_type": "json"})
+
+from PyFunceble import DomainAndIPAvailabilityChecker, URLAvailabilityChecker
 
 DOMAINS = ["twitter.com", "google.com", "github.com", "github.comcomcom", "funilrys.co"]
 
@@ -28,7 +26,7 @@ def domain_status(domain_or_ip):
         The status of the domain.
     """
 
-    return PyFunceble(domain_or_ip)
+    return DomainAndIPAvailabilityChecker(domain_or_ip).get_status().status
 
 
 def url_status(url):
@@ -43,18 +41,13 @@ def url_status(url):
         The status of the URL.
     """
 
-    return PyFuncebleURL(url)
+    return URLAvailabilityChecker(url).get_status().status
 
 
 print("Start of loop example.")
 for domain in DOMAINS:
     print(
-        "%s is %s and %s is %s"
-        % (
-            domain,
-            domain_status(domain),
-            "http://" + domain,
-            url_status("http://" + domain),
-        )
+        f"{domain} is {domain_status(domain)} and "
+        f"http://{domain} is {url_status(f'http://{domain}')} "
     )
 print("End of loop example.")

@@ -1,0 +1,47 @@
+PyFunceble.cli.utils package
+============================
+
+.. automodule:: PyFunceble.cli.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Submodules
+----------
+
+PyFunceble.cli.utils.ascii\_logo module
+---------------------------------------
+
+.. automodule:: PyFunceble.cli.utils.ascii_logo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.utils.sort module
+--------------------------------
+
+.. automodule:: PyFunceble.cli.utils.sort
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.utils.stdout module
+----------------------------------
+
+.. automodule:: PyFunceble.cli.utils.stdout
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.utils.testing module
+-----------------------------------
+
+.. automodule:: PyFunceble.cli.utils.testing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

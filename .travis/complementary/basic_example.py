@@ -6,16 +6,12 @@ the given domain and URL.
     Official output: ACTIVE, INACTIVE, INVALID
 """
 
-from PyFunceble import load_config
-from PyFunceble import test as PyFunceble
-from PyFunceble import url_test as PyFuncebleURL
-
-load_config(custom={"db_type": "json"})
+from PyFunceble import DomainAndIPAvailabilityChecker, URLAvailabilityChecker
 
 print("Start of basic example.")
 DOMAIN = "github.com"
-URL = "https://{}".format(DOMAIN)
+URL = f"https://{DOMAIN}"
 
-print(DOMAIN, PyFunceble(subject=DOMAIN))
-print(URL, PyFuncebleURL(subject=URL))
+print(DOMAIN, DomainAndIPAvailabilityChecker(DOMAIN).get_status().status)
+print(URL, URLAvailabilityChecker(URL).get_status().status)
 print("End of basic example ")
