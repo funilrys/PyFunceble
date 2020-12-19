@@ -1,0 +1,45 @@
+name: PyFunceble Dev Workflow
+on:
+  pull_request:
+    branches:
+      - dev
+      - 4.0.0-dev
+  push:
+    branches:
+      - dev
+      - 4.0.0-dev
+  schedule:
+    - cron: "0 0 * * *"
+env:
+  PYFUNCEBLE_AUTO_CONFIGURATION: yes
+
+jobs:
+  lint:
+    name: Lint PyFunceble with Python ${{ matrix.python_version }} under ${{ matrix.os }}
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install pylint
+
+      - name: Lint with Pylint
+        run: pylint PyFunceble
+
