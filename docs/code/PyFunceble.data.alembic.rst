@@ -1,12 +1,6 @@
 PyFunceble.data.alembic package
 ===============================
 
-.. automodule:: PyFunceble.data.alembic
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -22,6 +16,15 @@ PyFunceble.data.alembic.env module
 ----------------------------------
 
 .. automodule:: PyFunceble.data.alembic.env
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.data.alembic
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,12 +1,6 @@
 PyFunceble.database package
 ===========================
 
-.. automodule:: PyFunceble.database
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -24,6 +18,15 @@ PyFunceble.database.session module
 ----------------------------------
 
 .. automodule:: PyFunceble.database.session
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.database
    :members:
    :undoc-members:
    :show-inheritance:

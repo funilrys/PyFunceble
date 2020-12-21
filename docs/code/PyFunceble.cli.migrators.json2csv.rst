@@ -1,12 +1,6 @@
 PyFunceble.cli.migrators.json2csv package
 =========================================
 
-.. automodule:: PyFunceble.cli.migrators.json2csv
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.cli.migrators.json2csv.whois module
 ----------------------------------------------
 
 .. automodule:: PyFunceble.cli.migrators.json2csv.whois
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.migrators.json2csv
    :members:
    :undoc-members:
    :show-inheritance:

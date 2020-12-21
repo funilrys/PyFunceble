@@ -1,12 +1,6 @@
 PyFunceble.cli.continuous\_integration package
 ==============================================
 
-.. automodule:: PyFunceble.cli.continuous_integration
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -50,6 +44,15 @@ PyFunceble.cli.continuous\_integration.utils module
 ---------------------------------------------------
 
 .. automodule:: PyFunceble.cli.continuous_integration.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.continuous_integration
    :members:
    :undoc-members:
    :show-inheritance:

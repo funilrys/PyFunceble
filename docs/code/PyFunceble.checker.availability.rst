@@ -1,12 +1,6 @@
 PyFunceble.checker.availability package
 =======================================
 
-.. automodule:: PyFunceble.checker.availability
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -77,6 +71,15 @@ PyFunceble.checker.availability.url module
 ------------------------------------------
 
 .. automodule:: PyFunceble.checker.availability.url
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.checker.availability
    :members:
    :undoc-members:
    :show-inheritance:

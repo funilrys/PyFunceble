@@ -1,12 +1,6 @@
 PyFunceble.cli.migrators package
 ================================
 
-.. automodule:: PyFunceble.cli.migrators
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -42,6 +36,15 @@ PyFunceble.cli.migrators.db\_base module
 ----------------------------------------
 
 .. automodule:: PyFunceble.cli.migrators.db_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.migrators
    :members:
    :undoc-members:
    :show-inheritance:

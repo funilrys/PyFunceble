@@ -1,12 +1,6 @@
 PyFunceble.cli.utils package
 ============================
 
-.. automodule:: PyFunceble.cli.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -41,6 +35,15 @@ PyFunceble.cli.utils.testing module
 -----------------------------------
 
 .. automodule:: PyFunceble.cli.utils.testing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.utils
    :members:
    :undoc-members:
    :show-inheritance:

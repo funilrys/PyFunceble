@@ -1,12 +1,6 @@
 PyFunceble.data package
 =======================
 
-.. automodule:: PyFunceble.data
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -15,3 +9,12 @@ Subpackages
 
    PyFunceble.data.alembic
    PyFunceble.data.infrastructure
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

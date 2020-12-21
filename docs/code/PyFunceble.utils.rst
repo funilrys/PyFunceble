@@ -1,12 +1,6 @@
 PyFunceble.utils package
 ========================
 
-.. automodule:: PyFunceble.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -23,6 +17,15 @@ PyFunceble.utils.version module
 -------------------------------
 
 .. automodule:: PyFunceble.utils.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.utils
    :members:
    :undoc-members:
    :show-inheritance:

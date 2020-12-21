@@ -1,12 +1,6 @@
 PyFunceble.dataset package
 ==========================
 
-.. automodule:: PyFunceble.dataset
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -87,6 +81,15 @@ PyFunceble.dataset.user\_agent module
 -------------------------------------
 
 .. automodule:: PyFunceble.dataset.user_agent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.dataset
    :members:
    :undoc-members:
    :show-inheritance:

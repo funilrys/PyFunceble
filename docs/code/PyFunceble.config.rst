@@ -1,12 +1,6 @@
 PyFunceble.config package
 =========================
 
-.. automodule:: PyFunceble.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -23,6 +17,15 @@ PyFunceble.config.loader module
 -------------------------------
 
 .. automodule:: PyFunceble.config.loader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.config
    :members:
    :undoc-members:
    :show-inheritance:

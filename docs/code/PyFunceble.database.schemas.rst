@@ -1,12 +1,6 @@
 PyFunceble.database.schemas package
 ===================================
 
-.. automodule:: PyFunceble.database.schemas
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -41,6 +35,15 @@ PyFunceble.database.schemas.whois\_record module
 ------------------------------------------------
 
 .. automodule:: PyFunceble.database.schemas.whois_record
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.database.schemas
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,12 +1,6 @@
 PyFunceble.database.sqlalchemy package
 ======================================
 
-.. automodule:: PyFunceble.database.sqlalchemy
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -23,6 +17,15 @@ PyFunceble.database.sqlalchemy.base\_schema module
 --------------------------------------------------
 
 .. automodule:: PyFunceble.database.sqlalchemy.base_schema
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.database.sqlalchemy
    :members:
    :undoc-members:
    :show-inheritance:

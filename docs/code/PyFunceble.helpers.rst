@@ -1,12 +1,6 @@
 PyFunceble.helpers package
 ==========================
 
-.. automodule:: PyFunceble.helpers
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -104,6 +98,15 @@ PyFunceble.helpers.regex module
 -------------------------------
 
 .. automodule:: PyFunceble.helpers.regex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.helpers
    :members:
    :undoc-members:
    :show-inheritance:

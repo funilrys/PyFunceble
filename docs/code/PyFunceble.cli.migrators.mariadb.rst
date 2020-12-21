@@ -1,12 +1,6 @@
 PyFunceble.cli.migrators.mariadb package
 ========================================
 
-.. automodule:: PyFunceble.cli.migrators.mariadb
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.cli.migrators.mariadb.whois\_record\_idna\_subject module
 --------------------------------------------------------------------
 
 .. automodule:: PyFunceble.cli.migrators.mariadb.whois_record_idna_subject
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.migrators.mariadb
    :members:
    :undoc-members:
    :show-inheritance:

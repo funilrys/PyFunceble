@@ -1,12 +1,6 @@
 PyFunceble.data.alembic.versions package
 ========================================
 
-.. automodule:: PyFunceble.data.alembic.versions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -104,6 +98,15 @@ PyFunceble.data.alembic.versions.e04e8301d1a2\_deletion\_of\_the\_mined\_table m
 -------------------------------------------------------------------------------------
 
 .. automodule:: PyFunceble.data.alembic.versions.e04e8301d1a2_deletion_of_the_mined_table
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.data.alembic.versions
    :members:
    :undoc-members:
    :show-inheritance:

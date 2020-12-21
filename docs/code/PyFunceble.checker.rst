@@ -1,12 +1,6 @@
 PyFunceble.checker package
 ==========================
 
-.. automodule:: PyFunceble.checker
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -52,6 +46,15 @@ PyFunceble.checker.status\_base module
 --------------------------------------
 
 .. automodule:: PyFunceble.checker.status_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.checker
    :members:
    :undoc-members:
    :show-inheritance:

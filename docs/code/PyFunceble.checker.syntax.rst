@@ -1,12 +1,6 @@
 PyFunceble.checker.syntax package
 =================================
 
-.. automodule:: PyFunceble.checker.syntax
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -104,6 +98,15 @@ PyFunceble.checker.syntax.url module
 ------------------------------------
 
 .. automodule:: PyFunceble.checker.syntax.url
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.checker.syntax
    :members:
    :undoc-members:
    :show-inheritance:

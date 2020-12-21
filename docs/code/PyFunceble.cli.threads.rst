@@ -1,12 +1,6 @@
 PyFunceble.cli.threads package
 ==============================
 
-.. automodule:: PyFunceble.cli.threads
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -77,6 +71,15 @@ PyFunceble.cli.threads.utils module
 -----------------------------------
 
 .. automodule:: PyFunceble.cli.threads.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.threads
    :members:
    :undoc-members:
    :show-inheritance:

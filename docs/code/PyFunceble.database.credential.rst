@@ -1,12 +1,6 @@
 PyFunceble.database.credential package
 ======================================
 
-.. automodule:: PyFunceble.database.credential
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.database.credential.mysql module
 -------------------------------------------
 
 .. automodule:: PyFunceble.database.credential.mysql
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.database.credential
    :members:
    :undoc-members:
    :show-inheritance:

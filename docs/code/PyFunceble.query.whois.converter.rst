@@ -1,12 +1,6 @@
 PyFunceble.query.whois.converter package
 ========================================
 
-.. automodule:: PyFunceble.query.whois.converter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -41,6 +35,15 @@ PyFunceble.query.whois.converter.month2unified module
 -----------------------------------------------------
 
 .. automodule:: PyFunceble.query.whois.converter.month2unified
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.whois.converter
    :members:
    :undoc-members:
    :show-inheritance:

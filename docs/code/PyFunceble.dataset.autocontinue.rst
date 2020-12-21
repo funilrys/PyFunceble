@@ -1,12 +1,6 @@
 PyFunceble.dataset.autocontinue package
 =======================================
 
-.. automodule:: PyFunceble.dataset.autocontinue
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -41,6 +35,15 @@ PyFunceble.dataset.autocontinue.mysql module
 --------------------------------------------
 
 .. automodule:: PyFunceble.dataset.autocontinue.mysql
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.dataset.autocontinue
    :members:
    :undoc-members:
    :show-inheritance:

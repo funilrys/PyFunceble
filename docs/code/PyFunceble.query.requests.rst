@@ -1,12 +1,6 @@
 PyFunceble.query.requests package
 =================================
 
-.. automodule:: PyFunceble.query.requests
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -22,6 +16,15 @@ PyFunceble.query.requests.requester module
 ------------------------------------------
 
 .. automodule:: PyFunceble.query.requests.requester
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.requests
    :members:
    :undoc-members:
    :show-inheritance:

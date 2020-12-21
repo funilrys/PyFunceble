@@ -1,12 +1,6 @@
 PyFunceble.dataset.whois package
 ================================
 
-.. automodule:: PyFunceble.dataset.whois
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -41,6 +35,15 @@ PyFunceble.dataset.whois.mysql module
 -------------------------------------
 
 .. automodule:: PyFunceble.dataset.whois.mysql
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.dataset.whois
    :members:
    :undoc-members:
    :show-inheritance:

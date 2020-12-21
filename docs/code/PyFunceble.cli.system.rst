@@ -1,12 +1,6 @@
 PyFunceble.cli.system package
 =============================
 
-.. automodule:: PyFunceble.cli.system
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.cli.system.launcher module
 -------------------------------------
 
 .. automodule:: PyFunceble.cli.system.launcher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.system
    :members:
    :undoc-members:
    :show-inheritance:

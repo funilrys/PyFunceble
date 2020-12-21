@@ -1,12 +1,6 @@
 PyFunceble.downloader package
 =============================
 
-.. automodule:: PyFunceble.downloader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -59,6 +53,15 @@ PyFunceble.downloader.user\_agents module
 -----------------------------------------
 
 .. automodule:: PyFunceble.downloader.user_agents
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.downloader
    :members:
    :undoc-members:
    :show-inheritance:

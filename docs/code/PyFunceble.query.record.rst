@@ -1,12 +1,6 @@
 PyFunceble.query.record package
 ===============================
 
-.. automodule:: PyFunceble.query.record
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.query.record.whois module
 ------------------------------------
 
 .. automodule:: PyFunceble.query.record.whois
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.record
    :members:
    :undoc-members:
    :show-inheritance:

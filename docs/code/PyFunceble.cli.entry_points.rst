@@ -1,12 +1,6 @@
 PyFunceble.cli.entry\_points package
 ====================================
 
-.. automodule:: PyFunceble.cli.entry_points
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -49,6 +43,15 @@ PyFunceble.cli.entry\_points.public\_suffix module
 --------------------------------------------------
 
 .. automodule:: PyFunceble.cli.entry_points.public_suffix
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.entry_points
    :members:
    :undoc-members:
    :show-inheritance:

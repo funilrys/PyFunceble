@@ -1,12 +1,6 @@
 PyFunceble.checker.reputation package
 =====================================
 
-.. automodule:: PyFunceble.checker.reputation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -68,6 +62,15 @@ PyFunceble.checker.reputation.url module
 ----------------------------------------
 
 .. automodule:: PyFunceble.checker.reputation.url
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.checker.reputation
    :members:
    :undoc-members:
    :show-inheritance:

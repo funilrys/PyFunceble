@@ -1,12 +1,6 @@
 PyFunceble.query.requests.adapter package
 =========================================
 
-.. automodule:: PyFunceble.query.requests.adapter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.query.requests.adapter.https module
 ----------------------------------------------
 
 .. automodule:: PyFunceble.query.requests.adapter.https
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.requests.adapter
    :members:
    :undoc-members:
    :show-inheritance:

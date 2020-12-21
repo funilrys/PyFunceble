@@ -1,12 +1,6 @@
 PyFunceble.cli.filesystem package
 =================================
 
-.. automodule:: PyFunceble.cli.filesystem
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -50,6 +44,15 @@ PyFunceble.cli.filesystem.status\_file module
 ---------------------------------------------
 
 .. automodule:: PyFunceble.cli.filesystem.status_file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.filesystem
    :members:
    :undoc-members:
    :show-inheritance:

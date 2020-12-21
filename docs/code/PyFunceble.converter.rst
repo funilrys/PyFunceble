@@ -1,12 +1,6 @@
 PyFunceble.converter package
 ============================
 
-.. automodule:: PyFunceble.converter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -86,6 +80,15 @@ PyFunceble.converter.wildcard2subject module
 --------------------------------------------
 
 .. automodule:: PyFunceble.converter.wildcard2subject
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.converter
    :members:
    :undoc-members:
    :show-inheritance:

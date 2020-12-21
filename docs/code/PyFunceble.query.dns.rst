@@ -1,12 +1,6 @@
 PyFunceble.query.dns package
 ============================
 
-.. automodule:: PyFunceble.query.dns
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.query.dns.resolver module
 ------------------------------------
 
 .. automodule:: PyFunceble.query.dns.resolver
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.dns
    :members:
    :undoc-members:
    :show-inheritance:

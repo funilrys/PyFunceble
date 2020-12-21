@@ -1,12 +1,6 @@
 PyFunceble.query.netinfo package
 ================================
 
-.. automodule:: PyFunceble.query.netinfo
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.query.netinfo.hostbyaddr module
 ------------------------------------------
 
 .. automodule:: PyFunceble.query.netinfo.hostbyaddr
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.query.netinfo
    :members:
    :undoc-members:
    :show-inheritance:

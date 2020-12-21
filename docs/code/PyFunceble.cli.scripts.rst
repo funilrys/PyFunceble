@@ -1,12 +1,6 @@
 PyFunceble.cli.scripts package
 ==============================
 
-.. automodule:: PyFunceble.cli.scripts
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Submodules
 ----------
 
@@ -32,6 +26,15 @@ PyFunceble.cli.scripts.public\_suffix module
 --------------------------------------------
 
 .. automodule:: PyFunceble.cli.scripts.public_suffix
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli.scripts
    :members:
    :undoc-members:
    :show-inheritance:

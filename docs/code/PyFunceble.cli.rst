@@ -1,12 +1,6 @@
 PyFunceble.cli package
 ======================
 
-.. automodule:: PyFunceble.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
-
 Subpackages
 -----------
 
@@ -74,6 +68,15 @@ PyFunceble.cli.storage\_facility module
 ---------------------------------------
 
 .. automodule:: PyFunceble.cli.storage_facility
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+Module contents
+---------------
+
+.. automodule:: PyFunceble.cli
    :members:
    :undoc-members:
    :show-inheritance:
