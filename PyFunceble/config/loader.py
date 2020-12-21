@@ -69,6 +69,7 @@ from PyFunceble.downloader.iana import IANADownloader
 from PyFunceble.downloader.public_suffix import PublicSuffixDownloader
 from PyFunceble.downloader.user_agents import UserAgentsDownloader
 from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.merge import Merge
 
@@ -79,6 +80,10 @@ class ConfigLoader:
 
     :param merge_upstream:
         Authorizes the merging of the upstream configuration.
+
+        .. note::
+            If value is set to :py:class:`None` (default), we fallback to the
+            :code:`PYFUNCEBLE_AUTO_CONFIGURATION` environment variable.
     """
 
     path_to_config: Optional[str] = None
@@ -104,6 +109,8 @@ class ConfigLoader:
 
         if merge_upstream is not None:
             self.merge_upstream = merge_upstream
+        elif EnvironmentVariableHelper("PYFUNCEBLE_AUTO_CONFIGURATION").exists():
+            self.merge_upstream = True
 
     def __del__(self) -> None:
         self.destroy()
