@@ -11,7 +11,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    PyFunceble.data.alembic
    PyFunceble.data.infrastructure

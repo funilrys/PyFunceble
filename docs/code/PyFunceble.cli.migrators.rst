@@ -11,7 +11,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    PyFunceble.cli.migrators.file_cleanup
    PyFunceble.cli.migrators.json2csv

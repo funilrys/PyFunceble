@@ -90,14 +90,6 @@ class SyntaxCheckerBase(CheckerBase):
 
         return self
 
-    @CheckerBase.query_status_if_missing
-    def get_status(self) -> Optional[SyntaxCheckerStatus]:
-        """
-        Provides the current state of the status.
-        """
-
-        return self.status
-
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query
     def query_status(self) -> "SyntaxCheckerBase":

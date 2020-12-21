@@ -134,14 +134,6 @@ class ReputationCheckerBase(CheckerBase):
             or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
         )
 
-    @CheckerBase.query_status_if_missing
-    def get_status(self) -> Optional[ReputationCheckerStatus]:
-        """
-        Provides the current state of the status.
-        """
-
-        return self.status
-
     def query_syntax_checker(self) -> "ReputationCheckerBase":
         """
         Queries the syntax checker.

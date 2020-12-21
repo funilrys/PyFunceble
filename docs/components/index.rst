@@ -3,11 +3,12 @@ Components
 
 .. include:: adblock.rst
 .. include:: auto-continue.rst
-.. include:: auto-save.rst
 .. include:: certificate-verification.rst
 .. include:: clean.rst
 .. include:: complements.rst
 .. include:: config.rst
+.. include:: continuous-integration.rst
+.. include:: custom-dns-protocol.rst
 .. include:: custom-dns-server.rst
 .. include:: custom-user-agent.rst
 .. include:: databases.rst
@@ -20,7 +21,7 @@ Components
 .. include:: local.rst
 .. include:: logs-sharing.rst
 .. include:: mining.rst
-.. include:: multiprocessing.rst
+.. include:: multithreading.rst
 .. include:: output-files.rst
 .. include:: percentage.rst
 .. include:: public-suffix.rst

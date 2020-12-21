@@ -7,16 +7,20 @@ AdBlock/Filter list decoding
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-As some people may want to test the content of their AdBlock/Filter list, we offer a way to decode them!
+As some people may want to test the content of their AdBlock/Filter list, we
+offer a way to decode them!
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.converter.adblock.AdBlock.get_converted`!
+    Want to read the code ? It's here:
+    :class:`~PyFunceble.converter.adblock_input_line2subject.AdblockInputLine2Subject`!
 
-We keep it simple by trying to comply with the `Adblock Plus filters explained`_ documentation.
-For us, the relevant parts are the one which defines/explains which domains are being blocked from a given rule.
+We keep it simple by trying to comply with the
+`Adblock Plus filters explained`_ documentation.
+For us, the relevant parts are the one which defines/explains which domains
+are being blocked from a given rule.
 
 .. note::
     A more aggressive extraction might be planned in the future.
@@ -29,16 +33,25 @@ You can simply change
 
 ::
 
-    adblock: False
+    cli_decoding:
+        adblock: False
+
+        # Activate this only if you want to get as much as possible.
+        adblock_aggressive: False
 
 to
 
 ::
 
-    adblock: True
+    cli_decoding:
+        adblock: False
+
+        # Activate this only if you want to get as much as possible.
+        adblock_aggressive: False
 
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--adblock` argument from the CLI to activate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--adblock`
+argument from the CLI to activate it.
 
 
 .. _Adblock Plus filters explained: https://adblockplus.org/filter-cheatsheet

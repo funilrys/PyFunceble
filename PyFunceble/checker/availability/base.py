@@ -580,14 +580,6 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    @CheckerBase.query_status_if_missing
-    def get_status(self) -> Optional[AvailabilityCheckerStatus]:
-        """
-        Provides the current state of the status.
-        """
-
-        return self.status
-
     def query_syntax_checker(self) -> "AvailabilityCheckerBase":
         """
         Queries the syntax checker.

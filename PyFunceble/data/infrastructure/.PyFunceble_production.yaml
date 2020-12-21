@@ -57,7 +57,7 @@ cli_testing:
   # `\.info`.
   file_filter: null
 
-  # Activates the mining.
+  # Activates the mining of data.
   mining: False
 
   # Acknowleadges that we may test for local network component.

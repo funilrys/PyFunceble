@@ -356,22 +356,16 @@ class ProductionPrep:
         header = "Code Documentation"
         source_code_destination = os.path.join(docs_dir_helper.realpath, "code")
 
-        current_dir = docs_dir_helper.get_current()
-
         CommandHelper(
-            f"sphinx-apidoc -f -H {header!r} -M -P -o "
+            f"sphinx-apidoc -d 5 -f -H {header!r} -M -P -o "
             f"{source_code_destination!r} {source_code_dir_helper.realpath}"
         ).execute(raise_on_error=True)
 
-        os.chdir(docs_dir_helper.realpath)
-
-        docs_destination = os.path.join(docs_dir_helper.realpath, "_build")
+        docs_destination = os.path.join(docs_dir_helper.realpath, "_build", "html")
 
         CommandHelper(
-            f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination}"
+            f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination!r}"
         ).execute(raise_on_error=False)
-
-        os.chdir(current_dir)
 
     def update_code_urls(self) -> "ProductionPrep":
         """

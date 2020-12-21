@@ -310,3 +310,18 @@ class CheckerBase:
         """
 
         raise NotImplementedError()
+
+    @query_status_if_missing
+    def get_status(self) -> Optional[CheckerStatusBase]:
+        """
+        Provides the current state of the status.
+
+        .. note::
+            This method will automatically query status using the
+            :meth:`PyFunceble.checker.base.CheckerBase.query_status` if
+            the
+            :attr:`PyFunceble.checker.status_base.CheckerStatusBase.status`
+            attribute is not set.
+        """
+
+        return self.status

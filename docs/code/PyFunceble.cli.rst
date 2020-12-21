@@ -11,7 +11,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    PyFunceble.cli.continuous_integration
    PyFunceble.cli.entry_points

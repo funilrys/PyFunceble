@@ -4,30 +4,30 @@ Configuration
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-As we wanted to be hybrid and allow different modes and options, we introduced the configuration logic.
+As we wanted to be able to manage the options without having to always update
+the CLI call, we introduced the configuration logic and file.
 
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the configuration loader code ? It's here :func:`PyFunceble.config.load.Load`!
+    Want to read the configuration loader code ?
+    It's here :class:`~PyFunceble.config.loader.ConfigLoader`!
 
-We first look for the :code:`.PyFunceble.yaml`. If not found, we get/generate it.
-Then we parse it to the system.
+When you are using an argument from the CLI, what we actually do is parse them
+into our configuration logic.
+
+In the other side, if we first look for the :code:`.PyFunceble.yaml` file.
+If not found, we get/generate it and then parse it to our system.
 
 .. note::
-    Because we also wanted to get rid of the configuration for an end-user point of view,
-    almost all configuration indexed can be updated from the CLI.
+    We also wanted to get rid of the configuration for an end-user
+    point of view, therefore almost all configuration indexed can be updated
+    from the CLI.
 
     In that case, we update the configuration with the different argument you gives
     us before parsing it to the system.
-
-.. note::
-    If in the future a new configuration key is introduced, you will be asked to choose if you want to merge it into your :code:`.PyFunceble.yaml`.
-
-    In that case, we get a copy of the new one and keep/set all previously set indexes. Which means that you don't have to care about reconfiguring previously
-    set indexes.
 
 How to configure?
 ^^^^^^^^^^^^^^^^^
