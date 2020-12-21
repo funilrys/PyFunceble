@@ -57,6 +57,8 @@ import os
 import pathlib
 from typing import List, Optional
 
+from isort.api import sort_file
+
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
@@ -289,11 +291,19 @@ class ProductionPrep:
 
         # pylint: disable=import-outside-toplevel, import-error
         import black
+        import isort
 
-        def format_file(file: str) -> None:
+        def format_file(file: str, isortconfig: isort.settings.Config) -> None:
             """
             Formats the given file using black.
+
+            :param file:
+                The file to format.
+            :parm isortconfig:
+                The configuration to apply while sorting the imports.
             """
+
+            isort.api.sort_file(pathlib.Path(file), config=isortconfig)
 
             black.format_file_in_place(
                 pathlib.Path(file),
@@ -302,12 +312,14 @@ class ProductionPrep:
                 write_back=black.WriteBack.YES,
             )
 
+        isort_config = isort.settings.Config(settings_file="setup.cfg")
+
         files = [
             os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "setup.py"),
         ]
 
         for file in files:
-            format_file(file)
+            format_file(file, isort_config)
 
         for root, _, files in os.walk(
             os.path.join(
@@ -321,7 +333,7 @@ class ProductionPrep:
                 if not file.endswith(".py"):
                     continue
 
-                format_file(os.path.join(root, file))
+                format_file(os.path.join(root, file), isort_config)
 
         for root, _, files in os.walk(
             os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "tests")
@@ -333,7 +345,7 @@ class ProductionPrep:
                 if not file.endswith(".py"):
                     continue
 
-                format_file(os.path.join(root, file))
+                format_file(os.path.join(root, file), isort_config)
 
     @staticmethod
     def update_documentation() -> "ProductionPrep":
