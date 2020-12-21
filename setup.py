@@ -71,7 +71,7 @@ License:
 
 from re import compile as comp
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 def get_requirements():
