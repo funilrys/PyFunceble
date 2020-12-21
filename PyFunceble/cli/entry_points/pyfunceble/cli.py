@@ -233,8 +233,8 @@ def tool() -> None:
             {
                 "dest": "cli_decoding.adblock",
                 "action": "store_true",
-                "help": "Switch the decoding of the adblock format. %s"
-                % get_configured_value("cli_decoding.adblock"),
+                "help": "Activates or deactivates the decoding of the adblock "
+                "format. %s" % get_configured_value("cli_decoding.adblock"),
             },
         ),
         (
@@ -254,11 +254,10 @@ def tool() -> None:
             {
                 "dest": "cli_testing.complements",
                 "action": "store_true",
-                "help": "Switch the value of the generation and test of the "
+                "help": "Activates or disables the generation and test of the\n"
                 "complements. "
                 "\nA complement is for example `example.org` if "
-                "`www.example.org` "
-                "is given and vice-versa. %s"
+                "'www.example.org'\nis given and vice-versa. %s"
                 % get_configured_value("cli_testing.complements"),
             },
         ),
@@ -280,8 +279,32 @@ def tool() -> None:
             {
                 "dest": "cli_testing.mining",
                 "action": "store_true",
-                "help": "Switch the value of the mining subsystem usage. %s"
+                "help": "Activates or disables the mining subsystem. %s"
                 % get_configured_value("cli_testing.mining"),
+            },
+        ),
+        (
+            [
+                "--rpz",
+            ],
+            {
+                "dest": "cli_decoding.rpz",
+                "action": "store_true",
+                "help": "Activates or disables the decoding of RPZ policies\n"
+                "from each given input files. %s"
+                % get_configured_value("cli_decoding.rpz"),
+            },
+        ),
+        (
+            [
+                "--wildcard",
+            ],
+            {
+                "dest": "cli_decoding.wildcard",
+                "action": "store_true",
+                "help": "Activates or disables the decoding of wildcards for\n"
+                "each given input files. %s"
+                % get_configured_value("cli_decoding.wildcard"),
             },
         ),
     ]
@@ -296,7 +319,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.autocontinue",
                 "action": "store_true",
-                "help": "Switch the value of the auto continue mode. %s"
+                "help": "Activates or disables the autocontinue subsystem. %s"
                 % get_configured_value("cli_testing.autocontinue"),
             },
         ),
@@ -307,7 +330,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.cooldown_time",
                 "type": float,
-                "help": "Sets the cooldown time (in second) to apply between "
+                "help": "Sets the cooldown time (in second) to apply between\n"
                 "each test. %s" % get_configured_value("cli_testing.cooldown_time"),
             },
         ),
@@ -318,78 +341,75 @@ def tool() -> None:
             {
                 "dest": "cli_testing.local_network",
                 "action": "store_true",
-                "help": "Switch the value of the local network testing. %s"
+                "help": "Activates or disables the consideration of the test(s)\n"
+                "in or for a local or private network context. %s"
                 % get_configured_value("cli_testing.local_network"),
             },
         ),
         (
-            [
-                "--no-http",
-            ],
+            ["--dns-lookup"],
+            {
+                "dest": "lookup.dns",
+                "action": "store_true",
+                "help": "Activates or disables the usage of the DNS lookup\n"
+                "whether possible. %s" % get_configured_value("lookup.dns"),
+            },
+        ),
+        (
+            ["--http", "--http-status-code-lookup"],
             {
                 "dest": "lookup.http_status_code",
                 "action": "store_true",
                 "help": "Switch the value of the usage of HTTP code. %s"
-                % get_configured_value("lookup.http_status_code", negate=True),
+                % get_configured_value("lookup.http_status_code"),
             },
         ),
         (
             [
-                "--no-special",
-            ],
-            {
-                "dest": "lookup.special",
-                "action": "store_true",
-                "help": "Switch the value of the usage of the SPECIAL rules. %s"
-                % get_configured_value("lookup.special", negate=True),
-            },
-        ),
-        (
-            [
-                "--no-whois",
-            ],
-            {
-                "dest": "lookup.whois",
-                "action": "store_true",
-                "help": "Switch the value of the usage of WHOIS to test the "
-                "subject's status. %s"
-                % get_configured_value("lookup.whois", negate=True),
-            },
-        ),
-        (
-            [
-                "--no-netinfo",
+                "--netinfo-lookup",
             ],
             {
                 "dest": "lookup.netinfo",
                 "action": "store_true",
-                "help": "Switch the value of the usage of network information "
-                "to test the subject's status. %s"
-                % get_configured_value("lookup.netinfo", negate=True),
+                "help": "Activates or disables the usage of the network\n"
+                "information (or network socket) whether possible. %s"
+                % get_configured_value("lookup.netinfo"),
             },
         ),
         (
             [
-                "--no-dns",
+                "--special-lookup",
             ],
             {
-                "dest": "lookup.dns",
+                "dest": "lookup.special",
                 "action": "store_true",
-                "help": "Switch the value of the usage of DNS Lookup to test "
-                "the subject's status. %s"
-                % get_configured_value("lookup.dns", negate=True),
+                "help": "Activates or disables the usage of our SPECIAL and\n"
+                "extra rules whether possible. %s"
+                % get_configured_value("lookup.special"),
             },
         ),
         (
             [
-                "--no-reputation",
+                "--whois-lookup",
+            ],
+            {
+                "dest": "lookup.whois",
+                "action": "store_true",
+                "help": "Activates or disables the usage of the WHOIS record\n"
+                "(or better said the expiration date in it) whether possible. %s"
+                % get_configured_value("lookup.whois"),
+            },
+        ),
+        (
+            [
+                "--reputation-lookup",
             ],
             {
                 "dest": "lookup.reputation",
                 "action": "store_true",
-                "help": "Switch the value of the usage of reputation Lookup to "
-                "test the subject's status. %s"
-                % get_configured_value("lookup.reputation", negate=True),
+                "help": "Activates or disables the usage of the reputation\n"
+                "dataset whether possible. %s"
+                % get_configured_value("lookup.reputation"),
             },
         ),
         (
@@ -399,20 +419,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.testing_mode.reputation",
                 "action": "store_true",
-                "help": "Switch the value of the reputation test mode. %s"
+                "help": "Activates or disables the reputation checker. %s"
                 % get_configured_value("cli_testing.testing_mode.reputation"),
-            },
-        ),
-        (
-            [
-                "--rpz",
-            ],
-            {
-                "dest": "cli_decoding.rpz",
-                "action": "store_true",
-                "help": "Switch the value of the RPZ policies test.\n\n"
-                "When used, RPZ policies will be properly tested.\n\n %s"
-                % get_configured_value("cli_decoding.rpz"),
             },
         ),
         (
@@ -422,7 +430,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.testing_mode.syntax",
                 "action": "store_true",
-                "help": "Switch the value of the syntax test mode. %s"
+                "help": "Activates or disables the syntax checker. %s"
                 % get_configured_value("cli_testing.testing_mode.syntax"),
             },
         ),
@@ -434,19 +442,10 @@ def tool() -> None:
             {
                 "dest": "lookup.timeout",
                 "type": float,
-                "help": "Switch the value of the timeout in seconds. %s"
+                "default": 5.0,
+                "help": "Sets the default timeout to apply to each lookup\n"
+                "utilities everytime it is possible to define a timeout. %s"
                 % get_configured_value("lookup.timeout"),
-            },
-        ),
-        (
-            [
-                "--use-reputation-data",
-            ],
-            {
-                "dest": "lookup.reputation",
-                "action": "store_true",
-                "help": "Switch the value of the reputation data usage. %s"
-                % get_configured_value("lookup.reputation"),
             },
         ),
         (
@@ -457,9 +456,8 @@ def tool() -> None:
             {
                 "dest": "user_agent.custom",
                 "type": str,
-                "help": "Set the user-agent to use and set every time we "
-                "interact with everything which\nis not part of the "
-                "PyFunceble infrastructure.",
+                "help": "Sets the user agent to use.\n\nIf not given, we try to"
+                "get the lastest (automatically) for you.",
             },
         ),
         (
@@ -470,21 +468,9 @@ def tool() -> None:
             {
                 "dest": "verify_ssl_certificate",
                 "action": "store_true",
-                "help": "Switch the value of the verification of the "
-                "SSL/TLS certificate when testing for URL. %s"
+                "help": "Activates or disables the verification of the SSL/TLS\n"
+                "certificate when testing for URL. %s"
                 % get_configured_value("verify_ssl_certificate"),
-            },
-        ),
-        (
-            [
-                "--wildcard",
-            ],
-            {
-                "dest": "cli_decoding.wildcard",
-                "action": "store_true",
-                "help": "Switch the value of the wildcards test.\n\n"
-                "When used, wildcards will be properly tested. %s"
-                % get_configured_value("cli_decoding.wildcard"),
             },
         ),
     ]
@@ -498,9 +484,10 @@ def tool() -> None:
                 "dest": "dns.server",
                 "nargs": "+",
                 "type": str,
-                "help": "Set one or more DNS server(s) to use during testing. "
-                "Separated by spaces.\n\nTo specify a port number for the "
-                "DNS server you append it as :port [ip:port].\n\n"
+                "help": "Sets one or more (space separated) DNS server(s) to "
+                "use during testing."
+                "\n\nTo specify a port number for the "
+                "DNS server you append\nit as :port [ip:port].\n\n"
                 "If no port is specified, the default DNS port (53) is used. %s"
                 % get_configured_value("dns.server"),
             },
@@ -513,7 +500,7 @@ def tool() -> None:
                 "dest": "dns.protocol",
                 "type": str,
                 "choices": ["UDP", "TCP", "HTTPS", "TLS"],
-                "help": "Set the protocol to use for the DNS queries. %s"
+                "help": "Sets the protocol to use for the DNS queries. %s"
                 % get_configured_value("dns.protocol"),
             },
         ),
@@ -527,8 +514,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.inactive_db",
                 "action": "store_true",
-                "help": "Switch the value of the usage of a database to store "
-                "inactive domains of the currently tested list. %s"
+                "help": "Activates or disables the usage of a 'database' to\n"
+                "store all 'INVALID' and 'INACTIVE' subject for continuous retest. %s"
                 % get_configured_value("cli_testing.inactive_db"),
             },
         ),
@@ -540,7 +527,7 @@ def tool() -> None:
                 "dest": "cli_testing.db_type",
                 "type": str,
                 "choices": ["csv", "mariadb", "mysql"],
-                "help": "Tell us the type of database to use. "
+                "help": "Sets the database engine to use. "
                 "\nYou can choose between the following: "
                 "`csv | mariadb | mysql` %s"
                 % get_configured_value("cli_testing.db_type"),
@@ -554,8 +541,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.days_between.db_retest",
                 "type": int,
-                "help": "Set the numbers of days between each retest of domains "
-                "present into inactive-db.json. %s"
+                "help": "Sets the numbers of days since the introduction of\n"
+                "subject into the inactive dataset before it gets retested. %s"
                 % get_configured_value("cli_testing.days_between.db_retest"),
             },
         ),
@@ -567,10 +554,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.days_between.db_clean",
                 "type": int,
-                "help": "Set the numbers of days since the introduction of a "
-                "subject into inactive-db.json for it to qualifies for "
-                "deletion. %s"
-                % get_configured_value("cli_testing.days_between.db_clean"),
+                "help": argparse.SUPPRESS,
             },
         ),
         (
@@ -581,9 +565,9 @@ def tool() -> None:
             {
                 "dest": "cli_testing.whois_db",
                 "type": int,
-                "help": "Switch the value of the usage of a database to store "
-                "whois data to avoid whois servers rate limit. %s"
-                % get_configured_value("cli_testing.whois_db"),
+                "help": "Activates or disables the usage of a 'database' to\n"
+                "store the expiration date of all domains with a valid\n"
+                "expiration date. %s" % get_configured_value("cli_testing.whois_db"),
             },
         ),
     ]
@@ -597,7 +581,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.all",
                 "action": "store_true",
-                "help": "Output all available information on the screen. %s"
+                "help": "Activates or disables the disply of the all\n"
+                "information in the table we print to stdout. %s"
                 % get_configured_value("cli_testing.display_mode.all"),
             },
         ),
@@ -609,7 +594,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.execution_time",
                 "action": "store_true",
-                "help": "Switch the default value of the execution time showing. %s"
+                "help": "Activates or disables the display of the execution time. %s"
                 % get_configured_value("cli_testing.display_mode.execution_time"),
             },
         ),
@@ -620,8 +605,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.sorting_mode.hierarchical",
                 "action": "store_true",
-                "help": "Switch the value of the hierarchical sorting of the "
-                "tested file. %s"
+                "help": "Activates or disables the sorting of the files\n"
+                "content (output) in a hierarchical order. %s"
                 % get_configured_value("cli_testing.sorting_mode.hierarchical"),
             },
         ),
@@ -633,7 +618,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.file_generation.hosts",
                 "action": "store_true",
-                "help": "Switch the value of the generation of hosts file. %s"
+                "help": "Activates or disables the generation of the\n"
+                "hosts file(s). %s"
                 % get_configured_value("cli_testing.file_generation.hosts"),
             },
         ),
@@ -642,8 +628,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.hosts_ip",
                 "type": str,
-                "help": "Change the IP to print in the hosts files with the "
-                "given one. %s" % get_configured_value("cli_testing.hosts_ip"),
+                "help": "Sets the IP to prefix each lines of the hosts file. %s"
+                % get_configured_value("cli_testing.hosts_ip"),
             },
         ),
         (
@@ -653,21 +639,22 @@ def tool() -> None:
             {
                 "dest": "cli_testing.file_generation.no_file",
                 "action": "store_true",
-                "help": "Switch the value of the production of output files. %s"
+                "help": "Activates or disables the generation of any non-logs\n"
+                "file(s). %s"
                 % get_configured_value("cli_testing.file_generation.no_file"),
             },
         ),
         (
             [
-                "--no-unified",
+                "--unified-results",
             ],
             {
                 "dest": "cli_testing.file_generation.unified_results",
                 "action": "store_true",
-                "help": "Switch the value of the production unified logs "
-                "under the output directory. %s"
+                "help": "Activates or disables the generation of the unified\n"
+                "results file instead of the splitted one. %s"
                 % get_configured_value(
-                    "cli_testing.file_generation.unified_results", negate=True
+                    "cli_testing.file_generation.unified_results",
                 ),
             },
         ),
@@ -678,7 +665,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.percentage",
                 "action": "store_true",
-                "help": "Switch the value of the percentage output mode. %s"
+                "help": "Activates or disables the display and generation\n"
+                "of the percentage - file - of each status. %s"
                 % get_configured_value("cli_testing.display_mode.percentage"),
             },
         ),
@@ -689,8 +677,9 @@ def tool() -> None:
             {
                 "dest": "cli_testing.file_generation.plain",
                 "action": "store_true",
-                "help": "Switch the value of the generation "
-                "of the plain list of domains. %s"
+                "help": "Activates or disables the generation of the\n"
+                "RAW file(s). What is meant is a list with only a list of\n"
+                "subject (one per line). %s"
                 % get_configured_value("cli_testing.file_generation.plain"),
             },
         ),
@@ -701,8 +690,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.dots",
                 "action": "store_true",
-                "help": "Prints dots to stdout instead of giving the impression "
-                "that we hang on. %s"
+                "help": "Activate or disables the display of dots or other\n"
+                "characters when we skip the test of a subjec. %s"
                 % get_configured_value("cli_testing.display_mode.dots"),
             },
         ),
@@ -714,8 +703,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.quiet",
                 "action": "store_true",
-                "help": "Run the script in quiet mode. %s"
-                % get_configured_value("cli_testing.display_mode.quiet"),
+                "help": "Activates or disables the display of output to the\n"
+                "terminal. %s" % get_configured_value("cli_testing.display_mode.quiet"),
             },
         ),
         (
@@ -736,7 +725,7 @@ def tool() -> None:
             {
                 "dest": "cli_testing.display_mode.simple",
                 "action": "store_true",
-                "help": "Switch the value of the simple output mode. %s"
+                "help": "Activates or disables the simple output mode. %s"
                 % get_configured_value("cli_testing.display_mode.simple"),
             },
         ),
@@ -765,8 +754,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.ci.max_exec_minutes",
                 "type": int,
-                "help": "Update the minimum of minutes before we start "
-                "committing to upstream under the CI mode. %s"
+                "help": "Sets the number of minutes to wait before starting\n"
+                "to stop a CI session. %s"
                 % get_configured_value("cli_testing.ci.max_exec_minutes"),
             },
         ),
@@ -775,9 +764,8 @@ def tool() -> None:
             {
                 "dest": "cli_testing.ci.active",
                 "action": "store_true",
-                "help": "Update the minimum of minutes before we start "
-                "committing to upstream under the CI mode. %s"
-                % get_configured_value("cli_testing.ci.active"),
+                "help": "Activates or disables the Continuous Integration\n"
+                "mechanism. %s" % get_configured_value("cli_testing.ci.active"),
             },
         ),
         (
@@ -785,8 +773,10 @@ def tool() -> None:
             {
                 "dest": "cli_testing.ci.branch",
                 "type": str,
-                "help": "Switch the branch name where we are going to push the "
-                "temporary results. %s" % get_configured_value("cli_testing.ci.branch"),
+                "help": "Sets our git working branch. This is the branch\n"
+                "from where we are supposed to store the tests\n"
+                "(excepts the final results). %s"
+                % get_configured_value("cli_testing.ci.branch"),
             },
         ),
         (
@@ -794,48 +784,50 @@ def tool() -> None:
             {
                 "dest": "cli_testing.ci.distribution_branch",
                 "type": str,
-                "help": "Switch the branch name where we are going to push the "
-                "final results. %s"
+                "help": "Sets our git distributions branch. This is the\n"
+                "branch from where we are supposed to store and push\n"
+                "the final results. %s"
                 % get_configured_value("cli_testing.ci.distribution_branch"),
             },
         ),
         (
-            ["--cmd"],
+            ["--cmd", "--ci-command"],
             {
                 "dest": "cli_testing.ci.command",
                 "type": str,
-                "help": "Pass a command to run before each commit "
-                "(except the final one) under the CI mode. %s"
+                "help": "Sets the command to execute before each commit\n"
+                "(except the final one). %s"
                 % get_configured_value("cli_testing.ci.command"),
             },
         ),
         (
-            ["--cmd-before-end"],
+            ["--cmd-before-end", "--ci-end-command"],
             {
                 "dest": "cli_testing.ci.end_command",
                 "type": str,
-                "help": "Pass a command to run before the results "
-                "(final) commit under the CI mode. %s"
+                "help": "Sets the command to execute before the final commit. %s"
                 % get_configured_value("cli_testing.ci.end_command"),
             },
         ),
         (
-            ["--commit-autosave-message"],
+            ["--ci-commit-message", "--commit-autosave-message"],
             {
                 "dest": "cli_testing.ci.commit_message",
                 "type": str,
-                "help": "Replace the default autosave commit message. %s"
+                "help": "Sets the commit message to apply everytime we have\n"
+                "to apply a commit except for the really last one. %s"
                 % get_configured_value("cli_testing.ci.commit_message"),
             },
         ),
         (
             [
+                "--ci-end-commit-message",
                 "--commit-results-message",
             ],
             {
                 "dest": "cli_testing.ci.end_commit_message",
                 "type": str,
-                "help": "Replace the default results (final) commit message. %s"
+                "help": "Sets the commit message to apply at the really end. %s"
                 % get_configured_value("cli_testing.ci.end_commit_message"),
             },
         ),

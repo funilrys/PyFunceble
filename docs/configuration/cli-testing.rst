@@ -58,7 +58,7 @@
 
     **Default value:** :code:`True`
 
-    **Description:** Activates or disables the suage of a "database" to store
+    **Description:** Activates or disables the uage of a "database" to store
     the expiration date of all domains with a valid expiration date.
 
 .. warning::
@@ -144,7 +144,7 @@
 
     **Default value:** :code:`False`
 
-    **Description:** Activates or disables the Continuous Integration subsystem.
+    **Description:** Activates or disables the Continuous Integration mechanism.
 
 :code:`cli_testing[ci][commit_message]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,7 +172,7 @@
 
     **Default value:** :code:`15`
 
-    **Description:** Sets the number of minutest to wait before starting to
+    **Description:** Sets the number of minutes to wait before starting to
     stop a CI session.
 
 .. note::
@@ -379,8 +379,8 @@
 .. warning::
     As of PyFunceble :code:`4.0.0` this is not actively implemented.
 
-:code:`cli_testing[days_between][db_clean]`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:code:`cli_testing[days_between][db_retest]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     **Type:** :code:`integer`
 
