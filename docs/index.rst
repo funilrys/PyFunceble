@@ -73,7 +73,7 @@ As an example, its auto-continue system coupled with its auto-save system allows
    update/index
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
 
    configuration/index
 

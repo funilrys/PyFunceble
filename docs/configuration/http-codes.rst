@@ -3,23 +3,15 @@
 
     **Type:** :code:`dict`
 
-    **Description:** Handle the interpretation of each status codes when we do and generate our analytic data.
-
-:code:`http_codes[active]`
-""""""""""""""""""""""""""
-
-    **Type:** :code:`boolean`
-
-    **Default value:** :code:`True`
-    
-    **Description:** Enable / Disable the usage of the HTTP status code extraction.
+    **Description:** Configures everything related to the HTTP status code and
+    the way PyFunceble handles them.
 
 :code:`http_codes[list]`
 """"""""""""""""""""""""
 
     **Type:** :code:`dict`
 
-    **Description:** Categorize the http status code as mentioned in the documentation related to the :code:`HTTP Code` column.
+    **Description:** Categorizes the HTTP status codes.
 
 :code:`http_codes[list][up]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,6 +19,7 @@
     **Type:** :code:`list`
 
     **Default value:**
+
         ::
 
             - 100
@@ -39,7 +32,9 @@
             - 205
             - 206
 
-    **Description:** List the HTTP status codes which are considered as :code:`ACTIVE`.
+
+    **Description:** List the HTTP status codes which are considered as
+    :code:`ACTIVE`.
 
 :code:`http_codes[list][potentially_down]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,6 +42,7 @@
     **Type:** :code:`list`
 
     **Default value:**
+
         ::
 
             - 400
@@ -60,7 +56,8 @@
             - 415
             - 416
 
-    **Description:** List the HTTP status code which are considered as :code:`INACTIVE` or :code:`POTENTIALLY_INACTIVE`.
+    **Description:** List the HTTP status code which are considered
+    as :code:`INACTIVE` or :code:`POTENTIALLY_INACTIVE`.
 
 
 :code:`http_codes[list][potentially_up]`
@@ -94,4 +91,5 @@
             - 504
             - 505
 
-    **Description:** List the HTTP status code which are considered as :code:`ACTIVE` or :code:`POTENTIALLY_ACTIVE`.
+    **Description:** List the HTTP status code which are considered as
+    :code:`ACTIVE` or :code:`POTENTIALLY_ACTIVE`.
