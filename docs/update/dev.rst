@@ -1,30 +1,36 @@
 Development version
 -------------------
 
-IMPORTANT INFORMATION for :code:`dev >= 3.2.11`
+Important information for :code:`dev >= 3.2.11`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. warning::
+When you update from dev@<=3.2.10 or master@<=3.2.2 to newer release, there
+will be made a SQL conversion of the databases table layout.
+This can take up a sagnificent amount of time based on the size of the
+database.
 
-::
+The table layout converion is being made to:
 
-   When you update from dev@<=3.2.10 or master@<=3.2.2
-   to newer release, there will be made a SQL
-   conversion of the databases table layout.
-   This can take up a sagnificent amount of time
-   based on the size of the Database.
+1. Minimize the total size
 
-   The table layout converion is being made to:
+2. Optimize the sql flow and minimizing the read/write to save disk I/O.
 
-   1. Minimize the total size
+3. Minimize the number of SQL queries being made
 
-   2. Optimize the sql flow and minimizing the
-      read/write to save disk I/O
+It have been seen taking days to convert these tables on very large
+installations.
 
-   3. Minimize the number of SQL queries being made
 
-   It have been seen taking days to convert these
-   tables on very large installations.
+Important information for :code:`dev >= 4.0.0`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When you update to PyFunceble :code:`4.0.0`, there will be
+
+- a SQL conversion if you use the :code:`mysql` or `mariadb` database type.
+- a JSON to CSV conversion if one of those files is found in your filesystem:
+
+   - :code:`inactive_db.json`
+   - :code:`whois_db.json`
 
 
 For development
@@ -58,9 +64,13 @@ From PyPi
    $ pip3 install --user --upgrade PyFunceble-dev
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on
+   `pip documentation`_.
+
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers like - for example - Travis CI.
 
 From GitHub
 ~~~~~~~~~~~
@@ -70,9 +80,12 @@ From GitHub
    $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on
+   `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers like - for example - Travis CI.
 
 Using the AUR (for Arch Linux users)
 """"""""""""""""""""""""""""""""""""
@@ -90,8 +103,10 @@ With your favorite AUR helper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning::
-    We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
-    For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
+    We do not recommend any AUR helper but keep in mind that some AUR helpers
+    are "better" than other.
+    For more information about your current (or any other) AUR helper please
+    report to `the ArchWiki page`_.
 
 ::
 
@@ -126,12 +141,14 @@ Execute the following and enjoy PyFunceble!
    $ git fetch origin && git merge origin/dev
    $ python3 setup.py test
    $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip3 install --user --upgrade -e .
+   $ pip3 install --user --upgrade -e . # Prefer this method.
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers  or CI engines.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers
