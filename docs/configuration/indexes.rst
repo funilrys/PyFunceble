@@ -5,8 +5,6 @@ This page will try to detail each configuration available into :code:`.PyFuncebl
 
 .. include:: core.rst
 .. include:: user-agent.rst
-.. include:: outputs.rst
-.. include:: status.rst
 .. include:: http-codes.rst
 .. include:: links.rst
 
