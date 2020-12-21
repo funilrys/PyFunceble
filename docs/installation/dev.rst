@@ -89,8 +89,10 @@ With your favorite AUR helper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning::
-    We do not recommend any AUR helper but keep in mind that some AUR helpers are "better" than other.
-    For more information about your current (or any other) AUR helper please report to `the ArchWiki page`_.
+    We do not recommend any AUR helper but keep in mind that some AUR helpers
+    are "better" than other.
+    For more information about your current (or any other) AUR helper please
+    report to `the ArchWiki page`_.
 
 ::
 
@@ -123,14 +125,18 @@ Execute the following and enjoy PyFunceble!
 
    $ git clone https://github.com/funilrys/PyFunceble.git
    $ cd PyFunceble && git checkout dev
-   $ python3 setup.py test
-   $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip3 install --user -e .
+   $ tox # Run tests
+   $ python3 setup.py install # Avoid this if you want to uninstall or update one day.
+   $ pip3 install --user -e . # Prefer this method.
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on
+   `pip documentation`_.
+
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers like - for example - Travis CI.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers
