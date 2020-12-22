@@ -482,36 +482,37 @@ class SystemLauncher(SystemBase):
             Generates the percentage file.
             """
 
-            self.counter.set_parent_dirname(parent_dirname)
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                self.counter.set_parent_dirname(parent_dirname)
 
-            destination = os.path.join(
-                self.counter.get_output_basedir(),
-                PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
-                PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
-                PyFunceble.cli.storage.OUTPUTS.logs.filenames.percentage,
-            )
+                destination = os.path.join(
+                    self.counter.get_output_basedir(),
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
+                    PyFunceble.cli.storage.OUTPUTS.logs.filenames.percentage,
+                )
 
-            stdout_header_printed = False
+                stdout_header_printed = False
 
-            self.stdout_printer.template_to_use = "percentage"
-            self.file_printer.template_to_use = "percentage"
-            self.file_printer.destination = destination
+                self.stdout_printer.template_to_use = "percentage"
+                self.file_printer.template_to_use = "percentage"
+                self.file_printer.destination = destination
 
-            for data in self.counter.get_dataset_for_printer():
-                self.file_printer.set_dataset(data).print_interpolated_line()
+                for data in self.counter.get_dataset_for_printer():
+                    self.file_printer.set_dataset(data).print_interpolated_line()
 
-                # pylint: disable=line-too-long
-                if (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.percentage
-                    and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
-                ):
-                    self.stdout_printer.dataset = data
+                    # pylint: disable=line-too-long
+                    if (
+                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.percentage
+                        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                    ):
+                        self.stdout_printer.dataset = data
 
-                    if not stdout_header_printed:
-                        self.stdout_printer.print_header()
-                        stdout_header_printed = True
+                        if not stdout_header_printed:
+                            self.stdout_printer.print_header()
+                            stdout_header_printed = True
 
-                    self.stdout_printer.print_interpolated_line()
+                        self.stdout_printer.print_interpolated_line()
 
         for protocol in self.testing_protocol:
             if protocol["destination"]:

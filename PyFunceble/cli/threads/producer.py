@@ -232,7 +232,11 @@ class ProducerThread(ThreadsBase):
             The test result object.
         """
 
-        if not self.block_printer and test_dataset["destination"]:
+        if (
+            not self.block_printer
+            and test_dataset["destination"]
+            and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
+        ):
             # Note: We don't want hiden data to be counted.
 
             self.counter.set_parent_dirname(test_dataset["destination"]).count(
