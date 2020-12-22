@@ -24,7 +24,7 @@ Execute the following and let's hack PyFunceble!
    $ git clone https://github.com/funilrys/PyFunceble.git
    $ cd PyFunceble
    $ git checkout dev
-   $ virtualenv venv
+   $ virtualenv -p python3 venv
    $ source venv/bin/activate
    $ pip3 install -e .
 
