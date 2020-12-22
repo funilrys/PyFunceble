@@ -64,6 +64,7 @@ class InputLine2Subject(ConverterBase):
 
     COMMENT: str = "#"
     SPACE: str = " "
+    NSLOOKUP_SPACE: str = "\\032"
     TAB: str = "\t"
 
     @ConverterBase.data_to_convert.setter
@@ -93,6 +94,12 @@ class InputLine2Subject(ConverterBase):
         if subject and not subject.startswith(self.COMMENT):
             if self.COMMENT in subject:
                 subject = subject[: subject.find(self.COMMENT)].strip()
+
+            if self.NSLOOKUP_SPACE in subject:
+                # Comply with RFC 6367:
+                #    Note that nslookup escapes spaces as "\032" for display
+                #    purposes, but a graphical DNS-SD browser should not.
+                subject = subject.replace(self.NSLOOKUP_SPACE, self.SPACE)
 
             if self.SPACE in subject or self.TAB in subject:
                 splitted = subject.split()
