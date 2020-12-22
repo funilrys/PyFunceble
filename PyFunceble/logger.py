@@ -391,13 +391,26 @@ class Logger:
         Tries to guess the min level from the configuration.
         """
 
-        if PyFunceble.storage.CONFIGURATION:
-            # pylint: disable=protected-access
-            self.min_level = logging._nameToLevel[
-                PyFunceble.storage.CONFIGURATION.debug.level.upper()
-            ]
-        else:
-            self.min_level = self.STD_MIN_LEVEL
+        env_vars = ["PYFUNCEBLE_DEBUG_LVL", "PYFUNCEBLE_LOGGING_LVL"]
+
+        env_var_helper = EnvironmentVariableHelper()
+        env_var_found = False
+
+        for env_var in env_vars:
+            if env_var_helper.set_name(env_var).exists():
+                self.min_level = env_var_helper.get_value()
+                env_var_found = True
+
+                break
+
+        if not env_var_found:
+            if PyFunceble.storage.CONFIGURATION:
+                # pylint: disable=protected-access
+                self.min_level = logging._nameToLevel[
+                    PyFunceble.storage.CONFIGURATION.debug.level.upper()
+                ]
+            else:
+                self.min_level = self.STD_MIN_LEVEL
 
     def guess_all_settings(self) -> "Logger":
         """
