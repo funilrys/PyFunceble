@@ -70,7 +70,9 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
         PyFunceble.facility.Logger.debug("Checking if %r is authorized.", result)
 
         if result.is_authorized():
-            PyFunceble.facility.Logger.debug("%r is authorized. Using it as CI object.")
+            PyFunceble.facility.Logger.debug(
+                "%r is authorized. Using it as CI object.", result
+            )
             return result
 
     PyFunceble.facility.Logger.debug(

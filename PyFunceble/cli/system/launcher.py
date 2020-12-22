@@ -139,6 +139,9 @@ class SystemLauncher(SystemBase):
         self.checker_type = PyFunceble.cli.utils.testing.get_testing_mode()
         self.continuous_integration = ci_object()
 
+        if self.continuous_integration.authorized:
+            self.continuous_integration.init()
+
         self.producer_thread_manager = ProducerThread()
         self.tester_thread_manager = TesterThread(
             output_queue=self.producer_thread_manager.the_queue

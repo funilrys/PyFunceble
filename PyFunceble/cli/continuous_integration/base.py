@@ -1256,3 +1256,5 @@ class ContinuousIntegrationBase:
         self.init_git()
 
         PyFunceble.facility.Logger.info("Finished initizalization of workflow.")
+
+        return self
