@@ -98,7 +98,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     env:
-      PYFUNCEBLE_DB_CHARSET: latin-1
+      PYFUNCEBLE_DB_CHARSET: utf8mb4
       PYFUNCEBLE_DB_HOST: "127.0.0.1"
       PYFUNCEBLE_DB_NAME: pyfunceble
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
