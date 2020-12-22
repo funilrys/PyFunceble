@@ -61,6 +61,7 @@ except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
 from box import Box
+from yaml.constructor import ConstructorError
 
 import PyFunceble.cli.storage
 import PyFunceble.storage
@@ -288,7 +289,13 @@ class ConfigLoader:
             self.install_missing_infrastructure_files()
             self.download_dynamic_infrastructure_files()
 
-            config = self.dict_helper.from_yaml_file(self.path_to_config)
+            try:
+                config = self.dict_helper.from_yaml_file(self.path_to_config)
+            except ConstructorError:
+                self.file_helper.set_path(self.path_to_default_config).copy(
+                    self.path_to_config
+                )
+                config = self.dict_helper.from_yaml_file(self.path_to_config)
         else:
             config = copy.deepcopy(PyFunceble.storage.CONFIGURATION.to_dict())
 
