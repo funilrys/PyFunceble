@@ -599,6 +599,15 @@ def tool() -> None:
             },
         ),
         (
+            ["--colour", "--color"],
+            {
+                "dest": "cli_testing.display_mode.colour",
+                "action": "store_true",
+                "help": "Activates or disables the coloration to STDOUT. %s"
+                % get_configured_value("cli_testing.display_mode.colour"),
+            },
+        ),
+        (
             [
                 "--hierarchical",
             ],

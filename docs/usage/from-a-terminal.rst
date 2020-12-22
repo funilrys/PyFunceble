@@ -439,6 +439,15 @@ Output control
 Want to know the execution time of your test? Well, this argument will let
 you know!
 
+:code:`--color` | :code:`--colour`
+""""""""""""""""""""""""""""""""""
+
+    Activates or disables the coloration to STDOUT.
+
+    **Default value:** :code:`True`
+
+Don't want any colour ? Argument is for your!
+
 :code:`--hierarchical`
 """"""""""""""""""""""
 
@@ -689,44 +698,51 @@ Global overview
 
 ::
 
-    usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
-                    [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
-                    [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
-                    [--http] [--local] [-ns] [-nw] [--reputation] [--rpz]
-                    [--shadow-file] [--syntax] [-t TIMEOUT]
-                    [--use-reputation-data] [-ua USER_AGENT] [-vsc] [--wildcard]
-                    [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
-                    [--database-type DATABASE_TYPE]
-                    [-dbr DAYS_BETWEEN_DB_RETEST] [-dbc DAYS_BETWEEN_DB_CLEAN]
-                    [-wdb] [-a] [-ex] [--hierarchical] [-h] [-ip IP] [--json]
-                    [--less] [-nf] [-nl] [-nu] [--percentage] [--plain] [--dots]
-                    [-q] [--share-logs] [-s] [--split] [--store-whois] [-m]
-                    [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
-                    [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
-                    [--ci-branch CI_BRANCH]
-                    [--ci-distribution-branch CI_DISTRIBUTION_BRANCH]
-                    [--cmd CMD] [--cmd-before-end CMD_BEFORE_END]
-                    [--commit-autosave-message COMMIT_AUTOSAVE_MESSAGE]
-                    [--commit-results-message COMMIT_RESULTS_MESSAGE] [--clean]
-                    [--clean-all] [--directory-structure] [--help] [-v]
+    usage: PyFunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
+                        [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
+                        [--adblock] [--complements]
+                        [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
+                        [--wildcard] [-c]
+                        [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
+                        [--dns-lookup] [--http] [--netinfo-lookup]
+                        [--special-lookup] [--whois-lookup] [--reputation-lookup]
+                        [--reputation] [--syntax] [-t LOOKUP__TIMEOUT]
+                        [-ua USER_AGENT__CUSTOM] [-vsc]
+                        [--dns DNS__SERVER [DNS__SERVER ...]]
+                        [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--inactive-db]
+                        [--database-type {csv,mariadb,mysql}]
+                        [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST]
+                        [-wdb CLI_TESTING__WHOIS_DB] [-a] [-ex] [--colour]
+                        [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
+                        [--no-files] [--unified-results] [--percentage] [--plain]
+                        [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS]
+                        [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
+                        [--ci-branch CLI_TESTING__CI__BRANCH]
+                        [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
+                        [--cmd CLI_TESTING__CI__COMMAND]
+                        [--cmd-before-end CLI_TESTING__CI__END_COMMAND]
+                        [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
+                        [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
+                        [--help] [-v]
 
-    PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
+    PyFunceble PSG Generator - The Public Suffix List file generator for PyFunceble.
 
     optional arguments:
         --help                Show this help message and exit.
         -v, --version         Show the version of PyFunceble and exit.
 
     Source:
-        -d DOMAIN [DOMAIN ...], --domain DOMAIN [DOMAIN ...]
+        -d DOMAINS [DOMAINS ...], --domain DOMAINS [DOMAINS ...]
                                 Test one or more domains, separated by spaces.
 
                                 When this option is used, no output files are generated.
-        -u URL [URL ...], --url URL [URL ...]
+        -u URLS [URLS ...], --url URLS [URLS ...]
                                 Test one or more full URL, separated by spaces.
-        -f FILE, --file FILE  Read a local or remote (RAW link) file and test all domains inside it.
+        -f FILES [FILES ...], --file FILES [FILES ...]
+                                Read a local or remote (RAW link) file and test all domains inside it.
                                 If remote (RAW link) file is given, PyFunceble will download it,
                                 and test the content of the given RAW link as if it was a locally stored file.
-        -uf URL_FILE, --url-file URL_FILE
+        -uf URL_FILES [URL_FILES ...], --url-file URL_FILES [URL_FILES ...]
                                 Read a local or remote (RAW link) file and test all (full) URLs inside it.
                                 If remote (RAW link) file is given, PyFunceble will download it,
                                 and test the content of the given RAW link as if it was a locally stored file.
@@ -734,168 +750,182 @@ Global overview
                                 This argument test if an URL is available. It ONLY test full URLs.
 
     Source filtering, decoding, conversion and expansion:
-        -ad, --adblock        Switch the decoding of the adblock format.
+        --adblock             Activates or deactivates the decoding of the adblock format.
                                 Configured value: False
-        --complements         Switch the value of the generation and test of the complements.
-                                A complement is for example `example.org` if `www.example.org` is given and vice-versa.
+        --complements         Activates or disables the generation and test of the
+                                complements.
+                                A complement is for example `example.org` if 'www.example.org'
+                                is given and vice-versa.
                                 Configured value: False
-        --filter FILTER       Domain to filter (regex).
-        --idna                Switch the value of the IDNA conversion.
+        --filter CLI_TESTING__FILE_FILTER
+                                Regex to match in order to test a given line.
+                                Configured value: None
+        --mining              Activates or disables the mining subsystem.
                                 Configured value: False
-        --mining              Switch the value of the mining subsystem usage.
+        --rpz                 Activates or disables the decoding of RPZ policies
+                                from each given input files.
+                                Configured value: False
+        --wildcard            Activates or disables the decoding of wildcards for
+                                each given input files.
                                 Configured value: False
 
     Test control:
         -c, --auto-continue, --continue
-                                Switch the value of the auto continue mode.
+                                Activates or disables the autocontinue subsystem.
                                 Configured value: True
-        --cooldown-time COOLDOWN_TIME
-                                Switch the value of the cooldown time to apply between each test.
-                                Configured value: None
-        --http                Switch the value of the usage of HTTP code.
+        --cooldown-time CLI_TESTING__COOLDOWN_TIME
+                                Sets the cooldown time (in second) to apply between
+                                each test.
+                                Configured value: 0.0
+        --local               Activates or disables the consideration of the test(s)
+                                in or for a local or private network context.
+                                Configured value: False
+        --dns-lookup          Activates or disables the usage of the DNS lookup
+                                whether possible.
                                 Configured value: True
-        --local               Switch the value of the local network testing.
+        --http, --http-status-code-lookup
+                                Switch the value of the usage of HTTP code.
                                 Configured value: True
-        -ns, --no-special     Switch the value of the usage of the SPECIAL rules.
+        --netinfo-lookup      Activates or disables the usage of the network
+                                information (or network socket) whether possible.
+                                Configured value: True
+        --special-lookup      Activates or disables the usage of our SPECIAL and
+                                extra rules whether possible.
+                                Configured value: True
+        --whois-lookup        Activates or disables the usage of the WHOIS record
+                                (or better said the expiration date in it) whether possible.
+                                Configured value: True
+        --reputation-lookup   Activates or disables the usage of the reputation
+                                dataset whether possible.
                                 Configured value: False
-        -nw, --no-whois       Switch the value of the usage of WHOIS to test the domain's status.
+        --reputation          Activates or disables the reputation checker.
                                 Configured value: False
-        --reputation          Switch the value of the reputation test mode.
+        --syntax              Activates or disables the syntax checker.
                                 Configured value: False
-        --rpz                 Switch the value of the RPZ policies test.
-
-                                When used, RPZ policies will be properly tested.
-        --shadow-file, --shadow
-                                Switch the value of the usage and generation of a shadow file before a file test starts.
-
-                                A shadow file is a file which only contain the actual list of subject to test. For its generation we check each subjects as we normally do on-the-fly.
-                                Configured value: False
-        --syntax              Switch the value of the syntax test mode.
-                                Configured value: False
-        -t TIMEOUT, --timeout TIMEOUT
-                                Switch the value of the timeout in seconds.
+        -t LOOKUP__TIMEOUT, --timeout LOOKUP__TIMEOUT
+                                Sets the default timeout to apply to each lookup
+                                utilities everytime it is possible to define a timeout.
                                 Configured value: 5
-        --use-reputation-data
-                                Switch the value of the reputation data usage.
-                                Configured value: False
-        -ua USER_AGENT, --user-agent USER_AGENT
-                                Set the user-agent to use and set every time we interact with everything which
-                                is not the logs sharing system.
+        -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
+                                Sets the user agent to use.
+
+                                If not given, we try toget the lastest (automatically) for you.
         -vsc, --verify-ssl-certificate
-                                Switch the value of the verification of the SSL/TLS certificate when testing for URL.
+                                Activates or disables the verification of the SSL/TLS
+                                certificate when testing for URL.
                                 Configured value: False
-        --wildcard            Switch the value of the wildcards test.
 
-                                When used, wildcards will be properly tested.
+    DNS control:
+        --dns DNS__SERVER [DNS__SERVER ...]
+                                Sets one or more (space separated) DNS server(s) to use during testing.
 
-    DNS (resolver) control:
-        --dns DNS [DNS ...]   Set one or more DNS server(s) to use during testing. Separated by spaces.
-
-                                To specify a port number for the DNS server you append it as :port [ip:port].
+                                To specify a port number for the DNS server you append
+                                it as :port [ip:port].
 
                                 If no port is specified, the default DNS port (53) is used.
-                                Configured value: OS (declared) DNS server
-        --dns-lookup-over-tcp
-                                Make all DNS queries with TCP.
-                                Configured value: False
+                                Configured value: None
+        --dns-protocol {UDP,TCP,HTTPS,TLS}
+                                Sets the protocol to use for the DNS queries.
+                                Configured value: 'UDP'
 
     Databases:
-        -db, --database       Switch the value of the usage of a database to store inactive domains of the currently tested list.
+        --inactive-db         Activates or disables the usage of a 'database' to
+                                store all 'INVALID' and 'INACTIVE' subject for continuous retest.
                                 Configured value: True
-        --database-type DATABASE_TYPE
-                                Tell us the type of database to use.
-                                You can choose between the following: `json | mariadb | mysql`
-                                Configured value: 'json'
-        -dbr DAYS_BETWEEN_DB_RETEST, --days-between-db-retest DAYS_BETWEEN_DB_RETEST
-                                Set the numbers of days between each retest of domains present into inactive-db.json.
+        --database-type {csv,mariadb,mysql}
+                                Sets the database engine to use.
+                                You can choose between the following: `csv | mariadb | mysql`
+                                Configured value: 'csv'
+        -dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST, --days-between-db-retest CLI_TESTING__DAYS_BETWEEN__DB_RETEST
+                                Sets the numbers of days since the introduction of
+                                subject into the inactive dataset before it gets retested.
                                 Configured value: 1
-        -dbc DAYS_BETWEEN_DB_CLEAN, --days-between-db-clean DAYS_BETWEEN_DB_CLEAN
-                                Set the numbers of days since the introduction of a subject into inactive-db.json for it to qualifies for deletion.
-                                Configured value: 28
-        -wdb, --whois-database
-                                Switch the value of the usage of a database to store whois data to avoid whois servers rate limit.
+        -wdb CLI_TESTING__WHOIS_DB, --whois-database CLI_TESTING__WHOIS_DB
+                                Activates or disables the usage of a 'database' to
+                                store the expiration date of all domains with a valid
+                                expiration date.
                                 Configured value: True
 
     Output control:
-        -a, --all             Output all available information on the screen.
-                                Configured value: True
-        -ex, --execution      Switch the default value of the execution time showing.
+        -a, --all             Activates or disables the disply of the all
+                                information in the table we print to stdout.
                                 Configured value: False
-        --hierarchical        Switch the value of the hierarchical sorting of the tested file.
+        -ex, --execution      Activates or disables the display of the execution time.
                                 Configured value: False
-        -h, --host            Switch the value of the generation of hosts file.
+        --colour, --color     Activates or disables the coloration to STDOUT.
                                 Configured value: True
-        -ip IP                Change the IP to print in the hosts files with the given one.
+        --hierarchical        Activates or disables the sorting of the files
+                                content (output) in a hierarchical order.
+                                Configured value: False
+        -h, --host            Activates or disables the generation of the
+                                hosts file(s).
+                                Configured value: True
+        -ip CLI_TESTING__HOSTS_IP, --hosts-ip CLI_TESTING__HOSTS_IP
+                                Sets the IP to prefix each lines of the hosts file.
                                 Configured value: '0.0.0.0'
-        --json                Switch the value of the generation of the JSON formatted list of domains.
+        --no-files            Activates or disables the generation of any non-logs
+                                file(s).
                                 Configured value: False
-        --less                Output less informations on screen.
+        --unified-results     Activates or disables the generation of the unified
+                                results file instead of the splitted one.
                                 Configured value: False
-        -nf, --no-files       Switch the value of the production of output files.
-                                Configured value: False
-        -nl, --no-logs        Switch the value of the production of logs files in the case we encounter some errors.
-                                Configured value: False
-        -nu, --no-unified     Switch the value of the production unified logs under the output directory.
-                                Configured value: False
-        --percentage          Switch the value of the percentage output mode.
+        --percentage          Activates or disables the display and generation
+                                of the percentage - file - of each status.
                                 Configured value: True
-        --plain               Switch the value of the generation of the plain list of domains.
-                                Configured value: False
-        --dots                Prints dots to stdout instead of giving the impression that we hang on.
-                                Configured value: False
-        -q, --quiet           Run the script in quiet mode.
-                                Configured value: False
-        --share-logs          Switch the value of the sharing of logs.
-                                Configured value: False
-        -s, --simple          Switch the value of the simple output mode.
-                                Configured value: False
-        --split               Switch the value of the split of the generated output files.
+        --plain               Activates or disables the generation of the
+                                RAW file(s). What is meant is a list with only a list of
+                                subject (one per line).
                                 Configured value: True
-        --store-whois         Switch the value of the WHOIS record storage in the WHOIS DB.
+        --dots                Activate or disables the display of dots or other
+                                characters when we skip the test of a subjec.
+                                Configured value: False
+        -q, --quiet           Activates or disables the display of output to the
+                                terminal.
+                                Configured value: False
+        -s, --simple          Activates or disables the simple output mode.
                                 Configured value: False
 
-    Multiprocessing:
-        -m, --multiprocess    Switch the value of the usage of multiple processes.
-                                Configured value: False
-        --multiprocess-merging-mode MULTIPROCESS_MERGING_MODE
-                                Sets the multiprocess merging mode.
-                                You can choose between the following: `live|ends`.
-                                Configured value: 'end'
-        -p PROCESSES, --processes PROCESSES
-                                Set the number of simultaneous processes to use while using multiple processes.
-                                If omited, the number of available CPU cores will be used instead.
-                                Configured value: 25
+    Multithreading:
+        -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
+                                Sets the number of maximal worker to use.
+                                If not given, 40 (based on the current machine) will be applied.
+                                Configured value: None
 
-    CI / CD:
-        --autosave-minutes AUTOSAVE_MINUTES
-                                Update the minimum of minutes before we start committing to upstream under the CI mode.
+        CI / CD:
+        --ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES, --autosave-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES
+                                Sets the number of minutes to wait before starting
+                                to stop a CI session.
                                 Configured value: 15
-        --ci                  Switch the value of the CI mode.
+        --ci                  Activates or disables the Continuous Integration
+                                mechanism.
                                 Configured value: False
-        --ci-branch CI_BRANCH
-                                Switch the branch name where we are going to push the temporary results.
+        --ci-branch CLI_TESTING__CI__BRANCH
+                                Sets our git working branch. This is the branch
+                                from where we are supposed to store the tests
+                                (excepts the final results).
                                 Configured value: 'master'
-        --ci-distribution-branch CI_DISTRIBUTION_BRANCH
-                                Switch the branch name where we are going to push the final results.
+        --ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH
+                                Sets our git distributions branch. This is the
+                                branch from where we are supposed to store and push
+                                the final results.
                                 Configured value: 'master'
-        --cmd CMD             Pass a command to run before each commit (except the final one) under the CI mode.
-                                Configured value: ''
-        --cmd-before-end CMD_BEFORE_END
-                                Pass a command to run before the results (final) commit under the CI mode.
-                                Configured value: ''
-        --commit-autosave-message COMMIT_AUTOSAVE_MESSAGE
-                                Replace the default autosave commit message.
+        --cmd CLI_TESTING__CI__COMMAND, --ci-command CLI_TESTING__CI__COMMAND
+                                Sets the command to execute before each commit
+                                (except the final one).
                                 Configured value: None
-        --commit-results-message COMMIT_RESULTS_MESSAGE
-                                Replace the default results (final) commit message.
+        --cmd-before-end CLI_TESTING__CI__END_COMMAND, --ci-end-command CLI_TESTING__CI__END_COMMAND
+                                Sets the command to execute before the final commit.
                                 Configured value: None
+        --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE, --commit-autosave-message CLI_TESTING__CI__COMMIT_MESSAGE
+                                Sets the commit message to apply everytime we have
+                                to apply a commit except for the really last one.
+                                Configured value: 'PyFunceble - AutoSave'
+        --ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE, --commit-results-message CLI_TESTING__CI__END_COMMIT_MESSAGE
+                                Sets the commit message to apply at the really end.
+                                Configured value: 'PyFunceble - Results'
 
-    Unique actions:
-        --clean               Clean all files under the output directory.
-        --clean-all           Clean all files under the output directory along with all file generated by PyFunceble.
-        --directory-structure
-                                Generate the directory and files that are needed and which does not exist in the current directory.
+    For an in-depth usage, explanation and examples of the arguments,
+    you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
-    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
-
-    Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html
+    Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
+    https://git.io/JkUPS && https://git.io/JkUPF

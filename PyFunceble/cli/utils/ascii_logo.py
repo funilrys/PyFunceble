@@ -53,6 +53,8 @@ License:
 import colorama
 
 import PyFunceble.cli.storage
+import PyFunceble.facility
+import PyFunceble.storage
 from PyFunceble.utils.platform import PlatformUtility
 
 
@@ -84,10 +86,15 @@ def colorify(color: str) -> str:
     else:
         to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
 
-    for line in to_color.split("\n"):
-        result.append(f"{color_to_apply}{line}{colorama.Fore.RESET}")
+    if (
+        PyFunceble.facility.ConfigLoader.is_already_loaded()
+        and PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour
+    ):
+        for line in to_color.split("\n"):
+            result.append(f"{color_to_apply}{line}{colorama.Fore.RESET}")
 
-    return "\n".join(result)
+        return "\n".join(result)
+    return to_color
 
 
 def get_home_representation() -> str:

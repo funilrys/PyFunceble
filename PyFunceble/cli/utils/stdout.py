@@ -99,24 +99,39 @@ def print_thanks() -> None:
             not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
             and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.simple
         ):
-            print(
-                f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                f"Thanks for using PyFunceble!{colorama.Style.RESET_ALL}"
-            )
+            if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
+                print(
+                    f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    f"Thanks for using PyFunceble!{colorama.Style.RESET_ALL}"
+                )
+            else:
+                print("\nThanks for using PyFunceble!")
 
             if int(secrets.token_hex(8), 16) % 3 == 0:
-                print(
-                    f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-                    f"Share your experience on {colorama.Fore.CYAN}Twitter "
-                    f"{colorama.Fore.YELLOW}with {colorama.Fore.CYAN}"
-                    f"#PyFunceble{colorama.Fore.YELLOW} "
-                    f"or {colorama.Fore.CYAN}@PyFunceble!"
-                )
+                if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
+                    print(
+                        f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
+                        f"Share your experience on {colorama.Fore.CYAN}Twitter "
+                        f"{colorama.Fore.YELLOW}with {colorama.Fore.CYAN}"
+                        f"#PyFunceble{colorama.Fore.YELLOW} "
+                        f"or {colorama.Fore.CYAN}@PyFunceble!"
+                    )
+                else:
+                    print(
+                        "Share your experience on Twitter with #PyFunceble or "
+                        "@PyFunceble!"
+                    )
 
             if int(secrets.token_hex(8), 16) % 3 == 0:
-                print(
-                    f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-                    f"Have a feedback, an issue or an improvement idea? "
-                    f"{colorama.Fore.YELLOW}Let us know on {colorama.Fore.CYAN}"
-                    f"GitHub{colorama.Fore.YELLOW}!"
-                )
+                if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
+                    print(
+                        f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
+                        f"Have a feedback, an issue or an improvement idea? "
+                        f"{colorama.Fore.YELLOW}Let us know on {colorama.Fore.CYAN}"
+                        f"GitHub{colorama.Fore.YELLOW}!"
+                    )
+                else:
+                    print(
+                        "Have a feedback, an issue or an improvement idea? "
+                        "Let us know on GitHub!"
+                    )

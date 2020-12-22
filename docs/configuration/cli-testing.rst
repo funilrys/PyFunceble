@@ -312,6 +312,15 @@
     When this mode is active, the system will only return the result in the
     following format: :code:`example.org ACTIVE`.
 
+:code:`cli_testing[display_mode][colour]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Activates or disables the coloration to STDOUT.
+
 :code:`cli_testing[testing_mode]`
 """""""""""""""""""""""""""""""""
 

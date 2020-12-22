@@ -119,6 +119,9 @@ cli_testing:
     # Activates the output of the status and it's status (only)
     simple: False
 
+    # Activates the coloration of stdout.
+    colour: True
+
   testing_mode:
     # Provides all available testing modes.
     # WARNING: Only one can be used at a time.

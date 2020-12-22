@@ -54,6 +54,7 @@ from typing import Dict, List, Optional
 
 import colorama
 
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.filesystem.printer.base import PrinterBase
 
@@ -68,6 +69,7 @@ class StdoutPrinter(PrinterBase):
         f"(v{PyFunceble.storage.PROJECT_VERSION.split()[0]}) "
         f"/ {PyFunceble.storage.SHORT_REPO_LINK}\n"
     )
+    STD_ALLOW_COLORATION: bool = True
 
     STATUS2BACKGROUND_COLOR: Dict[str, str] = {
         PyFunceble.storage.STATUS.up: f"{colorama.Fore.BLACK}{colorama.Back.GREEN}",
@@ -111,6 +113,8 @@ class StdoutPrinter(PrinterBase):
     ) -> None:
         if allow_coloration is not None:
             self.allow_coloration = allow_coloration
+        else:
+            self.guess_allow_coloration()
 
         super().__init__(template_to_use=template_to_use, dataset=dataset)
 
@@ -152,6 +156,18 @@ class StdoutPrinter(PrinterBase):
         self.allow_coloration = value
 
         return self
+
+    def guess_allow_coloration(self) -> "StdoutPrinter":
+        """
+        Try to guess and set the :code:`allow_coloration` attribute.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            self.allow_coloration = (
+                PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour
+            )
+        else:
+            self.allow_coloration = self.STD_ALLOW_COLORATION
 
     def print_interpolated_line(self):
         """
