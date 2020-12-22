@@ -97,7 +97,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
         for row in super().get_content():
             try:
                 row["epoch"] = float(row["epoch"])
-            except TypeError:
+            except (TypeError, ValueError):
                 continue
 
             yield row
