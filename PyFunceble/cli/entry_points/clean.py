@@ -137,7 +137,7 @@ def cleaner() -> None:
 
         utility.set_parent_dirname(directory)
 
-        print(f"Starting cleanup of {utility.get_output_basedir()}.", end=" ")
+        print(f"Started cleanup of {utility.get_output_basedir()}.", end=" ")
 
         try:
             utility.clean_output_files()

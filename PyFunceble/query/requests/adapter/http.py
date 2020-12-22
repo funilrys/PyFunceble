@@ -91,10 +91,6 @@ class RequestHTTPAdapter(RequestAdapterBase):
         parsed_url = urllib.parse.urlparse(request.url)
         hostname_ip = self.resolve(parsed_url.hostname)
 
-        PyFunceble.facility.Logger.debug(
-            f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
-        )
-
         PyFunceble.facility.Logger.debug("Parsed URL: %r", parsed_url)
         PyFunceble.facility.Logger.debug("Resolved IP: %r", hostname_ip)
         PyFunceble.facility.Logger.debug("KWARGS: %r", kwargs)

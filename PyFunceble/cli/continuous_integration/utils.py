@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.cli.continuous_integration.gitlab_ci import GitLabCI
 from PyFunceble.cli.continuous_integration.travis_ci import TravisCI
@@ -66,7 +67,14 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
     for known in known_objects:
         result = known(*args, **kwargs)
 
+        PyFunceble.facility.Logger.debug("Checking if %r is authorized.", result)
+
         if result.is_authorized():
+            PyFunceble.facility.Logger.debug("%r is authorized. Using it as CI object.")
             return result
+
+    PyFunceble.facility.Logger.debug(
+        "No known CI object authorized. Using: %r", known_objects[-1]
+    )
 
     return known_objects[-1](*args, **kwargs)

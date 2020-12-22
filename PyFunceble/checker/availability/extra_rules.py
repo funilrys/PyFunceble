@@ -335,6 +335,11 @@ class ExtraRulesHandler:
         Starts the process.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to check %r against our own set of rules.",
+            self.status.idna_subject,
+        )
+
         self.status.status_before_extra_rules = self.status.status
         self.status.status_source_before_extra_rules = self.status.status_source
 
@@ -358,8 +363,18 @@ class ExtraRulesHandler:
         if self.status.status_after_extra_rules:
             self.status.status = self.status.status_after_extra_rules
             self.status.status_source = self.status.status_source_after_extra_rules
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from our own set of rules.",
+                self.status.idna_subject,
+            )
         else:
             self.status.status_before_extra_rules = None
             self.status.status_source_before_extra_rules = None
             self.status.status_after_extra_rules = None
             self.status.status_source_after_extra_rules = None
+
+        PyFunceble.facility.Logger.info(
+            "Finished to check %r against our own set of rules.",
+            self.status.idna_subject,
+        )

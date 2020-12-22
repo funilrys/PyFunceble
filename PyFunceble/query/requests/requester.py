@@ -135,7 +135,7 @@ class Requester:
             def wrapper(self, *args, **kwargs):
                 # pylint: disable=no-member
                 PyFunceble.facility.Logger.debug(
-                    "Starting %r request to %r with %r",
+                    "Started %r request to %r with %r",
                     verb.upper(),
                     args[0],
                     kwargs,

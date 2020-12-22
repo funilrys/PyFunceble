@@ -54,6 +54,7 @@ import functools
 from datetime import datetime
 from typing import Dict, Optional
 
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.filesystem.printer.base import PrinterBase
 from PyFunceble.helpers.file import FileHelper
@@ -178,8 +179,14 @@ class FilePrinter(PrinterBase):
         Prints the interpolated line into the destination.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to write into %r.", self.file_helper.path
+        )
+
         line_to_print = self.get_line_to_print() + "\n"
         without_header = ["hosts", "plain"]
+
+        PyFunceble.facility.Logger.debug("Line to print: %r", line_to_print)
 
         if not self.file_helper.exists():
             self.file_helper.write(self.STD_FILE_GENERATION, overwrite=True)
@@ -191,3 +198,7 @@ class FilePrinter(PrinterBase):
                 self.file_helper.write("\n")
 
         self.file_helper.write(line_to_print)
+
+        PyFunceble.facility.Logger.info(
+            "Finished to write into %r.", self.file_helper.path
+        )

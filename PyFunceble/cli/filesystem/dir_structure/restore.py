@@ -78,7 +78,11 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
             for directory, files in data.items():
                 result[os.path.normpath(directory)] = files
 
+            PyFunceble.facility.Logger.debug("Backup (read) data:\n%r", result)
+
             return result
+
+        PyFunceble.facility.Logger.debug("Backup (read) data:\n%r", data)
         return data
 
     def restore_from_backup(
@@ -91,6 +95,12 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
             Authorizes the deletion of the files that are not
             matching our structure.
         """
+
+        # pylint: disable=too-many-locals
+
+        PyFunceble.facility.Logger.info(
+            "Started restoration of the directory structure"
+        )
 
         backup = self.get_backup_data()
 
@@ -107,18 +117,34 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
 
                 if reduced_path not in backup and root != reduced_path:
                     dirs_to_delete.add(root)
+
+                    PyFunceble.facility.Logger.debug(
+                        "Added %r into the list of directories to delete. "
+                        "Reason: not found in own dataset.",
+                        root,
+                    )
                     continue
 
                 if delete_files:
                     for file in files:
                         if root == reduced_path or file not in backup[reduced_path]:
-                            files_to_delete.add(os.path.join(root, file))
+                            to_delete = os.path.join(root, file)
+                            files_to_delete.add(to_delete)
+
+                            PyFunceble.facility.Logger.debug(
+                                "Added %r into the list of files to delete. "
+                                "Reason: not found in own dataset.",
+                                to_delete,
+                            )
 
             for directory in dirs_to_delete:
                 dir_helper.set_path(directory).delete()
+                PyFunceble.facility.Logger.debug("Deleted: %r", directory)
 
             for file in files_to_delete:
                 file_helper.set_path(file).delete()
+
+                PyFunceble.facility.Logger.debug("Deleted: %r", file)
 
         for directory, files in backup.items():
             dir_helper.set_path(os.path.join(base_dir, directory))
@@ -132,13 +158,23 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
                     and PyFunceble.cli.storage.STD_PARENT_DIRNAME not in dir_helper.path
                 ):
                     file = ".gitkeep"
-                    file_helper.set_path(
-                        os.path.join(dir_helper.path, ".gitignore")
-                    ).delete()
+
+                    to_delete = os.path.join(dir_helper.path, ".gitignore")
+                    file_helper.set_path(to_delete).delete()
+
+                    PyFunceble.facility.Logger.debug(
+                        "Deleted: %r. Reason: We are going to replace it with %r",
+                        to_delete,
+                        file,
+                    )
 
                 file_helper.set_path(os.path.join(dir_helper.path, file)).write(
                     dataset["content"], overwrite=True
                 )
+
+        PyFunceble.facility.Logger.info(
+            "Finished restoration of the directory structure"
+        )
 
         return self
 

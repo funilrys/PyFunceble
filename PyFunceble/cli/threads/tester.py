@@ -199,6 +199,8 @@ class TesterThread(ThreadsBase):
             .get_status()
         )
 
+        PyFunceble.facility.Logger.debug("Got status:\n%r.", result)
+
         self.add_to_output_queue((test_dataset, result))
 
         return result

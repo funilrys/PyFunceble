@@ -56,6 +56,7 @@ import os
 import domain2idna
 
 import PyFunceble.cli.storage
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.migrators.json2csv.base import JSON2CSVMigratorBase
 from PyFunceble.cli.utils.testing import get_destination_from_origin
@@ -130,7 +131,13 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
                     if not dataset["tested_at"]:
                         dataset["tested_at"] = datetime.datetime.utcnow().isoformat()
 
+                    PyFunceble.facility.Logger.debug("Decoded dataset:\n%r.", dataset)
+
                     self.dataset.update(dataset)
+
+                    PyFunceble.facility.Logger.info(
+                        "Added %r into %r", dataset["idna_subject"], self.dataset
+                    )
 
             file_helper.delete()
         return self

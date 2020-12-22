@@ -446,7 +446,7 @@ class SystemLauncher(SystemBase):
                             to_send["from_inactive"] = True
 
                             # Note: Our test infrastructure need a subject
-                            # but there is not subject in the table.
+                            # but there is no subject in the table.
                             to_send["subject"] = dataset["idna_subject"]
                             to_send["idna_subject"] = dataset["idna_subject"]
 
@@ -543,6 +543,7 @@ class SystemLauncher(SystemBase):
                     PyFunceble.cli.storage.TEST_RUNNING_FILE,
                 )
             ).delete()
+            PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
         def remove_continue_dataset(protocol: dict) -> None:
             """
@@ -560,6 +561,8 @@ class SystemLauncher(SystemBase):
                 # CSV file :-)
                 continue_object.set_base_directory(protocol["output_dir"])
                 file_helper.set_path(continue_object.source_file).delete()
+
+                PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
             else:
                 # MariaDB / MySQL
 

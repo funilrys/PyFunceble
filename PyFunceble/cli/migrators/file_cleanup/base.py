@@ -53,6 +53,7 @@ License:
 import functools
 from typing import Optional
 
+import PyFunceble.facility
 from PyFunceble.cli.migrators.base import MigratorBase
 from PyFunceble.helpers.file import FileHelper
 
@@ -90,11 +91,17 @@ class FileClenupMigratorBase(MigratorBase):
 
         FileHelper(self.source_file).delete()
 
+        PyFunceble.facility.Logger.debug("Deleted: %r", self.source_file)
+
     def start(self) -> "FileClenupMigratorBase":
         """
         Starts the migration and everything related to it.
         """
 
+        PyFunceble.facility.Logger.info("Started migration.")
+
         self.migrate()
+
+        PyFunceble.facility.Logger.info("Finished migration.")
 
         return self

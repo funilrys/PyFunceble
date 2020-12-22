@@ -55,6 +55,7 @@ import tempfile
 from datetime import datetime
 from typing import Generator, Optional, Tuple
 
+import PyFunceble.facility
 from PyFunceble.dataset.db_base import DBDatasetBase
 from PyFunceble.helpers.file import FileHelper
 
@@ -98,11 +99,16 @@ class CSVDatasetBase(DBDatasetBase):
         if not isinstance(row, dict):
             raise TypeError(f"<row> should be {dict}, {type(row)} given.")
 
+        PyFunceble.facility.Logger.info("Started to update row.")
+
         if self.exists(row):
             self.remove(row)
             self.add(row)
         else:
             self.add(row)
+
+        PyFunceble.facility.Logger.debug("Updated row:\n%r", row)
+        PyFunceble.facility.Logger.info("Finished to update row.")
 
         return self
 
@@ -122,6 +128,8 @@ class CSVDatasetBase(DBDatasetBase):
         if not isinstance(row, dict):
             raise TypeError(f"<row> should be {dict}, {type(row)} given.")
 
+        PyFunceble.facility.Logger.info("Started to add row.")
+
         if self.remove_unneeded_fields:
             row = self.get_filtered_row(row)
 
@@ -130,6 +138,10 @@ class CSVDatasetBase(DBDatasetBase):
         writer.writerow(row)
 
         file_handler.close()
+
+        PyFunceble.facility.Logger.debug("Added row:\n%r", row)
+
+        PyFunceble.facility.Logger.info("Finished to add row.")
 
         return self
 
@@ -149,6 +161,8 @@ class CSVDatasetBase(DBDatasetBase):
         if not isinstance(row, dict):
             raise TypeError(f"<row> should be {dict}, {type(row)} given.")
 
+        PyFunceble.facility.Logger.info("Started to remove row.")
+
         if self.remove_unneeded_fields:
             row = self.get_filtered_row(row)
 
@@ -167,6 +181,10 @@ class CSVDatasetBase(DBDatasetBase):
         our_temp_file.close()
 
         FileHelper(our_temp_filename).move(self.source_file)
+
+        PyFunceble.facility.Logger.debug("Removed row:\n%r", row)
+
+        PyFunceble.facility.Logger.info("Finished to remove row.")
 
         return self
 

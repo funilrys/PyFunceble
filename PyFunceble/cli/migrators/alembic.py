@@ -141,7 +141,7 @@ class Alembic:
         """
 
         PyFunceble.facility.Logger.info(
-            "Starting update (%r) of the database schema(s).", revision
+            "Started update (%r) of the database schema(s).", revision
         )
 
         self.configure()
@@ -161,7 +161,7 @@ class Alembic:
         """
 
         PyFunceble.facility.Logger.info(
-            "Starting downgrade (%r) of the database schema(s).", revision
+            "Started downgrade (%r) of the database schema(s).", revision
         )
 
         self.configure()

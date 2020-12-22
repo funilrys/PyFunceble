@@ -117,6 +117,8 @@ class MariaDBDatasetBase(DBDatasetBase):
             :class:`PyFunceble.database.sqlalchemy.base_schema.DeclarativeMeta`
         """
 
+        PyFunceble.facility.Logger.info("Started to update row.")
+
         existing_row = self.get_existing_row(row)
 
         if not existing_row:
@@ -129,6 +131,9 @@ class MariaDBDatasetBase(DBDatasetBase):
 
                 db_session.add(existing_row)
                 db_session.commit()
+
+        PyFunceble.facility.Logger.debug("Updated row:\n%r", row)
+        PyFunceble.facility.Logger.info("Finished to update row.")
 
     @ensure_orm_obj_is_given
     def remove(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
@@ -148,6 +153,8 @@ class MariaDBDatasetBase(DBDatasetBase):
                 f"<row> should be {dict} or {self.ORM_OBJ}, {type(row)} given."
             )
 
+        PyFunceble.facility.Logger.info("Started to remove row.")
+
         with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
             if not isinstance(row, type(self.ORM_OBJ)):
                 row = self[row["idna_subject"]]
@@ -155,6 +162,9 @@ class MariaDBDatasetBase(DBDatasetBase):
             if row:
                 db_session.delete(row)
                 db_session.commit()
+
+        PyFunceble.facility.Logger.debug("Removed row:\n%r", row)
+        PyFunceble.facility.Logger.info("Finished to remove row.")
 
     @ensure_orm_obj_is_given
     def exists(self, row: Union[dict, DeclarativeMeta]) -> bool:
@@ -239,6 +249,8 @@ class MariaDBDatasetBase(DBDatasetBase):
                 f"<row> should be {dict} or {self.ORM_OBJ}, {type(row)} given."
             )
 
+        PyFunceble.facility.Logger.info("Started to add row.")
+
         if not self.exists(row):
             with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
                 if not isinstance(row, type(self.ORM_OBJ)):
@@ -252,5 +264,8 @@ class MariaDBDatasetBase(DBDatasetBase):
 
                 db_session.add(dataset)
                 db_session.commit()
+
+        PyFunceble.facility.Logger.debug("Added row:\n%r", row)
+        PyFunceble.facility.Logger.info("Finished to add row.")
 
         return self

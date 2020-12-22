@@ -69,11 +69,26 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
         Tries to query the status from the reputation lookup.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Reputation Lookup",
+            self.status.idna_subject,
+        )
+
         lookup_result = DomainReputationChecker(self.status.idna_subject).get_status()
 
         if lookup_result and lookup_result.is_malicious():
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "REPUTATION"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Reputation Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Reputation Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -126,6 +141,12 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
         if not self.status.status:
             self.status.status = PyFunceble.storage.STATUS.down
             self.status.status_source = "STDLOOKUP"
+
+            PyFunceble.facility.Logger.info(
+                "Could not define status the status of %r. Setting to %r",
+                self.status.idna_subject,
+                self.status.status,
+            )
 
         if self.use_extra_rules:
             ExtraRulesHandler(self.status).start()

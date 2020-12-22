@@ -1054,13 +1054,15 @@ class ContinuousIntegrationBase:
         Initiate the git repository.
         """
 
+        PyFunceble.facility.Logger.info("Started initialization of GIT.")
+
         if self.token:
             self.init_git_remote_with_token()
 
         commands = [
-            (f'git config --global user.email "{self.git_email}"', False),
-            (f'git config --global user.name "{self.git_name}"', False),
-            ("git config --global push.default simple", False),
+            (f'git config --local user.email "{self.git_email}"', False),
+            (f'git config --local user.name "{self.git_name}"', False),
+            ("git config --local push.default simple", False),
             (f'git checkout "{self.git_branch}"', False),
             (
                 f'git pull origin "{self.git_distribution_branch}"',
@@ -1072,6 +1074,8 @@ class ContinuousIntegrationBase:
             self.exec_command(command, allow_stdout)
 
         self.git_initialized = True
+
+        PyFunceble.facility.Logger.info("Finished initialization of GIT.")
 
         return self
 
@@ -1101,6 +1105,8 @@ class ContinuousIntegrationBase:
             When the :code:`exit_it` is set to :code:`True`.
         """
 
+        PyFunceble.facility.Logger.info("Started to push GIT changes.")
+
         commands = []
 
         if self.git_initialized:
@@ -1111,12 +1117,14 @@ class ContinuousIntegrationBase:
                         True,
                     ),
                     (f"git pull origin {branch}", True),
-                    (f"git push origin {branch}", False),
+                    (f"git push origin {branch}", True),
                 ]
             )
 
         for command, allow_stdout in commands:
             self.exec_command(command, allow_stdout)
+
+        PyFunceble.facility.Logger.info("Finished to push GIT changes.")
 
         if exit_it:
             raise PyFunceble.cli.continuous_integration.exceptions.StopExecution()
@@ -1129,6 +1137,10 @@ class ContinuousIntegrationBase:
         Side effect:
             It runs the declared command to execute.
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to prepare and apply final GIT commit."
+        )
 
         self.fix_permissions()
 
@@ -1156,6 +1168,10 @@ class ContinuousIntegrationBase:
             # Fix permissions because we met some strange behaviors in the past.
             self.fix_permissions()
 
+        PyFunceble.facility.Logger.info(
+            "Finished to prepare and apply final GIT commit."
+        )
+
         if self.git_distribution_branch != self.git_branch:
             self.push_changes(self.git_distribution_branch)
         else:
@@ -1169,6 +1185,8 @@ class ContinuousIntegrationBase:
         Side effect:
             It runs the declared command to execute.
         """
+
+        PyFunceble.facility.Logger.info("Started to prepare and apply GIT commit.")
 
         self.fix_permissions()
 
@@ -1194,6 +1212,8 @@ class ContinuousIntegrationBase:
         if self.command:
             # Fix permissions because we met some strange behaviors in the past.
             self.fix_permissions()
+
+        PyFunceble.facility.Logger.info("Finished to prepare and apply GIT commit.")
 
         self.push_changes(self.git_branch)
 
@@ -1231,4 +1251,8 @@ class ContinuousIntegrationBase:
             We assume that we are aware that you should run this method first.
         """
 
+        PyFunceble.facility.Logger.info("Started initizalization of workflow.")
+
         self.init_git()
+
+        PyFunceble.facility.Logger.info("Finished initizalization of workflow.")

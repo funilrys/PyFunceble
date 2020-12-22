@@ -249,6 +249,10 @@ class ProductionPrep:
 
         self.file_helper.set_path(file)
 
+        PyFunceble.facility.Logger.info(
+            "Started to update our URL into %r", self.file_helper.path
+        )
+
         if not self.file_helper.exists():
             raise FileNotFoundError(self.file_helper.path)
 
@@ -260,6 +264,10 @@ class ProductionPrep:
             )
 
         self.file_helper.write(to_update, overwrite=True)
+
+        PyFunceble.facility.Logger.info(
+            "Finished to update our URL into %r", self.file_helper.path
+        )
 
         return self
 
@@ -310,6 +318,8 @@ class ProductionPrep:
                 write_back=black.WriteBack.YES,
             )
 
+            PyFunceble.facility.Logger.info("Update format of %r", file)
+
         isort_config = isort.settings.Config(settings_file="setup.cfg")
 
         files = [
@@ -354,6 +364,10 @@ class ProductionPrep:
             When one of the wanted directory is not found.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to update and generate the documentation.",
+        )
+
         docs_dir_helper = DirectoryHelper("docs")
         source_code_dir_helper = DirectoryHelper("PyFunceble")
 
@@ -376,6 +390,10 @@ class ProductionPrep:
         CommandHelper(
             f"sphinx-build -a -Q {docs_dir_helper.realpath!r} {docs_destination!r}"
         ).execute(raise_on_error=False)
+
+        PyFunceble.facility.Logger.info(
+            "Finished to update and generate the documentation.",
+        )
 
     def update_code_urls(self) -> "ProductionPrep":
         """
@@ -424,6 +442,10 @@ class ProductionPrep:
             When the :code:`setup.py` file does not exists.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to update setup.py.",
+        )
+
         if self.branch == "dev":
             regexes = [
                 (r'name=".*"', 'name="PyFunceble-dev"'),
@@ -462,12 +484,20 @@ class ProductionPrep:
 
         self.file_helper.write(to_update, overwrite=True)
 
+        PyFunceble.facility.Logger.info(
+            "Started to update setup.py.",
+        )
+
         return self
 
     def update_version_file(self) -> "ProductionPrep":
         """
         Updates the version file.
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to update version file.",
+        )
 
         if self.should_be_deprecated(self.previous_version):
             to_append = ".".join(
@@ -483,6 +513,10 @@ class ProductionPrep:
 
         self.dict_helper.set_subject(self.version_file_content).to_yaml_file(
             self.VERSION_FILE_PATH
+        )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to update version file.",
         )
 
         return self

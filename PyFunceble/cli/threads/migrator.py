@@ -115,7 +115,7 @@ class MigratorThread(ThreadsBase):
         if FileHelper(migrator.source_file).exists():
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                "Starting migration (json2csv) of the inactive dataset."
+                "Started migration (json2csv) of the inactive dataset."
             )
 
             migrator.start()
@@ -140,7 +140,7 @@ class MigratorThread(ThreadsBase):
         if FileHelper(migrator.source_file).exists():
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                "Starting migration (json2csv) of the whois dataset."
+                "Started migration (json2csv) of the whois dataset."
             )
 
             migrator.start()
@@ -166,7 +166,7 @@ class MigratorThread(ThreadsBase):
         if migrator.authorized:
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                "Starting completion of NULL idna_subject(s) into the whois dataset."
+                "Started completion of NULL idna_subject(s) into the whois dataset."
             )
 
             migrator.start()
@@ -192,7 +192,7 @@ class MigratorThread(ThreadsBase):
         if migrator.authorized:
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                "Starting migration of the pyfunceble_file and "
+                "Started migration of the pyfunceble_file and "
                 "pyfunceble_status tables."
             )
 
@@ -200,7 +200,7 @@ class MigratorThread(ThreadsBase):
 
             print(
                 f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                "Starting migration of the pyfunceble_file and "
+                "Started migration of the pyfunceble_file and "
                 "pyfunceble_status tables."
             )
         else:
@@ -219,7 +219,7 @@ class MigratorThread(ThreadsBase):
         if FileHelper(migrator.source_file).exists():
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                f"Starting deletion of {migrator.source_file!r}."
+                f"Started deletion of {migrator.source_file!r}."
             )
 
             migrator.start()
@@ -244,7 +244,7 @@ class MigratorThread(ThreadsBase):
         if FileHelper(migrator.source_file).exists():
             print(
                 f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
-                f"Starting deletion of {migrator.source_file!r}."
+                f"Started deletion of {migrator.source_file!r}."
             )
 
             migrator.start()

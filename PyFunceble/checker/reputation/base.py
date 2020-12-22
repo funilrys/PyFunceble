@@ -168,6 +168,11 @@ class ReputationCheckerBase(CheckerBase):
         Tries to query the status from the DNS lookup.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: DNS Lookup",
+            self.status.idna_subject,
+        )
+
         if not self.status.ipv4_syntax:
             lookup_result = self.query_a_record()
             self.status.dns_lookup = lookup_result
@@ -179,7 +184,18 @@ class ReputationCheckerBase(CheckerBase):
                 if subject in self.ipv4_reputation_query_tool:
                     self.status.status = PyFunceble.storage.STATUS.malicious
                     self.status.status_source = "REPUTATION"
+
+                    PyFunceble.facility.Logger.info(
+                        "Could define the status of %r from: DNS Lookup",
+                        self.status.idna_subject,
+                    )
+
                     break
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: DNS Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -188,6 +204,11 @@ class ReputationCheckerBase(CheckerBase):
         Tries to query the status from the syntax.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Syntax Lookup",
+            self.status.idna_subject,
+        )
+
         if (
             not self.status.domain_syntax
             and not self.status.ip_syntax
@@ -195,6 +216,16 @@ class ReputationCheckerBase(CheckerBase):
         ):
             self.status.status = PyFunceble.storage.STATUS.invalid
             self.status.status_source = "SYNTAX"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Syntax Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Syntax Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -219,5 +250,11 @@ class ReputationCheckerBase(CheckerBase):
         if not self.status.status:
             self.status.status = PyFunceble.storage.STATUS.sane
             self.status.status_source = "REPUTATION"
+
+            PyFunceble.facility.Logger.info(
+                "Could not define the status of %r. Setting to %r",
+                self.status.idna_subject,
+                self.status.status,
+            )
 
         return self

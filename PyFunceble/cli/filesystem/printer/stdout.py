@@ -158,7 +158,11 @@ class StdoutPrinter(PrinterBase):
         Prints the interpolated line into the destination.
         """
 
+        PyFunceble.facility.Logger.info("Started to print to stdout.")
+
         line_to_print = self.get_line_to_print()
+
+        PyFunceble.facility.Logger.debug("Line to print: %r", line_to_print)
 
         if "status" in self.dataset:
             status_to_compare = self.dataset["status"]
@@ -182,3 +186,5 @@ class StdoutPrinter(PrinterBase):
             print(f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}{line_to_print}")
         else:
             print(line_to_print)
+
+        PyFunceble.facility.Logger.info("Finished to print to stdout.")

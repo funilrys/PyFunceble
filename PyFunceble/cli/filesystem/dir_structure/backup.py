@@ -52,6 +52,7 @@ License:
 
 import os
 
+import PyFunceble.facility
 from PyFunceble.cli.filesystem.dir_structure.base import DirectoryStructureBase
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.directory import DirectoryHelper
@@ -88,6 +89,8 @@ class DirectoryStructureBackup(DirectoryStructureBase):
             else:
                 result[directory].update(dataset)
 
+        PyFunceble.facility.Logger.debug("Dir Structure to backup:\n%r", result)
+
         return result
 
     def store_backup(self) -> "DirectoryStructureBackup":
@@ -96,6 +99,8 @@ class DirectoryStructureBackup(DirectoryStructureBase):
         """
 
         DictHelper(self.get_backup_data()).to_json_file(self.source_file)
+
+        PyFunceble.facility.Logger.info("Stored backup into: %r", self.source_file)
 
         return self
 

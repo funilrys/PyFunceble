@@ -55,6 +55,7 @@ import os
 import domain2idna
 
 import PyFunceble.cli.storage
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.migrators.json2csv.base import JSON2CSVMigratorBase
 from PyFunceble.dataset.whois.csv import CSVWhoisDataset
@@ -118,7 +119,15 @@ class WhoisJSON2CSVMigrator(JSON2CSVMigratorBase):
                     elif index == "expiration_date":
                         dataset["expiration_date"] = value
                     elif index == "state":
+                        PyFunceble.facility.Logger.debug(
+                            "Decoded dataset:\n%r.", dataset
+                        )
+
                         self.dataset.update(dataset)
+
+                        PyFunceble.facility.Logger.info(
+                            "Added %r into %r", dataset["idna_subject"], self.dataset
+                        )
 
             file_helper.delete()
         return self

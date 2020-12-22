@@ -110,6 +110,10 @@ class Namseservers:
             The name to resolve.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to get ip from nameserver (%r)", nameserver
+        )
+
         result = []
 
         if cls.domain_syntax_checker.set_subject(nameserver).is_valid():
@@ -134,6 +138,14 @@ class Namseservers:
                 pass
         else:
             result.append(nameserver)
+
+        PyFunceble.facility.Logger.debug(
+            "IP from nameserver (%r):\n%r", nameserver, result
+        )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to get ip from nameserver (%r)", nameserver
+        )
 
         return result
 

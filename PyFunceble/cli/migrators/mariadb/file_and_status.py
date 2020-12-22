@@ -56,6 +56,7 @@ import domain2idna
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.cli.utils.testing
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
 from PyFunceble.cli.utils.testing import get_destination_from_origin
@@ -107,7 +108,13 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                 if status["status"] in inactive_statuses:
                     inactive_dataset.update(to_send)
 
+                PyFunceble.facility.Logger.debug("Dataset: %r", to_send)
+
                 continue_dataset.update(to_send)
+
+                PyFunceble.facility.Logger.info(
+                    "Added %r into %r", to_send["idna_subject"], continue_dataset
+                )
 
                 # pylint: disable=line-too-long
                 with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
@@ -116,18 +123,30 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                     )
                     db_session.commit()
 
+                    PyFunceble.facility.Logger.debug(
+                        "Deleted from pyfunceble_status: \n%r", status
+                    )
+
             with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
                 db_session.execute(
                     f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"
                 )
                 db_session.commit()
 
+                PyFunceble.facility.Logger.debug(
+                    "Deleted from pyfunceble_file: \n%r", file_info
+                )
+
         with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
             db_session.execute("DROP TABLE pyfunceble_file")
             db_session.commit()
 
+            PyFunceble.facility.Logger.debug("Deleted pyfunceble_file table.")
+
         with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
             db_session.execute("DROP TABLE pyfunceble_status")
             db_session.commit()
+
+            PyFunceble.facility.Logger.debug("Deleted pyfunceble_status table.")
 
         return self

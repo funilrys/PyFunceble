@@ -585,6 +585,10 @@ class AvailabilityCheckerBase(CheckerBase):
         Queries the syntax checker.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to check the syntax of %r", self.status.idna_subject
+        )
+
         self.status.second_level_domain_syntax = (
             self.domain_syntax_checker.is_valid_second_level()
         )
@@ -600,10 +604,14 @@ class AvailabilityCheckerBase(CheckerBase):
         self.status.ip_syntax = bool(self.status.ipv4_syntax or self.status.ipv6_syntax)
         self.status.url_syntax = self.url_syntax_checker.is_valid()
 
+        PyFunceble.facility.Logger.info(
+            "Finished to check the syntax of %r", self.status.idna_subject
+        )
+
         return self
 
     @CheckerBase.ensure_subject_is_given
-    def query_dns_lookup_status(self) -> Optional[Dict[str, Optional[List[str]]]]:
+    def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:
         """
         Tries to query the DNS record(s) of the given subject.
 
@@ -615,6 +623,11 @@ class AvailabilityCheckerBase(CheckerBase):
         :raise ValueError:
             When the given :code:`subject` is empty.
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the DNS record of %r.",
+            self.status.idna_subject,
+        )
 
         result = dict()
 
@@ -639,6 +652,13 @@ class AvailabilityCheckerBase(CheckerBase):
                     if local_result:
                         result[record_type] = local_result
 
+        PyFunceble.facility.Logger.debug("DNS Record:\n%r", result)
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the DNS record of %r",
+            self.status.idna_subject,
+        )
+
         return result
 
     def try_to_query_status_from_whois(self) -> "AvailabilityCheckerBase":
@@ -658,6 +678,11 @@ class AvailabilityCheckerBase(CheckerBase):
             running in a thread with a name that does not starts with
             :code:`PyFunceble` (case sensitive).
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: WHOIS Lookup",
+            self.status.idna_subject,
+        )
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
             whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object()
@@ -704,6 +729,16 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "WHOIS"
 
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: WHOIS Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: WHOIS Lookup",
+            self.status.idna_subject,
+        )
+
         return self
 
     def try_to_query_status_from_dns(self) -> "AvailabilityCheckerBase":
@@ -711,12 +746,27 @@ class AvailabilityCheckerBase(CheckerBase):
         Tries to query the status from the DNS lookup.
         """
 
-        lookup_result = self.query_dns_lookup_status()
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: DNS Lookup",
+            self.status.idna_subject,
+        )
+
+        lookup_result = self.query_dns_record()
 
         if lookup_result:
             self.status.dns_lookup = lookup_result
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "DNSLOOKUP"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: DNS Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: DNS Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -724,6 +774,11 @@ class AvailabilityCheckerBase(CheckerBase):
         """
         Tries to query the status from the network information.
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: NETINFO Lookup",
+            self.status.idna_subject,
+        )
 
         if self.status.domain_syntax:
             lookup_result = self.addressinfo_query_tool.get_info()
@@ -737,12 +792,27 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "NETINFO"
 
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: NETINFO Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: NETINFO Lookup",
+            self.status.idna_subject,
+        )
+
         return self
 
     def try_to_query_status_from_http_status_code(self) -> "AvailabilityCheckerBase":
         """
         Tries to query the status from the HTTP status code.
         """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: HTTP Status code Lookup",
+            self.status.idna_subject,
+        )
 
         if not self.status.url_syntax and not RegexHelper("[^a-z0-9._]").match(
             self.idna_subject, return_match=False
@@ -774,8 +844,18 @@ class AvailabilityCheckerBase(CheckerBase):
             ):
                 self.status.status = PyFunceble.storage.STATUS.up
                 self.status.status_source = "HTTP CODE"
+
+                PyFunceble.facility.Logger.info(
+                    "Could define the status of %r from: HTTP Status code Lookup",
+                    self.status.idna_subject,
+                )
         else:
             self.status.http_status_code = None
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: HTTP Status code Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -784,6 +864,11 @@ class AvailabilityCheckerBase(CheckerBase):
         Tries to query the status from the syntax.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Syntax Lookup",
+            self.status.idna_subject,
+        )
+
         if (
             not self.status.domain_syntax
             and not self.status.ip_syntax
@@ -791,6 +876,16 @@ class AvailabilityCheckerBase(CheckerBase):
         ):
             self.status.status = PyFunceble.storage.STATUS.invalid
             self.status.status_source = "SYNTAX"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Syntax Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Syntax Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 

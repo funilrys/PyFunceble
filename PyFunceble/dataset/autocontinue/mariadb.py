@@ -118,4 +118,10 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             )
             db_session.commit()
 
+            PyFunceble.facility.Logger.debug(
+                "Deleted data related to %r (checker_type: %r)",
+                destination,
+                checker_type,
+            )
+
         return self

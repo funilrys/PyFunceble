@@ -68,6 +68,11 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         Tries to query the status from the network information.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: HTTP Status code Lookup",
+            self.status.idna_subject,
+        )
+
         lookup_result = self.http_status_code_query_tool.get_status_code()
 
         if (
@@ -87,8 +92,18 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
             ):
                 self.status.status = PyFunceble.storage.STATUS.up
                 self.status.status_source = "HTTP CODE"
+
+                PyFunceble.facility.Logger.info(
+                    "Could define the status of %r from: HTTP Status code Lookup",
+                    self.status.idna_subject,
+                )
         else:
             self.status.http_status_code = None
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: HTTP Status code Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -97,11 +112,26 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         Tries to query the status from the reputation lookup.
         """
 
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Reputation Lookup",
+            self.status.idna_subject,
+        )
+
         lookup_result = URLReputationChecker(self.status.idna_subject).get_status()
 
         if lookup_result and lookup_result.is_malicious():
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "REPUTATION"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Reputation Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Reputation Lookup",
+            self.status.idna_subject,
+        )
 
         return self
 
@@ -132,6 +162,12 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         if not self.status.status:
             self.status.status = PyFunceble.storage.STATUS.down
             self.status.status_source = "STDLOOKUP"
+
+            PyFunceble.facility.Logger.info(
+                "Could not define status the status of %r. Setting to %r",
+                self.status.idna_subject,
+                self.status.status,
+            )
 
         return self
 

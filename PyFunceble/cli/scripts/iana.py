@@ -53,6 +53,7 @@ License:
 import concurrent.futures
 from typing import Dict, Optional, Tuple
 
+import PyFunceble.facility
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
@@ -275,6 +276,10 @@ class IanaDBGenerator:
             ):
                 if extension:
                     self.database[extension] = whois_server
+
+                    PyFunceble.facility.Logger.debug(
+                        "Got: extension: %r ; whois server: %r", extension, whois_server
+                    )
 
         DictHelper(self.database).to_json_file(self.destination)
 

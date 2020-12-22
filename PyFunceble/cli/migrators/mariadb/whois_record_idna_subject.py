@@ -54,6 +54,7 @@ import domain2idna
 import sqlalchemy
 
 import PyFunceble.cli.factory
+import PyFunceble.facility
 from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord
 
@@ -89,9 +90,16 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
             for row in db_session.query(WhoisRecord).filter(
                 WhoisRecord.idna_subject == None
             ):
+                PyFunceble.facility.Logger.info(
+                    "Started to fix idna_subject field of %r", row.subject
+                )
                 row.idna_subject = domain2idna.domain2idna(row.subject)
 
                 db_session.add(row)
                 db_session.commit()
+
+                PyFunceble.facility.Logger.info(
+                    "Finished to fix idna_subject field of %r", row.subject
+                )
 
         return self

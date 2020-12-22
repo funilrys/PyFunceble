@@ -55,6 +55,7 @@ import os
 from typing import Any, Optional
 
 import PyFunceble.cli.storage
+import PyFunceble.facility
 from PyFunceble.dataset.csv_base import CSVDatasetBase
 from PyFunceble.helpers.file import FileHelper
 
@@ -167,5 +168,6 @@ class CSVContinueDataset(CSVDatasetBase):
 
         if self.source_file:
             FileHelper(self.source_file).delete()
+            PyFunceble.facility.Logger.debug("Deleted: %r", self.source_file)
 
         return self

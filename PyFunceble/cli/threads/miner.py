@@ -119,6 +119,8 @@ class MinerThread(ThreadsBase):
                 "Could not mine from %r", subject, exc_info=True
             )
 
+        PyFunceble.facility.Logger.info("Mined from %r:\n%r.", subject, result)
+
         return result
 
     def target(self) -> None:

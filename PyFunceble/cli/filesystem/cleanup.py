@@ -86,6 +86,10 @@ class FilesystemCleanup(FilesystemDirBase):
                     db_session.query(orm_obj).delete(synchronize_session=False)
                     db_session.commit()
 
+                    PyFunceble.facility.Logger.info(
+                        "Deleted all entries in %r.", orm_obj
+                    )
+
     @property
     def output_files_to_delete(self) -> List[str]:
         """
@@ -111,6 +115,8 @@ class FilesystemCleanup(FilesystemDirBase):
 
         for file in self.output_files_to_delete:
             self.file_helper.set_path(file).delete()
+
+            PyFunceble.facility.Logger.debug("Deleted: %r.", file)
 
         return self
 

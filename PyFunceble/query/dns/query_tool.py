@@ -561,6 +561,8 @@ class DNSQueryTool:
         if rrset:
             result.extend([x.to_text() for x in rrset])
 
+        PyFunceble.facility.Logger.debug("Result from response:\r%r", result)
+
         return result
 
     def _mix_order(
@@ -583,6 +585,8 @@ class DNSQueryTool:
                 random.shuffle(temp)
 
                 return dict(temp)
+
+        PyFunceble.facility.Logger.debug("Mixed data:\n%r", dataset)
         return dataset
 
     @ensure_subject_is_given

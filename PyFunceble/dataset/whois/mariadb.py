@@ -58,6 +58,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
+import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -140,6 +141,8 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         if not self.is_expired(row):
             super().update(row)
+        else:
+            PyFunceble.facility.Logger.debug("Expired dataset:\n%r", row)
 
         return self
 
@@ -156,5 +159,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
                 self.ORM_OBJ.epoch < current_timestamp
             ).delete(synchronize_session=False)
             db_session.commit()
+
+            PyFunceble.facility.Logger.debug("Deleted all expired WHOIS records")
 
         return self

@@ -149,6 +149,10 @@ class MariaDBMigratorBase(MigratorBase):
         Starts the migration if wanted.
         """
 
+        PyFunceble.facility.Logger.info("Started migration.")
+
         self.migrate()
+
+        PyFunceble.facility.Logger.info("Finished migration.")
 
         return self

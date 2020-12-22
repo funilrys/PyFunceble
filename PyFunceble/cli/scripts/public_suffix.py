@@ -53,6 +53,7 @@ License:
 import concurrent.futures
 from typing import Optional
 
+import PyFunceble.facility
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.public_suffix import PublicSuffixDataset
 from PyFunceble.helpers.dict import DictHelper
@@ -181,6 +182,10 @@ class PublicSuffixGenerator:
                         self.database[extension] = suffixes
                     else:
                         self.database[extension].extend(suffixes)
+
+                    PyFunceble.facility.Logger.debug(
+                        "Got: extension: %r ; suffixes: %r.", extension, suffixes
+                    )
 
         for extension, suffixes in self.database.items():
             self.database[extension] = ListHelper(suffixes).remove_duplicates().subject

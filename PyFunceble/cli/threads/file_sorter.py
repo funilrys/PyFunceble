@@ -113,6 +113,8 @@ class FileSorterThread(ThreadsBase):
 
                 result.append(os.path.join(root, file))
 
+        PyFunceble.facility.Logger.debug("List of files to sort:\n%r.", result)
+
         return result
 
     def process_sorting(self, file: str) -> None:
@@ -128,6 +130,8 @@ class FileSorterThread(ThreadsBase):
         file_helper = FileHelper(file)
 
         with file_helper.open("r", encoding="utf-8") as file_stream:
+            PyFunceble.facility.Logger.info("Started sort of %r.", file_helper.path)
+
             to_sort = []
             file_finished = False
 
@@ -175,6 +179,8 @@ class FileSorterThread(ThreadsBase):
                         final_file_stream.write(FilePrinter.get_generation_date_line())
                         final_file_stream.write("\n\n")
                         final_file_stream.writelines(heapq.merge(*sorted_files))
+
+            PyFunceble.facility.Logger.info("Finished sort of %r.", file_helper.path)
 
         temp_directory.cleanup()
 
