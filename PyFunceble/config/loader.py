@@ -290,7 +290,7 @@ class ConfigLoader:
 
             config = self.dict_helper.from_yaml_file(self.path_to_config)
         else:
-            config = copy.deepcopy(PyFunceble.storage.CONFIGURATION)
+            config = copy.deepcopy(PyFunceble.storage.CONFIGURATION.to_dict())
 
         if self.merge_upstream or is_3_x_version(
             config
