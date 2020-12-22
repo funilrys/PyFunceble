@@ -32,6 +32,11 @@ When you update to PyFunceble :code:`4.0.0`, there will be
    - :code:`inactive_db.json`
    - :code:`whois_db.json`
 
+- a breaking and compatibility issue if you try to directly (automatically ?)
+  read the data in the output directory. Indeed if you were looking for
+  :code:`output/domains/ACTIVE/list` in PyFunceble :code:`3.x`, in :code:`4.0`,
+  it is now under :code:`output/{{ input_file_name }}/domains/ACTIVE list`.
+
 
 For development
 ^^^^^^^^^^^^^^^
