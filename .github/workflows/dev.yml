@@ -104,7 +104,6 @@ jobs:
       PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
       PYFUNCEBLE_DB_PORT: "3306"
       PYFUNCEBLE_DB_USERNAME: pyfunceble
-      PYFUNCEBLE_DEBUG_ON_SCREEN: YES
 
     strategy:
       fail-fast: false
