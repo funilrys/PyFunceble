@@ -364,7 +364,7 @@ class ContinuousIntegrationBase:
         Provides the currently state of the :code:`_git_email` attribute.
         """
 
-        return self._authorized
+        return self._git_email
 
     @git_email.setter
     def git_email(self, value: str) -> None:
