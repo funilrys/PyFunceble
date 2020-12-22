@@ -57,8 +57,6 @@ import os
 import pathlib
 from typing import List, Optional
 
-from isort.api import sort_file
-
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
