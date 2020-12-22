@@ -130,7 +130,6 @@ class SystemIntegrator(SystemBase):
 
             if key in flatten_config:
                 if isinstance(flatten_config[key], bool) and isinstance(value, bool):
-                    print(flatten_config[key], key, value, not flatten_config)
                     to_update[key] = not flatten_config[key]
                 else:
                     to_update[key] = value
