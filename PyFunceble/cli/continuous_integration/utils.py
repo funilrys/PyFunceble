@@ -66,6 +66,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
 
     for known in known_objects:
         result = known(*args, **kwargs)
+        result.guess_all_settings()
 
         PyFunceble.facility.Logger.debug("Checking if %r is authorized.", result)
 

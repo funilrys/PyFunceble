@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
@@ -65,7 +66,12 @@ class TravisCI(ContinuousIntegrationBase):
         Tries to guess the authorization.
         """
 
-        if EnvironmentVariableHelper("TRAVIS_BUILD_DIR").exists():
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            self.authorized = (
+                bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active)
+                and EnvironmentVariableHelper("TRAVIS_BUILD_DIR").exists()
+            )
+        elif EnvironmentVariableHelper("TRAVIS_BUILD_DIR").exists():
             self.authorized = True
         else:
             super().guess_and_set_authorized()

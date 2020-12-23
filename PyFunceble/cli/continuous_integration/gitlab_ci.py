@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
@@ -67,7 +68,17 @@ class GitLabCI(ContinuousIntegrationBase):
 
         needed_environment_vars = ["GITLAB_CI", "GITLAB_USER_ID"]
 
-        if all(EnvironmentVariableHelper(x).exists() for x in needed_environment_vars):
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active) and all(
+                EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
+            ):
+                self.authorized = True
+            else:
+                super().guess_and_set_authorized()
+        elif all(
+            EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
+        ):
             self.authorized = True
         else:
             super().guess_and_set_authorized()
