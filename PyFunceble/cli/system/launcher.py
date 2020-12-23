@@ -142,6 +142,8 @@ class SystemLauncher(SystemBase):
         if self.continuous_integration.authorized:
             self.continuous_integration.init()
 
+        self.stdout_printer.guess_allow_coloration()
+
         self.producer_thread_manager = ProducerThread()
         self.tester_thread_manager = TesterThread(
             output_queue=self.producer_thread_manager.the_queue
@@ -378,9 +380,10 @@ class SystemLauncher(SystemBase):
             Restore missing directories from the current directory.
             """
 
-            DirectoryStructureRestoration(parent_dirname).restore_from_backup(
-                delete_files=False
-            )
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                DirectoryStructureRestoration(parent_dirname).restore_from_backup(
+                    delete_files=False
+                )
 
         def handle_file(protocol: dict) -> None:
             """
@@ -666,13 +669,9 @@ class SystemLauncher(SystemBase):
         if self.execution_time_holder.authorized:
             self.execution_time_holder.set_end_time()
 
-            old_coloration = self.stdout_printer.allow_coloration
-
             self.stdout_printer.set_template_to_use("execution_time").set_dataset(
                 self.execution_time_holder.get_info()
-            ).set_allow_coloration(True).print_interpolated_line()
-
-            self.stdout_printer.allow_coloration = old_coloration
+            ).print_interpolated_line()
 
         return self
 

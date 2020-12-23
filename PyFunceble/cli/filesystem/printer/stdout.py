@@ -199,7 +199,10 @@ class StdoutPrinter(PrinterBase):
             else:
                 print(line_to_print)
         elif self.template_to_use == "execution_time":
-            print(f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}{line_to_print}")
+            if self.allow_coloration:
+                print(f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}{line_to_print}")
+            else:
+                print(line_to_print)
         else:
             print(line_to_print)
 
