@@ -89,8 +89,17 @@ class WhoisJSON2CSVMigrator(JSON2CSVMigratorBase):
                 "epoch": None,
             }
 
+            delete_file = True
+
             with file_helper.open("r", encoding="utf-8") as file_stream:
                 for line in file_stream:
+                    if (
+                        self.continuous_integration
+                        and self.continuous_integration.is_time_exceeded()
+                    ):
+                        delete_file = False
+                        break
+
                     line = (
                         line.strip()
                         .replace('"', "")
@@ -129,5 +138,6 @@ class WhoisJSON2CSVMigrator(JSON2CSVMigratorBase):
                             "Added %r into %r", dataset["idna_subject"], self.dataset
                         )
 
-            file_helper.delete()
+            if delete_file:
+                file_helper.delete()
         return self

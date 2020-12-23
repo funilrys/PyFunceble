@@ -91,18 +91,36 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
         inactive_dataset = PyFunceble.cli.utils.testing.get_inactive_dataset_object()
         continue_dataset = PyFunceble.cli.utils.testing.get_continue_databaset_object()
 
+        drop_table = True
+
         for file_info in self.get_rows("SELECT * from pyfunceble_file"):
+
+            if (
+                self.continuous_integration
+                and self.continuous_integration.is_time_exceeded()
+            ):
+                drop_table = False
+                break
+
             destination = get_destination_from_origin(file_info["path"])
 
             for status in self.get_rows(
                 f"SELECT * from pyfunceble_status WHERE file_id = {file_info['id']}"
             ):
+                if (
+                    self.continuous_integration
+                    and self.continuous_integration.is_time_exceeded()
+                ):
+                    drop_table = False
+                    break
+
                 to_send = {
                     "idna_subject": domain2idna.domain2idna(status["tested"]),
                     "checker_type": "AVAILABILITY",
                     "destination": destination,
                     "source": file_info["path"],
                     "tested_at": status["tested_at"],
+                    "session_id": None,
                 }
 
                 if status["status"] in inactive_statuses:
@@ -127,26 +145,37 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                         "Deleted from pyfunceble_status: \n%r", status
                     )
 
-            with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-                db_session.execute(
-                    f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"
+            if drop_table:
+                # pylint: disable=line-too-long
+                with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+                    db_session.execute(
+                        f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"
+                    )
+                    db_session.commit()
+
+                    PyFunceble.facility.Logger.debug(
+                        "Deleted from pyfunceble_file: \n%r", file_info
+                    )
+            else:
+                PyFunceble.facility.Logger.debug(
+                    "Not deleted from pyfunceble_file (not authorized): \n%r", file_info
                 )
+
+        if drop_table:
+            with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+                db_session.execute("DROP TABLE pyfunceble_file")
                 db_session.commit()
 
-                PyFunceble.facility.Logger.debug(
-                    "Deleted from pyfunceble_file: \n%r", file_info
-                )
+                PyFunceble.facility.Logger.debug("Deleted pyfunceble_file table.")
 
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            db_session.execute("DROP TABLE pyfunceble_file")
-            db_session.commit()
+            with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+                db_session.execute("DROP TABLE pyfunceble_status")
+                db_session.commit()
 
-            PyFunceble.facility.Logger.debug("Deleted pyfunceble_file table.")
-
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            db_session.execute("DROP TABLE pyfunceble_status")
-            db_session.commit()
-
-            PyFunceble.facility.Logger.debug("Deleted pyfunceble_status table.")
+                PyFunceble.facility.Logger.debug("Deleted pyfunceble_status table.")
+        else:
+            PyFunceble.facility.Logger.debug(
+                "No table deleted. Reason: not authorized."
+            )
 
         return self

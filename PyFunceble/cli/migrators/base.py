@@ -51,10 +51,17 @@ License:
 """
 
 
+from typing import Optional
+
+from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
+
+
 class MigratorBase:
     """
     Provides the base of all classes.
     """
+
+    continuous_integration: Optional[ContinuousIntegrationBase] = None
 
     def start(self) -> "MigratorBase":
         """

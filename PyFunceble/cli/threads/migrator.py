@@ -104,13 +104,13 @@ class MigratorThread(ThreadsBase):
                 exc_info=True,
             )
 
-    @staticmethod
-    def json2csv_inactive_target() -> None:
+    def json2csv_inactive_target(self) -> None:
         """
         Provides the target for the inactive database migrator.
         """
 
         migrator = InactiveJSON2CSVMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if FileHelper(migrator.source_file).exists():
             print(
@@ -129,13 +129,13 @@ class MigratorThread(ThreadsBase):
                 "Stopped json2csv_inactive_target. File does not exist."
             )
 
-    @staticmethod
-    def json2csv_whois_target() -> None:
+    def json2csv_whois_target(self) -> None:
         """
         Provides the target for the whois database migrator.
         """
 
         migrator = WhoisJSON2CSVMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if FileHelper(migrator.source_file).exists():
             print(
@@ -154,14 +154,14 @@ class MigratorThread(ThreadsBase):
                 "Stopped json2csv_whois_target. File does not exist."
             )
 
-    @staticmethod
-    def mariadb_whois_record_idna_subject_target() -> None:
+    def mariadb_whois_record_idna_subject_target(self) -> None:
         """
         Provides the target for the whois addition of the missing
         idna_subject column.
         """
 
         migrator = WhoisRecordIDNASubjectMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if migrator.authorized:
             print(
@@ -180,14 +180,14 @@ class MigratorThread(ThreadsBase):
                 "Stopped mariadb_whois_record_idna_subject_target. Not authorized."
             )
 
-    @staticmethod
-    def mariadb_file_and_status_target() -> None:
+    def mariadb_file_and_status_target(self) -> None:
         """
         Provides the target for the migration of the :code:`pyfunceble_file`
         and :code:`pyfunceble_status` tables.
         """
 
         migrator = FileAndStatusMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if migrator.authorized:
             print(
@@ -208,13 +208,13 @@ class MigratorThread(ThreadsBase):
                 "Stopped mariadb_file_and_status_target. Not authorized."
             )
 
-    @staticmethod
-    def hashes_file_cleanup_target() -> None:
+    def hashes_file_cleanup_target(self) -> None:
         """
         Provides the target for the cleanup of the hashes file.
         """
 
         migrator = HashesFileCleanupMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if FileHelper(migrator.source_file).exists():
             print(
@@ -233,13 +233,13 @@ class MigratorThread(ThreadsBase):
                 "Stopped hashes_file_cleanup_target. File does not exist."
             )
 
-    @staticmethod
-    def mining_file_cleanup_target() -> None:
+    def mining_file_cleanup_target(self) -> None:
         """
         Provides the target for the cleanup of the mining file.
         """
 
         migrator = MiningFileCleanupMigrator()
+        migrator.continuous_integration = self.continuous_integration
 
         if FileHelper(migrator.source_file).exists():
             print(
@@ -282,12 +282,15 @@ class MigratorThread(ThreadsBase):
                 submitted.add_done_callback(self.done_callback)
                 submitted_list.append(submitted)
 
-            while (
-                any(x.running() for x in submitted_list)
-                and not self.continuous_integration.is_time_exceeded()
-            ):
+            while any(x.running() for x in submitted_list):
                 PyFunceble.cli.utils.stdout.print_single_line(".")
                 time.sleep(float(PyFunceble.storage.CONFIGURATION.lookup.timeout))
+
+                if (
+                    self.continuous_integration
+                    and self.continuous_integration.is_time_exceeded()
+                ):
+                    break
 
             if self.continuous_integration.is_time_exceeded():
                 for submitted in submitted_list:

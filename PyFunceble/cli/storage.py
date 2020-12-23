@@ -92,7 +92,7 @@ ERROR: str = f"{colorama.Fore.RED}✘"
 
 HASHES_FILENAME: str = "hashes_tracker.json"
 ALEMBIC_DIRECTORY_NAME = "alembic"
-CI_MIGRATION_TRIGGER_FILE = ".trigger"
+CI_TRIGGER_FILE = ".trigger"
 DISTRIBUTED_VERSION_FILENAME: str = "version.yaml"
 
 AUTOCONTINUE_OLD_FILE: str = "continue.json"

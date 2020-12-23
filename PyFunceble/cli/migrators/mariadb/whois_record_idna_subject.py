@@ -90,6 +90,12 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
             for row in db_session.query(WhoisRecord).filter(
                 WhoisRecord.idna_subject == None
             ):
+                if (
+                    self.continuous_integration
+                    and self.continuous_integration.is_time_exceeded()
+                ):
+                    break
+
                 PyFunceble.facility.Logger.info(
                     "Started to fix idna_subject field of %r", row.subject
                 )

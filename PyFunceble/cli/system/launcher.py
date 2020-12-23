@@ -365,30 +365,45 @@ class SystemLauncher(SystemBase):
             """
 
             cleanup_tool = FilesystemCleanup(parent_dirname)
-            file_helper = FileHelper(
+            running_file_helper = FileHelper(
                 os.path.join(
                     cleanup_tool.get_output_basedir(),
                     PyFunceble.cli.storage.TEST_RUNNING_FILE,
                 )
             )
 
-            if not file_helper.exists():
+            trigger_file_helper = FileHelper(
+                os.path.join(
+                    cleanup_tool.get_output_basedir(),
+                    PyFunceble.cli.storage.CI_TRIGGER_FILE,
+                )
+            )
+
+            if not running_file_helper.exists():
                 self.sessions_id[parent_dirname] = secrets.token_hex(12)
 
                 cleanup_tool.clean_output_files()
-                file_helper.write(
+                running_file_helper.write(
                     f"{self.sessions_id[parent_dirname]} "
                     f"{datetime.datetime.utcnow().isoformat()}",
                     overwrite=True,
                 )
             else:
-                possible_session_id = file_helper.read().split()[0]
+                possible_session_id = running_file_helper.read().split()[0]
 
                 try:
                     _ = datetime.datetime.fromisoformat(possible_session_id)
                     self.sessions_id[parent_dirname] = None
                 except ValueError:
                     self.sessions_id[parent_dirname] = possible_session_id
+
+            if self.continuous_integration.authorized:
+                # Ensures that we always have somethin
+                trigger_file_helper.write(
+                    f"{self.sessions_id[parent_dirname]} "
+                    f"{datetime.datetime.utcnow().isoformat()}",
+                    overwrite=True,
+                )
 
         def match_output_directory_if_necessary(parent_dirname: str) -> None:
             """
@@ -573,6 +588,25 @@ class SystemLauncher(SystemBase):
             ).delete()
             PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
+        def remove_trigger_file(parent_dirname: str) -> None:
+            """
+            Removes the trigger file.
+
+            :param parent_dirname:
+                The name of the directory to work from (under the output
+                directory).
+            """
+
+            cleanup_tool = FilesystemCleanup(parent_dirname)
+
+            file_helper.set_path(
+                os.path.join(
+                    cleanup_tool.get_output_basedir(),
+                    PyFunceble.cli.storage.CI_TRIGGER_FILE,
+                )
+            ).delete()
+            PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
+
         def remove_continue_dataset(protocol: dict) -> None:
             """
             Removes the continue file.
@@ -606,6 +640,7 @@ class SystemLauncher(SystemBase):
         for protocol in self.testing_protocol:
             if protocol["destination"]:
                 remove_running_file(protocol["destination"])
+                remove_trigger_file(protocol["destination"])
 
             if protocol["output_dir"]:
                 remove_continue_dataset(protocol)
