@@ -1063,6 +1063,7 @@ class ContinuousIntegrationBase:
             (f'git config --local user.email "{self.git_email}"', False),
             (f'git config --local user.name "{self.git_name}"', False),
             ("git config --local push.default simple", False),
+            ("git config --local pull.rebase false", False),
             (f'git checkout "{self.git_branch}"', False),
             (
                 f'git pull origin "{self.git_distribution_branch}"',
