@@ -56,11 +56,12 @@ from typing import Any, Optional
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
+from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.csv_base import CSVDatasetBase
 from PyFunceble.helpers.file import FileHelper
 
 
-class CSVContinueDataset(CSVDatasetBase):
+class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
     """
     Provides the interface for the management of the continue
     CSV file.

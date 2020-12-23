@@ -67,3 +67,4 @@ class Continue(SchemaBase):
     destination = Column(Text, nullable=False)
     source = Column(Text, nullable=False)
     tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
+    session_id = Column(Text, nullable=True, default=None)

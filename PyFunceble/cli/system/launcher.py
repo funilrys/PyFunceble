@@ -55,6 +55,7 @@ import argparse
 import copy
 import datetime
 import os
+import secrets
 import sys
 from typing import List, Optional
 
@@ -133,6 +134,8 @@ class SystemLauncher(SystemBase):
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
     checker_type: Optional[str] = None
+
+    sessions_id: dict = dict()
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
         self.execution_time_holder = ExecutionTime().set_start_time()
@@ -370,10 +373,22 @@ class SystemLauncher(SystemBase):
             )
 
             if not file_helper.exists():
+                self.sessions_id[parent_dirname] = secrets.token_hex(12)
+
                 cleanup_tool.clean_output_files()
                 file_helper.write(
-                    datetime.datetime.utcnow().isoformat(), overwrite=True
+                    f"{self.sessions_id[parent_dirname]} "
+                    f"{datetime.datetime.utcnow().isoformat()}",
+                    overwrite=True,
                 )
+            else:
+                possible_session_id = file_helper.read().split()[0]
+
+                try:
+                    _ = datetime.datetime.fromisoformat(possible_session_id)
+                    self.sessions_id[parent_dirname] = None
+                except ValueError:
+                    self.sessions_id[parent_dirname] = possible_session_id
 
         def match_output_directory_if_necessary(parent_dirname: str) -> None:
             """
@@ -416,6 +431,9 @@ class SystemLauncher(SystemBase):
                         to_send = copy.deepcopy(protocol)
                         to_send["subject"] = subject
                         to_send["idna_subject"] = domain2idna.domain2idna(subject)
+                        to_send["session_id"] = self.sessions_id[
+                            protocol["destination"]
+                        ]
 
                         self.tester_thread_manager.add_to_the_queue(to_send)
 
@@ -455,6 +473,10 @@ class SystemLauncher(SystemBase):
                             # but there is no subject in the table.
                             to_send["subject"] = dataset["idna_subject"]
                             to_send["idna_subject"] = dataset["idna_subject"]
+
+                            to_send["session_id"] = self.sessions_id[
+                                protocol["destination"]
+                            ]
 
                             self.tester_thread_manager.add_to_the_queue(to_send)
 

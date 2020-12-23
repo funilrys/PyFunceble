@@ -66,6 +66,7 @@ class ContinueDatasetBase(DBDatasetBase):
         "destination",
         "source",
         "tested_at",
+        "session_id",
     ]
 
     COMPARISON_FIELDS: List[str] = [
@@ -73,4 +74,5 @@ class ContinueDatasetBase(DBDatasetBase):
         "checker_type",
         "destination",
         "source",
+        "session_id",
     ]
