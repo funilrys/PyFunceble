@@ -173,6 +173,8 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                 db_session.commit()
 
                 PyFunceble.facility.Logger.debug("Deleted pyfunceble_status table.")
+
+            self.done = True
         else:
             PyFunceble.facility.Logger.debug(
                 "No table deleted. Reason: not authorized."

@@ -120,10 +120,16 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                "Finished migration (json2csv) of the inactive dataset."
-            )
+            if migrator.done:
+                print(
+                    f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    "Finished migration (json2csv) of the inactive dataset."
+                )
+            else:
+                print(
+                    f"\n{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    "Unfinished migration (json2csv) of the inactive dataset."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped json2csv_inactive_target. File does not exist."
@@ -145,10 +151,16 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                "Finished migration (json2csv) of the whois dataset."
-            )
+            if migrator.done:
+                print(
+                    f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    "Finished migration (json2csv) of the whois dataset."
+                )
+            else:
+                print(
+                    f"\n{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    "Unfinished migration (json2csv) of the whois dataset."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped json2csv_whois_target. File does not exist."
@@ -171,10 +183,18 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                "Finished completion of NULL idna_subject(s) into the whois dataset."
-            )
+            if migrator.done:
+                print(
+                    f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    "Finished completion of NULL idna_subject(s) into "
+                    "the whois dataset."
+                )
+            else:
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    "Unfinished completion of NULL idna_subject(s) into "
+                    "the whois dataset."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped mariadb_whois_record_idna_subject_target. Not authorized."
@@ -198,11 +218,18 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                "Started migration of the pyfunceble_file and "
-                "pyfunceble_status tables."
-            )
+            if migrator.done:
+                print(
+                    f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    "Finished migration of the pyfunceble_file and "
+                    "pyfunceble_status tables."
+                )
+            else:
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    "Unfinished migration of the pyfunceble_file and "
+                    "pyfunceble_status tables."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped mariadb_file_and_status_target. Not authorized."
@@ -224,10 +251,16 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                f"Finished deletion of {migrator.source_file!r}."
-            )
+            if migrator.done:
+                print(
+                    f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    f"Finished deletion of {migrator.source_file!r}."
+                )
+            else:
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    f"Unfinished deletion of {migrator.source_file!r}."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped hashes_file_cleanup_target. File does not exist."
@@ -249,10 +282,16 @@ class MigratorThread(ThreadsBase):
 
             migrator.start()
 
-            print(
-                f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                f"Finished deletion of {migrator.source_file!r}."
-            )
+            if migrator.done:
+                print(
+                    f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    f"Finished deletion of {migrator.source_file!r}."
+                )
+            else:
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    f"Unfinished deletion of {migrator.source_file!r}."
+                )
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped hashes_file_cleanup_target. File does not exist."

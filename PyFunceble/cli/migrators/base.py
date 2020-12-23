@@ -61,6 +61,7 @@ class MigratorBase:
     Provides the base of all classes.
     """
 
+    done: bool = False
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
     def start(self) -> "MigratorBase":

@@ -87,6 +87,9 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
     def migrate(self) -> "WhoisRecordIDNASubjectMigrator":
         with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
             # pylint: disable=singleton-comparison
+
+            broken = False
+
             for row in db_session.query(WhoisRecord).filter(
                 WhoisRecord.idna_subject == None
             ):
@@ -94,6 +97,7 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
                     self.continuous_integration
                     and self.continuous_integration.is_time_exceeded()
                 ):
+                    broken = True
                     break
 
                 PyFunceble.facility.Logger.info(
@@ -107,5 +111,8 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
                 PyFunceble.facility.Logger.info(
                     "Finished to fix idna_subject field of %r", row.subject
                 )
+
+            if not broken:
+                self.done = True
 
         return self

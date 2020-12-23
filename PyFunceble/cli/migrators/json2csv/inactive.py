@@ -151,4 +151,5 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
 
             if delete_file:
                 file_helper.delete()
+                self.done = True
         return self

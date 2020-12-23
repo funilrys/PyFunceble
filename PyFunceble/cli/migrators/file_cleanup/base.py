@@ -92,6 +92,7 @@ class FileClenupMigratorBase(MigratorBase):
         FileHelper(self.source_file).delete()
 
         PyFunceble.facility.Logger.debug("Deleted: %r", self.source_file)
+        self.done = True
 
     def start(self) -> "FileClenupMigratorBase":
         """
