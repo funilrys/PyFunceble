@@ -152,18 +152,21 @@ class IPv4SyntaxChecker(CheckerBase):
         """
 
         if self.is_valid():
-            address = ipaddress.IPv4Address(self.idna_subject)
+            try:
+                address = ipaddress.IPv4Address(self.idna_subject)
 
-            return (
-                address.is_multicast
-                or address.is_private
-                or address.is_unspecified
-                or address.is_reserved
-                or address.is_loopback
-                or address.is_link_local
-                or not address.is_global
-                or RegexHelper(self._get_regex_reserved_ip()).match(
-                    self.idna_subject, return_match=False
+                return (
+                    address.is_multicast
+                    or address.is_private
+                    or address.is_unspecified
+                    or address.is_reserved
+                    or address.is_loopback
+                    or address.is_link_local
+                    or not address.is_global
+                    or RegexHelper(self._get_regex_reserved_ip()).match(
+                        self.idna_subject, return_match=False
+                    )
                 )
-            )
+            except ValueError:
+                pass
         return False
