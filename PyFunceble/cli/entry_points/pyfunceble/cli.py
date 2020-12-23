@@ -52,7 +52,8 @@ License:
 
 import argparse
 import os
-from typing import Any, List, Tuple, Union
+import sys
+from typing import Any, List, Optional, Tuple, Union
 
 import colorama
 
@@ -62,6 +63,7 @@ import PyFunceble.storage
 from PyFunceble.cli.entry_points.pyfunceble.argsparser import OurArgumentParser
 from PyFunceble.cli.system.integrator import SystemIntegrator
 from PyFunceble.cli.system.launcher import SystemLauncher
+from PyFunceble.helpers.regex import RegexHelper
 
 
 def get_configured_value(entry: str, *, negate=False) -> Any:
@@ -109,61 +111,12 @@ def add_arguments_to_parser(
         parser.add_argument(*pos_args, **opt_args)
 
 
-def tool() -> None:
+def get_source_group_data() -> List[Tuple[List[str], dict]]:
     """
-    Provides the CLI of PyFunceble.
+    Provides the arguments of the source group.
     """
 
-    # pylint: disable=too-many-locals
-
-    # We start with loading the configuration. That way, we don't have to
-    # think of this anymore as soon as the CLI is called.
-    # As the merging is now done on demand and not on first hand, this will
-    # give us a bit of agility.
-    PyFunceble.facility.ConfigLoader.start()
-
-    colorama.init(autoreset=True)
-
-    description = (
-        f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}PyFunceble PSG Generator"
-        f"{colorama.Style.RESET_ALL} - "
-        "The Public Suffix List file generator for PyFunceble."
-    )
-
-    our_epilog = (
-        f"{colorama.Style.BRIGHT}{colorama.Fore.YELLOW}For an in-depth usage, "
-        "explanation and examples of the arguments,\n"
-        f"you should read the documentation at{colorama.Fore.GREEN} "
-        "https://pyfunceble.readthedocs.io/en/dev/"
-        f"{colorama.Style.RESET_ALL}\n\n"
-    )
-
-    parser = OurArgumentParser(
-        description=description,
-        epilog=our_epilog + PyFunceble.cli.storage.STD_EPILOG,
-        add_help=False,
-        formatter_class=argparse.RawTextHelpFormatter,
-    )
-
-    source_group = parser.add_argument_group("Source")
-    filtering_group = parser.add_argument_group(
-        "Source filtering, decoding, conversion and expansion"
-    )
-    test_control_group = parser.add_argument_group("Test control")
-    dns_control_group = parser.add_argument_group("DNS control")
-    database_control_group = parser.add_argument_group("Databases")
-    output_control_group = parser.add_argument_group("Output control")
-    multiprocessing_group = parser.add_argument_group("Multithreading")
-    ci_group = parser.add_argument_group("CI / CD")
-
-    available_cpu = os.cpu_count()
-
-    if available_cpu:
-        default_max_workers = available_cpu * 5
-    else:
-        default_max_workers = 1
-
-    source_groups_data = [
+    return [
         (
             [
                 "-d",
@@ -225,7 +178,13 @@ def tool() -> None:
         ),
     ]
 
-    filtering_groups_data = [
+
+def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the filtering group.
+    """
+
+    return [
         (
             [
                 "--adblock",
@@ -309,7 +268,13 @@ def tool() -> None:
         ),
     ]
 
-    test_control_groups_data = [
+
+def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the test control data group.
+    """
+
+    return [
         (
             [
                 "-c",
@@ -475,7 +440,13 @@ def tool() -> None:
         ),
     ]
 
-    dns_control_groups_data = [
+
+def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the DNS control group.
+    """
+
+    return [
         (
             [
                 "--dns",
@@ -506,7 +477,13 @@ def tool() -> None:
         ),
     ]
 
-    database_control_groups_data = [
+
+def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the arguments of the database group.
+    """
+
+    return [
         (
             [
                 "--inactive-db",
@@ -572,7 +549,13 @@ def tool() -> None:
         ),
     ]
 
-    output_control_groups_data = [
+
+def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the output group.
+    """
+
+    return [
         (
             [
                 "-a",
@@ -740,7 +723,20 @@ def tool() -> None:
         ),
     ]
 
-    multiprocessing_groups_data = [
+
+def get_multithreading_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the multithreading group data.
+    """
+
+    available_cpu = os.cpu_count()
+
+    if available_cpu:
+        default_max_workers = available_cpu * 5
+    else:
+        default_max_workers = 1
+
+    return [
         (
             [
                 "-w",
@@ -757,7 +753,13 @@ def tool() -> None:
         ),
     ]
 
-    ci_groups_data = [
+
+def get_ci_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the CI group data.
+    """
+
+    return [
         (
             ["--ci-max-minutes", "--autosave-minutes"],
             {
@@ -842,7 +844,13 @@ def tool() -> None:
         ),
     ]
 
-    default_groups_data = [
+
+def get_default_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the default group.
+    """
+
+    return [
         (
             ["--debug"],
             {
@@ -882,15 +890,134 @@ def tool() -> None:
         ),
     ]
 
-    add_arguments_to_parser(source_group, source_groups_data)
-    add_arguments_to_parser(filtering_group, filtering_groups_data)
-    add_arguments_to_parser(test_control_group, test_control_groups_data)
-    add_arguments_to_parser(dns_control_group, dns_control_groups_data)
-    add_arguments_to_parser(database_control_group, database_control_groups_data)
-    add_arguments_to_parser(output_control_group, output_control_groups_data)
-    add_arguments_to_parser(multiprocessing_group, multiprocessing_groups_data)
-    add_arguments_to_parser(ci_group, ci_groups_data)
-    add_arguments_to_parser(parser, default_groups_data)
+
+def ask_authorization_to_merge_config(missing_key: Optional[str] = None) -> bool:
+    """
+    Asks the end-user for the authorization to merge the upstream
+    configuration and - finally - return the new authorization status.
+
+    :param missing_key:
+        The name of a missing key. If not given, a more generic message will be
+        given to end-user.
+    """
+
+    if missing_key:
+        message = (
+            f"{colorama.Fore.RED}{colorama.Style.BRIGHT}The {missing_key!r} "
+            f"key is missing from your configuration file."
+            f"{colorama.Style.RESET_ALL}\n"
+            f"Are we authorized to merge it from upstream ? {colorama.Style.BRIGHT}"
+            "[y/n] "
+        )
+    else:
+        message = (
+            f"{colorama.Fore.RED}{colorama.Style.BRIGHT}A "
+            f"key is missing from your configuration file."
+            f"{colorama.Style.RESET_ALL}\n"
+            f"Are we authorized to merge it from upstream ? {colorama.Style.BRIGHT}"
+            "[y/n] "
+        )
+
+    while True:
+        response = input(message).lower()
+
+        if response[0] not in ("y", "n"):
+            continue
+
+        if response[0] == "y":
+            return True
+
+        return False
+
+
+def tool() -> None:
+    """
+    Provides the CLI of PyFunceble.
+    """
+
+    # pylint: disable=too-many-locals
+
+    # We start with loading the configuration. That way, we don't have to
+    # think of this anymore as soon as the CLI is called.
+    # As the merging is now done on demand and not on first hand, this will
+    # give us a bit of agility.
+    PyFunceble.facility.ConfigLoader.start()
+
+    colorama.init(autoreset=True)
+
+    description = (
+        f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}PyFunceble PSG Generator"
+        f"{colorama.Style.RESET_ALL} - "
+        "The Public Suffix List file generator for PyFunceble."
+    )
+
+    our_epilog = (
+        f"{colorama.Style.BRIGHT}{colorama.Fore.YELLOW}For an in-depth usage, "
+        "explanation and examples of the arguments,\n"
+        f"you should read the documentation at{colorama.Fore.GREEN} "
+        "https://pyfunceble.readthedocs.io/en/dev/"
+        f"{colorama.Style.RESET_ALL}\n\n"
+    )
+
+    parser = OurArgumentParser(
+        description=description,
+        epilog=our_epilog + PyFunceble.cli.storage.STD_EPILOG,
+        add_help=False,
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
+    # pylint:  disable=possibly-unused-variable
+
+    source_group = parser.add_argument_group("Source")
+    filtering_group = parser.add_argument_group(
+        "Source filtering, decoding, conversion and expansion"
+    )
+    test_control_group = parser.add_argument_group("Test control")
+    dns_control_group = parser.add_argument_group("DNS control")
+    database_control_group = parser.add_argument_group("Databases")
+    output_control_group = parser.add_argument_group("Output control")
+    multithreading_group = parser.add_argument_group("Multithreading")
+    ci_group = parser.add_argument_group("CI / CD")
+
+    funcs = [
+        get_source_group_data,
+        get_filtering_group_data,
+        get_test_control_group_data,
+        get_dns_control_group_data,
+        get_database_control_group_data,
+        get_output_control_group_data,
+        get_multithreading_group_data,
+        get_ci_group_data,
+    ]
+
+    for func in funcs:
+        parser_name = func.__name__.replace("get_", "").replace("_data", "")
+
+        try:
+            add_arguments_to_parser(locals()[parser_name], func())
+        except ValueError as exception:
+            exception_message = str(exception)
+            if "configuration" not in exception_message:
+                raise exception
+
+            missing_key = RegexHelper(r"<entry>\s\(\'(.*)\'\)").match(
+                exception_message, return_match=True, group=1
+            )
+
+            if ask_authorization_to_merge_config(missing_key):
+                PyFunceble.facility.ConfigLoader.set_merge_upstream(True).start()
+                add_arguments_to_parser(locals()[parser_name], func())
+            else:
+                print(
+                    f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Could not find "
+                    f"the {missing_key!r} in your configuration.\n"
+                    f"{colorama.Fore.MAGENTA}Please fix your "
+                    "configuration file manually or fill a new issue if you "
+                    "don't understand this error."
+                )
+                sys.exit(1)
+
+    add_arguments_to_parser(parser, get_default_group_data())
 
     args = parser.parse_args()
 
