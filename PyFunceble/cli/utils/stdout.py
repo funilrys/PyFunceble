@@ -71,7 +71,7 @@ def get_template_to_use() -> str:
     return "less"
 
 
-def print_single_line(value: str = ".", end: str = "") -> None:
+def print_single_line(value: str = ".", end: str = "", *, force: bool = False) -> None:
     """
     Prints the given :code:`value` in the current line.
 
@@ -79,11 +79,14 @@ def print_single_line(value: str = ".", end: str = "") -> None:
         The default value
     :param end:
         Same as the end argument of the built-in print function.
+    :param force:
+        Forces the printing.
     """
 
     if PyFunceble.facility.ConfigLoader.is_already_loaded():
         if (
-            PyFunceble.storage.CONFIGURATION.cli_testing.ci.active
+            force
+            or PyFunceble.storage.CONFIGURATION.cli_testing.ci.active
             or PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots
         ):
             print(value, end=end)

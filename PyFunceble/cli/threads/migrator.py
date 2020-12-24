@@ -322,7 +322,7 @@ class MigratorThread(ThreadsBase):
                 submitted_list.append(submitted)
 
             while any(x.running() for x in submitted_list):
-                PyFunceble.cli.utils.stdout.print_single_line(".")
+                PyFunceble.cli.utils.stdout.print_single_line(".", force=True)
                 time.sleep(float(PyFunceble.storage.CONFIGURATION.lookup.timeout))
 
                 if (
