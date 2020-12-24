@@ -312,6 +312,18 @@
     When this mode is active, the system will only return the result in the
     following format: :code:`example.org ACTIVE`.
 
+:code:`cli_testing[display_mode][status]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`string`
+
+    **Default value:** :code:`all`
+
+    **Available values:** :code:`all`, :code:`ACTIVE`, :code:`INACTIVE`,
+    :code:`INVALID`, :code:`VALID`, :code:`SANE`, :code:`MALICIOUS`
+
+    **Description:** Sets the status that we are allowed to print to STDOUT.
+
 :code:`cli_testing[display_mode][colour]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

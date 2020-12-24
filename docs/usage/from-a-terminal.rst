@@ -446,7 +446,17 @@ you know!
 
     **Default value:** :code:`True`
 
-Don't want any colour ? Argument is for your!
+Don't want any colour ? This argument is for you!
+
+:code:`--display-status`
+""""""""""""""""""""""""
+
+    Sets the status that we are allowed to print to STDOUT.
+
+    **Default value:** :code:`all`
+
+    **Available values:** :code:`all`, :code:`ACTIVE`, :code:`INACTIVE`,
+    :code:`INVALID`, :code:`VALID`, :code:`SANE`, :code:`MALICIOUS`
 
 :code:`--hierarchical`
 """"""""""""""""""""""
@@ -698,7 +708,7 @@ Global overview
 
 ::
 
-    usage: PyFunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
+    usage: pyfunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
                         [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
                         [--adblock] [--complements]
                         [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
@@ -713,6 +723,7 @@ Global overview
                         [--database-type {csv,mariadb,mysql}]
                         [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST]
                         [-wdb CLI_TESTING__WHOIS_DB] [-a] [-ex] [--colour]
+                        [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE}]
                         [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
                         [--no-files] [--unified-results] [--percentage] [--plain]
                         [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS]
@@ -725,7 +736,7 @@ Global overview
                         [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
                         [--help] [-v]
 
-    PyFunceble PSG Generator - The Public Suffix List file generator for PyFunceble.
+    PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
     optional arguments:
         --help                Show this help message and exit.
@@ -809,7 +820,7 @@ Global overview
         -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
                                 Sets the user agent to use.
 
-                                If not given, we try toget the lastest (automatically) for you.
+                                If not given, we try to get the lastest (automatically) for you.
         -vsc, --verify-ssl-certificate
                                 Activates or disables the verification of the SSL/TLS
                                 certificate when testing for URL.
@@ -828,9 +839,9 @@ Global overview
                                 Sets the protocol to use for the DNS queries.
                                 Configured value: 'UDP'
 
-    Databases:
+        Databases:
         --inactive-db         Activates or disables the usage of a 'database' to
-                                store all 'INVALID' and 'INACTIVE' subject for continuous retest.
+                                store all 'INACTIVE' and 'INVALID'  subject for continuous retest.
                                 Configured value: True
         --database-type {csv,mariadb,mysql}
                                 Sets the database engine to use.
@@ -847,13 +858,17 @@ Global overview
                                 Configured value: True
 
     Output control:
-        -a, --all             Activates or disables the disply of the all
+        -a, --all             Activates or disables the display of the all
                                 information in the table we print to stdout.
                                 Configured value: False
         -ex, --execution      Activates or disables the display of the execution time.
                                 Configured value: False
         --colour, --color     Activates or disables the coloration to STDOUT.
                                 Configured value: True
+        --display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE}
+                                Sets the status that we are allowed to print to STDOUT.
+
+                                Configured value: 'all'
         --hierarchical        Activates or disables the sorting of the files
                                 content (output) in a hierarchical order.
                                 Configured value: False
@@ -877,7 +892,7 @@ Global overview
                                 subject (one per line).
                                 Configured value: True
         --dots                Activate or disables the display of dots or other
-                                characters when we skip the test of a subjec.
+                                characters when we skip the test of a subject.
                                 Configured value: False
         -q, --quiet           Activates or disables the display of output to the
                                 terminal.
@@ -887,11 +902,11 @@ Global overview
 
     Multithreading:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
-                                Sets the number of maximal worker to use.
+                                Sets the number of maximal workers to use.
                                 If not given, 40 (based on the current machine) will be applied.
                                 Configured value: None
 
-        CI / CD:
+    CI / CD:
         --ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES, --autosave-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES
                                 Sets the number of minutes to wait before starting
                                 to stop a CI session.

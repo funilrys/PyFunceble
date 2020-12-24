@@ -423,7 +423,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "user_agent.custom",
                 "type": str,
-                "help": "Sets the user agent to use.\n\nIf not given, we try to"
+                "help": "Sets the user agent to use.\n\nIf not given, we try to "
                 "get the lastest (automatically) for you.",
             },
         ),
@@ -494,7 +494,9 @@ def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.inactive_db",
                 "action": "store_true",
                 "help": "Activates or disables the usage of a 'database' to\n"
-                "store all 'INVALID' and 'INACTIVE' subject for continuous retest. %s"
+                f"store all {PyFunceble.storage.STATUS.down!r} and "
+                f"{PyFunceble.storage.STATUS.invalid!r} "
+                " subject for continuous retest. %s"
                 % get_configured_value("cli_testing.inactive_db"),
             },
         ),
@@ -566,7 +568,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.display_mode.all",
                 "action": "store_true",
-                "help": "Activates or disables the disply of the all\n"
+                "help": "Activates or disables the display of the all\n"
                 "information in the table we print to stdout. %s"
                 % get_configured_value("cli_testing.display_mode.all"),
             },
@@ -590,6 +592,16 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "action": "store_true",
                 "help": "Activates or disables the coloration to STDOUT. %s"
                 % get_configured_value("cli_testing.display_mode.colour"),
+            },
+        ),
+        (
+            ["--display-status"],
+            {
+                "dest": "cli_testing.display_mode.status",
+                "type": str.upper,
+                "choices": ["all"] + list(PyFunceble.storage.STATUS.values()),
+                "help": "Sets the status that we are allowed to print to STDOUT.\n"
+                "%s" % get_configured_value("cli_testing.display_mode.status"),
             },
         ),
         (
@@ -685,7 +697,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.display_mode.dots",
                 "action": "store_true",
                 "help": "Activate or disables the display of dots or other\n"
-                "characters when we skip the test of a subjec. %s"
+                "characters when we skip the test of a subject. %s"
                 % get_configured_value("cli_testing.display_mode.dots"),
             },
         ),
@@ -747,7 +759,7 @@ def get_multithreading_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.max_workers",
                 "type": int,
-                "help": "Sets the number of maximal worker to use.\n"
+                "help": "Sets the number of maximal workers to use.\n"
                 f"If not given, {default_max_workers} "
                 "(based on the current machine) will be applied. %s"
                 % get_configured_value("cli_testing.max_workers"),
@@ -948,9 +960,9 @@ def tool() -> None:
     colorama.init(autoreset=True)
 
     description = (
-        f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}PyFunceble PSG Generator"
+        f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}PyFunceble"
         f"{colorama.Style.RESET_ALL} - "
-        "The Public Suffix List file generator for PyFunceble."
+        "The tool to check the availability or syntax of domain, IP or URL."
     )
 
     our_epilog = (

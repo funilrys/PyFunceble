@@ -122,6 +122,11 @@ cli_testing:
     # Activates the coloration of stdout.
     colour: True
 
+    # Sets the status do display to STDOUT.
+    # NOTE: This does not have any effect with the generated files.
+    # Available values: ALL | ACTIVE | INACTIVE | INVALID | SANE | MALICIOUS
+    status: all
+
   testing_mode:
     # Provides all available testing modes.
     # WARNING: Only one can be used at a time.
