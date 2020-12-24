@@ -204,6 +204,7 @@ class SystemLauncher(SystemBase):
                     "source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
+                    "session_id": None,
                 }
 
                 self.testing_protocol.append(to_append)
@@ -223,6 +224,7 @@ class SystemLauncher(SystemBase):
                     "source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
+                    "session_id": None,
                 }
 
                 self.testing_protocol.append(to_append)
@@ -243,6 +245,7 @@ class SystemLauncher(SystemBase):
                     "source": file,
                     "subject": file,
                     "checker_type": self.checker_type,
+                    "session_id": None,
                 }
 
                 to_append["output_dir"] = filesytem_dirbase.set_parent_dirname(
@@ -267,6 +270,7 @@ class SystemLauncher(SystemBase):
                     "source": file,
                     "subject": file,
                     "checker_type": self.checker_type,
+                    "session_id": None,
                 }
 
                 to_append["output_dir"] = filesytem_dirbase.set_parent_dirname(

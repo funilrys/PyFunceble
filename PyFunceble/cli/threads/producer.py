@@ -384,8 +384,9 @@ class ProducerThread(ThreadsBase):
             else:
                 self.send_for_mining(test_dataset, test_result)
 
-                self.run_autosave(test_dataset, test_result)
-                self.run_inactive(test_dataset, test_result)
+                if test_dataset["type"] != "single":
+                    self.run_autosave(test_dataset, test_result)
+                    self.run_inactive(test_dataset, test_result)
 
                 PyFunceble.facility.Logger.debug(
                     "Printer Blocked: %r", self.block_printer
