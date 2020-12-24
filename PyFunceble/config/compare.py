@@ -54,6 +54,7 @@ import copy
 from typing import List, Optional
 
 from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.list import ListHelper
 from PyFunceble.helpers.merge import Merge
 
 
@@ -72,6 +73,7 @@ class ConfigComparison:
         "psl",
         "repo",
         "requirements",
+        "user_agents",
     ]
     DELETED_CORE: List[str] = [
         "dns_lookup_over_tcp",
@@ -79,9 +81,16 @@ class ConfigComparison:
         "header_printed",
         "iana_whois_server",
         "idna_conversion",
+        "logs",
         "maximal_processes",
+        "multiprocess_merging_mode",
+        "multiprocess",
+        "no_http_codes",
         "outputs",
+        "shadow_file",
         "status",
+        "store_whois_record",
+        "unified",
     ]
 
     OLD_TO_NEW: dict = {
@@ -131,6 +140,29 @@ class ConfigComparison:
         "no_special": "lookup.special",
         "no_whois": "lookup.whois",
         "split": "cli_testing.file_generation.unified_results",
+    }
+
+    NEW_STATUS_CODES: dict = {
+        "up": [102, 207, 208, 226, 429],
+        "potentially_down": [451],
+        "potentially_up": [
+            308,
+            403,
+            418,
+            421,
+            422,
+            423,
+            424,
+            426,
+            428,
+            429,
+            431,
+            506,
+            507,
+            508,
+            510,
+            511,
+        ],
     }
 
     _local_config: dict = dict()
@@ -225,6 +257,8 @@ class ConfigComparison:
             or "user_agent" not in self.local_config
             or not isinstance(self.local_config["user_agent"], dict)
             or "active" in self.local_config["http_codes"]
+            or "not_found_default" in self.local_config["http_codes"]
+            or "self_managed" not in self.local_config["http_codes"]
         ):
             return False
 
@@ -235,6 +269,15 @@ class ConfigComparison:
         for index in self.local_config["links"]:
             if index in self.DELETED_LINKS:
                 return False
+
+        if "self_managed" in self.local_config["http_codes"] and not bool(
+            self.local_config["http_codes"]
+        ):
+            for index, values in self.local_config["http_codes"]["list"].items():
+                if set(self.upstream_config["http_codes"]["list"][index]) != set(
+                    values
+                ):
+                    return False
 
         return True
 
@@ -296,6 +339,36 @@ class ConfigComparison:
                 if index in merged["links"]:
                     del merged["links"][index]
 
+            if not bool(merged["http_codes"]["self_managed"]):
+                for index, values in self.NEW_STATUS_CODES.items():
+                    for value in values:
+                        if value in merged["http_codes"]["list"][index]:
+                            continue
+
+                        merged["http_codes"]["list"][index].append(value)
+
+                for index, values in self.NEW_STATUS_CODES.items():
+                    for status in merged["http_codes"]["list"]:
+                        while (
+                            status == index
+                            and merged["http_codes"]["list"][status].count(value) > 1
+                        ):
+                            merged["http_codes"]["list"][status].remove(value)
+
+                        while (
+                            status != index
+                            and merged["http_codes"]["list"][status].count(value) > 0
+                        ):
+                            merged["http_codes"]["list"][status].remove(value)
+
+                        merged["http_codes"]["list"][status] = (
+                            ListHelper(merged["http_codes"]["list"][status])
+                            .remove_duplicates()
+                            .remove_empty()
+                            .custom_sort(key_method=lambda x: x)
+                            .subject
+                        )
+
             if not isinstance(self.local_config["user_agent"], dict):
                 merged["user_agent"] = self.upstream_config["user_agent"]
 
@@ -303,6 +376,9 @@ class ConfigComparison:
                 merged["no_http_codes"] = not merged["http_codes"]["active"]
 
                 del merged["http_codes"]["active"]
+
+            if "not_found_default" in merged["http_codes"]:
+                del merged["http_codes"]["not_found_default"]
 
             return merged
         return self.local_config

@@ -235,10 +235,15 @@ verify_ssl_certificate: False
 http_codes:
   # Provides everything related to the HTTP code lookup interpretation.
 
+  # Informs PyFunceble that the end-user (not PyFunceble) is managing this list.
+  # This means that you won't get any update in this section.
+  self_managed: False
+
   list:
     up:
       - 100
       - 101
+      - 102
       - 200
       - 201
       - 202
@@ -246,10 +251,12 @@ http_codes:
       - 204
       - 205
       - 206
+      - 207
+      - 208
+      - 226
     potentially_down:
       - 400
       - 402
-      - 403
       - 404
       - 409
       - 410
@@ -257,6 +264,7 @@ http_codes:
       - 414
       - 415
       - 416
+      - 451
     potentially_up:
       - 000
       - 300
@@ -266,6 +274,7 @@ http_codes:
       - 304
       - 305
       - 307
+      - 308
       - 403
       - 405
       - 406
@@ -274,12 +283,26 @@ http_codes:
       - 411
       - 413
       - 417
+      - 418
+      - 421
+      - 422
+      - 423
+      - 424
+      - 426
+      - 428
+      - 429
+      - 431
       - 500
       - 501
       - 502
       - 503
       - 504
       - 505
+      - 506
+      - 507
+      - 508
+      - 510
+      - 511
 
 links:
   # Provides some of our API links.
