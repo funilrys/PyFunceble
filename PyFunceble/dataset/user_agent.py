@@ -51,7 +51,7 @@ License:
 """
 
 import os
-from typing import Any, List
+from typing import Any
 
 import PyFunceble.storage
 from PyFunceble.dataset.base import DatasetBase
