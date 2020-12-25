@@ -41,8 +41,46 @@ jobs:
           pip install -r requirements.txt
           pip install pylint
 
-      - name: Lint with Pylint
+      - name: Lint PyFunceble with Pylint
         run: pylint PyFunceble
+
+      - name: Lint tests with Pylint
+        run: pylint tests
+
+  test:
+    needs: lint
+    name: "[${{ matrix.os }}] Test PyFunceble with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7.9"
+          - "3.8.6"
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox
+
+      - name: Run PyFunceble as defined by tox_run.ini
+        run: tox -c tox.ini
 
   run_cli:
     needs: lint
