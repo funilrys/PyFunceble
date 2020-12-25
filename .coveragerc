@@ -61,6 +61,7 @@ exclude_lines =
 
 
 ignore_errors = True
+fail_under = 70
 
 [html]
 directory = coverage_html_report
