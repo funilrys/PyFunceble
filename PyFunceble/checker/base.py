@@ -79,6 +79,12 @@ class CheckerBase:
         *,
         do_syntax_check_first: Optional[bool] = None,
     ) -> None:
+        if self.params is None:
+            self.params = CheckerParamsBase()
+
+        if self.status is None:
+            self.status = CheckerStatusBase()
+
         if subject is not None:
             self.subject = subject
 
@@ -272,14 +278,6 @@ class CheckerBase:
         self.do_syntax_check_first = value
 
         return self
-
-    def get_do_syntax_check_first(self) -> Optional[str]:
-        """
-        Provides the currently set value of the :code:`do_syntax_check_first`
-        attribute.
-        """
-
-        return self.do_syntax_check_first
 
     def subject_propagator(self) -> "CheckerBase":
         """
