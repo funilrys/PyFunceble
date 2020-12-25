@@ -77,10 +77,43 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install tox
+          pip install tox coveralls
 
       - name: Test PyFunceble as defined by tox.ini
-        run: tox -c tox.ini
+        run: |
+          tox -c tox.ini
+
+      - name: Upload Coverage
+        run: |
+          coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+
+  coveralls:
+    needs: test
+    name: Finish Coveralls
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - name: Installing dependencies
+        run: |
+          pip install coveralls
+
+      - name: Sending finish flag to coverall.io
+        run: |
+          coveralls --finish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   run_cli:
     needs: test
