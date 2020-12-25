@@ -358,7 +358,13 @@ class SystemLauncher(SystemBase):
 
             if PyFunceble.storage.CONFIGURATION.cli_testing.complements:
                 result.extend(
-                    self.subject2complements.set_data_to_convert(result).get_converted()
+                    [
+                        y
+                        for x in result
+                        for y in self.subject2complements.set_data_to_convert(
+                            x
+                        ).get_converted()
+                    ]
                 )
 
             return ListHelper(result).remove_duplicates().remove_empty().subject

@@ -52,7 +52,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from typing import Any, List
+from typing import Any, List, Optional
 
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.converter.base import ConverterBase
@@ -62,6 +62,19 @@ class Subject2Complements(ConverterBase):
     """
     Converts a given wildcard into a testable subject.
     """
+
+    _include_given: bool = False
+
+    def __init__(
+        self,
+        data_to_convert: Optional[Any] = None,
+        *,
+        include_given: Optional[bool] = False,
+    ) -> None:
+        if include_given is not None:
+            self.include_given = include_given
+
+        super().__init__(data_to_convert=data_to_convert)
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
@@ -73,34 +86,60 @@ class Subject2Complements(ConverterBase):
             :py:class:`list`.
         """
 
-        if not isinstance(value, (str, list)):
-            raise TypeError(f"<value> should be {str} or {list}, {type(value)} given.")
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         # pylint: disable=no-member
         super(Subject2Complements, self.__class__).data_to_convert.fset(self, value)
 
-    # pylint: disable=arguments-differ
-    def get_converted(self, *, include_given: bool = False) -> List[str]:
+    @property
+    def include_given(self) -> bool:
+        """
+        Provides the state of the :code:`_include_given` attribute.
+        """
+
+        return self._include_given
+
+    @include_given.setter
+    def include_given(self, value: bool) -> None:
+        """
+        Provides a way to activate/deactivate the inclusion of the given
+        subject into the result.
+
+        :raise TypeError:
+            When the given data to convert is not :py:class:`str`
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._include_given = value
+
+    def set_include_given(self, value: bool) -> "Subject2Complements":
+        """
+        Provides a way to activate/deactivate the inclusion of the given
+        subject into the result.
+        """
+
+        self.include_given = value
+
+        return self
+
+    def get_converted(self) -> List[str]:
         """
         Provides the converted data.
         """
 
-        complements = []
+        result = []
 
-        if isinstance(self.data_to_convert, str):
-            checker = DomainSyntaxChecker(self.data_to_convert)
+        checker = DomainSyntaxChecker(self.data_to_convert)
 
-            if include_given and self.data_to_convert not in complements:
-                complements.append(self.data_to_convert)
+        if self.include_given and self.data_to_convert not in result:
+            result.append(self.data_to_convert)
 
-            if self.data_to_convert.startswith("www."):
-                complements.append(self.data_to_convert[4:])
-            elif checker.is_valid_second_level():
-                complements.append(f"www.{self.data_to_convert}")
-        elif isinstance(self.data_to_convert, (list, set)):
-            for subj in self.data_to_convert:
-                complements.extend(
-                    Subject2Complements(subj).get_converted(include_given=include_given)
-                )
+        if self.data_to_convert.startswith("www."):
+            result.append(self.data_to_convert[4:])
+        elif checker.is_valid_second_level():
+            result.append(f"www.{self.data_to_convert}")
 
-        return complements
+        return result

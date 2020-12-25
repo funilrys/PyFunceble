@@ -752,4 +752,4 @@ def get_complements(subject: str, include_given: bool = False) -> List[str]:
         DeprecationWarning,
     )
 
-    return Subject2Complements(subject).get_converted(include_given=include_given)
+    return Subject2Complements(subject, include_given=include_given).get_converted()
