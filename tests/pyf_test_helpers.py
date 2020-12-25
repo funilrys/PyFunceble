@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -50,10 +49,9 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-# pylint: enable=line-too-long
 
 
-def convert_ipv4_to_rpz(subject):
+def convert_ipv4_to_rpz(subject: str) -> str:
     """
     Converts the given IPv4 into a policy format which can later be used in the
     tests.
@@ -62,7 +60,7 @@ def convert_ipv4_to_rpz(subject):
     return ".".join(reversed(subject.replace("/", ".").split(".")))
 
 
-def convert_ipv6_to_rpz(subject):
+def convert_ipv6_to_rpz(subject: str) -> str:
     """
     Converts the given IPV6 into a policy format which can later be used in the
     tests.

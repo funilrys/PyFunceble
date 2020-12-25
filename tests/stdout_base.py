@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -50,14 +49,13 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-# pylint: enable=line-too-long
 
+import io
 import sys
-from io import StringIO
-from unittest import TestCase
+import unittest
 
 
-class StdoutBase(TestCase):
+class StdoutBase(unittest.TestCase):
     """
     Use when we want to catch stdout.
     """
@@ -67,7 +65,7 @@ class StdoutBase(TestCase):
         Setup stdout.
         """
 
-        sys.stdout = StringIO()
+        sys.stdout = io.StringIO()
 
     def tearDown(self):
         sys.stdout.close()
