@@ -36,7 +36,6 @@ exclude_lines =
 
     # Don't complain about missing debug-only code:
     def __repr__
-    if self\.debug
 
     # Don't complain if tests don't hit defensive assertion code:
     raise AssertionError
@@ -44,18 +43,21 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
-    if tcp is None:
 
     # Don't complain for those blocks
-    PyFunceble\.CONFIGURATION\.db_type == "mariadb"
-    PyFunceble\.CONFIGURATION\.db_type in \["mariadb", "mysql"\]
+    PyFunceble\.storage\.CONFIGURATION\.cli_testing\.db_type == "mariadb"
+    PyFunceble\.storage\.CONFIGURATION\.cli_testing\.db_type == "mysql"
 
     # Don't complain about those.
-    _json
-    _mysql
-    _sqlite
-    PyFunceble\.Logger\(\)
-    Logger\(\)
+    to_json\(
+    _mysql\(
+    _mariadb\(
+
+    PyFunceble\.facility\.Logger\.
+
+    # Manual handling of imports.
+    except\sModuleNotFoundError\:
+    except\sImportError:
 
 
 ignore_errors = True
