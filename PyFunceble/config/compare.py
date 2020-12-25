@@ -53,6 +53,8 @@ License:
 import copy
 from typing import List, Optional
 
+
+import PyFunceble.storage
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.list import ListHelper
 from PyFunceble.helpers.merge import Merge
@@ -155,7 +157,6 @@ class ConfigComparison:
             424,
             426,
             428,
-            429,
             431,
             506,
             507,
@@ -271,7 +272,7 @@ class ConfigComparison:
                 return False
 
         if "self_managed" in self.local_config["http_codes"] and not bool(
-            self.local_config["http_codes"]
+            self.local_config["http_codes"]["self_managed"]
         ):
             for index, values in self.local_config["http_codes"]["list"].items():
                 if set(self.upstream_config["http_codes"]["list"][index]) != set(
@@ -290,46 +291,40 @@ class ConfigComparison:
 
         if not self.is_local_identical():
 
-            merged_original = Merge(self.upstream_config).into(self.local_config)
-            merged = copy.deepcopy(merged_original)
+            original_local = copy.deepcopy(self.local_config)
+            original_upstream = copy.deepcopy(self.upstream_config)
 
-            flatten_merged = self.dict_helper.set_subject(merged).flatten()
+            flatten_original = self.dict_helper.set_subject(original_local).flatten()
 
             for key, value in self.OLD_TO_NEW.items():
-                if key not in flatten_merged:
+                if key not in flatten_original:
                     continue
 
-                if value not in flatten_merged:
+                if value not in flatten_original:  # pragma: no cover ## Safety.
                     raise RuntimeError(f"<value> {value!r} not found.")
 
-                flatten_merged[value] = merged[key]
+                flatten_original[value] = original_local[key]
 
-                del flatten_merged[key]
+                del flatten_original[key]
 
             for key, value in self.OLD_TO_NEW_NEGATE.items():
-                if key not in flatten_merged:
+                if key not in flatten_original:
                     continue
 
-                if value not in flatten_merged:
+                if value not in flatten_original:  # pragma: no cover ## Safety.0
                     raise RuntimeError(f"<value> {value!r} not found.")
 
-                flatten_merged[value] = not merged[key]
+                flatten_original[value] = not original_local[key]
 
-                del flatten_merged[key]
+                del flatten_original[key]
 
-            merged = self.dict_helper.set_subject(flatten_merged).unflatten()
-            del flatten_merged
+            original_local = self.dict_helper.set_subject(flatten_original).unflatten()
+            del flatten_original
+
+            merged = Merge(original_local).into(original_upstream)
 
             if "dns_lookup_over_tcp" in merged and merged["dns_lookup_over_tcp"]:
-                merged["dns_protocol"] = "TCP"
-
-            if merged["cli_testing"]["db_type"] == "json":
-                merged["cli_testing"]["db_type"] = "csv"
-
-            if merged["cli_testing"]["cooldown_time"] is None:
-                merged["cli_testing"]["cooldown_time"] = copy.deepcopy(
-                    self.upstream_config["cli_testing"]["cooldown_time"]
-                )
+                merged["dns"]["protocol"] = "TCP"
 
             for index in self.DELETED_CORE:
                 if index in merged:
@@ -340,41 +335,21 @@ class ConfigComparison:
                     del merged["links"][index]
 
             if not bool(merged["http_codes"]["self_managed"]):
-                for index, values in self.NEW_STATUS_CODES.items():
-                    for value in values:
-                        if value in merged["http_codes"]["list"][index]:
-                            continue
+                for index, values in PyFunceble.storage.STD_HTTP_CODES.list.items():
+                    merged["http_codes"]["list"][index] = list(values)
 
-                        merged["http_codes"]["list"][index].append(value)
+            if merged["cli_testing"]["db_type"] == "json":
+                merged["cli_testing"]["db_type"] = "csv"
 
-                for index, values in self.NEW_STATUS_CODES.items():
-                    for status in merged["http_codes"]["list"]:
-                        while (
-                            status == index
-                            and merged["http_codes"]["list"][status].count(value) > 1
-                        ):
-                            merged["http_codes"]["list"][status].remove(value)
-
-                        while (
-                            status != index
-                            and merged["http_codes"]["list"][status].count(value) > 0
-                        ):
-                            merged["http_codes"]["list"][status].remove(value)
-
-                        merged["http_codes"]["list"][status] = (
-                            ListHelper(merged["http_codes"]["list"][status])
-                            .remove_duplicates()
-                            .remove_empty()
-                            .custom_sort(key_method=lambda x: x)
-                            .subject
-                        )
+            if merged["cli_testing"]["cooldown_time"] is None:
+                merged["cli_testing"]["cooldown_time"] = self.upstream_config[
+                    "cli_testing"
+                ]["cooldown_time"]
 
             if not isinstance(self.local_config["user_agent"], dict):
                 merged["user_agent"] = self.upstream_config["user_agent"]
 
             if "active" in merged["http_codes"]:
-                merged["no_http_codes"] = not merged["http_codes"]["active"]
-
                 del merged["http_codes"]["active"]
 
             if "not_found_default" in merged["http_codes"]:
