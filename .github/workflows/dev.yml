@@ -109,7 +109,7 @@ jobs:
         run: |
           pip install coveralls
 
-      - name: Sending finish flag to coverall.io
+      - name: Sending finish flag to coveralls.io
         run: |
           coveralls --finish
         env:
