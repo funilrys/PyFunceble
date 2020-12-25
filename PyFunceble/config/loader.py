@@ -374,7 +374,7 @@ class ConfigLoader:
             PyFunceble.storage.HTTP_CODES = Box({})
             PyFunceble.storage.LINKS = Box({})
             self.custom_config = dict()
-        except (AttributeError, TypeError): # pragma: no cover ## Safety.
+        except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
 
         return self

@@ -53,7 +53,6 @@ License:
 import copy
 from typing import List, Optional
 
-
 import PyFunceble.storage
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.merge import Merge
