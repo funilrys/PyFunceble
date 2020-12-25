@@ -8,33 +8,23 @@ omit =
     /home/travis/virtualenv/*
     *.eggs/*
     */distutils/*
-    PyFunceble/config/*
 
     # omit the following file
-    PyFunceble/cli/dispatcher.py
-    PyFunceble/cli/production.py
-    PyFunceble/core/api.py
-    PyFunceble/core/file.py
-    PyFunceble/core/multiprocess.py
-    PyFunceble/core/simple.py
-    PyFunceble/downloader/*.py
-    PyFunceble/engine/database/*
-    PyFunceble/engine/auto_save.py
-    PyFunceble/engine/mysql.py
-    PyFunceble/engine/hashes_tracker.py
-    PyFunceble/helpers/download.py
-    PyFunceble/lookup/requests.py
-    PyFunceble/lookup/ipv4_reputation.py
-    PyFunceble/output/clean.py
-    PyFunceble/output/constructor.py
-    PyFunceble/output/generate.py
-    PyFunceble/output/logs.py
-    PyFunceble/status/*
-    PyFunceble/engine/ci/*
+    PyFunceble/dataset/mariadb_base.py
+    PyFunceble/dataset/autocontinue/mariadb.py
+    PyFunceble/dataset/autocontinue/mysql.py
+    PyFunceble/dataset/inactive/mariadb.py
+    PyFunceble/dataset/inactive/mysql.py
+    PyFunceble/dataset/whois/mariadb.py
+    PyFunceble/dataset/whois/mysql.py
+
+    PyFunceble/database/*
+
+    PyFunceble/cli/*
 
 [report]
 # This should be False one we move into production
-skip_covered = True
+skip_covered = False
 
 # Regexes for lines to exclude from consideration
 exclude_lines =
