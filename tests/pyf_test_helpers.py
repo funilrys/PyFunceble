@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+from datetime import timedelta, timezone
+
 
 def convert_ipv4_to_rpz(subject: str) -> str:
     """
@@ -77,3 +79,52 @@ def convert_ipv6_to_rpz(subject: str) -> str:
             starting_point = starting_point.replace("::", ".zz")
 
     return ".".join(reversed(starting_point.replace(":", ".").split(".")))
+
+
+def get_timezone(
+    sign: str = "+",
+    days: int = 0,
+    seconds: int = 0,
+    microseconds: int = 0,
+    milliseconds: int = 0,
+    minutes: int = 0,
+    hours: int = 0,
+    weeks: int = 0,
+) -> timezone:
+    """
+    Provides a timezone.
+
+    :param str sign:
+        The sign to apply. Should be :code:`+` or :code:`-`.
+    :param int weeks:
+        The number of weeks from UTC.
+    :param int days:
+        The number of days from UTC.
+    :param int hours:
+        The number of hours from UTC.
+    :param int minutes:
+        The number of minutes from UTC.
+    :param int seconds:
+        The number of seconds from UTC.
+    :param int milliseconds:
+        The number of days from UTC.
+    :param int microseconds:
+        The number of microseconds from UTC.
+    """
+
+    if sign == "+":
+        sign = 1
+    else:
+        sign = -1
+
+    delta = timedelta(
+        days=days,
+        seconds=seconds,
+        microseconds=microseconds,
+        milliseconds=milliseconds,
+        minutes=minutes,
+        hours=hours,
+        weeks=weeks,
+    )
+
+    return timezone(sign * delta)

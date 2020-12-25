@@ -55,6 +55,11 @@ from datetime import datetime
 
 from PyFunceble.checker.status_base import CheckerStatusBase
 
+try:
+    import pyf_test_helpers
+except ModuleNotFoundError:
+    from .. import pyf_test_helpers
+
 
 class TestCheckerStatusBase(unittest.TestCase):
     """
@@ -108,7 +113,7 @@ class TestCheckerStatusBase(unittest.TestCase):
         current status object.
         """
 
-        test_datetime = datetime.fromtimestamp(0)
+        test_datetime = datetime.fromtimestamp(0, tz=pyf_test_helpers.get_timezone())
 
         self.status.status = "ACTIVE"
         self.status.status_source = "Funilrys"
@@ -120,7 +125,7 @@ class TestCheckerStatusBase(unittest.TestCase):
     "status": "ACTIVE",
     "status_source": "Funilrys",
     "subject": "example.org",
-    "tested_at": "1970-01-01T01:00:00"
+    "tested_at": "1970-01-01T00:00:00+00:00"
 }"""
 
         actual = self.status.to_json()
