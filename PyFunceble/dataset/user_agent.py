@@ -78,20 +78,22 @@ class UserAgentDataset(DatasetBase):
     def __contains__(self, value: Any) -> bool:
         return value in self.get_content()
 
-    def __getattr__(self, value: Any) -> List[str]:
+    def __getattr__(self, value: Any) -> dict:
         if value in self:
             return self.get_content()[value]
 
-        return []
+        return dict()
 
-    def __getitem__(self, value: Any) -> List[str]:
+    def __getitem__(self, value: Any) -> dict:
         return self.__getattr__(value)
 
-    def set_prefered(self, name: str, platform: str) -> "UserAgentDataset":
+    def set_prefered(
+        self, browser_short_name: str, platform: str
+    ) -> "UserAgentDataset":
         """
         Sets the prefered browser to work with.
 
-        :param name:
+        :param browser_short_name:
             The name of the browser to select.
         :pram platform:
             The name of the platform to select.
@@ -102,12 +104,13 @@ class UserAgentDataset(DatasetBase):
             When the given :code:`value` is not supported.
         """
 
-        if not self.is_supported(name, platform):
+        if not self.is_supported(browser_short_name, platform):
             raise ValueError(
-                f"The given name ({name!r}) or platform ({platform!r} is not supported."
+                f"The given name ({browser_short_name!r}) or platform "
+                f"({platform!r}) is not supported."
             )
 
-        self.prefered_browser = name.lower()
+        self.prefered_browser = browser_short_name.lower()
         self.prefered_platform = platform.lower()
 
         return self
@@ -126,7 +129,9 @@ class UserAgentDataset(DatasetBase):
                 f"{type(browser_short_name)} given."
             )
 
-        return browser_short_name.lower() in self and self[browser_short_name.lower()]
+        return bool(browser_short_name.lower() in self) and bool(
+            self[browser_short_name.lower()]
+        )
 
     def is_supported(self, browser_short_name: str, platform: str) -> bool:
         """
@@ -153,8 +158,8 @@ class UserAgentDataset(DatasetBase):
 
         return (
             self.is_supported_browser(browser_short_name)
-            and platform.lower() in self[browser_short_name.lower()]
-            and self[browser_short_name.lower()][platform.lower()]
+            and bool(platform.lower() in self[browser_short_name.lower()])
+            and bool(self[browser_short_name.lower()][platform.lower()])
         )
 
     def get_latest(self) -> str:
@@ -167,13 +172,15 @@ class UserAgentDataset(DatasetBase):
         """
 
         if PyFunceble.storage.CONFIGURATION:
-            if PyFunceble.storage.CONFIGURATION.user_agent:
-                if PyFunceble.storage.CONFIGURATION.user_agent.custom:
-                    return PyFunceble.storage.CONFIGURATION.user_agent.custom
+            if (
+                PyFunceble.storage.CONFIGURATION.user_agent
+                and PyFunceble.storage.CONFIGURATION.user_agent.custom
+            ):
+                return PyFunceble.storage.CONFIGURATION.user_agent.custom
 
-                self.set_prefered(
-                    PyFunceble.storage.CONFIGURATION.user_agent.browser,
-                    PyFunceble.storage.CONFIGURATION.user_agent.platform,
-                )
+            self.set_prefered(
+                PyFunceble.storage.CONFIGURATION.user_agent.browser,
+                PyFunceble.storage.CONFIGURATION.user_agent.platform,
+            )
 
         return self[self.prefered_browser][self.prefered_platform]
