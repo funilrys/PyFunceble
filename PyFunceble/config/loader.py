@@ -283,7 +283,7 @@ class ConfigLoader:
                 The config to work with.
             """
 
-            return "days_between_inactive_db_clean" in config
+            return config and "days_between_inactive_db_clean" in config
 
         if not self.is_already_loaded():
             self.install_missing_infrastructure_files()
@@ -374,7 +374,7 @@ class ConfigLoader:
             PyFunceble.storage.HTTP_CODES = Box({})
             PyFunceble.storage.LINKS = Box({})
             self.custom_config = dict()
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError): # pragma: no cover ## Safety.
             pass
 
         return self
