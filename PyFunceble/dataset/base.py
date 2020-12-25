@@ -91,13 +91,13 @@ class DatasetBase:
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            if not isinstance(self.source_file, str):  # pragma: no cover ## Safety
+            if not isinstance(self.source_file, str):
                 raise TypeError(
                     f"<self.source_file> should be {str}, "
                     f"{type(self.source_file)} given."
                 )
 
-            if not self.source_file:  # pragma: no cover ## Safety
+            if not self.source_file:
                 raise ValueError("<self.source_file> should not be emtpy.")
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
@@ -113,8 +113,10 @@ class DatasetBase:
             When the declared file does not exists.
         """
 
-        if hasattr(PyFunceble.storage, self.STORAGE_INDEX) and bool(
-            getattr(PyFunceble.storage, self.STORAGE_INDEX)
+        if (
+            bool(self.STORAGE_INDEX)
+            and hasattr(PyFunceble.storage, self.STORAGE_INDEX)
+            and bool(getattr(PyFunceble.storage, self.STORAGE_INDEX))
         ):
             return getattr(PyFunceble.storage, self.STORAGE_INDEX)
 
