@@ -545,7 +545,6 @@ class TestConfigCompare(unittest.TestCase):
         expected = self.our_config
         actual = config_comparison.get_merged()
 
-        self.maxDiff = None
         self.assertEqual(expected, actual)
 
 
