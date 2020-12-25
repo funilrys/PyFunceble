@@ -83,7 +83,7 @@ jobs:
         run: tox -c tox.ini
 
   run_cli:
-    needs: lint
+    needs: test
     name: "[${{ matrix.os }}] Run PyFunceble with Python ${{ matrix.python_version }}"
 
     runs-on: "${{ matrix.os }}"
@@ -118,7 +118,7 @@ jobs:
         run: tox -c tox_run.ini
 
   run_cli_mariadb:
-    needs: lint
+    needs: test
     name: "[${{ matrix.os }}] Run PyFunceble (with mariadb) with Python ${{ matrix.python_version }}"
 
     runs-on: "${{ matrix.os }}"
