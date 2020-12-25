@@ -101,7 +101,8 @@ class IPV4ReputationDataset(DatasetBase):
 
         file_helper = FileHelper(self.source_file)
 
-        if not file_helper.exists() and bool(self.DOWNLOADER):
+        if not file_helper.exists() and bool(self.DOWNLOADER):  # pragma: no cover
+            ## pragma reason: Safety.
             self.DOWNLOADER.start()
 
             if not file_helper.exists():
