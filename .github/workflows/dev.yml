@@ -79,7 +79,7 @@ jobs:
           pip install -r requirements.txt
           pip install tox
 
-      - name: Run PyFunceble as defined by tox_run.ini
+      - name: Test PyFunceble as defined by tox.ini
         run: tox -c tox.ini
 
   run_cli:
