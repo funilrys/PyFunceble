@@ -87,7 +87,7 @@ jobs:
         run: |
           coveralls
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           COVERALLS_PARALLEL: true
 
   coveralls:
@@ -105,15 +105,11 @@ jobs:
           - ubuntu-latest
 
     steps:
-      - name: Installing dependencies
-        run: |
-          pip install coveralls
-
       - name: Sending finish flag to coveralls.io
-        run: |
-          coveralls --finish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
 
   run_cli:
     needs: test
