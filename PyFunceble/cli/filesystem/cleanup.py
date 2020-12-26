@@ -97,7 +97,7 @@ class FilesystemCleanup(FilesystemDirBase):
         """
 
         result = []
-        files_to_ignore = [".gitignore", ".keep"]
+        files_to_ignore = [".gitignore", ".keep", ".gitkeep"]
 
         for root, _, files in os.walk(self.get_output_basedir()):
             for file in files:
