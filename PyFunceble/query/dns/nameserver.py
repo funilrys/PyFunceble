@@ -70,17 +70,25 @@ class Namseservers:
     nameservers: Optional[List[str]] = None
     nameserver_ports: Optional[dict] = None
 
+    protocol: Optional[str] = None
+
     domain_syntax_checker: DomainSyntaxChecker = DomainSyntaxChecker()
     url_syntax_checker: URLSyntaxChecker = URLSyntaxChecker()
     url2netloc: Url2Netloc = Url2Netloc()
 
-    def __init__(self, nameserver: Optional[List[str]] = None) -> None:
+    def __init__(
+        self, nameserver: Optional[List[str]] = None, protocol: str = "TCP"
+    ) -> None:
         if nameserver is not None:
             self.set_nameservers(nameserver)
 
+        self.protocol = protocol
+
     @staticmethod
     def split_nameserver_from_port(
-        nameserver: str, *, default_port: int = 53
+        nameserver: str,
+        *,
+        default_port: int = 53,
     ) -> Tuple[str, int]:
         """
         Splits the nameserver from its port.re
@@ -172,10 +180,18 @@ class Namseservers:
         self.nameservers = list()
 
         for nameserver in value:
-            if self.url_syntax_checker.set_subject(nameserver).is_valid():
-                self.nameservers.append(nameserver)
+            if self.protocol.lower() == "https":
+                if not nameserver.startswith("https://"):
+                    self.nameservers.append(
+                        "https://"
+                        # pylint: disable=line-too-long
+                        f"{self.url2netloc.set_data_to_convert(nameserver).get_converted()}"
+                    )
+                else:
+                    self.nameservers.append(nameserver)
+
                 # 443 is because it's more likely to be for DOH.
-                self.nameserver_ports.update({nameserver: 443})
+                self.nameserver_ports.update({self.nameservers[-1]: 443})
                 continue
 
             server, port = self.split_nameserver_from_port(nameserver)

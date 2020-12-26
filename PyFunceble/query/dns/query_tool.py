@@ -482,7 +482,7 @@ class DNSQueryTool:
                 f"(supported: {self.SUPPORTED_PROTOCOL!r})."
             )
 
-        self._prefered_protocol = value
+        self._prefered_protocol = self.nameservers.protocol = value
 
     def set_prefered_protocol(self, value: str) -> "DNSQueryTool":
         """
