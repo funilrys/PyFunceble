@@ -604,6 +604,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Sets the status that we are allowed to print to STDOUT.\n\n"
                 "Multiple space separated statuses can be given."
                 "%s" % get_configured_value("cli_testing.display_mode.status"),
+                "default": "all",
             },
         ),
         (
