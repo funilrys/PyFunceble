@@ -50,12 +50,6 @@ License:
     limitations under the License.
 """
 
-from typing import Any, Optional
-
-import sqlalchemy
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
-import PyFunceble.cli.factory
 from PyFunceble.database.sqlalchemy.all_schemas import Inactive
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -68,37 +62,3 @@ class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
     """
 
     ORM_OBJ: Inactive = Inactive
-
-    def __contains__(self, value: str) -> bool:
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            return (
-                db_session.query(self.ORM_OBJ)
-                .filter(
-                    self.ORM_OBJ.idna_subject == value,
-                )
-                .with_entities(sqlalchemy.func.count())
-                .scalar()
-                > 0
-            )
-
-    def __getitem__(self, value: Any) -> Optional[Inactive]:
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            try:
-                return (
-                    db_session.query(self.ORM_OBJ)
-                    .filter(
-                        self.ORM_OBJ.idna_subject == value,
-                    )
-                    .one()
-                )
-            except NoResultFound:
-                return None
-            except MultipleResultsFound:
-                # Worst case scenario.
-                return (
-                    db_session.query(self.ORM_OBJ)
-                    .filter(
-                        self.ORM_OBJ.idna_subject == value,
-                    )
-                    .all()[0]
-                )

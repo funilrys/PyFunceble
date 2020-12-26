@@ -51,7 +51,6 @@ License:
 """
 
 import domain2idna
-import sqlalchemy
 
 import PyFunceble.cli.factory
 import PyFunceble.facility
@@ -77,9 +76,8 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
                 return (
                     db_session.query(WhoisRecord)
                     .filter(WhoisRecord.idna_subject == None)
-                    .with_entities(sqlalchemy.func.count())
-                    .scalar()
-                    > 0
+                    .first()
+                    is not None
                 )
         return False
 

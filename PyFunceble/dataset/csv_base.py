@@ -209,6 +209,7 @@ class CSVDatasetBase(DBDatasetBase):
 
             file_handler.close()
 
+    @DBDatasetBase.execute_if_authorized(None)
     def get_filtered_content(
         self, filter_map: dict
     ) -> Generator[Optional[dict], None, None]:

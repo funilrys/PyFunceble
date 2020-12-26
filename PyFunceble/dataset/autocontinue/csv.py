@@ -162,6 +162,7 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
 
         return self
 
+    @CSVDatasetBase.execute_if_authorized(None)
     def cleanup(self) -> "CSVContinueDataset":
         """
         Deletes the source file (completely).

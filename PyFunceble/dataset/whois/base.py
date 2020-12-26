@@ -73,13 +73,15 @@ class WhoisDatasetBase(DBDatasetBase):
         """
 
         if isinstance(row, WhoisRecord):
-            row = row.to_dict()
-
-        if "epoch" not in row:
+            to_check = row.epoch
+        elif "epoch" in row:
+            to_check = row["epoch"]
+        else:
             return True
 
-        return datetime.utcnow() > datetime.fromtimestamp(float(row["epoch"]))
+        return datetime.utcnow() > datetime.fromtimestamp(float(to_check))
 
+    @DBDatasetBase.execute_if_authorized(None)
     def get_filtered_row(self, row: Union[dict, WhoisRecord]) -> dict:
         """
         Removes all unkowns fields (not declared) from the given row.

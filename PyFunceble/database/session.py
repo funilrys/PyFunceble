@@ -115,10 +115,26 @@ class DBSession:
     def get_new_session(self) -> sqlalchemy.orm.sessionmaker:
         """
         Creates and returns a new session.
+
+        .. warning::
+            This method generate a new session without any pool of connections.
         """
 
         engine = sqlalchemy.create_engine(
             self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
+        )
+
+        return sqlalchemy.orm.sessionmaker(
+            autocommit=False, autoflush=False, bind=engine
+        )
+
+    def get_new_pool_session(self) -> sqlalchemy.orm.sessionmaker:
+        """
+        Create and return a new session.
+        """
+
+        engine = sqlalchemy.create_engine(
+            self.credential.get_uri(),
         )
 
         return sqlalchemy.orm.sessionmaker(

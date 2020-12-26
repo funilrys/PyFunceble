@@ -89,6 +89,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
         return None
 
+    @CSVDatasetBase.execute_if_authorized(None)
     def get_content(self) -> Generator[Optional[dict], None, None]:
         """
         Provides a generator which provides the next line to read.
@@ -102,6 +103,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
             yield row
 
+    @CSVDatasetBase.execute_if_authorized(None)
     def update(self, row: dict) -> "CSVWhoisDataset":
         """
         Adds the given dataset into the database if it does not exists.
@@ -133,6 +135,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
         return self
 
+    @CSVDatasetBase.execute_if_authorized(None)
     def remove(self, row: dict) -> "CSVDatasetBase":
         """
         Removes the given dataset from the CSV file.
@@ -155,6 +158,8 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
         self.set_remove_unneeded_fields(previous_remove_uneeded_fields)
 
+        return self
+
     def cleanup(self) -> "CSVWhoisDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are
@@ -164,3 +169,5 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
         for row in self.get_content():
             if self.is_expired(row):
                 self.remove(row)
+
+        return self

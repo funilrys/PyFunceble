@@ -50,11 +50,6 @@ License:
     limitations under the License.
 """
 
-from typing import Any, Optional
-
-import sqlalchemy
-from sqlalchemy.orm.exc import NoResultFound
-
 import PyFunceble.cli.factory
 from PyFunceble.database.sqlalchemy.all_schemas import Continue
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
@@ -69,35 +64,10 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
 
     ORM_OBJ: Continue = Continue
 
-    def __contains__(self, value: str) -> bool:
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            return (
-                db_session.query(self.ORM_OBJ)
-                .filter(
-                    self.ORM_OBJ.idna_subject == value,
-                )
-                .with_entities(sqlalchemy.func.count())
-                .scalar()
-                > 0
-            )
-
-    def __getitem__(self, value: Any) -> Optional[Continue]:
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            try:
-                return (
-                    db_session.query(self.ORM_OBJ)
-                    .filter(
-                        self.ORM_OBJ.idna_subject == value,
-                    )
-                    .one()
-                )
-            except NoResultFound:
-                return None
-
+    @MariaDBDatasetBase.execute_if_authorized(None)
+    @MariaDBDatasetBase.handle_db_session
     # pylint: disable=arguments-differ
-    def cleanup(
-        self, *, source: str, destination: str, checker_type: str
-    ) -> "MariaDBContinueDataset":
+    def cleanup(self, *, session_id: str) -> "MariaDBContinueDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are
         needed anymore.
@@ -108,20 +78,17 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             The destination to delete.
         :param checker_type:
             The checker type to delete.
+        :param session_id:
+            The session ID to cleanup.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
-            db_session.query(self.ORM_OBJ).filter(self.ORM_OBJ.source == source).filter(
-                self.ORM_OBJ.destination == destination
-            ).filter(self.ORM_OBJ.checker_type == checker_type).delete(
-                synchronize_session=False
-            )
-            db_session.commit()
+        self.db_session.query(self.ORM_OBJ).filter(
+            self.ORM_OBJ.session_id == session_id
+        ).delete(synchronize_session=False)
+        self.db_session.commit()
 
-            PyFunceble.facility.Logger.debug(
-                "Deleted data related to %r (checker_type: %r)",
-                destination,
-                checker_type,
-            )
+        PyFunceble.facility.Logger.debug(
+            "Deleted data related to %s (session_id", session_id
+        )
 
         return self

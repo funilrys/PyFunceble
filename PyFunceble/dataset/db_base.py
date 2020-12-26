@@ -184,6 +184,7 @@ class DBDatasetBase(DatasetBase):
 
         return self
 
+    @execute_if_authorized(dict())
     def get_filtered_row(self, row: dict) -> dict:
         """
         Removes all unkowns fields (not declared) from the given row.
@@ -261,6 +262,7 @@ class DBDatasetBase(DatasetBase):
 
         raise NotImplementedError()
 
+    @execute_if_authorized(None)
     def get_filtered_content(
         self, filter_map: dict
     ) -> Generator[Optional[dict], None, None]:
