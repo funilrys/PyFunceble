@@ -51,13 +51,11 @@ License:
     limitations under the License.
 """
 
-import datetime
 import os
 import queue
 from typing import Optional
 
 import domain2idna
-from sqlalchemy.exc import IntegrityError
 
 import PyFunceble.checker.utils.whois
 import PyFunceble.cli.storage
@@ -70,13 +68,11 @@ from PyFunceble.cli.filesystem.counter import FilesystemCounter
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.status_file import StatusFileGenerator
 from PyFunceble.cli.threads.producer_base import ProducerThreadBase
-from PyFunceble.dataset.inactive.base import InactiveDatasetBase
-from PyFunceble.dataset.whois.base import WhoisDatasetBase
 
 
-class DatasetProducerThread(ProducerThreadBase):
+class FileProducerThread(ProducerThreadBase):
     """
-    Provides our producer thread logic.
+    Provides our file producer thread logic.
 
     The thread behind this object, will read :code:`the_queue`, and procude
     the outputs to the files or other storage formats.
@@ -89,61 +85,12 @@ class DatasetProducerThread(ProducerThreadBase):
     file_printer: Optional[FilePrinter] = None
     counter: Optional[FilesystemCounter] = None
 
-    whois_dataset: Optional[WhoisDatasetBase] = None
-    inactive_dataset: Optional[InactiveDatasetBase] = None
-
     def __init__(self, output_queue: Optional[queue.Queue] = None) -> None:
-        self.whois_dataset = PyFunceble.checker.utils.whois.get_whois_dataset_object()
-        self.inactive_dataset = (
-            PyFunceble.cli.utils.testing.get_inactive_dataset_object()
-        )
-
         self.status_file_generator = StatusFileGenerator()
         self.file_printer = FilePrinter()
         self.counter = FilesystemCounter()
 
         super().__init__(output_queue=output_queue)
-
-    @staticmethod
-    def run_autosave(test_dataset: dict, test_result: CheckerStatusBase) -> None:
-        """
-        Reads the given test dataset, interpret it and add the given test
-        result to the dataset if needed.
-
-        :param test_dataset:
-            The test dataset as per protocol.
-
-        :param test_result_dict:
-            The test result object.
-        """
-
-        to_save = test_result.to_dict()
-        to_save.update(test_dataset)
-
-        continue_object = PyFunceble.cli.utils.testing.get_continue_databaset_object()
-
-        if to_save["output_dir"]:
-            # Note: This handles the case that someone try to test a single subject.
-            # In fact, we should not generate any file if the output directory
-            # is not given.
-            #
-            # The exception handler is just there to catch the case that the
-            # method is not implemented because we are more likely using an
-            # alternative backup (for example mariadb).
-
-            try:
-                continue_object.set_base_directory(test_dataset["output_dir"])
-            except NotImplementedError:
-                pass
-
-        try:
-            continue_object.update(to_save)
-        except TypeError:
-            # Example: File generation from non-controlled ressources.
-            pass
-        except IntegrityError:
-            # Example: Trying to add a domain which does not have a destination.
-            pass
 
     def run_file_printer(
         self, test_dataset: dict, test_result: CheckerStatusBase
@@ -200,35 +147,6 @@ class DatasetProducerThread(ProducerThreadBase):
                 test_result
             )
 
-    def run_whois_backup(self, test_result: CheckerStatusBase) -> None:
-        """
-        Runs the WHOIS record backup.
-
-        :param test_result:
-            The test result object.
-        """
-
-        if (
-            hasattr(test_result, "expiration_date")
-            and test_result.expiration_date
-            and test_result.whois_record
-        ):
-            # Note: The whois record is always given if the status does not come
-            # from the database.
-
-            self.whois_dataset.update(
-                {
-                    "subject": test_result.subject,
-                    "idna_subject": test_result.idna_subject,
-                    "expiration_date": test_result.expiration_date,
-                    "epoch": str(
-                        datetime.datetime.strptime(
-                            test_result.expiration_date, "%d-%b-%Y"
-                        ).timestamp()
-                    ),
-                }
-            )
-
     def run_ignored_file_printer(self, test_dataset: dict, test_result: str) -> None:
         """
         Runs the file printer assuming that the given test dataset has been
@@ -262,38 +180,6 @@ class DatasetProducerThread(ProducerThreadBase):
             self.file_printer.template_to_use = "plain"
             self.file_printer.dataset = test_dataset
             self.file_printer.print_interpolated_line()
-
-    def run_inactive(self, test_dataset: dict, test_result: CheckerStatusBase) -> None:
-        """
-        Processes the update of a dataset which was previously inactive.
-
-        The idea is that if the status is OK, we just remove it from the
-        database. Otherwise, we just keep it in there :-)
-        """
-
-        inactive_statuses = (
-            PyFunceble.storage.STATUS.down,
-            PyFunceble.storage.STATUS.invalid,
-        )
-        dataset = test_result.to_dict()
-        dataset.update(test_dataset)
-
-        PyFunceble.facility.Logger.debug("Test Dataset: %r", test_dataset)
-        PyFunceble.facility.Logger.debug("Test Result: %r", test_result)
-
-        if "from_inactive" in dataset:
-            if test_result.status in self.INACTIVE_STATUSES:
-                if dataset["destination"]:
-                    # Note: This handles the case that someone try to test a
-                    # single subject.
-                    # In fact, we should not generate any file if the output
-                    # directory is not given.
-
-                    self.inactive_dataset.update(dataset)
-            else:
-                self.inactive_dataset.remove(dataset)
-        elif test_result.status in inactive_statuses and dataset["destination"]:
-            self.inactive_dataset.update(dataset)
 
     def target(self) -> None:
         """int
@@ -330,20 +216,11 @@ class DatasetProducerThread(ProducerThreadBase):
 
                 continue
 
-            block_printer = self.should_we_block_printer(test_dataset, test_result)
+            if self.should_we_block_printer(test_dataset, test_result):
+                continue
 
-            if test_dataset["type"] != "single":
-                self.run_autosave(test_dataset, test_result)
-                self.run_inactive(test_dataset, test_result)
-
-            if not block_printer:
-                self.run_file_printer(test_dataset, test_result)
-                self.run_counter(test_dataset, test_result)
-
-            self.run_whois_backup(test_result)
-
-            # D means that we did somthing with dataset (in general)
-            PyFunceble.cli.utils.stdout.print_single_line("D")
+            self.run_file_printer(test_dataset, test_result)
+            self.run_counter(test_dataset, test_result)
 
         if stop_message_caught:
             self.add_to_output_queue("stop")

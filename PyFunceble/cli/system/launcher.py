@@ -84,18 +84,22 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
 from PyFunceble.cli.system.base import SystemBase
-from PyFunceble.cli.threads.dataset_producer import DatasetProducerThread
+from PyFunceble.cli.threads.continue_producer import ContinueProducerThread
+from PyFunceble.cli.threads.file_producer import FileProducerThread
 from PyFunceble.cli.threads.file_sorter import FileSorterThread
+from PyFunceble.cli.threads.inactive_producer import InactiveProducerThread
 from PyFunceble.cli.threads.migrator import MigratorThread
 from PyFunceble.cli.threads.miner import MinerThread
 from PyFunceble.cli.threads.stdout_producer import StdoutProducerThread
 from PyFunceble.cli.threads.tester import TesterThread
+from PyFunceble.cli.threads.whois_producer import WhoisProducerThread
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
 from PyFunceble.converter.subject2complements import Subject2Complements
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
+from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.list import ListHelper
@@ -127,12 +131,16 @@ class SystemLauncher(SystemBase):
     execution_time_holder: Optional[ExecutionTime] = None
 
     stdout_producer_thread_manager: Optional[StdoutProducerThread] = None
-    dataset_producer_thread_manager: Optional[DatasetProducerThread] = None
+    continue_producer_thread_manager: Optional[ContinueProducerThread] = None
+    inactive_producer_thread_manager: Optional[InactiveProducerThread] = None
+    whois_producer_thread_manager: Optional[WhoisProducerThread] = None
+    file_producer_thread_manager: Optional[FileProducerThread] = None
     tester_thread_manager: Optional[TesterThread] = None
     miner_thread_manager: Optional[MinerThread] = None
     migrator_thread_manager: Optional[MigratorThread] = None
     file_sorter_thread_manager: Optional[FileSorterThread] = None
 
+    inactive_dataset: Optional[InactiveDatasetBase] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
     checker_type: Optional[str] = None
@@ -142,6 +150,9 @@ class SystemLauncher(SystemBase):
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
         self.execution_time_holder = ExecutionTime().set_start_time()
         self.checker_type = PyFunceble.cli.utils.testing.get_testing_mode()
+        self.inactive_dataset = (
+            PyFunceble.cli.utils.testing.get_inactive_dataset_object()
+        )
         self.continuous_integration = ci_object()
 
         if self.continuous_integration.authorized:
@@ -150,11 +161,18 @@ class SystemLauncher(SystemBase):
         self.stdout_printer.guess_allow_coloration()
 
         self.stdout_producer_thread_manager = StdoutProducerThread()
-        self.dataset_producer_thread_manager = DatasetProducerThread()
+        self.continue_producer_thread_manager = ContinueProducerThread()
+        self.inactive_producer_thread_manager = InactiveProducerThread()
+        self.whois_producer_thread_manager = WhoisProducerThread()
+        self.file_producer_thread_manager = FileProducerThread()
+
         self.tester_thread_manager = TesterThread(
             output_queue=(
                 self.stdout_producer_thread_manager.the_queue,
-                self.dataset_producer_thread_manager.the_queue,
+                self.continue_producer_thread_manager.the_queue,
+                self.inactive_producer_thread_manager.the_queue,
+                self.whois_producer_thread_manager.the_queue,
+                self.file_producer_thread_manager.the_queue,
             )
         )
         self.migrator_thread_manager = MigratorThread()
@@ -427,9 +445,7 @@ class SystemLauncher(SystemBase):
             """
 
             if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
-                DirectoryStructureRestoration(parent_dirname).restore_from_backup(
-                    delete_files=False
-                )
+                DirectoryStructureRestoration(parent_dirname).restore_from_backup()
 
         def handle_file(protocol: dict) -> None:
             """
@@ -470,11 +486,11 @@ class SystemLauncher(SystemBase):
 
                 # Now, let's handle the inactive one :-)
                 if bool(PyFunceble.storage.CONFIGURATION.cli_testing.inactive_db):
-                    inactive_object = (
-                        PyFunceble.cli.utils.testing.get_inactive_dataset_object()
-                    )
-                    for dataset in inactive_object.get_filtered_content(
-                        {"destination": protocol["destination"]}
+                    for dataset in self.inactive_dataset.get_filtered_content(
+                        {
+                            "source": protocol["source"],
+                            "checker_type": protocol["checker_type"],
+                        }
                     ):
                         self.ci_stop_in_the_middle_if_time_exceeded()
 
@@ -646,9 +662,7 @@ class SystemLauncher(SystemBase):
 
                 #   ## We specially have different signature.
                 continue_object.cleanup(  # pylint: disable=unexpected-keyword-arg
-                    source=protocol["source"],
-                    destination=protocol["destination"],
-                    checker_type=protocol["checker_type"],
+                    session_id=self.sessions_id[protocol["destination"]]
                 )
 
         file_helper = FileHelper()
@@ -732,7 +746,10 @@ class SystemLauncher(SystemBase):
 
         self.tester_thread_manager.wait()
         self.stdout_producer_thread_manager.wait()
-        self.dataset_producer_thread_manager.wait()
+        self.continue_producer_thread_manager.wait()
+        self.inactive_producer_thread_manager.wait()
+        self.whois_producer_thread_manager.wait()
+        self.file_producer_thread_manager.wait()
 
         # From here, we are sure that every test and files are produced.
         # We now format the generated file(s).
@@ -767,16 +784,13 @@ class SystemLauncher(SystemBase):
 
             self.tester_thread_manager.start(daemon=True)
             self.stdout_producer_thread_manager.start(daemon=True)
-            self.dataset_producer_thread_manager.start(daemon=True)
+            self.continue_producer_thread_manager.start(daemon=True)
+            self.inactive_producer_thread_manager.start(daemon=True)
+            self.whois_producer_thread_manager.start(daemon=True)
+            self.file_producer_thread_manager.start(daemon=True)
 
             if self.miner_thread_manager:
                 self.miner_thread_manager.start(daemon=True)
-
-            # We starts with the cleanup of unneeded WHOIS records.
-            # WARNING: People using the API should be aware that this should be
-            # done before playing with our system. The cleanup is executed only
-            # on purpose and not automaticaly, like we used to do in the past.
-            PyFunceble.checker.utils.whois.get_whois_dataset_object().cleanup()
 
             self.fill_protocol()
             self.fill_to_test_queue_from_protocol()
