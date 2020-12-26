@@ -55,6 +55,7 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
+from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.url import URLReputationChecker
 
 
@@ -62,6 +63,33 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
     """
     Provides the interface for checking the availability of a given URL.
     """
+
+    def subject_propagator(self) -> "URLAvailabilityChecker":
+        """
+        Propagate the currently set subject.
+
+        .. warning::
+            You are not invited to run this method directly.
+        """
+
+        self.http_status_code_query_tool.set_subject(self.idna_subject)
+
+        self.domain_syntax_checker.subject = self.idna_subject
+        self.ip_syntax_checker.subject = self.idna_subject
+        self.url_syntax_checker.subject = self.idna_subject
+
+        self.status = AvailabilityCheckerStatus()
+        self.status.params = self.params
+        self.status.dns_lookup_record = None
+        self.status.whois_lookup_record = None
+
+        self.status.subject = self.subject
+        self.status.idna_subject = self.idna_subject
+        self.status.status = None
+
+        self.query_syntax_checker()
+
+        return self
 
     def try_to_query_status_from_http_status_code(self) -> "URLAvailabilityChecker":
         """
