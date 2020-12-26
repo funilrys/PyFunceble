@@ -13,6 +13,15 @@ PyFunceble.cli.threads.base module
    :show-inheritance:
    :private-members:
 
+PyFunceble.cli.threads.dataset\_producer module
+-----------------------------------------------
+
+.. automodule:: PyFunceble.cli.threads.dataset_producer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.cli.threads.file\_sorter module
 ------------------------------------------
 
@@ -40,10 +49,19 @@ PyFunceble.cli.threads.miner module
    :show-inheritance:
    :private-members:
 
-PyFunceble.cli.threads.producer module
---------------------------------------
+PyFunceble.cli.threads.producer\_base module
+--------------------------------------------
 
-.. automodule:: PyFunceble.cli.threads.producer
+.. automodule:: PyFunceble.cli.threads.producer_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
+PyFunceble.cli.threads.stdout\_producer module
+----------------------------------------------
+
+.. automodule:: PyFunceble.cli.threads.stdout_producer
    :members:
    :undoc-members:
    :show-inheritance:
