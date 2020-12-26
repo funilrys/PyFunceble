@@ -54,7 +54,6 @@ from datetime import datetime
 from typing import Any, Generator, Optional, Union
 
 import sqlalchemy
-from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
