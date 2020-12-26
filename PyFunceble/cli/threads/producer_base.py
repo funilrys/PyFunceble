@@ -96,3 +96,16 @@ class ProducerThreadBase(ThreadsBase):
             "from_inactive" in test_dataset
             and test_result.status in self.INACTIVE_STATUSES
         )
+
+    @staticmethod
+    def should_we_ignore(test_result: CheckerStatusBase) -> bool:
+        """
+        Checks if the we should ignore the given datasets.
+
+        :param test_dataset:
+            The test dataset.
+        :param test_result:
+            The test result
+        """
+
+        return isinstance(test_result, str) and test_result.startswith("ignored_")

@@ -325,11 +325,9 @@ class DatasetProducerThread(ProducerThreadBase):
 
             test_dataset, test_result = consumed
 
-            if isinstance(test_result, str) and test_result.startswith("ignored_"):
-                continue
-
-            if isinstance(test_result, str) and test_result.startswith("ignored_"):
+            if self.should_we_ignore(test_result):
                 self.run_ignored_file_printer(test_dataset, test_result)
+
                 continue
 
             block_printer = self.should_we_block_printer(test_dataset, test_result)

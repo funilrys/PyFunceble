@@ -160,7 +160,7 @@ class StdoutProducerThread(ProducerThreadBase):
 
             test_dataset, test_result = consumed
 
-            if isinstance(test_result, str) and test_result.startswith("ignored_"):
+            if self.should_we_ignore(test_result):
                 continue
 
             self.run_stdout_printer(test_dataset, test_result)
