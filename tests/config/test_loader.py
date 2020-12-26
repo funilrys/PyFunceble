@@ -51,6 +51,7 @@ License:
 """
 
 import copy
+import os
 import tempfile
 import unittest
 
@@ -79,8 +80,8 @@ class TestConfigLoader(unittest.TestCase):
 
         self.our_config = Box(copy.deepcopy(pyf_test_dataset.DEFAULT_CONFIG))
 
-        self.default_config_file = tempfile.NamedTemporaryFile()
-        self.config_file = tempfile.NamedTemporaryFile()
+        self.default_config_file = tempfile.NamedTemporaryFile(delete=False)
+        self.config_file = tempfile.NamedTemporaryFile(delete=False)
 
         self.merge_upstream = False
 
@@ -94,6 +95,12 @@ class TestConfigLoader(unittest.TestCase):
         """
         Destroys everything initiated by the tests.
         """
+
+        self.config_file.close()
+        self.default_config_file.close()
+
+        os.unlink(self.config_file.name)
+        os.unlink(self.default_config_file.name)
 
         del self.our_config
         del self.default_config_file
