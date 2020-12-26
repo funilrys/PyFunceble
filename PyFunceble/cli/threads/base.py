@@ -74,7 +74,9 @@ class ThreadsBase:
 
     _output_queue: Optional[Union[queue.Queue, Tuple[queue.Queue]]] = None
 
-    def __init__(self, output_queue: Optional[queue.Queue] = None) -> None:
+    def __init__(
+        self, output_queue: Optional[Union[queue.Queue, Tuple[queue.Queue]]] = None
+    ) -> None:
         self.the_queue = queue.Queue()
 
         if output_queue is not None:
@@ -129,7 +131,7 @@ class ThreadsBase:
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            if not isinstance(self.output_queue, queue.Queue):
+            if not isinstance(self.output_queue, (queue.Queue, tuple)):
                 raise RuntimeError("Output queue not given.")
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable.
@@ -334,10 +336,12 @@ class ThreadsBase:
                     output_queue.put(data)
 
                     PyFunceble.facility.Logger.debug(
-                        "Added to the (main) queue: %r", data
+                        "Added to the (output) queue: %r", data
                     )
             else:
                 self.output_queue.put(data)
-                PyFunceble.facility.Logger.debug("Added to the (main) queue: %r", data)
+                PyFunceble.facility.Logger.debug(
+                    "Added to the (output) queue: %r", data
+                )
 
         return self

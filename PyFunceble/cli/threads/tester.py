@@ -249,23 +249,26 @@ class TesterThread(ThreadsBase):
                 PyFunceble.facility.Logger.debug(
                     "Adding callback into submitted: %r", submitted
                 )
-                submitted.add_done_callback(self.done_callback)
+                # submitted.add_done_callback(self.done_callback)
                 PyFunceble.facility.Logger.debug(
                     "Added callback into submitted: %r", submitted
                 )
 
                 submitted_list.append(submitted)
 
-                PyFunceble.facility.Logger.info(
-                    "Sleeping: %rs for our own safety :-)",
-                    PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
-                )
-                # Apply cooldowntime.
-                time.sleep(PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time)
-                PyFunceble.facility.Logger.info(
-                    "Slept: %rs for our own safety :-)",
-                    PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
-                )
+                if PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time > 0:
+                    PyFunceble.facility.Logger.info(
+                        "Sleeping: %rs for our own safety :-)",
+                        PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
+                    )
+                    # Apply cooldowntime.
+                    time.sleep(
+                        PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time
+                    )
+                    PyFunceble.facility.Logger.info(
+                        "Slept: %rs for our own safety :-)",
+                        PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
+                    )
 
             wait_until_completion(submitted_list, raise_exc=True)
 

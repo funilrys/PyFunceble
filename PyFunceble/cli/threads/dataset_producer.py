@@ -11,7 +11,8 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the logic behind the threads which is supposed to generate outputs.
+Provides the logic behind the threads which is supposed to generate outputs to
+the files or other formats.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -67,46 +68,29 @@ import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.filesystem.counter import FilesystemCounter
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
-from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
 from PyFunceble.cli.filesystem.status_file import StatusFileGenerator
-from PyFunceble.cli.threads.base import ThreadsBase
+from PyFunceble.cli.threads.producer_base import ProducerThreadBase
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.whois.base import WhoisDatasetBase
 
 
-class ProducerThread(ThreadsBase):
+class DatasetProducerThread(ProducerThreadBase):
     """
     Provides our producer thread logic.
 
     The thread behind this object, will read :code:`the_queue`, and procude
-    the outputs.
+    the outputs to the files or other storage formats.
     """
 
-    thread_name: str = "pyfunceble_producer"
+    thread_name: str = "pyfunceble_file_producer"
 
     status_file_generator: Optional[StatusFileGenerator] = None
-    stdout_printer: Optional[StdoutPrinter] = None
+
     file_printer: Optional[FilePrinter] = None
     counter: Optional[FilesystemCounter] = None
 
     whois_dataset: Optional[WhoisDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
-
-    header_already_printed: bool = False
-
-    block_printer: bool = False
-    """
-    We use this variable to block the printing if the subject was already and
-    is still inactive.
-
-    .. note::
-        This variable should be reseted to :py:class:`False` before reading
-        the queue.
-
-    .. warning::
-        You should never use this variable in your statement if not
-        for anything related to the stdout or file result printers.
-    """
 
     def __init__(self, output_queue: Optional[queue.Queue] = None) -> None:
         self.whois_dataset = PyFunceble.checker.utils.whois.get_whois_dataset_object()
@@ -115,7 +99,6 @@ class ProducerThread(ThreadsBase):
         )
 
         self.status_file_generator = StatusFileGenerator()
-        self.stdout_printer = StdoutPrinter()
         self.file_printer = FilePrinter()
         self.counter = FilesystemCounter()
 
@@ -162,39 +145,6 @@ class ProducerThread(ThreadsBase):
             # Example: Trying to add a domain which does not have a destination.
             pass
 
-    def run_stdout_printer(self, test_result: CheckerStatusBase) -> None:
-        """
-        Runs the stdout printer if necessary.
-
-        :param test_result_dict:
-            The test result object.
-        """
-
-        if not self.block_printer:
-            if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
-                # pylint: disable=line-too-long
-                if (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status.upper()
-                    == "ALL"
-                    or PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status.upper()
-                    == test_result.status
-                ):
-                    self.stdout_printer.template_to_use = (
-                        PyFunceble.cli.utils.stdout.get_template_to_use()
-                    )
-
-                    if not self.header_already_printed:
-                        self.stdout_printer.print_header()
-                        self.header_already_printed = True
-
-                    self.stdout_printer.set_dataset(
-                        test_result.to_dict()
-                    ).print_interpolated_line()
-                else:
-                    PyFunceble.cli.utils.stdout.print_single_line()
-            else:
-                PyFunceble.cli.utils.stdout.print_single_line()
-
     def run_file_printer(
         self, test_dataset: dict, test_result: CheckerStatusBase
     ) -> None:
@@ -209,8 +159,7 @@ class ProducerThread(ThreadsBase):
         """
 
         if (
-            not self.block_printer
-            and test_dataset["destination"]
+            test_dataset["destination"]
             and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
         ):
             self.status_file_generator.guess_all_settings()
@@ -242,8 +191,7 @@ class ProducerThread(ThreadsBase):
         """
 
         if (
-            not self.block_printer
-            and test_dataset["destination"]
+            test_dataset["destination"]
             and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
         ):
             # Note: We don't want hiden data to be counted.
@@ -280,15 +228,6 @@ class ProducerThread(ThreadsBase):
                     ),
                 }
             )
-
-    def send_for_mining(
-        self, test_dataset: dict, test_result: CheckerStatusBase
-    ) -> None:
-        """
-        Sends the test dataset to the mining queue (if given).
-        """
-
-        self.add_to_output_queue((test_dataset, test_result))
 
     def run_ignored_file_printer(self, test_dataset: dict, test_result: str) -> None:
         """
@@ -343,7 +282,7 @@ class ProducerThread(ThreadsBase):
         PyFunceble.facility.Logger.debug("Test Result: %r", test_result)
 
         if "from_inactive" in dataset:
-            if test_result.status in inactive_statuses:
+            if test_result.status in self.INACTIVE_STATUSES:
                 if dataset["destination"]:
                     # Note: This handles the case that someone try to test a
                     # single subject.
@@ -351,7 +290,6 @@ class ProducerThread(ThreadsBase):
                     # directory is not given.
 
                     self.inactive_dataset.update(dataset)
-                    self.block_printer = True
             else:
                 self.inactive_dataset.remove(dataset)
         elif test_result.status in inactive_statuses and dataset["destination"]:
@@ -386,28 +324,28 @@ class ProducerThread(ThreadsBase):
             PyFunceble.facility.Logger.debug("Got: %r", consumed)
 
             test_dataset, test_result = consumed
-            self.block_printer = False
+
+            if isinstance(test_result, str) and test_result.startswith("ignored_"):
+                continue
 
             if isinstance(test_result, str) and test_result.startswith("ignored_"):
                 self.run_ignored_file_printer(test_dataset, test_result)
-            else:
-                self.send_for_mining(test_dataset, test_result)
+                continue
 
-                if test_dataset["type"] != "single":
-                    self.run_autosave(test_dataset, test_result)
-                    self.run_inactive(test_dataset, test_result)
+            block_printer = self.should_we_block_printer(test_dataset, test_result)
 
-                PyFunceble.facility.Logger.debug(
-                    "Printer Blocked: %r", self.block_printer
-                )
+            if test_dataset["type"] != "single":
+                self.run_autosave(test_dataset, test_result)
+                self.run_inactive(test_dataset, test_result)
 
-                ## WARNING: DO NOT RUN PRINTER BEFORE the `run_inactive` or
-                ## `run_autosave` methods.
-
-                self.run_stdout_printer(test_result)
+            if not block_printer:
                 self.run_file_printer(test_dataset, test_result)
                 self.run_counter(test_dataset, test_result)
-                self.run_whois_backup(test_result)
+
+            self.run_whois_backup(test_result)
+
+            # D means that we did somthing with dataset (in general)
+            PyFunceble.cli.utils.stdout.print_single_line("D")
 
         if stop_message_caught:
             self.add_to_output_queue("stop")

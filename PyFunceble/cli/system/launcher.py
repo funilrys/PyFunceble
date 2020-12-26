@@ -84,10 +84,11 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
 from PyFunceble.cli.system.base import SystemBase
+from PyFunceble.cli.threads.dataset_producer import DatasetProducerThread
 from PyFunceble.cli.threads.file_sorter import FileSorterThread
 from PyFunceble.cli.threads.migrator import MigratorThread
 from PyFunceble.cli.threads.miner import MinerThread
-from PyFunceble.cli.threads.producer import ProducerThread
+from PyFunceble.cli.threads.stdout_producer import StdoutProducerThread
 from PyFunceble.cli.threads.tester import TesterThread
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
@@ -125,7 +126,8 @@ class SystemLauncher(SystemBase):
 
     execution_time_holder: Optional[ExecutionTime] = None
 
-    producer_thread_manager: Optional[ProducerThread] = None
+    stdout_producer_thread_manager: Optional[StdoutProducerThread] = None
+    dataset_producer_thread_manager: Optional[DatasetProducerThread] = None
     tester_thread_manager: Optional[TesterThread] = None
     miner_thread_manager: Optional[MinerThread] = None
     migrator_thread_manager: Optional[MigratorThread] = None
@@ -147,9 +149,13 @@ class SystemLauncher(SystemBase):
 
         self.stdout_printer.guess_allow_coloration()
 
-        self.producer_thread_manager = ProducerThread()
+        self.stdout_producer_thread_manager = StdoutProducerThread()
+        self.dataset_producer_thread_manager = DatasetProducerThread()
         self.tester_thread_manager = TesterThread(
-            output_queue=self.producer_thread_manager.the_queue
+            output_queue=(
+                self.stdout_producer_thread_manager.the_queue,
+                self.dataset_producer_thread_manager.the_queue,
+            )
         )
         self.migrator_thread_manager = MigratorThread()
         self.file_sorter_thread_manager = FileSorterThread()
@@ -162,7 +168,7 @@ class SystemLauncher(SystemBase):
                 self.continuous_integration
             )
 
-            self.producer_thread_manager.output_queue = (
+            self.stdout_producer_thread_manager.output_queue = (
                 self.miner_thread_manager.the_queue
             )
 
@@ -725,7 +731,8 @@ class SystemLauncher(SystemBase):
             self.miner_thread_manager.wait()
 
         self.tester_thread_manager.wait()
-        self.producer_thread_manager.wait()
+        self.stdout_producer_thread_manager.wait()
+        self.dataset_producer_thread_manager.wait()
 
         # From here, we are sure that every test and files are produced.
         # We now format the generated file(s).
@@ -759,7 +766,8 @@ class SystemLauncher(SystemBase):
             del self.migrator_thread_manager
 
             self.tester_thread_manager.start(daemon=True)
-            self.producer_thread_manager.start(daemon=True)
+            self.stdout_producer_thread_manager.start(daemon=True)
+            self.dataset_producer_thread_manager.start(daemon=True)
 
             if self.miner_thread_manager:
                 self.miner_thread_manager.start(daemon=True)
