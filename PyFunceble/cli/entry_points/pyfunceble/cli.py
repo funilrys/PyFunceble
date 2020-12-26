@@ -600,7 +600,9 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.display_mode.status",
                 "type": str.upper,
                 "choices": ["all"] + list(PyFunceble.storage.STATUS.values()),
-                "help": "Sets the status that we are allowed to print to STDOUT.\n"
+                "nargs": "+",
+                "help": "Sets the status that we are allowed to print to STDOUT.\n\n"
+                "Multiple space separated statuses can be given."
                 "%s" % get_configured_value("cli_testing.display_mode.status"),
             },
         ),

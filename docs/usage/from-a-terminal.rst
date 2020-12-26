@@ -452,6 +452,7 @@ Don't want any colour ? This argument is for you!
 """"""""""""""""""""""""
 
     Sets the status that we are allowed to print to STDOUT.
+    Multiple space separated statuses can be given.
 
     **Default value:** :code:`all`
 
@@ -709,32 +710,32 @@ Global overview
 ::
 
     usage: pyfunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
-                        [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
-                        [--adblock] [--complements]
-                        [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
-                        [--wildcard] [-c]
-                        [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
-                        [--dns-lookup] [--http] [--netinfo-lookup]
-                        [--special-lookup] [--whois-lookup] [--reputation-lookup]
-                        [--reputation] [--syntax] [-t LOOKUP__TIMEOUT]
-                        [-ua USER_AGENT__CUSTOM] [-vsc]
-                        [--dns DNS__SERVER [DNS__SERVER ...]]
-                        [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--inactive-db]
-                        [--database-type {csv,mariadb,mysql}]
-                        [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST]
-                        [-wdb CLI_TESTING__WHOIS_DB] [-a] [-ex] [--colour]
-                        [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE}]
-                        [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
-                        [--no-files] [--unified-results] [--percentage] [--plain]
-                        [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS]
-                        [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
-                        [--ci-branch CLI_TESTING__CI__BRANCH]
-                        [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
-                        [--cmd CLI_TESTING__CI__COMMAND]
-                        [--cmd-before-end CLI_TESTING__CI__END_COMMAND]
-                        [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
-                        [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
-                        [--help] [-v]
+                    [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
+                    [--adblock] [--complements]
+                    [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
+                    [--wildcard] [-c]
+                    [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
+                    [--dns-lookup] [--http] [--netinfo-lookup]
+                    [--special-lookup] [--whois-lookup] [--reputation-lookup]
+                    [--reputation] [--syntax] [-t LOOKUP__TIMEOUT]
+                    [-ua USER_AGENT__CUSTOM] [-vsc]
+                    [--dns DNS__SERVER [DNS__SERVER ...]]
+                    [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--inactive-db]
+                    [--database-type {csv,mariadb,mysql}]
+                    [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST]
+                    [-wdb CLI_TESTING__WHOIS_DB] [-a] [-ex] [--colour]
+                    [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]]
+                    [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
+                    [--no-files] [--unified-results] [--percentage] [--plain]
+                    [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS]
+                    [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
+                    [--ci-branch CLI_TESTING__CI__BRANCH]
+                    [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
+                    [--cmd CLI_TESTING__CI__COMMAND]
+                    [--cmd-before-end CLI_TESTING__CI__END_COMMAND]
+                    [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
+                    [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
+                    [--help] [-v]
 
     PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
@@ -865,9 +866,10 @@ Global overview
                                 Configured value: False
         --colour, --color     Activates or disables the coloration to STDOUT.
                                 Configured value: True
-        --display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE}
+        --display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]
                                 Sets the status that we are allowed to print to STDOUT.
 
+                                Multiple space separated statuses can be given.
                                 Configured value: 'all'
         --hierarchical        Activates or disables the sorting of the files
                                 content (output) in a hierarchical order.

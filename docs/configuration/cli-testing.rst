@@ -315,7 +315,7 @@
 :code:`cli_testing[display_mode][status]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    **Type:** :code:`string`
+    **Type:** :code:`string` | :code:`list`
 
     **Default value:** :code:`all`
 
@@ -323,6 +323,9 @@
     :code:`INVALID`, :code:`VALID`, :code:`SANE`, :code:`MALICIOUS`
 
     **Description:** Sets the status that we are allowed to print to STDOUT.
+
+.. note::
+    A list of status can be given if you want to filter multiple status at once.
 
 :code:`cli_testing[display_mode][colour]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -84,6 +84,24 @@ class StdoutProducerThread(ProducerThreadBase):
 
         super().__init__(output_queue=output_queue)
 
+    @staticmethod
+    def shoud_we_print_status(status: str) -> bool:
+        """
+        Checks if we are allowed to print based on the given status.
+
+        :param status:
+            The status to check.
+        """
+
+        if isinstance(
+            PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status, list
+        ):
+            to_keep = PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status
+        else:
+            to_keep = [PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status]
+
+        return "ALL" in to_keep or status in to_keep
+
     def run_stdout_printer(
         self, test_dataset: dict, test_result: CheckerStatusBase
     ) -> None:
@@ -99,12 +117,7 @@ class StdoutProducerThread(ProducerThreadBase):
         if not self.should_we_block_printer(test_dataset, test_result):
             if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
                 # pylint: disable=line-too-long
-                if (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status.upper()
-                    == "ALL"
-                    or PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status.upper()
-                    == test_result.status
-                ):
+                if self.shoud_we_print_status(test_result.status):
                     self.stdout_printer.template_to_use = (
                         PyFunceble.cli.utils.stdout.get_template_to_use()
                     )
