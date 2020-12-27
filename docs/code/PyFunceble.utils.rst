@@ -13,6 +13,15 @@ PyFunceble.utils.platform module
    :show-inheritance:
    :private-members:
 
+PyFunceble.utils.profile module
+-------------------------------
+
+.. automodule:: PyFunceble.utils.profile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.utils.version module
 -------------------------------
 
