@@ -136,7 +136,7 @@ class TestSubDomainSyntaxChecker(unittest.TestCase):
         given = "example.hello_world.org"
         actual = DomainSyntaxChecker(given).is_valid()
 
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected, actual, given)
 
     def test_is_valid_second_lvl_domain(self) -> None:
         """
@@ -185,7 +185,7 @@ class TestSubDomainSyntaxChecker(unittest.TestCase):
             domain_checker.subject = subject
             actual = domain_checker.is_valid_subdomain()
 
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual, subject)
 
 
 if __name__ == "__main__":

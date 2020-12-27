@@ -57,6 +57,7 @@ VALID_SECOND_LVL_DOMAINS: List[str] = [
     "example.net",
     "example.co.uk",
     "example.de",
+    "985.com",
 ]
 
 NOT_VALID_SECOND_LVL_DOMAINS: List[str] = [
@@ -126,6 +127,7 @@ VALID_DOMAINS: List[str] = [
     "coinbȧse.com",
     "cryptopiạ.com",
     "cṙyptopia.com",
+    "985.com",
 ]
 
 NOT_VALID_DOMAINS: List[str] = [
@@ -175,6 +177,8 @@ VALID_SUBDOMAINS: List[str] = [
     "hello-.example.co.uk",
     "hello.world.onion",
     "test.hello.blogspot.co.uk",
+    "888.0769.com",
+    "1661599812.hello.985.com",
 ]
 
 NOT_VALID_SUBDOMAINS: List[str] = [
