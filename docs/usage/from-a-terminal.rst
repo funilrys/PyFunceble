@@ -1,6 +1,9 @@
 From a terminal
 ---------------
 
+This chapter also relates to writing bash scripts
+and PowerShell scripts as the syntaxing used is equal.
+
 :code:`--help`
 ^^^^^^^^^^^^^^
 
@@ -162,6 +165,17 @@ exactly do that.
     from each given input files.
 
     **Default value:** :code:`False`
+
+.. versionadded:: 3.3.3
+
+.. warning::
+    You can not currently not use the :code:`--rpz` in combination with
+    :code:`--syntax` to validate or syntax test a rpz formatted file.
+    
+.. seealso::
+    See discussions `149 <https://github.com/funilrys/PyFunceble/discussions/149>`_
+    for more information and participate in it's development.
+
 
 :code:`--wildcard`
 """"""""""""""""""
