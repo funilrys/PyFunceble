@@ -80,7 +80,7 @@ class WhoisProducerThread(ProducerThreadBase):
 
     def __init__(self, output_queue: Optional[queue.Queue] = None) -> None:
         self.dataset = PyFunceble.checker.utils.whois.get_whois_dataset_object()
-        self.dataset.keep_session_open = True
+        self.dataset.keep_session_open = False
 
         super().__init__(output_queue=output_queue)
 

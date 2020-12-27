@@ -80,7 +80,7 @@ class ContinueProducerThread(ProducerThreadBase):
 
     def __init__(self, output_queue: Optional[queue.Queue] = None) -> None:
         self.dataset = PyFunceble.cli.utils.testing.get_continue_databaset_object()
-        self.dataset.keep_session_open = True
+        self.dataset.keep_session_open = False
 
         super().__init__(output_queue=output_queue)
 
