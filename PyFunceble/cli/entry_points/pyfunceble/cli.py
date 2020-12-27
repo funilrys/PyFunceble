@@ -84,7 +84,18 @@ def get_configured_value(entry: str, *, negate=False) -> Any:
         When the given :code:`entry` is not found.
     """
 
-    result = PyFunceble.facility.ConfigLoader.get_configured_value(entry)
+    if ":" in entry:
+        location, var_name = entry.split(":", 1)
+
+        if location == "cli_storage":
+            result = getattr(PyFunceble.cli.storage, var_name)
+        else:
+            raise RuntimeError("<entry> ({entry!r}) not supported.")
+
+        if var_name == "OUTPUT_DIRECTORY":
+            result = os.path.join(*os.path.split(result)[:-1])
+    else:
+        result = PyFunceble.facility.ConfigLoader.get_configured_value(entry)
 
     if negate:
         result = not result
@@ -651,6 +662,18 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the generation of any non-logs\n"
                 "file(s). %s"
                 % get_configured_value("cli_testing.file_generation.no_file"),
+            },
+        ),
+        (
+            [
+                "--output-location",
+            ],
+            {
+                "dest": "output_location",
+                "type": str,
+                "help": "Sets the location where we are supposed to generation\n"
+                "the output directory from. %s"
+                % get_configured_value("cli_storage:OUTPUT_DIRECTORY"),
             },
         ),
         (

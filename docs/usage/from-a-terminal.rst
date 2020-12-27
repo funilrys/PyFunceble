@@ -496,6 +496,17 @@ version of each status.
 Want to disable the production of the outputted files? This argument is for
 you!
 
+:code:`--output-location`
+"""""""""""""""""""""""""
+
+    Sets the location where we are supposed to generation the output directory
+    from.
+
+    **Default value:** Please look at your machine
+
+Don't want to use the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable? This
+argument is for you!
+
 :code:`--unified-results`
 """""""""""""""""""""""""
 
@@ -726,8 +737,9 @@ Global overview
                     [-wdb CLI_TESTING__WHOIS_DB] [-a] [-ex] [--colour]
                     [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]]
                     [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
-                    [--no-files] [--unified-results] [--percentage] [--plain]
-                    [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS]
+                    [--no-files] [--output-location OUTPUT_LOCATION]
+                    [--unified-results] [--percentage] [--plain] [--dots] [-q]
+                    [-s] [-w CLI_TESTING__MAX_WORKERS]
                     [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
                     [--ci-branch CLI_TESTING__CI__BRANCH]
                     [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
@@ -840,7 +852,7 @@ Global overview
                                 Sets the protocol to use for the DNS queries.
                                 Configured value: 'UDP'
 
-        Databases:
+    Databases:
         --inactive-db         Activates or disables the usage of a 'database' to
                                 store all 'INACTIVE' and 'INVALID'  subject for continuous retest.
                                 Configured value: True
@@ -858,7 +870,7 @@ Global overview
                                 expiration date.
                                 Configured value: True
 
-    Output control:
+        Output control:
         -a, --all             Activates or disables the display of the all
                                 information in the table we print to stdout.
                                 Configured value: False
@@ -883,6 +895,10 @@ Global overview
         --no-files            Activates or disables the generation of any non-logs
                                 file(s).
                                 Configured value: False
+        --output-location OUTPUT_LOCATION
+                                Sets the location where we are supposed to generation
+                                the output directory from.
+                                Configured value: '/XXXX/XXXX/XXXXX'
         --unified-results     Activates or disables the generation of the unified
                                 results file instead of the splitted one.
                                 Configured value: False
