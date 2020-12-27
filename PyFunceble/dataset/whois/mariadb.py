@@ -54,6 +54,7 @@ from datetime import datetime
 from typing import Any, Generator, Optional, Union
 
 import sqlalchemy
+from sqlalchemy.exc import ProgrammingError
 
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
@@ -74,30 +75,36 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     @MariaDBDatasetBase.handle_db_session
     def __contains__(self, value: str) -> bool:
-        return (
-            self.db_session.query(self.ORM_OBJ)
-            .filter(
-                sqlalchemy.or_(
-                    self.ORM_OBJ.subject == value,
-                    self.ORM_OBJ.idna_subject == value,
+        try:
+            return (
+                self.db_session.query(self.ORM_OBJ)
+                .filter(
+                    sqlalchemy.or_(
+                        self.ORM_OBJ.subject == value,
+                        self.ORM_OBJ.idna_subject == value,
+                    )
                 )
+                .first()
+                is not None
             )
-            .first()
-            is not None
-        )
+        except ProgrammingError:
+            return None
 
     @MariaDBDatasetBase.handle_db_session
     def __getitem__(self, value: Any) -> Optional[WhoisRecord]:
-        return (
-            self.db_session.query(self.ORM_OBJ)
-            .filter(
-                sqlalchemy.or_(
-                    self.ORM_OBJ.subject == value,
-                    self.ORM_OBJ.idna_subject == value,
+        try:
+            return (
+                self.db_session.query(self.ORM_OBJ)
+                .filter(
+                    sqlalchemy.or_(
+                        self.ORM_OBJ.subject == value,
+                        self.ORM_OBJ.idna_subject == value,
+                    )
                 )
+                .first()
             )
-            .first()
-        )
+        except ProgrammingError:
+            return None
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def get_content(self) -> Generator[dict, None, None]:
@@ -135,7 +142,10 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
             )
 
         if not self.is_expired(row):
-            super().update(row)
+            try:
+                super().update(row)
+            except ProgrammingError:
+                pass
         else:
             PyFunceble.facility.Logger.debug("Expired dataset:\n%r", row)
 
@@ -151,10 +161,13 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         current_timestamp = int(datetime.utcnow().timestamp())
 
-        self.db_session.query(self.ORM_OBJ).filter(
-            self.ORM_OBJ.epoch < current_timestamp
-        ).delete(synchronize_session=False)
-        self.db_session.commit()
+        try:
+            self.db_session.query(self.ORM_OBJ).filter(
+                self.ORM_OBJ.epoch < current_timestamp
+            ).delete(synchronize_session=False)
+            self.db_session.commit()
+        except ProgrammingError:
+            pass
 
         PyFunceble.facility.Logger.debug("Deleted all expired WHOIS records")
 

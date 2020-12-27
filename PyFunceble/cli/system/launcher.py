@@ -544,7 +544,7 @@ class SystemLauncher(SystemBase):
                     )
 
                     self.tester_thread_manager.add_to_the_queue(to_send)
-            if protocol["type"] == "file":
+            elif protocol["type"] == "file":
                 handle_file(protocol)
 
         return self
