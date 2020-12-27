@@ -52,7 +52,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from typing import Optional
+from typing import Any, List, Optional
 
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
@@ -65,6 +65,111 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
 
     CLEANUP_MARKERS: list = [".rpz-nsdname"]
     IP_MARKERS: list = [".rpz-client-ip", ".rpz-ip", ".rpz-nsip"]
+
+    _soa: Optional[str] = None
+    _soas: List[str] = []
+
+    def __init__(
+        self,
+        data_to_convert: Optional[Any] = None,
+        soas: Optional[List[str]] = None,
+        soa: Optional[str] = None,
+    ) -> None:
+
+        if soas is not None:
+            self.soas = soas
+
+        if soa is not None:
+            self.soa = soa
+
+        super().__init__(data_to_convert=data_to_convert)
+
+    @property
+    def soa(self) -> Optional[str]:
+        """
+        Provides the currently set SOA.
+        """
+
+        return self._soa
+
+    @soa.setter
+    def soa(self, value: str) -> None:
+        """
+        Sets the current SOA.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class`str`.
+        :raise ValueError:
+            When the given :code:`value` is empty.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        if not value:
+            raise ValueError("<value> should not be empty.")
+
+        self._soa = value
+
+        if value not in self._soas:
+            self._soas.append(value)
+
+    def set_soa(self, value: str) -> "RPZPolicy2Subject":
+        """
+        Sets the current SOA.
+
+        :param value:
+            The value to set.
+        """
+
+        self.soa = value
+
+        return self
+
+    @property
+    def soas(self) -> Optional[str]:
+        """
+        Provides the currently set SOAs.
+        """
+
+        return self._soas
+
+    @soas.setter
+    def soas(self, value: List[str]) -> None:
+        """
+        Sets the current SOAs.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class`list`.
+        :raise ValueError:
+            When one of the given value is not a string.
+        """
+
+        if not isinstance(value, list):
+            raise TypeError(f"<value> should be {list}, {type(value)} given.")
+
+        if any(not isinstance(x, str) for x in value):
+            raise ValueError(f"<value> {value!r} should only contain strings.")
+
+        self._soas = value
+
+    def set_soas(self, value: List[str]) -> "RPZPolicy2Subject":
+        """
+        Sets the current SOAs.
+
+        :param value:
+            The value to set.
+        """
+
+        self.soas = value
+
+        return self
 
     @staticmethod
     def remove_marker(subject: str, marker: str) -> str:
@@ -164,6 +269,11 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
                     subject = self.remove_marker(subject, comment_sign).strip()
 
             subject = Wildcard2Subject(subject).get_converted()
+
+            if self._soas:
+                for soa in self._soas:
+                    subject = self.remove_marker(subject, f".{soa}")
+                    subject = self.remove_marker(subject, soa)
 
             found_cleanup_marker = self.get_matching_cleanup_marker(subject)
 

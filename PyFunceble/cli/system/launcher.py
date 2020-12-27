@@ -471,6 +471,9 @@ class SystemLauncher(SystemBase):
 
                     line = line.strip()
 
+                    if "SOA" in line:
+                        self.rpz_policy2subject.set_soa(line.split()[0])
+
                     subjects = get_subjects_from_line(line)
                     subjects = [x for x in subjects if x]
 

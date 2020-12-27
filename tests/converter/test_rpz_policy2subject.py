@@ -316,6 +316,173 @@ class TestRPZPolicy2Subject(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_set_soa_return(self) -> None:
+        """
+        Tests the response from the method which let us set the SOA to work with.
+        """
+
+        given = "example.com."
+
+        actual = self.converter.set_soa(given)
+
+        self.assertIsInstance(actual, RPZPolicy2Subject)
+
+    def test_set_soa_method(self) -> None:
+        """
+        Tests the method which let us set the SOA to work with.
+        """
+
+        given = "example.com."
+        expected = "example.com."
+
+        self.converter.set_soa(given)
+
+        actual = self.converter.soa
+
+        self.assertEqual(expected, actual)
+        self.assertTrue(given in self.converter.soas)
+
+    def test_set_soa_attribute(self) -> None:
+        """
+        Tests overwritting of the :code:`soa` attribute.
+        """
+
+        given = "example.com."
+        expected = "example.com."
+
+        self.converter.soa = given
+        actual = self.converter.soa
+
+        self.assertEqual(expected, actual)
+        self.assertTrue(given in self.converter.soas)
+
+    def test_set_soa_no_str(self) -> None:
+        """
+        Tests overwritting of the :code:`soa` attribute.
+
+        In this test we test the case that we give a non-string value.
+        """
+
+        given = ["Hello", "World!"]
+
+        self.assertRaises(TypeError, lambda: self.converter.set_soa(given))
+
+    def test_set_soa_empty_str(self) -> None:
+        """
+        Tests overwritting of the :code:`soa` attribute.
+
+        In this test we test the case that we give an empty string value.
+        """
+
+        given = ""
+
+        self.assertRaises(ValueError, lambda: self.converter.set_soa(given))
+
+    def test_set_soa_through_init(self) -> None:
+        """
+        Tests the overwritting of the SOA to work with through the class
+        constructor.
+        """
+
+        given = "example.com."
+        expected = "example.com."
+
+        converter = RPZPolicy2Subject(soa=given)
+        actual = converter.soa
+
+        self.assertEqual(expected, actual)
+        self.assertTrue(given in converter.soas)
+
+    def test_set_soas_return(self) -> None:
+        """
+        Tests the response from the method which let us set the SOAs to work with.
+        """
+
+        given = ["example.com."]
+
+        actual = self.converter.set_soas(given)
+
+        self.assertIsInstance(actual, RPZPolicy2Subject)
+
+    def test_set_soas_method(self) -> None:
+        """
+        Tests the method which let us set the SOA to work with.
+        """
+
+        given = ["example.com."]
+        expected = ["example.com."]
+
+        self.converter.set_soas(given)
+
+        actual = self.converter.soas
+
+        self.assertEqual(expected, actual)
+
+    def test_set_soas_attribute(self) -> None:
+        """
+        Tests overwritting of the :code:`soas` attribute.
+        """
+
+        given = ["example.com."]
+        expected = ["example.com."]
+
+        self.converter.soas = given
+        actual = self.converter.soas
+
+        self.assertEqual(expected, actual)
+
+    def test_set_soas_no_list(self) -> None:
+        """
+        Tests overwritting of the :code:`soas` attribute.
+
+        In this test we test the case that we give a non-list value.
+        """
+
+        given = "Hello, World!"
+
+        self.assertRaises(TypeError, lambda: self.converter.set_soas(given))
+
+    def test_set_soas_non_list_of_str(self) -> None:
+        """
+        Tests overwritting of the :code:`soas` attribute.
+
+        In this test we test the case that we give a non string value.
+        """
+
+        given = [".example.org.", None, ".example.net."]
+
+        self.assertRaises(ValueError, lambda: self.converter.set_soas(given))
+
+    def test_set_soas_through_init(self) -> None:
+        """
+        Tests the overwritting of the SOA to work with through the class
+        constructor.
+        """
+
+        given = ["example.com."]
+        expected = ["example.com."]
+
+        converter = RPZPolicy2Subject(soas=given)
+        actual = converter.soas
+
+        self.assertEqual(expected, actual)
+
+    def test_get_converted_soa(self) -> None:
+        """
+        Tests the method which let us get the converted data for the case that
+        a subjec with the SOA given.
+        """
+
+        given = "example.org.example.net"
+        given_soa = "example.net"
+        expected = "example.org"
+
+        self.converter.data_to_convert = given
+        self.converter.soa = given_soa
+        actual = self.converter.get_converted()
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main()
