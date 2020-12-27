@@ -771,14 +771,15 @@ class SystemLauncher(SystemBase):
         try:
             self.print_home_ascii()
 
-            self.migrator_thread_manager.start(daemon=False)
+            if self.args.files or self.args.url_files:
+                self.migrator_thread_manager.start(daemon=False)
 
-            while self.migrator_thread_manager.is_running():
-                # We wait until the migrator is completely done.
-                continue
+                while self.migrator_thread_manager.is_running():
+                    # We wait until the migrator is completely done.
+                    continue
 
-            if self.migrator_thread_manager.is_failed():
-                raise self.migrator_thread_manager.the_thread.exception
+                if self.migrator_thread_manager.is_failed():
+                    raise self.migrator_thread_manager.the_thread.exception
 
             del self.migrator_thread_manager
 
