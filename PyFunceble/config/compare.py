@@ -293,13 +293,14 @@ class ConfigComparison:
             original_upstream = copy.deepcopy(self.upstream_config)
 
             flatten_original = self.dict_helper.set_subject(original_local).flatten()
+            flatten_upstream = self.dict_helper.set_subject(original_upstream).flatten()
 
             for key, value in self.OLD_TO_NEW.items():
                 if key not in flatten_original:
                     continue
 
-                if value not in flatten_original:  # pragma: no cover ## Safety.
-                    raise RuntimeError(f"<value> {value!r} not found.")
+                if value not in flatten_upstream:  # pragma: no cover ## Safety.
+                    raise RuntimeError(f"<value> ({value!r}) not found.")
 
                 flatten_original[value] = original_local[key]
 
@@ -309,8 +310,8 @@ class ConfigComparison:
                 if key not in flatten_original:
                     continue
 
-                if value not in flatten_original:  # pragma: no cover ## Safety.0
-                    raise RuntimeError(f"<value> {value!r} not found.")
+                if value not in flatten_upstream:  # pragma: no cover ## Safety.0
+                    raise RuntimeError(f"<value> ({value!r}) not found.")
 
                 flatten_original[value] = not original_local[key]
 
