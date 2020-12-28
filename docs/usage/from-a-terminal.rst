@@ -72,6 +72,10 @@ Source
 
         $ PyFunceble -f test_this test_that
 
+.. warning::
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
+
 
 
 :code:`-uf "something"` | :code:`--url-file "something"`
@@ -111,6 +115,10 @@ Source
     A test with this argument consists of the comparison of the status code.
     No WHOIS record will be requested nor DNS Lookup will be done.
 
+.. warning::
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
+
 
 Source filtering, decoding, conversion and expansion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -124,7 +132,11 @@ Source filtering, decoding, conversion and expansion
 
 .. note::
     If this argument is activated the system will extract all domains or
-    IP from the given adblock file.
+    IPv4 and IPv6 adresses from the given adblock file.
+
+.. warning::
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
 
 :code:`--complements`
 """""""""""""""""""""

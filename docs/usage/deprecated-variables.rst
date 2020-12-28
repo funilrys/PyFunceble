@@ -87,7 +87,7 @@ and features comes and goes.
 .. deprecated:: 4.0.0
 
 :code:`-nu | --no-unified`
-"""""""""""
+""""""""""""""""""""""""""
 
     No replacements
 
