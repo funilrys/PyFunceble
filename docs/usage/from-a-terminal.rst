@@ -184,6 +184,15 @@ exactly do that.
 
     **Default value:** :code:`False`
 
+.. code-block:: bash
+    
+    '*.wildcard.me'
+    'wildcard.me'
+
+
+These are examples of when to use this arguement. The first one will
+return INVALID if :code:`--wildcard` is not set to true.
+
 Test control
 ^^^^^^^^^^^^
 
@@ -227,7 +236,7 @@ the limitation which does not apply to private networks.
 
     **Default value:** :code:`True`
 
-Don't want to perform some DNS lookup ? This argument is for you.
+Don't want to perform some DNS lookup? This argument is for you.
 
 
 :code:`--http-status-code-lookup` | :code:`--http`
@@ -315,6 +324,10 @@ This argument is for you.
 .. warning::
     If not given, we try to get the latest (automatically) for you
 
+.. code-block:: bash
+    
+    --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+
 :code:`-vsc` | :code:`--verify-ssl-certificate`
 """""""""""""""""""""""""""""""""""""""""""""""
 
@@ -367,6 +380,9 @@ DNS control
 
     **Available values:** :code:`UDP`, :code:`TCP`, :code:`HTTPS`, :code:`TLS`.
 
+.. note:
+    You can not mix protocols
+
 
 Databases
 ^^^^^^^^^
@@ -397,7 +413,7 @@ This argument will disable or enable the usage of a database which saves all
     Sets the numbers of days since the introduction of a
     subject into the inactive dataset before it gets retested.
 
-    **Default value:** :code:`1`
+    **Default value:** :code:`1` Day(s)
 
 .. note::
     This argument is only used if :code:`-db` or
@@ -415,13 +431,15 @@ This argument will disable or enable the usage of a database which saves all
 Output control
 ^^^^^^^^^^^^^^
 
+.. versionchanged:: 4.0.0
+
 :code:`-a` | :code:`--all`
 """"""""""""""""""""""""""
 
     Activates or disables the disply of the all information in the table we
     print to stdout.
 
-    **Default value:** :code:`False`
+    **Default value:** :code:`True`
 
     **When activated:**
 
@@ -493,12 +511,34 @@ This argument will output the result listed in a hierarchical order.
 This argument will let the system know if it has to generate the hosts file
 version of each status.
 
-:code:`-ip "something"` | --hosts-ip "something"
-""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-ip "something"` | :code:`--hosts-ip` "something"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     Sets the IP to prefix each lines of the hosts file.
 
     **Default value:** :code:`0.0.0.0`
+
+
+.. versionadded:: 4.0.0
+
+.. _logging-level:
+
+:code:`--logging-level`
+"""""""""""""""""""""""
+
+    You can configure the logging level to be outputted in STDOUT (screen).
+    The following optional values can be set.
+
+.. hlist::
+    :columns: 1
+
+    * :code:`info` ==> **INFO (default)**
+    * :code:`debug` ==> DEBUG
+    * :code:`warning` ==> WARNING
+    * :code:`error` ==> ERROR
+    * :code:`critical` ==> CRITICAL
+
+
 
 :code:`--no-files`
 """"""""""""""""""
@@ -509,6 +549,9 @@ version of each status.
 
 Want to disable the production of the outputted files? This argument is for
 you!
+
+.. note:
+    This will also disable the generation of the end statistic.
 
 :code:`--unified-results`
 """""""""""""""""""""""""
@@ -597,13 +640,6 @@ Multithreading
 CI / CD
 ^^^^^^^
 
-:code:`--ci-max-minutes`
-""""""""""""""""""""""""
-
-    Sets the number of minutes to wait before starting to stop a CI session.
-
-    **Default value:** :code:`15`
-
 :code:`--ci`
 """"""""""""
 
@@ -618,6 +654,13 @@ CI / CD
 
 Want to use PyFunceble under a supported CI infrastructure/network? This
 argument is suited for your needs!
+
+:code:`--ci-max-minutes`
+""""""""""""""""""""""""
+
+    Sets the number of minutes to wait before starting to stop a CI session.
+
+    **Default value:** :code:`15`
 
 :code:`--ci-branch`
 """""""""""""""""""
@@ -651,6 +694,8 @@ argument is suited for your needs!
     - :code:`master` (CI distribution branch), for the distribution of the
       results of PyFunceble.
 
+.. versionchanged:: 4.0.0
+
 :code:`--ci-command "something"` | :code:`--cmd "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -666,6 +711,8 @@ argument is suited for your needs!
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under
     :code:`.PyFunceble.yaml`) are activated.
 
+.. versionchanged:: 4.0.0
+
 :code:`--ci-end-command "something"` | :code:`--cmd-before-end "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -680,6 +727,8 @@ argument is suited for your needs!
 .. note::
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under
     :code:`.PyFunceble.yaml`) are activated.
+
+.. versionchanged:: 4.0.0
 
 :code:`--ci-commit-message "something"` | :code:`--commit-autosave-message "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -703,6 +752,8 @@ used as a commit message when saving.
 .. warning::
     Please avoid the usage of :code:`[ci skip]` here.
 
+.. versionchanged:: 4.0.0
+
 :code:`--ci-end-commit-message "something"` | :code:`--commit-results-message "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -717,6 +768,58 @@ used as a commit message when saving.
 .. note::
     This argument is only used if we reached the end of the list we are or
     have to test.
+
+Global Variables
+^^^^^^^^^^^^^^^^
+
+Here is the list of environment variables we use and how we use them if they
+are set.
+
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| **Environment Variable**              | **How to use them?**                                                                                                 |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                           |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MariaDB charset to use.                                                                                  |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host or the Unix socket (absolute file path) of the MariaDB database.                                    |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_NAME`            | Tell us the name of the MariaDB database to use.                                                                     |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_PASSWORD`        | Tell us the MariaDB user password to use.                                                                            |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_PORT`            | Tell us the MariaDB connection port to use.                                                                          |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the MariaDB user-name to use.                                                                                |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_LVL`          | Sets the logging level to use. :ref:`logging-level`                                                                  |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_LOGGING_LVL`        | Same as :code:`PYFUNCEBLE_DEBUG_LVL`. :ref:`logging-level`                                                           |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`    | Tell us to log everything to :code:`stdout` bool (true | false)                                                      |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_CONFIG_DIR`         | Tell us the location of the directory to use as the configuration directory.                                         |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_OUTPUT_LOCATION`    | Tell us where we should generate the :code:`output/` directory.                                                      |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`APPDATA`                       | Used under Windows to construct/get the configuration directory if :code:`PYFUNCEBLE_CONFIG_DIR` is not found.       |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GH_TOKEN`                      | Tell us the GitHub token to set into the repository configuration when using PyFunceble under Travis CI.             |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GL_TOKEN`                      | Tell us the GitLab token to set into the repository configuration when using PyFunceble under GitLab CI/CD.          |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GIT_EMAIL`                     | Tell us the :code:`git.email` configuration to set when using PyFunceble under any supported CI environment.         |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GIT_NAME`                      | Tell us the :code:`git.name` configuration to set when using PyFunceble under any supported CI environment.          |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`TRAVIS_BUILD_DIR`              | Used to confirm that we are running under a Travis CI container.                                                     |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GITLAB_CI`                     | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GITLAB_USER_ID`                | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 
 Global overview
 ^^^^^^^^^^^^^^^
