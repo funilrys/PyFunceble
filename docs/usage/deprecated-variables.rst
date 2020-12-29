@@ -8,136 +8,135 @@ with new values.
 This is happening because PyFuncble is envoling over time
 and features comes and goes.
 
-.. deprecated:: 4.0.0
-
 :code:`-ad`
 """""""""""
-    This code have been replaced by :code:`--adblock`
-
 .. deprecated:: 4.0.0
+
+This code have been replaced by :code:`--adblock`
+
 
 :code:`-nw`
 """""""""""
-    Replaced with :code:`--whois-lookup`
-
 .. deprecated:: 4.0.0
+
+Replaced with :code:`--whois-lookup`
+
 
 :code:`--shadow-file` | :code:`--shadow`
 """"""""""""""""""""""""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`--use-reputation-data`
 """""""""""""""""""""""""""""
-    No replacements
-
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`-db | --database`
 """"""""""""""""""""""""
-
-    No replacements, from Version 4 you only uses :code:`--database-type`
-
 .. deprecated:: 4.0.0
+
+No replacements, from Version 4 you only uses :code:`--database-type`
+
 
 :code:`-dbc "something" | --days-between-db-clean`
 """"""""""""""""""""""""""""""""""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`-json`
 """""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`-less`
 """""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`-nf`
 """""""""""
-
-    Replaced by :code:`--no-files`
-
-
 .. deprecated:: 4.0.0
+
+Replaced by :code:`--no-files`
+
 
 :code:`-nl`
 """""""""""
-
-    Replaced by :code:`--no-logs`
-
 .. deprecated:: 4.0.0
+
+Replaced by :code:`--no-logs`
+
 
 :code:`-nu | --no-unified`
 """"""""""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`--split`
 """""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`--store-whois`
 """""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`-m | --multiprocess`
 """""""""""""""""""""""""""
-
-    Replaced with :code:`-w` | :code:`--max-workers`
-
 .. deprecated:: 4.0.0
+
+Replaced with :code:`-w` | :code:`--max-workers`
+
 
 :code:`-p | --processes`
 """"""""""""""""""""""""
-
-    Replaced with :code:`-w` | :code:`--max-workers`
-
-
 .. deprecated:: 4.0.0
+
+Replaced with :code:`-w` | :code:`--max-workers`
+
 
 :code:`--multiprocess-merging-mode`
 """""""""""""""""""""""""""""""""""
-
-    No replacements
-
 .. deprecated:: 4.0.0
+
+No replacements
+
 
 :code:`--autosave-minutes`
 """"""""""""""""""""""""""
-
-    Replaced with :code:`--ci-max-minutes`
-
 .. deprecated:: 4.0.0
+
+Replaced with :code:`--ci-max-minutes`
+
 
 :code:`--cmd`
 """""""""""""
+.. deprecated:: 4.0.0
 
-    Replaced with :code:`--ci-max-minutes`
+Replaced with :code:`--ci-max-minutes`
 

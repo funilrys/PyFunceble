@@ -7,8 +7,8 @@ The original idea was to test `Funceble`_ against hosts file in order
 to find bugs inside `Funceble`_ but also letting me (@funilrys) have a shorter 
 hosts file.
 
-On 23rd January 2018, I (@funilrys) decided to shut `funilrys/dead-hosts`_ 
-down, as it became impossible to test all members of the project without having 
+On 23rd January 2018, I (@funilrys) decided to shut down `funilrys/dead-hosts`_ 
+, as it became impossible to test all members of the project without having 
 to wait for weeks. I then decided it was time to move on to another level.
 
 That was the beginning of `Dead-Hosts`_.

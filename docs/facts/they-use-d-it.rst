@@ -29,6 +29,7 @@ PyFunceble!
 * `polish-adblock-filters`_
 * `polish-pihole-filters`_
 * `pornhosts`_
+* `porn-records`_
 * `Stop.Google.Analytics.Ghost.Spam.HOWTO`_
 * `The-Big-List-of-Hacked-Malware-Web-Sites`_
 * `Top-Attacking-IP-Addresses-Against-Wordpress-Sites`_
@@ -60,6 +61,7 @@ PyFunceble!
 .. _polish-adblock-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-adblock-filters/adblock.txt
 .. _polish-pihole-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-pihole-filters/hostfile.txt
 .. _pornhosts : https://github.com/Import-External-Sources/pornhosts
+.. _porn-records : https://github.com/mypdns/porn-records
 .. _Stop.Google.Analytics.Ghost.Spam.HOWTO : https://github.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO
 .. _The-Big-List-of-Hacked-Malware-Web-Sites : https://github.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites
 .. _Top-Attacking-IP-Addresses-Against-Wordpress-Sites : https://github.com/mitchellkrogza/Top-Attacking-IP-Addresses-Against-Wordpress-Sites
