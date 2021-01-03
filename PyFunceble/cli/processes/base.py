@@ -54,7 +54,6 @@ import functools
 import multiprocessing
 import os
 import queue
-from multiprocessing import Manager
 from typing import Any, List, Optional
 
 import PyFunceble.facility
@@ -88,7 +87,7 @@ class ProcessesManagerBase:
 
     daemon: Optional[bool] = None
 
-    manager: Optional[Manager] = None
+    manager: Optional[multiprocessing.Manager] = None
 
     global_exit_event: Optional[multiprocessing.Event] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
@@ -100,7 +99,7 @@ class ProcessesManagerBase:
 
     def __init__(
         self,
-        manager: Manager,
+        manager: Optional[multiprocessing.Manager] = None,
         max_worker: Optional[int] = None,
         *,
         continuous_integration: Optional[ContinuousIntegrationBase] = None,
@@ -110,7 +109,10 @@ class ProcessesManagerBase:
         generate_input_queue: bool = True,
         generate_output_queue: bool = True,
     ) -> None:
-        self.manager = manager
+        if manager is not None:
+            self.manager = manager
+        else:
+            self.manager = multiprocessing.Manager()
 
         if input_queue is None:
             self.input_queue = self.manager.Queue()
