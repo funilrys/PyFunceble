@@ -237,7 +237,10 @@ class WorkerBase(multiprocessing.Process):
                     self.add_to_output_queue("stop")
                     break
 
-                if self.continuous_integration.is_time_exceeded():
+                if (
+                    self.continuous_integration
+                    and self.continuous_integration.is_time_exceeded()
+                ):
                     PyFunceble.facility.Logger.info(
                         "CI time exceeded. Stopping runner."
                     )
