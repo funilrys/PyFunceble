@@ -59,6 +59,7 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
+from PyFunceble.cli.migrators.alembic import Alembic
 from PyFunceble.cli.migrators.file_cleanup.hashes_file import HashesFileCleanupMigrator
 from PyFunceble.cli.migrators.file_cleanup.mining_file import MiningFileCleanupMigrator
 from PyFunceble.cli.migrators.json2csv.inactive import InactiveJSON2CSVMigrator
@@ -70,7 +71,6 @@ from PyFunceble.cli.migrators.mariadb.whois_record_idna_subject import (
 from PyFunceble.cli.processes.base import ProcessesManagerBase
 from PyFunceble.cli.processes.workers.migrator import MigratorWorker
 from PyFunceble.helpers.file import FileHelper
-from PyFunceble.cli.migrators.alembic import Alembic
 
 
 class MigratorProcessesManager(ProcessesManagerBase):
