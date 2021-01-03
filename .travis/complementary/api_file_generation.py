@@ -16,6 +16,7 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
     DirectoryStructureRestoration,
 )
 from PyFunceble.cli.threads.file_producer import FileProducerThread
+from PyFunceble.cli.processes.producer import ProducerProcessesManager
 
 # We initiate the coloration.
 colorama.init(autoreset=True)
@@ -51,8 +52,8 @@ dir_structure_restoration = DirectoryStructureRestoration(
 ).restore_from_backup()
 
 # We start the producer thread.
-file_producer_thread = FileProducerThread()
-file_producer_thread.start()
+producer_process_manager = ProducerProcessesManager()
+producer_process_manager.start()
 
 # We start and configure our availability checker.
 avail_checker = DomainAvailabilityChecker(use_whois_lookup=False)
@@ -79,15 +80,15 @@ for domain in DOMAINS:
 
     # We order the generation of the status file by putting our information
     # to the producer queue.
-    file_producer_thread.add_to_the_queue((communication_dataset, test_result))
+    producer_process_manager.add_to_input_queue((communication_dataset, test_result))
 
 # We are now done, it's time to send the stop signal.
 # The stop signal will inform thhe producer thread that it needs to stop
 # listening to new order (from the time it reads the stop signal).
-file_producer_thread.send_stop_signal()
+producer_process_manager.send_stop_signal()
 
 # Now we wait until it's done.
-file_producer_thread.wait()
+producer_process_manager.wait()
 
 # From here all files were generated we can do whatever we want with them.
 
