@@ -58,6 +58,15 @@ PyFunceble.logger module
    :show-inheritance:
    :private-members:
 
+PyFunceble.sessions module
+--------------------------
+
+.. automodule:: PyFunceble.sessions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.storage module
 -------------------------
 
