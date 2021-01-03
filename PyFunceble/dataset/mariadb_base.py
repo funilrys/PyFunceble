@@ -56,7 +56,7 @@ from typing import Any, Generator, Optional, Union
 from sqlalchemy.ext.declarative.api import DeclarativeMeta
 from sqlalchemy.orm import Session
 
-import PyFunceble.cli.factory
+import PyFunceble.sessions
 from PyFunceble.dataset.db_base import DBDatasetBase
 
 
@@ -116,28 +116,6 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         return wrapper
 
-    def handle_db_session(func):  # pylint: disable=no-self-argument
-        """
-        Ensures that a session exists before launching the decorated method.
-        Also ensures that a session is closed after launching the decorated
-        method.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            if not self.keep_db_session_open and isinstance(self.db_session, Session):
-                self.db_session.close()
-                del self.db_session
-                self.db_session = None
-
-            self.db_session = PyFunceble.cli.factory.DBSession.get_new_session()()
-
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            return result
-
-        return wrapper
-
     @property
     def keep_db_session_open(self):
         """
@@ -176,16 +154,16 @@ class MariaDBDatasetBase(DBDatasetBase):
         return self
 
     @DBDatasetBase.execute_if_authorized(None)
-    @handle_db_session
     def get_content(self) -> Generator[dict, None, None]:
         """
         Provides a generator which provides the next dataset to read.
         """
 
-        for row in self.db_session.query(self.ORM_OBJ):
-            row = row.to_dict()
+        with PyFunceble.sessions.session_scope() as db_session:
+            for row in db_session.query(self.ORM_OBJ):
+                row = row.to_dict()
 
-            yield row
+                yield row
 
     @DBDatasetBase.execute_if_authorized(None)
     def update(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
@@ -203,17 +181,21 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         PyFunceble.facility.Logger.info("Started to update row.")
 
-        existing_row = self.get_existing_row(row)
+        with PyFunceble.sessions.session_scope() as db_session:
+            existing_row = self.get_existing_row(row)
 
-        if existing_row:
-            for key, value in row.items():
-                if hasattr(existing_row, key) and getattr(existing_row, key) != value:
-                    setattr(existing_row, key, value)
+            if existing_row:
+                for key, value in row.items():
+                    if (
+                        hasattr(existing_row, key)
+                        and getattr(existing_row, key) != value
+                    ):
+                        setattr(existing_row, key, value)
 
-            self.db_session.add(existing_row)
-            self.db_session.commit()
-        else:
-            self.add(row)
+                    db_session.add(existing_row)
+                    db_session.commit()
+            else:
+                self.add(row)
 
         PyFunceble.facility.Logger.debug("Updated row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to update row.")
@@ -222,7 +204,6 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    @handle_db_session
     def remove(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
         """
         Removes the given dataset from the database.
@@ -246,8 +227,9 @@ class MariaDBDatasetBase(DBDatasetBase):
             row = self.get_existing_row(row)
 
         if row:
-            self.db_session.delete(row)
-            self.db_session.commit()
+            with PyFunceble.sessions.session_scope() as db_session:
+                db_session.delete(row)
+                db_session.commit()
 
         PyFunceble.facility.Logger.debug("Removed row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to remove row.")
@@ -256,7 +238,6 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(False)
     @ensure_orm_obj_is_given
-    @handle_db_session
     def exists(self, row: Union[dict, DeclarativeMeta]) -> bool:
         """
         Checks if the given dataset exists in our dataset.
@@ -277,16 +258,16 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        result = self.db_session.query(self.ORM_OBJ)
+        with PyFunceble.sessions.session_scope() as db_session:
+            result = db_session.query(self.ORM_OBJ)
 
-        for field in self.COMPARISON_FIELDS:
-            result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
+            for field in self.COMPARISON_FIELDS:
+                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
 
-        return result.first() is not None
+            return result.first() is not None
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    @handle_db_session
     def get_existing_row(
         self, row: Union[dict, DeclarativeMeta]
     ) -> Optional[DeclarativeMeta]:
@@ -306,16 +287,16 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        result = self.db_session.query(self.ORM_OBJ)
+        with PyFunceble.sessions.session_scope() as db_session:
+            result = db_session.query(self.ORM_OBJ)
 
-        for field in self.COMPARISON_FIELDS:
-            result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
+            for field in self.COMPARISON_FIELDS:
+                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
 
         return result.first()
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    @handle_db_session
     def add(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
         """
         Adds the given dataset into the database.
@@ -344,8 +325,9 @@ class MariaDBDatasetBase(DBDatasetBase):
         for key, value in row.items():
             setattr(dataset, key, value)
 
-        self.db_session.add(dataset)
-        self.db_session.commit()
+        with PyFunceble.sessions.session_scope() as db_session:
+            db_session.add(dataset)
+            db_session.commit()
 
         PyFunceble.facility.Logger.debug("Added row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to add row.")

@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import copy
 import functools
 from typing import Any, Optional
 
@@ -58,6 +57,7 @@ import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.pool
 
+import PyFunceble.sessions
 from PyFunceble.database.credential.base import CredentialBase
 
 
@@ -71,7 +71,7 @@ class DBSession:
 
     def __enter__(self) -> sqlalchemy.orm.Session:
         # Yes we explicitly re-call.
-        self.current_session = self.close().get_new_session()()
+        self.current_session = self.close().get_db_session()
 
         return self.current_session
 
@@ -99,18 +99,64 @@ class DBSession:
 
         return wrapper
 
-    def get_new_db_session(self) -> "DBSession":
+    def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
-        Provides a new representation of the current object.
-
-        The idea of the new object is that we want to avoid connection issues.
+        Executes the decorated method only if we are authorized to process.
+        Otherwise, apply the given :code:`default`.
         """
 
-        new_obj = DBSession()
-        new_obj.__dict__ = copy.deepcopy(self.__dict__)
+        def inner_metdhod(func):
+            @functools.wraps(func)
+            def wrapper(self, *args, **kwargs):
+                if self.authorized:
+                    return func(self, *args, **kwargs)  # pylint: disable=not-callable
+                return self if default is None else default
 
-        return new_obj
+            return wrapper
 
+        return inner_metdhod
+
+    @property
+    def authorized(self) -> bool:
+        """
+        Provides the authorization to operate.
+        """
+
+        return self.credential is not None
+
+    @execute_if_authorized(None)
+    @ensure_credential_is_given
+    def init_global_session(self) -> "DBSession":
+        """
+        Initiate the global session to work with.
+        """
+
+        PyFunceble.sessions.DB_ENGINE = sqlalchemy.create_engine(
+            self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
+        )
+
+        PyFunceble.sessions.DB_FACTORY = sqlalchemy.orm.sessionmaker(
+            autocommit=False, autoflush=False, bind=PyFunceble.sessions.DB_ENGINE
+        )
+
+        PyFunceble.sessions.DB_SESSION = sqlalchemy.orm.scoped_session(
+            PyFunceble.sessions.DB_FACTORY
+        )
+
+        return self
+
+    @execute_if_authorized(None)
+    def get_db_session(self):
+        """
+        Provides a new session.
+        """
+
+        if PyFunceble.sessions.DB_SESSION is None:
+            self.init_global_session()
+
+        return PyFunceble.sessions.DB_SESSION()
+
+    @execute_if_authorized(None)
     @ensure_credential_is_given
     def get_new_session(self) -> sqlalchemy.orm.sessionmaker:
         """
@@ -128,6 +174,8 @@ class DBSession:
             autocommit=False, autoflush=False, bind=engine
         )
 
+    @execute_if_authorized(None)
+    @ensure_credential_is_given
     def get_new_pool_session(self) -> sqlalchemy.orm.sessionmaker:
         """
         Create and return a new session.
@@ -147,13 +195,17 @@ class DBSession:
         """
 
         if self.current_session is not None:
-            self.current_session.close()
+            try:
+                PyFunceble.sessions.DB_SESSION.remove()
+            except AttributeError:
+                self.current_session.close()
 
             del self.current_session
             self.current_session = None
 
         return self
 
+    @execute_if_authorized(None)
     def query(self, *args, **kwargs) -> Any:
         """
         Makes a query.

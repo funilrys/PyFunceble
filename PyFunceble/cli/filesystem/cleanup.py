@@ -56,6 +56,7 @@ from typing import List
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.cli.utils.testing
+import PyFunceble.sessions
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 from PyFunceble.database.sqlalchemy.all_schemas import Continue, Inactive
 from PyFunceble.helpers.file import FileHelper
@@ -82,7 +83,7 @@ class FilesystemCleanup(FilesystemDirBase):
 
             for orm_obj in to_clean:
                 # pylint: disable=line-too-long
-                with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+                with PyFunceble.sessions.session_scope() as db_session:
                     db_session.query(orm_obj).delete(synchronize_session=False)
                     db_session.commit()
 

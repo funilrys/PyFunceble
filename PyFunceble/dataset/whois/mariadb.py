@@ -59,6 +59,7 @@ from sqlalchemy.exc import ProgrammingError
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
+import PyFunceble.sessions
 import PyFunceble.storage
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -73,38 +74,40 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     ORM_OBJ: WhoisRecord = WhoisRecord
 
-    @MariaDBDatasetBase.handle_db_session
+    @MariaDBDatasetBase.execute_if_authorized(None)
     def __contains__(self, value: str) -> bool:
-        try:
-            return (
-                self.db_session.query(self.ORM_OBJ)
-                .filter(
-                    sqlalchemy.or_(
-                        self.ORM_OBJ.subject == value,
-                        self.ORM_OBJ.idna_subject == value,
+        with PyFunceble.sessions.session_scope() as db_session:
+            try:
+                return (
+                    db_session.query(self.ORM_OBJ)
+                    .filter(
+                        sqlalchemy.or_(
+                            self.ORM_OBJ.subject == value,
+                            self.ORM_OBJ.idna_subject == value,
+                        )
                     )
+                    .first()
+                    is not None
                 )
-                .first()
-                is not None
-            )
-        except ProgrammingError:
-            return None
+            except ProgrammingError:
+                return None
 
-    @MariaDBDatasetBase.handle_db_session
+    @MariaDBDatasetBase.execute_if_authorized(None)
     def __getitem__(self, value: Any) -> Optional[WhoisRecord]:
-        try:
-            return (
-                self.db_session.query(self.ORM_OBJ)
-                .filter(
-                    sqlalchemy.or_(
-                        self.ORM_OBJ.subject == value,
-                        self.ORM_OBJ.idna_subject == value,
+        with PyFunceble.sessions.session_scope() as db_session:
+            try:
+                return (
+                    db_session.query(self.ORM_OBJ)
+                    .filter(
+                        sqlalchemy.or_(
+                            self.ORM_OBJ.subject == value,
+                            self.ORM_OBJ.idna_subject == value,
+                        )
                     )
+                    .first()
                 )
-                .first()
-            )
-        except ProgrammingError:
-            return None
+            except ProgrammingError:
+                return None
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def get_content(self) -> Generator[dict, None, None]:
@@ -152,7 +155,6 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
         return self
 
     @MariaDBDatasetBase.execute_if_authorized(None)
-    @MariaDBDatasetBase.handle_db_session
     def cleanup(self) -> "MariaDBWhoisDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are
@@ -161,13 +163,14 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         current_timestamp = int(datetime.utcnow().timestamp())
 
-        try:
-            self.db_session.query(self.ORM_OBJ).filter(
-                self.ORM_OBJ.epoch < current_timestamp
-            ).delete(synchronize_session=False)
-            self.db_session.commit()
-        except ProgrammingError:
-            pass
+        with PyFunceble.sessions.session_scope() as db_session:
+            try:
+                db_session.query(self.ORM_OBJ).filter(
+                    self.ORM_OBJ.epoch < current_timestamp
+                ).delete(synchronize_session=False)
+                db_session.commit()
+            except ProgrammingError:
+                pass
 
         PyFunceble.facility.Logger.debug("Deleted all expired WHOIS records")
 

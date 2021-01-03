@@ -54,6 +54,7 @@ License:
 import os
 
 import PyFunceble.cli.facility
+import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
@@ -156,7 +157,7 @@ class SystemIntegrator(SystemBase):
         Starts a group of actions provided by this interface.
         """
 
-        if self.args.output_location:
+        if hasattr(self.args, "output_location") and self.args.output_location:
             PyFunceble.cli.storage.OUTPUT_DIRECTORY = os.path.realpath(
                 os.path.join(
                     self.args.output_location,
@@ -171,5 +172,6 @@ class SystemIntegrator(SystemBase):
         self.inject_into_config()
 
         PyFunceble.cli.facility.CredentialLoader.start()
+        PyFunceble.cli.factory.DBSession.init_global_session()
 
         return self

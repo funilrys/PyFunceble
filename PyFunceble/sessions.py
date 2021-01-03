@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the MariaDB management.
+Provides the location of all our sessions
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,46 +50,30 @@ License:
     limitations under the License.
 """
 
-import PyFunceble.cli.factory
-import PyFunceble.sessions
-from PyFunceble.database.sqlalchemy.all_schemas import Continue
-from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
-from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
+from contextlib import contextmanager
+from typing import Optional
+
+from sqlalchemy.orm import Session
+
+# Should be initiated by the PyFunceble.database.session module.
+DB_ENGINE = None
+DB_FACTORY = None
+DB_SESSION: Optional[Session] = None
 
 
-class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
+@contextmanager
+def session_scope():
     """
-    Provides the interface for the management and the Continue dataset unser
-    mariadb.
+    Provides a new session scope.
     """
 
-    ORM_OBJ: Continue = Continue
+    session = DB_SESSION()  # pylint: disable=not-callable
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
-    # pylint: disable=arguments-differ
-    def cleanup(self, *, session_id: str) -> "MariaDBContinueDataset":
-        """
-        Cleanups the dataset. Meaning that we delete every entries which are
-        needed anymore.
-
-        :param source:
-            The source to delete.
-        :param destination:
-            The destination to delete.
-        :param checker_type:
-            The checker type to delete.
-        :param session_id:
-            The session ID to cleanup.
-        """
-
-        with PyFunceble.sessions.session_scope() as db_session:
-            db_session.query(self.ORM_OBJ).filter(
-                self.ORM_OBJ.session_id == session_id
-            ).delete(synchronize_session=False)
-            db_session.commit()
-
-            PyFunceble.facility.Logger.debug(
-                "Deleted data related to %s (session_id", session_id
-            )
-
-        return self
+    try:
+        yield session
+        session.commit()
+    except Exception as exception:
+        session.rollback()
+        raise exception
+    finally:
+        DB_SESSION.remove()
