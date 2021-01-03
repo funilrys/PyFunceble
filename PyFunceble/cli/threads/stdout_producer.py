@@ -102,9 +102,7 @@ class StdoutProducerThread(ProducerThreadBase):
 
         return "ALL" in to_keep or status in to_keep
 
-    def run_stdout_printer(
-        self, test_dataset: dict, test_result: CheckerStatusBase
-    ) -> None:
+    def run_stdout_printer(self, test_result: CheckerStatusBase) -> None:
         """
         Runs the stdout printer if necessary.
 
@@ -114,25 +112,24 @@ class StdoutProducerThread(ProducerThreadBase):
             The test result object.
         """
 
-        if not self.should_we_block_printer(test_dataset, test_result):
-            if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
-                # pylint: disable=line-too-long
-                if self.shoud_we_print_status(test_result.status):
-                    self.stdout_printer.template_to_use = (
-                        PyFunceble.cli.utils.stdout.get_template_to_use()
-                    )
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
+            # pylint: disable=line-too-long
+            if self.shoud_we_print_status(test_result.status):
+                self.stdout_printer.template_to_use = (
+                    PyFunceble.cli.utils.stdout.get_template_to_use()
+                )
 
-                    if not self.header_already_printed:
-                        self.stdout_printer.print_header()
-                        self.header_already_printed = True
+                if not self.header_already_printed:
+                    self.stdout_printer.print_header()
+                    self.header_already_printed = True
 
-                    self.stdout_printer.set_dataset(
-                        test_result.to_dict()
-                    ).print_interpolated_line()
-                else:
-                    PyFunceble.cli.utils.stdout.print_single_line()
+                self.stdout_printer.set_dataset(
+                    test_result.to_dict()
+                ).print_interpolated_line()
             else:
                 PyFunceble.cli.utils.stdout.print_single_line()
+        else:
+            PyFunceble.cli.utils.stdout.print_single_line()
 
     def send_for_mining(
         self, test_dataset: dict, test_result: CheckerStatusBase
@@ -176,7 +173,7 @@ class StdoutProducerThread(ProducerThreadBase):
             if self.should_we_ignore(test_result):
                 continue
 
-            self.run_stdout_printer(test_dataset, test_result)
+            self.run_stdout_printer(test_result)
             self.send_for_mining(test_dataset, test_result)
 
         if stop_message_caught:
