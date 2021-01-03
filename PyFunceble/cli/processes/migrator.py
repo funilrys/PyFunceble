@@ -70,6 +70,7 @@ from PyFunceble.cli.migrators.mariadb.whois_record_idna_subject import (
 from PyFunceble.cli.processes.base import ProcessesManagerBase
 from PyFunceble.cli.processes.workers.migrator import MigratorWorker
 from PyFunceble.helpers.file import FileHelper
+from PyFunceble.cli.migrators.alembic import Alembic
 
 
 class MigratorProcessesManager(ProcessesManagerBase):
@@ -306,3 +307,9 @@ class MigratorProcessesManager(ProcessesManagerBase):
 
             self._created_workers.append(worker)
             PyFunceble.facility.Logger.info("Created worker for %r", method)
+
+    def start(self) -> "ProcessesManagerBase":
+        # We start the migration (as a standalone)
+        Alembic().upgrade()
+
+        return super().start()
