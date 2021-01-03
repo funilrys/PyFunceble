@@ -62,10 +62,13 @@ except ImportError:  # pragma: no cover ## Retro compatibility
 import alembic
 import alembic.config
 from alembic import command as alembic_command
+from alembic.script.base import ScriptDirectory
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.storage
 import PyFunceble.facility
+import PyFunceble.sessions
+from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
 
 
 class Alembic:
@@ -131,6 +134,27 @@ class Alembic:
 
         return self
 
+    def is_revision_different(self, revision: str) -> bool:
+        """
+        Checks if the given revision is already set.
+
+        :param revision:
+            The revision to check
+        """
+
+        revision_id = (
+            ScriptDirectory.from_config(self.alembic_config)
+            .get_revision(revision)
+            .revision
+        )
+
+        with PyFunceble.sessions.session_scope() as db_session:
+            statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
+
+            result = db_session.execute(statement, {"db_revision": revision_id})
+
+            return result.fetchone() is None
+
     @execute_if_authorized(None)
     def upgrade(self, revision: str = "head") -> "Alembic":
         """
@@ -140,16 +164,20 @@ class Alembic:
             The revision to apply.
         """
 
-        PyFunceble.facility.Logger.info(
-            "Started update (%r) of the database schema(s).", revision
-        )
-
         self.configure()
-        alembic_command.upgrade(self.alembic_config, revision)
 
-        PyFunceble.facility.Logger.info(
-            "Finished update (%r) of the database schema(s).", revision
-        )
+        if not MariaDBMigratorBase.does_table_exists(
+            "alembic_version"
+        ) or self.is_revision_different(revision):
+            PyFunceble.facility.Logger.info(
+                "Started update (%r) of the database schema(s).", revision
+            )
+
+            alembic_command.upgrade(self.alembic_config, revision)
+
+            PyFunceble.facility.Logger.info(
+                "Finished update (%r) of the database schema(s).", revision
+            )
 
     @execute_if_authorized(None)
     def downgrade(self, revision: str = "head") -> "Alembic":
@@ -160,13 +188,18 @@ class Alembic:
             The revision to apply.
         """
 
-        PyFunceble.facility.Logger.info(
-            "Started downgrade (%r) of the database schema(s).", revision
-        )
-
         self.configure()
-        alembic_command.downgrade(self.alembic_config, revision)
 
-        PyFunceble.facility.Logger.info(
-            "Finished downgrade (%r) of the database schema(s).", revision
-        )
+        if not MariaDBMigratorBase.does_table_exists(
+            "alembic_version"
+        ) or self.is_revision_different(revision):
+
+            PyFunceble.facility.Logger.info(
+                "Started downgrade (%r) of the database schema(s).", revision
+            )
+
+            alembic_command.downgrade(self.alembic_config, revision)
+
+            PyFunceble.facility.Logger.info(
+                "Finished downgrade (%r) of the database schema(s).", revision
+            )
