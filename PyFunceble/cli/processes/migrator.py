@@ -296,9 +296,12 @@ class MigratorProcessesManager(ProcessesManagerBase):
                 continue
 
             worker = MigratorWorker(
-                self.manager, name=f"pyfunceble_{method}", daemon=True
+                None,
+                name=f"pyfunceble_{method}",
+                daemon=True,
+                continuous_integration=self.continuous_integration,
             )
-            worker.target_args = (self.continuous_integration,)
+
             worker.target = getattr(self, method)
 
             self._created_workers.append(worker)

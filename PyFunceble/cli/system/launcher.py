@@ -180,6 +180,8 @@ class SystemLauncher(SystemBase):
             self.manager,
             continuous_integration=self.continuous_integration,
             daemon=True,
+            generate_input_queue=False,
+            generate_output_queue=False,
         )
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.mining:

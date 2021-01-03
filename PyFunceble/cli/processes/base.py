@@ -107,18 +107,24 @@ class ProcessesManagerBase:
         input_queue: Optional[queue.Queue] = None,
         output_queue: Optional[queue.Queue] = None,
         daemon: bool = False,
+        generate_input_queue: bool = True,
+        generate_output_queue: bool = True,
     ) -> None:
         self.manager = manager
 
         if input_queue is None:
             self.input_queue = self.manager.Queue()
-        else:
+        elif generate_input_queue:
             self.input_queue = input_queue
+        else:
+            self.input_queue = None
 
         if output_queue is None:
             self.output_queue = self.manager.Queue()
-        else:
+        elif generate_output_queue:
             self.output_queue = output_queue
+        else:
+            self.output_queue = None
 
         if max_worker is not None:
             self.max_worker = max_worker

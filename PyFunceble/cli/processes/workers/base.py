@@ -88,20 +88,20 @@ class WorkerBase(multiprocessing.Process):
     send_feeding_message: Optional[bool] = None
     accept_waiting_delay: Optional[bool] = None
 
-    __parent_connection: Optional[multiprocessing.connection.Connection] = None
+    _parent_connection: Optional[multiprocessing.connection.Connection] = None
     _child_connection: Optional[multiprocessing.connection.Connection] = None
-    __exception: Optional[multiprocessing.Pipe] = None
+    _exception: Optional[multiprocessing.Pipe] = None
 
     def __init__(
         self,
-        input_queue: queue.Queue,
+        input_queue: Optional[queue.Queue],
         output_queue: Optional[queue.Queue] = None,
         global_exit_event: Optional[multiprocessing.Event] = None,
         *,
         name: Optional[str] = None,
         daemon: Optional[bool] = None,
         continuous_integration: Optional[ContinuousIntegrationBase] = None,
-        configuration: Optional[dict] = None
+        configuration: Optional[dict] = None,
     ) -> None:
         self.configuration = configuration
         self.input_queue = input_queue
@@ -112,8 +112,8 @@ class WorkerBase(multiprocessing.Process):
         self.global_exit_event = global_exit_event
         self.exit_it = multiprocessing.Event()
 
-        self.__parent_connection, self._child_connection = multiprocessing.Pipe()
-        self.__exception = None
+        self._parent_connection, self._child_connection = multiprocessing.Pipe()
+        self._exception = None
 
         self.send_feeding_message = True
         self.accept_waiting_delay = True
@@ -133,10 +133,10 @@ class WorkerBase(multiprocessing.Process):
         Provides the exception of the current worker.
         """
 
-        if self.__parent_connection.poll():
-            self.__exception = self.__parent_connection.recv()
+        if self._parent_connection.poll():
+            self._exception = self._parent_connection.recv()
 
-        return self.__exception
+        return self._exception
 
     def add_to_input_queue(
         self, data: Any, *, worker_name: Optional[str] = None

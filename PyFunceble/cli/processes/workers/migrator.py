@@ -51,7 +51,6 @@ License:
 """
 
 import traceback
-from typing import Optional
 
 import PyFunceble.facility
 import PyFunceble.factory
@@ -68,11 +67,10 @@ class MigratorWorker(WorkerBase):
 
     STD_NAME: str = "pyfunceble_migrator_worker"
 
-    target_args: Optional[list] = list()
-
     def run(self) -> None:
         try:
-            self.target(*self.target_args)
+
+            self.target(self.continuous_integration)
             self._child_connection.send(None)
         except Exception as exception:  # pylint: disable=broad-except
             PyFunceble.facility.Logger.critical(
