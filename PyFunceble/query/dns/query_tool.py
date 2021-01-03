@@ -605,6 +605,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.tcp(
                     self.query_message,
@@ -621,9 +625,22 @@ class DNSQueryTool:
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
 
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
@@ -645,6 +662,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.udp(
                     self.query_message,
@@ -661,9 +682,22 @@ class DNSQueryTool:
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
 
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except (dns.exception.Timeout, socket.gaierror):
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
@@ -683,6 +717,10 @@ class DNSQueryTool:
         result = []
 
         for nameserver in self._mix_order(self.nameservers.get_nameservers()):
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.https(
                     self.query_message, nameserver, timeout=self.query_timeout
@@ -694,9 +732,23 @@ class DNSQueryTool:
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver
+
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
@@ -718,6 +770,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             if port == 53:
                 # Default port for nameserver class is 53. So we ensure we
                 # overwrite with our own default.
@@ -738,9 +794,23 @@ class DNSQueryTool:
 
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
+
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
