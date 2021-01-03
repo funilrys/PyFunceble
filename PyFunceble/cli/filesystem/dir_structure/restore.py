@@ -118,30 +118,31 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
                     continue
 
         for directory, files in backup.items():
-            dir_helper.set_path(os.path.join(base_dir, directory))
-
-            if not dir_helper.exists():
-                dir_helper.create()
+            dir_helper.set_path(os.path.join(base_dir, directory)).create()
 
             for file, dataset in files.items():
+                file_full_path = os.path.join(dir_helper.path, file)
+
                 if (
                     file == ".gitignore"
-                    and PyFunceble.cli.storage.STD_PARENT_DIRNAME not in dir_helper.path
+                    and PyFunceble.cli.storage.STD_PARENT_DIRNAME not in file_full_path
                 ):
-                    file = ".gitkeep"
+                    to_delete = file_full_path
 
-                    to_delete = os.path.join(dir_helper.path, ".gitignore")
                     file_helper.set_path(to_delete).delete()
 
                     PyFunceble.facility.Logger.debug(
-                        "Deleted: %r. Reason: We are going to replace it with %r",
+                        "(If exists) Deleted: %r. Reason: We are going to "
+                        "replace it with .gitkeep",
                         to_delete,
-                        file,
                     )
 
-                file_helper.set_path(os.path.join(dir_helper.path, file)).write(
-                    dataset["content"], overwrite=True
-                )
+                    file_full_path = file_full_path.replace(".gitignore", ".gitkeep")
+
+                file_helper.set_path(file_full_path)
+
+                if not file_helper.exists():
+                    file_helper.write(dataset["content"], overwrite=True)
 
         PyFunceble.facility.Logger.info(
             "Finished restoration of the directory structure"
