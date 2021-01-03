@@ -55,9 +55,8 @@ from typing import Any
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
-from PyFunceble.cli.credential_loader import CredentialLoader
+import PyFunceble.sessions
 from PyFunceble.cli.migrators.base import MigratorBase
-from PyFunceble.database.session import DBSession
 
 
 class DBMigratorBase(MigratorBase):
@@ -65,12 +64,8 @@ class DBMigratorBase(MigratorBase):
     Provides the base of all our database migration.
     """
 
-    credential_loader: CredentialLoader = PyFunceble.cli.facility.CredentialLoader
-    session: DBSession = PyFunceble.cli.factory.DBSession
-
-    def __init__(self) -> None:
-        self.session.credentials = self.credential_loader.credential
-        super().__init__()
+    def __init__(self, print_action_to_stdout: bool = False) -> None:
+        super().__init__(print_action_to_stdout=print_action_to_stdout)
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
@@ -97,7 +92,8 @@ class DBMigratorBase(MigratorBase):
 
         return PyFunceble.cli.facility.CredentialLoader.is_already_loaded()
 
-    def does_table_exists(self, table_name: str) -> bool:
+    @staticmethod
+    def does_table_exists(table_name: str) -> bool:
         """
         Checks if the table exists.
 
@@ -105,7 +101,7 @@ class DBMigratorBase(MigratorBase):
             The name of the table to check.
         """
 
-        with self.session as db_session:
+        with PyFunceble.sessions.session_scope() as db_session:
             statement = (
                 "SELECT COUNT(*) "
                 "FROM information_schema.tables "
@@ -116,7 +112,8 @@ class DBMigratorBase(MigratorBase):
             result = db_session.execute(
                 statement,
                 {
-                    "database_name": self.session.credential.name,
+                    # pylint: disable=line-too-long
+                    "database_name": PyFunceble.cli.facility.CredentialLoader.credential.name,
                     "table_name": table_name,
                 },
             )
