@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import List
+from typing import Generator, List, Optional, Tuple
 
 from PyFunceble.dataset.db_base import DBDatasetBase
 
@@ -74,3 +74,13 @@ class InactiveDatasetBase(DBDatasetBase):
         "destination",
         "source",
     ]
+
+    @DBDatasetBase.execute_if_authorized(None)
+    def get_to_retest(
+        self, source: str, checker_type: str, *, min_days: Optional[int] = 1
+    ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
+        """
+        Provides the next row to restest.
+        """
+
+        raise NotImplementedError()

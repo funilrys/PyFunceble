@@ -50,6 +50,10 @@ License:
     limitations under the License.
 """
 
+from datetime import datetime, timedelta
+from typing import Generator, Optional, Tuple
+
+import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Inactive
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -62,3 +66,22 @@ class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
     """
 
     ORM_OBJ: Inactive = Inactive
+
+    @MariaDBDatasetBase.execute_if_authorized(None)
+    @MariaDBDatasetBase.ensure_orm_obj_is_given
+    def get_to_retest(
+        self, source: str, checker_type: str, *, min_days: Optional[int]
+    ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
+
+        with PyFunceble.sessions.session_scope() as db_session:
+            result = (
+                db_session.query(self.ORM_OBJ)
+                .filter(self.ORM_OBJ.source == source)
+                .filter(self.ORM_OBJ.checker_type == checker_type)
+            )
+
+            for row in result:
+                if datetime.utcnow() < row.tested_at + timedelta(days=min_days):
+                    continue
+
+                yield row.to_dict()
