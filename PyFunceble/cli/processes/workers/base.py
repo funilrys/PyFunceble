@@ -197,6 +197,9 @@ class WorkerBase(multiprocessing.Process):
                 The events which were caught so far.
             """
 
+            if not feeding_worker_events:
+                return False
+
             return all(not x for x in feeding_worker_events.values())
 
         def break_now() -> bool:
