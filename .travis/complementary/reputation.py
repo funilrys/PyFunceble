@@ -7,9 +7,6 @@ import colorama
 from PyFunceble import DomainAndIPReputationChecker
 from PyFunceble.dataset.ipv4_reputation import IPV4ReputationDataset
 
-colorama.init(autoreset=True)
-
-
 reputation_checker = DomainAndIPReputationChecker()
 reputation_dataset = IPV4ReputationDataset().get_content()
 
@@ -20,22 +17,24 @@ MALICIOUS_SUBJECTS = [
 
 SANE_SUBJECTS = ["twitter.com", "google.com", "github.com"]
 
+if __name__ == "__main__":
+    colorama.init(autoreset=True)
 
-for subject in MALICIOUS_SUBJECTS:
-    reputation_checker.subject = subject
-    status = reputation_checker.get_status()
+    for subject in MALICIOUS_SUBJECTS:
+        reputation_checker.subject = subject
+        status = reputation_checker.get_status()
 
-    if not status.is_malicious():
-        raise RuntimeError(f"Something is wrong with {subject}.")
-    print(f"{subject} is {status.status}")
+        if not status.is_malicious():
+            raise RuntimeError(f"Something is wrong with {subject}.")
+        print(f"{subject} is {status.status}")
 
-for subject in SANE_SUBJECTS:
-    reputation_checker.subject = subject
-    status = reputation_checker.get_status()
+    for subject in SANE_SUBJECTS:
+        reputation_checker.subject = subject
+        status = reputation_checker.get_status()
 
-    if not status.is_sane():
+        if not status.is_sane():
 
-        raise RuntimeError(
-            f"Something is wrong with {subject}. Dataset:\n{status.to_json()}"
-        )
-    print(f"{subject} is {status.status}")
+            raise RuntimeError(
+                f"Something is wrong with {subject}. Dataset:\n{status.to_json()}"
+            )
+        print(f"{subject} is {status.status}")
