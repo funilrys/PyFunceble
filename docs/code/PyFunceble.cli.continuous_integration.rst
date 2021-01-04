@@ -22,6 +22,15 @@ PyFunceble.cli.continuous\_integration.exceptions module
    :show-inheritance:
    :private-members:
 
+PyFunceble.cli.continuous\_integration.github\_actions module
+-------------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.continuous_integration.github_actions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.cli.continuous\_integration.gitlab\_ci module
 --------------------------------------------------------
 

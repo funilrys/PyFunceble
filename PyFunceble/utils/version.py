@@ -145,9 +145,14 @@ class VersionUtility:
             Provides the codename part.
             """
 
-            return [
-                x for x in splitted_version if not x.isdigit() and not x[0].isdigit()
-            ][0]
+            try:
+                return [
+                    x
+                    for x in splitted_version
+                    if not x.isdigit() and not x[0].isdigit()
+                ][0]
+            except IndexError:
+                return ""
 
         return get_version_part(), get_codename_part()
 
@@ -224,7 +229,7 @@ class VersionUtility:
 
         return result
 
-    def is_older_then(self, upstream_version: str) -> bool:
+    def is_older_than(self, upstream_version: str) -> bool:
         """
         Compares if the local version is older that the given one.
         """

@@ -90,6 +90,7 @@ from PyFunceble.cli.processes.miner import MinerProcessesManager
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
 from PyFunceble.cli.processes.tester import TesterProcessesManager
 from PyFunceble.cli.system.base import SystemBase
+from PyFunceble.cli.utils.version import print_central_messages
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
@@ -759,6 +760,8 @@ class SystemLauncher(SystemBase):
     def start(self) -> "SystemLauncher":
         try:
             self.print_home_ascii()
+
+            print_central_messages(check_force_update=True)
 
             # This tries to bypass the execution when the continuous integration
             # is given and the last commit message (the one we are testing for)
