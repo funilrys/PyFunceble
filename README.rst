@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble?ref=badge_shield)
+
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
 
 The tool to check the availability or syntax of domain, IP or URL
@@ -302,3 +304,6 @@ License
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffunilrys%2FPyFunceble?ref=badge_large)
