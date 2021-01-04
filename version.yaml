@@ -1,4 +1,4 @@
-current_version: 4.0.0a41.dev (Blue Duckling)
+current_version: 4.0.0a42.dev (Blue Duckling)
 deprecated:
 - 3.0.21
 - 3.1.20
@@ -9,6 +9,14 @@ force_update:
     - 2.58.0
     status: true
 messages:
+    1.0.0:
+    -   message: '🎉🌠 Happy New Year! 🌠🎉
+
+            Best wishes to you and your beloved ones.
+
+            '
+        type: info
+        until_date: '2021-02-01T00:01:00+00:00'
     3.2.0:
     -   message: '🚨 ⚠️ ⚡ 🚨 A critical bug has been fixed. We recommend you to update
             to PyFunceble v3.2.2 or later! Find more about it at https://git.io/Jfdov
