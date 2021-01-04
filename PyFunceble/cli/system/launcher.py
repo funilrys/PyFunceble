@@ -90,7 +90,6 @@ from PyFunceble.cli.processes.miner import MinerProcessesManager
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
 from PyFunceble.cli.processes.tester import TesterProcessesManager
 from PyFunceble.cli.system.base import SystemBase
-from PyFunceble.cli.threads.migrator import MigratorThread
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
@@ -199,14 +198,8 @@ class SystemLauncher(SystemBase):
                 self.miner_process_manager.input_queue
             )
 
-        self.migrator_thread_manager = MigratorThread()
-
         if self.continuous_integration.authorized:
             self.continuous_integration.set_start_time()
-
-        self.migrator_thread_manager.continuous_integration = (
-            self.continuous_integration
-        )
 
         super().__init__(args)
 
@@ -323,10 +316,7 @@ class SystemLauncher(SystemBase):
         Stops our processes as soon as the time is exceeded.
         """
 
-        if (
-            self.continuous_integration.authorized
-            and self.continuous_integration.is_time_exceeded()
-        ):
+        if self.continuous_integration.is_time_exceeded():
             self.run_ci_saving_instructions()
 
         return self
@@ -694,15 +684,13 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.tester_process_manager.is_running():
-            # Just make sure that all threads are stopped :-)
-            self.stop_and_wait_for_all_manager()
+        # Just make sure that all processes are stopped :-)
+        self.stop_and_wait_for_all_manager()
 
         self.generate_waiting_files()
         self.remove_unwanted_files()
 
-        if self.continuous_integration.authorized:
-            self.continuous_integration.apply_end_commit()
+        self.continuous_integration.apply_end_commit()
 
         return self
 
@@ -723,18 +711,16 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.tester_process_manager.is_running():
-            # Just make sure that all threads are stopped :-)
-            self.stop_and_wait_for_all_manager()
+        # Just make sure that all processes are stopped :-)
+        self.stop_and_wait_for_all_manager()
 
-        if self.continuous_integration.authorized:
-            self.continuous_integration.apply_commit()
+        self.continuous_integration.apply_commit()
 
         return self
 
     def stop_and_wait_for_all_manager(self) -> "SystemLauncher":
         """
-        Sends our stop signal and wait until all threads are finished.
+        Sends our stop signal and wait until all managers are finished.
         """
 
         # The idea out here is to propate the stop signal.
