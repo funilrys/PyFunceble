@@ -684,13 +684,14 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        # Just make sure that all processes are stopped :-)
-        self.stop_and_wait_for_all_manager()
+        if self.continuous_integration.authorized:
+            # Just make sure that all processes are stopped :-)
+            self.stop_and_wait_for_all_manager()
 
-        self.generate_waiting_files()
-        self.remove_unwanted_files()
+            self.generate_waiting_files()
+            self.remove_unwanted_files()
 
-        self.continuous_integration.apply_end_commit()
+            self.continuous_integration.apply_end_commit()
 
         return self
 
@@ -711,10 +712,11 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        # Just make sure that all processes are stopped :-)
-        self.stop_and_wait_for_all_manager()
+        if self.continuous_integration.authorized:
+            # Just make sure that all processes are stopped :-)
+            self.stop_and_wait_for_all_manager()
 
-        self.continuous_integration.apply_commit()
+            self.continuous_integration.apply_commit()
 
         return self
 
@@ -734,11 +736,12 @@ class SystemLauncher(SystemBase):
         self.tester_process_manager.wait()
         self.producer_process_manager.wait()
 
-        # From here, we are sure that every test and files are produced.
-        # We now format the generated file(s).
-        self.file_sorter_process_manager.start()
-        self.file_sorter_process_manager.send_stop_signal()
-        self.file_sorter_process_manager.wait()
+        if not self.file_sorter_process_manager.is_running():
+            # From here, we are sure that every test and files are produced.
+            # We now format the generated file(s).
+            self.file_sorter_process_manager.start()
+            self.file_sorter_process_manager.send_stop_signal()
+            self.file_sorter_process_manager.wait()
 
         if self.execution_time_holder.authorized:
             self.execution_time_holder.set_end_time()
