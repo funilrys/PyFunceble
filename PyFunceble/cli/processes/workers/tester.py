@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import time
 from typing import Any, Optional, Tuple
 
 import PyFunceble.cli.utils.testing
@@ -188,6 +189,18 @@ class TesterWorker(WorkerBase):
             # X means that it was ignored because of our core ignore procedure.
             print_single_line("X")
             return None
+
+        if PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time > 0:
+            PyFunceble.facility.Logger.info(
+                "Sleeping: %rs for our own safety :-)",
+                PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
+            )
+            # Apply cooldowntime.
+            time.sleep(PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time)
+            PyFunceble.facility.Logger.info(
+                "Slept: %rs for our own safety :-)",
+                PyFunceble.storage.CONFIGURATION.cli_testing.cooldown_time,
+            )
 
         if test_dataset["type"] != "single":
             if test_dataset["output_dir"]:
