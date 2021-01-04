@@ -169,7 +169,7 @@ class ConfigLoader:
             loaded.
         """
 
-        self.custom_config = copy.deepcopy(value)
+        self.custom_config = value
 
         return self
 
@@ -285,25 +285,23 @@ class ConfigLoader:
 
             return config and "days_between_inactive_db_clean" in config
 
-        self.install_missing_infrastructure_files()
-        self.download_dynamic_infrastructure_files()
+        if not self.is_already_loaded():
+            self.install_missing_infrastructure_files()
+            self.download_dynamic_infrastructure_files()
 
-        try:
-            config = self.dict_helper.from_yaml_file(self.path_to_config)
-        except ConstructorError:
-            self.file_helper.set_path(self.path_to_default_config).copy(
-                self.path_to_config
-            )
-            config = self.dict_helper.from_yaml_file(self.path_to_config)
+            try:
+                config = self.dict_helper.from_yaml_file(self.path_to_config)
+            except ConstructorError:
+                self.file_helper.set_path(self.path_to_default_config).copy(
+                    self.path_to_config
+                )
+                config = self.dict_helper.from_yaml_file(self.path_to_config)
+        else:
+            config = copy.deepcopy(PyFunceble.storage.CONFIGURATION.to_dict())
 
-        if config and (
-            self.merge_upstream or is_3_x_version(config)
+        if self.merge_upstream or is_3_x_version(
+            config
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
-
-            # Note: The case that the config is not complete can only happen
-            # when under a process. In our workflow it is actually not a
-            # problem because a worker inherit the parent configuration as a
-            # custom one (parsed in the start method).
 
             config = ConfigComparison(
                 local_config=config,
