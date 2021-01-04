@@ -217,11 +217,13 @@ class VersionUtility:
             Compare and provides the result of the comparison.
             """
 
+            # pylint: disable=too-many-return-statements
+
             # ORD A ==> 65 ==> 650
-            if version_number > 650 and upstream_number < 650:
+            if upstream_number < 650 < version_number:
                 return True
 
-            if version_number < 650 and upstream_number > 650:
+            if version_number < 650 < upstream_number:
                 return False
 
             if version_number > 650 and upstream_number > 650:
