@@ -314,8 +314,9 @@ def handle_messages(upstream_version: Box) -> None:
                 if remaining_days is not None and remaining_days <= 0:
                     continue
 
-                if "until" in single_message and version_utility.is_recent(
-                    single_message.until
+                if "until" in single_message and (
+                    version_utility.is_recent(single_message.until)
+                    or version_utility.is_equal_to(single_message.until)
                 ):
                     continue
 
