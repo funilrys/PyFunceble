@@ -61,6 +61,8 @@ class GitHubActions(ContinuousIntegrationBase):
     infrastructure.
     """
 
+    end_commit_marker: str = "[GHA skip]"
+
     def guess_and_set_authorized(self) -> "GitHubActions":
         """
         Tries to guess the authorization.
