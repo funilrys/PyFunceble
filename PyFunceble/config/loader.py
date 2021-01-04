@@ -158,7 +158,10 @@ class ConfigLoader:
         if not isinstance(value, dict):
             raise TypeError(f"<value> should be {dict}, {type(value)} given.")
 
-        self._custom_config = value
+        if not self._custom_config:
+            self._custom_config = value
+        else:
+            self._custom_config.update(value)
 
     def set_custom_config(self, value: dict) -> "ConfigLoader":
         """
@@ -289,15 +292,13 @@ class ConfigLoader:
             self.install_missing_infrastructure_files()
             self.download_dynamic_infrastructure_files()
 
-            try:
-                config = self.dict_helper.from_yaml_file(self.path_to_config)
-            except ConstructorError:
-                self.file_helper.set_path(self.path_to_default_config).copy(
-                    self.path_to_config
-                )
-                config = self.dict_helper.from_yaml_file(self.path_to_config)
-        else:
-            config = copy.deepcopy(PyFunceble.storage.CONFIGURATION.to_dict())
+        try:
+            config = self.dict_helper.from_yaml_file(self.path_to_config)
+        except ConstructorError:
+            self.file_helper.set_path(self.path_to_default_config).copy(
+                self.path_to_config
+            )
+            config = self.dict_helper.from_yaml_file(self.path_to_config)
 
         if (
             not config or self.merge_upstream or is_3_x_version(config)
@@ -373,8 +374,10 @@ class ConfigLoader:
             )
             PyFunceble.storage.HTTP_CODES = Box({})
             PyFunceble.storage.LINKS = Box({})
-            self.custom_config = dict()
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
+
+        # This is not a mistake.
+        self._custom_config = dict()
 
         return self
