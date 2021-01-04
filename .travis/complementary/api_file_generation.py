@@ -15,7 +15,6 @@ from PyFunceble import DomainAvailabilityChecker
 from PyFunceble.cli.filesystem.dir_structure.restore import (
     DirectoryStructureRestoration,
 )
-from PyFunceble.cli.threads.file_producer import FileProducerThread
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
 
 # We initiate the coloration.
@@ -52,7 +51,9 @@ dir_structure_restoration = DirectoryStructureRestoration(
 ).restore_from_backup()
 
 # We start the producer thread.
-producer_process_manager = ProducerProcessesManager()
+producer_process_manager = ProducerProcessesManager(
+    max_worker=1, daemon=True, generate_output_queue=False
+)
 producer_process_manager.start()
 
 # We start and configure our availability checker.
