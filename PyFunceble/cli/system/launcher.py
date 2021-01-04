@@ -736,12 +736,15 @@ class SystemLauncher(SystemBase):
         self.tester_process_manager.wait()
         self.producer_process_manager.wait()
 
-        if not self.file_sorter_process_manager.is_running():
+        try:
             # From here, we are sure that every test and files are produced.
             # We now format the generated file(s).
             self.file_sorter_process_manager.start()
             self.file_sorter_process_manager.send_stop_signal()
             self.file_sorter_process_manager.wait()
+        except AssertionError:
+            # Example: Already started previously.
+            pass
 
         if self.execution_time_holder.authorized:
             self.execution_time_holder.set_end_time()
@@ -778,7 +781,11 @@ class SystemLauncher(SystemBase):
             self.fill_to_test_queue_from_protocol()
 
             self.stop_and_wait_for_all_manager()
-            self.run_standard_end_instructions()
+
+            if self.continuous_integration.is_time_exceeded():
+                self.run_ci_saving_instructions()
+            else:
+                self.run_standard_end_instructions()
         except (KeyboardInterrupt, StopExecution):
             pass
         except Exception as exception:  # pylint: disable=broad-except
