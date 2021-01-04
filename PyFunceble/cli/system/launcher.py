@@ -760,6 +760,12 @@ class SystemLauncher(SystemBase):
         try:
             self.print_home_ascii()
 
+            # This tries to bypass the execution when the continuous integration
+            # is given and the last commit message (the one we are testing for)
+            # match any of our known marker. Please report to the method itself
+            # for more information about the markers.
+            self.continuous_integration.bypass()
+
             if self.args.files or self.args.url_files:
                 self.migrator_process_manager.start()
 
