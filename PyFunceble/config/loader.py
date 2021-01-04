@@ -299,8 +299,8 @@ class ConfigLoader:
         else:
             config = copy.deepcopy(PyFunceble.storage.CONFIGURATION.to_dict())
 
-        if self.merge_upstream or is_3_x_version(
-            config
+        if (
+            not config or self.merge_upstream or is_3_x_version(config)
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
 
             config = ConfigComparison(

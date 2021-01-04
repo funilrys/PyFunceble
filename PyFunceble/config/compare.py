@@ -287,72 +287,75 @@ class ConfigComparison:
 
         # pylint: disable=too-many-branches
 
-        if not self.is_local_identical():
+        if self.is_local_identical():
+            return self.local_config
 
-            original_local = copy.deepcopy(self.local_config)
-            original_upstream = copy.deepcopy(self.upstream_config)
+        if not self.local_config:
+            return self.upstream_config
 
-            flatten_original = self.dict_helper.set_subject(original_local).flatten()
-            flatten_upstream = self.dict_helper.set_subject(original_upstream).flatten()
+        original_local = copy.deepcopy(self.local_config)
+        original_upstream = copy.deepcopy(self.upstream_config)
 
-            for key, value in self.OLD_TO_NEW.items():
-                if key not in flatten_original:
-                    continue
+        flatten_original = self.dict_helper.set_subject(original_local).flatten()
+        flatten_upstream = self.dict_helper.set_subject(original_upstream).flatten()
 
-                if value not in flatten_upstream:  # pragma: no cover ## Safety.
-                    raise RuntimeError(f"<value> ({value!r}) not found.")
+        for key, value in self.OLD_TO_NEW.items():
+            if key not in flatten_original:
+                continue
 
-                flatten_original[value] = original_local[key]
+            if value not in flatten_upstream:  # pragma: no cover ## Safety.
+                raise RuntimeError(f"<value> ({value!r}) not found.")
 
-                del flatten_original[key]
+            flatten_original[value] = original_local[key]
 
-            for key, value in self.OLD_TO_NEW_NEGATE.items():
-                if key not in flatten_original:
-                    continue
+            del flatten_original[key]
 
-                if value not in flatten_upstream:  # pragma: no cover ## Safety.0
-                    raise RuntimeError(f"<value> ({value!r}) not found.")
+        for key, value in self.OLD_TO_NEW_NEGATE.items():
+            if key not in flatten_original:
+                continue
 
-                flatten_original[value] = not original_local[key]
+            if value not in flatten_upstream:  # pragma: no cover ## Safety.0
+                raise RuntimeError(f"<value> ({value!r}) not found.")
 
-                del flatten_original[key]
+            flatten_original[value] = not original_local[key]
 
-            original_local = self.dict_helper.set_subject(flatten_original).unflatten()
-            del flatten_original
+            del flatten_original[key]
 
-            merged = Merge(original_local).into(original_upstream)
+        original_local = self.dict_helper.set_subject(flatten_original).unflatten()
+        del flatten_original
 
-            if "dns_lookup_over_tcp" in merged and merged["dns_lookup_over_tcp"]:
-                merged["dns"]["protocol"] = "TCP"
+        merged = Merge(original_local).into(original_upstream)
 
-            for index in self.DELETED_CORE:
-                if index in merged:
-                    del merged[index]
+        if "dns_lookup_over_tcp" in merged and merged["dns_lookup_over_tcp"]:
+            merged["dns"]["protocol"] = "TCP"
 
-            for index in self.DELETED_LINKS:
-                if index in merged["links"]:
-                    del merged["links"][index]
+        for index in self.DELETED_CORE:
+            if index in merged:
+                del merged[index]
 
-            if not bool(merged["http_codes"]["self_managed"]):
-                for index, values in PyFunceble.storage.STD_HTTP_CODES.list.items():
-                    merged["http_codes"]["list"][index] = list(values)
+        for index in self.DELETED_LINKS:
+            if index in merged["links"]:
+                del merged["links"][index]
 
-            if merged["cli_testing"]["db_type"] == "json":
-                merged["cli_testing"]["db_type"] = "csv"
+        if not bool(merged["http_codes"]["self_managed"]):
+            for index, values in PyFunceble.storage.STD_HTTP_CODES.list.items():
+                merged["http_codes"]["list"][index] = list(values)
 
-            if merged["cli_testing"]["cooldown_time"] is None:
-                merged["cli_testing"]["cooldown_time"] = self.upstream_config[
-                    "cli_testing"
-                ]["cooldown_time"]
+        if merged["cli_testing"]["db_type"] == "json":
+            merged["cli_testing"]["db_type"] = "csv"
 
-            if not isinstance(self.local_config["user_agent"], dict):
-                merged["user_agent"] = self.upstream_config["user_agent"]
+        if merged["cli_testing"]["cooldown_time"] is None:
+            merged["cli_testing"]["cooldown_time"] = self.upstream_config[
+                "cli_testing"
+            ]["cooldown_time"]
 
-            if "active" in merged["http_codes"]:
-                del merged["http_codes"]["active"]
+        if not isinstance(self.local_config["user_agent"], dict):
+            merged["user_agent"] = self.upstream_config["user_agent"]
 
-            if "not_found_default" in merged["http_codes"]:
-                del merged["http_codes"]["not_found_default"]
+        if "active" in merged["http_codes"]:
+            del merged["http_codes"]["active"]
 
-            return merged
-        return self.local_config
+        if "not_found_default" in merged["http_codes"]:
+            del merged["http_codes"]["not_found_default"]
+
+        return merged

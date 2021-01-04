@@ -272,6 +272,23 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_config_file_but_empty(self) -> None:
+        """
+        Tests the method which let us get the content of the configuration file
+        for the case it is empty.
+        """
+
+        self.default_config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.default_config_file.seek(0)
+
+        self.config_file.write("".encode())
+        self.config_file.seek(0)
+
+        expected = self.our_config
+        actual = self.config_loader.get_config_file_content()
+
+        self.assertEqual(expected, actual)
+
     def test_get_configured_value_not_loaded(self) -> None:
         """
         Tests the method which let us get the configured value.

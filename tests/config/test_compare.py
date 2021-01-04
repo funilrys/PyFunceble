@@ -547,6 +547,25 @@ class TestConfigCompare(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_merged_empty_local(self) -> None:
+        """
+        Tests the method which let us get the (clean) merged configuration
+        for the case that the given local configuration is empty -- which should
+        never happens.
+        """
+
+        given_local = dict()
+        given_upstream = copy.deepcopy(self.our_config)
+
+        config_comparison = ConfigComparison(
+            local_config=given_local, upstream_config=given_upstream
+        )
+
+        expected = self.our_config
+        actual = config_comparison.get_merged()
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main()
