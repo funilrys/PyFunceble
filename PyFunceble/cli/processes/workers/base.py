@@ -352,7 +352,6 @@ class WorkerBase(multiprocessing.Process):
                     break
 
                 result = self.target(consumed)
-                self._child_connection.send(None)
 
                 if result is not None:
                     self.add_to_output_queue(result)
