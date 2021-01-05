@@ -685,14 +685,11 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.continuous_integration.authorized:
-            # Just make sure that all processes are stopped :-)
-            self.stop_and_wait_for_all_manager()
+        # Just make sure that all processes are stopped :-)
+        self.stop_and_wait_for_all_manager()
 
-            self.generate_waiting_files()
-            self.remove_unwanted_files()
-
-            self.continuous_integration.apply_end_commit()
+        self.generate_waiting_files()
+        self.remove_unwanted_files()
 
         return self
 
@@ -713,11 +710,34 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.continuous_integration.authorized:
-            # Just make sure that all processes are stopped :-)
-            self.stop_and_wait_for_all_manager()
+        self.stop_and_wait_for_all_manager()
 
+        if self.continuous_integration.authorized:
             self.continuous_integration.apply_commit()
+
+        return self
+
+    def run_ci_end_saving_instructions(self) -> "SystemLauncher":
+        """
+        Runns our CI END "saving" instructions.
+
+        The instructions executed by this method are the one we execute
+        before ending a testing session under one of the supported CI engines.
+
+        The purpose of this method is to make our instructions
+        available to everybody instead of hiding them into the :code:`start`
+        method. :-)
+
+        .. warning::
+            This is the standard "end" instructions. Do not call this method
+            if you are trying to run an action after the CI execution time
+            exceeded.
+        """
+
+        self.run_standard_end_instructions()
+
+        if self.continuous_integration.authorized:
+            self.continuous_integration.apply_end_commit()
 
         return self
 
@@ -789,10 +809,13 @@ class SystemLauncher(SystemBase):
             self.fill_protocol()
             self.fill_to_test_queue_from_protocol()
 
-            self.stop_and_wait_for_all_manager()
-
             if self.continuous_integration.is_time_exceeded():
+                # Does not includes the run_standard_end_instructions call.
+                # Reason: We have to continue.
                 self.run_ci_saving_instructions()
+            elif self.continuous_integration.authorized:
+                # Includes the run_standard_end_instructions call.
+                self.run_ci_end_saving_instructions()
             else:
                 self.run_standard_end_instructions()
         except (KeyboardInterrupt, StopExecution):
