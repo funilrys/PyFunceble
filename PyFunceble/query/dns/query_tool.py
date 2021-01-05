@@ -136,9 +136,12 @@ class DNSQueryTool:
             if self.subject and self.query_record_type:
                 self.dns_name = self.get_dns_name_from_subject_and_query_type()
 
-                self.query_message = dns.message.make_query(
-                    self.dns_name, self.query_record_type
-                )
+                if self.dns_name:
+                    self.query_message = dns.message.make_query(
+                        self.dns_name, self.query_record_type
+                    )
+                else:
+                    self.query_message = None
 
             return result
 
@@ -229,20 +232,37 @@ class DNSQueryTool:
 
         return wrapper
 
+    def ignore_if_query_message_is_missing(func):  # pylint: disable=no-self-argument
+        """
+        Ignores the call to the decorated method if the query message is
+        missing. Otherwise, return an empty list.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
+            if self.query_message:
+                return func(self, *args, **kwargs)  # pylint: disable=not-callable
+            return []
+
+        return wrapper
+
     @ensure_subject_is_given
     def get_dns_name_from_subject_and_query_type(self):
         """
         Provides the dns name based on the current subject and query type.
         """
 
-        if self.get_human_query_record_type().lower() == "ptr":
-            try:
-                return dns.name.from_text(
-                    ipaddress.ip_address(self.subject).reverse_pointer
-                )
-            except ValueError:
-                return dns.name.from_text(self.subject)
-        return dns.name.from_text(self.subject)
+        try:
+            if self.get_human_query_record_type().lower() == "ptr":
+                try:
+                    return dns.name.from_text(
+                        ipaddress.ip_address(self.subject).reverse_pointer
+                    )
+                except ValueError:
+                    return dns.name.from_text(self.subject)
+            return dns.name.from_text(self.subject)
+        except dns.name.LabelTooLong:
+            return None
 
     @property
     def subject(self) -> Optional[str]:
@@ -590,6 +610,7 @@ class DNSQueryTool:
         return dataset
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def tcp(
         self,
@@ -647,6 +668,7 @@ class DNSQueryTool:
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def udp(
         self,
@@ -704,6 +726,7 @@ class DNSQueryTool:
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def https(
         self,
@@ -755,6 +778,7 @@ class DNSQueryTool:
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def tls(
         self,
