@@ -22,7 +22,7 @@ from setup import get_version
 # -- Project information -----------------------------------------------------
 
 project = "PyFunceble"
-copyright = "2017, 2018, 2019, 2020 Nissar Chababy (@funilrys)"
+copyright = "2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys)"
 author = "Nissar Chababy (@funilrys)"
 
 # The short X.Y version
