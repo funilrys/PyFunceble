@@ -14,8 +14,8 @@ Show the help message and exit.
 
 Show the version of PyFunceble and exit.
 
-Source
-^^^^^^
+Test sources
+^^^^^^^^^^^^
 
 :code:`-d "something"` | :code:`--domain "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -53,6 +53,9 @@ As example:
 
     $ PyFunceble -u https://example.org https://example.com
 
+
+.. _domain_source:
+
 :code:`-f "something"` | :code:`--file "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -77,6 +80,7 @@ As example:
     at the same time
 
 
+.. _uri_source:
 
 :code:`-uf "something"` | :code:`--url-file "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -93,7 +97,7 @@ As example:
 
 .. code-block:: bash
 
-    $ PyFunceble -uf test_this test_tha
+    $ PyFunceble -uf test_this test_that
 
 .. note::
     We consider one line as one URL to test.
@@ -127,6 +131,7 @@ Source filtering, decoding, conversion and expansion
 """""""""""""""""
 
 Activates or disables the decoding of the adblock format.
+You will still need to use the :ref:`domain_source`
 
 **Default value:** :code:`False`
 
@@ -395,8 +400,11 @@ Separated by spaces.
     - 127.0.1.53:5353
 
 
+dns-protocol
+""""""""""""
+
 :code:`--dns-protocol`
-""""""""""""""""""""""
+
 
 Sets the protocol to use for the DNS queries.
 
@@ -583,19 +591,19 @@ Sets the IP to prefix each lines of the hosts file.
 
 :code:`--logging-level`
 """""""""""""""""""""""
-.. versionadded:: 4.0.0
+    .. versionadded:: 4.0.0
 
-You can configure the logging level to be outputted in STDOUT (screen).
-The following optional values can be set.
+    You can configure the logging level to be outputted in STDOUT (screen).
+    The following optional values can be set.
 
-.. hlist::
-    :columns: 1
+    .. hlist::
+        :columns: 1
 
-    * :code:`info` ==> **INFO (default)**
-    * :code:`debug` ==> DEBUG
-    * :code:`warning` ==> WARNING
-    * :code:`error` ==> ERROR
-    * :code:`critical` ==> CRITICAL
+        * :code:`--logging-level info` ==> INFO **(default)**
+        * :code:`--logging-level debug` ==> DEBUG
+        * :code:`--logging-level warning` ==> WARNING
+        * :code:`--logging-level error` ==> ERROR
+        * :code:`--logging-level critical` ==> CRITICAL
 
 
 .. _no-files:
@@ -603,30 +611,46 @@ The following optional values can be set.
 :code:`--no-files`
 """"""""""""""""""
 
-Activates or disables the generation of any non-logs file(s).
+    Activates or disables the generation of any non-logs file(s).
 
-**Default value:** :code:`False`
+    **Default value:** :code:`False`
 
-Want to disable the production of the outputted files? This argument is for
-you!
+    Want to disable the production of the outputted files? This argument is for
+    you!
 
-.. note:
-    This will also disable the generation of the end statistic.
+    .. note:
+        This will also disable the generation of the end statistic.
 
-.. seealso::
+    .. seealso::
 
-    :ref:`hosts`, :ref:`plain`
+        :ref:`hosts`, :ref:`plain`
 
+
+:code:`--output-location`
+"""""""""""""""""""""""""
+    .. versionadded:: 4.0.0
+
+    This is used to direct the output location and matches
+    `PYFUNCEBLE_OUTPUT_LOCATION <index.html#global-variables>`_.
+
+    With this new option you no longer need to add the Global
+    Variable but can append it directly to the CLI string.
+
+    **Example of usage**:
+
+    .. code-block:: bash
+    
+        pyfunceble --output-location /tmp/pyfunceble -f file
 
 :code:`--unified-results`
 """""""""""""""""""""""""
 
-Activates or disables the generation of the unified results
-file instead of the splitted one.
+    Activates or disables the generation of the unified results
+    file instead of the splitted one.
 
-**Default value:** :code:`True`
+    **Default value:** :code:`True`
 
-This argument disables the generation of the :code:`result.txt` file.
+    This argument disables the generation of the :code:`result.txt` file.
 
 :code:`--percentage`
 """"""""""""""""""""
