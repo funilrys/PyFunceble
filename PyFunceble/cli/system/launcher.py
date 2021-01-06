@@ -54,6 +54,7 @@ License:
 import argparse
 import copy
 import datetime
+import multiprocessing
 import os
 import secrets
 import sys
@@ -83,16 +84,13 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
+from PyFunceble.cli.processes.file_sorter import FileSorterProcessesManager
+from PyFunceble.cli.processes.migrator import MigratorProcessesManager
+from PyFunceble.cli.processes.miner import MinerProcessesManager
+from PyFunceble.cli.processes.producer import ProducerProcessesManager
+from PyFunceble.cli.processes.tester import TesterProcessesManager
 from PyFunceble.cli.system.base import SystemBase
-from PyFunceble.cli.threads.continue_producer import ContinueProducerThread
-from PyFunceble.cli.threads.file_producer import FileProducerThread
-from PyFunceble.cli.threads.file_sorter import FileSorterThread
-from PyFunceble.cli.threads.inactive_producer import InactiveProducerThread
-from PyFunceble.cli.threads.migrator import MigratorThread
-from PyFunceble.cli.threads.miner import MinerThread
-from PyFunceble.cli.threads.stdout_producer import StdoutProducerThread
-from PyFunceble.cli.threads.tester import TesterThread
-from PyFunceble.cli.threads.whois_producer import WhoisProducerThread
+from PyFunceble.cli.utils.version import print_central_messages
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
@@ -130,15 +128,12 @@ class SystemLauncher(SystemBase):
 
     execution_time_holder: Optional[ExecutionTime] = None
 
-    stdout_producer_thread_manager: Optional[StdoutProducerThread] = None
-    continue_producer_thread_manager: Optional[ContinueProducerThread] = None
-    inactive_producer_thread_manager: Optional[InactiveProducerThread] = None
-    whois_producer_thread_manager: Optional[WhoisProducerThread] = None
-    file_producer_thread_manager: Optional[FileProducerThread] = None
-    tester_thread_manager: Optional[TesterThread] = None
-    miner_thread_manager: Optional[MinerThread] = None
-    migrator_thread_manager: Optional[MigratorThread] = None
-    file_sorter_thread_manager: Optional[FileSorterThread] = None
+    manager: Optional[multiprocessing.Manager]
+    tester_process_manager: Optional[TesterProcessesManager] = None
+    producer_process_manager: Optional[ProducerProcessesManager] = None
+    miner_process_manager: Optional[MinerProcessesManager] = None
+    file_sorter_process_manager: Optional[FileSorterProcessesManager] = None
+    migrator_process_manager: Optional[MigratorProcessesManager] = None
 
     inactive_dataset: Optional[InactiveDatasetBase] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
@@ -160,42 +155,52 @@ class SystemLauncher(SystemBase):
 
         self.stdout_printer.guess_allow_coloration()
 
-        self.stdout_producer_thread_manager = StdoutProducerThread()
-        self.continue_producer_thread_manager = ContinueProducerThread()
-        self.inactive_producer_thread_manager = InactiveProducerThread()
-        self.whois_producer_thread_manager = WhoisProducerThread()
-        self.file_producer_thread_manager = FileProducerThread()
+        self.manager = multiprocessing.Manager()
 
-        self.tester_thread_manager = TesterThread(
-            output_queue=(
-                self.stdout_producer_thread_manager.the_queue,
-                self.continue_producer_thread_manager.the_queue,
-                self.inactive_producer_thread_manager.the_queue,
-                self.whois_producer_thread_manager.the_queue,
-                self.file_producer_thread_manager.the_queue,
-            )
+        self.tester_process_manager = TesterProcessesManager(
+            self.manager,
+            max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+            continuous_integration=self.continuous_integration,
+            daemon=True,
         )
-        self.migrator_thread_manager = MigratorThread()
-        self.file_sorter_thread_manager = FileSorterThread()
+        self.producer_process_manager = ProducerProcessesManager(
+            self.manager,
+            max_worker=1,
+            continuous_integration=self.continuous_integration,
+            input_queue=self.tester_process_manager.output_queue,
+            daemon=True,
+        )
+        self.file_sorter_process_manager = FileSorterProcessesManager(
+            self.manager,
+            max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+            continuous_integration=self.continuous_integration,
+            daemon=True,
+        ).create()
+        self.migrator_process_manager = MigratorProcessesManager(
+            self.manager,
+            continuous_integration=self.continuous_integration,
+            daemon=True,
+            generate_input_queue=False,
+            generate_output_queue=False,
+        )
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.mining:
-            self.miner_thread_manager = MinerThread(
-                output_queue=self.tester_thread_manager.the_queue
-            )
-            self.miner_thread_manager.continuous_integration = (
-                self.continuous_integration
+            self.miner_process_manager = MinerProcessesManager(
+                self.manager,
+                max_worker=1,
+                continuous_integration=self.continuous_integration,
+                output_queue=self.tester_process_manager.input_queue,
+                daemon=True,
             )
 
-            self.stdout_producer_thread_manager.output_queue = (
-                self.miner_thread_manager.the_queue
+            del self.producer_process_manager.output_queue
+
+            self.producer_process_manager.output_queue = (
+                self.miner_process_manager.input_queue
             )
 
         if self.continuous_integration.authorized:
             self.continuous_integration.set_start_time()
-
-        self.tester_thread_manager.continuous_integration = (
-            self.migrator_thread_manager.continuous_integration
-        ) = self.continuous_integration
 
         super().__init__(args)
 
@@ -312,10 +317,7 @@ class SystemLauncher(SystemBase):
         Stops our processes as soon as the time is exceeded.
         """
 
-        if (
-            self.continuous_integration.authorized
-            and self.continuous_integration.is_time_exceeded()
-        ):
+        if self.continuous_integration.is_time_exceeded():
             self.run_ci_saving_instructions()
 
         return self
@@ -485,52 +487,37 @@ class SystemLauncher(SystemBase):
                             protocol["destination"]
                         ]
 
-                        self.tester_thread_manager.add_to_the_queue(to_send)
+                        self.tester_process_manager.add_to_input_queue(
+                            to_send, worker_name="main"
+                        )
 
                 # Now, let's handle the inactive one :-)
                 if bool(PyFunceble.storage.CONFIGURATION.cli_testing.inactive_db):
-                    for dataset in self.inactive_dataset.get_filtered_content(
-                        {
-                            "source": protocol["source"],
-                            "checker_type": protocol["checker_type"],
-                        }
+                    for dataset in self.inactive_dataset.get_to_retest(
+                        protocol["source"],
+                        protocol["checker_type"],
+                        # pylint: disable=line-too-long
+                        min_days=PyFunceble.storage.CONFIGURATION.cli_testing.days_between.db_retest,
                     ):
                         self.ci_stop_in_the_middle_if_time_exceeded()
 
-                        if not isinstance(dataset["tested_at"], datetime.datetime):
-                            try:
-                                date_of_inclusion = datetime.datetime.fromisoformat(
-                                    dataset["tested_at"]
-                                )
-                            except (TypeError, ValueError):
-                                date_of_inclusion = (
-                                    datetime.datetime.utcnow()
-                                    - datetime.timedelta(days=365)
-                                )
-                        else:
-                            date_of_inclusion = dataset["tested_at"]
+                        to_send = copy.deepcopy(protocol)
+                        to_send["from_inactive"] = True
 
-                        # pylint: disable=line-too-long
-                        date_of_retest = date_of_inclusion + datetime.timedelta(
-                            days=PyFunceble.storage.CONFIGURATION.cli_testing.days_between.db_retest
+                        # Note: Our test infrastructure need a subject
+                        # but there is no subject in the table.
+                        to_send["subject"] = dataset["idna_subject"]
+                        to_send["idna_subject"] = dataset["idna_subject"]
+
+                        to_send["session_id"] = self.sessions_id[
+                            protocol["destination"]
+                        ]
+
+                        self.tester_process_manager.add_to_input_queue(
+                            to_send, worker_name="main"
                         )
 
-                        if datetime.datetime.utcnow() > date_of_retest:
-                            to_send = copy.deepcopy(protocol)
-                            to_send["from_inactive"] = True
-
-                            # Note: Our test infrastructure need a subject
-                            # but there is no subject in the table.
-                            to_send["subject"] = dataset["idna_subject"]
-                            to_send["idna_subject"] = dataset["idna_subject"]
-
-                            to_send["session_id"] = self.sessions_id[
-                                protocol["destination"]
-                            ]
-
-                            self.tester_thread_manager.add_to_the_queue(to_send)
-
-                self.file_sorter_thread_manager.add_to_the_queue(protocol)
+                self.file_sorter_process_manager.add_to_input_queue(protocol)
 
         for protocol in self.testing_protocol:
             self.ci_stop_in_the_middle_if_time_exceeded()
@@ -543,7 +530,9 @@ class SystemLauncher(SystemBase):
                         domain2idna.domain2idna(subject),
                     )
 
-                    self.tester_thread_manager.add_to_the_queue(to_send)
+                    self.tester_process_manager.add_to_input_queue(
+                        to_send, worker_name="main"
+                    )
             elif protocol["type"] == "file":
                 handle_file(protocol)
 
@@ -696,15 +685,11 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.tester_thread_manager.is_running():
-            # Just make sure that all threads are stopped :-)
-            self.stop_and_wait_for_all_thread_manager()
+        # Just make sure that all processes are stopped :-)
+        self.stop_and_wait_for_all_manager()
 
         self.generate_waiting_files()
         self.remove_unwanted_files()
-
-        if self.continuous_integration.authorized:
-            self.continuous_integration.apply_end_commit()
 
         return self
 
@@ -725,40 +710,62 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        if self.tester_thread_manager.is_running():
-            # Just make sure that all threads are stopped :-)
-            self.stop_and_wait_for_all_thread_manager()
+        self.stop_and_wait_for_all_manager()
 
         if self.continuous_integration.authorized:
             self.continuous_integration.apply_commit()
 
         return self
 
-    def stop_and_wait_for_all_thread_manager(self) -> "SystemLauncher":
+    def run_ci_end_saving_instructions(self) -> "SystemLauncher":
         """
-        Sends our stop signal and wait until all threads are finished.
+        Runns our CI END "saving" instructions.
+
+        The instructions executed by this method are the one we execute
+        before ending a testing session under one of the supported CI engines.
+
+        The purpose of this method is to make our instructions
+        available to everybody instead of hiding them into the :code:`start`
+        method. :-)
+
+        .. warning::
+            This is the standard "end" instructions. Do not call this method
+            if you are trying to run an action after the CI execution time
+            exceeded.
+        """
+
+        self.run_standard_end_instructions()
+
+        if self.continuous_integration.authorized:
+            self.continuous_integration.apply_end_commit()
+
+        return self
+
+    def stop_and_wait_for_all_manager(self) -> "SystemLauncher":
+        """
+        Sends our stop signal and wait until all managers are finished.
         """
 
         # The idea out here is to propate the stop signal.
         # Meaning that the tester will share it's stop signal to all
         # subsequencial queues after all submitted tasks are done.
-        self.tester_thread_manager.send_stop_signal()
+        self.tester_process_manager.send_stop_signal(worker_name="main")
 
-        if self.miner_thread_manager:
-            self.miner_thread_manager.wait()
+        if self.miner_process_manager:
+            self.miner_process_manager.wait()
 
-        self.tester_thread_manager.wait()
-        self.stdout_producer_thread_manager.wait()
-        self.continue_producer_thread_manager.wait()
-        self.inactive_producer_thread_manager.wait()
-        self.whois_producer_thread_manager.wait()
-        self.file_producer_thread_manager.wait()
+        self.tester_process_manager.wait()
+        self.producer_process_manager.wait()
 
-        # From here, we are sure that every test and files are produced.
-        # We now format the generated file(s).
-        self.file_sorter_thread_manager.start()
-        self.file_sorter_thread_manager.send_stop_signal()
-        self.file_sorter_thread_manager.wait()
+        try:
+            # From here, we are sure that every test and files are produced.
+            # We now format the generated file(s).
+            self.file_sorter_process_manager.start()
+            self.file_sorter_process_manager.send_stop_signal()
+            self.file_sorter_process_manager.wait()
+        except AssertionError:
+            # Example: Already started previously.
+            pass
 
         if self.execution_time_holder.authorized:
             self.execution_time_holder.set_end_time()
@@ -774,33 +781,43 @@ class SystemLauncher(SystemBase):
         try:
             self.print_home_ascii()
 
+            print_central_messages(check_force_update=True)
+
+            # This tries to bypass the execution when the continuous integration
+            # is given and the last commit message (the one we are testing for)
+            # match any of our known marker. Please report to the method itself
+            # for more information about the markers.
+            self.continuous_integration.bypass()
+
             if self.args.files or self.args.url_files:
-                self.migrator_thread_manager.start(daemon=False)
+                self.migrator_process_manager.start()
 
-                while self.migrator_thread_manager.is_running():
-                    # We wait until the migrator is completely done.
-                    continue
+                self.migrator_process_manager.wait()
 
-                if self.migrator_thread_manager.is_failed():
-                    raise self.migrator_thread_manager.the_thread.exception
+            del self.migrator_process_manager
 
-            del self.migrator_thread_manager
+            self.tester_process_manager.start()
+            self.tester_process_manager.add_to_all_input_queues(
+                "feeding", worker_name="main"
+            )
 
-            self.tester_thread_manager.start(daemon=True)
-            self.stdout_producer_thread_manager.start(daemon=True)
-            self.continue_producer_thread_manager.start(daemon=True)
-            self.inactive_producer_thread_manager.start(daemon=True)
-            self.whois_producer_thread_manager.start(daemon=True)
-            self.file_producer_thread_manager.start(daemon=True)
+            self.producer_process_manager.start()
 
-            if self.miner_thread_manager:
-                self.miner_thread_manager.start(daemon=True)
+            if self.miner_process_manager:
+                self.miner_process_manager.start()
 
             self.fill_protocol()
             self.fill_to_test_queue_from_protocol()
 
-            self.stop_and_wait_for_all_thread_manager()
-            self.run_standard_end_instructions()
+            if self.continuous_integration.is_time_exceeded():
+                # Does not includes the run_standard_end_instructions call.
+                # Reason: We have to continue.
+                self.run_ci_saving_instructions()
+            elif self.continuous_integration.authorized:
+                # Includes the run_standard_end_instructions call.
+                self.run_ci_end_saving_instructions()
+            else:
+                self.run_standard_end_instructions()
         except (KeyboardInterrupt, StopExecution):
             pass
         except Exception as exception:  # pylint: disable=broad-except

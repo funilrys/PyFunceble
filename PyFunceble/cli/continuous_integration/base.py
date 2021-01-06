@@ -1225,17 +1225,18 @@ class ContinuousIntegrationBase:
 
             - :code:`[PyFunceble skip]` (case insensitive)
             - :code:`[PyFunceble-skip]` (case insensitive)
+            - :attr:`~PyFunceble.cli.continuous_integration.base.end_commit_marker`
         """
 
-        our_marker = ["[pyfunceble skip]"]
+        our_marker = ["[pyfunceble skip]", "[pyfunceble-skip]", self.end_commit_marker]
         latest_commit = CommandHelper("git log -1").execute().lower()
 
-        if any(x in latest_commit for x in our_marker):
+        if any(x.lower() in latest_commit for x in our_marker):
             PyFunceble.facility.Logger.info(
                 "Bypass marker caught. Saving and stopping process."
             )
 
-            self.apply_end_commit()
+            raise PyFunceble.cli.continuous_integration.exceptions.StopExecution()
 
     @execute_if_authorized(None)
     def init(self) -> "ContinuousIntegrationBase":

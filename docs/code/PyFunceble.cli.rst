@@ -11,6 +11,7 @@ Subpackages
    PyFunceble.cli.entry_points
    PyFunceble.cli.filesystem
    PyFunceble.cli.migrators
+   PyFunceble.cli.processes
    PyFunceble.cli.scripts
    PyFunceble.cli.system
    PyFunceble.cli.threads

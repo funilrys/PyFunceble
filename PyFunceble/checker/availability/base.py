@@ -50,9 +50,8 @@ License:
     limitations under the License.
 """
 
-
 import functools
-import threading
+import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -701,7 +700,7 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.status.whois_record = self.whois_query_tool.get_record()
 
                 if (
-                    not threading.current_thread().name.startswith(
+                    not multiprocessing.current_process().name.startswith(
                         PyFunceble.storage.PROJECT_NAME.lower()
                     )
                     and self.status.expiration_date

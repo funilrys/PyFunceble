@@ -74,7 +74,7 @@ class WhoisProducerThread(ProducerThreadBase):
     into the whois dataset.
     """
 
-    thread_name: str = "pyfunceble_continue_producer"
+    thread_name: str = "pyfunceble_whois_producer"
 
     dataset: Optional[WhoisDatasetBase] = None
 

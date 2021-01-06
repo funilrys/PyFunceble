@@ -115,7 +115,7 @@ class VersionUtility:
         """
         Splits the version from its code name.
 
-        :param version:cls
+        :param version:
             The version to split.
 
         :return:
@@ -145,9 +145,14 @@ class VersionUtility:
             Provides the codename part.
             """
 
-            return [
-                x for x in splitted_version if not x.isdigit() and not x[0].isdigit()
-            ][0]
+            try:
+                return [
+                    x
+                    for x in splitted_version
+                    if not x.isdigit() and not x[0].isdigit()
+                ][0]
+            except IndexError:
+                return ""
 
         return get_version_part(), get_codename_part()
 
@@ -171,7 +176,7 @@ class VersionUtility:
         Given a version part it returns the actual version.
 
         As example:
-            Given :code:`0a1` returns `0`.
+            Given :code:`0a1` returns `0971`.
         """
 
         result = []
@@ -179,6 +184,16 @@ class VersionUtility:
         for part in version_part:
             if part.isdigit():
                 result.append(part)
+            else:
+                local_result = ""
+
+                for char in part:
+                    if char.isdigit():  # pragma: no cover ## Safety.
+                        local_result += local_result
+                    else:
+                        local_result += str(ord(char))
+
+                result.append(local_result)
 
         return "".join(result)
 
@@ -196,6 +211,44 @@ class VersionUtility:
             and :py:class`False` if the local version is greater than the
             upstream one.
         """
+
+        def compare(version_number: int, upstream_number: int) -> Optional[bool]:
+            """
+            Compare and provides the result of the comparison.
+            """
+
+            # pylint: disable=too-many-return-statements
+
+            # ORD A ==> 65 ==> 650
+            if upstream_number < 650 < version_number:
+                return True
+
+            if version_number < 650 < upstream_number:
+                return False
+
+            if version_number > 650 and upstream_number > 650:
+
+                local_upstream_number = str(upstream_number)
+
+                for index, value in enumerate(str(version_number)):
+                    if value == local_upstream_number[index]:
+                        continue
+
+                    if value < local_upstream_number[index]:
+                        return True
+
+                    if value > local_upstream_number[index]:
+                        return False
+
+                return None
+
+            if version_number < upstream_number:
+                return True
+
+            if version_number > upstream_number:
+                return False
+
+            return None
 
         local_digits, _ = self.get_splitted(self.local_version)
         upstream_digits, _ = self.get_splitted(upstream_version)
@@ -215,16 +268,11 @@ class VersionUtility:
                     self.__get_version_number_pep440(upstream_digits[index])
                 )
 
-            if version_number < upstream_number:
-                result.append(True)
-            elif version_number > upstream_number:
-                result.append(False)
-            else:
-                result.append(None)
+            result.append(compare(version_number, upstream_number))
 
         return result
 
-    def is_older_then(self, upstream_version: str) -> bool:
+    def is_older_than(self, upstream_version: str) -> bool:
         """
         Compares if the local version is older that the given one.
         """
@@ -271,7 +319,7 @@ class VersionUtility:
         Checks if the local version is the master one.
         """
 
-        return not self.is_dev()
+        return self.get_splitted(self.local_version)[-1].startswith(" ")
 
     @staticmethod
     def is_cloned() -> bool:  # pragma: no cover ## Only used by 1 thing for dev.

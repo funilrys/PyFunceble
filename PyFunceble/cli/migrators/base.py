@@ -64,6 +64,11 @@ class MigratorBase:
     done: bool = False
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
+    print_action_to_stdout: bool = False
+
+    def __init__(self, print_action_to_stdout: bool = False) -> None:
+        self.print_action_to_stdout = print_action_to_stdout
+
     def start(self) -> "MigratorBase":
         """
         Starts the migration.

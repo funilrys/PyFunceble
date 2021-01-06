@@ -105,10 +105,10 @@ def print_thanks() -> None:
             if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
                 print(
                     f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
-                    f"Thanks for using PyFunceble!{colorama.Style.RESET_ALL}"
+                    f"Thank you for using PyFunceble!{colorama.Style.RESET_ALL}"
                 )
             else:
-                print("\nThanks for using PyFunceble!")
+                print("\nThank you for using PyFunceble!")
 
             if int(secrets.token_hex(8), 16) % 3 == 0:
                 if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
@@ -117,7 +117,8 @@ def print_thanks() -> None:
                         f"Share your experience on {colorama.Fore.CYAN}Twitter "
                         f"{colorama.Fore.YELLOW}with {colorama.Fore.CYAN}"
                         f"#PyFunceble{colorama.Fore.YELLOW} "
-                        f"or {colorama.Fore.CYAN}@PyFunceble!"
+                        f"or {colorama.Fore.CYAN}@PyFunceble"
+                        f"{colorama.Fore.YELLOW}!"
                     )
                 else:
                     print(
@@ -129,12 +130,12 @@ def print_thanks() -> None:
                 if PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.colour:
                     print(
                         f"{colorama.Fore.YELLOW}{colorama.Style.BRIGHT}"
-                        f"Have a feedback, an issue or an improvement idea? "
+                        f"Do you have a feedback, an issue or an improvement idea? "
                         f"{colorama.Fore.YELLOW}Let us know on {colorama.Fore.CYAN}"
                         f"GitHub{colorama.Fore.YELLOW}!"
                     )
                 else:
                     print(
-                        "Have a feedback, an issue or an improvement idea? "
+                        "Do you ave a feedback, an issue or an improvement idea? "
                         "Let us know on GitHub!"
                     )
