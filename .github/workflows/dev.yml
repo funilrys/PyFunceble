@@ -1,4 +1,4 @@
-name: PyFunceble Dev Workflow
+name: Dev Workflow
 on:
   pull_request:
     branches:
