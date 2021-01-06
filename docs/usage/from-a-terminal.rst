@@ -401,10 +401,10 @@ Separated by spaces.
 
 
 dns-protocol
-""""""""""""
+
 
 :code:`--dns-protocol`
-
+""""""""""""""""""""""
 
 Sets the protocol to use for the DNS queries.
 
@@ -414,7 +414,8 @@ Sets the protocol to use for the DNS queries.
 Case-Sensitive
 
 .. note:
-    You can not mix protocols. IE. the following will only test on DOH
+    You can not mix protocols. IE. the following will only test on the
+    :code:`doh.powerdns.org`
 
 .. code-block:: bash
 
