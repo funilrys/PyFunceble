@@ -400,7 +400,7 @@ Separated by spaces.
     - 127.0.1.53:5353
 
 
-dns-protocol
+.. _dns-protocol:
 
 
 :code:`--dns-protocol`
