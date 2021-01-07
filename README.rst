@@ -104,6 +104,7 @@ Simply run the following and enjoy the documentation!
 .. note::
     You are also invited to submit changes and improvement to the documentation
     through a new Pull Request.
+
 ___________________________________________
 
 What can PyFunceble do?

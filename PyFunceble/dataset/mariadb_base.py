@@ -53,7 +53,10 @@ License:
 import functools
 from typing import Any, Generator, Optional, Union
 
-from sqlalchemy.ext.declarative.api import DeclarativeMeta
+try:
+    from sqlalchemy.ext.declarative.api import DeclarativeMeta
+except ModuleNotFoundError:
+    from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm import Session
 
 import PyFunceble.sessions
