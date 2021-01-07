@@ -97,8 +97,9 @@ Simply run the following and enjoy the documentation!
 
 ::
 
+    $ pip install --user -r requirements.docs.txt # Install dependencies.
     $ cd docs/
-    $ make html
+    $ make clean html
     $ palemoon _build/html/index.html # palemoon or whatever browser you use.
 
 .. note::
