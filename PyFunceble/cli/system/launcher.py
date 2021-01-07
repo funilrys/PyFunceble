@@ -393,6 +393,9 @@ class SystemLauncher(SystemBase):
                     ]
                 )
 
+            if self.checker_type.lower() != "syntax":
+                result = [x.lower() for x in result]
+
             return ListHelper(result).remove_duplicates().remove_empty().subject
 
         def cleanup_if_necessary(parent_dirname: str) -> None:
