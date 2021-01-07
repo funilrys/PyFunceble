@@ -11,4 +11,4 @@ python-dotenv
 PyYAML
 requests<3
 setuptools
-SQLAlchemy
+SQLAlchemy<1.4,>=1.3
