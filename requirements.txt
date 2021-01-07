@@ -10,4 +10,4 @@ python-dotenv
 PyYAML
 requests<3
 setuptools
-sqlalchemy
+SQLAlchemy
