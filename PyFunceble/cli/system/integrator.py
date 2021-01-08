@@ -58,7 +58,6 @@ import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
 from PyFunceble.cli.system.base import SystemBase
 from PyFunceble.helpers.dict import DictHelper
 
@@ -87,12 +86,10 @@ class SystemIntegrator(SystemBase):
             follow the same procedure.
         """
 
-        # We do this because the starting point is here under the CLI :-)
-        PyFunceble.facility.Logger.init_loggers()
         PyFunceble.facility.Logger.set_output_directory(
             os.path.join(
-                FilesystemDirBase().get_output_basedir(),
-                PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                PyFunceble.cli.storage.OUTPUT_DIRECTORY,
+                PyFunceble.cli.storage.STD_LOGGING_DIRNAME,
             )
         )
 
@@ -105,6 +102,9 @@ class SystemIntegrator(SystemBase):
 
         if not PyFunceble.facility.Logger.activated:
             PyFunceble.facility.Logger.guess_all_settings()
+
+        # We do this because the starting point is here under the CLI :-)
+        PyFunceble.facility.Logger.init_loggers()
 
     @SystemBase.ensure_args_is_given
     def inject_into_config(self) -> "SystemIntegrator":
