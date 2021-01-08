@@ -10,6 +10,7 @@ This is the list of issues which are not or will not be fixed (yet...).
 Ubuntu 20.04.1 LTS Focal
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. versionadded:: 3.2.0
 
 In Ubunto release 20.04 they have removed a package name
 :code:`libffi.so.6` and upgraded it with version :code:`libffi.so.7`
@@ -30,3 +31,10 @@ However, the right way to do this is by first locate where your's
 
 :code:`find /usr/lib/ -type f -iname 'libffi.so.*'` and then apply the
 softlink to :code:`libffi.so.7`
+
+
+Combination of :code:`-f`, :code:`-uf` and :code:`--adblock`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+at the same time

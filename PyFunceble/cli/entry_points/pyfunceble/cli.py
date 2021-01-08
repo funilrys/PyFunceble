@@ -764,7 +764,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
     ]
 
 
-def get_multithreading_group_data() -> List[Tuple[List[str], dict]]:
+def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
     """
     Provides the argument of the multithreading group data.
     """
@@ -1008,7 +1008,7 @@ def tool() -> None:
 
     # pylint:  disable=possibly-unused-variable
 
-    source_group = parser.add_argument_group("Source")
+    source_group = parser.add_argument_group("Test sources")
     filtering_group = parser.add_argument_group(
         "Source filtering, decoding, conversion and expansion"
     )
@@ -1016,7 +1016,7 @@ def tool() -> None:
     dns_control_group = parser.add_argument_group("DNS control")
     database_control_group = parser.add_argument_group("Databases")
     output_control_group = parser.add_argument_group("Output control")
-    multithreading_group = parser.add_argument_group("Multithreading")
+    multiprocessing_group = parser.add_argument_group("Multiprocessing")
     ci_group = parser.add_argument_group("CI / CD")
 
     funcs = [
@@ -1026,7 +1026,7 @@ def tool() -> None:
         get_dns_control_group_data,
         get_database_control_group_data,
         get_output_control_group_data,
-        get_multithreading_group_data,
+        get_multiprocessing_group_data,
         get_ci_group_data,
     ]
 
