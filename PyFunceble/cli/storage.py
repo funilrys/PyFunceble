@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ DONE: str = f"{colorama.Fore.GREEN}✔"
 ERROR: str = f"{colorama.Fore.RED}✘"
 
 VERSION_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/funilrys/PyFunceble/4.0.0-dev/version.yaml"
+    "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
 )
 
 HASHES_FILENAME: str = "hashes_tracker.json"
@@ -113,6 +113,7 @@ COUNTER_FILE = "counter.json"
 TEST_RUNNING_FILE = ".running"
 
 STD_PARENT_DIRNAME: str = "__pyfunceble_origin__"
+STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 
 OUTPUTS: Optional[Box] = Box(
     {
