@@ -15,8 +15,8 @@ and features comes and goes.
 This code have been replaced by :code:`--adblock`
 
 
-:code:`-nw`
-"""""""""""
+:code:`-nw` | :code:`--no-whois`
+""""""""""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
 Replaced with :code:`--whois-lookup`
@@ -110,7 +110,7 @@ No replacements
 """""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-Replaced with :code:`-w` | :code:`--max-workers`
+Integrated into `index.html#w-max-workers`_ 
 
 
 :code:`-p | --processes`
