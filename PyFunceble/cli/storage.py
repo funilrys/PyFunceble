@@ -113,6 +113,7 @@ COUNTER_FILE = "counter.json"
 TEST_RUNNING_FILE = ".running"
 
 STD_PARENT_DIRNAME: str = "__pyfunceble_origin__"
+STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 
 OUTPUTS: Optional[Box] = Box(
     {

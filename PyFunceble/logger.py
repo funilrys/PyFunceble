@@ -164,7 +164,6 @@ class Logger:
         return (
             self.env_var_helper.set_name("PYFUNCEBLE_DEBUG_ON_SCREEN").exists()
             or self.env_var_helper.set_name("DEBUG_PYFUNCEBLE_ON_SCREEN").exists()
-            or self.activated
         )
 
     @property
@@ -457,9 +456,6 @@ class Logger:
                     )
 
                 logger = getattr(self, logger_var_name)
-
-                for handler in logger.handlers:
-                    logger.removeHandler(handler)
 
                 # pylint: disable=protected-access
                 logger.setLevel(logging._nameToLevel[level.upper()])
