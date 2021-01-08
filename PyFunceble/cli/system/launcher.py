@@ -96,6 +96,7 @@ from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
 from PyFunceble.converter.subject2complements import Subject2Complements
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.download import DownloadHelper
@@ -121,6 +122,7 @@ class SystemLauncher(SystemBase):
     wildcard2subject: Wildcard2Subject = Wildcard2Subject()
     rpz_policy2subject: RPZPolicy2Subject = RPZPolicy2Subject()
     rpz_inputline2subject: RPZInputLine2Subject = RPZInputLine2Subject()
+    url2netloc: Url2Netloc = Url2Netloc()
 
     stdout_printer: StdoutPrinter = StdoutPrinter()
     file_printer: FilePrinter = FilePrinter()
@@ -394,7 +396,12 @@ class SystemLauncher(SystemBase):
                 )
 
             if self.checker_type.lower() != "syntax":
-                result = [x.lower() for x in result]
+                for index, subject in enumerate(result):
+                    netloc = self.url2netloc.set_data_to_convert(
+                        subject
+                    ).get_converted()
+
+                    result[index] = subject.replace(netloc, netloc.lower())
 
             return ListHelper(result).remove_duplicates().remove_empty().subject
 
