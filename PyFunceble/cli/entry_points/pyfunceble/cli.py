@@ -84,7 +84,18 @@ def get_configured_value(entry: str, *, negate=False) -> Any:
         When the given :code:`entry` is not found.
     """
 
-    result = PyFunceble.facility.ConfigLoader.get_configured_value(entry)
+    if ":" in entry:
+        location, var_name = entry.split(":", 1)
+
+        if location == "cli_storage":
+            result = getattr(PyFunceble.cli.storage, var_name)
+        else:
+            raise RuntimeError("<entry> ({entry!r}) not supported.")
+
+        if var_name == "OUTPUT_DIRECTORY":
+            result = os.path.join(*os.path.split(result)[:-1])
+    else:
+        result = PyFunceble.facility.ConfigLoader.get_configured_value(entry)
 
     if negate:
         result = not result
@@ -655,6 +666,18 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--output-location",
+            ],
+            {
+                "dest": "output_location",
+                "type": str,
+                "help": "Sets the location where we are supposed to generation\n"
+                "the output directory from. %s"
+                % get_configured_value("cli_storage:OUTPUT_DIRECTORY"),
+            },
+        ),
+        (
+            [
                 "--unified-results",
             ],
             {
@@ -741,7 +764,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
     ]
 
 
-def get_multithreading_group_data() -> List[Tuple[List[str], dict]]:
+def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
     """
     Provides the argument of the multithreading group data.
     """
@@ -985,7 +1008,7 @@ def tool() -> None:
 
     # pylint:  disable=possibly-unused-variable
 
-    source_group = parser.add_argument_group("Source")
+    source_group = parser.add_argument_group("Test sources")
     filtering_group = parser.add_argument_group(
         "Source filtering, decoding, conversion and expansion"
     )
@@ -993,7 +1016,7 @@ def tool() -> None:
     dns_control_group = parser.add_argument_group("DNS control")
     database_control_group = parser.add_argument_group("Databases")
     output_control_group = parser.add_argument_group("Output control")
-    multithreading_group = parser.add_argument_group("Multithreading")
+    multiprocessing_group = parser.add_argument_group("Multiprocessing")
     ci_group = parser.add_argument_group("CI / CD")
 
     funcs = [
@@ -1003,7 +1026,7 @@ def tool() -> None:
         get_dns_control_group_data,
         get_database_control_group_data,
         get_output_control_group_data,
-        get_multithreading_group_data,
+        get_multiprocessing_group_data,
         get_ci_group_data,
     ]
 

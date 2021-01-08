@@ -225,7 +225,10 @@ class TesterThread(ThreadsBase):
 
             # Don't worry, if we are not under a CI engine, the
             # is_time_exceeded will automatically return false (cf: decorators)
-            while not self.continuous_integration.is_time_exceeded():
+            while (
+                self.continuous_integration
+                and not self.continuous_integration.is_time_exceeded()
+            ) or True:
                 if self.the_queue.empty():
                     continue
 

@@ -52,6 +52,7 @@ License:
 
 import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
+from PyFunceble.cli.continuous_integration.github_actions import GitHubActions
 from PyFunceble.cli.continuous_integration.gitlab_ci import GitLabCI
 from PyFunceble.cli.continuous_integration.travis_ci import TravisCI
 
@@ -61,7 +62,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
     A placeholder which provides the CI object to use.
     """
 
-    known_objects = [TravisCI, GitLabCI]
+    known_objects = [GitHubActions, TravisCI, GitLabCI]
     result = None
 
     for known in known_objects:
@@ -80,4 +81,4 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
         "No known CI object authorized. Using: %r", known_objects[-1]
     )
 
-    return known_objects[-1](*args, **kwargs)
+    return known_objects[0](*args, **kwargs)

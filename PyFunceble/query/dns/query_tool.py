@@ -136,9 +136,12 @@ class DNSQueryTool:
             if self.subject and self.query_record_type:
                 self.dns_name = self.get_dns_name_from_subject_and_query_type()
 
-                self.query_message = dns.message.make_query(
-                    self.dns_name, self.query_record_type
-                )
+                if self.dns_name:
+                    self.query_message = dns.message.make_query(
+                        self.dns_name, self.query_record_type
+                    )
+                else:
+                    self.query_message = None
 
             return result
 
@@ -229,20 +232,37 @@ class DNSQueryTool:
 
         return wrapper
 
+    def ignore_if_query_message_is_missing(func):  # pylint: disable=no-self-argument
+        """
+        Ignores the call to the decorated method if the query message is
+        missing. Otherwise, return an empty list.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
+            if self.query_message:
+                return func(self, *args, **kwargs)  # pylint: disable=not-callable
+            return []
+
+        return wrapper
+
     @ensure_subject_is_given
     def get_dns_name_from_subject_and_query_type(self):
         """
         Provides the dns name based on the current subject and query type.
         """
 
-        if self.get_human_query_record_type().lower() == "ptr":
-            try:
-                return dns.name.from_text(
-                    ipaddress.ip_address(self.subject).reverse_pointer
-                )
-            except ValueError:
-                return dns.name.from_text(self.subject)
-        return dns.name.from_text(self.subject)
+        try:
+            if self.get_human_query_record_type().lower() == "ptr":
+                try:
+                    return dns.name.from_text(
+                        ipaddress.ip_address(self.subject).reverse_pointer
+                    )
+                except ValueError:
+                    return dns.name.from_text(self.subject)
+            return dns.name.from_text(self.subject)
+        except dns.name.LabelTooLong:
+            return None
 
     @property
     def subject(self) -> Optional[str]:
@@ -590,6 +610,7 @@ class DNSQueryTool:
         return dataset
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def tcp(
         self,
@@ -605,6 +626,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.tcp(
                     self.query_message,
@@ -621,15 +646,29 @@ class DNSQueryTool:
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
 
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def udp(
         self,
@@ -645,6 +684,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.udp(
                     self.query_message,
@@ -661,15 +704,29 @@ class DNSQueryTool:
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
 
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except (dns.exception.Timeout, socket.gaierror):
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def https(
         self,
@@ -683,6 +740,10 @@ class DNSQueryTool:
         result = []
 
         for nameserver in self._mix_order(self.nameservers.get_nameservers()):
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             try:
                 response = dns.query.https(
                     self.query_message, nameserver, timeout=self.query_timeout
@@ -694,15 +755,30 @@ class DNSQueryTool:
                     result.extend(local_result)
 
                     self.lookup_record.nameserver = nameserver
+
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 
         return ListHelper(result).remove_duplicates().subject
 
     @ensure_subject_is_given
+    @ignore_if_query_message_is_missing
     @update_lookup_record_response
     def tls(
         self,
@@ -718,6 +794,10 @@ class DNSQueryTool:
         for nameserver, port in self._mix_order(
             self.nameservers.get_nameserver_ports()
         ).items():
+            PyFunceble.facility.Logger.debug(
+                "Started to query information of %r from %r", self.subject, nameserver
+            )
+
             if port == 53:
                 # Default port for nameserver class is 53. So we ensure we
                 # overwrite with our own default.
@@ -738,9 +818,23 @@ class DNSQueryTool:
 
                     self.lookup_record.nameserver = nameserver
                     self.lookup_record.port = port
+
+                    PyFunceble.facility.Logger.debug(
+                        "Successfully queried information of %r from %r.",
+                        self.subject,
+                        nameserver,
+                    )
+
                     break
             except dns.exception.Timeout:
                 pass
+
+            PyFunceble.facility.Logger.debug(
+                "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
+                self.subject,
+                nameserver,
+                self.BREAKOFF,
+            )
 
             time.sleep(self.BREAKOFF)
 

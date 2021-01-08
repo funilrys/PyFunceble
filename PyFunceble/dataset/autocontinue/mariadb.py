@@ -51,6 +51,7 @@ License:
 """
 
 import PyFunceble.cli.factory
+import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Continue
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -65,7 +66,6 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
     ORM_OBJ: Continue = Continue
 
     @MariaDBDatasetBase.execute_if_authorized(None)
-    @MariaDBDatasetBase.handle_db_session
     # pylint: disable=arguments-differ
     def cleanup(self, *, session_id: str) -> "MariaDBContinueDataset":
         """
@@ -82,13 +82,14 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             The session ID to cleanup.
         """
 
-        self.db_session.query(self.ORM_OBJ).filter(
-            self.ORM_OBJ.session_id == session_id
-        ).delete(synchronize_session=False)
-        self.db_session.commit()
+        with PyFunceble.sessions.session_scope() as db_session:
+            db_session.query(self.ORM_OBJ).filter(
+                self.ORM_OBJ.session_id == session_id
+            ).delete(synchronize_session=False)
+            db_session.commit()
 
-        PyFunceble.facility.Logger.debug(
-            "Deleted data related to %s (session_id", session_id
-        )
+            PyFunceble.facility.Logger.debug(
+                "Deleted data related to %s (session_id", session_id
+            )
 
         return self

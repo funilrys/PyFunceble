@@ -15,8 +15,8 @@ and features comes and goes.
 This code have been replaced by :code:`--adblock`
 
 
-:code:`-nw`
-"""""""""""
+:code:`-nw` | :code:`--no-whois`
+""""""""""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
 Replaced with :code:`--whois-lookup`
@@ -33,21 +33,21 @@ No replacements
 """""""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-No replacements
+Replaced with `index.html#reputation-lookup`_
 
 
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-No replacements
+See `--dns-protocol <index.html#dnds-protocol>`_
 
 
 :code:`-db | --database`
 """"""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-No replacements, from Version 4 you only uses :code:`--database-type`
+From Version 4 this have been replaced by `index.html#inactive-db`_
 
 
 :code:`-dbc "something" | --days-between-db-clean`
@@ -68,7 +68,7 @@ No replacements
 """""""""""""
 .. deprecated:: 4.0.0
 
-No replacements
+Replaced by :code:`-a` | :code:`--all`
 
 
 :code:`-nf`
@@ -78,25 +78,25 @@ No replacements
 Replaced by :code:`--no-files`
 
 
-:code:`-nl`
-"""""""""""
+:code:`-nl` | :code:`--no-logs`
+"""""""""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-Replaced by :code:`--no-logs`
+Replaced by `index.html#no-files`_
 
 
 :code:`-nu | --no-unified`
 """"""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-No replacements
+Replaced by `index.html#unified-results`_
 
 
 :code:`--split`
 """""""""""""""
 .. deprecated:: 4.0.0
 
-No replacements
+Replaced by `index.html#unified-results`_
 
 
 :code:`--store-whois`
@@ -110,7 +110,7 @@ No replacements
 """""""""""""""""""""""""""
 .. deprecated:: 4.0.0
 
-Replaced with :code:`-w` | :code:`--max-workers`
+Integrated into `index.html#w-max-workers`_ 
 
 
 :code:`-p | --processes`
@@ -138,5 +138,5 @@ Replaced with :code:`--ci-max-minutes`
 """""""""""""
 .. deprecated:: 4.0.0
 
-Replaced with :code:`--ci-max-minutes`
+Replaced with :code:`--ci-command`
 

@@ -90,6 +90,10 @@ WIN_ASCII_PYFUNCEBLE = """
 DONE: str = f"{colorama.Fore.GREEN}✔"
 ERROR: str = f"{colorama.Fore.RED}✘"
 
+VERSION_DUMP_LINK: str = (
+    "https://raw.githubusercontent.com/funilrys/PyFunceble/4.0.0-dev/version.yaml"
+)
+
 HASHES_FILENAME: str = "hashes_tracker.json"
 ALEMBIC_DIRECTORY_NAME = "alembic"
 CI_TRIGGER_FILE = ".trigger"

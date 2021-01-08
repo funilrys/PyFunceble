@@ -58,6 +58,7 @@ import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.migrators.json2csv.base import JSON2CSVMigratorBase
+from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.dataset.whois.csv import CSVWhoisDataset
 from PyFunceble.helpers.file import FileHelper
 
@@ -133,6 +134,9 @@ class WhoisJSON2CSVMigrator(JSON2CSVMigratorBase):
                         )
 
                         self.dataset.update(dataset)
+
+                        if self.print_action_to_stdout:
+                            print_single_line()
 
                         PyFunceble.facility.Logger.info(
                             "Added %r into %r", dataset["idna_subject"], self.dataset

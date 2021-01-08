@@ -8,10 +8,11 @@ the given domain and URL.
 
 from PyFunceble import DomainAndIPAvailabilityChecker, URLAvailabilityChecker
 
-print("Start of basic example.")
-DOMAIN = "github.com"
-URL = f"https://{DOMAIN}"
+if __name__ == "__main__":
+    print("Start of basic example.")
+    DOMAIN = "github.com"
+    URL = f"https://{DOMAIN}"
 
-print(DOMAIN, DomainAndIPAvailabilityChecker(DOMAIN).get_status().status)
-print(URL, URLAvailabilityChecker(URL).get_status().status)
-print("End of basic example ")
+    print(DOMAIN, DomainAndIPAvailabilityChecker(DOMAIN).get_status().status)
+    print(URL, URLAvailabilityChecker(URL).get_status().status)
+    print("End of basic example ")

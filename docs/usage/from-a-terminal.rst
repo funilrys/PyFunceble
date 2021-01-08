@@ -41,8 +41,8 @@ Test one or more domains, separated by spaces.
 Test one or more full URL, separated by spaces.
 
 .. note::
-    When we test the availability of a URL, we (only) check the HTTP
-    status code of the given URL.
+    When we test the availability of a URL, we (only) check the HTTP status
+    code of the given URL.
 
 .. note::
     This argument takes one or more values.
@@ -76,8 +76,8 @@ As example:
     $ PyFunceble -f test_this test_that
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and
-    :code:`--adblock` at the same time
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
 
 
 .. _uri_source:
@@ -85,8 +85,7 @@ As example:
 :code:`-uf "something"` | :code:`--url-file "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Read a local or remote (RAW link) file and test all (full) URLs inside
-it.
+Read a local or remote (RAW link) file and test all (full) URLs inside it.
 If remote (RAW link) file is given, PyFunceble will download it,
 and test the content of the given RAW link as if it was a locally stored
 file.
@@ -104,9 +103,7 @@ As example:
     We consider one line as one URL to test.
 
 .. note::
-    This argument test if a URL which is inside the given file is
-    available.
-    
+    This argument test if a URL which is inside the given file is available.
     It ONLY tests full URLs.
 
 As example:
@@ -119,13 +116,12 @@ will download the given URL and test for its content assuming that each
 line represents a URL to test.
 
 .. warning::
-    A test with this argument consists of the comparison of the status
-    code.
+    A test with this argument consists of the comparison of the status code.
     No WHOIS record will be requested nor DNS Lookup will be done.
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and
-    :code:`--adblock` at the same time.
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
 
 
 Source filtering, decoding, conversion and expansion
@@ -144,15 +140,15 @@ You will still need to use the :ref:`domain_source`
     IPv4 and IPv6 adresses from the given adblock file.
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and
-    :code:`--adblock` at the same time
+    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
+    at the same time
 
 :code:`--complements`
 """""""""""""""""""""
 
 Activates or disables the generation and test of the complements.
-A complement is for example :code:`example.org` if
-:code:`www.example.org` is given and vice-versa.
+A complement is for example :code:`example.org` if :code:`www.example.org`
+is given and vice-versa.
 
 **Default value:** :code:`False`
 
@@ -163,8 +159,8 @@ Regex to match in order to test a given line.
 
 **Default value:** :code:`None`
 
-Want to test all :code:`blogspot` from your list? This argument allows
-you to do that!
+Want to test all :code:`blogspot` from your list? This argument allows you to
+do that!
 
 .. note::
     This argument should be a regex expression.
@@ -177,8 +173,8 @@ Activates or disables the mining subsystem usage.
 
 **Default value:** :code:`False`
 
-Want to find domain or URL linked to a domain in your list? This
-argument will exactly do that.
+Want to find domain or URL linked to a domain in your list? This argument will
+exactly do that.
 
 
 :code:`--rpz`
@@ -202,8 +198,7 @@ from each given input files.
 :code:`--wildcard`
 """"""""""""""""""
 
-Activates or disables the decoding of wildcards for each given input
-files.
+Activates or disables the decoding of wildcards for each given input files.
 
 **Default value:** :code:`False`
 
@@ -238,8 +233,7 @@ Sets the cooldown time (in second) to apply between each test.
 
 **Default value:** :code:`0.0`
 
-This argument applies a number of seconds to sleep before/between each
-test.
+This argument applies a number of seconds to sleep before/between each test.
 
 
 :code:`--local`
@@ -250,8 +244,8 @@ or for a local or private network context.
 
 **Default value:** :code:`False`
 
-Want to run a test over a local or private network? This argument will
-disable the limitation which does not apply to private networks.
+Want to run a test over a local or private network? This argument will disable
+the limitation which does not apply to private networks.
 
 
 :code:`--dns-lookup`
@@ -273,9 +267,7 @@ whether possible.
 
 **Default value:** :code:`True`
 
-Don't want to take the result of the HTTP code execution into
-consideration?
-
+Don't want to take the result of the HTTP code execution into consideration?
 This argument allows you to disable that!
 
 
@@ -298,10 +290,8 @@ rules whether possible.
 
 **Default value:** :code:`True`
 
-Don't want to use/apply the SPECIAL rules - which are explained in the
-source column section?
-
-This argument disables them all.
+Don't want to use/apply the SPECIAL rules - which are explained in the source
+column section? This argument disables them all.
 
 
 :code:`--whois-lookup`
@@ -312,9 +302,7 @@ Activates or disables the usage of the WHOIS record
 
 **Default value:** :code:`True`
 
-Don't want to use or take into consideration the results from
-:code:`whois`?
-
+Don't want to use or take into consideration the results from :code:`whois`?
 This argument allows you to disable it!
 
 
@@ -377,8 +365,8 @@ testing for URL.
 **Default value:** :code:`False`
 
 .. warning::
-    If you activate the verification of the SSL/TLS certificate, you may
-    get **false-positive** results.
+    If you activate the verification of the SSL/TLS certificate, you may get
+    **false-positive** results.
 
     Indeed if the certificate is not registered to the CA or is simply
     invalid and the domain is still alive, you will always get
@@ -397,8 +385,8 @@ Separated by spaces.
 **Default value:** :code:`Follow OS DNS` ==> :code:`None`
 
 .. warning::
-    We expect a DNS server(s). If no DNS server(s) is given. You'll
-    almost for certain get all results as :code:`INACTIVE`
+    We expect a DNS server(s). If no DNS server(s) is given. You'll almost for
+    certain get all results as :code:`INACTIVE`
 
     This could happen in case you use :code:`--dns -f`
 
@@ -409,7 +397,7 @@ Separated by spaces.
 
 .. code-block:: bash
 
-    - 127.0.1.53:5353
+    pyfunceble -dns 127.0.1.53:5353 -f file
 
 
 .. _dns-protocol:
@@ -422,8 +410,8 @@ Sets the protocol to use for the DNS queries.
 
 **Default value:** :code:`False`
 
-**Available values:** :code:`UDP`, :code:`TCP`, :code:`HTTPS`,
-:code:`TLS`. **Case-Sensitive**
+**Available values:** :code:`UDP`, :code:`TCP`, :code:`HTTPS`, :code:`TLS`.
+Case-Sensitive
 
 .. note:
     You can not mix protocols. IE. the following will only test on the
@@ -431,7 +419,7 @@ Sets the protocol to use for the DNS queries.
 
 .. code-block:: bash
 
-    --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
+    pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
 
 
 Databases
@@ -445,9 +433,8 @@ the currently tested list.
 
 **Default value:** :code:`True`
 
-This argument will disable or enable the usage of a database which saves
-all :code:`INACTIVE` and :code:`INVALID` domain of the given file over
-time.
+This argument will disable or enable the usage of a database which saves all
+:code:`INACTIVE` and :code:`INVALID` domain of the given file over time.
 
 
 :code:`--database-type`
@@ -458,6 +445,15 @@ Sets the database engine to use.
 **Default value:** :code:`csv`
 
 **Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`.
+
+
+:code:`--inactive-db`
+"""""""""""""""""""""
+
+Activates or disables the usage of a 'database' to store all
+'INACTIVE' and 'INVALID'  subject for continuous retest.
+
+Configured value: :code:`True`
 
 
 :code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
@@ -491,7 +487,7 @@ Output control
 """"""""""""""""""""""""""
 
 Activates or disables the disply of the all information in the table we
-print to stdout.
+print to stdout (screen).
 
 **Default value:** :code:`false`
 
@@ -561,8 +557,8 @@ Activates or disables the display of the execution time.
 
 **Default value:** :code:`False`
 
-Want to know the execution time of your test? Well, this argument will
-let you know!
+Want to know the execution time of your test? Well, this argument will let
+you know!
 
 
 :code:`--hierarchical`
@@ -585,8 +581,8 @@ Activates or disables the generation of the hosts file(s).
 
 **Default value:** :code:`True`
 
-This argument will let the system know if it has to generate the hosts
-file version of each status.
+This argument will let the system know if it has to generate the hosts file
+version of each status.
 
 .. seealso::
 
@@ -607,9 +603,7 @@ Sets the IP to prefix each lines of the hosts file.
 """""""""""""""""""""""
     .. versionadded:: 4.0.0
 
-    You can configure the logging level to be outputted in STDOUT
-    (screen).
-    
+    You can configure the logging level to be outputted in STDOUT (screen).
     The following optional values can be set.
 
     .. hlist::
@@ -631,8 +625,8 @@ Sets the IP to prefix each lines of the hosts file.
 
     **Default value:** :code:`False`
 
-    Want to disable the production of the outputted files? This argument
-    is for you!
+    Want to disable the production of the outputted files? This argument is for
+    you!
 
     .. note:
         This will also disable the generation of the end statistic.
@@ -661,22 +655,20 @@ Sets the IP to prefix each lines of the hosts file.
 :code:`--output-location`
 """""""""""""""""""""""""
 
-    Sets the location where we are supposed to generation the output
-    directory
+    Sets the location where we are supposed to generation the output directory
     from.
 
     **Default value:** Please look at your machine
 
-Don't want to use the :code:`PYFUNCEBLE_OUTPUT_DIR` environment
-variable?
-
-This argument is for you!
+Don't want to use the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable? This
+argument is for you!
 
 :code:`--unified-results`
 """""""""""""""""""""""""
 
     Activates or disables the generation of the unified results
-    file instead of the splitted one.
+    file instead of the splitted output in individual subfolder under
+    :code:`output/`.
 
     **Default value:** :code:`True`
 
@@ -690,8 +682,8 @@ percentage - file - of each status.
 
 **Default value:** :code:`True`
 
-This argument will disable or enable the generation of the percentage of
-each status.
+This argument will disable or enable the generation of the percentage of each
+status.
 
 
 .. _plain:
@@ -704,8 +696,8 @@ What is meant is a list with only a list of subject (one per line).
 
 **Default value:** :code:`False:`
 
-Want to get a list with all domains for each status? The activation of
-this argument does the work while testing!
+Want to get a list with all domains for each status? The activation of this
+argument does the work while testing!
 
 .. seealso::
 
@@ -715,8 +707,8 @@ this argument does the work while testing!
 :code:`--dots`
 """"""""""""""
 
-Activate or disables the display of dots or other characters when we
-skip the test of a subject.
+Activate or disables the display of dots or other characters when we skip
+the test of a subjec.
 
 **Default value:** :code:`False`
 
@@ -738,8 +730,8 @@ Switch the value of the sharing of logs.
 
 **Default value:** :code:`False`
 
-Want to make PyFunceble a better tool? Share your logs with our API
-which collect all logs!
+Want to make PyFunceble a better tool? Share your logs with our API which
+collect all logs!
 
 
 :code:`-s` | :code:`--simple`
@@ -749,11 +741,11 @@ Activates or disables the simple output mode.
 
 **Default value:** :code:`False`
 
-Want as less as possible data on screen? This argument returns as less
-as possible on screen!
+Want as less as possible data on screen? This argument returns as less as
+possible on screen!
 
 
-Multithreading
+Multiprocessing
 ^^^^^^^^^^^^^^
 
 :code:`-w` | :code:`--max-workers`
@@ -764,8 +756,8 @@ Sets the number of maximal worker to use.
 **Default value:** :code:`False`
 
 .. note::
-    If omitted, the number of available CPU cores multiplied by 5 will
-    be used instead.
+    If omitted, the number of available CPU cores multiplied by 5 will be used
+    instead.
 
 
 CI / CD
@@ -779,10 +771,9 @@ Activates or disables the Continuous Integration mechanism.
 **Default value:** :code:`False`
 
 .. note::
-    If you combine this argument with the :code:`--quiet` argument, the
-    test will output a dotted line, where each dot (:code:`.`) represent
-    one test result or input which was skipped because it was previously
-    tested.
+    If you combine this argument with the :code:`--quiet` argument, the test
+    will output a dotted line, where each dot (:code:`.`) represent one test
+    result or input which was skipped because it was previously tested.
 
 Want to use PyFunceble under a supported CI infrastructure/network? This
 argument is suited for your needs!
@@ -805,9 +796,9 @@ we are supposed to store the tests (excepts the final results).
 **Default value:** :code:`master`
 
 .. note::
-    Currently the branch need to exist, but there are being worked on a
-    path to have PyFunceble to create the sub-branch and finally merge
-    it into the :code:`--ci-distribution-branch`
+    Currently the branch need to exist, but there are being worked on a path
+    to have PyFunceble to create the sub-branch and finally merge it into the
+    :code:`--ci-distribution-branch`
 
 
 :code:`--ci-distribution-branch`
@@ -820,16 +811,16 @@ supposed to store and push the final results.
 
 .. note::
     The difference between this and :code:`--ci-branch` is the fact
-    that this branch will get the (final) result only when the test is
-    finished under the given :code:`--ci-branch`.
+    that this branch will get the (final) result only when the test is finished
+    under the given :code:`--ci-branch`.
 
 As an example, this allows us to have 2 branches:
 
 .. code-block:: bash
 
     - :code:`proceessing` (CI branch), for the tests with PyFunceble.
-    - :code:`master` (CI distribution branch), for the distribution of
-	  the results of PyFunceble.
+    - :code:`master` (CI distribution branch), for the distribution of the
+      results of PyFunceble.
 
 
 :code:`--ci-command "something"` | :code:`--cmd "something"`
@@ -841,12 +832,12 @@ Sets the command to execute before each commit (except the final one).
 **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program
-    which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which
+    have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`
-    (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are activated.
 
 
 :code:`--ci-end-command "something"` | :code:`--cmd-before-end "something"`
@@ -858,34 +849,33 @@ Sets the command to execute before the final commit.
 **Default value:** :code:`''`
 
 .. note::
-    In this example, :code:`something` should be a script or a program
-    which have to be executed when we reached the end of the given file.
+    In this example, :code:`something` should be a script or a program which
+    have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`
-    (under :code:`.PyFunceble.yaml`) are activated.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are activated.
 
 
-:code:`--ci-commit-message | :code:`--commit-autosave-message
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-commit-message "something"` | :code:`--commit-autosave-message "something"`
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
-Sets the commit message to apply everytime we have to apply a commit
-except for the really last one.
+Sets the commit message to apply everytime we have to apply a commit except
+for the really last one.
 
 **Default value:** :code:`PyFunceble - AutoSave`
 
-This argument allows us to set a custom commit message which is going to
-be used as a commit message when saving.
+This argument allows us to set a custom commit message which is going to be
+used as a commit message when saving.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`
-    (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are used.
 
 .. note::
-    This argument is only used if we have to split the work into
-    multiple processes because a list is too long or the timeout is
-    reached.
+    This argument is only used if we have to split the work into multiple
+    processes because a list is too long or the timeout is reached.
 
 .. warning::
     Please avoid the usage of :code:`[ci skip]` here.
@@ -900,19 +890,19 @@ Sets the commit message to apply at the really end.
 **Default value:** :code:`PyFunceble - Results`
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`
-    (under :code:`.PyFunceble.yaml`) are used.
+    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    :code:`.PyFunceble.yaml`) are used.
 
 .. note::
-    This argument is only used if we reached the end of the list we are
-    or have to test.
+    This argument is only used if we reached the end of the list we are or
+    have to test.
 
 
 Global Variables
 ^^^^^^^^^^^^^^^^
 
-Here is the list of environment variables we use and how we use them if
-they are set.
+Here is the list of environment variables we use and how we use them if they
+are set.
 
 .. note::
     If used in a script like bash or a terminal directly
@@ -1169,7 +1159,7 @@ Global overview
         -s, --simple          Activates or disables the simple output mode.
                                 Configured value: False
 
-    Multithreading:
+    Multiprocessing:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
                                 Sets the number of maximal workers to use.
                                 If not given, 40 (based on the current machine) will be applied.

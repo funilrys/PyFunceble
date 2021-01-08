@@ -331,7 +331,10 @@ class MigratorThread(ThreadsBase):
                 ):
                     break
 
-            if self.continuous_integration.is_time_exceeded():
+            if (
+                self.continuous_integration
+                and self.continuous_integration.is_time_exceeded()
+            ):
                 for submitted in submitted_list:
                     submitted.cancel()
 

@@ -15,17 +15,7 @@ from PyFunceble import DomainAvailabilityChecker
 from PyFunceble.cli.filesystem.dir_structure.restore import (
     DirectoryStructureRestoration,
 )
-from PyFunceble.cli.threads.file_producer import FileProducerThread
-
-# We initiate the coloration.
-colorama.init(autoreset=True)
-
-# We are in control, so we need to manually start the loading.
-PyFunceble.facility.ConfigLoader.custom_config = {
-    "cli_testing": {"file_generation": {"plain": True}, "display_mode": {"quiet": True}}
-}
-PyFunceble.facility.ConfigLoader.start()
-
+from PyFunceble.cli.processes.producer import ProducerProcessesManager
 
 # This is needed as our idea is to communicate with the producer thread instead
 # of trying to reimplement everything.
@@ -44,66 +34,83 @@ STD_COMMUNICATION_DATASET = {
 
 DOMAINS = ["github.com", "twitter.com"]
 
-# In this example, we are cleaning up and regenerating the output directory
-# at each run.
-dir_structure_restoration = DirectoryStructureRestoration(
-    parent_dirname=STD_COMMUNICATION_DATASET["destination"]
-).restore_from_backup()
+if __name__ == "__main__":
+    # We initiate the coloration.
+    colorama.init(autoreset=True)
 
-# We start the producer thread.
-file_producer_thread = FileProducerThread()
-file_producer_thread.start()
+    # We are in control, so we need to manually start the loading.
+    PyFunceble.facility.ConfigLoader.custom_config = {
+        "cli_testing": {
+            "file_generation": {"plain": True},
+            "display_mode": {"quiet": True},
+        }
+    }
+    PyFunceble.facility.ConfigLoader.start()
 
-# We start and configure our availability checker.
-avail_checker = DomainAvailabilityChecker(use_whois_lookup=False)
+    # In this example, we are cleaning up and regenerating the output directory
+    # at each run.
+    dir_structure_restoration = DirectoryStructureRestoration(
+        parent_dirname=STD_COMMUNICATION_DATASET["destination"]
+    ).restore_from_backup()
 
-for domain in DOMAINS:
-    # We loop through our list of subject to test.
-
-    # We parse the current subject to the availability checker.
-    avail_checker.subject = domain
-
-    # Now we fetch the status object.
-    test_result = avail_checker.get_status()
-
-    # We prepare our communication dataset.
-    communication_dataset = copy.deepcopy(STD_COMMUNICATION_DATASET)
-    communication_dataset["subject"] = test_result.subject
-    communication_dataset["idna_subject"] = test_result.idna_subject
-
-    # We print the result (for us as we call this script.)
-    print(
-        f"{test_result.idna_subject} (IDNA: {test_result.subject}) "
-        f"is {test_result.status}"
+    # We start the producer thread.
+    producer_process_manager = ProducerProcessesManager(
+        max_worker=1, daemon=True, generate_output_queue=False
     )
+    producer_process_manager.start()
 
-    # We order the generation of the status file by putting our information
-    # to the producer queue.
-    file_producer_thread.add_to_the_queue((communication_dataset, test_result))
+    # We start and configure our availability checker.
+    avail_checker = DomainAvailabilityChecker(use_whois_lookup=False)
 
-# We are now done, it's time to send the stop signal.
-# The stop signal will inform thhe producer thread that it needs to stop
-# listening to new order (from the time it reads the stop signal).
-file_producer_thread.send_stop_signal()
+    for domain in DOMAINS:
+        # We loop through our list of subject to test.
 
-# Now we wait until it's done.
-file_producer_thread.wait()
+        # We parse the current subject to the availability checker.
+        avail_checker.subject = domain
 
-# From here all files were generated we can do whatever we want with them.
+        # Now we fetch the status object.
+        test_result = avail_checker.get_status()
 
-if os.path.isfile(
-    os.path.join(
-        dir_structure_restoration.get_output_basedir(), "domains", "ACTIVE", "list"
-    )
-):
-    print(
-        f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}All right, "
-        "files correctly generated!"
-    )
-    sys.exit(0)
-else:
-    print(
-        f"{colorama.Style.BRIGHT}{colorama.Fore.RED}Something went wrong, "
-        "files not correctly generated!"
-    )
-    sys.exit(1)
+        # We prepare our communication dataset.
+        communication_dataset = copy.deepcopy(STD_COMMUNICATION_DATASET)
+        communication_dataset["subject"] = test_result.subject
+        communication_dataset["idna_subject"] = test_result.idna_subject
+
+        # We print the result (for us as we call this script.)
+        print(
+            f"{test_result.idna_subject} (IDNA: {test_result.subject}) "
+            f"is {test_result.status}"
+        )
+
+        # We order the generation of the status file by putting our information
+        # to the producer queue.
+        producer_process_manager.add_to_input_queue(
+            (communication_dataset, test_result)
+        )
+
+    # We are now done, it's time to send the stop signal.
+    # The stop signal will inform thhe producer thread that it needs to stop
+    # listening to new order (from the time it reads the stop signal).
+    producer_process_manager.send_stop_signal()
+
+    # Now we wait until it's done.
+    producer_process_manager.wait()
+
+    # From here all files were generated we can do whatever we want with them.
+
+    if os.path.isfile(
+        os.path.join(
+            dir_structure_restoration.get_output_basedir(), "domains", "ACTIVE", "list"
+        )
+    ):
+        print(
+            f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}All right, "
+            "files correctly generated!"
+        )
+        sys.exit(0)
+    else:
+        print(
+            f"{colorama.Style.BRIGHT}{colorama.Fore.RED}Something went wrong, "
+            "files not correctly generated!"
+        )
+        sys.exit(1)

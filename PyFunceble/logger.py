@@ -80,7 +80,11 @@ class Logger:
     # pylint: disable=too-many-public-methods
 
     # pylint: disable=line-too-long
-    OWN_FORMAT: str = "[%(asctime)s::%(levelname)s::%(origin_path)s:%(origin_line)s@%(origin_func)s](PID%(thread)s:%(threadName)s): %(message)s"
+    OWN_FORMAT: str = (
+        "[%(asctime)s | %(levelname)s | %(origin_path)s:"
+        "%(origin_line)s@%(origin_func)s | TPID%(thread)d:%(threadName)s"
+        " | PPID%(process)d:%(processName)s]:\n%(message)s"
+    )
     """
     Our very own format.
     """

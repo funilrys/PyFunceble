@@ -54,7 +54,7 @@ import functools
 import socket
 from typing import Callable, List, Optional
 
-from box.box import Box
+from box import Box
 
 import PyFunceble.facility
 import PyFunceble.factory

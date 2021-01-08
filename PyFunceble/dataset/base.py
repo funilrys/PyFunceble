@@ -78,6 +78,12 @@ class DatasetBase:
     def __getitem__(self, value: Any):
         raise NotImplementedError()
 
+    def __getstate__(self):
+        return vars(self)
+
+    def __setstate__(self, state):
+        vars(self).update(state)
+
     def ensure_source_file_exists(func):  # pylint: disable=no-self-argument
         """
         Ensures that the source file exists before running the decorated

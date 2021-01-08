@@ -55,6 +55,7 @@ from typing import Any, Generator, Tuple
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
+import PyFunceble.sessions
 from PyFunceble.cli.migrators.base import MigratorBase
 
 
@@ -86,7 +87,7 @@ class MariaDBMigratorBase(MigratorBase):
         Checks if the given table name exists.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+        with PyFunceble.sessions.session_scope() as db_session:
             statement = (
                 "SELECT COUNT(*) "
                 "FROM information_schema.tables "
@@ -118,7 +119,7 @@ class MariaDBMigratorBase(MigratorBase):
         statement += f" LIMIT {limit}"
 
         while True:
-            with PyFunceble.cli.factory.DBSession.get_new_db_session() as db_session:
+            with PyFunceble.sessions.session_scope() as db_session:
                 db_result = list(db_session.execute(statement).fetchall())
 
                 if not db_result:

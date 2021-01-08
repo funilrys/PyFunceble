@@ -130,7 +130,10 @@ class MinerThread(ThreadsBase):
 
         stop_message_caught = False
 
-        while not self.continuous_integration.is_time_exceeded():
+        while (
+            self.continuous_integration
+            and not self.continuous_integration.is_time_exceeded()
+        ) or True:
             if self.the_queue.empty():
                 continue
 

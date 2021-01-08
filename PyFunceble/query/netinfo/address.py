@@ -75,7 +75,7 @@ class AddressInfo(NetInfoBase):
                 x[-1][0]
                 for x in socket.getaddrinfo(self.subject, 80, proto=socket.IPPROTO_TCP)
             ]
-        except (socket.gaierror, socket.herror):
+        except (socket.gaierror, socket.herror, UnicodeError):
             pass
 
         return []

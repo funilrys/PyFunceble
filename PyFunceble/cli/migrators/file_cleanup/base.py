@@ -55,6 +55,7 @@ from typing import Optional
 
 import PyFunceble.facility
 from PyFunceble.cli.migrators.base import MigratorBase
+from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.helpers.file import FileHelper
 
 
@@ -93,6 +94,9 @@ class FileClenupMigratorBase(MigratorBase):
 
         PyFunceble.facility.Logger.debug("Deleted: %r", self.source_file)
         self.done = True
+
+        if self.print_action_to_stdout:
+            print_single_line()
 
     def start(self) -> "FileClenupMigratorBase":
         """

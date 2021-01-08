@@ -153,6 +153,12 @@ class TestConfigLoader(unittest.TestCase):
         tests that the reload occurs.
         """
 
+        self.default_config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.default_config_file.seek(0)
+
+        self.config_file.write(yaml.dump(self.our_config).encode())
+        self.config_file.seek(0)
+
         PyFunceble.storage.CONFIGURATION = self.our_config
 
         given = {"hello": "world"}
@@ -165,6 +171,46 @@ class TestConfigLoader(unittest.TestCase):
 
         expected = "world"
         actual = PyFunceble.storage.CONFIGURATION["hello"]
+
+        self.assertEqual(expected, actual)
+
+    def test_set_custom_config_config_already_loaded_merging_active(self) -> None:
+        """
+        Tests the method which let us set the custom configuration to work with.
+
+        In this case, we want the loader to reload (itself). So we basically
+        tests that the reload occurs. And that nothing has changed if the
+        merging is authorized
+        """
+
+        self.default_config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.default_config_file.seek(0)
+
+        self.config_file.write(yaml.dump(self.our_config).encode())
+        self.config_file.seek(0)
+
+        self.config_loader.merge_upstream = True
+
+        PyFunceble.storage.CONFIGURATION = copy.deepcopy(self.our_config)
+        PyFunceble.storage.CONFIGURATION["cli_testing"]["display_mode"]["dots"] = True
+
+        given = {"hello": "world"}
+        expected = {"hello": "world"}
+
+        self.config_loader.custom_config = given
+        actual = self.config_loader.custom_config
+
+        self.assertEqual(expected, actual)
+
+        expected = "world"
+        actual = PyFunceble.storage.CONFIGURATION["hello"]
+
+        self.assertEqual(expected, actual)
+
+        self.config_file.seek(0)
+
+        expected = copy.deepcopy(self.our_config.to_dict())
+        actual = yaml.safe_load(self.config_file)
 
         self.assertEqual(expected, actual)
 
@@ -267,7 +313,24 @@ class TestConfigLoader(unittest.TestCase):
 
         PyFunceble.storage.CONFIGURATION = Box({"hello": "world"})
 
-        expected = {"hello": "world"}
+        expected = self.our_config.to_dict()
+        actual = self.config_loader.get_config_file_content()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_config_file_but_empty(self) -> None:
+        """
+        Tests the method which let us get the content of the configuration file
+        for the case it is empty.
+        """
+
+        self.default_config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.default_config_file.seek(0)
+
+        self.config_file.write("".encode())
+        self.config_file.seek(0)
+
+        expected = self.our_config
         actual = self.config_loader.get_config_file_content()
 
         self.assertEqual(expected, actual)

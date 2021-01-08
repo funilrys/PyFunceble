@@ -44,10 +44,11 @@ def url_status(url):
     return URLAvailabilityChecker(url).get_status().status
 
 
-print("Start of loop example.")
-for domain in DOMAINS:
-    print(
-        f"{domain} is {domain_status(domain)} and "
-        f"http://{domain} is {url_status(f'http://{domain}')} "
-    )
-print("End of loop example.")
+if __name__ == "__main__":
+    print("Start of loop example.")
+    for domain in DOMAINS:
+        print(
+            f"{domain} is {domain_status(domain)} and "
+            f"http://{domain} is {url_status(f'http://{domain}')} "
+        )
+    print("End of loop example.")
