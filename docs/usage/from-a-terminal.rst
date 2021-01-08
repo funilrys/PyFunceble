@@ -397,7 +397,7 @@ Separated by spaces.
 
 .. code-block:: bash
 
-    - 127.0.1.53:5353
+    pyfunceble -dns 127.0.1.53:5353 -f file
 
 
 .. _dns-protocol:
@@ -419,7 +419,7 @@ Case-Sensitive
 
 .. code-block:: bash
 
-    --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
+    pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
 
 
 Databases
@@ -445,6 +445,15 @@ Sets the database engine to use.
 **Default value:** :code:`csv`
 
 **Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`.
+
+
+:code:`--inactive-db`
+"""""""""""""""""""""
+
+Activates or disables the usage of a 'database' to store all
+'INACTIVE' and 'INVALID'  subject for continuous retest.
+
+Configured value: :code:`True`
 
 
 :code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
@@ -478,7 +487,7 @@ Output control
 """"""""""""""""""""""""""
 
 Activates or disables the disply of the all information in the table we
-print to stdout.
+print to stdout (screen).
 
 **Default value:** :code:`false`
 
@@ -658,7 +667,8 @@ argument is for you!
 """""""""""""""""""""""""
 
     Activates or disables the generation of the unified results
-    file instead of the splitted one.
+    file instead of the splitted output in individual subfolder under
+    :code:`output/`.
 
     **Default value:** :code:`True`
 
@@ -735,7 +745,7 @@ Want as less as possible data on screen? This argument returns as less as
 possible on screen!
 
 
-Multithreading
+Multiprocessing
 ^^^^^^^^^^^^^^
 
 :code:`-w` | :code:`--max-workers`
@@ -1149,7 +1159,7 @@ Global overview
         -s, --simple          Activates or disables the simple output mode.
                                 Configured value: False
 
-    Multithreading:
+    Multiprocessing:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
                                 Sets the number of maximal workers to use.
                                 If not given, 40 (based on the current machine) will be applied.
