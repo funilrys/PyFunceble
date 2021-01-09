@@ -172,21 +172,14 @@ class DomainSyntaxCheckerBase(CheckerBase):
             The extension previously extracted.
         """
 
-        subject_without_suffix = None
-        suffix_result = None
-
         if extension in self.public_suffix_dataset:
             for suffix in self.public_suffix_dataset.get_available_suffix(extension):
                 try:
-                    suffix_index = subject.rindex(f".{suffix}")
+                    return subject[: subject.rindex(f".{suffix}")], suffix
                 except ValueError:
                     continue
 
-                subject_without_suffix = subject[:suffix_index]
-                suffix_result = suffix
-                break
-
-        return subject_without_suffix, suffix_result
+        return None, None
 
     @CheckerBase.ensure_subject_is_given
     def get_extension(self) -> Optional[str]:
