@@ -52,7 +52,7 @@ License:
 
 import csv
 import tempfile
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Generator, Optional, Tuple
 
 import PyFunceble.facility
@@ -203,7 +203,10 @@ class CSVDatasetBase(DBDatasetBase):
 
             for row in reader:
                 if "tested_at" in row:
-                    row["tested_at"] = datetime.fromisoformat(row["tested_at"])
+                    try:
+                        row["tested_at"] = datetime.fromisoformat(row["tested_at"])
+                    except (TypeError, ValueError):
+                        row["tested_at"] = datetime.utcnow() - timedelta(days=365)
 
                 yield row
 
