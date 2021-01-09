@@ -651,6 +651,7 @@ Sets the IP to prefix each lines of the hosts file.
     
         pyfunceble --output-location /tmp/pyfunceble -f file
 
+
 :code:`--unified-results`
 """""""""""""""""""""""""
 
@@ -681,7 +682,7 @@ status.
 Activates or disables the generation of the RAW file(s).
 What is meant is a list with only a list of subject (one per line).
 
-**Default value:** :code:`False:`
+**Default value:** :code:`True:`
 
 Want to get a list with all domains for each status? The activation of this
 argument does the work while testing!
