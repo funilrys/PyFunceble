@@ -1,9 +1,6 @@
 What can PyFunceble do?
 =======================
 
-What can PyFunceble do?
------------------------
-
 - Test the availability of a domain.
 - Test the availability of an IPv4.
 - Test the availability of an IPv6.
