@@ -587,7 +587,7 @@ version of each status.
     :ref:`--plain <plaindomain>`, :ref:`--no-files <no-file>`
 
 
-:code:`-ip "something"` | :code:`--host-ip` "something"
+:code:`-ip "something"` | :code:`--hosts-ip` "something"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Sets the IP to prefix each lines of the hosts file.
@@ -1118,7 +1118,7 @@ Global overview
         -h, --host            Activates or disables the generation of the
                                 hosts file(s).
                                 Configured value: True
-        -ip CLI_TESTING__HOSTS_IP, --host-ip CLI_TESTING__HOSTS_IP
+        -ip CLI_TESTING__HOSTS_IP, --hosts-ip CLI_TESTING__HOSTS_IP
                                 Sets the IP to prefix each lines of the hosts file.
                                 Configured value: '0.0.0.0'
         --no-files            Activates or disables the generation of any non-logs
