@@ -95,7 +95,7 @@ class SecondLvlDomainSyntaxChecker(DomainSyntaxCheckerBase):
             return False
 
         subject_without_extension = self.idna_subject[: self.last_point_index]
-        subject_without_suffix = self.get_subject_without_suffix(
+        subject_without_suffix, _ = self.get_subject_without_suffix(
             self.idna_subject, extension
         )
 
