@@ -96,10 +96,10 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
         return False
 
     def __getattr__(self, value: Any) -> Any:
-        raise NotImplementedError()
+        raise AttributeError(value)
 
     def __getitem__(self, value: Any) -> Any:
-        raise NotImplementedError()
+        raise KeyError(value)
 
     def update_source_file_afterwards(func):  # pylint: disable=no-self-argument
         """
