@@ -34,7 +34,7 @@ there will be:
   
 - The output directory structure have been altered to work with the ability to
   test more than one source at the time.
-  Prior to version :code:`4.0.0.ax` the output hirachi looked like 
+  Prior to version :code:`4.0.0.ax` the output hierarchy looked like 
   :code:`output/domains/ACTIVE/list`.
   In Pyfunceble version :code:`>=4.x` this have been altered to include the source
   name and append to the folder structure.

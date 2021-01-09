@@ -91,14 +91,6 @@ The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunc
 
    docker pull pyfunceble/pyfunceble-dev
 
-Using :code:`conda`
-"""""""""""""""""""
-
-Our repository is located at https://anaconda.org/pyfunceble/pyfunceble-dev
-
-.. code-block:: bash
-
-   conda update -c conda-forge -c pyfunceble pyfunceble-dev
 
 Pure Python method
 """"""""""""""""""
