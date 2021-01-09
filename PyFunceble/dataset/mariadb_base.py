@@ -95,7 +95,7 @@ class MariaDBDatasetBase(DBDatasetBase):
         raise NotImplementedError()
 
     def __getitem__(self, value: Any) -> Any:
-        raise NotImplementedError()
+        raise KeyError(value)
 
     def __del__(self) -> None:
         if isinstance(self.db_session, Session):

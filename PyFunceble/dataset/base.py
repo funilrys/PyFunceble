@@ -73,10 +73,10 @@ class DatasetBase:
         raise NotImplementedError()
 
     def __getattr__(self, value: Any):
-        raise NotImplementedError()
+        raise AttributeError(value)
 
     def __getitem__(self, value: Any):
-        raise NotImplementedError()
+        raise KeyError(value)
 
     def __getstate__(self):
         return vars(self)

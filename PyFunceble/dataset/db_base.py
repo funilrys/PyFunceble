@@ -88,10 +88,10 @@ class DBDatasetBase(DatasetBase):
         raise NotImplementedError()
 
     def __getattr__(self, value: Any) -> Any:
-        raise NotImplementedError()
+        raise AttributeError(value)
 
     def __getitem__(self, value: Any) -> Any:
-        raise NotImplementedError()
+        raise KeyError(value)
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
