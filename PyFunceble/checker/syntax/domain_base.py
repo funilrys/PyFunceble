@@ -51,7 +51,7 @@ License:
 """
 
 import functools
-from typing import Optional
+from typing import Optional, Tuple
 
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.dataset.iana import IanaDataset
@@ -159,6 +159,34 @@ class DomainSyntaxCheckerBase(CheckerBase):
             return subject.rindex(".")
         except ValueError:
             return None
+
+    def get_subject_without_suffix(
+        self, subject: str, extension: str
+    ) -> Optional[Tuple[Optional[int], Optional[str]]]:
+        """
+        Provides the given subject without the suffix.
+
+        :param subject:
+            The subject to work with.
+        :param extension:
+            The extension previously extracted.
+        """
+
+        subject_without_suffix = None
+        suffix_result = None
+
+        if extension in self.public_suffix_dataset:
+            for suffix in self.public_suffix_dataset.get_available_suffix(extension):
+                try:
+                    suffix_index = subject.rindex(f".{suffix}")
+                except ValueError:
+                    continue
+
+                subject_without_suffix = subject[:suffix_index]
+                suffix_result = suffix
+                break
+
+        return subject_without_suffix, suffix_result
 
     @CheckerBase.ensure_subject_is_given
     def get_extension(self) -> Optional[str]:

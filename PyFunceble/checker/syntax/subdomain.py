@@ -81,28 +81,22 @@ class SubDomainSyntaxChecker(DomainSyntaxCheckerBase):
             return False
 
         subject_without_extension = self.idna_subject[: self.last_point_index]
+        subject_without_suffix, suffix = self.get_subject_without_suffix(
+            self.idna_subject, extension
+        )
 
-        if extension in self.public_suffix_dataset:
-            for suffix in self.public_suffix_dataset.get_available_suffix(extension):
-                try:
-                    # Minus 1 is for the leading point.
-                    suffix_index = self.idna_subject.rindex(f".{suffix}")
-                except ValueError:
-                    continue
+        if subject_without_suffix:
+            if suffix.count(".") >= 2:
+                return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
+                    subject_without_extension, return_match=False
+                )
 
-                subject_without_suffix = self.idna_subject[:suffix_index]
+            if "." in subject_without_suffix:
+                return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
+                    subject_without_suffix, return_match=False
+                )
 
-                if suffix.count(".") >= 2:
-                    return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
-                        subject_without_extension, return_match=False
-                    )
-
-                if "." in subject_without_suffix:
-                    return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(
-                        subject_without_suffix, return_match=False
-                    )
-
-                return False
+            return False
 
         if "." in subject_without_extension:
             return RegexHelper(self.REGEX_VALID_SUBDOMAIN).match(

@@ -95,23 +95,17 @@ class SecondLvlDomainSyntaxChecker(DomainSyntaxCheckerBase):
             return False
 
         subject_without_extension = self.idna_subject[: self.last_point_index]
+        subject_without_suffix = self.get_subject_without_suffix(
+            self.idna_subject, extension
+        )
 
-        if extension in self.public_suffix_dataset:
-            for suffix in self.public_suffix_dataset.get_available_suffix(extension):
-                try:
-                    # Minus 1 is for the leading point.
-                    suffix_index = self.idna_subject.rindex(suffix) - 1
-                except ValueError:
-                    continue
+        if subject_without_suffix:
+            if "." in subject_without_suffix:
+                return False
 
-                subject_without_suffix = self.idna_subject[:suffix_index]
-
-                if "." in subject_without_suffix:
-                    return False
-
-                return RegexHelper(self.REGEX_VALID_DOMAIN).match(
-                    self.idna_subject, return_match=False
-                )
+            return RegexHelper(self.REGEX_VALID_DOMAIN).match(
+                self.idna_subject, return_match=False
+            )
 
         if "." in subject_without_extension:
             return False
