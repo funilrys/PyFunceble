@@ -86,7 +86,7 @@ class SubDomainSyntaxChecker(DomainSyntaxCheckerBase):
             for suffix in self.public_suffix_dataset.get_available_suffix(extension):
                 try:
                     # Minus 1 is for the leading point.
-                    suffix_index = self.idna_subject.rindex(suffix) - 1
+                    suffix_index = self.idna_subject.rindex(f".{suffix}")
                 except ValueError:
                     continue
 
