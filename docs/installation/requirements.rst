@@ -10,7 +10,7 @@ Here is the list of requirements:
 -   :code:`dnspython`
 -   :code:`domain2idna`
 -   :code:`inflection`
--   :code:`PyMySQL`like - for example - Travis CI
+-   :code:`PyMySQL` like - for example - Travis CI
 -   :code:`python-box`
 -   :code:`python-dotenv`
 -   :code:`PyYAML`
