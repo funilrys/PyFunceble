@@ -10,133 +10,133 @@ and features comes and goes.
 
 :code:`-ad`
 """""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-This code have been replaced by :code:`--adblock`
+    This code have been replaced by `--adblock <index.html#adblock>`_
 
 
 :code:`-nw` | :code:`--no-whois`
 """"""""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced with :code:`--whois-lookup`
+    Replaced with `--whois-lookup <index.html#whois-lookup>`_
 
 
 :code:`--shadow-file` | :code:`--shadow`
 """"""""""""""""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-No replacements
+    No replacements
 
 
 :code:`--use-reputation-data`
 """""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced with `index.html#reputation-lookup`_
+    Replaced with `reputation-lookup <index.html#reputation-lookup>`_
 
 
 :code:`--dns-lookup-over-tcp`
 """""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-See `--dns-protocol <index.html#dnds-protocol>`_
+    See `--dns-protocol <index.html#dns-protocol>`_
 
 
 :code:`-db | --database`
 """"""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-From Version 4 this have been replaced by `index.html#inactive-db`_
+    From Version 4 this have been replaced by `--inactive-db <index.html#inactive-db>`_
 
 
 :code:`-dbc "something" | --days-between-db-clean`
 """"""""""""""""""""""""""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-No replacements
+    No replacements
 
 
 :code:`-json`
 """""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-No replacements
+    No replacements
 
 
 :code:`-less`
 """""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced by :code:`-a` | :code:`--all`
+    Replaced by `-a | --all <index.html#a-all>`_
 
 
 :code:`-nf`
 """""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced by :code:`--no-files`
+    Replaced by `--no-files <index.html#no-files>`_
 
 
 :code:`-nl` | :code:`--no-logs`
 """""""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced by `index.html#no-files`_
+    Replaced by `--no-files <index.html#no-files>`_
 
 
 :code:`-nu | --no-unified`
 """"""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced by `index.html#unified-results`_
+    Replaced by `--unified-results <index.html#unified-results>`_
 
 
 :code:`--split`
 """""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced by `index.html#unified-results`_
+    Replaced by `--unified-results <index.html#unified-results>`_
 
 
 :code:`--store-whois`
 """""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-No replacements
+    No replacements
 
 
 :code:`-m | --multiprocess`
 """""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Integrated into `index.html#w-max-workers`_ 
+    Integrated into `-w | --max-workers <index.html#w-max-workers>`_ 
 
 
 :code:`-p | --processes`
 """"""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced with :code:`-w` | :code:`--max-workers`
+    Replaced with `-w | --max-workers <index.html#w-max-workers>`_ 
 
 
 :code:`--multiprocess-merging-mode`
 """""""""""""""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-No replacements
+    No replacements
 
 
 :code:`--autosave-minutes`
 """"""""""""""""""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced with :code:`--ci-max-minutes`
+    Replaced with `--ci-max-minutes <index.html#ci-max-minutes>`_
 
 
 :code:`--cmd`
 """""""""""""
-.. deprecated:: 4.0.0
+    .. deprecated:: 4.0.0
 
-Replaced with :code:`--ci-command`
+    Replaced with `--ci-command <index.html#ci-command-something-cmd-something>`
 

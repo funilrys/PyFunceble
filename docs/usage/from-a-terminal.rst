@@ -572,8 +572,6 @@ hierarchical order.
 This argument will output the result listed in a hierarchical order.
 
 
-.. _hosts:
-
 :code:`-h` | :code:`--host`
 """""""""""""""""""""""""""
 
@@ -586,7 +584,7 @@ version of each status.
 
 .. seealso::
 
-    :ref:`plain`, :ref:`no-files`
+    :ref:`--plain <plaindomain>`, :ref:`--no-files <no-file>`
 
 
 :code:`-ip "something"` | :code:`--hosts-ip` "something"
@@ -616,7 +614,7 @@ Sets the IP to prefix each lines of the hosts file.
         * :code:`--logging-level critical` ==> CRITICAL
 
 
-.. _no-files:
+.. _no-file:
 
 :code:`--no-files`
 """"""""""""""""""
@@ -633,7 +631,8 @@ Sets the IP to prefix each lines of the hosts file.
 
     .. seealso::
 
-        :ref:`hosts`, :ref:`plain`
+        `-h | --host <#h-host>`_,
+        :ref:`--plain <plaindomain>`
 
 
 :code:`--output-location`
@@ -641,7 +640,7 @@ Sets the IP to prefix each lines of the hosts file.
     .. versionadded:: 4.0.0
 
     This is used to direct the output location and matches
-    `PYFUNCEBLE_OUTPUT_LOCATION <index.html#global-variables>`_.
+    `PYFUNCEBLE_OUTPUT_LOCATION <#global-variables>`_.
 
     With this new option you no longer need to add the Global
     Variable but can append it directly to the CLI string.
@@ -652,16 +651,6 @@ Sets the IP to prefix each lines of the hosts file.
     
         pyfunceble --output-location /tmp/pyfunceble -f file
 
-:code:`--output-location`
-"""""""""""""""""""""""""
-
-    Sets the location where we are supposed to generation the output directory
-    from.
-
-    **Default value:** Please look at your machine
-
-Don't want to use the :code:`PYFUNCEBLE_OUTPUT_DIR` environment variable? This
-argument is for you!
 
 :code:`--unified-results`
 """""""""""""""""""""""""
@@ -685,8 +674,7 @@ percentage - file - of each status.
 This argument will disable or enable the generation of the percentage of each
 status.
 
-
-.. _plain:
+.. _plaindomain:
 
 :code:`--plain`
 """""""""""""""
@@ -694,14 +682,14 @@ status.
 Activates or disables the generation of the RAW file(s).
 What is meant is a list with only a list of subject (one per line).
 
-**Default value:** :code:`False:`
+**Default value:** :code:`True:`
 
 Want to get a list with all domains for each status? The activation of this
 argument does the work while testing!
 
 .. seealso::
 
-    :ref:`hosts`, :ref:`no-files`
+    `-h | --host <#h-host>`_, :ref:`--no-files <no-file>`
 
 
 :code:`--dots`
@@ -746,7 +734,7 @@ possible on screen!
 
 
 Multiprocessing
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 :code:`-w` | :code:`--max-workers`
 """"""""""""""""""""""""""""""""""
