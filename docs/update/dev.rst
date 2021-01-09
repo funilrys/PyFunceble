@@ -1,55 +1,18 @@
 Development version
 -------------------
 
-Important information for :code:`dev >= 3.2.11`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When you update from dev@<=3.2.10 or master@<=3.2.2 to newer release, there
-will be made a SQL conversion of the databases table layout.
-This can take up a sagnificent amount of time based on the size of the
-database.
-
-The table layout converion is being made to:
-
-1. Minimize the total size
-
-2. Optimize the sql flow and minimizing the read/write to save disk I/O.
-
-3. Minimize the number of SQL queries being made
-
-It have been seen taking days to convert these tables on very large
-installations.
-
-
-Important information for :code:`dev >= 4.0.0`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When you update to PyFunceble :code:`4.0.0`, there will be
-
-- a SQL conversion if you use the :code:`mysql` or `mariadb` database type.
-- a JSON to CSV conversion if one of those files is found in your filesystem:
-
-   - :code:`inactive_db.json`
-   - :code:`whois_db.json`
-
-- a breaking and compatibility issue if you try to directly (automatically ?)
-  read the data in the output directory. Indeed if you were looking for
-  :code:`output/domains/ACTIVE/list` in PyFunceble :code:`3.x`, in :code:`4.0`,
-  it is now under :code:`output/{{ input_file_name }}/domains/ACTIVE list`.
-
-
 For development
 ^^^^^^^^^^^^^^^
 
-::
+.. code-block:: bash
 
-   $ cd PyFunceble && git checkout dev
-   $ git fetch origin && git merge origin/dev
+   cd PyFunceble && git checkout dev
+   git fetch origin && git merge origin/dev
 
 .. note::
    As you previously installed with
 
-   ::
+   .. code-block:: 
 
       $ . venv/bin/activate && pip3 install -e .
 
@@ -64,9 +27,9 @@ Using :code:`pip`
 From PyPi
 ~~~~~~~~~
 
-::
+.. code-block:: bash
 
-   $ pip3 install --user --upgrade PyFunceble-dev
+   pip3 install --user --upgrade PyFunceble-dev
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
@@ -77,17 +40,19 @@ From PyPi
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
    into containers like - for example - Travis CI.
 
+
 From GitHub
 ~~~~~~~~~~~
 
-::
+.. code-block:: bash
 
-   $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+   pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
    at the user level. More information about it can be found on
    `pip documentation`_.
+
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
    into containers like - for example - Travis CI.
@@ -98,40 +63,40 @@ Using the AUR (for Arch Linux users)
 With makepkg
 ~~~~~~~~~~~~
 
-::
+.. code-block:: bash
 
-    $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev
-    $ makepkg
-    $ sudo pacman -U python-pyfunceble-dev*.tar.xz
+   wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev
+   makepkg
+   sudo pacman -U python-pyfunceble-dev*.tar.xz
 
 With your favorite AUR helper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning::
-    We do not recommend any AUR helper but keep in mind that some AUR helpers
-    are "better" than other.
-    For more information about your current (or any other) AUR helper please
-    report to `the ArchWiki page`_.
+   We do not recommend any AUR helper but keep in mind that some AUR helpers
+   are "better" than other.
+   For more information about your current (or any other) AUR helper please
+   report to `the ArchWiki page`_.
 
-::
+.. code-block:: bash
 
-    $ yourFavoriteAurHelper -Syu python-pyfunceble-dev
+   yourFavoriteAurHelper -Syu python-pyfunceble-dev
 
 Using docker (hub)
 """"""""""""""""""
 
 The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble-dev
 
-::
+.. code-block:: bash
 
-   $ docker pull pyfunceble/pyfunceble-dev
+   docker pull pyfunceble/pyfunceble-dev
 
 Using :code:`conda`
 """""""""""""""""""
 
 Our repository is located at https://anaconda.org/pyfunceble/pyfunceble-dev
 
-::
+.. code-block:: bash
 
    conda update -c conda-forge -c pyfunceble pyfunceble-dev
 
@@ -140,17 +105,18 @@ Pure Python method
 
 Execute the following and enjoy PyFunceble!
 
-::
+.. code-block:: bash
 
-   $ cd PyFunceble && git checkout dev
-   $ git fetch origin && git merge origin/dev
-   $ python3 setup.py test
-   $ python3 setup.py install # Avoid this if you want to uninstall one day.
-   $ pip3 install --user --upgrade -e . # Prefer this method.
+   cd PyFunceble && git checkout dev
+   git fetch origin && git merge origin/dev
+   python3 setup.py test
+   python3 setup.py install # Avoid this if you want to uninstall one day.
+   pip3 install --user --upgrade -e . # Prefer this method.
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
    at the user level. More information about it can be found on `pip documentation`_.
+
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
    into containers  or CI engines.
