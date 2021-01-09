@@ -128,6 +128,7 @@ VALID_DOMAINS: List[str] = [
     "cryptopiạ.com",
     "cṙyptopia.com",
     "985.com",
+    "hello-world.example.msn.cn",
 ]
 
 NOT_VALID_DOMAINS: List[str] = [
