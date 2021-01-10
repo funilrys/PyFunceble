@@ -56,7 +56,7 @@ import queue
 import time
 import traceback
 from datetime import datetime, timedelta
-from typing import Any, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 
 import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
@@ -88,6 +88,8 @@ class WorkerBase(multiprocessing.Process):
     send_feeding_message: Optional[bool] = None
     accept_waiting_delay: Optional[bool] = None
 
+    concurrent_worker_names: Optional[List[str]] = None
+
     _parent_connection: Optional[multiprocessing.connection.Connection] = None
     _child_connection: Optional[multiprocessing.connection.Connection] = None
     _exception: Optional[multiprocessing.Pipe] = None
@@ -117,6 +119,7 @@ class WorkerBase(multiprocessing.Process):
 
         self.send_feeding_message = True
         self.accept_waiting_delay = True
+        self.concurrent_worker_names = list()
 
         super().__init__(name=name, daemon=daemon)
 
@@ -139,26 +142,36 @@ class WorkerBase(multiprocessing.Process):
         return self._exception
 
     def add_to_input_queue(
-        self, data: Any, *, worker_name: Optional[str] = None
+        self,
+        data: Any,
+        *,
+        worker_name: Optional[str] = None,
+        destination_worker: Optional[str] = None,
     ) -> "WorkerBase":
         """
         Adds the given data to the current queue.
 
         :param data:
             The data to add into the queue.
+        :param destination_worker:
+            The name of the worker which is supposed to read the message.
         """
 
         if worker_name:
-            to_send = (worker_name, data)
+            to_send = (worker_name, destination_worker, data)
         else:
-            to_send = (self.name, data)
+            to_send = (self.name, destination_worker, data)
 
         self.input_queue.put(to_send)
 
         PyFunceble.facility.Logger.debug("Added to the (input) queue: %r", data)
 
     def add_to_output_queue(
-        self, data: Any, *, worker_name: Optional[str] = None
+        self,
+        data: Any,
+        *,
+        worker_name: Optional[str] = None,
+        destination_worker: Optional[str] = None,
     ) -> "WorkerBase":
         """
         Adds the given data to the output queue queue.
@@ -168,9 +181,9 @@ class WorkerBase(multiprocessing.Process):
         """
 
         if worker_name:
-            to_send = (worker_name, data)
+            to_send = (worker_name, destination_worker, data)
         else:
-            to_send = (self.name, data)
+            to_send = (self.name, destination_worker, data)
 
         self.output_queue.put(to_send)
 
@@ -256,41 +269,63 @@ class WorkerBase(multiprocessing.Process):
                     continue
 
                 try:
-                    worker_name, consumed = self.input_queue.get()
-                except queue.Empty:
-                    PyFunceble.facility.Logger.debug("Queue is empty. Continue.")
-                    continue
+                    worker_name, destination_worker, consumed = self.input_queue.get()
                 except EOFError:
                     PyFunceble.facility.Logger.info("Got EOFError. Stopping runner.")
                     self.global_exit_event.set()
                     break
 
                 PyFunceble.facility.Logger.info(
-                    "Got (from %r): %r", worker_name, consumed
+                    "Got (from %r | supposely to %r): %r",
+                    worker_name,
+                    destination_worker,
+                    consumed,
                 )
-                PyFunceble.facility.Logger.debug("Feeding workers: %r", feeding_worker)
+
+                if destination_worker and destination_worker != self.name:
+                    self.add_to_input_queue(
+                        consumed,
+                        worker_name=worker_name,
+                        destination_worker=destination_worker,
+                    )
+                    continue
 
                 if consumed == "stop":
                     if feeding_worker and not worker_name.startswith(
                         self.name[: self.name.rfind("_")]
                     ):
-                        feeding_worker[worker_name] = False
+                        if worker_name in feeding_worker:
+                            feeding_worker[worker_name] = False
 
-                        if break_from_feeder(feeding_worker) and break_now():
                             PyFunceble.facility.Logger.info(
-                                "Got stop message from %r (all feeders). Applying.",
+                                "Feeding workers: %r", feeding_worker
+                            )
+
+                            if break_from_feeder(feeding_worker) and break_now():
+                                PyFunceble.facility.Logger.info(
+                                    "Got stop message from %r (all feeders). Applying.",
+                                    worker_name,
+                                )
+                                self.add_to_output_queue("stop")
+                                break
+
+                            PyFunceble.facility.Logger.info(
+                                "Got stop message from %r. Keeping track of it.",
                                 worker_name,
                             )
-                            self.add_to_output_queue("stop")
-                            break
 
-                        PyFunceble.facility.Logger.info(
-                            "Got stop message from %r. Keeping track of it.",
-                            worker_name,
-                        )
+                            self.add_to_input_queue("wait")
+                            continue
+                        else:
+                            # We assume that that stop message was not for us
+                            # because we already working with it.
+                            self.add_to_input_queue("stop", worker_name=worker_name)
 
-                        self.add_to_input_queue("wait")
-                        continue
+                            continue
+
+                    PyFunceble.facility.Logger.info(
+                        "Feeding workers: %r", feeding_worker
+                    )
 
                     if break_now():
                         PyFunceble.facility.Logger.info(
@@ -311,13 +346,23 @@ class WorkerBase(multiprocessing.Process):
                         worker_name,
                     )
 
-                    if (
-                        worker_name not in feeding_worker
-                        and not worker_name.startswith(
+                    if worker_name not in feeding_worker:
+                        if not worker_name.startswith(
                             self.name[: self.name.rfind("_")]
-                        )
-                    ):
-                        feeding_worker[worker_name] = True
+                        ):
+                            feeding_worker[worker_name] = True
+                    else:
+                        # We assume that that feeding message was not for us
+                        # because we already working with it.
+                        # Therefore, we just resend it to our input queue so
+                        # that one of the concurrent worker that is not
+                        # tracking the worker can work with it.
+                        self.add_to_input_queue("feeding", worker_name=worker_name)
+                        continue
+
+                    PyFunceble.facility.Logger.info(
+                        "Feeding workers: %r", feeding_worker
+                    )
 
                     if self.send_feeding_message:
                         self.add_to_output_queue("feeding", worker_name=self.name)
