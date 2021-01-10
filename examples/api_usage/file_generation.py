@@ -57,6 +57,7 @@ if __name__ == "__main__":
     producer_process_manager = ProducerProcessesManager(
         max_worker=1, daemon=True, generate_output_queue=False
     )
+    producer_process_manager.send_feeding_signal(worker_name="main")
     producer_process_manager.start()
 
     # We start and configure our availability checker.
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     # We are now done, it's time to send the stop signal.
     # The stop signal will inform thhe producer thread that it needs to stop
     # listening to new order (from the time it reads the stop signal).
-    producer_process_manager.send_stop_signal()
+    producer_process_manager.send_stop_signal(worker_name="main")
 
     # Now we wait until it's done.
     producer_process_manager.wait()

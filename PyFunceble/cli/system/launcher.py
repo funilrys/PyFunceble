@@ -177,7 +177,7 @@ class SystemLauncher(SystemBase):
             max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
             continuous_integration=self.continuous_integration,
             daemon=True,
-        ).create()
+        )
         self.migrator_process_manager = MigratorProcessesManager(
             self.manager,
             continuous_integration=self.continuous_integration,
@@ -806,12 +806,10 @@ class SystemLauncher(SystemBase):
 
             del self.migrator_process_manager
 
-            self.tester_process_manager.start()
-            self.tester_process_manager.add_to_all_input_queues(
-                "feeding", worker_name="main"
-            )
-
             self.producer_process_manager.start()
+            self.tester_process_manager.send_feeding_signal(worker_name="main")
+
+            self.tester_process_manager.start()
 
             if self.miner_process_manager:
                 self.miner_process_manager.start()
