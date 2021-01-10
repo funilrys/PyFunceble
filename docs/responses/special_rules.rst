@@ -29,7 +29,7 @@ please either open an new `issue`_ or make you
     To add directly into the special rules please modify both the source code
     `extra_rules.py <https://github.com/funilrys/PyFunceble/blob/dev/PyFunceble/checker/availability/extra_rules.py>`_
     and the documentation
-    `source.rst <https://github.com/funilrys/PyFunceble/blob/dev/docs/responses/source.rst>`_
+    `source.rst <https://github.com/funilrys/PyFunceble/blob/dev/docs/responses/special_rules.rst>`_
 
 :code:`*.000webhostapp.com`
 """""""""""""""""""""""""""
