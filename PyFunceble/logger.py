@@ -55,7 +55,7 @@ import logging
 import logging.handlers
 import os
 import traceback
-from typing import Optional, Union
+from typing import Generator, Optional, Tuple, Union
 
 import PyFunceble.cli.storage
 import PyFunceble.storage
@@ -139,22 +139,6 @@ class Logger:
         else:
             self.guess_and_set_min_level()
 
-    def recreate_loggers(func):  # pylint: disable=no-self-argument
-        """
-        Recreate the loggers after the execution of the decorated method.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.recreated = True
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            self.init_loggers()
-
-            return result
-
-        return wrapper
-
     @property
     def on_screen(self) -> bool:
         """
@@ -186,7 +170,6 @@ class Logger:
         return self._activated
 
     @activated.setter
-    @recreate_loggers
     def activated(self, value: bool) -> None:
         """
         Sets the value of the activated attribute.
@@ -224,7 +207,6 @@ class Logger:
         return self._min_level
 
     @min_level.setter
-    @recreate_loggers
     def min_level(self, value: Union[int, str]) -> None:
         """
         Sets the minimum level to log.
@@ -280,7 +262,6 @@ class Logger:
         return self._output_directory
 
     @output_directory.setter
-    @recreate_loggers
     def output_directory(self, value: str) -> None:
         """
         Sets the directory to write.
@@ -381,6 +362,9 @@ class Logger:
                         level_name.lower(),
                     )
 
+                    if not logger:
+                        self.init_loggers()
+
                     return logger(*args, **kwargs, extra=self.get_origin())
 
                 return func
@@ -430,32 +414,53 @@ class Logger:
 
         return self
 
+    def destroy_loggers(self) -> "Logger":
+        """
+        Destroyes all existing loggers.
+        """
+
+        for logger, level in self.get_next_logger():
+            logger.handlers.clear()
+
+            delattr(self, f"{level}_logger")
+            setattr(self, f"{level}_logger", None)
+
+    def get_next_logger(self) -> Generator[None, Tuple[logging.Logger, str], None]:
+        """
+        Provides the next logger.
+        """
+
+        for logger_var_name in Logger.__dict__:
+            if (
+                not logger_var_name.endswith("_logger")
+                or logger_var_name == "get_next_logger"
+                or "sqlalchemy" in logger_var_name
+            ):
+                continue
+
+            level = logger_var_name.split("_", 1)[0]
+
+            if not getattr(self, logger_var_name):
+                setattr(self, logger_var_name, logging.getLogger(f"PyFunceble.{level}"))
+
+            yield getattr(self, logger_var_name), level
+
     def init_loggers(self) -> "Logger":
         """
         Init all our logger.
         """
 
         if self.authorized:
+            self.destroy_loggers()
+
             if not self.sqlalchemy_logger:
                 self.sqlalchemy_logger = logging.getLogger("sqlalchemy")
 
             self.sqlalchemy_logger.setLevel(self.min_level)
+            self.sqlalchemy_logger.propagate = False
 
-            for logger_var_name in Logger.__dict__:
-                if (
-                    not logger_var_name.endswith("_logger")
-                    or "sqlalchemy" in logger_var_name
-                ):
-                    continue
-
-                level = logger_var_name.split("_", 1)[0]
-
-                if not getattr(self, logger_var_name):
-                    setattr(
-                        self, logger_var_name, logging.getLogger(f"PyFunceble.{level}")
-                    )
-
-                logger = getattr(self, logger_var_name)
+            for logger, level in self.get_next_logger():
+                logger.propagate = False
 
                 # pylint: disable=protected-access
                 logger.setLevel(logging._nameToLevel[level.upper()])
@@ -493,20 +498,6 @@ class Logger:
             return handler
 
         return None
-
-    def destroy_loggers(self) -> "Logger":
-        """
-        Destroy all logger.
-        """
-
-        for logger_var_name, value in self.__dict__.items():
-            if not logger_var_name.endswith("_logger"):
-                continue
-
-            value.shutdown()
-            value = None
-
-        return self
 
     @single_logger_factory("info")
     def info(self, *args, **kwargs):
