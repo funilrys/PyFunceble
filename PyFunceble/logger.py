@@ -357,13 +357,21 @@ class Logger:
                     self.authorized
                     and logging._nameToLevel[level_name.upper()] >= self.min_level
                 ):
-                    logger = getattr(
-                        getattr(self, f"{level_name.lower()}_logger"),
-                        level_name.lower(),
-                    )
+                    try:
+                        logger = getattr(
+                            getattr(self, f"{level_name.lower()}_logger"),
+                            level_name.lower(),
+                        )
 
-                    if not logger:
+                        if not logger:
+                            self.init_loggers()
+                    except AttributeError:
                         self.init_loggers()
+
+                        logger = getattr(
+                            getattr(self, f"{level_name.lower()}_logger"),
+                            level_name.lower(),
+                        )
 
                     return logger(*args, **kwargs, extra=self.get_origin())
 
