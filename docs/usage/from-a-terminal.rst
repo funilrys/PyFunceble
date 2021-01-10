@@ -655,7 +655,7 @@ append it directly to the CLI string.
 """""""""""""""""""""""""
 
 Activates or disables the generation of the unified results file instead of the
-split output in individual subfolder under :code:`output/`.
+divided output in individual subfolder under :code:`output/`.
 
 **Default value:** :code:`unified_results: False`
 
@@ -1134,7 +1134,7 @@ Global overview
                                 the output directory from.
                                 Configured value: '/XXXX/XXXX/XXXXX'
         --unified-results     Activates or disables the generation of the unified
-                                results file instead of the split one.
+                                results file instead of the divided ones.
                                 Configured value: False
         --percentage          Activates or disables the display and generation
                                 of the percentage - file - of each status.

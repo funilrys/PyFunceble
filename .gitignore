@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# VSCode (Visual Basic Code)
+.vscode
+
 # Project related
 .pyfunceble_intern_downtime.json
 .pyfunceble-env

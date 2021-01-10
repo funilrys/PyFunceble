@@ -684,7 +684,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.file_generation.unified_results",
                 "action": "store_true",
                 "help": "Activates or disables the generation of the unified\n"
-                "results file instead of the splitted one. %s"
+                "results file instead of the divided ones. %s"
                 % get_configured_value(
                     "cli_testing.file_generation.unified_results",
                 ),
