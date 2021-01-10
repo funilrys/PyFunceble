@@ -653,7 +653,7 @@ class DNSQueryTool:
                     )
 
                     break
-            except dns.exception.Timeout:
+            except (dns.exception.Timeout, ValueError):
                 pass
 
             PyFunceble.facility.Logger.debug(
@@ -711,7 +711,7 @@ class DNSQueryTool:
                     )
 
                     break
-            except (dns.exception.Timeout, socket.gaierror):
+            except (dns.exception.Timeout, socket.gaierror, ValueError):
                 pass
 
             PyFunceble.facility.Logger.debug(
@@ -763,7 +763,7 @@ class DNSQueryTool:
                     )
 
                     break
-            except dns.exception.Timeout:
+            except (dns.exception.Timeout, ValueError):
                 pass
 
             PyFunceble.facility.Logger.debug(
@@ -826,7 +826,7 @@ class DNSQueryTool:
                     )
 
                     break
-            except dns.exception.Timeout:
+            except (dns.exception.Timeout, ValueError):
                 pass
 
             PyFunceble.facility.Logger.debug(

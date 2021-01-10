@@ -440,7 +440,7 @@ class SystemLauncher(SystemBase):
                 try:
                     _ = datetime.datetime.fromisoformat(possible_session_id)
                     self.sessions_id[parent_dirname] = None
-                except ValueError:
+                except (ValueError, TypeError):
                     self.sessions_id[parent_dirname] = possible_session_id
 
             if self.continuous_integration.authorized:
