@@ -289,11 +289,13 @@ Don't want to perform some netinfo lookup ? This argument is for you.
 Activates or disables the usage of our SPECIAL and extra
 rules whether possible.
 
-**Default value:** :code:`True`
+**Default value:** :code:`special: True`
 
 Don't want to use/apply the SPECIAL rules - which are explained in the source
 column section? This argument disables them all.
 
+To read more about which `Special Rules <../responses/source.html#special>`_
+is applied.
 
 :code:`--whois-lookup`
 """"""""""""""""""""""
