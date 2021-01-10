@@ -167,6 +167,7 @@ class ProcessesManagerBase:
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
+            # pylint: disable=protected-access
             if not self._created_workers:
                 self.create()
 

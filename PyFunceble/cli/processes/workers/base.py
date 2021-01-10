@@ -237,7 +237,7 @@ class WorkerBase(multiprocessing.Process):
         )
         break_time = datetime.utcnow() + timedelta(seconds=self.MINING_WAIT_TIME)
 
-        try:
+        try:  # pylint: disable=too-many-nested-blocks
             while True:
                 if self.global_exit_event.is_set():
                     PyFunceble.facility.Logger.info(
@@ -316,12 +316,12 @@ class WorkerBase(multiprocessing.Process):
 
                             self.add_to_input_queue("wait")
                             continue
-                        else:
-                            # We assume that that stop message was not for us
-                            # because we already working with it.
-                            self.add_to_input_queue("stop", worker_name=worker_name)
 
-                            continue
+                        # We assume that that stop message was not for us
+                        # because we already working with it.
+                        self.add_to_input_queue("stop", worker_name=worker_name)
+
+                        continue
 
                     PyFunceble.facility.Logger.info(
                         "Feeding workers: %r", feeding_worker
