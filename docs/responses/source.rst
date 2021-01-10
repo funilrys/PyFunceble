@@ -16,7 +16,7 @@ This source is returned when **all the following cases** are met:
   :func:`PyFunceble.lookup.whois.WhoisLookup.request`.
 - The :code:`INACTIVE` status is the one returned by other methods.
 - :func:`PyFunceble.lookup.http_code.HTTPCode.get` outputs is different from
-  the default one (:code:`XXX`) and the other methods gives the
+  the default one (:code:`99999999`) and the other methods gives the
   :code:`INACTIVE` status.
 
 
