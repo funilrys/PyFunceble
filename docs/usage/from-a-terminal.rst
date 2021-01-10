@@ -2,7 +2,7 @@ From a terminal
 ---------------
 
 This chapter also relates to writing bash scripts
-and PowerShell scripts as the syntaxing used is equal.
+and PowerShell scripts as the syntaxes used is equal.
 
 :code:`--help`
 ^^^^^^^^^^^^^^
@@ -76,8 +76,8 @@ As example:
     $ PyFunceble -f test_this test_that
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
-    at the same time
+    You can not combine the usage of :code:`-f`, :code:`-uf` and
+    :code:`--adblock` at the same time
 
 
 .. _uri_source:
@@ -120,8 +120,8 @@ line represents a URL to test.
     No WHOIS record will be requested nor DNS Lookup will be done.
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
-    at the same time
+    You can not combine the usage of :code:`-f`, :code:`-uf` and
+    :code:`--adblock` at the same time
 
 
 Source filtering, decoding, conversion and expansion
@@ -137,11 +137,11 @@ You will still need to use the :ref:`domain_source`
 
 .. note::
     If this argument is activated the system will extract all domains or
-    IPv4 and IPv6 adresses from the given adblock file.
+    IPv4 and IPv6 addresses from the given adblock file.
 
 .. warning::
-    You can not combine the usage of :code:`-f`, :code:`-uf` and :code:`--adblock`
-    at the same time
+    You can not combine the usage of :code:`-f`, :code:`-uf` and
+    :code:`--adblock` at the same time
 
 :code:`--complements`
 """""""""""""""""""""
@@ -159,8 +159,8 @@ Regex to match in order to test a given line.
 
 **Default value:** :code:`None`
 
-Want to test all :code:`blogspot` from your list? This argument allows you to
-do that!
+Want to test all :code:`blogspot` from your list? This argument allows
+you to do that!
 
 .. note::
     This argument should be a regex expression.
@@ -187,12 +187,13 @@ from each given input files.
 **Default value:** :code:`False`
 
 .. warning::
-    You can not currently not use the :code:`--rpz` in combination with
+    You can currently not use the :code:`--rpz` in combination with
     :code:`--syntax` to validate or syntax test a rpz formatted file.
     
 .. seealso::
-    See discussions `149 <https://github.com/funilrys/PyFunceble/discussions/149>`_
-    for more information and participate in it's development.
+    See discussions
+    `149 <https://github.com/funilrys/PyFunceble/discussions/149>`_ for more
+    information and participate in it's development.
 
 
 :code:`--wildcard`
@@ -207,7 +208,7 @@ Activates or disables the decoding of wildcards for each given input files.
     '*.wildcard.me'
     'wildcard.me'
 
-These are examples of when to use this arguement. The first one will
+These are examples of when to use this argument. The first one will
 return INVALID if :code:`--wildcard` is not set to true.
 
 Test control
@@ -216,7 +217,7 @@ Test control
 :code:`-c` | :code:`--auto-continue` | :code:`--continue`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Activates or disables the autocontinue subsystem.
+Activates or disables the auto-continue subsystem.
 
 **Default value:** :code:`True`
 
@@ -296,15 +297,19 @@ column section? This argument disables them all.
 
 :code:`--whois-lookup`
 """"""""""""""""""""""
+.. versionadded:: 4.0.0
 
 Activates or disables the usage of the WHOIS record
 (or better said the expiration date in it) whether possible.
 
 **Default value:** :code:`True`
 
-Don't want to use or take into consideration the results from :code:`whois`?
+Don't want to use or take the :code:`whois` date into consideration?
 This argument allows you to disable it!
 
+.. note::
+    When you use the :code:`--syntax` no WHOIS data lookup will be performed
+    In other words: :code:`--syntax` overrules this argument
 
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
@@ -338,7 +343,7 @@ Activates or disables the syntax checker.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Sets the default timeout to apply to each lookup utilities
-everytime it is possible to define a timeout.
+every time it is possible to define a timeout.
 
 **Default value:** :code:`5`
 
@@ -365,8 +370,8 @@ testing for URL.
 **Default value:** :code:`False`
 
 .. warning::
-    If you activate the verification of the SSL/TLS certificate, you may get
-    **false-positive** results.
+    If you activate the verification of the SSL/TLS certificate, you may
+    get **false-positive** results.
 
     Indeed if the certificate is not registered to the CA or is simply
     invalid and the domain is still alive, you will always get
@@ -473,7 +478,7 @@ subject into the inactive dataset before it gets retested.
 :code:`-wdb` | :code:`--whois-database`
 """""""""""""""""""""""""""""""""""""""
 
-Activates or disables the uage of a "database" to store
+Activates or disables the usage of a "database" to store
 the expiration date of all domains with a valid expiration date.
 
 **Default value:** :code:`True`
@@ -486,7 +491,7 @@ Output control
 :code:`-a` | :code:`--all`
 """"""""""""""""""""""""""
 
-Activates or disables the disply of the all information in the table we
+Activates or disables the display of the all information in the table we
 print to stdout (screen).
 
 **Default value:** :code:`false`
@@ -656,7 +661,7 @@ Sets the IP to prefix each lines of the hosts file.
 """""""""""""""""""""""""
 
     Activates or disables the generation of the unified results
-    file instead of the splitted output in individual subfolder under
+    file instead of the split output in individual subfolder under
     :code:`output/`.
 
     **Default value:** :code:`True`
@@ -696,7 +701,7 @@ argument does the work while testing!
 """"""""""""""
 
 Activate or disables the display of dots or other characters when we skip
-the test of a subjec.
+the test of a subject.
 
 **Default value:** :code:`False`
 
@@ -741,11 +746,9 @@ Multiprocessing
 
 Sets the number of maximal worker to use.
 
-**Default value:** :code:`False`
+The default is number of available CPU cores multiplied by 5
 
-.. note::
-    If omitted, the number of available CPU cores multiplied by 5 will be used
-    instead.
+**Default value:** :code:`False`
 
 
 CI / CD
@@ -806,7 +809,7 @@ As an example, this allows us to have 2 branches:
 
 .. code-block:: bash
 
-    - :code:`proceessing` (CI branch), for the tests with PyFunceble.
+    - :code:`processing` (CI branch), for the tests with PyFunceble.
     - :code:`master` (CI distribution branch), for the distribution of the
       results of PyFunceble.
 
@@ -845,11 +848,11 @@ Sets the command to execute before the final commit.
     :code:`.PyFunceble.yaml`) are activated.
 
 
-:code:`--ci-commit-message "something"` | :code:`--commit-autosave-message "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-commit-message` | :code:`--commit-autosave-message "something"`
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
-Sets the commit message to apply everytime we have to apply a commit except
+Sets the commit message to apply every time we have to apply a commit except
 for the really last one.
 
 **Default value:** :code:`PyFunceble - AutoSave`
@@ -869,8 +872,8 @@ used as a commit message when saving.
     Please avoid the usage of :code:`[ci skip]` here.
 
 
-:code:`--ci-end-commit-message "something"` | :code:`--commit-results-message "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-end-commit-message` | :code:`--commit-results-message "something"`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
 Sets the commit message to apply at the really end.
@@ -1057,12 +1060,12 @@ Global overview
                                 Configured value: False
         -t LOOKUP__TIMEOUT, --timeout LOOKUP__TIMEOUT
                                 Sets the default timeout to apply to each lookup
-                                utilities everytime it is possible to define a timeout.
+                                utilities every time it is possible to define a timeout.
                                 Configured value: 5
         -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
                                 Sets the user agent to use.
 
-                                If not given, we try to get the lastest (automatically) for you.
+                                If not given, we try to get the latest (automatically) for you.
         -vsc, --verify-ssl-certificate
                                 Activates or disables the verification of the SSL/TLS
                                 certificate when testing for URL.
@@ -1129,7 +1132,7 @@ Global overview
                                 the output directory from.
                                 Configured value: '/XXXX/XXXX/XXXXX'
         --unified-results     Activates or disables the generation of the unified
-                                results file instead of the splitted one.
+                                results file instead of the split one.
                                 Configured value: False
         --percentage          Activates or disables the display and generation
                                 of the percentage - file - of each status.
@@ -1179,7 +1182,7 @@ Global overview
                                 Sets the command to execute before the final commit.
                                 Configured value: None
         --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE, --commit-autosave-message CLI_TESTING__CI__COMMIT_MESSAGE
-                                Sets the commit message to apply everytime we have
+                                Sets the commit message to apply every time we have
                                 to apply a commit except for the really last one.
                                 Configured value: 'PyFunceble - AutoSave'
         --ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE, --commit-results-message CLI_TESTING__CI__END_COMMIT_MESSAGE
