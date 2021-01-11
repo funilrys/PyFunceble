@@ -752,6 +752,14 @@ The default is number of available CPU cores multiplied by 5
     If you have a CPU with 4 cores or Threads (depends on it's age) Then the
     number of workers will be 4 * 5 = 20 workers
 
+.. warning::
+
+    This section about `max-workers` is still under construction, but it close.
+    This means you should be experimenting a bit your self.
+
+    To follow the "behind the scene" talk about this subject, please have a
+    look at this `issue <https://github.com/spirillen/PyFunceble/issues/34>`_
+
 
 CI / CD
 ^^^^^^^
