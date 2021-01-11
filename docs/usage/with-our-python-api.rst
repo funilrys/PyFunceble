@@ -154,8 +154,9 @@ the :code:`complete=True` argument.
 You'll then get the following :code:`dict` as output.
 
 
-.. code-block:: json
-    :force:
+.. Do NOT append a lexer to this code block. It will break the layout
+
+.. code-block::
 
     {
         "_status": None, # If some extra rules are applied, this index will keep the status before the extra rules was applied.
