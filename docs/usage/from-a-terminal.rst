@@ -1,3 +1,14 @@
+..
+    In this document I uses the following variables to ref:
+
+    $DOMAIN or $URI as single instances
+    $DOMAIN_FILE or $URL_FILES as files with content of same type
+
+    These values are set as UPPERCase as ref to output variables from a
+    script. / @spirillen
+
+    We uses double lines between sections (for the eye) / @spirillen
+
 From a terminal
 ---------------
 
@@ -20,14 +31,14 @@ Test sources
 ^^^^^^^^^^^^
 
 
-:code:`-d "something"` | :code:`--domain "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-d "$DOMAIN"` | :code:`--domain "$DOMAIN"`
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 Test one or more domains, separated by spaces.
 
 This argument takes one or more values.
 
-.. code-block:: bash
+.. code-block:: console
 
     $ PyFunceble -d example.org example.net
 
@@ -35,16 +46,16 @@ This argument takes one or more values.
     When this option is used, no output files are generated.
 
 
-:code:`-url "something"` | :code:`--url "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-url "$URI"` | :code:`--url "$URI"`
+""""""""""""""""""""""""""""""""""""""""""
 
 Test one or more full URL, separated by spaces.
 
 This argument takes one or more values.
 
-.. code-block:: bash
+.. code-block:: console
 
-    PyFunceble -url https://example.org https://example.com
+    $ PyFunceble -url https://example.org/AlIvE https://example.com/GoNe
 
 .. note::
     When we test the availability of a URL, we (only) check the HTTP status
@@ -53,17 +64,19 @@ This argument takes one or more values.
 
 .. _domain_source:
 
-:code:`-f "something"` | :code:`--file "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-f "$DOMAIN"` | :code:`--file "$DOMAIN_FILE"`
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Read a local or remote (RAW link) file and test all domains inside it.
 If remote (RAW link) file is given, PyFunceble will download it,
 and test the content of the given RAW link as if it was a locally stored
 file.
 
-.. code-block:: bash
+.. code-block:: console
 
-    PyFunceble -f test_this test_that
+    $ PyFunceble -f "$DOMAIN"_1 "$DOMAIN"_2
+    $ PyFunceble -f "$DOMAIN_FILE"_1 "$DOMAIN_FILE"_2
+    $ PyFunceble --file "$DOMAIN_FILE"_1 "$DOMAIN_FILE"_2
 
 .. note::
     - This argument takes one or more space separated values.
@@ -74,10 +87,10 @@ file.
     :code:`--adblock` at the same time
 
 
-.. _uri_source:
+.. _URL_FILES:
 
-:code:`-uf "something"` | :code:`--url-file "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-uf "$URL_FILES"` | :code:`--url-file "$URL_FILES"`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Read a local or remote (RAW link) file and test all (full) URLs inside it.
 If remote (RAW link) file is given, PyFunceble will download it,
@@ -87,16 +100,16 @@ file.
 This argument test if a URL which is inside the given file is available.
 It ONLY tests full URLs.
 
-.. code-block:: bash
+.. code-block:: console
 
-    PyFunceble -uf test_this test_that
+    $ PyFunceble -uf "$URI"_1 "$URI"_2
 
 When a remote located source is provided, we will download the given URL and
 test its content assuming that each line represents a URL to test.
 
-.. code-block:: bash
+.. code-block:: console
 
-    PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.travis/lists/url`
+    $ PyFunceble -uf "$URL_FILES"
 
 .. note::
     - This argument takes one or more space separated values.
@@ -118,7 +131,12 @@ Source filtering, decoding, conversion and expansion
 """""""""""""""""
 
 Activates or disables the decoding of the adblock format.
+
 You will still need to use the :ref:`domain_source`
+
+.. code-block:: console
+
+    $ pyfunceble --adblock -f "$ADBLOCK_FILES"
 
 **Default value:** :code:`adblock: False`
 
@@ -149,9 +167,9 @@ Regex to match in order to test a given line.
 Want to test all :code:`blogspot` from your list? This argument allows
 you to do that!
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble --filter '\.blogspot\.' -f $source
+    $ pyfunceble --filter '^\.blogspot\.(com|net)$' -f $DOMAIN_FILE
 
 .. note::
     This argument should be a given as regex expression.
@@ -353,9 +371,9 @@ Sets the user agent to use.
 
 Example of how to change the default from CLI.
 
-.. code-block:: bash
+.. code-block:: console
     
-    --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+    $ pyfunceble --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 
 
 :code:`-vsc` | :code:`--verify-ssl-certificate`
@@ -386,9 +404,9 @@ You can add several separated by spaces and they will all be used in a order.
 
 **Default value:** :code:`Follow OS DNS` ==> :code:`server: null`
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble -dns 127.0.1.53:5353 127.0.0.1 -f file
+    $ pyfunceble -dns 127.0.1.53:5353 127.0.0.1 -f file
 
 .. warning::
     We expect a DNS server(s). If you add this flag but no DNS server(s) is
@@ -412,17 +430,17 @@ Sets the protocol to use for the DNS queries.
 **Available values:** :code:`UDP`, :code:`TCP`, :code:`HTTPS`, :code:`TLS`.
 Case-Sensitive
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble --dns doh.powerdns.org --dns-protocol HTTPS -f $source
+    $ pyfunceble --dns doh.powerdns.org --dns-protocol HTTPS -f $DOMAIN_FILE
 
 .. note:
     You can not mix protocols. IE. the following will only test on the
     :code:`doh.powerdns.org` dns server.
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
+    $ pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
 
 
 Databases
@@ -496,7 +514,7 @@ print to stdout (screen).
 
 **Default:**
 
-.. code-block:: bash
+.. code-block:: console
 
     Domain                        Status      Source
     ----------------------------- ----------- ----------
@@ -504,7 +522,7 @@ print to stdout (screen).
 
 **When :code:`all: True`:**
 
-.. code-block:: bash
+.. code-block:: console
 
     Domain                        Status      Expiration Date   Source     HTTP Code  Checker
     ----------------------------- ----------- ----------------- ---------- ---------- -------------
@@ -534,9 +552,9 @@ Multiple space separated statuses can be given.
 **Available values:** :code:`all`, :code:`ACTIVE`, :code:`INACTIVE`,
 :code:`INVALID`, :code:`VALID`, :code:`SANE`, :code:`MALICIOUS`
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
+    $ pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
     --display-status INACTIVE ACTIVE --whois-lookup
 
     Subject                                              Status      Source
@@ -544,9 +562,9 @@ Multiple space separated statuses can be given.
     duckduckgo.com                                       ACTIVE      DNSLOOKUP
     google-analytics.com                                 INACTIVE    STDLOOKUP
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
+    $ pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
       --display-status INACTIVE --whois-lookup
 
     Subject                                              Status      Source
@@ -646,9 +664,9 @@ This is used to direct the output location and matches
 With this new option you no longer need to add the Global Variable but can
 append it directly to the CLI string.
 
-.. code-block:: bash
+.. code-block:: console
 
-    pyfunceble --output-location /tmp/pyfunceble -f $source
+    $ pyfunceble --output-location /tmp/pyfunceble -f $DOMAIN_FILE
 
 
 :code:`--unified-results`
@@ -819,9 +837,9 @@ As an example, this allows us to have 2 branches:
 
 .. code-block:: bash
 
-    - :code:`processing` (CI branch), for the tests with PyFunceble.
-    - :code:`master` (CI distribution branch), for the distribution of the
-      results of PyFunceble.
+    --ci-branch processing # (CI branch), for the tests with PyFunceble.
+    --ci-distribution-branch master # (CI distribution branch), for the
+                                    # distribution of the results of PyFunceble.
 
 
 :code:`--ci-command "something"`
