@@ -92,6 +92,15 @@ and features comes and goes.
     Replaced by `--unified-results <index.html#unified-results>`_
 
 
+:code:`-ns|--no-special`
+    .. deprecated:: 4.0.0
+
+    Replaced by `--special-lookup <index.html#special-lookup>`_
+
+In the .code:`.PyFunceble_production.yaml` the value have changed from
+:code:`no_special` to :code:`special`
+
+
 :code:`--split`
 """""""""""""""
     .. deprecated:: 4.0.0

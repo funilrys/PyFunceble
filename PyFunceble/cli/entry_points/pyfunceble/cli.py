@@ -422,7 +422,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "type": float,
                 "default": 5.0,
                 "help": "Sets the default timeout to apply to each lookup\n"
-                "utilities everytime it is possible to define a timeout. %s"
+                "utilities every time it is possible to define a timeout. %s"
                 % get_configured_value("lookup.timeout"),
             },
         ),
@@ -435,7 +435,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "user_agent.custom",
                 "type": str,
                 "help": "Sets the user agent to use.\n\nIf not given, we try to "
-                "get the lastest (automatically) for you.",
+                "get the latest (automatically) for you.",
             },
         ),
         (
@@ -684,7 +684,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "cli_testing.file_generation.unified_results",
                 "action": "store_true",
                 "help": "Activates or disables the generation of the unified\n"
-                "results file instead of the splitted one. %s"
+                "results file instead of the divided ones. %s"
                 % get_configured_value(
                     "cli_testing.file_generation.unified_results",
                 ),
@@ -865,7 +865,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.ci.commit_message",
                 "type": str,
-                "help": "Sets the commit message to apply everytime we have\n"
+                "help": "Sets the commit message to apply every time we have\n"
                 "to apply a commit except for the really last one. %s"
                 % get_configured_value("cli_testing.ci.commit_message"),
             },
