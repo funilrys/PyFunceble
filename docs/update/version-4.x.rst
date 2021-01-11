@@ -44,12 +44,14 @@ there will be:
 
 .. note::
 
-   As consequence of the time consuming conversion we will advise you
+   As consequence of the time consuming conversion, we will advise you
    to run a simple pyfunceble command like:
 
    .. code-block:: bash
 
       pyfunceble -d mypdns.org
+
+      pyfunceble --database-type mariadb -d mypdns.org
 
 
 How long time does it take

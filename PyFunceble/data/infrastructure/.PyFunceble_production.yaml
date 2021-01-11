@@ -60,7 +60,7 @@ cli_testing:
   # Activates the mining of data.
   mining: False
 
-  # Acknowleadges that we may test for local network component.
+  # Acknowledges that we may test for local network component.
   # NOTE: Activating this, will remove the syntax checker completely.
   local_network: False
 
@@ -96,7 +96,7 @@ cli_testing:
     end_command: null
 
   display_mode:
-    # Provides everything related to the disply mode.
+    # Provides everything related to the display mode.
 
     # Activates the printing of dots.
     dots: False
@@ -156,6 +156,7 @@ cli_testing:
 
     # Activates the hierarchical sorting.
     hierarchical: False
+    
     # Activates the standard sorting.
     standard: True
 
@@ -175,7 +176,7 @@ cli_testing:
     analytic: True
 
     # Activate the generation of an unified file for the copy of what is
-    # outputed to STDOUT.
+    # outputted to STDOUT.
     unified_results: False
 
 lookup:
