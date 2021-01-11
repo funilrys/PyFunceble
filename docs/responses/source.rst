@@ -15,8 +15,8 @@ This source is returned when **all the following cases** are met:
 - We can't extract the expiration date from
   :func:`PyFunceble.lookup.whois.WhoisLookup.request`.
 - The :code:`INACTIVE` status is the one returned by other methods.
-- :func:`PyFunceble.lookup.http_code.HTTPCode.get` outputs is different from
-  the default one (:code:`XXX`) and the other methods gives the
+- :class:`PyFunceble.query.http_status_code.HTTPStatusCode` outputs is different from
+  the default one (:code:`99999999`) and the other methods gives the
   :code:`INACTIVE` status.
 
 
@@ -33,7 +33,8 @@ DNSLOOKUP
 ^^^^^^^^^
 
 This source is always returned when the taken decision of the status of the
-domain/IP comes from :func:`PyFunceble.lookup.dns.DNSLookup.request` outputs.
+domain/IP comes from :class:`PyFunceble.query.dns.query_tool.DNSQueryTool`
+outputs.
 
 
 .. include:: special_rules.rst
