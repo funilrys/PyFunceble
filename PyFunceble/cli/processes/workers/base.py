@@ -55,6 +55,9 @@ import multiprocessing.connection
 import queue
 import time
 import traceback
+import PyFunceble.cli.facility
+import PyFunceble.cli.factory
+import PyFunceble.sessions
 from datetime import datetime, timedelta
 from typing import Any, List, Optional, Tuple
 
@@ -229,6 +232,8 @@ class WorkerBase(multiprocessing.Process):
             PyFunceble.facility.ConfigLoader.set_custom_config(self.configuration)
 
         PyFunceble.facility.ConfigLoader.start()
+        PyFunceble.cli.facility.CredentialLoader.start()
+        PyFunceble.cli.factory.DBSession.init_db_sessions()
 
         feeding_worker = dict()
 

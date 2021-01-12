@@ -82,7 +82,7 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             The session ID to cleanup.
         """
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             db_session.query(self.ORM_OBJ).filter(
                 self.ORM_OBJ.session_id == session_id
             ).delete(synchronize_session=False)

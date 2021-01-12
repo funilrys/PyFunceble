@@ -76,7 +76,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def __contains__(self, value: str) -> bool:
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 return (
                     db_session.query(self.ORM_OBJ)
@@ -94,7 +94,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def __getitem__(self, value: Any) -> Optional[WhoisRecord]:
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 return (
                     db_session.query(self.ORM_OBJ)
@@ -163,7 +163,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         current_timestamp = int(datetime.utcnow().timestamp())
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 db_session.query(self.ORM_OBJ).filter(
                     self.ORM_OBJ.epoch < current_timestamp
