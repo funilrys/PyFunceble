@@ -55,13 +55,13 @@ import multiprocessing.connection
 import queue
 import time
 import traceback
-import PyFunceble.cli.facility
-import PyFunceble.cli.factory
-import PyFunceble.sessions
 from datetime import datetime, timedelta
 from typing import Any, List, Optional, Tuple
 
+import PyFunceble.cli.facility
+import PyFunceble.cli.factory
 import PyFunceble.facility
+import PyFunceble.sessions
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 
 
