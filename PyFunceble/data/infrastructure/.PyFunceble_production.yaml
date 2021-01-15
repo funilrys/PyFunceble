@@ -32,7 +32,7 @@ cli_testing:
   max_workers: null
 
   # Activates the automatic continuation after a break or shortage.
-  autocontinue: True
+  autocontinue: False
 
   # Activates the storage and creation of a database of all INACTIVA and INVALID
   # subjects for continuous testing.
