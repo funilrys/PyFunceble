@@ -52,7 +52,8 @@ License:
 
 import functools
 import os
-from typing import Any, Optional
+from datetime import datetime
+from typing import Any, Generator, Optional, Tuple
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
@@ -173,3 +174,13 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
             PyFunceble.facility.Logger.debug("Deleted: %r", self.source_file)
 
         return self
+
+    @CSVDatasetBase.execute_if_authorized(None)
+    def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
+        min_days = 365.25 * 20
+
+        for data in self.get_filtered_content({"session_id": session_id}):
+            if (datetime.utcnow() - data["tested_at"]).days < min_days:
+                continue
+
+            yield data["idna_subject"]

@@ -112,6 +112,8 @@ EXECUTION_TIME_FILE = "execution_time.json"
 COUNTER_FILE = "counter.json"
 TEST_RUNNING_FILE = ".running"
 
+PRE_LOADER_FILE = "preload.json"
+
 STD_PARENT_DIRNAME: str = "__pyfunceble_origin__"
 STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 

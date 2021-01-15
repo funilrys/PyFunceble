@@ -57,6 +57,7 @@ import secrets
 import tempfile
 from typing import Any, List, Optional, Tuple
 
+import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
@@ -101,7 +102,13 @@ class FileSorterWorker(WorkerBase):
             os.path.join(output_dir, PyFunceble.cli.storage.OUTPUTS.splitted.directory),
         ]
 
-        files_to_ignore = [".gitignore", ".gitkeep", ".running", "counter.json"]
+        files_to_ignore = [
+            ".gitignore",
+            ".gitkeep",
+            PyFunceble.cli.storage.TEST_RUNNING_FILE,
+            PyFunceble.cli.storage.COUNTER_FILE,
+            PyFunceble.cli.storage.PRE_LOADER_FILE,
+        ]
 
         result = []
 

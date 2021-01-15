@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-from typing import List
+from typing import Generator, List, Tuple
 
 from PyFunceble.dataset.db_base import DBDatasetBase
 
@@ -76,3 +76,19 @@ class ContinueDatasetBase(DBDatasetBase):
         "source",
         "session_id",
     ]
+
+    @DBDatasetBase.execute_if_authorized(None)
+    def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
+        """
+        Provides the next subject to test.
+
+        This method provides the dataset directly from the autocontinue dataset.
+        This method only compare the `tested_at` field.
+        If it older than 20 years, that means that we still have to test
+        the subject.
+
+        :param session_id:
+            The session ID to work with.
+        """
+
+        raise NotImplementedError()
