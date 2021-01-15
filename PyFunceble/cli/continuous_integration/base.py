@@ -1147,6 +1147,9 @@ class ContinuousIntegrationBase:
 
         commands = []
 
+        if self.end_command:
+            commands.append((self.end_command, True))
+
         if self.git_initialized:
             commands.extend(
                 [
@@ -1158,9 +1161,6 @@ class ContinuousIntegrationBase:
                     ),
                 ]
             )
-
-        if self.end_command:
-            commands.append((self.end_command, True))
 
         for command, allow_stdout in commands:
             self.exec_command(command, allow_stdout)
@@ -1193,6 +1193,9 @@ class ContinuousIntegrationBase:
 
         commands = []
 
+        if self.command:
+            commands.append((self.command, True))
+
         if self.git_initialized:
             commands.extend(
                 [
@@ -1203,9 +1206,6 @@ class ContinuousIntegrationBase:
                     ),
                 ]
             )
-
-        if self.command:
-            commands.append((self.command, True))
 
         for command, allow_stdout in commands:
             self.exec_command(command, allow_stdout)
