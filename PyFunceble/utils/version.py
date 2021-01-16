@@ -231,8 +231,12 @@ class VersionUtility:
                 local_upstream_number = str(upstream_number)
 
                 for index, value in enumerate(str(version_number)):
-                    if value == local_upstream_number[index]:
-                        continue
+                    try:
+                        if value == local_upstream_number[index]:
+                            continue
+                    except IndexError:
+                        # Example: Comparison of b10 to b1
+                        return False
 
                     if value < local_upstream_number[index]:
                         return True

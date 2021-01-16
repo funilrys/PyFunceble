@@ -240,6 +240,24 @@ class TestVersionUtility(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_is_older_almost_same(self) -> None:
+        """
+        Tests the method which let us check if the local version is older
+        than the given one.
+
+        In this case we compare a10 agains a1.
+        """
+
+        given_local = "1.0.0a1.dev (Hello, World)"
+        given_upstream = "1.0.0a10.dev (Hello, World)"
+
+        expected = False
+
+        self.utility.local_version = given_local
+        actual = self.utility.is_older_than(given_upstream)
+
+        self.assertEqual(expected, actual)
+
     def test_is_recent_beta(self) -> None:
         """
         Tests the method which let us check if the local version is recent
@@ -294,6 +312,24 @@ class TestVersionUtility(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def is_recent_almost_same(self) -> None:
+        """
+        Tests the method which let us check if the local version is older
+        than the given one.
+
+        In this case we compare a10 agains a1.
+        """
+
+        given_local = "1.0.0a10.dev (Hello, World)"
+        given_upstream = "1.0.0a1.dev (Hello, World)"
+
+        expected = True
+
+        self.utility.local_version = given_local
+        actual = self.utility.is_recent(given_upstream)
+
+        self.assertEqual(expected, actual)
+
     def test_is_older_alpha(self) -> None:
         """
         Tests the method which let us check if the local version is recent
@@ -324,6 +360,24 @@ class TestVersionUtility(unittest.TestCase):
         given_upstream = "1.0.0b1.dev (Hello, World)"
 
         expected = True
+
+        self.utility.local_version = given_local
+        actual = self.utility.is_equal_to(given_upstream)
+
+        self.assertEqual(expected, actual)
+
+    def test_is_equal_almost_same(self) -> None:
+        """
+        Tests the method which let us check if the local version is older
+        than the given one.
+
+        In this case we compare a10 agains a1.
+        """
+
+        given_local = "1.0.0a10.dev (Hello, World)"
+        given_upstream = "1.0.0a1.dev (Hello, World)"
+
+        expected = False
 
         self.utility.local_version = given_local
         actual = self.utility.is_equal_to(given_upstream)
