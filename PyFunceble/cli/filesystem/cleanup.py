@@ -83,7 +83,7 @@ class FilesystemCleanup(FilesystemDirBase):
 
             for orm_obj in to_clean:
                 # pylint: disable=line-too-long
-                with PyFunceble.sessions.session_scope() as db_session:
+                with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                     db_session.query(orm_obj).delete(synchronize_session=False)
                     db_session.commit()
 

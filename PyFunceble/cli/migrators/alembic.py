@@ -65,6 +65,7 @@ from alembic import command as alembic_command
 from alembic.script.base import ScriptDirectory
 
 import PyFunceble.cli.facility
+import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.sessions
@@ -148,7 +149,7 @@ class Alembic:
             .revision
         )
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
 
             result = db_session.execute(statement, {"db_revision": revision_id})

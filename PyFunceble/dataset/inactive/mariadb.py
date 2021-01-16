@@ -53,6 +53,7 @@ License:
 from datetime import datetime, timedelta
 from typing import Generator, Optional, Tuple
 
+import PyFunceble.cli.factory
 import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Inactive
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
@@ -73,7 +74,7 @@ class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
         self, source: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             result = (
                 db_session.query(self.ORM_OBJ)
                 .filter(self.ORM_OBJ.source == source)

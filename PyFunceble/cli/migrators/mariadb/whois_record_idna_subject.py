@@ -73,7 +73,7 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
         """
 
         if PyFunceble.cli.facility.CredentialLoader.is_already_loaded():
-            with PyFunceble.sessions.session_scope() as db_session:
+            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                 # pylint: disable=singleton-comparison
                 return (
                     db_session.query(WhoisRecord)
@@ -85,7 +85,7 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
 
     @MariaDBMigratorBase.execute_if_authorized(None)
     def migrate(self) -> "WhoisRecordIDNASubjectMigrator":
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             # pylint: disable=singleton-comparison
 
             broken = False
@@ -106,7 +106,6 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
                 row.idna_subject = domain2idna.domain2idna(row.subject)
 
                 db_session.add(row)
-                db_session.commit()
 
                 if self.print_action_to_stdout:
                     print_single_line()
@@ -114,6 +113,8 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
                 PyFunceble.facility.Logger.info(
                     "Finished to fix idna_subject field of %r", row.subject
                 )
+
+            db_session.commit()
 
             if not broken:
                 self.done = True

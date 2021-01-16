@@ -58,7 +58,10 @@ import traceback
 from datetime import datetime, timedelta
 from typing import Any, List, Optional, Tuple
 
+import PyFunceble.cli.facility
+import PyFunceble.cli.factory
 import PyFunceble.facility
+import PyFunceble.sessions
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 
 
@@ -228,7 +231,10 @@ class WorkerBase(multiprocessing.Process):
         if self.configuration is not None:
             PyFunceble.facility.ConfigLoader.set_custom_config(self.configuration)
 
-        PyFunceble.facility.ConfigLoader.start()
+        if multiprocessing.get_start_method() != "fork":
+            PyFunceble.facility.ConfigLoader.start()
+            PyFunceble.cli.facility.CredentialLoader.start()
+            PyFunceble.cli.factory.DBSession.init_db_sessions()
 
         feeding_worker = dict()
 

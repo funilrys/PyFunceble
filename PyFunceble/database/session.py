@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import copy
 import functools
 from typing import Any, Optional
 
@@ -70,12 +71,20 @@ class DBSession:
     current_session: sqlalchemy.orm.Session = None
 
     def __enter__(self) -> sqlalchemy.orm.Session:
-        # Yes we explicitly re-call.
-        self.current_session = self.close().get_db_session()
+        if PyFunceble.sessions.DB_FACTORY is not None:
+            self.current_session = PyFunceble.sessions.DB_FACTORY()
+        else:
+            self.current_session = self.get_new_session()()
 
         return self.current_session
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        if exc_type or exc_val or exc_tb:
+            try:
+                self.current_session.rollback()
+            except AttributeError:
+                pass
+
         self.close()
 
     def ensure_credential_is_given(func):  # pylint: disable=no-self-argument
@@ -126,22 +135,22 @@ class DBSession:
 
     @execute_if_authorized(None)
     @ensure_credential_is_given
-    def init_global_session(self) -> "DBSession":
+    def init_db_sessions(self) -> "DBSession":
         """
         Initiate the global session to work with.
         """
 
-        PyFunceble.sessions.DB_ENGINE = sqlalchemy.create_engine(
-            self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
-        )
+        if PyFunceble.sessions.DB_ENGINE is None:
+            PyFunceble.sessions.DB_ENGINE = sqlalchemy.create_engine(
+                self.credential.get_uri(), poolclass=sqlalchemy.pool.NullPool
+            )
 
-        PyFunceble.sessions.DB_FACTORY = sqlalchemy.orm.sessionmaker(
-            autocommit=False, autoflush=False, bind=PyFunceble.sessions.DB_ENGINE
-        )
-
-        PyFunceble.sessions.DB_SESSION = sqlalchemy.orm.scoped_session(
-            PyFunceble.sessions.DB_FACTORY
-        )
+            PyFunceble.sessions.DB_FACTORY = sqlalchemy.orm.sessionmaker(
+                bind=PyFunceble.sessions.DB_ENGINE,
+                autoflush=True,
+                autocommit=False,
+                expire_on_commit=False,
+            )
 
         return self
 
@@ -151,10 +160,10 @@ class DBSession:
         Provides a new session.
         """
 
-        if PyFunceble.sessions.DB_SESSION is None:
-            self.init_global_session()
+        session_object = DBSession()
+        session_object.credential = copy.deepcopy(self.credential)
 
-        return PyFunceble.sessions.DB_SESSION()
+        return session_object
 
     @execute_if_authorized(None)
     @ensure_credential_is_given
@@ -171,7 +180,7 @@ class DBSession:
         )
 
         return sqlalchemy.orm.sessionmaker(
-            autocommit=False, autoflush=False, bind=engine
+            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
         )
 
     @execute_if_authorized(None)
@@ -186,7 +195,7 @@ class DBSession:
         )
 
         return sqlalchemy.orm.sessionmaker(
-            autocommit=False, autoflush=False, bind=engine
+            bind=engine, autoflush=True, autocommit=False, expire_on_commit=False
         )
 
     def close(self) -> "DBSession":
@@ -195,10 +204,7 @@ class DBSession:
         """
 
         if self.current_session is not None:
-            try:
-                PyFunceble.sessions.DB_SESSION.remove()
-            except AttributeError:
-                self.current_session.close()
+            self.current_session.close()
 
             del self.current_session
             self.current_session = None
@@ -212,4 +218,5 @@ class DBSession:
         """
 
         # pylint: disable=no-member
-        return self.close().get_new_session()().query(*args, **kwargs)
+        with self as db_session:
+            return db_session.query(*args, **kwargs)

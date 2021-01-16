@@ -68,7 +68,6 @@ import PyFunceble.cli.storage
 import PyFunceble.cli.utils.ascii_logo
 import PyFunceble.cli.utils.sort
 import PyFunceble.cli.utils.stdout
-import PyFunceble.cli.utils.testing
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
@@ -76,6 +75,7 @@ from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.cli.continuous_integration.exceptions import StopExecution
 from PyFunceble.cli.continuous_integration.utils import ci_object
 from PyFunceble.cli.execution_time import ExecutionTime
+from PyFunceble.cli.file_preloader import FilePreloader
 from PyFunceble.cli.filesystem.cleanup import FilesystemCleanup
 from PyFunceble.cli.filesystem.counter import FilesystemCounter
 from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
@@ -90,6 +90,13 @@ from PyFunceble.cli.processes.miner import MinerProcessesManager
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
 from PyFunceble.cli.processes.tester import TesterProcessesManager
 from PyFunceble.cli.system.base import SystemBase
+from PyFunceble.cli.utils.testing import (
+    get_continue_databaset_object,
+    get_destination_from_origin,
+    get_inactive_dataset_object,
+    get_subjects_from_line,
+    get_testing_mode,
+)
 from PyFunceble.cli.utils.version import print_central_messages
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
@@ -98,10 +105,11 @@ from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
 from PyFunceble.converter.subject2complements import Subject2Complements
 from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
+from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
+from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
-from PyFunceble.helpers.list import ListHelper
 
 
 class SystemLauncher(SystemBase):
@@ -129,6 +137,7 @@ class SystemLauncher(SystemBase):
     counter: FilesystemCounter = FilesystemCounter()
 
     execution_time_holder: Optional[ExecutionTime] = None
+    file_preloader: Optional[FilePreloader] = None
 
     manager: Optional[multiprocessing.Manager]
     tester_process_manager: Optional[TesterProcessesManager] = None
@@ -137,6 +146,7 @@ class SystemLauncher(SystemBase):
     file_sorter_process_manager: Optional[FileSorterProcessesManager] = None
     migrator_process_manager: Optional[MigratorProcessesManager] = None
 
+    continue_dataset: Optional[ContinueDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
@@ -146,10 +156,9 @@ class SystemLauncher(SystemBase):
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
         self.execution_time_holder = ExecutionTime().set_start_time()
-        self.checker_type = PyFunceble.cli.utils.testing.get_testing_mode()
-        self.inactive_dataset = (
-            PyFunceble.cli.utils.testing.get_inactive_dataset_object()
-        )
+        self.checker_type = get_testing_mode()
+        self.continue_dataset = get_continue_databaset_object()
+        self.inactive_dataset = get_inactive_dataset_object()
         self.continuous_integration = ci_object()
 
         if self.continuous_integration.authorized:
@@ -204,6 +213,19 @@ class SystemLauncher(SystemBase):
         if self.continuous_integration.authorized:
             self.continuous_integration.set_start_time()
 
+        self.file_preloader = FilePreloader(
+            continuous_integration=self.continuous_integration,
+            checker_type=self.checker_type,
+            adblock_inputline2subject=self.adblock_inputline2subject,
+            wildcard2subject=self.wildcard2subject,
+            rpz_policy2subject=self.rpz_policy2subject,
+            rpz_inputline2subject=self.rpz_inputline2subject,
+            inputline2subject=self.inputline2subject,
+            subject2complements=self.subject2complements,
+            url2netloc=self.url2netloc,
+            continue_dataset=self.continue_dataset,
+        )
+
         super().__init__(args)
 
     @staticmethod
@@ -233,6 +255,8 @@ class SystemLauncher(SystemBase):
                     "subject": domain,
                     "idna_subject": domain2idna.domain2idna(domain),
                     "source": None,
+                    "abs_source": None,
+                    "rel_source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -253,6 +277,8 @@ class SystemLauncher(SystemBase):
                     "subject": url,
                     "idna_subject": domain2idna.domain2idna(url),
                     "source": None,
+                    "abs_source": None,
+                    "rel_source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -270,10 +296,10 @@ class SystemLauncher(SystemBase):
                     "type": "file",
                     "subject_type": "domain",
                     # pylint: disable=line-too-long
-                    "destination": PyFunceble.cli.utils.testing.get_destination_from_origin(
-                        file
-                    ),
+                    "destination": get_destination_from_origin(file),
                     "source": file,
+                    "abs_source": os.path.abspath(file),
+                    "rel_source": os.path.relpath(file),
                     "subject": file,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -295,10 +321,10 @@ class SystemLauncher(SystemBase):
                     "type": "file",
                     "subject_type": "url",
                     # pylint: disable=line-too-long
-                    "destination": PyFunceble.cli.utils.testing.get_destination_from_origin(
-                        file
-                    ),
+                    "destination": get_destination_from_origin(file),
                     "source": file,
+                    "abs_source": os.path.abspath(file),
+                    "rel_source": os.path.relpath(file),
                     "subject": file,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -347,63 +373,6 @@ class SystemLauncher(SystemBase):
                 DownloadHelper(file).download_text(destination=destination)
                 return True
             return False
-
-        def get_subjects_from_line(line: str) -> List[str]:
-            """
-            Provides the list of subject to test.
-            """
-
-            result = []
-
-            if PyFunceble.storage.CONFIGURATION.cli_decoding.adblock:
-                result.extend(
-                    # pylint: disable=line-too-long
-                    self.adblock_inputline2subject.set_aggressive(
-                        bool(
-                            PyFunceble.storage.CONFIGURATION.cli_decoding.adblock_aggressive
-                        )
-                    )
-                    .set_data_to_convert(line)
-                    .get_converted()
-                )
-            elif PyFunceble.storage.CONFIGURATION.cli_decoding.wildcard:
-                result.append(
-                    self.wildcard2subject.set_data_to_convert(line).get_converted()
-                )
-            elif PyFunceble.storage.CONFIGURATION.cli_decoding.rpz:
-                result.extend(
-                    [
-                        self.rpz_policy2subject.set_data_to_convert(x).get_converted()
-                        for x in self.rpz_inputline2subject.set_data_to_convert(
-                            line
-                        ).get_converted()
-                    ]
-                )
-            else:
-                result.extend(
-                    self.inputline2subject.set_data_to_convert(line).get_converted()
-                )
-
-            if PyFunceble.storage.CONFIGURATION.cli_testing.complements:
-                result.extend(
-                    [
-                        y
-                        for x in result
-                        for y in self.subject2complements.set_data_to_convert(
-                            x
-                        ).get_converted()
-                    ]
-                )
-
-            if self.checker_type.lower() != "syntax":
-                for index, subject in enumerate(result):
-                    netloc = self.url2netloc.set_data_to_convert(
-                        subject
-                    ).get_converted()
-
-                    result[index] = subject.replace(netloc, netloc.lower())
-
-            return ListHelper(result).remove_duplicates().remove_empty().subject
 
         def cleanup_if_necessary(parent_dirname: str) -> None:
             """
@@ -474,66 +443,119 @@ class SystemLauncher(SystemBase):
                 protocol["subject"] = os.path.abspath(protocol["subject"])
 
             protocol["source"] = os.path.abspath(protocol["destination"])
+            protocol["session_id"] = self.sessions_id[protocol["destination"]]
 
-            with FileHelper(protocol["subject"]).open(
-                "r", encoding="utf-8"
-            ) as file_stream:
-                for line in file_stream:
+            if isinstance(self.continue_dataset, CSVContinueDataset):
+                self.continue_dataset.set_base_directory(protocol["output_dir"])
+
+            if self.file_preloader.authorized:
+                if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
+                    print(
+                        f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                        f"Started preloading of {protocol['source']}..."
+                    )
+
+                self.file_preloader.set_protocol(protocol).start(
+                    # pylint: disable=line-too-long
+                    print_dots=(
+                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                        or bool(
+                            PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.dots
+                        )
+                    )
+                )
+
+                if not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet:
+                    print(
+                        f"\n{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                        f"Finished preloading of {protocol['source']}."
+                    )
+
+                self.__start_core_processes()
+
+                for subject in self.continue_dataset.get_to_test(
+                    protocol["session_id"]
+                ):
                     self.ci_stop_in_the_middle_if_time_exceeded()
 
-                    line = line.strip()
+                    to_send = copy.deepcopy(protocol)
+                    to_send["subject"], to_send["idna_subject"] = subject, subject
+                    to_send["from_preload"] = True
 
-                    if "SOA" in line:
-                        self.rpz_policy2subject.set_soa(line.split()[0])
+                    self.tester_process_manager.add_to_input_queue(
+                        to_send, worker_name="main"
+                    )
 
-                    subjects = get_subjects_from_line(line)
-                    subjects = [x for x in subjects if x]
-
-                    for subject in subjects:
-                        to_send = copy.deepcopy(protocol)
-                        to_send["subject"] = subject
-                        to_send["idna_subject"] = domain2idna.domain2idna(subject)
-                        to_send["session_id"] = self.sessions_id[
-                            protocol["destination"]
-                        ]
-
-                        self.tester_process_manager.add_to_input_queue(
-                            to_send, worker_name="main"
-                        )
-
-                # Now, let's handle the inactive one :-)
-                if bool(PyFunceble.storage.CONFIGURATION.cli_testing.inactive_db):
-                    for dataset in self.inactive_dataset.get_to_retest(
-                        protocol["source"],
-                        protocol["checker_type"],
-                        # pylint: disable=line-too-long
-                        min_days=PyFunceble.storage.CONFIGURATION.cli_testing.days_between.db_retest,
-                    ):
+            else:
+                with FileHelper(protocol["subject"]).open(
+                    "r", encoding="utf-8"
+                ) as file_stream:
+                    for line in file_stream:
                         self.ci_stop_in_the_middle_if_time_exceeded()
 
-                        to_send = copy.deepcopy(protocol)
-                        to_send["from_inactive"] = True
+                        line = line.strip()
 
-                        # Note: Our test infrastructure need a subject
-                        # but there is no subject in the table.
-                        to_send["subject"] = dataset["idna_subject"]
-                        to_send["idna_subject"] = dataset["idna_subject"]
+                        if "SOA" in line:
+                            self.rpz_policy2subject.set_soa(line.split()[0])
 
-                        to_send["session_id"] = self.sessions_id[
-                            protocol["destination"]
-                        ]
+                        for subject in get_subjects_from_line(
+                            line,
+                            self.checker_type,
+                            adblock_inputline2subject=self.adblock_inputline2subject,
+                            wildcard2subject=self.wildcard2subject,
+                            rpz_policy2subject=self.rpz_policy2subject,
+                            rpz_inputline2subject=self.rpz_inputline2subject,
+                            inputline2subject=self.inputline2subject,
+                            subject2complements=self.subject2complements,
+                            url2netloc=self.url2netloc,
+                        ):
+                            to_send = copy.deepcopy(protocol)
+                            to_send["subject"] = subject
+                            to_send["idna_subject"] = domain2idna.domain2idna(subject)
 
-                        self.tester_process_manager.add_to_input_queue(
-                            to_send, worker_name="main"
-                        )
+                            self.tester_process_manager.add_to_input_queue(
+                                to_send, worker_name="main"
+                            )
 
-                self.file_sorter_process_manager.add_to_input_queue(protocol)
+            # Now, let's handle the inactive one :-)
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.inactive_db):
+                for dataset in self.inactive_dataset.get_to_retest(
+                    protocol["source"],
+                    protocol["checker_type"],
+                    # pylint: disable=line-too-long
+                    min_days=PyFunceble.storage.CONFIGURATION.cli_testing.days_between.db_retest,
+                ):
+                    self.ci_stop_in_the_middle_if_time_exceeded()
+
+                    to_send = copy.deepcopy(protocol)
+                    to_send["from_inactive"] = True
+
+                    # Note: Our test infrastructure need a subject
+                    # but there is no subject in the table.
+                    to_send["subject"] = dataset["idna_subject"]
+                    to_send["idna_subject"] = dataset["idna_subject"]
+
+                    self.tester_process_manager.add_to_input_queue(
+                        to_send, worker_name="main"
+                    )
+
+            self.file_sorter_process_manager.add_to_input_queue(protocol)
 
         for protocol in self.testing_protocol:
             self.ci_stop_in_the_middle_if_time_exceeded()
 
             if protocol["type"] == "single":
-                for subject in get_subjects_from_line(protocol["idna_subject"]):
+                for subject in get_subjects_from_line(
+                    protocol["idna_subject"],
+                    self.checker_type,
+                    adblock_inputline2subject=self.adblock_inputline2subject,
+                    wildcard2subject=self.wildcard2subject,
+                    rpz_policy2subject=self.rpz_policy2subject,
+                    rpz_inputline2subject=self.rpz_inputline2subject,
+                    inputline2subject=self.inputline2subject,
+                    subject2complements=self.subject2complements,
+                    url2netloc=self.url2netloc,
+                ):
                     to_send = copy.deepcopy(protocol)
                     to_send["subject"], to_send["idna_subject"] = (
                         subject,
@@ -649,21 +671,17 @@ class SystemLauncher(SystemBase):
                 The protocol to work with.
             """
 
-            continue_object = (
-                PyFunceble.cli.utils.testing.get_continue_databaset_object()
-            )
-
-            if "set_base_directory" in dir(continue_object):
+            if isinstance(self.continue_dataset, CSVContinueDataset):
                 # CSV file :-)
-                continue_object.set_base_directory(protocol["output_dir"])
-                file_helper.set_path(continue_object.source_file).delete()
+                self.continue_dataset.set_base_directory(protocol["output_dir"])
+                file_helper.set_path(self.continue_dataset.source_file).delete()
 
                 PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
             else:
                 # MariaDB / MySQL
 
                 #   ## We specially have different signature.
-                continue_object.cleanup(  # pylint: disable=unexpected-keyword-arg
+                self.continue_dataset.cleanup(  # pylint: disable=unexpected-keyword-arg
                     session_id=self.sessions_id[protocol["destination"]]
                 )
 
@@ -786,6 +804,19 @@ class SystemLauncher(SystemBase):
 
         return self
 
+    def __start_core_processes(self):
+        """
+        Starts our core processes.
+        """
+
+        self.producer_process_manager.start()
+        self.tester_process_manager.send_feeding_signal(worker_name="main")
+
+        self.tester_process_manager.start()
+
+        if self.miner_process_manager:
+            self.miner_process_manager.start()
+
     @SystemBase.ensure_args_is_given
     def start(self) -> "SystemLauncher":
         try:
@@ -806,13 +837,8 @@ class SystemLauncher(SystemBase):
 
             del self.migrator_process_manager
 
-            self.producer_process_manager.start()
-            self.tester_process_manager.send_feeding_signal(worker_name="main")
-
-            self.tester_process_manager.start()
-
-            if self.miner_process_manager:
-                self.miner_process_manager.start()
+            if not self.file_preloader.authorized:
+                self.__start_core_processes()
 
             self.fill_protocol()
             self.fill_to_test_queue_from_protocol()

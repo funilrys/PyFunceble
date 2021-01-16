@@ -104,19 +104,22 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
             yield row
 
     @CSVDatasetBase.execute_if_authorized(None)
-    def update(self, row: dict) -> "CSVWhoisDataset":
+    def update(self, row: dict, *, ignore_if_exist: bool = False) -> "CSVWhoisDataset":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
 
         ..note::
-            This should be the prefered method for introduction of new dataset.I
+            This should be the prefered method for introduction of new dataset.
 
         ..warning::
             This method do nothing if the row is expired.
 
         :param row:
             The row or dataset to manipulate.
+
+        :param ignore_if_exist:
+            Ignores the insertion/update if the row already exists.
 
         :raise TypeError:
             When the given :code:`row` is not a :py:class`dict`.
@@ -127,7 +130,7 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
 
         if not self.is_expired(row):
             if self.exists(row):
-                if self[row["subject"]] != row:
+                if not ignore_if_exist and self[row["subject"]] != row:
                     self.remove(row)
                     self.add(row)
             else:

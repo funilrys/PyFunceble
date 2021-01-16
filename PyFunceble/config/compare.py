@@ -349,7 +349,9 @@ class ConfigComparison:
                 "cli_testing"
             ]["cooldown_time"]
 
-        if not isinstance(self.local_config["user_agent"], dict):
+        if "user_agent" not in self.local_config or not isinstance(
+            self.local_config["user_agent"], dict
+        ):
             merged["user_agent"] = self.upstream_config["user_agent"]
 
         if "active" in merged["http_codes"]:

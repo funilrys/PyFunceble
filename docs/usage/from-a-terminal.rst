@@ -167,6 +167,18 @@ Activates or disables the mining subsystem usage.
 Want to find domain or URL linked to a domain in your list? This argument will
 exactly do that.
 
+:code:`--preload`
+"""""""""""""""""
+
+.. versionadded:: 4.0.0
+
+Activates or disables the preloading of the input file(s) into the continue
+dataset before starting the tests.
+
+This reduces the waiting time while continuing a previous session.
+
+.. note::
+    This argument is useless when the auto continue subsystem is not active.
 
 :code:`--rpz`
 """""""""""""
@@ -180,7 +192,7 @@ from each given input files.
 .. warning::
     You can currently not use the :code:`--rpz` in combination with
     :code:`--syntax` to validate or syntax test a rpz formatted file.
-    
+
 .. seealso::
     See discussions
     `149 <https://github.com/funilrys/PyFunceble/discussions/149>`_ for more
@@ -196,7 +208,7 @@ Activates or disables the decoding of wildcards for each given input files.
 **Default value:** :code:`wildcard: False`
 
 .. code-block:: bash
-    
+
     '*.wildcard.me'
     'wildcard.me'
 
@@ -278,7 +290,7 @@ Activates or disables the usage of our SPECIAL and extra rules whether possible.
 
 Don't want to use/apply the `Special Rules <../responses/source.html#special>`_
 - which are explained in the source column section?
- 
+
 This argument disables them all.
 
 **Default value:** :code:`special: True`
@@ -354,7 +366,7 @@ Sets the user agent to use.
 Example of how to change the default from CLI.
 
 .. code-block:: bash
-    
+
     --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 
 

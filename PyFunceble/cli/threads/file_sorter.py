@@ -60,6 +60,7 @@ import tempfile
 from typing import List
 
 import PyFunceble.checker.utils.whois
+import PyFunceble.cli.storage
 import PyFunceble.cli.utils.sort
 import PyFunceble.cli.utils.stdout
 import PyFunceble.cli.utils.testing
@@ -99,7 +100,13 @@ class FileSorterThread(ThreadsBase):
             os.path.join(output_dir, PyFunceble.cli.storage.OUTPUTS.splitted.directory),
         ]
 
-        files_to_ignore = [".gitignore", ".gitkeep", ".running", "counter.json"]
+        files_to_ignore = [
+            ".gitignore",
+            ".gitkeep",
+            PyFunceble.cli.storage.TEST_RUNNING_FILE,
+            PyFunceble.cli.storage.COUNTER_FILE,
+            PyFunceble.cli.storage.PRE_LOADER_FILE,
+        ]
 
         result = []
 

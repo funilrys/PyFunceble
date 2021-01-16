@@ -51,9 +51,16 @@ License:
 """
 
 import os
-from typing import Union
+from typing import List, Optional, Union
 
 import PyFunceble.storage
+from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.converter.input_line2subject import InputLine2Subject
+from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
+from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
+from PyFunceble.converter.subject2complements import Subject2Complements
+from PyFunceble.converter.url2netloc import Url2Netloc
+from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.autocontinue.mariadb import MariaDBContinueDataset
 from PyFunceble.dataset.autocontinue.mysql import MySQLContinueDataset
@@ -63,6 +70,7 @@ from PyFunceble.dataset.db_base import DBDatasetBase
 from PyFunceble.dataset.inactive.csv import CSVInactiveDataset
 from PyFunceble.dataset.inactive.mariadb import MariaDBInactiveDataset
 from PyFunceble.dataset.inactive.mysql import MySQLInactiveDataset
+from PyFunceble.helpers.list import ListHelper
 from PyFunceble.helpers.regex import RegexHelper
 
 
@@ -155,3 +163,81 @@ def get_destination_from_origin(origin: str) -> str:
         origin = origin.rsplit(os.sep, 1)[-1]
 
     return RegexHelper("[^a-zA-Z0-9._-]").replace_match(origin, "_")
+
+
+def get_subjects_from_line(
+    line: str,
+    checker_type: str,
+    *,
+    adblock_inputline2subject: Optional[AdblockInputLine2Subject] = None,
+    wildcard2subject: Optional[Wildcard2Subject] = None,
+    rpz_policy2subject: Optional[RPZPolicy2Subject] = None,
+    rpz_inputline2subject: Optional[RPZInputLine2Subject] = None,
+    inputline2subject: Optional[InputLine2Subject] = None,
+    subject2complements: Optional[Subject2Complements] = None,
+    url2netloc: Optional[Url2Netloc] = None,
+) -> List[str]:
+    """
+    Provides the list of subject to test.
+    """
+
+    result = []
+
+    if adblock_inputline2subject is None:
+        adblock_inputline2subject = AdblockInputLine2Subject()
+
+    if wildcard2subject is None:
+        wildcard2subject = Wildcard2Subject()
+
+    if rpz_policy2subject is None:
+        rpz_policy2subject = RPZPolicy2Subject()
+
+    if rpz_inputline2subject is None:
+        rpz_inputline2subject = RPZInputLine2Subject()
+
+    if inputline2subject is None:
+        inputline2subject = InputLine2Subject()
+
+    if subject2complements is None:
+        subject2complements = Subject2Complements()
+
+    if url2netloc is None:
+        url2netloc = Url2Netloc()
+
+    if PyFunceble.storage.CONFIGURATION.cli_decoding.adblock:
+        result.extend(
+            # pylint: disable=line-too-long
+            adblock_inputline2subject.set_aggressive(
+                bool(PyFunceble.storage.CONFIGURATION.cli_decoding.adblock_aggressive)
+            )
+            .set_data_to_convert(line)
+            .get_converted()
+        )
+    elif PyFunceble.storage.CONFIGURATION.cli_decoding.wildcard:
+        result.append(wildcard2subject.set_data_to_convert(line).get_converted())
+    elif PyFunceble.storage.CONFIGURATION.cli_decoding.rpz:
+        result.extend(
+            [
+                rpz_policy2subject.set_data_to_convert(x).get_converted()
+                for x in rpz_inputline2subject.set_data_to_convert(line).get_converted()
+            ]
+        )
+    else:
+        result.extend(inputline2subject.set_data_to_convert(line).get_converted())
+
+    if PyFunceble.storage.CONFIGURATION.cli_testing.complements:
+        result.extend(
+            [
+                y
+                for x in result
+                for y in subject2complements.set_data_to_convert(x).get_converted()
+            ]
+        )
+
+    if checker_type.lower() != "syntax":
+        for index, subject in enumerate(result):
+            netloc = url2netloc.set_data_to_convert(subject).get_converted()
+
+            result[index] = subject.replace(netloc, netloc.lower())
+
+    return ListHelper(result).remove_duplicates().remove_empty().subject

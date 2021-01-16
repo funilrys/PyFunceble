@@ -143,7 +143,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                 )
 
                 # pylint: disable=line-too-long
-                with PyFunceble.sessions.session_scope() as db_session:
+                with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                     db_session.execute(
                         f"DELETE from pyfunceble_status WHERE id = {status['id']}"
                     )
@@ -155,7 +155,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
 
             if drop_table:
                 # pylint: disable=line-too-long
-                with PyFunceble.sessions.session_scope() as db_session:
+                with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                     db_session.execute(
                         f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"
                     )
@@ -170,13 +170,13 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                 )
 
         if drop_table:
-            with PyFunceble.sessions.session_scope() as db_session:
+            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                 db_session.execute("DROP TABLE pyfunceble_file")
                 db_session.commit()
 
                 PyFunceble.facility.Logger.debug("Deleted pyfunceble_file table.")
 
-            with PyFunceble.sessions.session_scope() as db_session:
+            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                 db_session.execute("DROP TABLE pyfunceble_status")
                 db_session.commit()
 

@@ -172,6 +172,6 @@ class SystemIntegrator(SystemBase):
         self.inject_into_config()
 
         PyFunceble.cli.facility.CredentialLoader.start()
-        PyFunceble.cli.factory.DBSession.init_global_session()
+        PyFunceble.cli.factory.DBSession.init_db_sessions()
 
         return self
