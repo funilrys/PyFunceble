@@ -11,7 +11,7 @@ on:
 
 jobs:
   lint:
-    name: Lint PyFunceble with Python ${{ matrix.python_version }} under ${{ matrix.os }}
+    name: Lint PyFunceble
 
     runs-on: "${{ matrix.os }}"
 
