@@ -410,9 +410,20 @@ Activates or disables the reputation checker.
 :code:`--syntax`
 """"""""""""""""
 
-Activates or disables the syntax checker.
+This code is to check the syntax of domains when the
+`-f <index.html#f-domain-file-domain-file>`_ and URI's when
+`--url <index.html#url-uri-url-uri>`_ is used as source.
+
+You should be able to use both :code:`-f` and `code:`-uf` at the same time with
+:code:`--syntax`
 
 **Default value:** :code:`syntax: False`
+
+.. note::
+
+    *TIP*: If you would like to gain some serious performance while testing
+    with :code:`--syntax`, We recommend you disable
+    `--auto-continue <index.html#c-auto-continue-continue>`_
 
 
 ------
