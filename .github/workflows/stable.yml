@@ -1,11 +1,11 @@
-name: Dev Deployment Workflow
+name: Stable Deployment Workflow
 on:
   pull_request:
     branches:
-      - dev
+      - master
   push:
     branches:
-      - dev
+      - master
   schedule:
     - cron: "0 0 * * *"
 
@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
 
@@ -53,8 +53,8 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.7"
-          - "3.8"
+          - "3.7.9"
+          - "3.8.6"
           - "3.9"
         os:
           - ubuntu-latest
@@ -107,99 +107,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
 
-  run_cli:
-    needs: test
-    name: "[${{ matrix.os }}] Run PyFunceble with Python ${{ matrix.python_version }}"
-
-    runs-on: "${{ matrix.os }}"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        name: Clone repository
-
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install tox
-
-      - name: Run PyFunceble as defined by tox_run.ini
-        run: tox -c tox_run.ini
-
-  run_cli_mariadb:
-    needs: test
-    name: "[${{ matrix.os }}] Run PyFunceble (with mariadb) with Python ${{ matrix.python_version }}"
-
-    runs-on: "${{ matrix.os }}"
-
-    services:
-      mariadb:
-        image: ghcr.io/pyfunceble/mariadb/mariadb:latest
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_USER: pyfunceble
-          MYSQL_PASSWORD: my_pyfunceble_password
-          MYSQL_DATABASE: pyfunceble
-          MYSQL_ROOT_PASSWORD: my_awesome_root_password
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
-
-    env:
-      PYFUNCEBLE_DB_CHARSET: utf8mb4
-      PYFUNCEBLE_DB_HOST: "127.0.0.1"
-      PYFUNCEBLE_DB_NAME: pyfunceble
-      PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
-      PYFUNCEBLE_DB_PORT: "3306"
-      PYFUNCEBLE_DB_USERNAME: pyfunceble
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-        os:
-          - ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        name: Clone repository
-
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install tox
-
-      - name: Run PyFunceble as defined by tox_run_mariadb.ini
-        run: tox -c tox_run_mariadb.ini
-
   deploy_to_pypi:
     needs: [run_cli, run_cli_mariadb]
     name: "Deploy 📦 to the PyPi"
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     runs-on: "${{ matrix.os }}"
 
@@ -235,14 +147,14 @@ jobs:
       - name: Publish 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
-          password: ${{ secrets.PYPI_DEV_API_TOKEN }}
+          password: ${{ secrets.PYPI_API_TOKEN }}
           skip_existing: true
 
   deploy_to_docker_hub:
     needs: [run_cli, run_cli_mariadb]
     name: "Deploy 📦 to the Docker Hub"
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     runs-on: "${{ matrix.os }}"
 

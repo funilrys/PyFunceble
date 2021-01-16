@@ -203,7 +203,7 @@ class TesterWorker(WorkerBase):
             )
 
         if test_dataset["type"] != "single":
-            if test_dataset["output_dir"]:
+            if test_dataset["output_dir"] and "from_preload" not in test_dataset:
                 if isinstance(self.continue_dataset, CSVContinueDataset):
                     self.continue_dataset.set_base_directory(test_dataset["output_dir"])
 

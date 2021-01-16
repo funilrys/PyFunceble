@@ -76,7 +76,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def __contains__(self, value: str) -> bool:
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 return (
                     db_session.query(self.ORM_OBJ)
@@ -94,7 +94,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     @MariaDBDatasetBase.execute_if_authorized(None)
     def __getitem__(self, value: Any) -> Optional[WhoisRecord]:
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 return (
                     db_session.query(self.ORM_OBJ)
@@ -121,7 +121,9 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
             yield row
 
     @MariaDBDatasetBase.execute_if_authorized(None)
-    def update(self, row: Union[dict, WhoisRecord]) -> "MariaDBWhoisDataset":
+    def update(
+        self, row: Union[dict, WhoisRecord], *, ignore_if_exist: bool = False
+    ) -> "MariaDBWhoisDataset":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
@@ -146,7 +148,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         if not self.is_expired(row):
             try:
-                super().update(row)
+                super().update(row, ignore_if_exist=ignore_if_exist)
             except ProgrammingError:
                 pass
         else:
@@ -163,7 +165,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         current_timestamp = int(datetime.utcnow().timestamp())
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             try:
                 db_session.query(self.ORM_OBJ).filter(
                     self.ORM_OBJ.epoch < current_timestamp

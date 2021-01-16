@@ -51,14 +51,11 @@ License:
 """
 
 import functools
-from typing import Any, Generator, Optional, Union
+from typing import Any, Generator, Optional
 
-try:
-    from sqlalchemy.ext.declarative.api import DeclarativeMeta
-except ModuleNotFoundError:
-    from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm import Session
 
+import PyFunceble.cli.factory
 import PyFunceble.sessions
 from PyFunceble.dataset.db_base import DBDatasetBase
 
@@ -69,7 +66,7 @@ class MariaDBDatasetBase(DBDatasetBase):
     """
 
     STD_KEEP_SESSION_OPEN: bool = False
-    ORM_OBJ: Optional[DeclarativeMeta] = None
+    ORM_OBJ = None
 
     _keep_db_session_open: Optional[bool] = None
     db_session: Optional[Session] = None
@@ -112,7 +109,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-            if not isinstance(self.ORM_OBJ, DeclarativeMeta):
+            if self.ORM_OBJ is None:
                 raise RuntimeError("<self.ORM_OBJ> not given.")
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
@@ -162,41 +159,49 @@ class MariaDBDatasetBase(DBDatasetBase):
         Provides a generator which provides the next dataset to read.
         """
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             for row in db_session.query(self.ORM_OBJ):
                 row = row.to_dict()
 
                 yield row
 
     @DBDatasetBase.execute_if_authorized(None)
-    def update(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
+    def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
 
         .. note::
-            This should be the prefered method for introduction of new dataset.
+            This should be the preferred method for introduction of new dataset.
 
         :raise TypeError:
-            When the given :code:`row` is not a :py:class:`dict` or
-            :class:`PyFunceble.database.sqlalchemy.base_schema.DeclarativeMeta`
+            When the given :code:`row` is not a :py:class:`dict` or sqlalchemy
+            schema.
         """
+
+        if not isinstance(row, (dict, type(self.ORM_OBJ))):
+            raise TypeError(
+                f"<row> should be {dict} or {self.ORM_OBJ}, {type(row)} given."
+            )
 
         PyFunceble.facility.Logger.info("Started to update row.")
 
-        with PyFunceble.sessions.session_scope() as db_session:
-            existing_row = self.get_existing_row(row)
+        if isinstance(row, type(self.ORM_OBJ)):
+            row = row.to_dict()
 
-            if existing_row:
-                for key, value in row.items():
-                    if (
-                        hasattr(existing_row, key)
-                        and getattr(existing_row, key) != value
-                    ):
-                        setattr(existing_row, key, value)
+        if "id" in row:
+            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
+                db_session.execute(
+                    self.ORM_OBJ.__table__.update().where(self.ORM_OBJ.id == row["id"]),
+                    row,
+                )
+        else:
+            existing_row_id = self.get_existing_row_id(row)
 
-                    db_session.add(existing_row)
-                    db_session.commit()
+            if existing_row_id is not None:
+                if not ignore_if_exist:
+                    row["id"] = existing_row_id
+                    self.update(row, ignore_if_exist=ignore_if_exist)
             else:
                 self.add(row)
 
@@ -207,7 +212,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def remove(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
+    def remove(self, row) -> "MariaDBDatasetBase":
         """
         Removes the given dataset from the database.
 
@@ -215,8 +220,8 @@ class MariaDBDatasetBase(DBDatasetBase):
             The row or dataset to check.
 
         :raise TypeError:
-            When the given :code:`row` is not a :py:class:`dict` or
-            :class:`PyFunceble.database.sqlalchemy.base_schema.DeclarativeMeta`
+            When the given :code:`row` is not a :py:class:`dict` or sqlalchemy
+            schema.
         """
 
         if not isinstance(row, (dict, type(self.ORM_OBJ))):
@@ -227,10 +232,16 @@ class MariaDBDatasetBase(DBDatasetBase):
         PyFunceble.facility.Logger.info("Started to remove row.")
 
         if not isinstance(row, type(self.ORM_OBJ)):
-            row = self.get_existing_row(row)
+            row_id = self.get_existing_row_id(row)
 
-        if row:
-            with PyFunceble.sessions.session_scope() as db_session:
+            if row_id is not None:
+                with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
+                    db_session.query(self.ORM_OBJ).filter(
+                        self.ORM_OBJ == row_id
+                    ).delete()
+                    db_session.commit()
+        else:
+            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
                 db_session.delete(row)
                 db_session.commit()
 
@@ -241,7 +252,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(False)
     @ensure_orm_obj_is_given
-    def exists(self, row: Union[dict, DeclarativeMeta]) -> bool:
+    def exists(self, row) -> bool:
         """
         Checks if the given dataset exists in our dataset.
 
@@ -249,34 +260,17 @@ class MariaDBDatasetBase(DBDatasetBase):
             The row or dataset to check.
 
         :raise TypeError:
-            When the given :code:`row` is not a :py:class:`dict` or
-            :class:`PyFunceble.database.sqlalchemy.base_schema.DeclarativeMeta`
+            When the given :code:`row` is not a :py:class:`dict` or sqlalchemy
+            schema.
         """
 
-        if not isinstance(row, (dict, type(self.ORM_OBJ))):
-            raise TypeError(
-                f"<row> should be {dict} or {self.ORM_OBJ}, {type(row)} given."
-            )
-
-        if isinstance(row, type(self.ORM_OBJ)):
-            row = row.to_dict()
-
-        with PyFunceble.sessions.session_scope() as db_session:
-            result = db_session.query(self.ORM_OBJ)
-
-            for field in self.COMPARISON_FIELDS:
-                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
-
-            return result.first() is not None
+        return self.get_existing_row_id(row) is not None
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def get_existing_row(
-        self, row: Union[dict, DeclarativeMeta]
-    ) -> Optional[DeclarativeMeta]:
+    def get_existing_row_id(self, row):
         """
-        Check if the given :code:`row` exists. And return the matiching
-        dataset.
+        Returns the ID of the existing row.
 
         :param row:
             The row or dataset to check,
@@ -290,7 +284,37 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
+            result = db_session.query(self.ORM_OBJ.id)
+
+            for field in self.COMPARISON_FIELDS:
+                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
+
+            result = result.first()
+
+            if result is not None:
+                return result.id
+        return None
+
+    @DBDatasetBase.execute_if_authorized(None)
+    @ensure_orm_obj_is_given
+    def get_existing_row(self, row):
+        """
+        Returns the matching row.
+
+        :param row:
+            The row or dataset to check,
+        """
+
+        if not isinstance(row, (dict, type(self.ORM_OBJ))):
+            raise TypeError(
+                f"<row> should be {dict} or {self.ORM_OBJ}, {type(row)} given."
+            )
+
+        if isinstance(row, type(self.ORM_OBJ)):
+            row = row.to_dict()
+
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             result = db_session.query(self.ORM_OBJ)
 
             for field in self.COMPARISON_FIELDS:
@@ -300,7 +324,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def add(self, row: Union[dict, DeclarativeMeta]) -> "MariaDBDatasetBase":
+    def add(self, row) -> "MariaDBDatasetBase":
         """
         Adds the given dataset into the database.
 
@@ -308,8 +332,8 @@ class MariaDBDatasetBase(DBDatasetBase):
             The row or dataset to add.
 
         :raise TypeError:
-            When the given :code:`row` is not a :py:class:`dict` or
-            :class:`PyFunceble.database.sqlalchemy.base_schema.DeclarativeMeta`
+            When the given :code:`row` is not a :py:class:`dict` or sqlalchemy
+            schema.
         """
 
         if not isinstance(row, (dict, type(self.ORM_OBJ))):
@@ -319,17 +343,11 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         PyFunceble.facility.Logger.info("Started to add row.")
 
-        if not isinstance(row, type(self.ORM_OBJ)):
-            # pylint: disable=not-callable
-            dataset = self.ORM_OBJ()
-        else:
-            dataset = row
+        if isinstance(row, type(self.ORM_OBJ)):
+            row = row.to_dict()
 
-        for key, value in row.items():
-            setattr(dataset, key, value)
-
-        with PyFunceble.sessions.session_scope() as db_session:
-            db_session.add(dataset)
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
+            db_session.execute(self.ORM_OBJ.__table__.insert(), row)
             db_session.commit()
 
         PyFunceble.facility.Logger.debug("Added row:\n%r", row)

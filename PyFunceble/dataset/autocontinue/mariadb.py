@@ -50,6 +50,9 @@ License:
     limitations under the License.
 """
 
+from datetime import datetime, timedelta
+from typing import Generator, Tuple
+
 import PyFunceble.cli.factory
 import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Continue
@@ -74,15 +77,11 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
 
         :param source:
             The source to delete.
-        :param destination:
-            The destination to delete.
-        :param checker_type:
-            The checker type to delete.
         :param session_id:
             The session ID to cleanup.
         """
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             db_session.query(self.ORM_OBJ).filter(
                 self.ORM_OBJ.session_id == session_id
             ).delete(synchronize_session=False)
@@ -93,3 +92,17 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             )
 
         return self
+
+    @MariaDBDatasetBase.execute_if_authorized(None)
+    def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
+        twenty_years_ago = datetime.utcnow() - timedelta(days=365.25 * 20)
+
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
+            result = (
+                db_session.query(self.ORM_OBJ)
+                .filter(self.ORM_OBJ.session_id == session_id)
+                .filter(self.ORM_OBJ.tested_at < twenty_years_ago)
+            )
+
+            for row in result:
+                yield row.idna_subject

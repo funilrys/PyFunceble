@@ -64,6 +64,14 @@ cli_testing:
   # NOTE: Activating this, will remove the syntax checker completely.
   local_network: False
 
+  # Activates or disable the preloading of the given input file(s).
+  # When this is activated, we take the time to pre load and decode the content
+  # of your file so that we can optimize some of our process regarding the
+  # auto continue.
+  #
+  # Note: This has no effect if the auto-continue is deactivated.
+  preload_file: False
+
   ci:
     # Provides everything related to the Continuous integration.
 
@@ -156,7 +164,7 @@ cli_testing:
 
     # Activates the hierarchical sorting.
     hierarchical: False
-    
+
     # Activates the standard sorting.
     standard: True
 

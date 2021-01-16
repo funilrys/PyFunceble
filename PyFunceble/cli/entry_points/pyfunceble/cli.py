@@ -235,6 +235,21 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--preload",
+            ],
+            {
+                "dest": "cli_testing.preload_file",
+                "action": "store_true",
+                "help": "Activates or disables the preloading of the input\n"
+                "file(s) into the continue dataset before starting the tests.\n\n"
+                "This reduces the waiting time while continuing a previous\n"
+                "session.\n"
+                "Note: This is useless when the auto continue subsystem is not "
+                "active. %s" % get_configured_value("cli_testing.preload_file"),
+            },
+        ),
+        (
+            [
                 "--filter",
             ],
             {

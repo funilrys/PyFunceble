@@ -101,7 +101,7 @@ class DBMigratorBase(MigratorBase):
             The name of the table to check.
         """
 
-        with PyFunceble.sessions.session_scope() as db_session:
+        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             statement = (
                 "SELECT COUNT(*) "
                 "FROM information_schema.tables "

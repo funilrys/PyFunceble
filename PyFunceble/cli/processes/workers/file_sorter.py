@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import concurrent
 import contextlib
 import heapq
 import os
@@ -57,6 +58,7 @@ import secrets
 import tempfile
 from typing import Any, List, Optional, Tuple
 
+import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
@@ -76,7 +78,7 @@ class FileSorterWorker(WorkerBase):
     """
 
     STD_NAME: str = "pyfunceble_file_sorter_worker"
-    MAX_LINES: int = 1000
+    MAX_LINES: int = 30_000
 
     def __post_init__(self) -> None:
         # We don't need to wait for anything here :-)
@@ -101,7 +103,13 @@ class FileSorterWorker(WorkerBase):
             os.path.join(output_dir, PyFunceble.cli.storage.OUTPUTS.splitted.directory),
         ]
 
-        files_to_ignore = [".gitignore", ".gitkeep", ".running", "counter.json"]
+        files_to_ignore = [
+            ".gitignore",
+            ".gitkeep",
+            PyFunceble.cli.storage.TEST_RUNNING_FILE,
+            PyFunceble.cli.storage.COUNTER_FILE,
+            PyFunceble.cli.storage.PRE_LOADER_FILE,
+        ]
 
         result = []
 
@@ -119,7 +127,8 @@ class FileSorterWorker(WorkerBase):
 
         return result
 
-    def process_file_sorting(self, file: str) -> None:
+    @classmethod
+    def process_file_sorting(cls, file: str) -> None:
         """
         Process the sorting of the given file.
 
@@ -138,7 +147,7 @@ class FileSorterWorker(WorkerBase):
             file_finished = False
 
             while True:
-                for _ in range(self.MAX_LINES + 1):
+                for _ in range(cls.MAX_LINES + 1):
                     try:
                         next_line = next(file_stream).strip()
                     except StopIteration:
@@ -195,9 +204,13 @@ class FileSorterWorker(WorkerBase):
         # Just for human brain :-)
         output_dir = FilesystemDirBase(consumed["destination"]).get_output_basedir()
 
-        files_to_sort = self.get_files_to_sort(output_dir)
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+        ) as executor:
+            submitted_list = []
 
-        for file in files_to_sort:
-            self.process_file_sorting(file)
+            for file in self.get_files_to_sort(output_dir):
+                submitted = executor.submit(self.process_file_sorting, file)
+                submitted_list.append(submitted)
 
         return None

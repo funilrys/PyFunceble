@@ -50,30 +50,7 @@ License:
     limitations under the License.
 """
 
-from contextlib import contextmanager
-from typing import Optional
-
-from sqlalchemy.orm import Session
-
 # Should be initiated by the PyFunceble.database.session module.
 DB_ENGINE = None
 DB_FACTORY = None
-DB_SESSION: Optional[Session] = None
-
-
-@contextmanager
-def session_scope():
-    """
-    Provides a new session scope.
-    """
-
-    session = DB_SESSION()  # pylint: disable=not-callable
-
-    try:
-        yield session
-        session.commit()
-    except Exception as exception:
-        session.rollback()
-        raise exception
-    finally:
-        DB_SESSION.remove()
+DB_SESSION = None

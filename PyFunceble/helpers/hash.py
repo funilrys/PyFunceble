@@ -71,7 +71,7 @@ class HashHelper:
     _algo: str = "SHA512_224"
 
     def __init__(self, algo: Optional[str] = None):
-        if algo:
+        if algo is not None:
             self.algo = algo
 
     @property
@@ -133,7 +133,18 @@ class HashHelper:
             The path of the file to read.
         """
 
-        return self.hash_data(FileHelper(file_path).read_bytes())
+        block_size = 4096
+
+        digest = self.__get_hash()
+
+        with FileHelper(file_path).open("rb") as file_stream:
+            block = file_stream.read(block_size)
+
+            while block:
+                digest.update(block)
+                block = file_stream.read(block_size)
+
+        return digest.finalize().hex()
 
     def hash_data(self, data: Union[str, bytes]) -> str:
         """

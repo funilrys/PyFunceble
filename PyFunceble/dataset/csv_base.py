@@ -84,13 +84,16 @@ class CSVDatasetBase(DBDatasetBase):
 
         return writer, file_handler
 
-    def update(self, row: dict) -> "DBDatasetBase":
+    def update(self, row: dict, *, ignore_if_exist: bool = False) -> "DBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
 
         :param row:
             The row or dataset to manipulate.
+
+        :param ignore_if_exist:
+            Ignore the insertion/update if the row already exists.
 
         :raise TypeError:
             When the given :code:`row` is not a :py:class`dict`.
@@ -102,8 +105,9 @@ class CSVDatasetBase(DBDatasetBase):
         PyFunceble.facility.Logger.info("Started to update row.")
 
         if self.exists(row):
-            self.remove(row)
-            self.add(row)
+            if not ignore_if_exist:
+                self.remove(row)
+                self.add(row)
         else:
             self.add(row)
 
