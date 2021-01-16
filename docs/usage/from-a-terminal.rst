@@ -212,10 +212,20 @@ exactly do that.
 Activates or disables the preloading of the input file(s) into the continue
 dataset before starting the tests.
 
+The `--preload` argument - or its option counterpart - ??
+is given, we decode and load the given input files into the continue
+dataset before starting the test.
+
 This reduces the waiting time while continuing a previous session.
 
 .. note::
-    This argument is useless when the auto continue subsystem is not active.
+    This argument is useless unless the
+    `auto continue <index.html#c-auto-continue-continue>`_ subsystem is
+    active.
+
+    The preloading may take some time depending of the size of the file to
+    test, but this is the price for a smooth and better autocontinue.
+    Especially under CI's.
 
 
 ------
