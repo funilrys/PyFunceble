@@ -204,32 +204,6 @@ exactly do that.
 
 ------
 
-:code:`--preload`
-"""""""""""""""""
-
-.. versionadded:: 4.0.0
-
-Activates or disables the preloading of the input file(s) into the continue
-dataset before starting the tests.
-
-The `--preload` argument - or its option counterpart - ??
-is given, we decode and load the given input files into the continue
-dataset before starting the test.
-
-This reduces the waiting time while continuing a previous session.
-
-.. note::
-    This argument is useless unless the
-    `auto continue <index.html#c-auto-continue-continue>`_ subsystem is
-    active.
-
-    The preloading may take some time depending of the size of the file to
-    test, but this is the price for a smooth and better autocontinue.
-    Especially under CI's.
-
-
-------
-
 :code:`--rpz`
 """""""""""""
 .. versionadded:: 3.3.3
@@ -281,21 +255,6 @@ This feature is related to the `--rpz <index.html#rpz>`_
 
 Test control
 ^^^^^^^^^^^^
-
-:code:`-c` | :code:`--auto-continue` | :code:`--continue`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Activates or disables the auto-continue subsystem.
-
-**Default value:** :code:`autocontinue: True`
-
-This argument activates or deactivates the auto-continue subsystem.
-Indeed, as we can automatically continue if the script has been stopped,
-this switch allows us to disable or enable the usage of that specific
-subsystem.
-
-
-------
 
 :code:`--cooldown-time`
 """""""""""""""""""""""
@@ -1126,6 +1085,46 @@ Sets the commit message to apply at the really end.
 .. note::
     This argument is only used if we reached the end of the list we are or
     have to test.
+
+
+------
+
+:code:`-c` | :code:`--auto-continue` | :code:`--continue`
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+This argument is to used for auto-continuing from a previously under CI 
+
+**Default value:** :code:`autocontinue: False`
+
+This argument activates or deactivates the auto-continue subsystem.
+Indeed, as we can automatically continue if the script has been stopped,
+this switch allows us to disable or enable the usage of that specific
+subsystem.
+
+------
+
+:code:`--preload`
+"""""""""""""""""
+
+.. versionadded:: 4.0.0
+
+Activates or disables the preloading of the input file(s) into the continue
+dataset before starting the tests.
+
+The `--preload` argument - or its option counterpart - ??
+is given, we decode and load the given input files into the continue
+dataset before starting the test.
+
+This reduces the waiting time while continuing a previous session.
+
+.. note::
+    This argument is useless unless the
+    `auto continue <index.html#c-auto-continue-continue>`_ subsystem is
+    active.
+
+    The preloading may take some time depending of the size of the file to
+    test, but this is the price for a smooth and better autocontinue.
+    Especially under CI's.
 
 
 ------
