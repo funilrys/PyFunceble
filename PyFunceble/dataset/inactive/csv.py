@@ -75,6 +75,8 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
         self, source: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
 
+        days_ago = datetime.utcnow() - timedelta(days=min_days)
+
         for dataset in self.get_filtered_content(
             {"source": source, "checker_type": checker_type}
         ):
@@ -86,7 +88,7 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
             else:
                 date_of_inclusion = dataset["tested_at"]
 
-            if datetime.utcnow() < date_of_inclusion + timedelta(days=min_days):
+            if date_of_inclusion > days_ago:
                 continue
 
             yield dataset

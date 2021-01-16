@@ -325,7 +325,7 @@ DEFAULT_CONFIG: dict = {
         "wildcard": False,
     },
     "cli_testing": {
-        "autocontinue": True,
+        "autocontinue": False,
         "ci": {
             "active": False,
             "branch": "master",
@@ -364,6 +364,7 @@ DEFAULT_CONFIG: dict = {
         "local_network": False,
         "max_workers": None,
         "mining": False,
+        "preload_file": False,
         "sorting_mode": {"hierarchical": False, "standard": True},
         "testing_mode": {"availability": True, "reputation": False, "syntax": False},
         "whois_db": True,

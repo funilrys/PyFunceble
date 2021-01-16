@@ -133,6 +133,35 @@ class ConfigLoader:
 
         return wrapper
 
+    @staticmethod
+    def conditional_switch(config: dict) -> dict:
+        """
+        Given the configuration that we are going to load, switches some of
+        setting.
+
+        :param config:
+            The configuration we are going to load.
+        """
+
+        # Conditional autocontinue.
+        # If we are under continuous integration, the autocontinue should be
+        # activated.
+
+        if bool(config["cli_testing"]["ci"]["active"]) and not bool(
+            config["cli_testing"]["autocontinue"]
+        ):
+            config["cli_testing"]["autocontinue"] = True
+
+        return config
+
+    @staticmethod
+    def is_already_loaded() -> bool:
+        """
+        Checks if the configuration was already loaded.
+        """
+
+        return bool(PyFunceble.storage.CONFIGURATION)
+
     @property
     def custom_config(self) -> dict:
         """
@@ -206,14 +235,6 @@ class ConfigLoader:
         self.merge_upstream = value
 
         return self
-
-    @staticmethod
-    def is_already_loaded() -> bool:
-        """
-        Checks if the configuration was already loaded.
-        """
-
-        return bool(PyFunceble.storage.CONFIGURATION)
 
     def config_file_exist(
         self,
@@ -350,6 +371,8 @@ class ConfigLoader:
 
         if self.custom_config:
             config = Merge(self.custom_config).into(config)
+
+        config = self.conditional_switch(config)
 
         PyFunceble.storage.CONFIGURATION = Box(
             copy.deepcopy(config),

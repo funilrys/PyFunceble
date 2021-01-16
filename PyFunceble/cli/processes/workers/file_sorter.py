@@ -50,7 +50,7 @@ License:
     limitations under the License.
 """
 
-import concurrent
+import concurrent.futures
 import contextlib
 import heapq
 import os

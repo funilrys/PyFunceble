@@ -130,6 +130,23 @@
     **Description:** Activates or disables the consideration of the test(s) in
     or for a local or private network context.
 
+:code:`cli_testing[preload_file]`
+"""""""""""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the preloading of the given input
+    files. When this is activates, we preload the given files into the
+    auto continue subsystem dataset in order to optimize some of our
+    processes regarding the auto continue.
+
+    .. note::
+        This option does not have any effect if the auto continue subsystem is
+        disabled.
+
+
 :code:`cli_testing[ci]`
 """""""""""""""""""""""
 
