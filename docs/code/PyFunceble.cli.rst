@@ -56,6 +56,15 @@ PyFunceble.cli.factory module
    :show-inheritance:
    :private-members:
 
+PyFunceble.cli.file\_preloader module
+-------------------------------------
+
+.. automodule:: PyFunceble.cli.file_preloader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.cli.storage module
 -----------------------------
 
