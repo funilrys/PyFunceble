@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
 
@@ -55,7 +55,7 @@ jobs:
         python_version:
           - "3.7.9"
           - "3.8.6"
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
           - macos-latest
@@ -96,7 +96,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
 
@@ -119,7 +119,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
 
@@ -162,7 +162,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9.1"
+          - "3.9"
         os:
           - ubuntu-latest
 
