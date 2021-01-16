@@ -1,14 +1,19 @@
 SPECIAL
 ^^^^^^^
 
-As PyFunceble grows, I thought that a bit of filtering for special
-cases would be great.
+As PyFunceble grows, I thought that a bit of filtering for special cases would
+be great.
 
-So I introduced the SPECIAL source.
+The SPECIAL source was then introduced.
+
+Below you'll find the list of currently active
+`--special-lookup <../usage/index.html#special-lookup>`_ we have developed and
+are active by default.
 
 For any new suggestion of domains where a special rule can enhance PyFunceble
 please either open an new `issue`_ or make you
-`contribution <../contributing/index.html#contribute>`_ directly into the git.
+`contribution <../contributing/index.html#contribute>`_ directly into the
+project.
 
 .. note::
     Please consider all 3 digits number that are listed in this section as
@@ -31,15 +36,22 @@ please either open an new `issue`_ or make you
     and the documentation
     `source.rst <https://github.com/funilrys/PyFunceble/blob/dev/docs/responses/special_rules.rst>`_
 
+
+------
+
 :code:`*.000webhostapp.com`
 """""""""""""""""""""""""""
 
 - All :code:`410` are returned as :code:`INACTIVE`.
 
-::code:`angelfire.com`
+------
+
+:code:`angelfire.com`
 """"""""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`.
+
+------
 
 :code:`*.blogspot.*`
 """"""""""""""""""""
@@ -49,40 +61,56 @@ please either open an new `issue`_ or make you
   as :code:`INACTIVE`
 - All :code:`302` which are blocked by Google are returned as :code:`INACTIVE`
 
+------
+
 :code:`*.canalblog.com`
 """""""""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
+
+------
 
 :code:`*.github.io`
 """""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
+------
+
 :code:`*.hpg.com.br`
 """"""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
+
+------
 
 :code:`*.liveadvert.com`
 """"""""""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
+------
+
 :code:`*.skyrock.com`
 """""""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
+
+------
 
 :code:`*.tumblr.com`
 """"""""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
 
+------
+
 :code:`*.wix.com`
 """""""""""""""""
 
 - All :code:`404` are returned as :code:`INACTIVE`
+
+------
 
 :code:`*.wordpress.com`
 """""""""""""""""""""""

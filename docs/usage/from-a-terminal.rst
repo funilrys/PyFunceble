@@ -22,10 +22,15 @@ and PowerShell scripts as the syntaxes used is equal.
 Show the help message and exit.
 
 
+------
+
 :code:`-v` | :code:`--version`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Show the version of PyFunceble and exit.
+
+
+------
 
 Test sources
 ^^^^^^^^^^^^
@@ -46,6 +51,8 @@ This argument takes one or more values.
     When this option is used, no output files are generated.
 
 
+------
+
 :code:`-url "$URI"` | :code:`--url "$URI"`
 """"""""""""""""""""""""""""""""""""""""""
 
@@ -61,6 +68,8 @@ This argument takes one or more values.
     When we test the availability of a URL, we (only) check the HTTP status
     code of the given URL.
 
+
+------
 
 .. _domain_source:
 
@@ -86,6 +95,8 @@ file.
     You can not combine the usage of :code:`-f`, :code:`-uf` with
     :code:`--adblock` at the same time
 
+
+------
 
 .. _URL_FILES:
 
@@ -124,6 +135,8 @@ test its content assuming that each line represents a URL to test.
     :code:`--adblock` at the same time
 
 
+------
+
 Source filtering, decoding, conversion and expansion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -148,6 +161,9 @@ You will still need to use the :ref:`domain_source`
     You can not combine the usage of :code:`-f`, :code:`-uf` and
     :code:`--adblock` at the same time
 
+
+------
+
 :code:`--complements`
 """""""""""""""""""""
 
@@ -156,6 +172,9 @@ A complement is for example :code:`example.org` if :code:`www.example.org`
 is given and vice-versa.
 
 **Default value:** :code:`complements: False`
+
+
+------
 
 :code:`--filter "something"`
 """"""""""""""""""""""""""""
@@ -175,6 +194,8 @@ you to do that!
     This argument should be a given as regex expression.
 
 
+------
+
 :code:`--mining`
 """"""""""""""""
 
@@ -184,6 +205,9 @@ Activates or disables the mining subsystem usage.
 
 Want to find domain or URL linked to a domain in your list? This argument will
 exactly do that.
+
+
+------
 
 :code:`--preload`
 """""""""""""""""
@@ -197,6 +221,9 @@ This reduces the waiting time while continuing a previous session.
 
 .. note::
     This argument is useless when the auto continue subsystem is not active.
+
+
+------
 
 :code:`--rpz`
 """""""""""""
@@ -217,6 +244,8 @@ from each given input files.
     information and participate in it's development.
 
 
+------
+
 :code:`--wildcard`
 """"""""""""""""""
 .. versionadded:: 3.3.0
@@ -232,6 +261,9 @@ Activates or disables the decoding of wildcards for each given input files.
 
 These are examples of when to use this argument. The first one will
 return INVALID if :code:`--wildcard` is not set to true.
+
+
+------
 
 Test control
 ^^^^^^^^^^^^
@@ -249,6 +281,8 @@ this switch allows us to disable or enable the usage of that specific
 subsystem.
 
 
+------
+
 :code:`--cooldown-time`
 """""""""""""""""""""""
 
@@ -257,6 +291,8 @@ each test cycles is done.
 
 **Default value:** :code:`cooldown_time: 0.0`
 
+
+------
 
 :code:`--local`
 """""""""""""""
@@ -270,6 +306,8 @@ the limitation which does not apply to private networks.
 **Default value:** :code:`local_network: False`
 
 
+------
+
 :code:`--dns-lookup`
 """"""""""""""""""""
 
@@ -279,6 +317,8 @@ Activates or disables the usage of the DNS lookup whether possible.
 
 Don't want to perform some DNS lookup? This argument is for you.
 
+
+------
 
 :code:`--http-status-code-lookup` | :code:`--http`
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -290,6 +330,8 @@ This argument allows you to disable the HTTP status code checker!
 **Default value:** :code:`http_status_code: True`
 
 
+------
+
 :code:`--netinfo-lookup`
 """"""""""""""""""""""""
 
@@ -300,6 +342,8 @@ Don't want to perform some netinfo lookup ? This argument is for you.
 
 **Default value:** :code:`netinfo: True`
 
+
+------
 
 :code:`--special-lookup`
 """"""""""""""""""""""""
@@ -313,6 +357,8 @@ This argument disables them all.
 
 **Default value:** :code:`special: True`
 
+
+------
 
 :code:`--whois-lookup`
 """"""""""""""""""""""
@@ -331,7 +377,9 @@ This argument allows you to disable it!
     In other words: :code:`--syntax` overrules this argument
 
 
-TODO Check which of the reputation is alive or the code difference
+------
+
+.. TODO Check which of the reputation is alive or the code difference
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
 
@@ -342,6 +390,8 @@ Activates or disables the usage of the reputation dataset when possible.
 **Default value:** :code:`reputation: False`
 
 
+------
+
 :code:`--reputation`
 """"""""""""""""""""
 
@@ -349,6 +399,8 @@ Activates or disables the reputation checker.
 
 **Default value:** :code:`False`
 
+
+------
 
 :code:`--syntax`
 """"""""""""""""
@@ -358,6 +410,8 @@ Activates or disables the syntax checker.
 **Default value:** :code:`syntax: False`
 
 
+------
+
 :code:`-t "something"` | :code:`--timeout "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -366,6 +420,8 @@ every time it is possible to define a timeout.
 
 **Default value:** :code:`timeout: 5`
 
+
+------
 
 :code:`-ua "something"` | :code:`--user-agent "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -383,16 +439,13 @@ Sets the user agent to use.
 
 Example of how to change the default from CLI.
 
-<<<<<<< HEAD
 .. code-block:: console
     
     $ pyfunceble --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
-=======
-.. code-block:: bash
 
-    --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
->>>>>>> 4.x-doc
 
+
+------
 
 :code:`-vsc` | :code:`--verify-ssl-certificate`
 """""""""""""""""""""""""""""""""""""""""""""""
@@ -409,6 +462,9 @@ testing for URL.
     Indeed if the certificate is not registered to the CA or is simply
     invalid and the domain is still alive, you will always get
     :code:`INACTIVE` as output.
+
+
+------
 
 DNS control
 ^^^^^^^^^^^
@@ -436,6 +492,8 @@ You can add several separated by spaces and they will all be used in a order.
     You can specify a port number to use to the DNS server if needed.
 
 
+------
+
 .. _dns-protocol:
 
 :code:`--dns-protocol`
@@ -461,6 +519,8 @@ Case-Sensitive
     $ pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
 
 
+------
+
 Databases
 ^^^^^^^^^
 
@@ -476,6 +536,8 @@ This argument will disable or enable the usage of a database which saves all
 :code:`INACTIVE` and :code:`INVALID` domain of the given file over time.
 
 
+------
+
 :code:`--database-type`
 """""""""""""""""""""""
 
@@ -486,6 +548,8 @@ Sets the database engine to use.
 **Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`.
 
 
+------
+
 :code:`--inactive-db`
 """""""""""""""""""""
 
@@ -494,6 +558,8 @@ Activates or disables the usage of a 'database' to store all
 
 Configured value: :code:`inactive_db: True`
 
+
+------
 
 :code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -509,6 +575,8 @@ subject into the inactive dataset before it gets retested.
     activated.
 
 
+------
+
 :code:`-wdb` | :code:`--whois-database`
 """""""""""""""""""""""""""""""""""""""
 
@@ -517,6 +585,8 @@ the expiration date of all domains with a valid expiration date.
 
 **Default value:** :code:`whois_db: True`
 
+
+------
 
 Output control
 ^^^^^^^^^^^^^^
@@ -547,6 +617,8 @@ print to stdout (screen).
     pyfunceble.readthedocs.io     ACTIVE      Unknown           NSLOOKUP   302        AVAILABILITY
 
 
+------
+
 :code:`--color` | :code:`--colour`
 """"""""""""""""""""""""""""""""""
 
@@ -556,6 +628,8 @@ Activates or disables the coloration to STDOUT.
 
 Don't want any colour ? This argument is for you!
 
+
+------
 
 :code:`--display-status`
 """"""""""""""""""""""""
@@ -590,6 +664,8 @@ Multiple space separated statuses can be given.
     google-analytics.com                                 INACTIVE    STDLOOKUP
 
 
+------
+
 :code:`-ex` | :code:`--execution`
 """""""""""""""""""""""""""""""""
 
@@ -601,6 +677,8 @@ Want to know the execution time of your test? Well, this argument will let
 you know!
 
 
+------
+
 :code:`--hierarchical`
 """"""""""""""""""""""
 
@@ -611,6 +689,8 @@ hierarchical order.
 
 This argument will output the result listed in a hierarchical order.
 
+
+------
 
 :code:`-h` | :code:`--hosts`
 """"""""""""""""""""""""""""
@@ -625,6 +705,8 @@ result file for each status.
     :ref:`--plain <plaindomain>`, :ref:`--no-files <no-file>`
 
 
+------
+
 :code:`-ip "something"` | :code:`--hosts-ip` "something"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -632,6 +714,8 @@ Sets the IP to prefix each lines of the hosts file.
 
 **Default value:** :code:`0.0.0.0`
 
+
+------
 
 .. _logging-level:
 
@@ -653,6 +737,8 @@ Optional values. (From less to more information)
     * :code:`--logging-level debug` ==> DEBUG
 
 
+------
+
 .. _no-file:
 
 :code:`--no-files`
@@ -672,6 +758,8 @@ Activates or disables the generation of any non-logs and status file(s).
     :ref:`--plain <plaindomain>`
 
 
+------
+
 :code:`--output-location`
 """""""""""""""""""""""""
     .. versionadded:: 4.0.0
@@ -687,6 +775,8 @@ append it directly to the CLI string.
     $ pyfunceble --output-location /tmp/pyfunceble -f $DOMAIN_FILE
 
 
+------
+
 :code:`--unified-results`
 """""""""""""""""""""""""
 
@@ -697,6 +787,8 @@ divided output in individual subfolder under :code:`output/`.
 
 This argument disables the generation of the :code:`result.txt` file.
 
+
+------
 
 :code:`--percentage`
 """"""""""""""""""""
@@ -709,6 +801,8 @@ percentage - file - of each status.
 This argument will disable or enable the generation of the percentage of each
 status.
 
+
+------
 
 .. _plaindomain:
 
@@ -727,6 +821,8 @@ per line)
     `-h | --host <#h-host>`_, :ref:`--no-files <no-file>`
 
 
+------
+
 :code:`--dots`
 """"""""""""""
 
@@ -739,6 +835,8 @@ record we tests.
 **Default value:** :code:`dots: False`
 
 
+------
+
 :code:`-q` | :code:`--quiet`
 """"""""""""""""""""""""""""
 
@@ -747,7 +845,10 @@ Activates or disables the display of output to the terminal.
 **Default value:** :code:`quiet: False`
 
 
-TODO: Follow up and link to what is being shared in `share-logs`
+.. TODO: Follow up and link to what is being shared in `share-logs`
+
+
+------
 
 :code:`--share-logs`
 """"""""""""""""""""
@@ -760,6 +861,8 @@ Don't forget to read about what is being collected (Privacy policy)
 **Default value:** :code:`share_logs: False`
 
 
+------
+
 :code:`-s` | :code:`--simple`
 """""""""""""""""""""""""""""
 
@@ -770,6 +873,8 @@ Activates or disables the simple output mode.
 Want as less as possible data on screen? This argument returns as less as
 possible on screen!
 
+
+------
 
 Multiprocessing
 ^^^^^^^^^^^^^^^
@@ -790,12 +895,16 @@ The default is number of available CPU cores multiplied by 5
 
 .. warning::
 
-    This section about `max-workers` is still under construction, but it close.
-    This means you should be experimenting a bit your self.
+    This section about `max-workers` is still under construction, but it is
+    close to how it is working.
+    
+    - **This means you should be experimenting a bit your self.**
 
-    To follow the "behind the scene" talk about this subject, please have a
-    look at this `issue <https://github.com/spirillen/PyFunceble/issues/34>`_
+    To follow the "behind the scene" talk about the subject, please take a
+    look at `issue <https://github.com/spirillen/PyFunceble/issues/34>`_
 
+
+------
 
 CI / CD
 ^^^^^^^
@@ -816,6 +925,8 @@ Want to use PyFunceble under a supported CI infrastructure/network? This
 argument is suited for your needs!
 
 
+------
+
 :code:`--ci-max-minutes`
 """"""""""""""""""""""""
 
@@ -823,6 +934,8 @@ Sets the number of minutes to wait before starting to stop a CI session.
 
 **Default value:** :code:`max_exec_minutes: 15`
 
+
+------
 
 :code:`--ci-branch`
 """""""""""""""""""
@@ -837,6 +950,8 @@ we are supposed to store the tests (excepts the final results).
     to have PyFunceble to create the sub-branch and finally merge it into the
     :code:`--ci-distribution-branch`
 
+
+------
 
 :code:`--ci-distribution-branch`
 """"""""""""""""""""""""""""""""
@@ -860,6 +975,8 @@ As an example, this allows us to have 2 branches:
                                     # distribution of the results of PyFunceble.
 
 
+------
+
 :code:`--ci-command "something"`
 """"""""""""""""""""""""""""""""
 
@@ -874,9 +991,11 @@ Sets the command to execute before each commit (except the final one).
     have to be executed when we reached the end of the given file.
 
 .. note::
-    This argument is only used if :code:`--ci` or :code:`ci: true`  (under
+    This argument is only used if :code:`--ci` or :code:`ci: true` (under
     :code:`.PyFunceble.yaml`) are activated.
 
+
+------
 
 :code:`--ci-end-command "something"` | :code:`--cmd-before-end "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -894,6 +1013,8 @@ Sets the command to execute before the final commit.
     This argument is only used if :code:`--ci` or :code:`ci: true`  (under
     :code:`.PyFunceble.yaml`) are activated.
 
+
+------
 
 :code:`--ci-commit-message` | :code:`--commit-autosave-message "something"`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -919,6 +1040,8 @@ used as a commit message when saving.
     Please avoid the usage of :code:`[ci skip]` here.
 
 
+------
+
 :code:`--ci-end-commit-message` | :code:`--commit-results-message "something"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
@@ -935,6 +1058,8 @@ Sets the commit message to apply at the really end.
     This argument is only used if we reached the end of the list we are or
     have to test.
 
+
+------
 
 Global Variables
 ^^^^^^^^^^^^^^^^
