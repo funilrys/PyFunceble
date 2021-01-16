@@ -74,15 +74,19 @@ class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
         self, source: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
 
+        days_ago = datetime.utcnow() - timedelta(days=min_days)
+
         with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
             result = (
                 db_session.query(self.ORM_OBJ)
                 .filter(self.ORM_OBJ.source == source)
                 .filter(self.ORM_OBJ.checker_type == checker_type)
+                .filter(self.ORM_OBJ.tested_at < days_ago)
             )
 
             for row in result:
-                if datetime.utcnow() < row.tested_at + timedelta(days=min_days):
+                if not hasattr(row, "tested_at"):
+                    # This is just a safety.
                     continue
 
                 yield row.to_dict()
