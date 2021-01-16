@@ -234,13 +234,17 @@ class DBDatasetBase(DatasetBase):
 
         raise NotImplementedError()
 
-    def update(self, row: dict) -> "DBDatasetBase":
+    def update(self, row: dict, *, ignore_if_exist: bool = False) -> "DBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
 
         :param row:
             The row or dataset to manipulate.
+
+        :param ignore_if_exist:
+            Ignores the insertion/update if the row already exists.
+
 
         :raise TypeError:
             When the given :code:`row` is not a :py:class`dict`.

@@ -166,7 +166,7 @@ class MariaDBDatasetBase(DBDatasetBase):
                 yield row
 
     @DBDatasetBase.execute_if_authorized(None)
-    def update(self, row) -> "MariaDBDatasetBase":
+    def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
@@ -191,13 +191,17 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         if "id" in row:
             with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                db_session.execute(self.ORM_OBJ.__table__.update(), row)
+                db_session.execute(
+                    self.ORM_OBJ.__table__.update().where(self.ORM_OBJ.id == row["id"]),
+                    row,
+                )
         else:
             existing_row_id = self.get_existing_row_id(row)
 
             if existing_row_id is not None:
-                row["id"] = existing_row_id
-                self.update(row)
+                if not ignore_if_exist:
+                    row["id"] = existing_row_id
+                    self.update(row, ignore_if_exist=ignore_if_exist)
             else:
                 self.add(row)
 
