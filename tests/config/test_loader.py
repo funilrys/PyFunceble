@@ -227,6 +227,24 @@ class TestConfigLoader(unittest.TestCase):
             TypeError, lambda: self.config_loader.set_custom_config(given)
         )
 
+    def test_set_custom_config_previously_given(self) -> None:
+        """
+        Tests the method which let us set the custom configuration to work with
+        for the case that the given custom configuration is not a
+        :py:class:`dict`.
+        """
+
+        given = {"Hello": "World!"}
+        given2 = {"World!": "Hello"}
+
+        self.config_loader.set_custom_config(given)
+        self.config_loader.set_custom_config(given2)
+
+        expected = {"Hello": "World!", "World!": "Hello"}
+        actual = self.config_loader.custom_config
+
+        self.assertEqual(expected, actual)
+
     def test_set_merge_upstream(self) -> None:
         """
         Tests the method which let us authorize the merging of upstream inside
@@ -429,6 +447,45 @@ class TestConfigLoader(unittest.TestCase):
             actual = getattr(PyFunceble.storage, index.upper())
 
             self.assertEqual(expected, actual)
+
+    def test_conditional_switch_autocontinue_ci_active(self) -> None:
+        """
+        Tests the method which let us switch some of our values based on
+        some assumption.
+
+        In this test, we check the the autocontinue is getting activated if we
+        are under CI.
+        """
+
+        given = copy.deepcopy(self.our_config)
+        given["cli_testing"]["ci"]["active"] = True
+        given["cli_testing"]["autocontinue"] = False
+
+        expected = copy.deepcopy(given)
+        expected["cli_testing"]["autocontinue"] = True
+
+        actual = self.config_loader.conditional_switch(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_conditional_switch_autocontinue_ci_not_active(self) -> None:
+        """
+        Tests the method which let us switch some of our values based on
+        some assumption.
+
+        In this test, we check the the autocontinue is getting activated if we
+        are under CI.
+        """
+
+        given = copy.deepcopy(self.our_config)
+        given["cli_testing"]["ci"]["active"] = False
+        given["cli_testing"]["autocontinue"] = False
+
+        expected = copy.deepcopy(given)
+
+        actual = self.config_loader.conditional_switch(given)
+
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
