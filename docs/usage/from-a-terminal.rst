@@ -143,19 +143,18 @@ Source filtering, decoding, conversion and expansion
 :code:`--adblock`
 """""""""""""""""
 
-Activates or disables the decoding of the adblock format.
+This feature is used to extract all domains, IPv4 and IPv6 addresses from a
+adblocking formatted file and test the status and validate the extracted
+domains.
 
-You will still need to use the :ref:`domain_source`
+To use this feature you'll need to set the :ref:`domain_source` to tell
+PyFunceble from where to obtain the given list.
 
 .. code-block:: console
 
     $ pyfunceble --adblock -f "$ADBLOCK_FILES"
 
 **Default value:** :code:`adblock: False`
-
-.. note::
-    If this argument is activated the system will extract all domains or
-    IPv4 and IPv6 addresses from the given adblock file.
 
 .. warning::
     You can not combine the usage of :code:`-f`, :code:`-uf` and
@@ -167,7 +166,6 @@ You will still need to use the :ref:`domain_source`
 :code:`--complements`
 """""""""""""""""""""
 
-Activates or disables the generation and test of the complements.
 A complement is for example :code:`example.org` if :code:`www.example.org`
 is given and vice-versa.
 
@@ -176,22 +174,19 @@ is given and vice-versa.
 
 ------
 
-:code:`--filter "something"`
+:code:`--filter "RegEx"`
 """"""""""""""""""""""""""""
 
-Regex to match in order to test a given line.
+A Regex string to match in order to test a given line.
 
 **Default value:** :code:`file_filter: null`
 
-Want to test all :code:`blogspot` from your list? This argument allows
-you to do that!
+If you only want to test all :code:`blogspot` URI or domains from your list?
+This argument allows you to do that!
 
 .. code-block:: console
 
     $ pyfunceble --filter '^\.blogspot\.(com|net)$' -f $DOMAIN_FILE
-
-.. note::
-    This argument should be a given as regex expression.
 
 
 ------
@@ -199,12 +194,12 @@ you to do that!
 :code:`--mining`
 """"""""""""""""
 
-Activates or disables the mining subsystem usage.
-
-**Default value:** :code:`mining: False`
+.. TODO Find out more about how this actually works...
 
 Want to find domain or URL linked to a domain in your list? This argument will
 exactly do that.
+
+**Default value:** :code:`mining: False`
 
 
 ------
@@ -229,8 +224,12 @@ This reduces the waiting time while continuing a previous session.
 """""""""""""
 .. versionadded:: 3.3.3
 
-Activates or disables the decoding of RPZ policies
-from each given input files.
+Activates or disables the decoding of RPZ policies from each given input source
+(:code:`-f`).
+
+When you are validating a fully complainant `RPZ`_ (Response Policy zone) source
+you will also need to use `--wildcard <index.html#wildcard>`_ argument or
+you will get a lot of :code:`INVALID` results.
 
 **Default value:** :code:`rpz: False`
 
@@ -250,17 +249,22 @@ from each given input files.
 """"""""""""""""""
 .. versionadded:: 3.3.0
 
-Activates or disables the decoding of wildcards for each given input files.
+The flag to use when your source(:code:`-f`) of domains starts with a wildcard.
+
+This flag will subtract the :code:`*.$DOMAIN` and test the :code:`$DOMAIN`
+according to the test arguments given.
 
 **Default value:** :code:`wildcard: False`
 
+A examples of when to use this argument. The first one will
+return INVALID if :code:`--wildcard` is not set to true.
+
+This feature is related to the `--rpz <index.html#rpz>`_
+
 .. code-block:: bash
 
-    '*.wildcard.me'
-    'wildcard.me'
-
-These are examples of when to use this argument. The first one will
-return INVALID if :code:`--wildcard` is not set to true.
+    '*.example.org'
+    'example.org'
 
 
 ------
@@ -380,6 +384,7 @@ This argument allows you to disable it!
 ------
 
 .. TODO Check which of the reputation is alive or the code difference
+
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
 
@@ -412,21 +417,22 @@ Activates or disables the syntax checker.
 
 ------
 
-:code:`-t "something"` | :code:`--timeout "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-t "seconds"` | :code:`--timeout "seconds"`
+""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Sets the default timeout to apply to each lookup utilities
 every time it is possible to define a timeout.
 
-**Default value:** :code:`timeout: 5`
+**Default value:** :code:`timeout: 5` seconds
 
 
 ------
 
-:code:`-ua "something"` | :code:`--user-agent "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-ua "full string"` | :code:`--user-agent "full string"`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Sets the user agent to use.
+USer defined user agent to use in the
+`--http <index.html#http-status-code-lookup-http>`_ status code lookup.
 
 .. code-block:: yaml
 
@@ -480,7 +486,17 @@ You can add several separated by spaces and they will all be used in a order.
 
 .. code-block:: console
 
-    $ pyfunceble -dns 127.0.1.53:5353 127.0.0.1 -f file
+    $ pyfunceble -dns 127.0.1.53:5303 127.0.0.1 -f $DOMAIN_FILE
+
+You can also set default DNS servers used for testing within the
+:code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
+
+.. code-block:: yaml
+
+      server:
+      - 1.2.3.4
+      - 5.6.7.8
+      - 9.10.11.12:5302
 
 .. warning::
     We expect a DNS server(s). If you add this flag but no DNS server(s) is
@@ -489,7 +505,7 @@ You can add several separated by spaces and they will all be used in a order.
     This could happen in case you use :code:`--dns -f`
 
 .. note::
-    You can specify a port number to use to the DNS server if needed.
+    You can specify the port number to be used on the DNS server if needed.
 
 
 ------
@@ -554,15 +570,15 @@ Sets the database engine to use.
 """""""""""""""""""""
 
 Activates or disables the usage of a 'database' to store all
-'INACTIVE' and 'INVALID'  subject for continuous retest.
+'INACTIVE' and 'INVALID' subject for continuous retest.
 
 Configured value: :code:`inactive_db: True`
 
 
 ------
 
-:code:`-dbr "something"` | :code:`--days-between-db-retest "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-dbr "time"` | :code:`--days-between-db-retest "time"`
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Sets the numbers of days since the introduction of a
 subject into the inactive dataset before it gets retested.
@@ -572,7 +588,7 @@ subject into the inactive dataset before it gets retested.
 .. note::
     This argument is only used if :code:`-db` or
     :code:`inactive_database : true` (under :code:`.PyFunceble.yaml`) are
-    activated.
+    activated. See also `--inactive-db <index.html#inactive-db>`_
 
 
 ------
@@ -644,20 +660,36 @@ Multiple space separated statuses can be given.
 **Available values:** :code:`all`, :code:`ACTIVE`, :code:`INACTIVE`,
 :code:`INVALID`, :code:`VALID`, :code:`SANE`, :code:`MALICIOUS`
 
+*Default response*
+
 .. code-block:: console
 
-    $ pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
-    --display-status INACTIVE ACTIVE --whois-lookup
+    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup
 
     Subject                                              Status      Source
     ---------------------------------------------------- ----------- ----------
     duckduckgo.com                                       ACTIVE      DNSLOOKUP
     google-analytics.com                                 INACTIVE    STDLOOKUP
 
+
+*Show only active and inactive*
+
 .. code-block:: console
 
-    $ pyfunceble -d google-analytics.com mypdns.org duckduckgo.com \
-      --display-status INACTIVE --whois-lookup
+    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup \
+    --display-status INACTIVE ACTIVE
+
+    Subject                                              Status      Source
+    ---------------------------------------------------- ----------- ----------
+    duckduckgo.com                                       ACTIVE      DNSLOOKUP
+    google-analytics.com                                 INACTIVE    STDLOOKUP
+
+*Show only inactive*
+
+.. code-block:: console
+
+    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup \
+      --display-status INACTIVE
 
     Subject                                              Status      Source
     ---------------------------------------------------- ----------- ----------
@@ -669,12 +701,10 @@ Multiple space separated statuses can be given.
 :code:`-ex` | :code:`--execution`
 """""""""""""""""""""""""""""""""
 
-Activates or disables the display of the execution time.
-
-**Default value:** :code:`execution_time: False`
-
 Want to know the execution time of your test? Well, this argument will let
 you know!
+
+**Default value:** :code:`execution_time: False`
 
 
 ------
@@ -704,11 +734,17 @@ result file for each status.
 
     :ref:`--plain <plaindomain>`, :ref:`--no-files <no-file>`
 
+.. note::
+
+    There is an ongoing request to set the default value of :code:`hosts: False`
+    You should be following this issue as it might affect your etup/results
+    later on. 
+    `Flip defaults for host <https://github.com/funilrys/PyFunceble/issues/178>`_
 
 ------
 
-:code:`-ip "something"` | :code:`--hosts-ip` "something"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`-ip "ip-address"` | :code:`--hosts-ip` "ip-address"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Sets the IP to prefix each lines of the hosts file.
 
@@ -723,7 +759,9 @@ Sets the IP to prefix each lines of the hosts file.
 """""""""""""""""""""""
     .. versionadded:: 4.0.0
 
-You can configure the logging level to be outputted in STDOUT (screen).
+You can configure the logging level to be outputted in STDOUT (screen)
+when you uses :code:`--no-files`. Default outputs to
+:code:`output/*_logging_/**.log`
 
 Optional values. (From less to more information)
 
@@ -882,7 +920,17 @@ Multiprocessing
 :code:`-w` | :code:`--max-workers`
 """"""""""""""""""""""""""""""""""
 
+    .. versionadded:: 4.0.0
+
 Sets the number of maximal worker to use.
+
+Keep in mind that the :code:`--max-workers` mostly - if not only - affects
+the tester threads. Because we want to safely write the files, we still
+need a single thread which read the submitted results and generate the
+outputs.
+
+The reason we added this to PyFunceble :code:`4.0.0` is we don't want to
+have a wrongly formatted output file.
 
 The default is number of available CPU cores multiplied by 5
 
@@ -1366,3 +1414,6 @@ Global overview
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
+
+
+.. _RPZ: https://www.mypdns.org/w/rpz/
