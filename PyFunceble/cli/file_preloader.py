@@ -349,6 +349,11 @@ class FilePreloader:
             except TypeError:
                 self.continue_dataset.cleanup(session_id=self.protocol["session_id"])
 
+        if self.__description["hash"] != self.__description["previous_hash"]:
+            # Forces the reading of each lines because there is literally no
+            # way to know where something has been changed.
+            self.__description["line_number"] = 1
+
         if (
             self.__description["checker_type"] != self.protocol["checker_type"]
             or self.__description["subject_type"] != self.protocol["subject_type"]
