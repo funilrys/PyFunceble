@@ -67,3 +67,25 @@ Combination of :code:`-f`, :code:`-uf` and :code:`--adblock`
 
 You can not combine the usage of :code:`-f`, :code:`-uf` with :code:`--adblock`
 simultaneously.
+
+
+------
+
+.. sectionauthor:: @spirillen
+
+PyFunceble v 3.2.x
+^^^^^^^^^^^^^^^^^^
+
+.. versionchanged:: 3.2.x
+
+.. deprecated:: 4.0.0.a1
+
+When you are using the HTTP status code module you might experience the
+following error corses by :code:`urllib3`
+
+.. code-block::
+
+    HTTPSConnectionPool(host='pyfunceble-not-resolved', port=443
+
+Workaround: Enable the Cert check
+`verify-ssl-certificate <../usage/index.html#vsc-verify-ssl-certificate>`_
