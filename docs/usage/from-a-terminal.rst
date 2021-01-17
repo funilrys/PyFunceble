@@ -425,6 +425,8 @@ You should be able to use both :code:`-f` and `code:`-uf` at the same time with
     with :code:`--syntax`, We recommend you disable
     `--auto-continue <index.html#c-auto-continue-continue>`_
 
+    See note for :code:`-rpz`
+
 
 ------
 
