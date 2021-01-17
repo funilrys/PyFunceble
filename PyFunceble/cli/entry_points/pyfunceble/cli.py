@@ -857,7 +857,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--cmd", "--ci-command"],
+            ["--ci-command"],
             {
                 "dest": "cli_testing.ci.command",
                 "type": str,
@@ -867,7 +867,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--cmd-before-end", "--ci-end-command"],
+            ["--ci-end-command"],
             {
                 "dest": "cli_testing.ci.end_command",
                 "type": str,

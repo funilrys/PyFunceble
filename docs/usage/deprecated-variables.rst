@@ -189,3 +189,15 @@ In the .code:`.PyFunceble_production.yaml` the value have changed from
 
     Replaced with `--ci-command <index.html#ci-command-something-cmd-something>`
 
+
+------
+
+:code:`--cmd-before-end`
+""""""""""""""""""""""""
+    .. deprecated:: 4.0.0
+
+    Replaced with :code:`--ci-end-command`
+
+
+------
+

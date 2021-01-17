@@ -1044,8 +1044,8 @@ Sets the command to execute before each commit (except the final one).
 
 ------
 
-:code:`--ci-end-command "something"` | :code:`--cmd-before-end "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-end-command "something"`
+""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
 Sets the command to execute before the final commit.
@@ -1233,8 +1233,8 @@ Global overview
                     [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
                     [--ci-branch CLI_TESTING__CI__BRANCH]
                     [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
-                    [--cmd CLI_TESTING__CI__COMMAND]
-                    [--cmd-before-end CLI_TESTING__CI__END_COMMAND]
+                    [--ci-command CLI_TESTING__CI__COMMAND]
+                    [--ci-end-command CLI_TESTING__CI__END_COMMAND]
                     [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
                     [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
                     [--help] [-v]
@@ -1432,12 +1432,9 @@ Global overview
                                 branch from where we are supposed to store and push
                                 the final results.
                                 Configured value: 'master'
-        --cmd CLI_TESTING__CI__COMMAND, --ci-command CLI_TESTING__CI__COMMAND
+        --ci-command CLI_TESTING__CI__COMMAND
                                 Sets the command to execute before each commit
                                 (except the final one).
-                                Configured value: None
-        --cmd-before-end CLI_TESTING__CI__END_COMMAND, --ci-end-command CLI_TESTING__CI__END_COMMAND
-                                Sets the command to execute before the final commit.
                                 Configured value: None
         --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE, --commit-autosave-message CLI_TESTING__CI__COMMIT_MESSAGE
                                 Sets the commit message to apply every time we have
