@@ -144,7 +144,7 @@ Source filtering, decoding, conversion and expansion
 """""""""""""""""
 
 This feature is used to extract all domains, IPv4 and IPv6 addresses from a
-adblocking formatted file and test the status and validate the extracted
+adblock formatted file and test the status and validate the extracted
 domains.
 
 To use this feature you'll need to set the :ref:`domain_source` to tell
@@ -393,6 +393,8 @@ You should be able to use both :code:`-f` and `code:`-uf` at the same time with
     *TIP*: If you would like to gain some serious performance while testing
     with :code:`--syntax`, We recommend you disable
     `--auto-continue <index.html#c-auto-continue-continue>`_
+
+    See note for :code:`-rpz`
 
 
 ------
@@ -717,7 +719,7 @@ result file for each status.
 .. note::
 
     There is an ongoing request to set the default value of :code:`hosts: False`
-    You should be following this issue as it might affect your etup/results
+    You should be following this issue as it might affect your setup/results
     later on. 
     `Flip defaults for host <https://github.com/funilrys/PyFunceble/issues/178>`_
 

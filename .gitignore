@@ -122,3 +122,4 @@ pyfunceble.db
 user_agents.json
 whois_db.json
 whois.csv
+output/**
