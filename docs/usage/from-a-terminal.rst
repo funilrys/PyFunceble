@@ -39,13 +39,18 @@ Test sources
 :code:`-d "$DOMAIN"` | :code:`--domain "$DOMAIN"`
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-Test one or more domains, separated by spaces.
+Test one or more :term:domains, separated by spaces.
 
 This argument takes one or more values.
 
 .. code-block:: console
 
     $ PyFunceble -d example.org example.net
+
+A domain is defined as it do NOT start with a :code:`protocol://` and it do not
+contain a forward slash :code:`/`
+
+This is a domain: :code:`example.org`
 
 .. note::
     When this option is used, no output files are generated.
@@ -67,6 +72,14 @@ This argument takes one or more values.
 .. note::
     When we test the availability of a URL, we (only) check the HTTP status
     code of the given URL.
+
+A URI or URL is defined by it is starting with a protocol.
+
+    This is a URL :code:`http://example.org/?example=yes`
+
+    This is another URL :code:`https://example.org`
+
+    This is another URL :code:`ftp://ftp.example.org`
 
 
 ------
