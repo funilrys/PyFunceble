@@ -7,6 +7,28 @@ This is the list of issues which are not or will not be fixed (yet...).
 * Under GitLab CI/CD the coloration may not be shown.
 
 
+Python < 3.7
+^^^^^^^^^^^^
+
+    .. versionchanged:: 4.0.0
+
+As of version 4 we no longer support python prior to version 3.7.
+
+This means you actually are unable to run with any version below python 3.7
+as a number of build-in features are missing and first introduced in 3.7
+
+The error message you might experience can be:
+
+.. code-block::
+
+    `Fatal Error: type object 'datetime.datetime' has no attribute 'fromisoformat'`
+
+.. code-block::
+
+    `ModuleNotFoundError: No module named 'dataclasses'`
+
+This can typically happens if you are using Ubuntu 18.x or 19.x
+
 Ubuntu 20.04.1 LTS Focal
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -18,6 +40,7 @@ In Ubuntu release 20.04 they have removed a package name
 This means PyFunceble will trow an error like:
 
 .. code-block:: console
+
     ImportError: libffi.so.6: cannot open shared object file: No such file or directory
 
 The fix for this issue is then rather simple, add a softlink between the
