@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,13 +50,15 @@ License:
     limitations under the License.
 """
 
+from typing import Optional, Union
+
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 
-from .file import File
+from PyFunceble.helpers.file import FileHelper
 
 
-class Hash:
+class HashHelper:
     """
     Simplify the hashing of data or file content.
 
@@ -66,50 +68,102 @@ class Hash:
     :raise ValueError: When the given algo is not known.
     """
 
-    def __init__(self, algo="sha512_224"):
-        self.algo = algo.upper()
+    _algo: str = "SHA512_224"
 
-        if not hasattr(hashes, self.algo):
-            raise ValueError(f"Unknown <algo> ({self.algo})")
+    def __init__(self, algo: Optional[str] = None):
+        if algo is not None:
+            self.algo = algo
 
-    def file(self, file_path, encoding="utf-8"):
+    @property
+    def algo(self) -> str:
         """
-        Open the given file, and it's content.
-
-        :param str file_path:
-            The file to hash.
-
-        :rtype: str
+        Provides the current state fo the :code:`_algo` attribute.
         """
 
-        digest = hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
+        return self._algo
 
-        content = File(file_path).read(encoding=encoding)
-
-        if content:
-            digest.update(content.encode(encoding))
-            return digest.finalize().hex()
-
-        return None
-
-    def data(self, data):
+    @algo.setter
+    def algo(self, value: str) -> None:
         """
-        Hash the given data.
+        Sets the algorithm to work with.
+
+        :param value:
+            The name of the hash to use.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        value = value.upper()
+
+        if not hasattr(hashes, value):
+            raise ValueError(
+                f"<value> ({value!r}) in an unknown algorithm ({self.algo!r})."
+            )
+
+        self._algo = value
+
+    def set_algo(self, value: str) -> "HashHelper":
+        """
+        Sets the algorithm to work with.
+
+        :param value:
+            The name of the hash to use.
+        """
+
+        self.algo = value
+
+        return self
+
+    def __get_hash(self) -> hashes.Hash:
+        """
+        Provides the Hash to use.
+        """
+
+        return hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
+
+    def hash_file(self, file_path: str) -> str:
+        """
+        Hashes the content of the given file.
+
+        :param file_path:
+            The path of the file to read.
+        """
+
+        block_size = 4096
+
+        digest = self.__get_hash()
+
+        with FileHelper(file_path).open("rb") as file_stream:
+            block = file_stream.read(block_size)
+
+            while block:
+                digest.update(block)
+                block = file_stream.read(block_size)
+
+        return digest.finalize().hex()
+
+    def hash_data(self, data: Union[str, bytes]) -> str:
+        """
+        Hashes the given data.
 
         :param data:
             The data to hash.
-        :type data: str, bytes
 
-        :rtype: str
+        :raise TypeError:
+            When :code:`data` is not :py:class:`str` or :py:class:`bytes`.
         """
 
-        if not isinstance(data, (bytes, str)):  # pragma: no cover
-            raise ValueError(f"<data> must be {bytes} or {str}, {type(data)}, given.")
+        if not isinstance(data, (bytes, str)):
+            raise TypeError(f"<data> should be {bytes} or {str}, {type(data)}, given.")
 
         if isinstance(data, str):
             data = data.encode()
 
-        digest = hashes.Hash(getattr(hashes, self.algo)(), backend=default_backend())
+        digest = self.__get_hash()
         digest.update(data)
 
         return digest.finalize().hex()

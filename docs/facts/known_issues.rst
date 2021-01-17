@@ -6,9 +6,86 @@ This is the list of issues which are not or will not be fixed (yet...).
 * Under Travis CI the coloration may not be shown.
 * Under GitLab CI/CD the coloration may not be shown.
 
-* When using either Oracle's MySQL or MariaDB-Server you will have to be 
-  either SUPER-PRIVILIDGED user (root) or be able to do 
-  :code:`set global log_bin_trust_function_creators=1;` Read more about this 
-  in the `components/databases`_
 
-.. _components/databases:
+Python < 3.7
+^^^^^^^^^^^^
+
+    .. versionchanged:: 4.0.0
+
+As of version 4 we no longer support python prior to version 3.7.
+
+This means you actually are unable to run with any version below python 3.7
+as a number of build-in features are missing and first introduced in 3.7
+
+The error message you might experience can be:
+
+.. code-block::
+
+    `Fatal Error: type object 'datetime.datetime' has no attribute 'fromisoformat'`
+
+.. code-block::
+
+    `ModuleNotFoundError: No module named 'dataclasses'`
+
+This can typically happens if you are using Ubuntu 18.x or 19.x
+
+Ubuntu 20.04.1 LTS Focal
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 3.2.0
+
+In Ubuntu release 20.04 they have removed a package name
+:code:`libffi.so.6` and upgraded it with version :code:`libffi.so.7`
+
+This means PyFunceble will trow an error like:
+
+.. code-block:: console
+
+    ImportError: libffi.so.6: cannot open shared object file: No such file or directory
+
+The fix for this issue is then rather simple, add a softlink between the
+versions with :code:`ln -s`
+
+The complete line in my case was:
+
+.. code-block:: console
+
+    sudo ln -s /usr/lib/x86_64-linux-gnu/libffi.so.7 /usr/lib/x86_64-linux-gnu/libffi.so.6
+
+However, the right way to do this is by first locate where your
+:code:`libffi.so.7` is with find
+
+.. code-block:: console
+
+    find /usr/lib/ -type f -iname 'libffi.so.*'
+    
+Then apply the softlink to :code:`libffi.so.7`
+
+
+Combination of :code:`-f`, :code:`-uf` and :code:`--adblock`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can not combine the usage of :code:`-f`, :code:`-uf` with :code:`--adblock`
+simultaneously.
+
+
+------
+
+.. sectionauthor:: @spirillen
+
+PyFunceble v 3.2.x
+^^^^^^^^^^^^^^^^^^
+
+.. versionchanged:: 3.2.x
+
+.. deprecated:: 4.0.0.a1
+
+When you are using the HTTP status code module you might experience the
+following error corses by :code:`urllib3`
+
+.. code-block::
+
+    HTTPSConnectionPool(host='pyfunceble-not-resolved', port=443
+
+Workaround: Enable the Cert check
+`verify-ssl-certificate <../usage/index.html#vsc-verify-ssl-certificate>`_

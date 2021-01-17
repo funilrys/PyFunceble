@@ -10,11 +10,13 @@ How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the parser code ? It's here :func:`PyFunceble.lookup.publicsuffix.PublicSuffix`!
+    Want to read the parser code ? It's here
+    :class:`~PyFunceble.cli.scripts.public_suffix.PublicSuffixGenerator`!
 
-The copy of the public suffix list we use is saved into the :code:`public-suffix.json` file.
-It is formatted like below and is automatically merged for the end-user before
-each test run.
+The copy of the public suffix list we use is saved into the
+:code:`public-suffix.json` file.
+It is formatted like below and is (periodically) automatically merged for the
+end-user before each test run.
 
 ::
 
@@ -27,11 +29,11 @@ each test run.
     }
 
 
-In-app, while testing for domain(s), we use it in order to know if we are checking
-for a subdomain or not.
+In-app, while testing for domain(s), we use it to know if we are
+checking for a subdomain or not.
 
 How to generate it manually?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can't and should not as we are automatically generating it every 24 hours.
-But, using the :code:`--public-suffix` argument will do the job on purpose.
+But, using the :code:`public-suffix-pyfunceble` CLI will do the job on purpose.

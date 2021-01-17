@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,155 +50,177 @@ License:
     limitations under the License.
 """
 
-from os import path, remove, stat
-from shutil import copy as shutil_copy
-from shutil import move as shutil_move
+import os
+import shutil
+from typing import Any, Optional
 
-from .directory import Directory
+from PyFunceble.helpers.directory import DirectoryHelper
 
 
-class File:
+class FileHelper:
     """
     Simplify the file manipulations.
 
-    :param str file_path: The file path to work with.
+    :param str path: The file path to work with.
     """
 
-    def __init__(self, file_path=None):
-        self.path = file_path
+    _path: Optional[str] = None
 
-    def exists(self, file_path=None):
+    def __init__(self, path: Optional[str] = None):
+        if path:
+            self.path = path
+
+    @property
+    def path(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_path` attribute.
+        """
+
+        return self._path
+
+    @path.setter
+    def path(self, value: str) -> None:
+        """
+        Sets the path to work with.
+
+        :param value:
+            The path to work with.
+
+        :raise TypeError:
+            When :code:`value` is a :py:class:`value`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} is given.")
+
+        self._path = value
+
+    def set_path(self, value: str) -> "FileHelper":
+        """
+        Sets the path to work with.
+
+        :param value:
+            The path to work with.
+        """
+
+        self.path = value
+
+        return self
+
+    def join_path(self, *args) -> str:
+        """
+        Joins the given arguments with the given path.
+        """
+
+        return os.path.join(self.path, *args)
+
+    def exists(self) -> bool:
         """
         Checks if the given file path exists.
-
-        :param str file_path:
-            The file path to check.
-
-            .. note::
-                If :code:`None` is given, we
-                report to the globally given file path.
-        :rtype: bool
         """
-        if not file_path:
-            file_path = self.path
 
-        return path.isfile(file_path)
+        return os.path.isfile(self.path)
 
-    def get_size(self, file_path=None):
+    def get_size(self) -> int:
         """
         Provides the size (in bytes) of the
         given file path.
-
-        :param str file_path:
-            The file path to check.
-
-            .. note::
-                If :code:`None` is given, we
-                report to the globally given file path.
-        :rtype: int
         """
 
-        if not file_path:
-            file_path = self.path
+        return os.stat(self.path).st_size
 
-        return stat(file_path).st_size
-
-    def is_empty(self, file_path=None):
+    def is_empty(self) -> bool:
         """
         Checks if the given file path is empty.
         """
 
-        return self.get_size(file_path=file_path) <= 0
+        return self.get_size() <= 0
 
-    def delete(self, file_path=None):
+    def delete(self) -> "FileHelper":
         """
         Deletes the given file path if it exists.
-
-        :param str file_path:
-            The file path to check.
-
-            .. note::
-                If :code:`None` is given, we
-                report to the globally given file path.
-
-        :return: The non existance state of the file.
-        :rtype: bool
         """
-        if not file_path:
-            file_path = self.path
 
-        if self.exists(file_path=file_path):
-            remove(file_path)
-        return not self.exists(file_path=file_path)
+        if self.exists():
+            os.remove(self.path)
+        return self
 
-    def write(self, data, overwrite=False, encoding="utf-8", file_path=None):
+    def write(
+        self, data: Any, *, overwrite: bool = False, encoding: str = "utf-8"
+    ) -> "FileHelper":
         """
         Write the given data into the given file path.
 
-        :param str data: The data to write.
-        :param str encoding: The encoding to use while opening the file.
-        :param str file_path:
-            The file path to check.
-
-            .. note::
-                If :code:`None` is given, we
-                report to the globally given file path.
+        :param data: The data to write.
+        :param encoding: The encoding to use while opening the file.
         """
 
-        if not file_path:
-            file_path = self.path
+        if overwrite or not self.exists():
+            DirectoryHelper(os.path.dirname(self.path)).create()
 
-        if isinstance(data, str):
-            if overwrite or not self.exists(file_path=file_path):
-                Directory(path.dirname(file_path)).create()
+            with self.open("w", encoding=encoding) as file_stream:
+                file_stream.write(data)
+        else:
+            with self.open("a", encoding=encoding) as file_stream:
+                file_stream.write(data)
 
-                with open(file_path, "w", encoding=encoding) as file_stream:
-                    file_stream.write(data)
-            else:
-                with open(file_path, "a", encoding=encoding) as file_stream:
-                    file_stream.write(data)
+        return self
 
-    def read(self, file_path=None, encoding="utf-8"):
+    def read(self, *, encoding: str = "utf-8") -> Optional[str]:
         """
         Read the given file path and return it's content.
 
-        :param str file_path:
-            The file path to check.
-
-            .. note::
-                If :code:`None` is given, we
-                report to the globally given file path.
         :param str encoding: The encoding to use.
-        :rtype: str
         """
-
-        if not file_path:
-            file_path = self.path
 
         data = None
 
-        if self.exists(file_path):
-            with open(self.path, "r", encoding=encoding) as file_stream:
+        if self.exists():
+            with self.open("r", encoding=encoding) as file_stream:
                 data = file_stream.read()
 
         return data
 
-    def copy(self, destination):
+    def read_bytes(self) -> Optional[bytes]:
+        """
+        Read the given file ath and returns it's bytes contetn.
+        """
+
+        data = None
+
+        if self.exists():
+            with self.open("rb") as file_stream:
+                data = file_stream.read()
+
+        return data
+
+    def open(self, *args, **kwargs) -> "open":
+        """
+        A wrapper for the built-in :py:class:`open` function.
+        """
+
+        return open(self.path, *args, **kwargs)
+
+    def copy(self, destination: str) -> "FileHelper":
         """
         Copy the globaly given file path to the given destination.
 
         :param str destination: The destination of the copy.
         """
 
-        if self.exists(self.path):
-            shutil_copy(self.path, destination)
+        if self.exists():
+            shutil.copy(self.path, destination)
 
-    def move(self, destination):  # pragma: no cover
+        return self
+
+    def move(self, destination) -> "FileHelper":
         """
         Move the globally given file path to the given destination.
 
         :param str destination: The destination of the file.
         """
 
-        if self.exists(self.path):
-            shutil_move(self.path, destination)
+        if self.exists():
+            shutil.move(self.path, destination)
+
+        return self

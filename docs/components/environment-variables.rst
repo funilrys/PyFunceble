@@ -4,7 +4,8 @@ Environment variables
 Dotenv files
 ^^^^^^^^^^^^
 
-Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble-dev :code:`>=1.18.0`), we load (thanks to `python-dotenv`_) the content of
+Since PyFunceble :code:`2.0.0` (equivalent of PyFunceble-dev :code:`>=1.18.0`),
+we load (thanks to `python-dotenv`_) the content of
 the following files into the (local) list of environment variables.
 
 1. :code:`.env` (current directory)
@@ -12,7 +13,8 @@ the following files into the (local) list of environment variables.
 3. :code:`.env` (configuration directory)
 4. :code:`.pyfunceble-env` (configuration directory)
 
-To quote the `python-dotenv`_ documentation, a :code:`.env` should look like the following:
+To quote the `python-dotenv`_ documentation, a :code:`.env` should look
+like the following:
 
 ::
 
@@ -26,14 +28,15 @@ To quote the `python-dotenv`_ documentation, a :code:`.env` should look like the
 What do we use and why ?
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here is the list of environment variables we use and how we use them if they are set.
+Here is the list of environment variables we use and how we use them if they
+are set.
 
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | **Environment Variable**              | **How do we use it?**                                                                                                |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`DEBUG_PYFUNCEBLE`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
+| :code:`DEBUG_PYFUNCEBLE`              | Same as :code:`PYFUNCEBLE_DEBUG` it's just present for retro-compatibility.                                          |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`DEBUG_PYFUNCEBLE_ON_SCREEN`    | Tell us to log everything to :code:`stdout`                                                                          |
+| :code:`DEBUG_PYFUNCEBLE_ON_SCREEN`    | Same as :code:`PYFUNCEBLE_DEBUG_ON_SCREEN` it's just present for retro-compatibility.                                |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                           |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
@@ -48,6 +51,14 @@ Here is the list of environment variables we use and how we use them if they are
 | :code:`PYFUNCEBLE_DB_PORT`            | Tell us the MySQL connection port to use.                                                                            |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the MySQL user-name to use.                                                                                  |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_LVL`          | Sets the logging level to use.                                                                                       |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_LOGGING_LVL`        | Same as :code:`PYFUNCEBLE_DEBUG_LVL`.                                                                                |
++---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`    | Tell us to log everything to :code:`stdout`                                                                          |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_CONFIG_DIR`         | Tell us the location of the directory to use as the configuration directory.                                         |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+

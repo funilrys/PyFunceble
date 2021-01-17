@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,92 +50,156 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime, timedelta
+import datetime
+import os
+from typing import Optional
 
-import PyFunceble
+import PyFunceble.downloader.exceptions
+import PyFunceble.exceptions
+import PyFunceble.storage
+from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.download import DownloadHelper
+from PyFunceble.helpers.file import FileHelper
 
 
 class DownloaderBase:
     """
-    Provides the downloader base.
+    Provides the base of all downloader classes.
+
+    The interface is actually simple, but the part which may be hard to
+    understand is the "downtime" part. What we do, is that we save the
+    download time inside a JSON file, so this class provides the base around
+    the download mechanism but also the generation or update of that JSON file.
     """
 
-    # pylint: disable=no-member
-
-    DOWNTIME_INDEX = None
+    DOWNTIME_INDEX: Optional[str] = None
     """
     Used to set/track the download time of the current file.
-
-    :rtype: str
     """
 
-    REDOWNLOAD_AFTER = 1
+    DOWNLOAD_FREQUENCY: int = 1
     """
-    Used to set the redownload frequency in day.
+    The download frequency (in day).
 
-    :rtype: int
+    Example:
+        if 1 is given, it's once every 24 hours.
+
+    .. warning::
+        A frequency of :code:`0` or a negative number will force the download
+        every hour.
     """
 
-    def __init__(self):
-        self.downtimes_file = PyFunceble.helpers.File(
-            f"{PyFunceble.CONFIG_DIRECTORY}{PyFunceble.abstracts.Infrastructure.DOWN_FILENAME}"
+    all_downtimes: Optional[dict] = dict()
+    """
+    Stores the download time of all files (self managed).
+    """
+
+    _destination: Optional[str] = None
+    _download_link: Optional[str] = None
+
+    dict_helper: DictHelper = DictHelper()
+
+    def __init__(self) -> None:
+        self.downtimes_file = FileHelper(
+            os.path.join(
+                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.DOWN_FILENAME
+            )
         )
 
-        self.all_downtimes = self.get_all_downtimes()
+        self.all_downtimes.update(self.get_all_downtimes())
 
-        if not hasattr(self, "destination"):
-            raise PyFunceble.exceptions.NoDownloadDestinationGiven()
-
-        if not hasattr(self, "download_link"):
-            raise PyFunceble.exceptions.NoDownloadLinkGiven()
-
-    def get_all_downtimes(self):
+    @property
+    def authorized(self) -> bool:
         """
-        Provides all download times.
-
-        :rtype: dict
+        Provides the authorization to start the download.
         """
 
-        return PyFunceble.helpers.Dict().from_json_file(self.downtimes_file.path)
+        raise NotImplementedError()
 
-    def get_downtime(self):
+    @property
+    def destination(self) -> Optional[str]:
         """
-        Provides the download timestamp of the current :code:`DOWN_TIME_INDEX`.
-
-        :rtype: dict, None
-        """
-
-        if self.is_downtime_set():
-            return self.all_downtimes[self.DOWNTIME_INDEX]
-
-        return None
-
-    def update_downtime(self):
-        """
-        Updates the current download time.
+        Provides the current state of the :code:`_destination` attribute.
         """
 
-        current_datetime = datetime.now()
+        return self._destination
 
-        self.all_downtimes[self.DOWNTIME_INDEX] = {
-            "iso": current_datetime.isoformat(),
-            "timestamp": current_datetime.timestamp(),
-        }
-
-    def save_downtimes(self):
+    @destination.setter
+    def destination(self, value: str) -> None:
         """
-        Saves all downtimes.
+        Sets the destination.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
         """
 
-        PyFunceble.helpers.Dict(self.all_downtimes).to_json_file(
-            self.downtimes_file.path
-        )
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
-    def is_downtime_set(self):
+        self._destination = value
+
+    def set_destination(self, value: str) -> "DownloaderBase":
         """
-        Checks if the downtime is set for the current :code:`DOWNTIME_INDEX`.
+        Sets the destination.
 
-        :rtype: bool
+        :param value:
+            The value to set.
+        """
+
+        self.destination = value
+
+        return self
+
+    @property
+    def download_link(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_download_link` attribute.
+        """
+
+        return self._download_link
+
+    @download_link.setter
+    def download_link(self, value: str) -> None:
+        """
+        Sets the link to download.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When value is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._download_link = value
+
+    def set_download_link(self, value: str) -> "DownloaderBase":
+        """
+        Sets the link to download.
+
+        :param value:
+            The value to set.
+        """
+
+        self.download_link = value
+
+        return self
+
+    def get_all_downtimes(self) -> dict:
+        """
+        Provides the downloadtime of all files.
+        """
+
+        return self.dict_helper.from_json_file(self.downtimes_file.path)
+
+    def is_downtime_set(self) -> bool:
+        """
+        Checks if the download time of the current object exists.
         """
 
         return (
@@ -150,39 +214,78 @@ class DownloaderBase:
             )
         )
 
-    def is_last_download_expired(self):
+    def get_current_downtime(self):
         """
-        Checks if the last downloaded file is expired.
+        Provides the download times of th ecurrent :code:`DOWN_TIME_INDEX`.
         """
 
-        if (
-            not PyFunceble.helpers.File(self.destination).exists()
-            or not self.is_downtime_set()
-        ):
+        if self.is_downtime_set():
+            return self.all_downtimes[self.DOWNTIME_INDEX]
+        return None
+
+    def set_current_downtime(self) -> "DownloaderBase":
+        """
+        Sets the current datetime into our registry.
+        """
+
+        current_datetime = datetime.datetime.utcnow()
+
+        self.all_downtimes[self.DOWNTIME_INDEX] = {
+            "iso": current_datetime.isoformat(),
+            "timestamp": current_datetime.timestamp(),
+        }
+
+        return self
+
+    def save_all_downtimes(self) -> None:
+        """
+        Saves the current state of the all downtimes.
+        """
+
+        self.dict_helper.set_subject(self.all_downtimes).to_json_file(
+            self.downtimes_file.path
+        )
+
+    def is_last_download_exipired(self) -> bool:
+        """
+        Checks if the last downloaded file is exipred (if exists).
+        """
+
+        if not FileHelper(self.destination).exists() or not self.is_downtime_set():
             return True
 
-        last_download = datetime.fromtimestamp(self.get_downtime()["timestamp"])
+        last_downloaded_time = datetime.datetime.fromtimestamp(
+            self.get_current_downtime()["timestamp"]
+        )
 
         if (
-            self.REDOWNLOAD_AFTER <= 0
-            and (datetime.now() - last_download).seconds < 3600
+            self.DOWNLOAD_FREQUENCY <= 0
+            and (datetime.datetime.utcnow() - last_downloaded_time).seconds < 3600
         ):
             return False
 
-        if last_download + timedelta(days=self.REDOWNLOAD_AFTER) <= datetime.now():
+        if (
+            last_downloaded_time + datetime.timedelta(days=self.DOWNLOAD_FREQUENCY)
+            <= datetime.datetime.utcnow()
+        ):
             return True
 
         return False
 
-    def process(self):
+    def start(self) -> None:
         """
-        Process the download and returns the downloaded text.
-
-        :rtype: str, None
+        Starts the download process.
         """
 
-        if self.is_last_download_expired() and PyFunceble.helpers.Download(
-            self.download_link
-        ).text(destination=self.destination):
-            self.update_downtime()
-            self.save_downtimes()
+        if self.authorized and self.is_last_download_exipired():
+            if not hasattr(self, "destination") or not self.destination:
+                raise PyFunceble.downloader.exceptions.NoDownloadDestinationGiven()
+
+            if not hasattr(self, "download_link") or not self.download_link:
+                raise PyFunceble.downloader.exceptions.NoDownloadLinkGiven()
+
+            if DownloadHelper(self.download_link).download_text(
+                destination=self.destination
+            ):
+                self.set_current_downtime()
+                self.save_all_downtimes()

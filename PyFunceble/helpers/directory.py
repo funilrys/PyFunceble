@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,23 +50,63 @@ License:
     limitations under the License.
 """
 
-from os import getcwd, makedirs, path
-from os import sep as directory_separator
-from shutil import rmtree
+import os
+import shutil
+from typing import List, Optional
 
 
-class Directory:
+class DirectoryHelper:
     """
     Simplify the directories manipulation.
 
     :param str dir_path the path to work with.
     """
 
-    def __init__(self, dir_path=None):
-        self.path = dir_path
+    _path: Optional[str] = None
 
-    @classmethod
-    def get_current(cls, with_end_sep=False):
+    def __init__(self, path: Optional[str] = None) -> None:
+        if path:
+            self.path = path
+
+    @property
+    def path(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_path` attribute.
+        """
+
+        return self._path
+
+    @path.setter
+    def path(self, value: str) -> None:
+        """
+        Sets the directory path to work with.
+
+        :param value:
+            The path to set.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._path = value
+
+    def set_path(self, value: str) -> "DirectoryHelper":
+        """
+        Sets the directory path to work with.
+
+        :param value:
+            The path to set.
+        """
+
+        self.path = value
+
+        return self
+
+    @staticmethod
+    def get_current(*, with_end_sep: bool = False) -> str:
         """
         Returns the current directory path.
 
@@ -75,84 +115,85 @@ class Directory:
         """
 
         if with_end_sep:
-            return getcwd() + directory_separator
-        return getcwd()  # pragma: no cover
+            return os.getcwd() + os.sep
+        return os.getcwd()
 
-    def fix_path(self, dir_path=None, splited_path=None):
+    @property
+    def realpath(self) -> str:
         """
-        Fix the path of the given path.
-
-        .. note::
-            We consider a path as fixed if it ends with the right
-            directory separator.
+        Returns the real path of the current path.
         """
 
-        if not dir_path:
-            dir_path = self.path
+        return os.path.realpath(self.path)
 
-        if not splited_path:
-            if dir_path:
-                # The parsed directory is not empty or equal to None.
+    def join_path(self, *args) -> str:
+        """
+        Joins the given arguments with the given path.
+        """
 
-                # We initate a variable which will save the splited path.
-                split_path = []
+        return os.path.join(self.path, *args)
 
-                if "/" in dir_path:
-                    # We split the separator.
-                    split_path = dir_path.split("/")
-                elif "\\" in dir_path:
-                    # We split the separator.
-                    split_path = dir_path.split("\\")
-                else:
-                    split_path = [dir_path]
-                # We join the splited element with the directory separator as glue.
-                return self.fix_path(splited_path=[x for x in split_path if x])
-
-            # We return the directory.
-            return dir_path
-        return directory_separator.join(splited_path) + directory_separator
-
-    def exists(self, dir_path=None):
+    def exists(self) -> bool:
         """
         Checks if the given directory exists.
         """
 
-        if not dir_path:
-            dir_path = self.path
+        return os.path.isdir(self.path)
 
-        return path.isdir(dir_path)
-
-    def create(self, dir_path=None):  # pragma: no cover
+    def create(self) -> "DirectoryHelper":
         """
         Creates the given directory path.
 
         :return: The output of :code:`self.exists` after the directory creation.
-        :rtype: bool
         """
 
-        if not dir_path:
-            dir_path = self.path
+        if self.path and not self.exists():
+            os.makedirs(self.path)
 
-        try:
-            if dir_path and not self.exists(dir_path=dir_path):
-                makedirs(dir_path)
-        except FileExistsError:
-            pass
+        return self
 
-        return self.exists(dir_path=dir_path)
-
-    def delete(self, dir_path=None):  # pragma: no cover
+    def delete(self) -> "DirectoryHelper":
         """
         Deletes the given directory path.
 
         :return: :code:`not self.exists` after the directory deletion.
-        :rtypt: bool
         """
 
-        if not dir_path:
-            dir_path = self.path
+        if self.exists():
+            shutil.rmtree(self.path)
 
-        if self.exists(dir_path=dir_path):
-            rmtree(dir_path)
+        return self
 
-        return not self.exists(dir_path=dir_path)
+    def list_all_subdirectories(self) -> List[str]:
+        """
+        Provides the list of all subdirectories of the current path.
+        """
+
+        result = []
+
+        if self.exists():
+            result = [x.path for x in os.scandir(self.path) if x.is_dir()]
+
+            for directory in result:
+                result.extend(DirectoryHelper(directory).list_all_subdirectories())
+
+        return result
+
+    def list_all_files(self) -> List[str]:
+        """
+        Lists all files of the current path.
+        """
+
+        result = []
+
+        if self.exists():
+            for directory in self.list_all_subdirectories():
+                result.extend(
+                    [
+                        os.path.join(directory, x)
+                        for x in os.listdir(directory)
+                        if os.path.isfile(x)
+                    ]
+                )
+
+        return result

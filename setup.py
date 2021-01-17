@@ -36,16 +36,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -54,7 +54,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -70,22 +70,11 @@ License:
 """
 
 from re import compile as comp
-from unittest import TestLoader
 
-from setuptools import setup
-
-
-def _test_suite():
-    """
-    This function will discover and run all the tests.
-    """
-
-    test_loader = TestLoader()
-    test_suite = test_loader.discover("tests", pattern="test_*.py")
-    return test_suite
+from setuptools import find_packages, setup
 
 
-def _get_requirements():
+def get_requirements():
     """
     This function extract all requirements from requirements.txt.
     """
@@ -96,26 +85,27 @@ def _get_requirements():
     return requirements
 
 
-def _get_version():
+def get_version():
     """
     This function will extract the version from PyFunceble/__init__.py
     """
 
-    to_match = comp(r'VERSION\s=\s"(.*)"\n')
+    to_match = comp(r'PROJECT_VERSION.*=\s+"(.*)"')
 
     try:
         extracted = to_match.findall(
-            open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
+            open("PyFunceble/storage.py", encoding="utf-8").read()
         )[0]
+
     except FileNotFoundError:  # pragma: no cover
         extracted = to_match.findall(
-            open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
+            open("../PyFunceble/storage.py", encoding="utf-8").read()
         )[0]
 
-    return ".".join([x for x in extracted.split(".") if x.isdigit()])
+    return extracted[: extracted.rfind(".")]
 
 
-def _get_long_description():  # pragma: no cover
+def get_long_description():  # pragma: no cover
     """
     This function return the long description.
     """
@@ -125,56 +115,29 @@ def _get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble",
-        version=_get_version(),
+        name="PyFunceble-dev",
+        version=get_version(),
         python_requires=">=3.6, <4",
-        install_requires=_get_requirements(),
+        install_requires=get_requirements(),
         description="The tool to check the availability or syntax of domain, IP or URL.",
-        long_description=_get_long_description(),
+        long_description=get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=[
-            "PyFunceble.abstracts",
-            "PyFunceble.cli",
-            "PyFunceble.config",
-            "PyFunceble.converter",
-            "PyFunceble.core",
-            "PyFunceble.database",
-            "PyFunceble.downloader",
-            "PyFunceble.engine.ci",
-            "PyFunceble.engine",
-            "PyFunceble.extractor",
-            "PyFunceble.helpers",
-            "PyFunceble.lookup",
-            "PyFunceble.output",
-            "PyFunceble.status.availability",
-            "PyFunceble.status.reputation",
-            "PyFunceble.status.syntax",
-            "PyFunceble.status",
-            "PyFunceble",
-        ],
+        packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
+        include_package_data=True,
         keywords=[
-            "availability",
-            "dns",
-            "domain",
-            "IP",
-            "IPv4",
-            "IPv6",
-            "URL",
-            "nslookup",
             "PyFunceble",
-            "Python",
             "syntax-checker",
-            "syntax",
-            "WHOIS",
+            "reputation-checker",
+            "availability-checker",
         ],
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 5 - Production/Stable",
+            "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
@@ -183,8 +146,12 @@ if __name__ == "__main__":
         test_suite="setup._test_suite",
         entry_points={
             "console_scripts": [
-                "PyFunceble=PyFunceble.cli:tool",
-                "pyfunceble=PyFunceble.cli:tool",
+                "PyFunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+                "pyfunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+                "public-suffix-pyfunceble=PyFunceble.cli.entry_points.public_suffix:generator",
+                "iana-pyfunceble=PyFunceble.cli.entry_points.iana:generator",
+                "production-pyfunceble=PyFunceble.cli.entry_points.production:producer",
+                "clean-pyfunceble=PyFunceble.cli.entry_points.clean:cleaner",
             ]
         },
     )

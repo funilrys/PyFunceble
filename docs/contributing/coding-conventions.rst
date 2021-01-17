@@ -12,6 +12,10 @@ Format
 
     $ black PyFunceble && black tests
 
+.. note::
+    You can avoid this secion if you use the :code:`production-pyfunceble` CLI
+    which already handles as musch as possible.
+
 Linting
 ^^^^^^^
 
@@ -36,12 +40,13 @@ Our code should have at least 60% of coverage.
 Distribution
 ^^^^^^^^^^^^
 
-Our code should be shipped (after each commit) with a new version and a new :code:`version.yaml` file.
+Our code should be shipped (after each commit) with a new version and a new
+:code:`version.yaml` file.
 That file should **ALWAYS** be generated with the following.
 
 .. note::
-    An exception is granted for detached branch (not :code:`dev` nor :code:`master`)
-    and no code changes.
+    An exception is granted for detached branch
+    (not :code:`dev` nor :code:`master`) and no code changes.
 
 ::
 
@@ -51,8 +56,10 @@ That file should **ALWAYS** be generated with the following.
 Commit
 ^^^^^^
 
-All your commits should be - when possible - be signed with **PGP**. (More information can be found on `GitHub documentation`_)
-Please note the usage of :code:`-S` into the commit command which means that we sign the commit.
+All your commits should be - when possible - be signed with **PGP**.
+(More information can be found on `GitHub documentation`_)
+Please note the usage of :code:`-S` into the commit command which means that
+we sign the commit.
 
 The commit message may be formatted like follow:
 

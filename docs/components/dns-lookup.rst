@@ -4,14 +4,11 @@ DNS Lookup
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-As our main purpose is to check the availability of the given subjects, we make a DNS lookup
-to determine it.
+As our main purpose is to check the availability of the given subjects, we make
+a DNS lookup to determine it.
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
-
-.. note::
-    Want to read the code ? It's here :func:`PyFunceble.lookup.dns.DNSLookup.request`!
 
 For domains
 """""""""""
@@ -33,4 +30,27 @@ For IP
 We request the :code:`PTR` record for the IP.
 
 .. warning::
-    If none is found, we call the UNIX/C equivalent of :code:`gethostbyaddr()`.
+    If none is found, we call the UNIX/C equivalent of :code:`gethostbyaddr()`
+    or :code:`getaddrinfo()`.
+
+How to use it?
+^^^^^^^^^^^^^^
+
+It is activated by default but if not simply change
+
+::
+
+    lookup:
+        # Activates the usage of the DNS lookup.
+        dns: False
+
+to
+
+::
+
+    lookup:
+        # Activates the usage of the DNS lookup.
+        dns: True
+
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--no-whois`
+argument from the CLI to reactivate it.

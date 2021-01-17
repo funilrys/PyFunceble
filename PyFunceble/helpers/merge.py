@@ -1,5 +1,5 @@
 """
-The tool to check the availability or syntax of domain, IP or URL.
+The tool to check the availability or syntax of dosubject, IP or URL.
 
 ::
 
@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,32 +50,80 @@ License:
     limitations under the License.
 """
 
+import copy
+from typing import Any, List, Optional
+
 
 class Merge:
     """
     Simplify the merging of dict and list.
 
-    :param main: The main data to work with.
-    :type main: str, tuple, bool, int, dict, list, float
+    :param subject:
+        The subject to work with.
     """
 
-    def __init__(self, main):
-        self.main = main
+    _subject: Optional[Any] = None
 
-    def __list(self, origin, strict=True):
+    def __init__(self, subject: Optional[Any] = None):
+        if subject:
+            self.subject = subject
+
+    @property
+    def subject(self) -> Optional[Any]:
+        """
+        Provides the current state of the :code:`_subject` attribute.
+        """
+
+        return self._subject
+
+    @subject.setter
+    def subject(self, value: Any) -> None:
+        """
+        Sets the subject to work with.
+
+        :param value:
+            The subject to work with.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`list`.
+        """
+
+        self._subject = copy.deepcopy(value)
+
+    def set_subject(self, value: Any) -> "Merge":
+        """
+        Sets the subject to work with.
+
+        :param value:
+            The subject to work with.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`list`.
+        """
+
+        self.subject = value
+
+        return self
+
+    def get_subject(self) -> Optional[Any]:
+        """
+        Provides currently set subject.
+        """
+
+        return self.subject
+
+    def __list(self, origin: Any, strict: bool = True) -> List[Any]:
         """
         Process the list merging.
 
-        :param bool strict:
+        :param strict:
             Activates the strict mode.
-
-        :rtype: list
         """
 
         result = []
 
         if strict:
-            for index, element in enumerate(self.main):
+            for index, element in enumerate(self.subject):
                 try:
                     if isinstance(element, dict) and isinstance(origin[index], dict):
                         result.append(Merge(element).into(origin[index], strict=strict))
@@ -83,30 +131,28 @@ class Merge:
                         result.append(Merge(element).into(origin[index], strict=strict))
                     else:
                         result.append(element)
-                except IndexError:  # pragma: no cover
+                except IndexError:  # pragma: no cover ## Safety
                     result.append(element)
         else:
             result = origin
 
-            for element in self.main:
+            for element in self.subject:
                 if element not in result:
                     result.append(element)
 
         return result
 
-    def __dict(self, origin, strict=True):
+    def __dict(self, origin: Any, strict: bool = True) -> dict:
         """
         Process the dict merging.
 
         :param bool strict:
             Activates the strict mode.
-
-        :rtype: dict
         """
 
         result = {}
 
-        for index, data in self.main.items():
+        for index, data in self.subject.items():
             if index in origin:
                 if isinstance(data, dict) and isinstance(origin[index], dict):
                     result[index] = Merge(data).into(origin[index], strict=strict)
@@ -123,24 +169,21 @@ class Merge:
 
         return result
 
-    def into(self, origin, strict=True):
+    def into(self, origin: Any, strict: bool = True) -> Any:
         """
         Process the mergin.
 
         :param origin: The original data.
-        :param bool strict:
+        :param strict:
             Activates the strict mode.
         """
 
-        try:
-            origin = origin.copy()
-        except AttributeError:
-            pass
+        origin = copy.deepcopy(origin)
 
-        if isinstance(self.main, list) and isinstance(origin, list):
+        if isinstance(self.subject, list) and isinstance(origin, list):
             return self.__list(origin, strict=strict)
 
-        if isinstance(self.main, dict) and isinstance(origin, dict):
+        if isinstance(self.subject, dict) and isinstance(origin, dict):
             return self.__dict(origin, strict=strict)
 
-        return self.main  # pragma: no cover
+        return self.subject

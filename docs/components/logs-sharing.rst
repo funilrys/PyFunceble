@@ -7,12 +7,26 @@ Logs Sharing
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-We chose to initiate the logs sharing as some actions can really be random when working with millions of domains.
+We chose to initiate the logs sharing as some actions can really be random when
+working with millions of domains.
 
-The idea and purpose of this feature are **ONLY** to make PyFunceble a better tool.
+The idea and purpose of this feature are **ONLY** to make PyFunceble a better
+tool.
 
 What do we share/collect?
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+   As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
+
+   Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
+   to implement any of the data collection source code until the infrastructure
+   behind it is ready.
+
+
+.. warning::
+   The following table only represent the option as available in the :code:`3.x`
+   version of PyFunceble.
 
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 | **Event**                                       | **Shared**                                      | **URL**                                                 |
@@ -39,4 +53,5 @@ to
 
    share_logs:                   True
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--share-logs` argument from the CLI to activate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--share-logs`
+argument from the CLI to activate it.

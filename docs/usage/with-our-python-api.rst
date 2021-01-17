@@ -8,6 +8,7 @@ it and using its API (cf: :ref:`api`).
 This section will present some example of the way you can interact
 with PyFunceble from anything written in Python.
 
+
 Get the availability of domains or IP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -17,12 +18,12 @@ Get the availability of domains or IP
 .. todo::
     Add IPs in the loop.
 
-::
+.. code-block:: python3
 
     """
     This is an example which respond to the following problematic(s):
 
-        * How can I get the avaibility of a domain or IP with PyFunceble ?
+        * How can I get the availability of a domain or IP with PyFunceble ?
     """
 
     # We want some coloration so we import the tool do to that :)
@@ -77,18 +78,19 @@ Get the availability of domains or IP
         # And we print the domain and status with the right coloration!
         print_result(domain, PyFunceble(domain))
 
+
 Get the availability of URL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
     This example can be found in `our examples repository`_.
 
-::
+.. code-block:: python3
 
     """
     This is an example which respond to the following problematic(s):
 
-        * How can I get the avaibility of an URL with PyFunceble ?
+        * How can I get the availability of an URL with PyFunceble ?
     """
 
     # We want some coloration so we import the tool do to that :)
@@ -142,15 +144,19 @@ Get the availability of URL
         # And we print the domain and status with the right coloration!
         print_result(url, PyFunceble(url))
 
-Complete dataset while getting the avaibility of domains, IPs or URL
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While using our API, you can request to see/get everything with the help of the :code:`complete=True` argument.
+Complete dataset while getting the availability of domains, IPs or URL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While using our API, you can request to see/get everything with the help of
+the :code:`complete=True` argument.
 
 You'll then get the following :code:`dict` as output.
 
 
-::
+.. Do NOT append a lexer to this code block. It will break the layout
+
+.. code-block::
 
     {
         "_status": None, # If some extra rules are applied, this index will keep the status before the extra rules was applied.
@@ -168,22 +174,24 @@ You'll then get the following :code:`dict` as output.
         "whois_server": None, # The whois server we use to get the whois record (if found).
     }
 
-Set custom configuration index while getting the avaibility of domains, IPs or URL
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-While using PyFunceble, you might want to set or overwritte a default behaviour.
+Set custom configuration index while getting the availability of domains, IPs or URL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+While using PyFunceble, you might want to set or overwritte a default
+behavior.
 
 You can do that in 2 ways. Globally or locally.
 
 Globally
 ^^^^^^^^
 
-To set globally simply initiate the configuration loader and parse your custom configuration along with
-the initialization.
+To set globally simply initiate the configuration loader and parse your custom
+configuration along with the initialization.
 
 As example, you can do it like follow:
 
-::
+.. code-block:: python3
 
     # We import the configuration loader.
     from PyFunceble import load_config
@@ -192,9 +200,11 @@ As example, you can do it like follow:
     OUR_PYFUNCEBLE_CONFIG = {"share_logs":False, "no_files": True}
 
     # We load our configuration and parse our custom indexes.
-    load_config(generate_directory_structure=False, custom=OUR_PYFUNCEBLE_CONFIG)
+    load_config(generate_directory_structure=False,
+    custom=OUR_PYFUNCEBLE_CONFIG)
 
     ## We can then play with PyFunceble and/or other business logic ...
+
 
 Locally
 """""""
@@ -203,7 +213,7 @@ To set globally simply parse your configuration along with the test method.
 
 As example, you can do it like follow:
 
-::
+.. code-block:: python3
 
     # We import the test method.
     from PyFunceble import test as AvailabilityTest
@@ -223,7 +233,7 @@ Check the syntax of domains
 .. note::
     This example can be found in `our examples repository`_.
 
-::
+.. code-block:: python3
 
     """
     This is an example which respond to the following problematic(s):
@@ -289,7 +299,7 @@ Check the syntax of IPv4s
 .. note::
     This example can be found in `our examples repository`_.
 
-::
+.. code-block:: python3
 
     """
     This is an example which respond to the following problematic(s):
@@ -347,7 +357,7 @@ Check the syntax of URLs
 .. note::
     This example can be found in `our examples repository`_.
 
-::
+.. code-block:: python3
 
     """
     This is an example which respond to the following problematic(s):

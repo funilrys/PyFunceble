@@ -7,19 +7,21 @@ Mining
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-Sometimes you might, for example, want to get the list of domain(s) / URL(s) in a redirecting loop.
-This feature reveals them.
+Sometimes you might, for example, want to get the list of domain(s) / URL(s) in
+a redirecting loop. This feature reveals them.
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.engine.mining.Mining`!
+    Want to read the code ? It's here
+    :class:`~PyFunceble.cli.threads.mining.MinerThread`!
 
-We access the given domain/URL and get the redirection history which we then test once we finished the normal test.
+We access the given domain/URL and get the redirection history which we then
+test once we finished the normal test.
 
 
-.. note::
+.. warning::
     This component might evolve with time.
 
 How to use it?
@@ -29,13 +31,18 @@ You can simply change
 
 ::
 
-    mining: False
+    cli_testing:
+        # Activates the mining of data.
+        mining: False
 
 to
 
 ::
 
-    mining: True
+    cli_testing:
+        # Activates the mining of data.
+        mining: True
 
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--mining` argument from the CLI to activate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--mining` argument
+from the CLI to activate it.

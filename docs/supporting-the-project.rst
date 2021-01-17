@@ -2,15 +2,13 @@ Supporting the project
 ======================
 
 
-`PyFunceble`_, `Dead-Hosts`_, and all other analogue projects are powered by my 
-free time and a lot of coffee!
+`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free
+time and a lot of coffee!
 
-If you like this project and/or it have helped you. Please consider buying me 
-more coffee.
+This project helps you and/or you like it?
 
 GitHub Sponsor
---------------
-
+""""""""""""""
 `@funilrys`_ is part of the GitHub Sponsor program!
 
 *GitHub will match all donation for the coming months!*
@@ -22,10 +20,10 @@ GitHub Sponsor
 `Sponsor me`_!
 
 Ko-Fi
------
+"""""
 
 Don't want to use the GitHub Sponsor program ?
-Single donation are welcome too!
+Single donations are welcome too!
 
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y

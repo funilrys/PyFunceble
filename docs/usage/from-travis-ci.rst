@@ -16,7 +16,7 @@ Configuration
 .. _Dead-Hosts: https://github.com/dead-hosts
 
 
-::
+.. code-block:: yaml
 
     env:
         global:
@@ -36,7 +36,7 @@ Configuration
     # This is the python version we are going to use for the tests.
     # Note: you can add any 3.x version to the list.
     python:
-    - "3.6"
+    - "3.8"
 
     # The following will tell Travis CI to ends as fast as possible.
     matrix:
@@ -88,7 +88,7 @@ Encrypting the token for future usage under the Travis CIs' containers
 
 To encrypt the token simply replace and execute the following according to your personal case.
 
-::
+.. code-block:: bash
 
     $ travis encrypt 'GH_TOKEN=theGeneratedToken' -r 'The content of TRAVIS_REPO_SLUG' --add
 

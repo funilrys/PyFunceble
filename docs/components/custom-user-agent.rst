@@ -4,12 +4,14 @@ Custom User-Agent
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-As we need to be one in a middle of a connection to a webserver, the custom user agent is there for that!
+As we need to be one in a middle of a connection to a webserver, the custom
+user agent is there for that!
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
-We set the user-agent every time we request something with the :code:`http` and :code:`https` protocols.
+We set the user-agent every time we request something with the :code:`http`
+and :code:`https` protocols.
 
 If a custom user agent is given, it will be used.
 
@@ -28,7 +30,8 @@ Simply choose your browser and platform or provide us your custom one!
         platform: linux
         custom: null
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--user-agent` (custom UA) argument from the CLI.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--user-agent`
+(custom UA) argument from the CLI.
 
 Available Browser
 """""""""""""""""

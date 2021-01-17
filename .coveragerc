@@ -8,31 +8,23 @@ omit =
     /home/travis/virtualenv/*
     *.eggs/*
     */distutils/*
-    PyFunceble/config/*
 
     # omit the following file
-    PyFunceble/cli/dispatcher.py
-    PyFunceble/cli/production.py
-    PyFunceble/core/api.py
-    PyFunceble/core/file.py
-    PyFunceble/core/multiprocess.py
-    PyFunceble/core/simple.py
-    PyFunceble/downloader/*.py
-    PyFunceble/engine/auto_save.py
-    PyFunceble/engine/mysql.py
-    PyFunceble/helpers/download.py
-    PyFunceble/lookup/requests.py
-    PyFunceble/lookup/ipv4_reputation.py
-    PyFunceble/output/clean.py
-    PyFunceble/output/constructor.py
-    PyFunceble/output/generate.py
-    PyFunceble/output/logs.py
-    PyFunceble/status/*
-    PyFunceble/engine/ci/*
+    PyFunceble/dataset/mariadb_base.py
+    PyFunceble/dataset/autocontinue/mariadb.py
+    PyFunceble/dataset/autocontinue/mysql.py
+    PyFunceble/dataset/inactive/mariadb.py
+    PyFunceble/dataset/inactive/mysql.py
+    PyFunceble/dataset/whois/mariadb.py
+    PyFunceble/dataset/whois/mysql.py
+
+    PyFunceble/database/*
+
+    PyFunceble/cli/*
 
 [report]
 # This should be False one we move into production
-skip_covered = True
+skip_covered = False
 
 # Regexes for lines to exclude from consideration
 exclude_lines =
@@ -44,7 +36,6 @@ exclude_lines =
 
     # Don't complain about missing debug-only code:
     def __repr__
-    if self\.debug
 
     # Don't complain if tests don't hit defensive assertion code:
     raise AssertionError
@@ -52,21 +43,25 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if __name__ == .__main__.:
-    if tcp is None:
 
     # Don't complain for those blocks
-    PyFunceble\.CONFIGURATION\.db_type == "mariadb"
-    PyFunceble\.CONFIGURATION\.db_type in \["mariadb", "mysql"\]
+    PyFunceble\.storage\.CONFIGURATION\.cli_testing\.db_type == "mariadb"
+    PyFunceble\.storage\.CONFIGURATION\.cli_testing\.db_type == "mysql"
 
     # Don't complain about those.
-    _json
-    _mysql
-    _sqlite
-    PyFunceble\.Logger\(\)
-    Logger\(\)
+    to_json\(
+    _mysql\(
+    _mariadb\(
+
+    PyFunceble\.facility\.Logger\.
+
+    # Manual handling of imports.
+    except\sModuleNotFoundError\:
+    except\sImportError:
 
 
 ignore_errors = True
+fail_under = 70
 
 [html]
 directory = coverage_html_report
