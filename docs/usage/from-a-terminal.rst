@@ -386,6 +386,10 @@ This code is to check the syntax of domains when the
 You should be able to use both :code:`-f` and `code:`-uf` at the same time with
 :code:`--syntax`
 
+When you are using this flags there will not be performed any other test, such
+as the `WHOIS <index.html#whois-lookup>`_ or
+`HTTP status code <index.html#http-status-code-lookup-http>`_
+
 **Default value:** :code:`syntax: False`
 
 .. note::
@@ -414,7 +418,7 @@ every time it is possible to define a timeout.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 USer defined user agent to use in the
-`--http <index.html#http-status-code-lookup-http>`_ status code lookup.
+`http <index.html#http-status-code-lookup-http>`_ status code lookup.
 
 .. code-block:: yaml
 
