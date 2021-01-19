@@ -876,7 +876,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--ci-commit-message",
+            ["--ci-commit-message"],
             {
                 "dest": "cli_testing.ci.commit_message",
                 "type": str,
