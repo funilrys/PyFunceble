@@ -194,8 +194,8 @@ A Regex string to match in order to test a given line.
 
 **Default value:** :code:`file_filter: null`
 
-If you only want to test all :code:`blogspot` URI or domains from your list?
-This argument allows you to do that!
+If you only want to test all :code:`blogspot` URI or domains from your list,
+this argument allows you to do that!
 
 .. code-block:: console
 
@@ -411,7 +411,7 @@ as the `WHOIS <index.html#whois-lookup>`_ or
     with :code:`--syntax`, We recommend you disable
     `--auto-continue <index.html#c-auto-continue-continue>`_
 
-    See note for :code:`-rpz`
+    See note for :code:`--rpz`
 
 
 ------
@@ -430,7 +430,7 @@ every time it is possible to define a timeout.
 :code:`-ua "full string"` | :code:`--user-agent "full string"`
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-USer defined user agent to use in the
+User defined user agent to use in the
 `http <index.html#http-status-code-lookup-http>`_ status code lookup.
 
 .. code-block:: yaml
