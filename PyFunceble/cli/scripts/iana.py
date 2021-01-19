@@ -190,7 +190,7 @@ class IanaDBGenerator:
 
         return self
 
-    def get_referer_from_extension(self, extension: str) -> Optional[str]:
+    def get_referrer_from_extension(self, extension: str) -> Optional[str]:
         """
         Given an extension, tries to get or guess its extension.
         """
@@ -205,9 +205,9 @@ class IanaDBGenerator:
         )
 
         if iana_record and "refer" in iana_record:
-            regex_referer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
+            regex_referrer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
 
-            matched = RegexHelper(regex_referer).match(
+            matched = RegexHelper(regex_referrer).match(
                 iana_record, return_match=True, group=1
             )
 
@@ -230,14 +230,14 @@ class IanaDBGenerator:
 
         return None
 
-    def get_extension_and_referer_from_block(
+    def get_extension_and_referrer_from_block(
         self, block: str
     ) -> Tuple[Optional[str], Optional[str]]:
         """
         Given an HTML block, we try to extract an extension and it's underlying
-        referer (WHOIS server).
+        referrer (WHOIS server).
 
-        The referer is extracted from the official IANA page, and guessed if
+        The referrer is extracted from the official IANA page, and guessed if
         missing.
 
         :param block:
@@ -252,7 +252,7 @@ class IanaDBGenerator:
             extension = regex_helper.match(block, return_match=True, group=2)
 
             if extension:
-                return extension, self.get_referer_from_extension(extension)
+                return extension, self.get_referrer_from_extension(extension)
 
         return None, None
 
@@ -272,7 +272,7 @@ class IanaDBGenerator:
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             for extension, whois_server in executor.map(
-                self.get_extension_and_referer_from_block, raw_data
+                self.get_extension_and_referrer_from_block, raw_data
             ):
                 if extension:
                     self.database[extension] = whois_server

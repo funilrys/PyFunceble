@@ -17,11 +17,11 @@
     **Description:** Sets the link to use when we share logs.
 
 
-:code:`links[api_no_referer]`
+:code:`links[api_no_referrer]`
 """"""""""""""""""""""""""""""
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://pyfunceble.funilrys.com/api/no-referer`
+    **Default value:** :code:`https://pyfunceble.funilrys.com/api/no-referrer`
 
     **Description:** Sets the link to use when we share logs.

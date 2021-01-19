@@ -323,4 +323,4 @@ links:
   # NOTE: Not implemented yet as the underlaying infrastructure will be
   # rewritten.
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
-  api_no_referer: "https://pyfunceble.funilrys.com/api/no-referer"
+  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
