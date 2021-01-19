@@ -1063,8 +1063,8 @@ Sets the command to execute before the final commit.
 
 ------
 
-:code:`--ci-commit-message` | :code:`--commit-autosave-message "something"`
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-commit-message` "message"`
+""""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
 Sets the commit message to apply every time we have to apply a commit except
@@ -1089,8 +1089,8 @@ used as a commit message when saving.
 
 ------
 
-:code:`--ci-end-commit-message` | :code:`--commit-results-message "something"`
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:code:`--ci-end-commit-message`
+"""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
 Sets the commit message to apply at the really end.
@@ -1436,11 +1436,11 @@ Global overview
                                 Sets the command to execute before each commit
                                 (except the final one).
                                 Configured value: None
-        --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE, --commit-autosave-message CLI_TESTING__CI__COMMIT_MESSAGE
+        --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE
                                 Sets the commit message to apply every time we have
                                 to apply a commit except for the really last one.
                                 Configured value: 'PyFunceble - AutoSave'
-        --ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE, --commit-results-message CLI_TESTING__CI__END_COMMIT_MESSAGE
+        --ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE
                                 Sets the commit message to apply at the really end.
                                 Configured value: 'PyFunceble - Results'
 
