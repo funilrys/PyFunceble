@@ -1415,7 +1415,7 @@ Global overview
                                 Configured value: None
 
     CI / CD:
-        --ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES, --autosave-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES
+        --ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES
                                 Sets the number of minutes to wait before starting
                                 to stop a CI session.
                                 Configured value: 15

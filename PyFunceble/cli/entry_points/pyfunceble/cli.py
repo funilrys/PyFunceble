@@ -816,7 +816,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
 
     return [
         (
-            ["--ci-max-minutes", "--autosave-minutes"],
+            ["--ci-max-minutes"],
             {
                 "dest": "cli_testing.ci.max_exec_minutes",
                 "type": int,
