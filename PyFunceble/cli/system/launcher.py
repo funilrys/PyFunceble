@@ -713,9 +713,6 @@ class SystemLauncher(SystemBase):
             exceeded.
         """
 
-        # Just make sure that all processes are stopped :-)
-        self.stop_and_wait_for_all_manager()
-
         self.generate_waiting_files()
         self.remove_unwanted_files()
 
@@ -737,8 +734,6 @@ class SystemLauncher(SystemBase):
             if you are trying to run an action after the CI execution time
             exceeded.
         """
-
-        self.stop_and_wait_for_all_manager()
 
         if self.continuous_integration.authorized:
             self.continuous_integration.apply_commit()
@@ -842,6 +837,8 @@ class SystemLauncher(SystemBase):
 
             self.fill_protocol()
             self.fill_to_test_queue_from_protocol()
+
+            self.stop_and_wait_for_all_manager()
 
             if self.continuous_integration.is_time_exceeded():
                 # Does not includes the run_standard_end_instructions call.
