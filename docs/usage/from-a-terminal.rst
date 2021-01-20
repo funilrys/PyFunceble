@@ -221,12 +221,51 @@ exactly do that.
 """""""""""""
 .. versionadded:: 3.3.3
 
+.. sectionauthor:: @funilrys
+
 Activates or disables the decoding of RPZ policies from each given input source
 (:code:`-f`).
 
-When you are validating a fully complainant `RPZ`_ (Response Policy zone) source
-you will also need to use `--wildcard <index.html#wildcard>`_ argument or
-you will get a lot of :code:`INVALID` results.
+.. code-block:: console
+
+    $ pyfunceble --rpz -f $RPZ_FILES
+
+.. sectionauthor:: @spirillen
+
+The :code:`--rpz` is used to test domains from a fully functional and valid
+RPZ_ (Response Policy Zone). If you do provide the required zone :code:`SOA`
+record it will extract the right domains to test.
+
+Example of a fully functional RPZ_ zone
+
+.. code-block:: console
+
+    spyware.my-rpz.internal.   86400   IN      SOA     my.awesome.rps.zone. need.to.know.only. 2021011401 300 60 604800 3600
+    *.360.com.spyware.my-rpz.internal. 86400   IN      CNAME   .
+    *.360safe.com.cn.spyware.my-rpz.internal.  86400   IN      CNAME   .
+    *.360totalsecurity.com.spyware.my-rpz.internal.    86400   IN      CNAME   .
+    360.com.spyware.mypdns.cloud.   86400   IN      CNAME   .
+    360safe.com.cn.spyware.mypdns.cloud.    86400   IN      CNAME   .
+    360totalsecurity.com.spyware.mypdns.cloud.      86400   IN      CNAME   .
+
+(PS. RPZ_ zones does not requires the NS records :rfc:`1034`)
+
+From the example above PyFunceble will be testing the following domains.
+
+.. code-block::
+
+    360.com
+    *.360.com
+    360safe.com.cn
+    *.360safe.com.cn
+    360totalsecurity.com
+    *.360totalsecurity.com
+
+You can make a simple test with the above zone example by copy/pasting.
+
+In case your RPZ zone are missing the required :code:`SOA` entry, you should
+consider combine the :code:`--rpz` with `--wildcard <index.html#wildcard>`_ to
+avoid all your wildcard's domain become marked as :code:`INVALID`
 
 **Default value:** :code:`rpz: False`
 
