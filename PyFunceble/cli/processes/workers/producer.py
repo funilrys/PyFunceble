@@ -140,6 +140,9 @@ class ProducerWorker(WorkerBase):
         else:
             to_keep = [PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.status]
 
+        to_keep = [x.upper() for x in to_keep]
+        status = status.upper()
+
         return "ALL" in to_keep or status in to_keep
 
     def should_we_block_status_file_printer(
