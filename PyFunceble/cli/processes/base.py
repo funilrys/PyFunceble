@@ -116,18 +116,20 @@ class ProcessesManagerBase:
             self.manager = multiprocessing.Manager()
 
         if input_queue is None:
-            self.input_queue = self.manager.Queue()
-        elif generate_input_queue:
-            self.input_queue = input_queue
+            if generate_input_queue:
+                self.input_queue = self.manager.Queue()
+            else:
+                self.input_queue = None
         else:
-            self.input_queue = None
+            self.input_queue = input_queue
 
         if output_queue is None:
-            self.output_queue = self.manager.Queue()
-        elif generate_output_queue:
-            self.output_queue = output_queue
+            if generate_output_queue:
+                self.output_queue = self.manager.Queue()
+            else:
+                self.output_queue = None
         else:
-            self.output_queue = None
+            self.output_queue = output_queue
 
         if max_worker is not None:
             self.max_worker = max_worker
