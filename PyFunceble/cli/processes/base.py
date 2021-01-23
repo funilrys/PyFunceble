@@ -81,7 +81,7 @@ class ProcessesManagerBase:
     The input queue. Dataset will be given through this.
     """
 
-    output_queue: Optional[queue.Queue] = None
+    output_queue: Optional[List[queue.Queue]] = None
     """
     The output queue. This is where the result of a worker will be put.
     """
@@ -109,6 +109,7 @@ class ProcessesManagerBase:
         daemon: bool = False,
         generate_input_queue: bool = True,
         generate_output_queue: bool = True,
+        output_queue_num: int = 1,
     ) -> None:
         if manager is not None:
             self.manager = manager
@@ -125,11 +126,16 @@ class ProcessesManagerBase:
 
         if output_queue is None:
             if generate_output_queue:
-                self.output_queue = self.manager.Queue()
+                self.output_queue = [
+                    self.manager.Queue() for _ in range(output_queue_num)
+                ]
             else:
                 self.output_queue = None
         else:
-            self.output_queue = output_queue
+            if not isinstance(output_queue, list):
+                self.output_queue = [output_queue]
+            else:
+                self.output_queue = output_queue
 
         if max_worker is not None:
             self.max_worker = max_worker

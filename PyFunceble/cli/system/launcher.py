@@ -178,7 +178,7 @@ class SystemLauncher(SystemBase):
             self.manager,
             max_worker=1,
             continuous_integration=self.continuous_integration,
-            input_queue=self.tester_process_manager.output_queue,
+            input_queue=self.tester_process_manager.output_queue[0],
             daemon=True,
         )
         self.file_sorter_process_manager = FileSorterProcessesManager(
