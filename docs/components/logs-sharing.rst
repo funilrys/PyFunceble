@@ -31,7 +31,7 @@ What do we share/collect?
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 | **Event**                                       | **Shared**                                      | **URL**                                                 |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
-| No WHOIS server (referrer) is found.             | - The extension of the currently tested domain. | :code:`https://pyfunceble.funilrys.com/api/no-referrer`  |
+| No WHOIS server (referrer) is found.            | - The extension of the currently tested domain. | :code:`https://pyfunceble.funilrys.com/api/no-referrer` |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 | The expiration date is not correctly formatted. | - The extracted expiration date.                | :code:`https://pyfunceble.funilrys.com/api/date-format` |
 |                                                 | - The currently tested domain.                  |                                                         |

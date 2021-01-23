@@ -207,7 +207,9 @@ this argument allows you to do that!
 :code:`--mining`
 """"""""""""""""
 
-.. TODO Find out more about how this actually works...
+.. TODO::
+
+    Find out more about how this actually works...
 
 Want to find domain or URL linked to a domain in your list? This argument will
 exactly do that.
@@ -404,10 +406,12 @@ This argument allows you to disable it!
 
 ------
 
-.. TODO Check which of the reputation is alive or the code difference
-
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
+
+.. TODO::
+
+    Check which of the reputation is alive or the code difference
 
 Want to take the reputation data into consideration?
 
@@ -921,13 +925,14 @@ Activates or disables the display of output to the terminal.
 **Default value:** :code:`quiet: False`
 
 
-.. TODO: Follow up and link to what is being shared in `share-logs`
-
-
 ------
 
 :code:`--share-logs`
 """"""""""""""""""""
+
+.. TODO::
+
+    Follow up and link to what is being shared in `share-logs`
 
 Want to make PyFunceble a better tool? Share your logs with our API which
 collect all logs!
