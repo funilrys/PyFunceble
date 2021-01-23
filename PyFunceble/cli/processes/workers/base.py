@@ -188,7 +188,9 @@ class WorkerBase(multiprocessing.Process):
         else:
             to_send = (self.name, destination_worker, data)
 
-        self.output_queue.put(to_send)
+        if self.output_queue is not None:
+            for output_queue in self.output_queue:
+                output_queue.put(to_send)
 
         PyFunceble.facility.Logger.debug("Added to the (output) queue: %r", data)
 
