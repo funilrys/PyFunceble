@@ -28,7 +28,7 @@ cli_testing:
   hosts_ip: "0.0.0.0"
 
   # Sets the number of maximal workers to use.
-  # If set to null, the system use: CPU Cores * 5.
+  # If set to null, the system use: CPU * Cores - 2
   max_workers: null
 
   # Activates the automatic continuation after a break or shortage.
