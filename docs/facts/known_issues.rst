@@ -12,7 +12,8 @@ Python < 3.7
 
     .. versionchanged:: 4.0.0
 
-As of version 4 we no longer support python prior to version 3.7.
+As of version 4 we no `longer support <../installation/index.html#python-3-7-0>`_
+python prior to version 3.7.
 
 This means you actually are unable to run with any version below python 3.7
 as a number of build-in features are missing and first introduced in 3.7
@@ -89,3 +90,45 @@ following error corses by :code:`urllib3`
 
 Workaround: Enable the Cert check
 `verify-ssl-certificate <../usage/index.html#vsc-verify-ssl-certificate>`_
+
+
+------
+
+Sql Missing default data in :code:`whois` table
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 4.0.0
+
+If you are trying to move or restore your SQL database from a dump, you
+will see an error message that is looking something like this
+
+.. code-block:: SQL
+
+    SQL Error [1364][HY000]: (conn=12345678) Field 'created_at' doesn't have a default value
+      (conn=12345678) Field 'created_at' doesn't have a default value
+      (conn=12345678) Field 'created_at' doesn't have a default value
+        Field 'created_at' doesn't have a default value
+
+The issue arises from the way `SQLAlchemy`_ is creating the tables. The
+fact is PyFunceble is written to set a default :code:`date` for the
+:code:'created_at`.
+
+However, it isn't set in the database.
+
+To solve this, you will have to manually set the default for `created_at`
+to for example :code:`2020-12-22 09:09:50` in the
+:code:`DB_name.pyfunceble_whois_record`. You can use dBeaver to do this
+or by manually run this SQL code.
+
+.. code-block:: sql
+
+    ALTER TABLE DB_name.pyfunceble_whois_record
+        MODIFY COLUMN created_at datetime
+        DEFAULT '2020-12-22 09:09:50'
+        NOT NULL;
+
+.. warning::
+
+    These changes will be reset next time you are running PyFunceble.
+
+.. _SQLAlchemy: https://www.sqlalchemy.org/

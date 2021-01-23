@@ -57,7 +57,7 @@ required.
 .. note::
     :code:`domain2idna` is maintained and developed by
     `Nissar Chababy (@funilrys)`_, the developer of PyFunceble.
-    Its source code can be found `on GitHub`_.
+    The source code can be found `on GitHub`_.
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
 .. _on GitHub: https://github.com/PyFunceble/domain2idna
