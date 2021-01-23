@@ -84,6 +84,13 @@ class DBDatasetBase(DatasetBase):
         if remove_unneeded_fields is not None:
             self.set_remove_unneeded_fields(remove_unneeded_fields)
 
+        self.__post_init__()
+
+    def __post_init__(self) -> None:
+        """
+        A method to be called (automatically) after __init__.
+        """
+
     def __contains__(self, value: str) -> bool:
         raise NotImplementedError()
 

@@ -65,9 +65,12 @@ class CSVWhoisDataset(CSVDatasetBase, WhoisDatasetBase):
     CSV file.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.WHOIS_DB_FILE
-    )
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.WHOIS_DB_FILE
+        )
+
+        return super().__post_init__()
 
     def __contains__(self, value: str) -> bool:
         for row in self.get_content():

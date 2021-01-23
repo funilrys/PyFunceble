@@ -66,9 +66,12 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
     CSV file.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_FILE
-    )
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_FILE
+        )
+
+        return super().__post_init__()
 
     @CSVDatasetBase.execute_if_authorized(None)
     def get_to_retest(
