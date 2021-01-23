@@ -69,6 +69,13 @@ class MigratorBase:
     def __init__(self, print_action_to_stdout: bool = False) -> None:
         self.print_action_to_stdout = print_action_to_stdout
 
+        self.__post_init__()
+
+    def __post_init__(self) -> None:
+        """
+        A method to be called (automatically) after the __init__ execution.
+        """
+
     def start(self) -> "MigratorBase":
         """
         Starts the migration.

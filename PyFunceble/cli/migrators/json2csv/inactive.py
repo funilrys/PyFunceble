@@ -52,6 +52,7 @@ License:
 
 import datetime
 import os
+from typing import Optional
 
 import domain2idna
 
@@ -70,11 +71,17 @@ class InactiveJSON2CSVMigrator(JSON2CSVMigratorBase):
     The migrator of the inactive database dile.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_OLD_FILE
-    )
+    dataset: Optional[CSVInactiveDataset] = None
 
-    dataset: CSVInactiveDataset = CSVInactiveDataset()
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.cli.storage.INACTIVE_DB_OLD_FILE,
+        )
+
+        self.dataset = CSVInactiveDataset()
+
+        return super().__post_init__()
 
     def migrate(self) -> "InactiveJSON2CSVMigrator":
         """

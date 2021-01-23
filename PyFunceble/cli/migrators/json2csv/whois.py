@@ -51,6 +51,7 @@ License:
 """
 
 import os
+from typing import Optional
 
 import domain2idna
 
@@ -68,11 +69,16 @@ class WhoisJSON2CSVMigrator(JSON2CSVMigratorBase):
     The migrator of the inactive database dile.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.WHOIS_DB_OLD_FILE
-    )
+    dataset: Optional[CSVWhoisDataset] = CSVWhoisDataset()
 
-    dataset: CSVWhoisDataset = CSVWhoisDataset()
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.cli.storage.WHOIS_DB_OLD_FILE,
+        )
+
+        self.dataset = CSVWhoisDataset()
+        return super().__post_init__()
 
     def migrate(self) -> "WhoisJSON2CSVMigrator":
         """

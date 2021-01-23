@@ -62,6 +62,9 @@ class MiningFileCleanupMigrator(FileClenupMigratorBase):
     Provides the interface for the cleanup of the mining file.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.MINING_OLD_FILE
-    )
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.MINING_OLD_FILE
+        )
+
+        return super().__post_init__()

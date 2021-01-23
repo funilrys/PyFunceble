@@ -52,7 +52,7 @@ License:
 
 import functools
 import os
-from typing import Optional
+from typing import List, Optional
 
 import PyFunceble.storage
 from PyFunceble.helpers.file import FileHelper
@@ -70,7 +70,7 @@ class CredentialBase:
     STD_PASSWORD: str = f"{PyFunceble.storage.PROJECT_NAME}:15_93le"
     STD_CHARSET: str = "utf8mb4"
 
-    VAR2ENV = {
+    VAR2ENV: dict = {
         "host": "PYFUNCEBLE_DB_HOST",
         "port": "PYFUNCEBLE_DB_PORT",
         "name": "PYFUNCEBLE_DB_NAME",
@@ -82,12 +82,7 @@ class CredentialBase:
     Maps our credential variable with environment variable.
     """
 
-    DOTENV_LOCATIONS = [
-        os.path.realpath(PyFunceble.storage.ENV_FILENAME),
-        os.path.join(
-            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.ENV_FILENAME
-        ),
-    ]
+    dotenv_locations: List[str] = []
     """
     Provides the location of the dotenv to work with.
 
@@ -145,6 +140,13 @@ class CredentialBase:
             self.charset = charset
         else:
             self.charset = self.STD_CHARSET
+
+        self.dotenv_locations = [
+            os.path.realpath(PyFunceble.storage.ENV_FILENAME),
+            os.path.join(
+                PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.storage.ENV_FILENAME
+            ),
+        ]
 
     def ensure_protocol_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -432,8 +434,8 @@ class CredentialBase:
 
         file_helper = FileHelper()
 
-        for file in self.DOTENV_LOCATIONS:
+        for file in self.dotenv_locations:
             if file_helper.set_path(file).exists():
                 return file_helper.path
 
-        return self.DOTENV_LOCATIONS[-1]
+        return self.dotenv_locations[-1]

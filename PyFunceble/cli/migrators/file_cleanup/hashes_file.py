@@ -62,6 +62,9 @@ class HashesFileCleanupMigrator(FileClenupMigratorBase):
     Provides the interface for the cleanup of the hashes file.
     """
 
-    source_file: str = os.path.join(
-        PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.HASHES_FILENAME
-    )
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.HASHES_FILENAME
+        )
+
+        return super().__post_init__()
