@@ -120,13 +120,7 @@ class ListHelper:
         Removes the duplicates of the current list.
         """
 
-        known = []
-
-        for index, subject in enumerate(self.subject):
-            if subject in known:
-                del self.subject[index]
-            else:
-                known.append(subject)
+        self.subject = list(set(self.subject))
 
         return self
 
