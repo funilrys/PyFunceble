@@ -439,6 +439,9 @@ class SystemLauncher(SystemBase):
 
             if download_file(protocol["subject"], protocol["destination"]):
                 protocol["subject"] = os.path.abspath(protocol["destination"])
+
+                protocol["abs_source"] = os.path.abspath(protocol["subject"])
+                protocol["rel_source"] = os.path.relpath(protocol["subject"])
             else:
                 protocol["subject"] = os.path.abspath(protocol["subject"])
 
