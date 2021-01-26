@@ -1064,6 +1064,7 @@ class ContinuousIntegrationBase:
             (f'git config --local user.name "{self.git_name}"', False),
             ("git config --local push.default simple", False),
             ("git config --local pull.rebase false", False),
+            ("git config --local core.autocrlf true", False),
             (f'git checkout "{self.git_branch}"', False),
             ("git fetch origin", False),
             (
