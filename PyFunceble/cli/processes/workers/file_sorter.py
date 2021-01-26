@@ -56,6 +56,7 @@ import heapq
 import os
 import secrets
 import tempfile
+from itertools import groupby
 from typing import Any, List, Optional, Tuple
 
 import PyFunceble.cli.storage
@@ -128,7 +129,7 @@ class FileSorterWorker(WorkerBase):
         return result
 
     @classmethod
-    def process_file_sorting(cls, file: str) -> None:
+    def process_file_sorting(cls, file: str) -> None:  # pylint: disable=too-many-locals
         """
         Process the sorting of the given file.
 
@@ -188,6 +189,29 @@ class FileSorterWorker(WorkerBase):
                         final_file_stream.write(FilePrinter.get_generation_date_line())
                         final_file_stream.write("\n\n")
                         final_file_stream.writelines(heapq.merge(*sorted_files))
+
+                temp_final_filename = secrets.token_hex(6)
+
+                with open(
+                    temp_final_filename, "wb"
+                ) as temp_file_stream, file_helper.open("rb") as final_file_stream:
+                    temp_file_stream.write(
+                        FilePrinter.STD_FILE_GENERATION.encode("utf-8")
+                    )
+                    temp_file_stream.write(
+                        FilePrinter.get_generation_date_line().encode("utf-8")
+                    )
+                    temp_file_stream.write("\n".encode("utf-8"))
+
+                    for key, _ in groupby(sorted(final_file_stream)):
+                        if key[0] == ord("#"):
+                            continue
+
+                        temp_file_stream.write(key)
+
+                    temp_file_stream.write(b"\n")
+
+                FileHelper(temp_final_filename).move(file_helper.path)
 
             PyFunceble.facility.Logger.info("Finished sort of %r.", file_helper.path)
 
