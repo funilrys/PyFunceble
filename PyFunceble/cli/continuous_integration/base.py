@@ -1065,8 +1065,10 @@ class ContinuousIntegrationBase:
             ("git config --local push.default simple", False),
             ("git config --local pull.rebase false", False),
             (f'git checkout "{self.git_branch}"', False),
+            ("git fetch origin", False),
             (
-                f'git pull origin "{self.git_distribution_branch}"',
+                f"git merge --strategy-option theirs "
+                f"origin/{self.git_distribution_branch}",
                 False,
             ),
         ]
@@ -1117,7 +1119,8 @@ class ContinuousIntegrationBase:
                         f'git checkout "{branch}"',
                         True,
                     ),
-                    (f"git pull origin {branch}", True),
+                    ("git fetch origin", True),
+                    (f"git merge --strategy-option theirs origin/{branch}", True),
                     (f"git push origin {branch}", True),
                 ]
             )
