@@ -1063,13 +1063,13 @@ class ContinuousIntegrationBase:
             (f'git config --local user.email "{self.git_email}"', False),
             (f'git config --local user.name "{self.git_name}"', False),
             ("git config --local push.default simple", False),
-            ("git config --local pull.rebase false", False),
+            ("git config --local pull.rebase true", False),
             ("git config --local core.autocrlf true", False),
+            ("git config --local branch.autosetuprebase always", False),
             (f'git checkout "{self.git_branch}"', False),
             ("git fetch origin", False),
             (
-                f"git merge --strategy-option theirs "
-                f"origin/{self.git_distribution_branch}",
+                f"git rebase -X theirs " f"origin/{self.git_distribution_branch}",
                 False,
             ),
         ]
@@ -1121,7 +1121,7 @@ class ContinuousIntegrationBase:
                         True,
                     ),
                     ("git fetch origin", True),
-                    (f"git merge --strategy-option theirs origin/{branch}", True),
+                    (f"git rebase -X theirs origin/{branch}", True),
                     (f"git push origin {branch}", True),
                 ]
             )
@@ -1151,12 +1151,22 @@ class ContinuousIntegrationBase:
 
         commands = []
 
+        if self.git_distribution_branch != self.git_branch:
+            branch_to_use = self.git_distribution_branch
+        else:
+            branch_to_use = self.git_branch
+
         if self.end_command:
             commands.append((self.end_command, True))
 
         if self.git_initialized:
             commands.extend(
                 [
+                    ("git fetch origin", True),
+                    (
+                        f"git rebase -X theirs origin/{branch_to_use}",
+                        True,
+                    ),
                     ("git add --all", True),
                     (
                         "git commit -a -m "
@@ -1178,9 +1188,9 @@ class ContinuousIntegrationBase:
         )
 
         if self.git_distribution_branch != self.git_branch:
-            self.push_changes(self.git_distribution_branch)
+            self.push_changes(branch_to_use)
         else:
-            self.push_changes(self.git_branch)
+            self.push_changes(branch_to_use)
 
     @execute_if_authorized(None)
     def apply_commit(self) -> None:
