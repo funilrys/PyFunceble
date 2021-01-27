@@ -227,7 +227,7 @@ jobs:
     needs: [run_cli, run_cli_mariadb]
     name: "Deploy 📦 to the PyPi"
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push'
 
     runs-on: "${{ matrix.os }}"
 
@@ -270,7 +270,7 @@ jobs:
     needs: [run_cli, run_cli_mariadb]
     name: "Deploy 📦 to the Docker Hub"
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    if: github.event_name == 'push'
 
     runs-on: "${{ matrix.os }}"
 
