@@ -64,7 +64,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.3.7.dev (Teal Blauwbok: Gander)"
+    VERSION = "3.3.8.dev (Teal Blauwbok: Gander)"
     """
     Sets the package version.
 
@@ -234,10 +234,8 @@ class Version:
         # We list the list of file which can be found only in a cloned version.
         list_of_file = [
             ".coveragerc",
-            ".coveralls.yml",
             ".gitignore",
             ".PyFunceble_production.yaml",
-            ".travis.yml",
             "CODE_OF_CONDUCT.rst",
             "CONTRIBUTING.rst",
             "dir_structure_production.json",
