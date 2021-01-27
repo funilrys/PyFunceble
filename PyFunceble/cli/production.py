@@ -353,7 +353,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
         for branch in command_result.split("\n"):
             # We loop through each line of the command output.
 
-            if branch.startswith("*") and "dev" in branch:
+            if branch.startswith("*") and ("dev" in branch or "3.x" in branch):
                 # The current branch is `dev`.
 
                 # We return True.
@@ -583,13 +583,14 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the file content.
         to_update = file_instance.read()
 
-        for replacement, regex in regexes.items():
-            # We loop through the map.
+        if to_update:
+            for replacement, regex in regexes.items():
+                # We loop through the map.
 
-            # And we process the replacement.
-            to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
-            )
+                # And we process the replacement.
+                to_update = PyFunceble.helpers.Regex(regex).replace_match(
+                    to_update, replacement
+                )
 
         # We finally replace the file content with the filtered
         # content.
