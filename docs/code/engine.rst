@@ -47,13 +47,6 @@ Documentation
     :members:
     :private-members:
 
-:code:`MySQL()`
-"""""""""""""""
-
-.. autoclass:: PyFunceble.engine.mysql.MySQL
-    :members:
-    :private-members:
-
 :code:`Sort()`
 """"""""""""""
 

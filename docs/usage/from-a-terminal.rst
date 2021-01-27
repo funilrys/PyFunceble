@@ -84,7 +84,7 @@ Source
 
     ::
 
-        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/master/.travis/lists/url`
+        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/examples/lists/url`
 
     will download the given URL and test for its content assuming that each
     line represents a URL to test.
@@ -228,6 +228,13 @@ This argument allows you to disable it!
     will check against AlienVault's reputation data
     and output its result into :code:`output/*/{MALICIOUS,SANE}/*`.
 
+:code:`--rpz`
+"""""""""""""
+
+    Switch the value of the RPZ policies test.
+
+    **Default value:** :code:`False`
+
 :code:`--shadow-file` | :code:`--shadow`
 """"""""""""""""""""""""""""""""""""""""
 
@@ -298,16 +305,12 @@ to set a timeout.
         invalid and the domain is still alive, you will always get
         :code:`INACTIVE` as output.
 
-:code:`wildcard`
-""""""""""""""""
+:code:`--wildcard`
+""""""""""""""""""
 
     Switch the value of the wildcards test.
 
     **Default value:** :code:`False`
-
-    .. warning::
-        This argument is not taken into consideration if the :code:`--syntax` argument
-        is not given.
 
 DNS (resolver) control
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -595,12 +598,40 @@ possible on screen!
 :code:`--split`
 """""""""""""""
 
-    Switch the value of the split of the generated output
+    Switch the value of the split of the generated output.
 
     **Default value:** :code:`True`
 
 Want to get the logs (copy of what you see on screen) on different files?
 This argument is suited to you!
+
+:code:`--store-whois`
+"""""""""""""""""""""
+
+    Switch the value of the WHOIS record storage in the WHOIS DB.
+
+    **Default value:** :code:`False`
+
+The difference between :code:`False` or :code:`True` is whether
+we are saving a full dump of the `WHOIS` reply into the database.
+
+If you for some reason believes you need to fill up your database
+with a complete dump of the whois reply, this is the right value
+to switch on.
+
+.. warning::
+    Before switching this value, you should read these comments
+    carefully...
+
+    You can test the amount of data by running :code:`whois mypdns.org`
+    from your Linux terminal, to see an example of what will be stored
+    in the database.
+
+    You're hearby warned...
+
+    `store_whois_record comment <https://github.com/funilrys/PyFunceble/issues/57#issuecomment-682597793>`_
+
+    `Brainstorm whois data comment <https://github.com/funilrys/PyFunceble/issues/108#issuecomment-682522516>`_
 
 Multiprocessing
 ^^^^^^^^^^^^^^^
@@ -830,18 +861,18 @@ Global overview
 
 ::
 
-    usage: pyfunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
+    usage: PyFunceble [-d DOMAIN [DOMAIN ...]] [-u URL [URL ...]] [-f FILE]
                     [-uf URL_FILE] [-ad] [--complements] [--filter FILTER]
                     [--idna] [--mining] [-c] [--cooldown-time COOLDOWN_TIME]
-                    [--http] [--local] [-ns] [-nw] [--syntax] [-t TIMEOUT]
-                    [--reputation] [--use-reputation-data] [-ua USER_AGENT]
-                    [-vsc] [--wildcard] [--dns DNS [DNS ...]]
-                    [--dns-lookup-over-tcp] [-db]
+                    [--http] [--local] [-ns] [-nw] [--reputation] [--rpz]
+                    [--shadow-file] [--syntax] [-t TIMEOUT]
+                    [--use-reputation-data] [-ua USER_AGENT] [-vsc] [--wildcard]
+                    [--dns DNS [DNS ...]] [--dns-lookup-over-tcp] [-db]
                     [--database-type DATABASE_TYPE]
                     [-dbr DAYS_BETWEEN_DB_RETEST] [-dbc DAYS_BETWEEN_DB_CLEAN]
                     [-wdb] [-a] [-ex] [--hierarchical] [-h] [-ip IP] [--json]
                     [--less] [-nf] [-nl] [-nu] [--percentage] [--plain] [--dots]
-                    [-q] [--share-logs] [-s] [--split] [-m]
+                    [-q] [--share-logs] [-s] [--split] [--store-whois] [-m]
                     [--multiprocess-merging-mode MULTIPROCESS_MERGING_MODE]
                     [-p PROCESSES] [--autosave-minutes AUTOSAVE_MINUTES] [--ci]
                     [--ci-branch CI_BRANCH]
@@ -901,13 +932,21 @@ Global overview
                                 Configured value: False
         -nw, --no-whois       Switch the value of the usage of WHOIS to test the domain's status.
                                 Configured value: False
+        --reputation          Switch the value of the reputation test mode.
+                                Configured value: False
+        --rpz                 Switch the value of the RPZ policies test.
+
+                                When used, RPZ policies will be properly tested.
+        --shadow-file, --shadow
+                                Switch the value of the usage and generation of a shadow file before a file test starts.
+
+                                A shadow file is a file which only contain the actual list of subject to test. For its generation we check each subjects as we normally do on-the-fly.
+                                Configured value: False
         --syntax              Switch the value of the syntax test mode.
                                 Configured value: False
         -t TIMEOUT, --timeout TIMEOUT
                                 Switch the value of the timeout in seconds.
                                 Configured value: 5
-        --reputation          Switch the value of the reputation test mode.
-                                Configured value: False
         --use-reputation-data
                                 Switch the value of the reputation data usage.
                                 Configured value: False
@@ -919,10 +958,7 @@ Global overview
                                 Configured value: False
         --wildcard            Switch the value of the wildcards test.
 
-                                When used, wildcards will be proprely tested.
-
-                                Warning: This is not taken in consideration if the '--syntax' argument is not given.
-                                Configured value: False
+                                When used, wildcards will be properly tested.
 
     DNS (resolver) control:
         --dns DNS [DNS ...]   Set one or more DNS server(s) to use during testing. Separated by spaces.
@@ -987,6 +1023,8 @@ Global overview
                                 Configured value: False
         --split               Switch the value of the split of the generated output files.
                                 Configured value: True
+        --store-whois         Switch the value of the WHOIS record storage in the WHOIS DB.
+                                Configured value: False
 
     Multiprocessing:
         -m, --multiprocess    Switch the value of the usage of multiple processes.
@@ -1030,6 +1068,6 @@ Global overview
         --directory-structure
                                 Generate the directory and files that are needed and which does not exist in the current directory.
 
-    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/master/
+    For an in-depth usage, explanation and examples of the arguments, you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of https://pyfunceble.github.io/contributors.html && https://pyfunceble.github.io/special-thanks.html

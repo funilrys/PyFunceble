@@ -71,6 +71,10 @@ Simply update the default value of
     If you do not explicitly set the :code:`--processes` argument,
     we overwrite the default to the number of available CPU.
 
+.. warning::
+    If this value is less than :code:`2`, the system will
+    automatically deactivate the multiprocessing.
+
 Merging mode
 """"""""""""
 

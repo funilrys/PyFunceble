@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,8 +51,13 @@ License:
 """
 
 from datetime import datetime, timedelta
+from multiprocessing import get_start_method
+
+from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
 
 
 class InactiveDB:  # pylint: disable=too-many-instance-attributes
@@ -64,15 +69,14 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
     is_present_cache = {}
     database = {}
-    authorized = False
     filename = None
 
     def __init__(self, filename, parent_process=False):
         self.one_day = timedelta(days=1)
         self.database_file = ""
 
-        self.authorized = self.authorization()
         self.parent = parent_process
+        self.authorized = self.authorization()
 
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
 
@@ -90,10 +94,8 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
             self.filename = filename
 
-            self.table_name = self.get_table_name()
             self.to_retest = self.get_to_retest()
 
-            PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
             PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
             self.initiate()
@@ -101,6 +103,12 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, subject):
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 if subject not in self.is_present_cache:
                     self.is_present_cache[subject] = False
                     if self[subject]:
@@ -109,18 +117,31 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 return self.is_present_cache[subject]
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = (
-                    "SELECT COUNT(*) "
-                    "FROM {0} "
-                    "WHERE subject = %(subject)s AND file_path = %(file)s"
-                ).format(self.table_name)
+                with session.Session() as db_session:
+                    # pylint: disable=no-member
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"subject": subject, "file": self.filename})
+                    result = (
+                        db_session.query(Status)
+                        .join(File)
+                        .filter(File.path == self.filename)
+                        .filter(Status.tested == subject)
+                        .filter(
+                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
+                        )
+                        .count()
+                        > 0
+                    )
 
-                    fetched = cursor.fetchone()
+                    if result:
+                        PyFunceble.LOGGER.info(
+                            f"{subject} is present into the database."
+                        )
+                    else:
+                        PyFunceble.LOGGER.info(
+                            f"{subject} is not present into the database."
+                        )
 
-                return fetched["COUNT(*)"]
+                    return result
 
         return False  # pragma: no cover
 
@@ -178,16 +199,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         """
 
         return PyFunceble.CONFIGURATION.inactive_database
-
-    @classmethod
-    def get_table_name(cls):
-        """
-        Returns the name of the table to use.
-        """
-
-        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return PyFunceble.engine.MySQL.tables["inactive"]
-        return "inactive"
 
     def _merge(self):
         """
@@ -292,7 +303,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
         :rtype: int|str
         """
 
-        return datetime.now()
+        return datetime.utcnow()
 
     def add(self, subject, status):
         """
@@ -327,47 +338,10 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 )
 
                 self.save()
-            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                digest = PyFunceble.helpers.Hash(algo="sha256").data(
-                    bytes(self.filename + subject, "utf-8")
-                )
 
-                query = (
-                    "INSERT INTO {0} "
-                    "(file_path, subject, status, digest) "
-                    "VALUES (%(file)s, %(subject)s, %(status)s, %(digest)s)"
-                ).format(self.table_name)
-
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    playload = {
-                        "file": self.filename,
-                        "subject": subject,
-                        "status": status,
-                        "digest": digest,
-                    }
-
-                    try:
-                        cursor.execute(query, playload)
-
-                        PyFunceble.LOGGER.info(
-                            f"Inserted into the database: \n {playload}"
-                        )
-                    except PyFunceble.engine.MySQL.errors:
-                        query = (
-                            "UPDATE {0} "
-                            "SET subject = %(subject)s, status = %(status)s "
-                            "WHERE digest = %(digest)s"
-                        ).format(self.table_name)
-
-                        cursor.execute(
-                            query,
-                            {"subject": subject, "status": status, "digest": digest},
-                        )
-
-                        PyFunceble.LOGGER.info(
-                            "Data already indexed, updated the modified "
-                            f"column of the row related to {repr(subject)}."
-                        )
+            # We ignore the mariadb/mysql case because
+            # we are sure that the data will be added in the database
+            # by the system.
 
     def remove(self, subject):
         """
@@ -385,42 +359,9 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                         "Cleaned the data related to " f"{repr(subject)}."
                     )
                     self.save()
-            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = (
-                    "DELETE FROM {0} "
-                    "WHERE file_path = %(file)s "
-                    "AND subject = %(subject)s"
-                ).format(self.table_name)
-
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"file": self.filename, "subject": subject})
-
-                    PyFunceble.LOGGER.info(
-                        "Cleaned the data related to "
-                        f"{repr(subject)} and {repr(self.filename)} from "
-                        f"the {repr(self.table_name)} table."
-                    )
-
-    def __execute_query(self, query):  # pragma: no cover
-        """
-        Executes the query to get the list to retest or already tested.
-        """
-
-        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-            cursor.execute(
-                query,
-                {
-                    "file": self.filename,
-                    "days": self.days,
-                    "days_between_clean": self.days_between_clean,
-                },
-            )
-            fetched = cursor.fetchall()
-
-            if fetched:
-                return {x["subject"] for x in fetched}
-
-        return set()
+            # We don't implement the mysql/mariadb because,
+            # instead of removing, the system will update the status
+            # automatically.
 
     def get_to_retest(self):
         """
@@ -439,13 +380,19 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             if PyFunceble.CONFIGURATION.db_type == "json":
                 result = set()
 
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 for subject, info in self.database[self.filename].items():
                     if (
                         "last_retested_at_epoch" in info
                         and info["last_retested_at_epoch"]
                     ):
                         if (
-                            datetime.now()
+                            datetime.utcnow()
                             > datetime.fromtimestamp(info["last_retested_at_epoch"])
                             + self.days
                         ):
@@ -456,13 +403,27 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 return result
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = (
-                    "SELECT * FROM {0} WHERE file_path = %(file)s "
-                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
-                    "> (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
+                with session.Session() as db_session:
+                    try:
+                        # pylint: disable=no-member
+                        result = (
+                            db_session.query(Status)
+                            .join(File)
+                            .filter(File.path == self.filename)
+                            .filter(
+                                Status.status.notin_(
+                                    PyFunceble.core.CLI.get_up_statuses()
+                                )
+                            )
+                            .filter(datetime.utcnow() > Status.tested_at + self.days)
+                            .all()
+                        )
+                    except NoResultFound:
+                        result = []
 
-                return self.__execute_query(query)
+                    if result:
+                        return {x.tested for x in result}
+
         return set()
 
     def get_already_tested(self):
@@ -474,25 +435,25 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
             "Getting the list of already tested (DATASET WONT BE LOGGED)"
         )
 
-        if (
-            self.authorized
-            and PyFunceble.CONFIGURATION.days_between_db_retest >= 0
-            and self.filename in self.database
-        ):
+        if self.authorized and PyFunceble.CONFIGURATION.days_between_db_retest >= 0:
             if PyFunceble.CONFIGURATION.db_type == "json":
                 result = set()
+
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
 
                 for subject, info in self.database[self.filename].items():
                     if (
                         "last_retested_at_epoch" in info
                         and info["last_retested_at_epoch"]
+                        and datetime.utcnow()
+                        < datetime.fromtimestamp(info["last_retested_at_epoch"])
+                        + self.days
                     ):
-                        if (
-                            datetime.now()
-                            < datetime.fromtimestamp(info["last_retested_at_epoch"])
-                            + self.days
-                        ):
-                            result.add(subject)
+                        result.add(subject)
                     else:
                         result.add(subject)
                 return result
@@ -501,13 +462,22 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 "mariadb",
                 "mysql",
             ]:  # pragma: no cover
-                query = (
-                    "SELECT * FROM {0} WHERE file_path= %(file)s "
-                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
-                    "< (CAST(UNIX_TIMESTAMP(modified) AS {1}) + CAST(%(days)s AS {1}))"
-                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
+                # pylint: disable=no-member
+                with session.Session() as db_session:
+                    result = (
+                        db_session.query(Status)
+                        .join(File)
+                        .filter(File.path == self.filename)
+                        .filter(File.id == Status.file_id)
+                        .filter(
+                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
+                        )
+                        .filter(datetime.utcnow() < Status.tested_at + self.days)
+                        .all()
+                    )
 
-                return self.__execute_query(query)
+                    if result:
+                        return {x.tested for x in result}
         return set()
 
     def get_to_clean(self):
@@ -530,7 +500,7 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
                 for subject, info in self.database[self.filename].items():
                     if "included_at_epoch" in info and info["included_at_epoch"]:
                         if (
-                            datetime.now()
+                            datetime.utcnow()
                             > datetime.fromtimestamp(info["included_at_epoch"])
                             + self.days_between_clean
                         ):
@@ -540,16 +510,6 @@ class InactiveDB:  # pylint: disable=too-many-instance-attributes
 
                 return result
 
-            if PyFunceble.CONFIGURATION.db_type in [
-                "mariadb",
-                "mysql",
-            ]:  # pragma: no cover
-
-                query = (
-                    "SELECT * FROM {0} WHERE file_path= %(file)s "
-                    "AND CAST(UNIX_TIMESTAMP() AS {1}) "
-                    "> (CAST(UNIX_TIMESTAMP(created) AS {1}) + CAST(%(days_between_clean)s AS {1}))"
-                ).format(self.table_name, PyFunceble.engine.MySQL.get_int_cast_type())
-
-                return self.__execute_query(query)
+            # We ignore the mariadb/mysql case because
+            # it's not necessary anymore.
         return set()

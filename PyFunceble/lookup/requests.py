@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,9 +50,11 @@ License:
     limitations under the License.
 """
 
+import warnings
 from urllib.parse import urlparse
 
 import requests
+from urllib3.exceptions import InsecureRequestWarning
 
 import PyFunceble
 
@@ -130,21 +132,23 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
             f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
         )
 
-        if parsed_url.scheme == "https" and hostname_ip:
+        if hostname_ip:
             request.url = request.url.replace(
-                f"https://{parsed_url.hostname}", f"https://{hostname_ip}"
+                f"{parsed_url.scheme}://{parsed_url.hostname}",
+                f"{parsed_url.scheme}://{hostname_ip}",
             )
 
-            self.poolmanager.connection_pool_kw["server_hostname"] = parsed_url.hostname
-            self.poolmanager.connection_pool_kw["assert_hostname"] = parsed_url.hostname
+            if parsed_url.scheme == "https":
+                self.poolmanager.connection_pool_kw[
+                    "server_hostname"
+                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw[
+                    "assert_hostname"
+                ] = parsed_url.hostname
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.
             request.headers["Host"] = parsed_url.hostname
-        elif parsed_url.scheme == "http" and hostname_ip:
-            request.url = request.url.replace(
-                f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
-            )
         else:
             self.poolmanager.connection_pool_kw.pop(
                 "server_hostname", "pyfunceble-not-resolved"
@@ -155,7 +159,10 @@ class HostSSLAdapter(requests.adapters.HTTPAdapter):
 
             request.url = "https://pyfunceble-not-resolved"
 
-        return super(HostSSLAdapter, self).send(request, **kwargs)
+        response = super().send(request, **kwargs)
+        response.url = response.url.replace(hostname_ip, parsed_url.hostname)
+
+        return response
 
 
 class HostAdapter(requests.adapters.HTTPAdapter):
@@ -210,21 +217,19 @@ class HostAdapter(requests.adapters.HTTPAdapter):
             f"{parsed_url}, {hostname_ip}, {parsed_url.scheme}, {kwargs}"
         )
 
-        if parsed_url.scheme == "http" and hostname_ip:
+        if hostname_ip:
             request.url = request.url.replace(
-                f"http://{parsed_url.hostname}", f"http://{hostname_ip}"
+                f"{parsed_url.scheme}://{parsed_url.hostname}",
+                f"{parsed_url.scheme}://{hostname_ip}",
             )
 
-            # Ensure that the Hosts header is present. Otherwise, connection might
-            # not work.
-            request.headers["Host"] = parsed_url.hostname
-        elif parsed_url.scheme == "https" and hostname_ip:
-            request.url = request.url.replace(
-                f"https://{parsed_url.hostname}", f"https://{hostname_ip}"
-            )
-
-            self.poolmanager.connection_pool_kw["server_hostname"] = parsed_url.hostname
-            self.poolmanager.connection_pool_kw["assert_hostname"] = parsed_url.hostname
+            if parsed_url.scheme == "https":
+                self.poolmanager.connection_pool_kw[
+                    "server_hostname"
+                ] = parsed_url.hostname
+                self.poolmanager.connection_pool_kw[
+                    "assert_hostname"
+                ] = parsed_url.hostname
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.
@@ -239,7 +244,12 @@ class HostAdapter(requests.adapters.HTTPAdapter):
 
             request.url = "http://pyfunceble-not-resolved"
 
-        return super(HostAdapter, self).send(request, **kwargs)
+        request.before_resolution = parsed_url.hostname
+
+        response = super().send(request, **kwargs)
+        response.url = response.url.replace(hostname_ip, parsed_url.hostname)
+
+        return response
 
 
 class Requests:
@@ -252,7 +262,10 @@ class Requests:
     exceptions = requests.exceptions
     pyfunceble_max_retry = False
 
-    def __init__(self):
+    def __init__(self, max_retries=None):
+        if max_retries and isinstance(max_retries, int):
+            self.pyfunceble_max_retry = max_retries
+
         self.session = requests.Session()
         self.session.mount(
             "https://", HostSSLAdapter(max_retries=self.pyfunceble_max_retry)
@@ -260,6 +273,8 @@ class Requests:
         self.session.mount(
             "http://", HostAdapter(max_retries=self.pyfunceble_max_retry)
         )
+
+        warnings.simplefilter("ignore", InsecureRequestWarning)
 
     def get(self, url, **kwargs):
         """

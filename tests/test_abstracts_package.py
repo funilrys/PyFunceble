@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -153,6 +153,17 @@ class TestVersion(TestCase):
         """
 
         expected = True
+        actual = Version.is_local_dev()
+
+        self.assertEqual(expected, actual)
+
+    @patch("PyFunceble.abstracts.Package.VERSION", "2.10.0.pre-dev (Hello, World)")
+    def test_is_not_local_dev_from_presence(self):
+        """
+        Tests if the local version is not the dev one.
+        """
+
+        expected = False
         actual = Version.is_local_dev()
 
         self.assertEqual(expected, actual)

@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -102,8 +102,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 PyFunceble.VERSION, return_non_digits=True
             )
 
-            if self._is_version_greater() or not PyFunceble.abstracts.Version.literally_compare(
-                PyFunceble.VERSION, self.data_version_yaml["current_version"]
+            if (
+                self._is_version_greater()
+                or not PyFunceble.abstracts.Version.literally_compare(
+                    PyFunceble.VERSION, self.data_version_yaml["current_version"]
+                )
             ):
                 # * The local version is greater than the older one.
                 # or
@@ -231,11 +234,6 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
             + "configuration"
             + directory_separator
             + "links.rst",
-            # We fix the urls in the db_types directory.
-            PyFunceble.CONFIG_DIRECTORY
-            + directory_separator
-            + "db_types"
-            + directory_separator,
         ]
 
         for fix_it in to_fix:
@@ -355,7 +353,7 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
         for branch in command_result.split("\n"):
             # We loop through each line of the command output.
 
-            if branch.startswith("*") and "dev" in branch:
+            if branch.startswith("*") and ("dev" in branch or "3.x" in branch):
                 # The current branch is `dev`.
 
                 # We return True.
@@ -450,8 +448,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "/en/%s" % "dev": r"en\/%s" % "master",
                 "/pyfunceble-%s.png" % "dev": r"\/pyfunceble-dev.png",
                 "/project/pyfunceble-%s" % "dev": r"\/project\/pyfunceble$",
-                "pypistats.org/packages/pyfunceble-%s"
-                % "dev": r"pypistats\.org\/packages\/pyfunceble$",
+                "/badge/pyfunceble-%s\\1"
+                % "dev": r"\/badge\/pyfunceble(/month|/week|)$",
+                "/blob/%s/" % "dev": r"\/blob\/%s\/" % "master",
+                "/pypi/v/pyfunceble-%s.png" % "dev": r"\/pypi\/v\/pyfunceble\.png$",
+                "/\\1/%s/" % "dev": r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "master",
             }
         elif self.is_master_version():
             # The current version is the master version.
@@ -463,8 +464,11 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
                 "/en/%s" % "master": r"en\/%s" % "dev",
                 "/pyfunceble-dev.png": r"\/pyfunceble-%s.png" % "dev",
                 "/project/pyfunceble": r"/project\/pyfunceble-%s$" % "dev",
-                "pypistats.org/packages/pyfunceble": r"pypistats\.org\/packages\/pyfunceble-%s$"
+                "/badge/pyfunceble\\1": r"/badge\/pyfunceble-%s(/month|/week|)$"
                 % "dev",
+                "/blob/%s/" % "master": r"\/blob\/%s\/" % "dev",
+                "/pypi/v/pyfunceble.png": r"\/pypi\/v\/pyfunceble-%s\.png$" % "dev",
+                "/\\1/%s/" % "master": r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev",
             }
         else:
             # The current version is not the master nor the dev version.
@@ -579,13 +583,14 @@ class Production:  # pragma: no cover pylint: disable=too-few-public-methods
         # We get the file content.
         to_update = file_instance.read()
 
-        for replacement, regex in regexes.items():
-            # We loop through the map.
+        if to_update:
+            for replacement, regex in regexes.items():
+                # We loop through the map.
 
-            # And we process the replacement.
-            to_update = PyFunceble.helpers.Regex(regex).replace_match(
-                to_update, replacement
-            )
+                # And we process the replacement.
+                to_update = PyFunceble.helpers.Regex(regex).replace_match(
+                    to_update, replacement
+                )
 
         # We finally replace the file content with the filtered
         # content.

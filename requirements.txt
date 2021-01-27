@@ -1,10 +1,13 @@
+alembic
 colorama
 cryptography
-dnspython
+dnspython>=2.0.0
 domain2idna
+inflection
 PyMySQL
-python-box
+python-box[all]>=5.0.0
 python-dotenv
 PyYAML
 requests<3
 setuptools
+sqlalchemy

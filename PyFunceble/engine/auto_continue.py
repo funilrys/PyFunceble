@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,8 +50,14 @@ License:
     limitations under the License.
 """
 
+from datetime import datetime
+from multiprocessing import get_start_method
+
+from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
 
 
 class AutoContinue:  # pylint: disable=too-many-instance-attributes
@@ -63,28 +69,23 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     database = {}
     # Save the database file
     database_file = None
-    # Save the operation authorization.
-    authorized = False
-
     # Save the filename we are working with.
     filename = None
 
     def __init__(self, filename, parent_process=False):
         # We get the operation authorization.
-        self.authorized = self.authorization()
         self.database_file = ""
         # We share the filename.
         self.filename = filename
         # We preset the filename namespace.
         self.database[self.filename] = {}
 
-        self.table_name = self.get_table_name()
-
         # We share if we are under the parent process.
         self.parent = parent_process
 
+        self.authorized = self.authorization()
+
         PyFunceble.LOGGER.debug(f"Authorization: {self.authorized}")
-        PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
 
         if self.authorized:
             # We are authorized to operate.
@@ -104,9 +105,7 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             # We load the backup (if existant).
             self.load()
 
-            if self.parent and (
-                self.filename not in self.database or not self.database[self.filename]
-            ):
+            if self.parent and self.is_empty():
                 # The database of the file we are
                 # currently testing is empty.
 
@@ -131,6 +130,12 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
     def __contains__(self, index):  # pragma: no cover
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 if self.filename in self.database:
                     for status, status_data in self.database[self.filename].items():
                         if status == "complements":
@@ -146,23 +151,24 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 return False
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = (
-                    "SELECT COUNT(*) "
-                    "FROM {0} "
-                    "WHERE subject = %(subject)s AND file_path = %(file)s"
-                ).format(self.table_name)
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+                    result = (
+                        db_session.query(Status)
+                        .join(File)
+                        .filter(Status.tested == index)
+                        .filter(File.path == self.filename)
+                        .count()
+                        > 0
+                    )
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"subject": index, "file": self.filename})
-
-                    fetched = cursor.fetchone()
-
-                if fetched["COUNT(*)"] != 0:
-                    PyFunceble.LOGGER.info(f"{index} is present into the database.")
-                    return True
-
-                PyFunceble.LOGGER.info(f"{index} is not present into the database.")
-                return False
+                    if result:
+                        PyFunceble.LOGGER.info(f"{index} is present into the database.")
+                    else:
+                        PyFunceble.LOGGER.info(
+                            f"{index} is not present into the database."
+                        )
+                    return result
 
         PyFunceble.LOGGER.info(
             f"Could not check if {index} is present into the database. "
@@ -180,16 +186,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             PyFunceble.CONFIGURATION.auto_continue
             and not PyFunceble.CONFIGURATION.no_files
         )
-
-    @classmethod
-    def get_table_name(cls):
-        """
-        Returns the name of the table to use.
-        """
-
-        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return PyFunceble.engine.MySQL.tables["auto_continue"]
-        return None
 
     def is_empty(self):
         """
@@ -210,21 +206,25 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 return False
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = "SELECT COUNT(*) FROM {0} WHERE file_path = %(file)s".format(
-                    self.table_name
-                )
+                # Here we don't really check if it is empty.
+                # What we do, is that we check that everything was
+                # tested.
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"file": self.filename})
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+                    try:
+                        result = (
+                            db_session.query(File)
+                            .filter(File.path == self.filename)
+                            .one()
+                        )
 
-                    fetched = cursor.fetchone()
-
-                if fetched["COUNT(*)"] == 0:
-                    PyFunceble.LOGGER.info("File to test was not previously indexed.")
-                    return True
-
-                PyFunceble.LOGGER.info("File to test was previously indexed.")
-                return False
+                        PyFunceble.LOGGER.info(
+                            f"File was completely tested: {not result.test_completed}"
+                        )
+                        return result.test_completed
+                    except NoResultFound:
+                        pass
 
         PyFunceble.LOGGER.info(  # pragma: no cover
             "Could not check if the file to test "
@@ -267,47 +267,6 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
                 # We save everything.
                 self.save()
-            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                # We construct the query string.
-
-                digest = PyFunceble.helpers.Hash(algo="sha256").data(
-                    bytes(self.filename + subject + status, "utf-8")
-                )
-
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-
-                    query = (
-                        "INSERT INTO {0} "
-                        "(file_path, subject, status, is_complement, digest) "
-                        "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)s, %(digest)s)"
-                    ).format(self.table_name)
-
-                    try:
-                        playload = {
-                            "file": self.filename,
-                            "subject": subject,
-                            "status": status,
-                            "is_complement": int(False),
-                            "digest": digest,
-                        }
-                        cursor.execute(query, playload)
-
-                        PyFunceble.LOGGER.info(
-                            f"Inserted into the database: \n {playload}"
-                        )
-                    except PyFunceble.engine.MySQL.errors:
-                        query = (
-                            "UPDATE {0} "
-                            "SET subject = %(subject)s "
-                            "WHERE digest = %(digest)s"
-                        ).format(self.table_name)
-
-                        cursor.execute(query, {"subject": subject, "digest": digest})
-
-                        PyFunceble.LOGGER.info(
-                            "Data already indexed, updated the modified "
-                            f"column of the row related to {repr(subject)}."
-                        )
 
     def save(self):
         """
@@ -368,19 +327,29 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                     "Cleaned the data related to "
                     f"{repr(self.filename)} from {repr(self.database_file)}."
                 )
-            elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                # We construct the query we are going to execute.
-                query = "DELETE FROM {0} WHERE file_path = %(file)s".format(
-                    self.table_name
-                )
+            elif PyFunceble.CONFIGURATION.db_type in [
+                "mysql",
+                "mariadb",
+            ]:  # pragma: no cover
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+                    try:
+                        file_object = (
+                            db_session.query(File)
+                            .filter(File.path == self.filename)
+                            .one()
+                        )
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"file": self.filename})
+                        file_object.test_completed = True
 
-                    PyFunceble.LOGGER.info(
-                        "Cleaned the data related to "
-                        f"{repr(self.filename)} from the {repr(self.table_name)} table."
-                    )
+                        for subject in file_object.subjects.filter(
+                            Status.status.notin_(PyFunceble.core.CLI.get_up_statuses())
+                        ).filter(Status.test_completed == True):
+                            subject.test_completed = False
+
+                        db_session.commit()
+                    except NoResultFound:
+                        pass
 
     def update_counters(self):  # pragma: no cover
         """
@@ -424,31 +393,25 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                         PyFunceble.INTERN["counter"]["number"][status] = 0
                         continue
                 elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                    query = (
-                        "SELECT COUNT(*) "
-                        "FROM {0} "
-                        "WHERE status = %(status)s "
-                        "AND file_path = %(file)s "
-                    ).format(self.table_name)
-
-                    with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                        cursor.execute(
-                            query,
-                            {
-                                "status": PyFunceble.STATUS.official[status],
-                                "file": self.filename,
-                            },
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
+                        result = (
+                            db_session.query(Status)
+                            .join(File)
+                            .filter(File.path == self.filename)
+                            .filter(Status.status == PyFunceble.STATUS.official[status])
+                            .filter(Status.test_completed == True)
+                            .all()
                         )
 
-                        fetched = cursor.fetchone()["COUNT(*)"]
-
+                        fetched = len(result)
                         PyFunceble.INTERN["counter"]["number"][status] = fetched
 
                         PyFunceble.LOGGER.debug(
                             f"Counter of {repr(status)} set to {fetched}."
                         )
 
-                        # We then update/transfert it to its global place.
+                        # We then update/transfer it to its global place.
                         tested += fetched
 
             # We update/transfert the number of tested globally.
@@ -464,8 +427,16 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
             "Getting the list of already tested (DATASET WONT BE LOGGED)"
         )
 
+        # raise Exception("AUTHORIZED", self.authorized)
+
         if self.authorized:
             if PyFunceble.CONFIGURATION.db_type == "json":
+                if (
+                    PyFunceble.CONFIGURATION.multiprocess
+                    and get_start_method() == "spawn"
+                ):  # pragma: no cover
+                    self.load()
+
                 try:
                     return {
                         y
@@ -476,17 +447,22 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
                 except KeyError:  # pragma: no cover
                     pass
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = "SELECT * FROM {0} WHERE file_path = %(file)s".format(
-                    self.table_name
-                )
+                with session.Session() as db_session:
+                    # pylint: disable=no-member, singleton-comparison
+                    try:
+                        result = (
+                            db_session.query(Status)
+                            .join(File)
+                            .filter(File.path == self.filename)
+                            .filter(Status.test_completed == True)
+                            .all()
+                        )
+                    except NoResultFound:
+                        result = []
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"file": self.filename})
+                    if result:
+                        return {x.tested for x in result}
 
-                    fetched = cursor.fetchall()
-
-                    if fetched:
-                        return {x["subject"] for x in fetched}
         return set()  # pragma: no cover
 
     def __generate_complements(self):  # pragma: no cover
@@ -536,48 +512,42 @@ class AutoContinue:  # pylint: disable=too-many-instance-attributes
 
         result = []
 
-        query = (
-            "SELECT * "
-            "FROM {0} "
-            "WHERE file_path = %(file)s "
-            "AND is_complement = %(is_complement)s".format(self.table_name)
-        )
+        with session.Session() as db_session:
+            # pylint: disable=singleton-comparison,no-member
 
-        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-            cursor.execute(query, {"file": self.filename, "is_complement": int(True)})
-            fetched = cursor.fetchall()
+            try:
+                file = db_session.query(File).filter(File.path == self.filename).one()
+                result = [
+                    x.tested for x in file.subjects.filter(Status.is_complement == True)
+                ]
+            except NoResultFound:
+                file = File(path=self.filename)
 
-            if fetched:
-                result = [x["subject"] for x in fetched]
-            else:
+                db_session.add(file)
+                db_session.commit()
+                db_session.refresh(file)
+
+                result = []
+
+            if not result:
                 result = self.__generate_complements()
 
-        query = (
-            "INSERT INTO {0} "
-            "(file_path, subject, status, is_complement, digest) "
-            "VALUES (%(file)s, %(subject)s, %(status)s, %(is_complement)s, %(digest)s)".format(
-                self.table_name
-            )
-        )
+            for subject in result:
+                try:
+                    _ = file.subjects.filter(Status.tested == subject).one()
+                    continue
+                except NoResultFound:
+                    status = Status(
+                        file_id=file.id,
+                        is_complement=True,
+                        tested=subject,
+                        tested_at=datetime.fromtimestamp(10),
+                        test_completed=False,
+                    )
 
-        to_execute = [
-            {
-                "file": self.filename,
-                "subject": subject,
-                "status": "",
-                "is_complement": int(True),
-                "digest": PyFunceble.helpers.Hash(algo="sha256").data(
-                    bytes(self.filename + subject, "utf-8")
-                ),
-            }
-            for subject in result
-        ]
+                    file.subjects.append(status)
 
-        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-            try:
-                cursor.executemany(query, to_execute)
-            except PyFunceble.engine.MySQL.errors:
-                pass
+            db_session.commit()
 
         return result
 

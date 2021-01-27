@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
                 self.current_ci_engine.bypass()
 
                 if start_time is None:
-                    self.start_time = datetime.now()
+                    self.start_time = datetime.utcnow()
                 else:
                     self.start_time = datetime.fromtimestamp(int(start_time))
 
@@ -135,7 +135,7 @@ class AutoSave:  # pragma: no cover  pylint: disable=too-few-public-methods
         if self.authorized and hasattr(self, "end_time"):
             # We are authorized to operate.
 
-            if not self.time_exceed and datetime.now() >= self.end_time:
+            if not self.time_exceed and datetime.utcnow() >= self.end_time:
                 # * We did not tested previously if the time exceed.
                 # and
                 # * The time exceed.

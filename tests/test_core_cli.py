@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -59,11 +59,11 @@ from unittest.mock import Mock, patch
 
 from colorama import Fore, Style
 from colorama import init as init_colorama
+from stdout_base import StdoutBase
+from time_zone import TZ
 
 import PyFunceble
 from PyFunceble.core import CLI
-from stdout_base import StdoutBase
-from time_zone import TZ
 
 
 class TestCLICore(StdoutBase):
@@ -219,7 +219,7 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(
+        datetime_patch.utcnow = Mock(
             return_value=datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
         )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
@@ -246,7 +246,7 @@ class TestCLICore(StdoutBase):
 """
 
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(
+        datetime_patch.utcnow = Mock(
             return_value=datetime(1970, 1, 1, 1, 0, 3, 0, tzinfo=TZ("+", hours=1).get())
         )
         patch("PyFunceble.core.cli.datetime", new=datetime_patch).start()
@@ -264,7 +264,7 @@ class TestCLICore(StdoutBase):
         PyFunceble.CONFIGURATION.share_logs = True
 
         expected = f"""{Fore.GREEN}{Style.BRIGHT}You are sharing your logs!
-{Fore.MAGENTA}{Style.BRIGHT}Please find more about it at https://pyfunceble.readthedocs.io/en/master/logs-sharing.html !
+{Fore.MAGENTA}{Style.BRIGHT}Please find more about it at https://pyfunceble.readthedocs.io/en/dev/logs-sharing.html !
 """
         self.cli_core.logs_sharing()
         actual = sys.stdout.getvalue()

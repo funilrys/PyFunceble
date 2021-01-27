@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,9 +57,10 @@ from unittest import TestCase
 from unittest import main as launch_tests
 from unittest.mock import Mock, patch
 
+from time_zone import TZ
+
 import PyFunceble
 from PyFunceble.database.inactive import InactiveDB
-from time_zone import TZ
 
 
 class TestInactiveDB(TestCase):
@@ -81,8 +82,10 @@ class TestInactiveDB(TestCase):
             PyFunceble.CONFIG_DIRECTORY + PyFunceble.OUTPUTS.default_files.inactive_db
         )
 
-        self.time_past = str(int((datetime.now() - timedelta(days=365)).timestamp()))
-        self.time_future = str(int((datetime.now() + timedelta(days=365)).timestamp()))
+        self.time_past = str(int((datetime.utcnow() - timedelta(days=365)).timestamp()))
+        self.time_future = str(
+            int((datetime.utcnow() + timedelta(days=365)).timestamp())
+        )
 
         self.inactive_db = InactiveDB(self.file_to_test, parent_process=True)
 
@@ -197,7 +200,7 @@ class TestInactiveDB(TestCase):
         of subject to restest.
         """
 
-        today = datetime.now()
+        today = datetime.utcnow()
         past = today - timedelta(days=100)
         to_write = {
             self.file_to_test: {
@@ -246,7 +249,7 @@ class TestInactiveDB(TestCase):
         tested subject.
         """
 
-        today = datetime.now()
+        today = datetime.utcnow()
         past = today - timedelta(days=300)
         to_write = {
             self.file_to_test: {
@@ -278,12 +281,13 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.load()
 
-        expected = {"example.com", "example.org"}
+        expected = {"example.com", "example.org", "example.net"}
 
         self.assertEqual(expected, self.inactive_db.get_already_tested())
 
         self.inactive_db.remove("example.com")
         self.inactive_db.remove("example.org")
+        self.inactive_db.remove("example.net")
 
         expected = set()
 
@@ -298,7 +302,7 @@ class TestInactiveDB(TestCase):
         Tests of the method which gives us the list of subject to clean.
         """
 
-        today = datetime.now()
+        today = datetime.utcnow()
         past = today - timedelta(days=300)
         to_write = {
             self.file_to_test: {
@@ -330,11 +334,12 @@ class TestInactiveDB(TestCase):
 
         self.inactive_db.load()
 
-        excepted = {"example.net", "example.org"}
+        excepted = {"example.net", "example.org", "example.net"}
 
         self.assertEqual(excepted, self.inactive_db.get_to_clean())
 
         excepted = set()
+
         self.inactive_db.authorized = False
 
         self.assertEqual(excepted, self.inactive_db.get_to_clean())
@@ -387,7 +392,7 @@ class TestInactiveDB(TestCase):
 
         our_value = datetime(1970, 1, 1, 1, 0, 2, 0, tzinfo=TZ("+", hours=1).get())
         datetime_patch = Mock(wraps=datetime)
-        datetime_patch.now = Mock(return_value=our_value)
+        datetime_patch.utcnow = Mock(return_value=our_value)
         patcher = patch("PyFunceble.database.inactive.datetime", new=datetime_patch)
         patcher.start()
 

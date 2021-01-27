@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -145,6 +145,25 @@ class TestDNSLookup(TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_server_and_port_from(self):
+        """
+        Tests the methods which let us split
+        a nameserver from its port.
+        """
+
+        expected_map = {
+            "example.org": ("example.org", 53),
+            "example.net:53": ("example.net", 53),
+            "example.com:449": ("example.com", 449),
+            " : :": (" : ", 53),
+        }
+
+        for inputted, expected in expected_map.items():
+            # pylint: disable=protected-access
+            actual = self.dns_lookup._get_server_and_port_from(inputted)
+
+            self.assertEqual(expected, actual)
+
     def test_get_addr_info_not_str(self):
         """
         Tests the method which let us get an addrinfo for the case
@@ -235,10 +254,13 @@ class TestDNSLookupA(TestCase):
         Tests the method which let us query the A record.
         """
 
+        side_effect = [["127.0.10.1", "127.0.10.2"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.a_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -246,7 +268,7 @@ class TestDNSLookupA(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.a_record(self.subject)
@@ -259,7 +281,7 @@ class TestDNSLookupA(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.a_record(self.subject)
@@ -272,7 +294,7 @@ class TestDNSLookupA(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.a_record(self.subject)
@@ -285,7 +307,7 @@ class TestDNSLookupA(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.a_record(self.subject)
@@ -322,10 +344,13 @@ class TestDNSLookupAAAA(TestCase):
         Tests the method which let us query the AAAA record.
         """
 
+        side_effect = [["::1", "::2"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.aaaa_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -333,7 +358,7 @@ class TestDNSLookupAAAA(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.aaaa_record(self.subject)
@@ -346,7 +371,7 @@ class TestDNSLookupAAAA(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.aaaa_record(self.subject)
@@ -359,7 +384,7 @@ class TestDNSLookupAAAA(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.aaaa_record(self.subject)
@@ -372,7 +397,7 @@ class TestDNSLookupAAAA(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.aaaa_record(self.subject)
@@ -409,10 +434,13 @@ class TestDNSLookupCNAME(TestCase):
         Tests the method which let us query the CNAME record.
         """
 
+        side_effect = [["example.org"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.cname_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -420,7 +448,7 @@ class TestDNSLookupCNAME(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.cname_record(self.subject)
@@ -433,7 +461,7 @@ class TestDNSLookupCNAME(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.cname_record(self.subject)
@@ -446,7 +474,7 @@ class TestDNSLookupCNAME(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.cname_record(self.subject)
@@ -459,7 +487,7 @@ class TestDNSLookupCNAME(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.cname_record(self.subject)
@@ -496,10 +524,13 @@ class TestDNSLookupMX(TestCase):
         Tests the method which let us query the MX record.
         """
 
+        side_effect = [["mail.example.org"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.mx_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -507,7 +538,7 @@ class TestDNSLookupMX(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.mx_record(self.subject)
@@ -520,7 +551,7 @@ class TestDNSLookupMX(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.mx_record(self.subject)
@@ -533,7 +564,7 @@ class TestDNSLookupMX(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.mx_record(self.subject)
@@ -546,7 +577,7 @@ class TestDNSLookupMX(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.mx_record(self.subject)
@@ -583,10 +614,13 @@ class TestDNSLookupNS(TestCase):
         Tests the method which let us query the NS record.
         """
 
+        side_effect = [["ns1.example.org", "ns2.example.org"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.ns_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -594,7 +628,7 @@ class TestDNSLookupNS(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.ns_record(self.subject)
@@ -607,7 +641,7 @@ class TestDNSLookupNS(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.ns_record(self.subject)
@@ -620,7 +654,7 @@ class TestDNSLookupNS(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.ns_record(self.subject)
@@ -633,7 +667,7 @@ class TestDNSLookupNS(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.ns_record(self.subject)
@@ -670,10 +704,13 @@ class TestDNSLookupTXT(TestCase):
         Tests the method which let us query the TXT record.
         """
 
+        side_effect = [["Hello, World!"]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
+
         actual = self.dns_lookup.txt_record(self.subject)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -681,7 +718,7 @@ class TestDNSLookupTXT(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.txt_record(self.subject)
@@ -694,7 +731,7 @@ class TestDNSLookupTXT(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.txt_record(self.subject)
@@ -707,7 +744,7 @@ class TestDNSLookupTXT(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.txt_record(self.subject)
@@ -720,7 +757,7 @@ class TestDNSLookupTXT(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.txt_record(self.subject)
@@ -752,20 +789,31 @@ class TestDNSLookupPTR(TestCase):
 
         self.assertRaises(ValueError, lambda: self.dns_lookup.ptr_record(123))
 
+    def test_record_wrong_format(self):
+        """
+        Tests the methods which let us query the PTR record
+        for the case that the wrong format is given.
+        """
+
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
+
+        expected = None
+        actual = self.dns_lookup.ptr_record(self.subject)
+
+        self.assertEqual(expected, actual)
+
     def test_record(self):
         """
         Tests the method which let us query the PTR record.
         """
 
-        actual = self.dns_lookup.ptr_record(self.subject)
-
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        side_effect = [["dns.google."]]
+        expected = side_effect[0]
+        self.dns_lookup.resolver.resolve = Mock(side_effect=side_effect)
 
         actual = self.dns_lookup.ptr_record("8.8.8.8.in-addr.arpa.", reverse_name=False)
 
-        self.assertIsInstance(actual, list)
-        self.assertNotEqual([], actual)
+        self.assertEqual(expected, actual)
 
     def test_record_NXDOMAIN(self):
         """
@@ -773,7 +821,7 @@ class TestDNSLookupPTR(TestCase):
         we get a NXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.ptr_record(self.subject)
@@ -786,7 +834,7 @@ class TestDNSLookupPTR(TestCase):
         we get a YXDOMAIN exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=YXDOMAIN())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=YXDOMAIN())
 
         expected = None
         actual = self.dns_lookup.ptr_record(self.subject)
@@ -799,7 +847,7 @@ class TestDNSLookupPTR(TestCase):
         we get a NoAnswer exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoAnswer())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoAnswer())
 
         expected = None
         actual = self.dns_lookup.ptr_record(self.subject)
@@ -812,7 +860,7 @@ class TestDNSLookupPTR(TestCase):
         we get a NoNameservers exception.
         """
 
-        self.dns_lookup.resolver.query = Mock(side_effect=NoNameservers())
+        self.dns_lookup.resolver.resolve = Mock(side_effect=NoNameservers())
 
         expected = None
         actual = self.dns_lookup.ptr_record(self.subject)

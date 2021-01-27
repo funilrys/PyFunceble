@@ -459,6 +459,18 @@
 .. warning::
     If this index is set to :code:`True`, we **ONLY** check for reputation, not availability nor syntax.
 
+:code:`rpz`
+^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / Disable the test of RPZ policies when testing for syntax.
+
+.. warning::
+    This is not taken into consideration if :code:`syntax` is set to :code:`False`.
+
 :code:`shadow_file`
 ^^^^^^^^^^^^^^^^^^^
 
@@ -525,6 +537,23 @@
 
 .. note::
     Understand with "results files" the mirror of what is shown on screen.
+
+:code:`store_whois_record`
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Enable / disable the storage of the WHOIS record into the WHOIS DB.
+
+.. warning::
+    This does not disable the WHOIS DB functionality. It just not storing the full
+    :code:`WHOIS` reply in the database.
+
+.. note: See also `storing-whois <usage/index.html#store-whois>`_ for more information
+
+
 
 :code:`syntax`
 ^^^^^^^^^^^^^^

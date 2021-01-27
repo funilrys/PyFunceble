@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -85,16 +85,15 @@ class Infrastructure:
     :type: str
     """
 
-    IANA_FILENAME = "iana-domains-db.json"
-    """
-    Sets the name of our own IANA database file.
-
-    :type: str
-    """
-
     USER_AGENT_FILENAME = "user_agents.json"
     """
     Sets the name of our own copy of the user agents file.
+    """
+
+    HASHES_FILENAME = "hashes_tracker.json"
+    """
+    Sets the name of the file which will save the hashes of the
+    files we are testing.
     """
 
     IPV4_REPUTATION_FILENAME = "ipv4_reputation.data"
@@ -104,7 +103,7 @@ class Infrastructure:
     :type: str
     """
 
-    PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+    PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
     """
     Sets the link to the production configuration file.
 
@@ -114,6 +113,21 @@ class Infrastructure:
     REPO_LINK = "https://git.io/vpZoI"
     """
     Sets the link to the repository.
+
+    :type: str
+    """
+
+    ALEMBIC_DIRECTORY_NAME = "alembic"
+    """
+    Sets the name of the alembic related directory.
+
+    :type: str
+    """
+
+    CI_MIGRATION_TRIGGER_FILE = ".trigger"
+    """
+    Sets the name of the file to write into for the case that
+    we are migrating to sqlalchemy from inside a CI engine.
 
     :type: str
     """

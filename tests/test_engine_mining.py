@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -160,7 +160,11 @@ class TestMining(TestCase):
 
         self.mining["www.google.com"] = ["github.com"]
 
-        expected[self.file_to_test_instance.path]["www.google.com"].append("github.com")
+        expected = {
+            self.file_to_test_instance.path: {
+                "www.google.com": ["facebook.com", "github.com", "www.facebook.com"]
+            }
+        }
 
         self.assertEqual(expected, self.mining.database)
 
@@ -186,6 +190,15 @@ class TestMining(TestCase):
         self.mining["example.org"] = ["www.facebook.com", "facebook.com"]
 
         self.mining.remove("example.org", "www.facebook.com")
+        self.assertEqual(expected, self.mining.database)
+
+        expected = {
+            self.file_to_test_instance.path: {
+                "myètherwället.com": ["www.facebook.com", "facebook.com"],
+            }
+        }
+        del self.mining["example.org"]
+
         self.assertEqual(expected, self.mining.database)
 
     def test_list_of_mined(self):
@@ -232,7 +245,8 @@ class TestMining(TestCase):
         )
 
         self.assertEqual(
-            expected, actual,
+            expected,
+            actual,
         )
 
 

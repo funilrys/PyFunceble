@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -205,7 +205,12 @@ class Dict:
         return None
 
     def to_json_file(
-        self, file_path, ensure_ascii=False, indent=4, sort_keys=True, encoding="utf-8",
+        self,
+        file_path,
+        ensure_ascii=False,
+        indent=4,
+        sort_keys=True,
+        encoding="utf-8",
     ):
         """
         Converts the given :code:`dict` to JSON and save the result
@@ -255,7 +260,10 @@ class Dict:
         """
 
         return dumps(
-            self.main, ensure_ascii=ensure_ascii, indent=indent, sort_keys=sort_keys,
+            self.main,
+            ensure_ascii=ensure_ascii,
+            indent=indent,
+            sort_keys=sort_keys,
         )
 
     @classmethod

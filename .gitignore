@@ -116,3 +116,4 @@ pyfunceble.db
 whois_db.json
 ipv4_reputation.data
 user_agents.json
+hashes_tracker.json

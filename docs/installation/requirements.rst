@@ -3,30 +3,38 @@ Requirements
 
 Here is the list of requirements:
 
--   Python 3.6.9+
+-   Python 3.6.11+
+-   :code:`alembic`
 -   :code:`colorama`
 -   :code:`cryptography`
 -   :code:`dnspython`
 -   :code:`domain2idna`
+-   :code:`inflection`
 -   :code:`PyMySQL`
 -   :code:`python-box`
 -   :code:`python-dotenv`
 -   :code:`PyYAML`
 -   :code:`requests`
 -   :code:`setuptools`
--   :code:`urllib3`
+-   :code:`sqlalchemy`
 
-Python 3.6.9+
-^^^^^^^^^^^^^
+Python 3.6.11+
+^^^^^^^^^^^^^^
 
-The specification :code:`3.6.9+` is because we test PyFunceble (daily)
-in all version from :code:`3.6.9`.
+The specification :code:`3.6.11+` is because we test PyFunceble (daily)
+in all (:code:`3.x`) versions from :code:`3.6.11`.
 Otherwise, more semantically, PyFunceble is written for all Python 3.6+ version.
+
+:code:`alembic`
+^^^^^^^^^^^^^^^
+
+As we want to automate database (MySQL/MariaDB) schema migration, we
+chose :code:`alembic` for the job.
 
 :code:`colorama`
 ^^^^^^^^^^^^^^^^
 
-As we use some coloration coloration, :code:`colorama` is required.
+As we use some coloration, :code:`colorama` is required.
 
 :code:`cryptography`
 ^^^^^^^^^^^^^^^^^^^^
@@ -51,6 +59,12 @@ As we propose the conversion of domains to IDNA, :code:`domain2idna` is required
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
 .. _on GitHub: https://github.com/PyFunceble/domain2idna
+
+:code:`inflection`
+^^^^^^^^^^^^^^^^^^
+
+We don't necessarily want to reinvent the wheel while generating the (database)
+tables name from our schama descriptions. This tool is a relief!
 
 :code:`PyMySQL`
 ^^^^^^^^^^^^^^^
@@ -83,7 +97,8 @@ As we use :code:`requests` multiple times to communicate with webservices, :code
 
 As we use :code:`install_requires=xx` inside our :code:`setup.py`, :code:`setuptools` is required.
 
-:code:`urllib3`
-^^^^^^^^^^^^^^^
+:code:`sqlalchemy`
+^^^^^^^^^^^^^^^^^^
 
-You should normally already have it. But as we handle some of its errors while using :code:`requests`, :code:`urllib3` is required.
+As we don't want to maintain several RAW SQL files, we use :code:`sqlalchemy`
+for the database communication and manipulation.

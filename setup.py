@@ -45,7 +45,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -54,7 +54,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ License:
 from re import compile as comp
 from unittest import TestLoader
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def _test_suite():
@@ -125,7 +125,7 @@ def _get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setup(
-        name="PyFunceble",
+        name="PyFunceble-dev",
         version=_get_version(),
         python_requires=">=3.6, <4",
         install_requires=_get_requirements(),
@@ -136,26 +136,7 @@ if __name__ == "__main__":
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         platforms=["any"],
-        packages=[
-            "PyFunceble.abstracts",
-            "PyFunceble.cli",
-            "PyFunceble.config",
-            "PyFunceble.converter",
-            "PyFunceble.core",
-            "PyFunceble.database",
-            "PyFunceble.downloader",
-            "PyFunceble.engine.ci",
-            "PyFunceble.engine",
-            "PyFunceble.extractor",
-            "PyFunceble.helpers",
-            "PyFunceble.lookup",
-            "PyFunceble.output",
-            "PyFunceble.status.availability",
-            "PyFunceble.status.reputation",
-            "PyFunceble.status.syntax",
-            "PyFunceble.status",
-            "PyFunceble",
-        ],
+        packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
         keywords=[
             "availability",
             "dns",
@@ -174,7 +155,7 @@ if __name__ == "__main__":
         classifiers=[
             "Environment :: Console",
             "Topic :: Internet",
-            "Development Status :: 5 - Production/Stable",
+            "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",

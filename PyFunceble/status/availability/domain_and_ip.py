@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -80,18 +80,19 @@ class DomainAndIp(GathererBase):
         if not self.status.whois_server:
             return None, None
 
+        expiration_date_from_database, whois_record = None, None
+
         if self.whois_db:
-            expiration_date_from_database = self.whois_db.get_expiration_date(
-                self.subject
-            )
-        else:
-            expiration_date_from_database = None
+            (
+                expiration_date_from_database,
+                whois_record,
+            ) = self.whois_db.get_expiration_date(self.status.tested)
 
         if expiration_date_from_database:
-            return expiration_date_from_database, "DATE EXTRACTED FROM WHOIS DATABASE"
+            return expiration_date_from_database, whois_record
 
         whois_record = PyFunceble.lookup.Whois(
-            self.subject,
+            self.status.tested,
             self.status.whois_server,
             timeout=PyFunceble.CONFIGURATION.timeout,
         ).request()
@@ -107,17 +108,24 @@ class DomainAndIp(GathererBase):
                 # The formatted expiration date does not match our unified format.
 
                 # We log the problem.
-                PyFunceble.output.Logs().expiration_date(self.subject, expiration_date)
+                PyFunceble.output.Logs().expiration_date(
+                    self.status.tested, expiration_date
+                )
 
                 PyFunceble.LOGGER.error(
                     "Expiration date of "
-                    f"{repr(self.subject)} ({repr(expiration_date)}) "
-                    "was not converted proprely."
+                    f"{repr(self.status.tested)} ({repr(expiration_date)}) "
+                    "was not converted properly."
                 )
 
             if self.whois_db:
                 # We save the whois record into the database.
-                self.whois_db.add(self.subject, expiration_date, whois_record)
+                self.whois_db.add(
+                    self.status.tested,
+                    expiration_date,
+                    self.status.whois_server,
+                    whois_record,
+                )
         except PyFunceble.exceptions.WrongParameterType:
             expiration_date = None
 
@@ -130,7 +138,9 @@ class DomainAndIp(GathererBase):
 
         if self.status["_status"].lower() not in PyFunceble.STATUS.list.invalid:
             if self.status["_status"].lower() in PyFunceble.STATUS.list.down:
-                self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
+                self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(
+                    self.status.tested
+                )
 
                 if self.status.dns_lookup:
                     self.status["_status"] = PyFunceble.STATUS.official.up
@@ -139,7 +149,7 @@ class DomainAndIp(GathererBase):
                     self.status["_status"] = PyFunceble.STATUS.official.down
                     self.status["_status_source"] = "DNSLOOKUP"
         else:
-            self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.subject)
+            self.status.dns_lookup = PyFunceble.DNSLOOKUP.request(self.status.tested)
 
             if self.status.dns_lookup:
                 # This is a safety. Indeed, as I may not be that reactive in the
@@ -150,14 +160,14 @@ class DomainAndIp(GathererBase):
                 self.status["_status_source"] = "DNSLOOKUP"
 
         PyFunceble.LOGGER.debug(
-            f'[{self.subject}] State before extra rules:\n{self.status["_status"]}'
+            f'[{self.status.given}] State before extra rules:\n{self.status["_status"]}'
         )
 
         self.gather_http_status_code()
 
         self.status.status, self.status.status_source = ExtraRules(
-            self.subject, self.subject_type, self.status.http_status_code
-        ).handle(self.status["_status"], self.status["_status_source"])
+            self.status, self.subject_type, self.status.http_status_code
+        ).handle()
 
     def __gather(self):
         """
@@ -198,7 +208,7 @@ class DomainAndIp(GathererBase):
             self.__gather_extra_rules()
 
         PyFunceble.output.Generate(
-            self.subject,
+            self.status.given,
             self.subject_type,
             self.status.status,
             source=self.status.status_source,
@@ -214,4 +224,4 @@ class DomainAndIp(GathererBase):
             )
         )
 
-        PyFunceble.LOGGER.debug(f"[{self.subject}] State:\n{self.status.get()}")
+        PyFunceble.LOGGER.debug(f"[{self.status.given}] State:\n{self.status.get()}")

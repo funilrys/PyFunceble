@@ -25,7 +25,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -34,7 +34,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 import warnings
 from datetime import datetime
 from os import path
@@ -58,19 +57,21 @@ from time import sleep
 from colorama import Fore
 from dotenv import load_dotenv
 
-import PyFunceble.abstracts as abstracts
-import PyFunceble.config as cconfig
-import PyFunceble.converter as converter
-import PyFunceble.core as core
-import PyFunceble.database as database
-import PyFunceble.downloader as downloader
-import PyFunceble.engine as engine
-import PyFunceble.exceptions as exceptions
-import PyFunceble.extractor as extractor
-import PyFunceble.helpers as helpers
-import PyFunceble.lookup as lookup
-import PyFunceble.output as output
-import PyFunceble.status as status
+from PyFunceble import abstracts
+from PyFunceble import config as cconfig
+from PyFunceble import (
+    converter,
+    core,
+    database,
+    downloader,
+    engine,
+    exceptions,
+    extractor,
+    helpers,
+    lookup,
+    output,
+    status,
+)
 from PyFunceble.check import Check
 
 # We set our project name.
@@ -145,6 +146,11 @@ else:  # pragma: no cover
             #   * `APPDATA` is not into the environnement variables.
             # We set the current directory as the directory we are working with.
             CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
+    else:
+        # We are under somethint we don't know about.
+
+        # We set the current directory as the directory we are working with.
+        CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
 
     if not CONFIG_DIRECTORY.endswith(directory_separator):
         # If the directory we are working with does not ends with the directory
@@ -258,6 +264,7 @@ def test(subject, complete=False, config=None):  # pragma: no cover
                 "dns_lookup": [],
                 "domain_syntax_validation": None,
                 "expiration_date": None,
+                "given": None,
                 "http_status_code": None,
                 "ipv4_range_syntax_validation": None,
                 "ipv4_syntax_validation": None,
@@ -323,6 +330,7 @@ def url_test(subject, complete=False, config=None):  # pragma: no covere
                 "dns_lookup": [],
                 "domain_syntax_validation": None,
                 "expiration_date": None,
+                "given": None,
                 "http_status_code": None,
                 "ipv4_range_syntax_validation": None,
                 "ipv4_syntax_validation": None,
@@ -671,7 +679,9 @@ def is_url(subject):  # pragma: no cover
     return None
 
 
-def load_config(generate_directory_structure=False, custom=None):  # pragma: no cover
+def load_config(
+    generate_directory_structure=False, custom=None, sanity_check=False
+):  # pragma: no cover
     """
     Load the configuration.
 
@@ -681,6 +691,9 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
 
     :param dict custom:
         A dict with the configuration index (from .PyFunceble.yaml) to update.
+
+    :param bool sanity_check:
+        Tell us to run the safety check of the configuration.
 
     .. note::
         If :code:`config` is given, the given :code:`dict` overwrite
@@ -704,6 +717,9 @@ def load_config(generate_directory_structure=False, custom=None):  # pragma: no 
         LOADER.set_custom_config(custom)
     else:
         LOADER.set_custom_config(custom)
+
+    if sanity_check:
+        cconfig.Preset().init_all()
 
     if generate_directory_structure:
         output.Constructor()

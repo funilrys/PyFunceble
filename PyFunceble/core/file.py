@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -34,7 +34,7 @@ Project homepage:
 License:
 ::
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,9 +51,12 @@ License:
 
 from tempfile import NamedTemporaryFile
 
-from domain2idna import get as domain2idna
+from sqlalchemy.orm.exc import NoResultFound
 
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
+from PyFunceble.engine.database.schemas.whois_record import WhoisRecord
 
 from .cli import CLICore
 
@@ -107,24 +110,22 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             # We get the destination.
             destination = input_file.split("/")[-1]
 
-            if input_file and PyFunceble.engine.AutoContinue(destination).is_empty():
+            if input_file and (
+                not PyFunceble.helpers.File(destination).exists()
+                or PyFunceble.engine.AutoContinue(destination).is_empty()
+                or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
+            ):
                 # The given file is an URL.
 
-                if (
-                    not PyFunceble.helpers.File(destination).exists()
-                    or PyFunceble.INTERN["counter"]["number"]["tested"] == 0
-                ):
-                    # The filename does not exist in the current directory
-                    # or the currently number of tested is equal to 0.
+                # The filename does not exist in the current directory
+                # or the currently number of tested is equal to 0.
 
-                    # We download the content of the link.
-                    PyFunceble.helpers.Download(input_file).text(
-                        destination=destination
-                    )
+                # We download the content of the link.
+                PyFunceble.helpers.Download(input_file).text(destination=destination)
 
-                    PyFunceble.LOGGER.info(
-                        f"Downloaded {repr(input_file)} into {repr(destination)}"
-                    )
+                PyFunceble.LOGGER.info(
+                    f"Downloaded {repr(input_file)} into {repr(destination)}"
+                )
 
             return destination
         return input_file
@@ -170,43 +171,51 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-
-            to_select = (
-                "SELECT tested as subject, status, status_source, expiration_date, "
-                "http_status_code, whois_server, file_path "
-                "FROM {0} WHERE status = %(official_status)s "
-                "AND file_path = %(file_path)s ORDER BY subject ASC"
-            ).format(PyFunceble.engine.MySQL.tables["tested"])
-
-            with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                cursor.execute(
-                    to_select, {"official_status": status, "file_path": self.file}
+            with session.Session() as db_session:
+                fetched = (
+                    # pylint: disable=no-member, singleton-comparison
+                    db_session.query(Status)
+                    .join(File)
+                    .filter(File.path == self.file)
+                    .filter(Status.status == status)
+                    .filter(Status.test_completed == True)
+                    .all()
                 )
 
-                fetched = cursor.fetchall()
-
-                if fetched:
-                    for data in fetched:
-                        generate = PyFunceble.output.Generate(
-                            data["subject"],
-                            f"file_{self.file_type}",
-                            data["status"],
-                            source=data["status_source"],
-                            expiration_date=data["expiration_date"],
-                            http_status_code=data["http_status_code"],
-                            whois_server=data["whois_server"],
-                            filename=self.file,
-                            end=True,
-                        )
-
-                        if include_entries_without_changes:
-                            generate.status_file(exclude_file_generation=False)
-                        else:
-                            generate.status_file(
-                                exclude_file_generation=self.inactive_db.authorized
-                                and data["status"] not in self.list_of_up_statuses
-                                and data["subject"] in self.inactive_db.to_retest
+            if fetched:
+                for data in fetched:
+                    with session.Session() as db_session:
+                        try:
+                            # pylint: disable=no-member
+                            whois_record = (
+                                db_session.query(WhoisRecord)
+                                .filter(WhoisRecord.subject == data.tested)
+                                .one()
                             )
+                            whois_server = whois_record.server
+                        except NoResultFound:
+                            whois_server = None
+
+                    generate = PyFunceble.output.Generate(
+                        data.tested,
+                        f"file_{self.file_type}",
+                        data.status,
+                        source=data.status_source,
+                        expiration_date=data.expiration_date,
+                        http_status_code=data.http_status_code,
+                        whois_server=whois_server,
+                        filename=self.file,
+                        end=True,
+                    )
+
+                    if include_entries_without_changes:
+                        generate.status_file(exclude_file_generation=False)
+                    else:
+                        generate.status_file(
+                            exclude_file_generation=self.inactive_db.authorized
+                            and data.status not in self.list_of_up_statuses
+                            and data.tested in self.inactive_db.to_retest
+                        )
 
     def generate_files(self, include_entries_without_changes=False):  # pragma: no cover
         """
@@ -252,9 +261,6 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
         Tests the given subject and return it's results.
         """
-
-        if PyFunceble.CONFIGURATION.idna_conversion:
-            subject = domain2idna(subject)
 
         if isinstance(PyFunceble.CONFIGURATION.cooldown_time, (float, int)):
             PyFunceble.sleep(PyFunceble.CONFIGURATION.cooldown_time)
@@ -304,7 +310,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 filename=self.file,
             ).get()
 
-        self.generate_complement_status_file(result["tested"], result["status"])
+        self.generate_complement_status_file(result["given"], result["status"])
         self.save_into_database(result, self.file)
 
         return result
@@ -323,33 +329,45 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             PyFunceble.LOGGER.debug(f"Ignored {subject} because not true.")
             return True
 
+        PyFunceble.LOGGER.debug(f"Continue. {subject} evaluates to {True}.")
+
         if subject.startswith(PyFunceble.converter.File.comment_sign):
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it starts with comment sign."
             )
             return True
 
-        if auto_continue_db and subject in auto_continue_db.get_already_tested():
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} does not starts with {PyFunceble.converter.File.comment_sign}."
+        )
+
+        if auto_continue_db and subject in auto_continue_db:
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it is into the list of already tested (autocontinue)."
             )
             return True
 
-        if (
-            not ignore_inactive_db_check
-            and inactive_db
-            and subject in inactive_db.get_already_tested()
-        ):
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} is not into the list of already tested (autocontinue)."
+        )
+
+        if not ignore_inactive_db_check and inactive_db and subject in inactive_db:
             PyFunceble.LOGGER.debug(
                 f"Ignored {subject} because it is into the list of already tested (inactive_db)."
             )
             return True
+
+        PyFunceble.LOGGER.debug(
+            f"Continue. {subject} is not into the list of already tested (inactive_db)."
+        )
 
         if PyFunceble.helpers.Regex(cls.regex_ignore).match(
             subject, return_match=False
         ):
             PyFunceble.LOGGER.debug(f"Ignored {subject} because it match our regex.")
             return True
+
+        PyFunceble.LOGGER.debug(f"Continue. {subject} does not match our regex.")
 
         if (
             not PyFunceble.CONFIGURATION.local
@@ -360,6 +378,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             )
             return True
 
+        PyFunceble.LOGGER.debug(f"Continue. {subject} is not a reserved IP.")
+
         if PyFunceble.CONFIGURATION.filter and not PyFunceble.helpers.Regex(
             PyFunceble.CONFIGURATION.filter
         ).match(subject, return_match=False):
@@ -368,6 +388,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 f"match the given filter ({PyFunceble.CONFIGURATION.fileter})"
             )
             return True
+
+        PyFunceble.LOGGER.debug(f"Continue. {subject} (possibly) match a filter.")
 
         return False
 
@@ -386,22 +408,22 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         """
 
         if auto_continue_db:
-            auto_continue_db.add(test_output["tested"], test_output["status"])
+            auto_continue_db.add(test_output["given"], test_output["status"])
 
         if test_output["status"].lower() in self.list_of_up_statuses:
             if mining:
                 mining.mine(test_output["tested"], file_content_type)
 
-            if inactive_db and test_output["tested"] in inactive_db:
+            if inactive_db and test_output["given"] in inactive_db:
                 PyFunceble.output.Generate(
-                    test_output["tested"],
+                    test_output["given"],
                     f"file_{file_content_type}",
                     PyFunceble.STATUS.official.up,
                 ).analytic_file("suspicious")
 
-                inactive_db.remove(test_output["tested"])
+                inactive_db.remove(test_output["given"])
         elif inactive_db:
-            inactive_db.add(test_output["tested"], test_output["status"])
+            inactive_db.add(test_output["given"], test_output["status"])
 
         if (
             auto_continue_db
@@ -410,9 +432,9 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         ):
             if "complements" in auto_continue_db.database:
 
-                while test_output["tested"] in auto_continue_db.database["complements"]:
+                while test_output["given"] in auto_continue_db.database["complements"]:
                     auto_continue_db.database["complements"].remove(
-                        test_output["tested"]
+                        test_output["given"]
                     )
                     auto_continue_db.save()
 
@@ -425,6 +447,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             whois_db.add(
                 test_output["tested"],
                 test_output["expiration_date"],
+                test_output["whois_server"],
                 test_output["whois_record"],
             )
 
@@ -433,7 +456,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             and PyFunceble.CONFIGURATION.multiprocess
         ):
             generate = PyFunceble.output.Generate(
-                test_output["tested"],
+                test_output["given"],
                 f"file_{self.file_type}",
                 test_output["status"],
                 source=test_output["status_source"],
@@ -452,16 +475,14 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         Runs the logic to run at the end of all test.
         """
 
-        if test_completed:
+        if test_completed or auto_save.is_time_exceed():
             auto_continue_db.update_counters()
             self.generate_files()
             self.sort_generated_files()
-            auto_continue_db.clean()
-            auto_save.process(test_completed=test_completed)
-        elif auto_save.is_time_exceed():
-            auto_continue_db.update_counters()
-            self.generate_files()
-            self.sort_generated_files()
+
+            if test_completed:
+                auto_continue_db.clean()
+
             auto_save.process(test_completed=test_completed)
 
     def __run_single_test(self, subject, ignore_inactive_db_check=False):
@@ -509,6 +530,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             subjects = PyFunceble.converter.AdBlock(
                 line, aggressive=PyFunceble.CONFIGURATION.aggressive
             ).get_converted()
+        elif PyFunceble.CONFIGURATION.rpz:
+            subjects = PyFunceble.converter.RPZFile(line).get_converted()
         else:
             subjects = PyFunceble.converter.File(line).get_converted()
 
@@ -554,7 +577,7 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             inactive_db = self.inactive_db
 
         if isinstance(subjects, list):
-            comparison = [
+            comparison = {
                 self.should_be_ignored(
                     x,
                     auto_continue_db=autocontinue,
@@ -562,16 +585,16 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                     ignore_inactive_db_check=ignore_inactive_db_check,
                 )
                 for x in subjects
-            ]
+            }
         else:
-            comparison = [
+            comparison = {
                 self.should_be_ignored(
                     subjects,
                     auto_continue_db=autocontinue,
                     inactive_db=inactive_db,
                     ignore_inactive_db_check=ignore_inactive_db_check,
                 )
-            ]
+            }
 
         if all(comparison) and (
             self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots
@@ -626,8 +649,27 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
         with open(self.file, "r", encoding="utf-8") as file_stream, open(
             self.construct_and_get_shadow_file(file_stream), "r"
         ) as shadow_file:
-            for subject in shadow_file:
-                self.__test_line(subject)
+            tracker = PyFunceble.engine.HashesTracker(shadow_file.name)
+
+            minimum_position = tracker.get_position()
+            file_position = 0
+
+            for line in shadow_file:
+                if tracker.authorized and file_position < minimum_position:
+                    file_position += len(line)
+
+                    if self.autosave.authorized or PyFunceble.CONFIGURATION.print_dots:
+                        PyFunceble.LOGGER.info(
+                            f"Skipped {line!r}: insufficient position."
+                        )
+                        print(".", end="")
+
+                    continue
+
+                self.__test_line(line)
+
+                file_position += len(line)
+                tracker.set_position(file_position)
 
             shadow_file_name = shadow_file.name
 
@@ -642,8 +684,8 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
                 "r",
                 encoding="utf-8",
             ) as shadow_file:
-                for subject in shadow_file:
-                    self.__test_line(subject, ignore_inactive_db_check=True)
+                for line in shadow_file:
+                    self.__test_line(line, ignore_inactive_db_check=True)
 
                 shadow_file_name = shadow_file.name
 
@@ -664,4 +706,5 @@ class FileCore(CLICore):  # pylint: disable=too-many-instance-attributes
             self.__test_line(subject)
             self.mining.remove(index, subject)
 
+        tracker.reset_position()
         self.cleanup(self.autocontinue, self.autosave, test_completed=True)

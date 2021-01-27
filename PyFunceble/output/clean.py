@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,7 +53,11 @@ License:
 from os import sep as directory_separator
 from os import walk
 
+from sqlalchemy.orm.exc import NoResultFound
+
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import File, Status
 
 
 class Clean:
@@ -142,38 +146,60 @@ class Clean:
         # We initate the result variable.
         result = []
 
-        if PyFunceble.CONFIGURATION.db_type == "json":
-            # We initiate the directory we have to look for.
-            directory = PyFunceble.CONFIG_DIRECTORY
+        # We initiate the directory we have to look for.
+        directory = PyFunceble.CONFIG_DIRECTORY
 
-            # We append the dir_structure file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.dir_structure
-                )
-            )
+        # We append the dir_structure file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.dir_structure)
+        )
 
-            # We append the iana file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana)
-            )
+        # We append the iana file.
+        result.append("{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.iana))
 
-            # We append the public suffix file.
-            result.append(
-                "{0}{1}".format(
-                    directory, PyFunceble.OUTPUTS.default_files.public_suffix
-                )
-            )
+        # We append the public suffix file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.public_suffix)
+        )
 
-            # We append the inactive database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
-            )
+        # We append the inactive database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.inactive_db)
+        )
 
-            # We append the mining database file.
-            result.append(
-                "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        # We append the mining database file.
+        result.append(
+            "{0}{1}".format(directory, PyFunceble.OUTPUTS.default_files.mining)
+        )
+
+        # We append the hashes tracker file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.HASHES_FILENAME
             )
+        )
+
+        # We append the user agent file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
+            )
+        )
+
+        # We append our downtime file.
+        result.append(
+            "{0}{1}".format(
+                directory, PyFunceble.abstracts.Infrastructure.DOWN_FILENAME
+            )
+        )
+
+        # We append the ipv4 reputation file.
+        result.append(
+            "{0}{1}".format(
+                directory,
+                PyFunceble.abstracts.Infrastructure.IPV4_REPUTATION_FILENAME,
+            )
+        )
 
         return result
 
@@ -206,36 +232,40 @@ class Clean:
 
                 PyFunceble.LOGGER.info(f"Deleted: {file}")
 
-            if clean_all:  # pragma: no cover
-                to_avoid = ["whois"]
-            else:
-                to_avoid = ["whois", "auto_continue", "inactive", "mining"]
-
-            if not file_path:
-                query = "DELETE FROM {0}"
-            else:  # pragma: no cover
-                query = "DELETE FROM {0} WHERE file_path = %(file_path)s"
-
             if PyFunceble.CONFIGURATION.db_type in [
                 "mariadb",
                 "mysql",
             ]:  # pragma: no cover
 
-                with PyFunceble.engine.MySQL() as connection:
-                    for database_name in [
-                        y
-                        for x, y in PyFunceble.engine.MySQL.tables.items()
-                        if x not in to_avoid
-                    ]:
-                        lquery = query.format(database_name)
+                if file_path:
 
-                        with connection.cursor() as cursor:
-                            cursor.execute(lquery, {"file_path": file_path})
+                    with session.Session() as db_session:
+                        # pylint: disable=no-member, singleton-comparison
 
-                            PyFunceble.LOGGER.info(
-                                "Cleaned the data related to "
-                                f"{repr(file_path)} from the {database_name} table."
+                        try:
+                            file = (
+                                db_session.query(File)
+                                .filter(File.path == file_path)
+                                .filter(File.test_completed == True)
+                                .one()
                             )
+
+                            for subject in file.subjects.filter(
+                                Status.status.in_(PyFunceble.core.CLI.get_up_statuses())
+                            ):
+                                db_session.delete(subject)
+
+                            file.test_completed = False
+
+                            db_session.commit()
+                        except NoResultFound:
+                            pass
+                else:
+                    with session.Session() as db_session:
+                        for file in db_session.query(File):
+                            db_session.delete(file)
+
+                        db_session.commit()
 
             if (
                 not PyFunceble.abstracts.Version.is_local_cloned() and clean_all

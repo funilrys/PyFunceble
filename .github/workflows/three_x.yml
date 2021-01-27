@@ -1,0 +1,321 @@
+name: 3.x (Retro-compatibility) Deployment Workflow
+on:
+  pull_request:
+    branches:
+      - 3.x
+  push:
+    branches:
+      - 3.x
+
+jobs:
+  lint:
+    name: Lint PyFunceble
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9.1"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pylint
+
+      - name: Lint PyFunceble with Pylint
+        run: pylint PyFunceble
+
+      - name: Lint tests with Pylint
+        run: pylint tests
+
+  deps_safety_check:
+    name: Check the safety of our dependencies.
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install safety
+
+      - name: Check the safety of our dependencies.
+        run: safety check
+
+  test:
+    needs: [lint, deps_safety_check]
+    name: "[${{ matrix.os }}] Test PyFunceble with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox coveralls
+
+      - name: Test PyFunceble as defined by tox.ini
+        run: |
+          tox -c tox.ini
+
+      - name: Upload Coverage
+        run: |
+          coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_PARALLEL: true
+
+  coveralls:
+    needs: test
+    name: Finish Coveralls
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - name: Sending finish flag to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+
+  run_cli:
+    needs: test
+    name: "[${{ matrix.os }}] Run PyFunceble with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox
+
+      - name: Run PyFunceble as defined by tox_run.ini
+        run: tox -c tox_run.ini
+
+  run_cli_mariadb:
+    needs: test
+    name: "[${{ matrix.os }}] Run PyFunceble (with mariadb) with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    services:
+      mariadb:
+        image: ghcr.io/pyfunceble/mariadb/mariadb:latest
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_USER: pyfunceble
+          MYSQL_PASSWORD: my_pyfunceble_password
+          MYSQL_DATABASE: pyfunceble
+          MYSQL_ROOT_PASSWORD: my_awesome_root_password
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    env:
+      PYFUNCEBLE_DB_CHARSET: utf8mb4
+      PYFUNCEBLE_DB_HOST: "127.0.0.1"
+      PYFUNCEBLE_DB_NAME: pyfunceble
+      PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
+      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_USERNAME: pyfunceble
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox
+
+      - name: Run PyFunceble as defined by tox_run_mariadb.ini
+        run: tox -c tox_run_mariadb.ini
+
+  deploy_to_pypi:
+    needs: [run_cli, run_cli_mariadb]
+    name: "Deploy 📦 to the PyPi"
+
+    if: github.event_name == 'push'
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install twine wheel setuptools
+
+      - name: Build 📦
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Check 📦
+        run: |
+          twine check dist/*
+
+      - name: Publish 📦 to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_DEV_API_TOKEN }}
+          skip_existing: true
+
+  deploy_to_docker_hub:
+    needs: [run_cli, run_cli_mariadb]
+    name: "Deploy 📦 to the Docker Hub"
+
+    if: github.event_name == 'push'
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.9"
+        os:
+          - ubuntu-latest
+
+    env:
+      DOCKER_PYTHON_VERSION: "3.9"
+      BUILDER_CLONE_DIRNAME: pyfunceble_docker
+      OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
+      OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
+      OUR_DOCKER_EMAIL: ${{ secrets.OUR_DOCKER_EMAIL }}
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - uses: actions/checkout@v2
+        name: Clone docker 📦 repository
+        with:
+          repository: PyFunceble/docker
+          path: ${{ env.BUILDER_CLONE_DIRNAME }}/
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install ${{ env.BUILDER_CLONE_DIRNAME }}/.
+
+      - name: Get version of builder
+        run: |
+          pyfunceble-docker-builder --version
+
+      - name: Build, Check and Publish 📦
+        run: >
+          pyfunceble-docker-builder -b ${{ env.BUILDER_CLONE_DIRNAME }}/builder
+          -p "$(python setup.py --name)"
+          --pyfunceble-version="$(python setup.py --version)"
+          --python-version="${DOCKER_PYTHON_VERSION}"
+          --publish --commit="$(git log -1 --format=format:'%H')"

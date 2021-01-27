@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2050 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -82,18 +82,26 @@ class TestWhoisDB(TestCase):
 
         self.our_dataset = {
             "google.com": {
-                "epoch": "1600034400",
-                "expiration_date": "14-sep-2020",
+                "epoch": "2546805600",
+                "expiration_date": "14-sep-2050",
                 "state": "future",
             },
+            "example.com": {
+                "epoch": "2546805600",
+                "expiration_date": "14-sep-2050",
+                "state": "future",
+                "record": "Hello, World!",
+            },
             "github.com": {
-                "epoch": "1602194400",
-                "expiration_date": "09-oct-2020",
+                "epoch": "2548965600",
+                "expiration_date": "09-oct-2050",
                 "state": "future",
             },
         }
 
         PyFunceble.helpers.File(self.storage_file).delete()
+
+        PyFunceble.CONFIGURATION.no_whois = False
 
     def tearDown(self):
         """
@@ -135,23 +143,23 @@ class TestWhoisDB(TestCase):
         PyFunceble.CONFIGURATION.whois_database = False
         expected = False
 
-        self.assertEqual(expected, self.whois_db.authorization())
+        self.assertEqual(expected, self.whois_db.authorized)
 
         PyFunceble.CONFIGURATION.no_whois = False
         PyFunceble.CONFIGURATION.whois_database = False
 
-        self.assertEqual(expected, self.whois_db.authorization())
+        self.assertEqual(expected, self.whois_db.authorized)
 
         PyFunceble.CONFIGURATION.no_whois = True
         PyFunceble.CONFIGURATION.whois_database = True
 
-        self.assertEqual(expected, self.whois_db.authorization())
+        self.assertEqual(expected, self.whois_db.authorized)
 
         PyFunceble.CONFIGURATION.no_whois = False
         PyFunceble.CONFIGURATION.whois_database = True
         expected = True
 
-        self.assertEqual(expected, self.whois_db.authorization())
+        self.assertEqual(expected, self.whois_db.authorized)
 
     def test_save(self):
         """
@@ -197,7 +205,7 @@ class TestWhoisDB(TestCase):
         self.whois_db.database = self.our_dataset.copy()
 
         self.whois_db.database["google.com"]["epoch"] = (
-            datetime.now() - timedelta(days=15)
+            datetime.utcnow() - timedelta(days=15)
         ).timestamp()
 
         expected = True
@@ -206,7 +214,7 @@ class TestWhoisDB(TestCase):
         self.assertEqual(expected, actual)
 
         self.whois_db.database["google.com"]["epoch"] = (
-            datetime.now() + timedelta(days=15)
+            datetime.utcnow() + timedelta(days=15)
         ).timestamp()
 
         expected = False
@@ -222,12 +230,17 @@ class TestWhoisDB(TestCase):
 
         self.whois_db.database = self.our_dataset.copy()
 
-        expected = "14-sep-2020"
+        expected = "14-sep-2050", None
         actual = self.whois_db.get_expiration_date("google.com")
 
         self.assertEqual(expected, actual)
 
-        expected = None
+        expected = "14-sep-2050", "Hello, World!"
+        actual = self.whois_db.get_expiration_date("example.com")
+
+        self.assertEqual(expected, actual)
+
+        expected = None, None
         actual = self.whois_db.get_expiration_date("hello.google.com")
 
         self.assertEqual(expected, actual)
@@ -246,15 +259,16 @@ class TestWhoisDB(TestCase):
                 "epoch": epoch,
                 "expiration_date": "25-dec-2022",
                 "state": "future",
+                "server": "example.org",
             }
         }
 
-        self.whois_db.add("microsoft.google.com", "25-dec-2022")
+        self.whois_db.add("microsoft.google.com", "25-dec-2022", "example.org")
 
         self.assertEqual(expected, self.whois_db.database)
 
         self.whois_db.database["microsoft.google.com"]["state"] = "hello"
-        self.whois_db.add("microsoft.google.com", "25-dec-2022")
+        self.whois_db.add("microsoft.google.com", "25-dec-2022", "example.org")
 
         self.assertEqual(expected, self.whois_db.database)
 
@@ -265,10 +279,11 @@ class TestWhoisDB(TestCase):
                 "epoch": epoch,
                 "expiration_date": "25-dec-2007",
                 "state": "past",
+                "server": "example.org",
             }
         }
 
-        self.whois_db.add("microsoft.google.com", "25-dec-2007")
+        self.whois_db.add("microsoft.google.com", "25-dec-2007", "example.org")
 
         self.assertEqual(expected, self.whois_db.database)
 

@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -127,7 +127,8 @@ class TestHash(TestCase):
         expected = None
         for algo in self.expected_hashed:
             self.assertEqual(
-                expected, Hash(algo=algo).file(self.file),
+                expected,
+                Hash(algo=algo).file(self.file),
             )
 
     def test_hash_file(self):
@@ -151,7 +152,8 @@ class TestHash(TestCase):
 
         for algo, expected in self.expected_hashed.items():
             self.assertEqual(
-                expected, Hash(algo=algo).file(self.file),
+                expected,
+                Hash(algo=algo).file(self.file),
             )
 
         file_instance.delete()

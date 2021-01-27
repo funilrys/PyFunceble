@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,7 +52,11 @@ License:
 
 from datetime import datetime
 
+from sqlalchemy.orm.exc import NoResultFound
+
 import PyFunceble
+from PyFunceble.engine.database.loader import session
+from PyFunceble.engine.database.schemas import WhoisRecord
 
 
 class WhoisDB:
@@ -63,11 +67,9 @@ class WhoisDB:
     database = {}
 
     database_file = None
-    authorized = False
 
     def __init__(self, parent_process=False):
         # Get the authorization.
-        self.authorized = self.authorization()
         self.database_file = ""
 
         if PyFunceble.CONFIGURATION.db_type == "json":
@@ -77,9 +79,7 @@ class WhoisDB:
             )
 
         self.parent = parent_process
-        self.table_name = self.get_table_name()
 
-        PyFunceble.LOGGER.debug(f"Table Name: {self.table_name}")
         PyFunceble.LOGGER.debug(f"DB (File): {self.database_file}")
 
         # We load the configuration.
@@ -96,20 +96,21 @@ class WhoisDB:
                 return False
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                query = "SELECT COUNT(*) FROM {0} WHERE subject = %(subject)s".format(
-                    self.table_name
-                )
+                with session.Session() as db_session:
+                    try:
+                        # pylint: disable=no-member
+                        _ = (
+                            db_session.query(WhoisRecord).filter(
+                                WhoisRecord.subject == index
+                            )
+                        ).one()
 
-                with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                    cursor.execute(query, {"subject": index})
-
-                    fetched = cursor.fetchone()
-
-                    if fetched["COUNT(*)"] != 0:
                         PyFunceble.LOGGER.info(f"{index} is present into the database.")
                         return True
-
-                    PyFunceble.LOGGER.info(f"{index} is not present into the database.")
+                    except NoResultFound:
+                        PyFunceble.LOGGER.info(
+                            f"{index} is not present into the database."
+                        )
 
         return False  # pragma: no cover
 
@@ -118,35 +119,35 @@ class WhoisDB:
             if PyFunceble.CONFIGURATION.db_type == "json":
                 if index in self.database:
                     return self.database[index]
-
                 return None
 
             if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 fetched = None
 
-                if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-                    query = "SELECT * FROM {0} WHERE subject = %(subject)s".format(
-                        self.table_name
-                    )
+                with session.Session() as db_session:
+                    try:
+                        # pylint: disable=no-member
+                        fetched = (
+                            db_session.query(WhoisRecord).filter(
+                                WhoisRecord.subject == index
+                            )
+                        ).one()
 
-                    with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-                        cursor.execute(query, {"subject": index})
-
-                        fetched = cursor.fetchone()
-
-                if fetched:
-                    return {
-                        "epoch": fetched["expiration_date_epoch"],
-                        "expiration_date": fetched["expiration_date"],
-                        "state": fetched["state"],
-                    }
+                        return {
+                            "epoch": fetched.epoch,
+                            "expiration_date": fetched.expiration_date,
+                            "state": fetched.state,
+                            "record": fetched.record,
+                        }
+                    except NoResultFound:
+                        pass
 
         return None  # pragma: no cover
 
     def __setitem_json(self, index, value):
         actual_value = self[index]
 
-        if "record" in value:
+        if not PyFunceble.CONFIGURATION.store_whois_record and "record" in value:
             del value["record"]
 
         if isinstance(actual_value, dict):
@@ -166,34 +167,36 @@ class WhoisDB:
             f"Inserted {repr(value)} into the subset of {repr(index)}"
         )
 
-    def __setitem_mysql(self, index, value):
-        query = (
-            "INSERT INTO {0} "
-            "(subject, expiration_date, expiration_date_epoch, state, record, digest) "
-            "VALUES  (%(subject)s, %(expiration_date)s, %(epoch)s, %(state)s, %(record)s, %(digest)s)"  # pylint: disable=line-too-long
-        ).format(self.table_name)
-
-        digest = PyFunceble.helpers.Hash(algo="sha256").data(
-            bytes(
-                index + value["expiration_date"] + str(value["epoch"]) + value["state"],
-                "utf-8",
-            )
-        )
-
-        with PyFunceble.engine.MySQL() as connection, connection.cursor() as cursor:
-            playload = {
-                "subject": index,
-                "expiration_date": value["expiration_date"],
-                "epoch": value["epoch"],
-                "state": value["state"],
-                "record": value["record"],
-                "digest": digest,
-            }
+    @classmethod
+    def __setitem_mysql(cls, index, value):
+        with session.Session() as db_session:
+            record_found_in_db = False
             try:
-                cursor.execute(query, playload)
-                PyFunceble.LOGGER.info(f"Inserted into the database: \n {playload}")
-            except PyFunceble.engine.MySQL.errors:
-                pass
+                # pylint: disable=no-member
+                record = (
+                    db_session.query(WhoisRecord)
+                    .filter(WhoisRecord.subject == index)
+                    .one()
+                )
+                record_found_in_db = True
+            except NoResultFound:
+                record = WhoisRecord(
+                    subject=index,
+                )
+
+            for db_key, db_value in value.items():
+                if (
+                    not PyFunceble.CONFIGURATION.store_whois_record
+                    and db_key == "record"
+                ):
+                    continue
+                setattr(record, db_key, db_value)
+
+            if not record_found_in_db:
+                db_session.add(record)
+
+            db_session.commit()
+            PyFunceble.LOGGER.info(f"Inserted into the database: \n {value}")
 
     def __setitem__(self, index, value):
         if self.authorized:
@@ -202,8 +205,8 @@ class WhoisDB:
             elif PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
                 self.__setitem_mysql(index, value)
 
-    @classmethod
-    def authorization(cls):
+    @property
+    def authorized(self):
         """
         Provides the operation authorization.
         """
@@ -250,16 +253,6 @@ class WhoisDB:
 
         # We return the result.
         return result
-
-    @classmethod
-    def get_table_name(cls):
-        """
-        Returns the name of the table to use.
-        """
-
-        if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return PyFunceble.engine.MySQL.tables["whois"]
-        return "whois"
 
     def load(self):
         """
@@ -322,7 +315,7 @@ class WhoisDB:
             self.authorized
             and data
             and "epoch" in data
-            and datetime.fromtimestamp(float(data["epoch"])) < datetime.now()
+            and datetime.fromtimestamp(float(data["epoch"])) < datetime.utcnow()
         )
 
     def get_expiration_date(self, subject):
@@ -332,7 +325,7 @@ class WhoisDB:
         :param str subject: The subject we are working with.
 
         :return: The expiration date from the database.
-        :rtype: str|None
+        :rtype: tuple
         """
 
         if self.authorized and self[subject] and not self.is_time_older(subject):
@@ -342,21 +335,27 @@ class WhoisDB:
             # and
             # * The expiration date is in the future.
 
+            if "record" in self[subject]:
+                whois_record = self[subject]["record"]
+            else:
+                whois_record = None
+
             try:
                 # We return the expiration date.
-                return self[subject]["expiration_date"]
+                return self[subject]["expiration_date"], whois_record
             except KeyError:  # pragma: no cover
                 pass
 
         # We return None, there is no data to work with.
-        return None
+        return None, None
 
-    def add(self, subject, expiration_date, record=None):
+    def add(self, subject, expiration_date, server, record=None):
         """
         Adds the given subject and expiration date to the database.
 
         :param str subject: The subject we are working with.
         :param str expiration_date: The extracted expiration date.
+        :param str server: The server we got the record from.
         :param str record: The WHOIS record.
         """
 
@@ -369,6 +368,7 @@ class WhoisDB:
             data = {
                 "epoch": datetime.strptime(expiration_date, "%d-%b-%Y").timestamp(),
                 "expiration_date": expiration_date,
+                "server": server,
             }
 
             if record:  # pragma: no cover
@@ -376,7 +376,7 @@ class WhoisDB:
             else:
                 data["record"] = str(None)
 
-            if data["epoch"] < datetime.now().timestamp():
+            if data["epoch"] < datetime.utcnow().timestamp():
                 # We compare the epoch with the current time.
 
                 # We set the state.

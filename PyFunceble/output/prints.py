@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -216,7 +216,7 @@ class Prints:
 
             # We initiate the information about the generation date of this file.
             date_of_generation = (
-                "# Date of generation: %s\n\n" % datetime.now().isoformat()
+                "# Date of generation: %s\n\n" % datetime.utcnow().isoformat()
             )
 
             # We initiate a variable which will save the list of
@@ -719,10 +719,14 @@ class Prints:
             for data in self.header_constructor(to_print, False):
                 # We loop through the formatted data.
 
-                if self.template.lower() in PyFunceble.STATUS.list.generic or self.template in [
-                    "Less",
-                    "Percentage",
-                ]:
+                if (
+                    self.template.lower() in PyFunceble.STATUS.list.generic
+                    or self.template
+                    in [
+                        "Less",
+                        "Percentage",
+                    ]
+                ):
                     # * The template is in the list of generic status.
                     # or
                     # * The template is in a specific list.

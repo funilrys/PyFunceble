@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -151,9 +151,8 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
             # We initiate an empty header to use with our request.
             self.headers = {}
 
-        self.file_production = not self._do_not_produce_file()
-
-    def _do_not_produce_file(self):
+    @property
+    def file_production(self):
         """
         Check if we are allowed to produce a file based from the given
         information.
@@ -165,14 +164,16 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
         :rtype: bool
         """
 
-        # pylint: disable=unsupported-membership-test
-        if "api_file_generation" in PyFunceble.CONFIGURATION:
-            return not PyFunceble.CONFIGURATION.api_file_generation
+        if (
+            "api_file_generation" in PyFunceble.CONFIGURATION
+            and PyFunceble.CONFIGURATION.api_file_generation
+        ):
+            return bool(PyFunceble.CONFIGURATION.api_file_generation)
 
         if PyFunceble.CONFIGURATION.db_type in ["mariadb", "mysql"]:
-            return not self.end
+            return self.end
 
-        return PyFunceble.CONFIGURATION.no_files
+        return not PyFunceble.CONFIGURATION.no_files
 
     def _analytic_host_file_directory(self):
         """
@@ -213,7 +214,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
         Provide the authorization for the generation
         of info files.
 
-        Basicaly here is what we check:
+        Basically here is what we check:
 
         * We are not testing as an imported module.
 
@@ -239,7 +240,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                 or PyFunceble.CONFIGURATION.plain_list_domain
                 or PyFunceble.CONFIGURATION.generate_json
             )
-            or PyFunceble.CONFIGURATION.api_file_generation
+            or bool(PyFunceble.CONFIGURATION.api_file_generation)
         )
 
     def ___get_info_files_destinations(self, output_hosts, output_domains, output_json):
@@ -556,7 +557,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     self.expiration_date,
                     self.source,
                     self.status_code,
-                    datetime.now().isoformat(),
+                    datetime.utcnow().isoformat(),
                 ]
 
                 # And we print the information on file.
@@ -696,7 +697,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     self.subject,
                     old_status,
                     self.status_code,
-                    datetime.now().isoformat(),
+                    datetime.utcnow().isoformat(),
                 ],
                 "HTTP",
                 output,
@@ -747,7 +748,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                             self.expiration_date,
                             self.source,
                             self.status_code,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
                     else:
                         # The http code extraction is not activated.
@@ -757,7 +758,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                             self.subject,
                             self.expiration_date,
                             self.source,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
 
                     # We print the informations to print on file.
@@ -771,7 +772,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     data_to_print = [
                         self.subject,
                         self.source,
-                        datetime.now().isoformat(),
+                        datetime.utcnow().isoformat(),
                     ]
 
                     # We print the informations to print on file.
@@ -785,7 +786,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     data_to_print = [
                         self.subject,
                         self.source,
-                        datetime.now().isoformat(),
+                        datetime.utcnow().isoformat(),
                     ]
 
                     # We print the informations to print on file.
@@ -799,7 +800,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                     data_to_print = [
                         self.subject,
                         self.source,
-                        datetime.now().isoformat(),
+                        datetime.utcnow().isoformat(),
                     ]
 
                     # We print the informations to print on file.
@@ -822,7 +823,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                             self.status,
                             self.source,
                             self.status_code,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
                     else:
                         # The http status code extraction is not activated.
@@ -833,7 +834,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                             self.whois_server,
                             self.status,
                             self.source,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
 
                     # We print the information on file.
@@ -851,7 +852,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                             self.subject,
                             self.source,
                             self.status_code,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
                     else:
                         # The http status code extraction is not activated.
@@ -860,7 +861,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                         data_to_print = [
                             self.subject,
                             self.source,
-                            datetime.now().isoformat(),
+                            datetime.utcnow().isoformat(),
                         ]
 
                     # We print the information to print on file.
@@ -921,7 +922,7 @@ class Generate:  # pylint:disable=too-many-instance-attributes, too-many-argumen
                         self.status,
                         self.expiration_date,
                         self.source,
-                        datetime.now().isoformat(),
+                        datetime.utcnow().isoformat(),
                     ]
 
                 # We print the information on screen.

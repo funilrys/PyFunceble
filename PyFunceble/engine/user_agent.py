@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,17 +60,22 @@ class UserAgent:
     """
 
     def __init__(self):
-        self.dumped = PyFunceble.helpers.Dict().from_json_file(
+        file_instance = PyFunceble.helpers.File(
             PyFunceble.CONFIG_DIRECTORY
             + PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME
         )
+
+        if not file_instance.exists():
+            PyFunceble.downloader.UserAgents()
+
+        self.dumped = PyFunceble.helpers.Dict().from_json_file(file_instance.path)
 
     def get(self):
         """
         Provides the user agent to use.
         """
 
-        if not PyFunceble.CONFIGURATION.user_agent.custom:
+        if "custom" not in PyFunceble.CONFIGURATION.user_agent:
             if (
                 not PyFunceble.CONFIGURATION.user_agent.browser
                 or PyFunceble.CONFIGURATION.user_agent.browser not in self.dumped

@@ -18,10 +18,12 @@ build:
 
 requirements:
   host:
+    - alembic
     - colorama
     - cryptography
     - dnspython
     - domain2idna
+    - inflection
     - pip
     - pymysql
     - python >=3.6,<4
@@ -30,11 +32,14 @@ requirements:
     - pyyaml
     - requests
     - setuptools
+    - sqlalchemy
   run:
+    - alembic
     - colorama
     - cryptography
     - dnspython
     - domain2idna
+    - inflection
     - pymysql
     - python >=3.6,<4
     - python-box
@@ -42,6 +47,7 @@ requirements:
     - pyyaml
     - requests
     - setuptools
+    - sqlalchemy
 
 test:
   imports:
@@ -51,10 +57,17 @@ test:
     - PyFunceble.config
     - PyFunceble.converter
     - PyFunceble.core
+    - PyFunceble.data
+    - PyFunceble.data.alembic
+    - PyFunceble.data.alembic.versions
     - PyFunceble.database
     - PyFunceble.downloader
     - PyFunceble.engine
     - PyFunceble.engine.ci
+    - PyFunceble.engine.database
+    - PyFunceble.engine.database.loader
+    - PyFunceble.engine.database.migrations
+    - PyFunceble.engine.database.schemas
     - PyFunceble.extractor
     - PyFunceble.helpers
     - PyFunceble.lookup
@@ -71,8 +84,8 @@ test:
 
 about:
   home: "https://github.com/funilrys/PyFunceble"
-  license: MIT
-  license_family: MIT
+  license: Apache 2.0
+  license_family: APACHE
   license_file:
   summary: "The tool to check the availability or syntax of domain, IP or URL."
   doc_url:

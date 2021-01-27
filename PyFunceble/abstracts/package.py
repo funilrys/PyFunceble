@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,8 +49,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import PyFunceble.helpers as helpers
+from PyFunceble import helpers
 
 
 class Package:
@@ -65,7 +64,7 @@ class Package:
     :type: str
     """
 
-    VERSION = "3.2.2. (Teal Blauwbok: Bombardier)"
+    VERSION = "3.3.8.dev (Teal Blauwbok: Termite)"
     """
     Sets the package version.
 
@@ -170,8 +169,9 @@ class Version:
         for index, version_number in enumerate(local):
             # We loop through the local version.
 
-            if int(version_number) < int(upstream[index]):
-                # The local version is less than the upstream version.
+            if len(upstream) - 1 < index or int(version_number) < int(upstream[index]):
+                # The local version is less than the upstream version of the
+                # decoded has a shorter length.
 
                 # We initiate its status to True which means that we are in
                 # an old version (for the current version part).
@@ -214,7 +214,9 @@ class Version:
         Checks if the local version is the development version.
         """
 
-        return "dev" in Package.VERSION
+        return cls.split_versions(Package.VERSION, return_non_digits=True)[
+            -1
+        ].startswith("dev")
 
     @classmethod
     def is_local_cloned(cls):  # pragma: no cover
@@ -232,10 +234,8 @@ class Version:
         # We list the list of file which can be found only in a cloned version.
         list_of_file = [
             ".coveragerc",
-            ".coveralls.yml",
             ".gitignore",
             ".PyFunceble_production.yaml",
-            ".travis.yml",
             "CODE_OF_CONDUCT.rst",
             "CONTRIBUTING.rst",
             "dir_structure_production.json",

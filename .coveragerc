@@ -18,8 +18,10 @@ omit =
     PyFunceble/core/multiprocess.py
     PyFunceble/core/simple.py
     PyFunceble/downloader/*.py
+    PyFunceble/engine/database/*
     PyFunceble/engine/auto_save.py
     PyFunceble/engine/mysql.py
+    PyFunceble/engine/hashes_tracker.py
     PyFunceble/helpers/download.py
     PyFunceble/lookup/requests.py
     PyFunceble/lookup/ipv4_reputation.py

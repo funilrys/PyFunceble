@@ -1,28 +1,28 @@
 .. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
 The tool to check the availability or syntax of domain, IP or URL
---------------------------------------------------------------------------
+-----------------------------------------------------------------
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=master
+.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
     :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
 .. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
     :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
 .. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
-    :target: https://pypi.org/project/pyfunceble
+    :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: http://img.shields.io/pypi/dd/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble
-.. image:: http://img.shields.io/pypi/dw/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble
-.. image:: http://img.shields.io/pypi/dm/pyfunceble-dev.png
-    :target: https://pypistats.org/packages/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble-dev
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/month
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/week
+    :target: https://pepy.tech/project/pyfunceble-dev
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
 
@@ -40,7 +40,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/master/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
 
 Want a local copy? We get you covered!
 
@@ -50,7 +50,7 @@ Simply run the following and enjoy the documentation!
 
     $ cd docs/
     $ make html
-    $ chromium _build/html/index.html # Chromium or whatever browser you use.
+    $ palemoon _build/html/index.html # palemoon or whatever browser you use.
 
 ___________________________________________
 
@@ -160,6 +160,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                      __/ |
                                                     |___/
 
+-   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -170,8 +171,8 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
--   sjhgvr - `@sjhgvr`_
 -   ScriptTiger - `@ScriptTiger`_
+-   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
 -   The Unknown - `@AnonymousPoster`_
@@ -236,7 +237,7 @@ License
 -------
 ::
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -269,6 +270,7 @@ License
 .. _@adblockplus: https://github.com/adblockplus
 .. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@asciinema: https://github.com/asciinema
+.. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
@@ -299,6 +301,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

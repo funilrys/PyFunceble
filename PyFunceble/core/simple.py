@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,8 +49,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from domain2idna import get as domain2idna
 
 import PyFunceble
 
@@ -67,10 +65,8 @@ class SimpleCore(CLICore):
     def __init__(self, subject):
         super().__init__()
 
-        if PyFunceble.CONFIGURATION.idna_conversion:
-            self.subject = domain2idna(subject)
-        else:
-            self.subject = subject
+        self.mining = PyFunceble.engine.Mining("simple")
+        self.subject = subject
 
         if PyFunceble.CONFIGURATION.generate_complements:
             self.subject = PyFunceble.get_complements(self.subject, include_given=True)
@@ -138,7 +134,17 @@ class SimpleCore(CLICore):
         self.print_header()
 
         if self.subject:
-            self.__save_in_database(self.test(self.subject, "domain"))
+            results = self.test(self.subject, "domain")
+
+            for result in results:
+                if result["status"] in PyFunceble.core.CLI.get_up_statuses():
+                    self.mining.mine(result["tested"], "domain")
+
+                self.__save_in_database(result)
+
+            for index, subject in self.mining.list_of_mined():
+                self.__save_in_database(self.test(subject, "domain"))
+                self.mining.remove(index, subject)
         else:
             self.print_nothing_to_test()
 
@@ -153,6 +159,16 @@ class SimpleCore(CLICore):
         self.print_header()
 
         if self.subject:
-            self.__save_in_database(self.test(self.subject, "url"))
+            results = self.test(self.subject, "url")
+
+            for result in results:
+                if result["status"] in PyFunceble.core.CLI.get_up_statuses():
+                    self.mining.mine(result["tested"], "url")
+
+                self.__save_in_database(result)
+
+            for index, subject in self.mining.list_of_mined():
+                self.__save_in_database(self.test(subject, "url"))
+                self.mining.remove(index, subject)
         else:
             self.print_nothing_to_test()

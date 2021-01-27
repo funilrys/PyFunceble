@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -242,7 +242,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the starting time as the current time.
-        PyFunceble.INTERN["start"] = datetime.now().timestamp()
+        PyFunceble.INTERN["start"] = datetime.utcnow().timestamp()
 
         PyFunceble.LOGGER.debug(
             f'Starting time: {PyFunceble.INTERN["start"]} '
@@ -256,7 +256,7 @@ class ExecutionTime:  # pylint: disable=too-few-public-methods
         """
 
         # We set the ending time as the current time.
-        PyFunceble.INTERN["end"] = datetime.now().timestamp()
+        PyFunceble.INTERN["end"] = datetime.utcnow().timestamp()
 
         PyFunceble.LOGGER.debug(
             f'Stoping time: {PyFunceble.INTERN["start"]} '

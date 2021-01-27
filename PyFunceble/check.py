@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,7 +49,6 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
 from ipaddress import (
     AddressValueError,
     IPv4Address,
@@ -59,7 +58,7 @@ from ipaddress import (
     ip_network,
 )
 
-from domain2idna import get as domain2idna
+import domain2idna
 
 import PyFunceble
 
@@ -91,13 +90,6 @@ class Check:
 
     def __init__(self, subject):
         self.subject = subject
-
-        if (
-            self.subject.startswith("*.")
-            and PyFunceble.CONFIGURATION.wildcard
-            and PyFunceble.CONFIGURATION.syntax
-        ):
-            self.subject = self.subject[2:]
 
     def is_url(
         self, return_base=False, return_formatted=False
@@ -135,7 +127,7 @@ class Check:
                     # We have to convert the domain to IDNA.
 
                     # We convert the initial base to IDNA.
-                    base = domain2idna(base)
+                    base = domain2idna.domain2idna(base)
 
                 if ":" in base:
                     # The port is explicitly given.
@@ -425,7 +417,7 @@ class Check:
         except ValueError:
             return False
 
-    def is_ip_range(self):  # pragma: no cover
+    def is_ip_range(self):
         """
         Checks if the given subject is a valid IPv4 or IPv6 range.
 
@@ -465,7 +457,7 @@ class Check:
                 return 0 <= block <= 128
         return False
 
-    def is_reserved_ip(self):  # pragma: no cover
+    def is_reserved_ip(self):
         """
         Checks if the given subject is a reserved IPv4 or IPv6.
 

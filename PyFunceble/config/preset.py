@@ -27,7 +27,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,14 +55,19 @@ License:
 from os import cpu_count
 
 from colorama import Fore, Style
+from sqlalchemy.exc import OperationalError
 
 import PyFunceble
+from PyFunceble.engine.database.loader import credential
+from PyFunceble.engine.database.migrations import Alembic
 
 
 class Preset:  # pragma: no cover
     """
     Checks or update the global configuration based on some events.
     """
+
+    # pylint: disable=too-many-public-methods
 
     # List all index which can be superset.
     # In other words if an index which is listed here
@@ -96,7 +101,7 @@ class Preset:  # pragma: no cover
         self.syntax_test()
         self.reputation_data()
 
-        self.db_types()
+        self.upgrade_database()
 
     @classmethod
     def switch(
@@ -281,20 +286,14 @@ class Preset:  # pragma: no cover
     @classmethod
     def maximal_processes(cls):
         """
-        Ensures that the number of maximal processes is alway >= 1.
+        Ensures that the number of maximal processes is alway >= 2.
+        If not, we don't authorize the multiprocessing.
         """
 
-        if PyFunceble.CONFIGURATION.maximal_processes < 1:
-            PyFunceble.CONFIGURATION.maximal_processes = 1
-
-    @classmethod
-    def db_types(cls):
-        """
-        Ensure that the files are downloaded when the db types is not
-        the JSON one.
-        """
-
-        PyFunceble.downloader.DBType()
+        if PyFunceble.CONFIGURATION.multiprocess:
+            if PyFunceble.CONFIGURATION.maximal_processes < 2:
+                PyFunceble.CONFIGURATION.multiprocess = False
+                PyFunceble.CONFIGURATION.maximal_processes = 1
 
     @classmethod
     def multiprocess_merging_mode(cls):
@@ -303,14 +302,18 @@ class Preset:  # pragma: no cover
         """
 
         # pylint: disable=line-too-long
-        if not PyFunceble.CONFIGURATION.multiprocess_merging_mode or PyFunceble.CONFIGURATION.multiprocess_merging_mode.lower() not in [
-            "end",
-            "live",
-        ]:
+        if (
+            not PyFunceble.CONFIGURATION.multiprocess_merging_mode
+            or PyFunceble.CONFIGURATION.multiprocess_merging_mode.lower()
+            not in [
+                "end",
+                "live",
+            ]
+        ):
             PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
 
         if PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]:
-            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "end"
+            PyFunceble.CONFIGURATION.multiprocess_merging_mode = "live"
 
     def simple_domain(self):
         """
@@ -375,6 +378,7 @@ class Preset:  # pragma: no cover
         Prepares the global configuration for a test with multiple processes.
         """
 
+        self.maximal_processes()
         if PyFunceble.CONFIGURATION.multiprocess:
             if (
                 "multiprocess_warning_printed" not in PyFunceble.INTERN
@@ -398,7 +402,6 @@ class Preset:  # pragma: no cover
                     )
 
                 PyFunceble.INTERN["multiprocess_warning_printed"] = True
-            self.maximal_processes()
             self.multiprocess_merging_mode()
 
     @classmethod
@@ -428,7 +431,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_lookup_over_tcp(cls):
         """
-        Ensures that the DNS lookup over tcp is proprely set.
+        Ensures that the DNS lookup over tcp is properly set.
         """
 
         PyFunceble.DNSLOOKUP.tcp = PyFunceble.CONFIGURATION.dns_lookup_over_tcp
@@ -436,7 +439,7 @@ class Preset:  # pragma: no cover
     @classmethod
     def dns_nameserver(cls):
         """
-        Ensures that the DNS nameserver is proprely set.
+        Ensures that the DNS nameserver is properly set.
         """
 
         PyFunceble.DNSLOOKUP.update_nameserver(PyFunceble.CONFIGURATION.dns_server)
@@ -468,3 +471,20 @@ class Preset:  # pragma: no cover
             PyFunceble.CONFIGURATION.cooldown_time = float(
                 PyFunceble.CONFIGURATION.cooldown_time
             )
+
+    @classmethod
+    def upgrade_database(cls):
+        """
+        Ensures that the database always have the latest state.
+        """
+
+        if (
+            PyFunceble.CONFIGURATION.db_type in ["mysql", "mariadb"]
+            and "migration_started" not in PyFunceble.CONFIGURATION
+        ):
+            try:
+                Alembic(credential.Credential()).upgrade()
+            except OperationalError:
+                pass
+
+            PyFunceble.CONFIGURATION["migration_started"] = True
