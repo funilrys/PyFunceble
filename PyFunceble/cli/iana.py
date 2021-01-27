@@ -394,21 +394,18 @@ class Iana:  # pragma: no cover pylint: disable=too-few-public-methods
         :rtype: str
         """
 
-        PyFunceble.LOGGER.info(
-            f"Trying to find the referer of {repr(extension)}.")
+        PyFunceble.LOGGER.info(f"Trying to find the referer of {repr(extension)}.")
 
         # We get the  whois record related to the domain extension we are currently
         # working with.
         iana_record = PyFunceble.lookup.Whois(
-            "hello.{}".format(
-                extension), PyFunceble.CONFIGURATION.iana_whois_server
+            "hello.{}".format(extension), PyFunceble.CONFIGURATION.iana_whois_server
         ).request()
 
         if iana_record and "refer" in iana_record:
             # The record is not empty.
 
-            PyFunceble.LOGGER.info(
-                "Referer probably present. Trying to extract it.")
+            PyFunceble.LOGGER.info("Referer probably present. Trying to extract it.")
 
             # We initiate a regex which will extract the referer.
             regex_referer = r"(?s)refer\:\s+([a-zA-Z0-9._-]+)\n"
