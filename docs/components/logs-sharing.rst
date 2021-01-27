@@ -3,8 +3,10 @@ Logs Sharing
 
 :code:`--share-logs`
 """"""""""""""""""""
+
 .. info::
     This component is not activated by default.
+
 
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
@@ -15,16 +17,17 @@ working with millions of domains.
 The idea and purpose of this feature are **ONLY** to make PyFunceble a better
 tool.
 
+
 What is collected
 ^^^^^^^^^^^^^^^^^
 
 .. versionchanged:: 4.0.0
 
-   As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
+As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
 
-   Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
-   to implement any of the data collection source code until the infrastructure
-   behind it is ready.
+Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
+to implement any of the data collection source code until the infrastructure
+behind it is ready.
 
 
 .. warning::
@@ -40,6 +43,7 @@ What is collected
 |                                                 | - The currently tested domain.                  |                                                         |
 |                                                 | - The currently used WHOIS server (DNS) name.   |                                                         |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
+
 
 How to share logs?
 ^^^^^^^^^^^^^^^^^^

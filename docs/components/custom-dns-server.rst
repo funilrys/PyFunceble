@@ -1,7 +1,7 @@
 Custom DNS Server
 -----------------
 
-.. versionadded:: 2.3.0
+.. versionadded:: 3.3.0
 
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^

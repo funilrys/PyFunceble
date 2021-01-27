@@ -266,8 +266,8 @@ From the example above PyFunceble will be testing the following domains.
 You can make a simple test with the above zone example by copy/pasting.
 
 In case your RPZ zone are missing the required :code:`SOA` entry, you should
-consider combine the :code:`--rpz` with `--wildcard <index.html#wildcard>`_ to
-avoid all your wildcard's domain become marked as :code:`INVALID`
+consider combining the :code:`--rpz` with `--wildcard <index.html#wildcard>`_ to
+avoid all your wildcard's domain becoming marked as :code:`INVALID`
 
 **Default value:** :code:`rpz: False`
 
@@ -294,7 +294,7 @@ according to the test arguments given.
 
 **Default value:** :code:`wildcard: False`
 
-A examples of when to use this argument. The first one will
+As examples of when to use this argument. The first one will
 return INVALID if :code:`--wildcard` is not set to true.
 
 This feature is related to the `--rpz <index.html#rpz>`_
@@ -938,7 +938,7 @@ Activates or disables the display of output to the terminal.
 
 Want to help make PyFunceble a better tool?
 
-The you can Share your logs with our backend API which collect all logs!
+Then you can share your logs with our backend API which collect all logs!
 
 **Default value:** :code:`share_logs: False`
 
@@ -1180,7 +1180,7 @@ subsystem.
 Activates or disables the preloading of the input file(s) into the continue
 dataset before starting the tests.
 
-The `--preload` argument - or its option counterpart - ??
+The `--preload` argument - or its option counterpart - ping
 is given, we decode and load the given input files into the continue
 dataset before starting the test.
 

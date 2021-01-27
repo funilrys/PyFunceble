@@ -30,6 +30,11 @@ The error message you might experience can be:
 
 This can typically happens if you are using Ubuntu 18.x or 19.x
 
+------
+
+
+.. sectionauthor:: @spirillen
+
 Ubuntu 20.04.1 LTS Focal
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -59,7 +64,7 @@ However, the right way to do this is by first locate where your
 .. code-block:: console
 
     find /usr/lib/ -type f -iname 'libffi.so.*'
-    
+
 Then apply the softlink to :code:`libffi.so.7`
 
 
@@ -69,30 +74,9 @@ Combination of :code:`-f`, :code:`-uf` and :code:`--adblock`
 You can not combine the usage of :code:`-f`, :code:`-uf` with :code:`--adblock`
 simultaneously.
 
-
 ------
 
 .. sectionauthor:: @spirillen
-
-PyFunceble v 3.2.x
-^^^^^^^^^^^^^^^^^^
-
-.. versionchanged:: 3.2.x
-
-.. deprecated:: 4.0.0.a1
-
-When you are using the HTTP status code module you might experience the
-following error corses by :code:`urllib3`
-
-.. code-block::
-
-    HTTPSConnectionPool(host='pyfunceble-not-resolved', port=443
-
-Workaround: Enable the Cert check
-`verify-ssl-certificate <../usage/index.html#vsc-verify-ssl-certificate>`_
-
-
-------
 
 Sql Missing default data in :code:`whois` table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,8 +101,8 @@ However, it isn't set in the database.
 
 To solve this, you will have to manually set the default for `created_at`
 to for example :code:`2020-12-22 09:09:50` in the
-:code:`DB_name.pyfunceble_whois_record`. You can use dBeaver to do this
-or by manually run this SQL code.
+:code:`DB_name.pyfunceble_whois_record`. You can for example use dBeaver_
+to do this or manually run this SQL code insode your database.
 
 .. code-block:: sql
 
@@ -131,4 +115,9 @@ or by manually run this SQL code.
 
     These changes will be reset next time you are running PyFunceble.
 
+
+.. External links
+
 .. _SQLAlchemy: https://www.sqlalchemy.org/
+
+.. _dBeaver: https://dbeaver.io/
