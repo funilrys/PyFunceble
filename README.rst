@@ -5,14 +5,10 @@ The tool to check the availability or syntax of domain, IP or URL
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://api.travis-ci.com/funilrys/PyFunceble.png?branch=dev
-    :target: https://travis-ci.com/funilrys/PyFunceble
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
-.. image:: https://api.codacy.com/project/badge/Grade/3f7684ffe6fc44d781ca0f26e0221928
-    :target: https://www.codacy.com/app/funilrys/PyFunceble?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=funilrys/PyFunceble&amp;utm_campaign=Badge_Grade
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=3.x
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=3.x
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/3.x/LICENSE
 .. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
     :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -24,16 +20,24 @@ The tool to check the availability or syntax of domain, IP or URL
 .. image:: https://pepy.tech/badge/pyfunceble-dev/week
     :target: https://pepy.tech/project/pyfunceble-dev
 
-PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
+PyFunceble is the little sister of `Funceble`_ which was archived on 13th
+March 2018.
 
-Its main objective is to provide the availability of domains, IPs and since recently URL by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
+**EOL of PyFunceble 3.x**. Please do read more about this in the
+`EOL <https://pyfunceble.readthedocs.io/en/3.x/installation/index.html#eol-of-any-version-3-x>`_
+chapter of the documentation.
 
-PyFunceble is currently running actively and daily with the help of Travis CI under 60+ repositories. It is used to clean or test the availability of data which are present in hosts files, list of IP, list of domains, block lists or even AdBlock filter lists.
+Its main objective is to provide the availability of domains, IPs and since
+recently URL by generating an accurate result based on results from WHOIS,
+NSLOOKUP and HTTP status codes.
 
 PyFunceble provides some useful features for continuous testing.
 
-As an example, its auto-continue system coupled with its auto-save system allows it to run nice and smoothly under Travis CI without even reaching Travis CI time restriction. In the other side, its internal inactive database system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs being automatically retested over time on next run.
-
+As an example, its auto-continue system coupled with its auto-save system
+allows it to run nice and smoothly under Travis CI without even reaching
+Travis CI time restriction. In the other side, its internal inactive database
+system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs
+being automatically retested over time on next run.
 ___________________________________________
 
 Documentation as the place to be!
