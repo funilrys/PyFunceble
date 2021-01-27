@@ -45,4 +45,4 @@ We will also like to point you attention to the requirement section of:
 `<https://pyfunceble.readthedocs.io/en/dev/installation/index.html#requirements>`_,
 where there is a pending PR
 `(#196) <https://github.com/funilrys/PyFunceble/pull/196>`_,
-which will currect the required python version to python version `3.7`
+which will correct the required python version to python version `3.7`
