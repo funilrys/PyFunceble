@@ -252,7 +252,7 @@ class IanaDBGenerator:
             extension = regex_helper.match(block, return_match=True, group=2)
 
             if extension:
-                return extension, self.get_referrer_from_extension(extension)
+                return extension, self.get_referer_from_extension(extension)
 
         return None, None
 
