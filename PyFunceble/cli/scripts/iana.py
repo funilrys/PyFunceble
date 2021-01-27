@@ -190,7 +190,7 @@ class IanaDBGenerator:
 
         return self
 
-    def get_referer_from_extension(self, extension: str) -> Optional[str]:
+    def get_referrer_from_extension(self, extension: str) -> Optional[str]:
         """
         Given an extension, tries to get or guess its extension.
         """
@@ -230,7 +230,7 @@ class IanaDBGenerator:
 
         return None
 
-    def get_extension_and_referer_from_block(
+    def get_extension_and_referrer_from_block(
         self, block: str
     ) -> Tuple[Optional[str], Optional[str]]:
         """
@@ -252,7 +252,7 @@ class IanaDBGenerator:
             extension = regex_helper.match(block, return_match=True, group=2)
 
             if extension:
-                return extension, self.get_referer_from_extension(extension)
+                return extension, self.get_referrer_from_extension(extension)
 
         return None, None
 
