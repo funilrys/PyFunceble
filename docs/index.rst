@@ -28,7 +28,7 @@ The tool to check the availability or syntax of domain, IP or URL.
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th
 March 2018.
 
-**EOL of Pyfunceble 3.x**. Please do read more about this in the
+**EOL of PyFunceble 3.x**. Please do read more about this in the
 `EOL <installation/index.html#eol-of-any-version-3-x>`_ chapter.
 
 Its main objective is to provide the availability of domains, IPs and since

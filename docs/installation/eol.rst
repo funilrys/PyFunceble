@@ -1,16 +1,16 @@
 EOL of any version 3.x
 ----------------------
 
-Development of Pyfunceble version 3.x have reached the End Of Life.
-This means any errors recurring in any version below Pyfunceble version
+Development of PyFunceble version 3.x have reached the End Of Life.
+This means any errors recurring in any version below PyFunceble version
 4.0.0 will no longer be fixed, but we will still be here to help you with a
 number of workarounds that might be required to have these releases working
-for you, until the final stable release of Pyfunceble version 4.0.0.
+for you, until the final stable release of PyFunceble version 4.0.0.
 
 -------
 
-If you are new to Pyfunceble, the team will recommend you to start by using and
-installing the pre-release of Pyfunceble 4.0.0
+If you are new to PyFunceble, the team will recommend you to start by using and
+installing the pre-release of PyFunceble 4.0.0
 
 You can read more about how this is done in the docs at:
 `<https://pyfunceble.readthedocs.io/en/dev/installation/index.html#development-version>`_
