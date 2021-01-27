@@ -179,6 +179,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
+
 ___________________________________________
 
 Special Thanks
