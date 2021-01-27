@@ -190,7 +190,7 @@ class IanaDBGenerator:
 
         return self
 
-    def get_referrer_from_extension(self, extension: str) -> Optional[str]:
+    def get_referer_from_extension(self, extension: str) -> Optional[str]:
         """
         Given an extension, tries to get or guess its extension.
         """
