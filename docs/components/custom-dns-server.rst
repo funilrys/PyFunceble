@@ -1,6 +1,8 @@
 Custom DNS Server
 -----------------
 
+.. versionadded:: 2.3.0
+
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
@@ -29,28 +31,29 @@ use during the test.
 You set this up with the CLI command :code:`--dns` **or** insert it into your
 personal :code:`.PyFunceble.yaml`
 
-::
+.. code-block:: yaml
 
     dns;
         server: null
 
 to
 
-::
+.. code-block:: yaml
 
     dns:
         server:
+            - 88.198.70.39
             - 95.216.209.53
             - 116.203.32.67
-            - 116.203.32.67
+            - 88.198.70.38
 
+.. versionchanged:: 3.0.0
 
-Since :code:`v3.0.0` it is possible to assign a specific port to use with the
-DNS-Server.
+It is now possible to assign a specific port to use with the DNS-Server.
 
-.. hint::
+If you don't append a port number, the default DNS port (53) will be used.
 
-    :code:`--dns 95.216.209.53:53 116.203.32.67:53 116.203.32.67:853`
+.. code-block:: console
 
-.. warning::
-    If you don't append a port number, the default DNS port (53) will be used.
+    $ pyfunceble --dns 88.198.70.38 95.216.209.53:53 116.203.32.67:853 \
+        -f $DOMAIN_FILE

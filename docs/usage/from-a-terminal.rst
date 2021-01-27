@@ -488,7 +488,7 @@ User defined user agent to use in the
 Example of how to change the default from CLI.
 
 .. code-block:: console
-    
+
     $ pyfunceble --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 
 
@@ -520,7 +520,13 @@ DNS control
 :code:`--dns`
 """""""""""""
 
-Sets one or more DNS server(s) to use during testing.
+By default, PyFunceble will use the system-wide DNS settings. This can be
+changed with the ability to configure which DNS-Servers you like PyFunceble to
+use during the test.
+
+You set this up with the CLI command :code:`--dns` **or** insert it into your
+personal :code:`.PyFunceble.yaml`
+
 You can add several separated by spaces and they will all be used in a order.
 (Kind of Round Robin style)
 
@@ -780,7 +786,7 @@ result file for each status.
 
     There is an ongoing request to set the default value of :code:`hosts: False`
     You should be following this issue as it might affect your setup/results
-    later on. 
+    later on.
     `Flip defaults for host <https://github.com/funilrys/PyFunceble/issues/178>`_
 
 ------
@@ -930,16 +936,15 @@ Activates or disables the display of output to the terminal.
 :code:`--share-logs`
 """"""""""""""""""""
 
-.. TODO::
+Want to help make PyFunceble a better tool?
 
-    Follow up and link to what is being shared in `share-logs`
-
-Want to make PyFunceble a better tool? Share your logs with our API which
-collect all logs!
-
-Don't forget to read about what is being collected (Privacy policy)
+The you can Share your logs with our backend API which collect all logs!
 
 **Default value:** :code:`share_logs: False`
+
+.. versionchanged:: 4.0.0
+
+.. include:: ../components/logs-sharing.rst
 
 
 ------
@@ -989,7 +994,7 @@ CPU - 2. Otherwise, it will 1.
 
     This section about `max-workers` is still under construction, but it is
     close to how it is working.
-    
+
     - **This means you should be experimenting a bit your self.**
 
     To follow the "behind the scene" talk about the subject, please take a
@@ -1156,7 +1161,7 @@ Sets the commit message to apply at the really end.
 :code:`-c` | :code:`--auto-continue` | :code:`--continue`
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-This argument is to used for auto-continuing from a previously under CI 
+This argument is to used for auto-continuing from a previously under CI
 
 **Default value:** :code:`autocontinue: False`
 
