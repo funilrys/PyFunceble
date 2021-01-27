@@ -169,8 +169,9 @@ class Version:
         for index, version_number in enumerate(local):
             # We loop through the local version.
 
-            if int(version_number) < int(upstream[index]):
-                # The local version is less than the upstream version.
+            if len(upstream) - 1 < index or int(version_number) < int(upstream[index]):
+                # The local version is less than the upstream version of the
+                # decoded has a shorter length.
 
                 # We initiate its status to True which means that we are in
                 # an old version (for the current version part).

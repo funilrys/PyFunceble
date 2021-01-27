@@ -144,7 +144,8 @@ disable=print-statement,
         logging-format-interpolation,
         access-member-before-definition,
         too-many-arguments,
-        too-few-public-methods
+        too-few-public-methods,
+        unsubscriptable-object
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
