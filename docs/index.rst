@@ -25,13 +25,23 @@ The tool to check the availability or syntax of domain, IP or URL.
 .. image:: https://pepy.tech/badge/pyfunceble-dev/week
     :target: https://pepy.tech/project/pyfunceble-dev
 
-PyFunceble is the little sister of `Funceble`_ which was archived on 13th March 2018.
+PyFunceble is the little sister of `Funceble`_ which was archived on 13th
+March 2018.
 
-Its main objective is to provide the availability of domains, IPs and since recently URL by generating an accurate result based on results from WHOIS, NSLOOKUP and HTTP status codes.
+**EOL of Pyfunceble 3.x**. Please do read more about this in the
+`EOL <installation/index.html#eol-of-any-version-3-x>`_ chapter.
+
+Its main objective is to provide the availability of domains, IPs and since
+recently URL by generating an accurate result based on results from WHOIS,
+NSLOOKUP and HTTP status codes.
 
 PyFunceble provides some useful features for continuous testing.
 
-As an example, its auto-continue system coupled with its auto-save system allows it to run nice and smoothly under Travis CI without even reaching Travis CI time restriction. In the other side, its internal inactive database system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs being automatically retested over time on next run.
+As an example, its auto-continue system coupled with its auto-save system
+allows it to run nice and smoothly under Travis CI without even reaching
+Travis CI time restriction. In the other side, its internal inactive database
+system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs
+being automatically retested over time on next run.
 
 .. _Funceble: https://github.com/funilrys/funceble
 
