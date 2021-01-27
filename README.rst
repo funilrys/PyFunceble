@@ -160,6 +160,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
                                                      __/ |
                                                     |___/
 
+-   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -170,15 +171,14 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
--   sjhgvr - `@sjhgvr`_
 -   ScriptTiger - `@ScriptTiger`_
+-   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
 -   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   ZeroDot1 - `@ZeroDot1`_
-
 ___________________________________________
 
 Special Thanks
@@ -269,6 +269,7 @@ License
 .. _@adblockplus: https://github.com/adblockplus
 .. _@AnonymousPoster: https://github.com/AnonymousPoster
 .. _@asciinema: https://github.com/asciinema
+.. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
