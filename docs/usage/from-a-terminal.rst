@@ -84,7 +84,7 @@ Source
 
     ::
 
-        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.travis/lists/url`
+        $ PyFunceble -uf `https://raw.githubusercontent.com/funilrys/PyFunceble/dev/examples/lists/url`
 
     will download the given URL and test for its content assuming that each
     line represents a URL to test.
