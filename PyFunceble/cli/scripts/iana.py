@@ -230,7 +230,7 @@ class IanaDBGenerator:
 
         return None
 
-    def get_extension_and_referrer_from_block(
+    def get_extension_and_referer_from_block(
         self, block: str
     ) -> Tuple[Optional[str], Optional[str]]:
         """
