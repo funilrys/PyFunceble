@@ -3,9 +3,11 @@ on:
   pull_request:
     branches:
       - 3.x
+      - master
   push:
     branches:
       - 3.x
+      - master
 
 jobs:
   lint:
@@ -318,4 +320,4 @@ jobs:
           -p "$(python setup.py --name)"
           --pyfunceble-version="$(python setup.py --version)"
           --python-version="${DOCKER_PYTHON_VERSION}"
-          --publish --commit="$(git log -1 --format=format:'%H')"
+          --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
