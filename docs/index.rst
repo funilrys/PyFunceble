@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
     :alt: PyFunceble logo
 
 The tool to check the availability or syntax of domain, IP or URL.
@@ -10,16 +10,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     :target: https://coveralls.io/github/funilrys/PyFunceble?branch=3.x
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/3.x/LICENSE
-.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
-    :target: https://pypi.org/project/pyfunceble-dev
+.. image:: https://img.shields.io/pypi/v/pyfunceble.png
+    :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://pepy.tech/badge/pyfunceble-dev
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/month
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/week
-    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/month
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/week
+    :target: https://pepy.tech/project/pyfunceble
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th
 March 2018.

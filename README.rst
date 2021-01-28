@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
 
 The tool to check the availability or syntax of domain, IP or URL
 -----------------------------------------------------------------
@@ -9,16 +9,16 @@ The tool to check the availability or syntax of domain, IP or URL
     :target: https://coveralls.io/github/funilrys/PyFunceble?branch=3.x
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/blob/3.x/LICENSE
-.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
-    :target: https://pypi.org/project/pyfunceble-dev
+.. image:: https://img.shields.io/pypi/v/pyfunceble.png
+    :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://pepy.tech/badge/pyfunceble-dev
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/month
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/week
-    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/month
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/week
+    :target: https://pepy.tech/project/pyfunceble
 
 PyFunceble is the little sister of `Funceble`_ which was archived on 13th
 March 2018.
@@ -44,7 +44,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
+We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/master/!
 
 Want a local copy? We get you covered!
 
@@ -107,8 +107,8 @@ What can PyFunceble do?
 
 - ... and a lot more!
 
-.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
 
 Please report to the `homepage for more GIF`_.
 
@@ -307,6 +307,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _homepage for more GIF: http://pyfunceble.github.io/
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
