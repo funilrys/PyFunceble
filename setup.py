@@ -135,6 +135,12 @@ if __name__ == "__main__":
         author_email="contact@funilrys.com",
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
+        project_urls={
+            "Documentation": "https://pyfunceble.readthedocs.io/en/dev/",
+            "Funding": "https://github.com/sponsors/funilrys",
+            "Source": "https://github.com/funilrys/PyFunceble",
+            "Tracker": "https://github.com/funilrys/PyFunceble/issues",
+        },
         platforms=["any"],
         packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
         keywords=[
