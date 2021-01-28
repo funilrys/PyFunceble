@@ -55,8 +55,8 @@ from sqlalchemy.exc import StatementError
 import PyFunceble
 
 from ..schemas.file import File
-from ..schemas.whois_record import WhoisRecord
 from ..schemas.status import Status
+from ..schemas.whois_record import WhoisRecord
 from .base import MigrationBase
 
 
