@@ -98,22 +98,33 @@ class Version:
         # We split the version.
         splited_version = version.split(".")
 
-        # We keep the digits only.
-        digits = [x for x in splited_version if x.isdigit()]
+        def get_version_part():
+            """
+            Provides the version part.
+            """
+
+            return [x for x in splited_version if x.isdigit() or x[0].isdigit()]
+
+        def get_codename_part():
+            """
+            Provides the codename part.
+            """
+
+            try:
+                return [
+                    x for x in splited_version if not x.isdigit() and not x[0].isdigit()
+                ][0]
+            except IndexError:
+                return ""
 
         if not return_non_digits:
             # We do not have to return the non digits part of the version.
 
             # We return the digits part of the version.
-            return digits
-
-        # We have to return the non digit parts of the version.
-
-        # We keep the non digits.
-        non_digits = [x for x in splited_version if not x.isdigit()]
+            return get_version_part()
 
         # We return a tuple with first the digits part and finally the non digit parts.
-        return digits, non_digits[0]
+        return get_version_part(), get_codename_part()
 
     @classmethod
     def literally_compare(cls, local, upstream):
@@ -156,57 +167,98 @@ class Version:
         :rtype: bool, None
         """
 
-        # We get the local version.
-        local = cls.split_versions(Package.VERSION)
-        # We get the upstream version
-        upstream = cls.split_versions(upstream)
+        def get_version_number_pep440(version_part):
+            """
+            Given a version part it returns the actual version.
+            As example:
+                Given :code:`0a1` returns `0971`.
+            """
 
-        # A version should be in format [1,2,3] which is actually the version `1.2.3`
-        # So as we only have 3 elements in the versioning,
-        # we initiate the following variable in order to get the status of each parts.
-        status = [None, None, None]
+            result = []
 
-        for index, version_number in enumerate(local):
-            # We loop through the local version.
+            for part in version_part:
+                if part.isdigit():
+                    result.append(part)
+                else:
+                    local_result = ""
 
-            if len(upstream) - 1 < index or int(version_number) < int(upstream[index]):
-                # The local version is less than the upstream version of the
-                # decoded has a shorter length.
+                    for char in part:
+                        if char.isdigit():  # pragma: no cover ## Safety.
+                            local_result += local_result
+                        else:
+                            local_result += str(ord(char))
 
-                # We initiate its status to True which means that we are in
-                # an old version (for the current version part).
-                status[index] = True
-            elif int(version_number) > int(upstream[index]):
-                # The local version is greater then the upstream version.
+                    result.append(local_result)
 
-                # We initiate its status to False which means that we are in
-                # a more recent version (for the current version part).
-                status[index] = False
-            else:
-                # The local version is eqal to the upstream version.
+            return "".join(result)
 
-                # We initiate its status to None which means that we are in
-                # the same version (for the current version part).
-                status[index] = None
+        def compare_them(version_number, upstream_number):
+            """
+            Compare and provides the result of the comparison.
+            """
 
-            # Otherwise the status stay None which means that there is no change
-            # between both local and upstream.
+            # pylint: disable=too-many-return-statements
 
-        # We consider that the version is the same.
-        result = None
+            # ORD A ==> 65 ==> 650
+            if upstream_number < 650 < version_number:
+                return True
 
-        for data in status:
-            # We loop through the list of status.
-            # The purpose of this loop is only to
-            # get the first not None value.
+            if version_number < 650 < upstream_number:
+                return False
 
-            if result is None:
-                # The result is None (no changes).
-                # We set the currently read one as the result.
-                result = data
+            if version_number > 650 and upstream_number > 650:
 
-        # We return the result.
-        return result
+                local_upstream_number = str(upstream_number)
+
+                for index, value in enumerate(str(version_number)):
+                    try:
+                        if value == local_upstream_number[index]:
+                            continue
+                    except IndexError:
+                        # Example: Comparison of b10 to b1
+                        return False
+
+                    if value < local_upstream_number[index]:
+                        return True
+
+                    if value > local_upstream_number[index]:
+                        return False
+
+                return None
+
+            if version_number < upstream_number:
+                return True
+
+            if version_number > upstream_number:
+                return False
+
+            return None
+
+        local_digits, _ = Version.split_versions(
+            Package.VERSION, return_non_digits=True
+        )
+
+        upstream_digits, _ = Version.split_versions(upstream, return_non_digits=True)
+
+        result = []
+
+        for index, version_number in enumerate(local_digits):
+            try:
+                version_number = int(version_number)
+            except ValueError:
+                version_number = int(get_version_number_pep440(version_number))
+
+            try:
+                upstream_number = int(upstream_digits[index])
+            except ValueError:
+                upstream_number = int(get_version_number_pep440(upstream_digits[index]))
+
+            result.append(compare_them(version_number, upstream_number))
+
+        try:
+            return [x for x in result if x is not None][0]
+        except IndexError:
+            return None
 
     @classmethod
     def is_local_dev(cls):

@@ -50,11 +50,13 @@ License:
     limitations under the License.
 """
 
+
 import sys
 from datetime import datetime
 from os import sep as directory_separator
 from os import walk
 from random import choice
+from string import ascii_lowercase
 
 from colorama import Fore, Style
 from sqlalchemy.orm.exc import NoResultFound
@@ -490,12 +492,10 @@ class CLICore:
             # We compare the local with the currently read deprecated version.
             checked = PyFunceble.abstracts.Version.compare(version)
 
-            if (
-                not PyFunceble.CONFIGURATION.quiet
-                and checked
-                or checked is not False
-                and not checked
-            ):
+            if checked is True and any(x in version for x in ascii_lowercase):
+                continue
+
+            if not PyFunceble.CONFIGURATION.quiet and checked is True:
                 # The quiet mode is not activated and the local version is
                 # less or equal to the currently read deprecated version.
 
@@ -522,7 +522,7 @@ class CLICore:
 
             # The quiet mode is activated.
 
-            if checked or checked is not False and not checked:
+            if checked is True:
                 # The local version is  less or equal to the currently
                 # read deprecated version.
                 print("Version deprecated.")
@@ -606,8 +606,7 @@ class CLICore:
             )
 
             if (
-                status is not None
-                and not status
+                status is False
                 and not PyFunceble.CONFIGURATION.quiet
                 and not PyFunceble.CONFIGURATION.simple
             ):
@@ -638,7 +637,49 @@ class CLICore:
 
                 # We print the message.
                 print(message)
-            elif status and not PyFunceble.CONFIGURATION.simple:
+            elif (
+                status is True
+                and any(
+                    x in upstream_version["current_version"] for x in ascii_lowercase
+                )
+                and not PyFunceble.CONFIGURATION.simple
+            ):
+                if not PyFunceble.CONFIGURATION.quiet:
+                    # The quiet mode is not activated.
+
+                    # We initiate the message we are going to return to the user.
+                    message = (
+                        Style.BRIGHT
+                        + Fore.GREEN
+                        + "A new pre-release version is available for testing!\n"
+                        + Style.RESET_ALL
+                    )  # pylint:disable=line-too-long
+                    message += (
+                        Style.BRIGHT
+                        + "Your version: "
+                        + Style.RESET_ALL
+                        + PyFunceble.VERSION
+                        + "\n"
+                    )  # pylint:disable=line-too-long
+                    message += (
+                        Style.BRIGHT
+                        + "Upstream version: "
+                        + Style.RESET_ALL
+                        + upstream_version[  # pylint:disable=line-too-long
+                            "current_version"
+                        ]
+                        + "\n"
+                    )
+
+                    # We print the message.
+                    print(message)
+                else:
+                    # The quiet mode is activated.
+
+                    # We print the message.
+                    print("New pre-release is available for testing.")
+
+            elif status is True and not PyFunceble.CONFIGURATION.simple:
                 # The current version is less that the upstream version.
 
                 if not PyFunceble.CONFIGURATION.quiet:
