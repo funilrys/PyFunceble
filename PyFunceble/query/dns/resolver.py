@@ -57,7 +57,7 @@ import dns.resolver
 
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.query.dns.nameserver import Namseservers
+from PyFunceble.query.dns.nameserver import Nameservers
 
 
 class Resolver:
@@ -72,19 +72,19 @@ class Resolver:
 
     timeout: float = 3.0
 
-    nameservers: Namseservers = Namseservers()
+    nameservers: Nameservers = Nameservers()
     internal_resolver: Optional[dns.resolver.Resolver] = None
 
     def __init__(
         self, nameservers: Optional[List[str]] = None, timeout: Optional[float] = None
     ) -> None:
         if nameservers is not None:
-            self.set_nameserver(nameservers)
+            self.set_nameservers(nameservers)
         else:
             self.nameservers.guess_and_set_nameservers()
 
         if timeout is not None:
-            self.set_timeout(nameservers)
+            self.set_timeout(timeout)
         else:
             self.guess_and_set_timeout()
 
@@ -108,7 +108,7 @@ class Resolver:
 
         return wrapper
 
-    def set_nameserver(self, value: List[str]) -> "Resolver":
+    def set_nameservers(self, value: List[str]) -> "Resolver":
         """
         Sets the given nameserver.
         """
@@ -160,7 +160,9 @@ class Resolver:
 
         return self
 
-    def guess_all_settings(self) -> "Resolver":
+    def guess_all_settings(
+        self,
+    ) -> "Resolver":  # pragma: no cover ## Method themselves are more important
         """
         Try to guess all settings.
         """
