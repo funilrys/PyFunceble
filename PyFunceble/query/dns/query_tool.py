@@ -68,7 +68,7 @@ import dns.rdatatype
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.helpers.list import ListHelper
-from PyFunceble.query.dns.nameserver import Namseservers
+from PyFunceble.query.dns.nameserver import Nameservers
 from PyFunceble.query.record.dns import DNSQueryToolRecord
 
 
@@ -92,7 +92,7 @@ class DNSQueryTool:
         x.name: x.value for x in dns.rdatatype.RdataType
     }
 
-    nameservers: Namseservers = Namseservers()
+    nameservers: Nameservers = Nameservers()
     _query_record_type: int = dns.rdatatype.RdataType.ANY
 
     _subject: Optional[str] = None
