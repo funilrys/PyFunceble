@@ -62,7 +62,7 @@ from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.converter.url2netloc import Url2Netloc
 
 
-class Namseservers:
+class Nameservers:
     """
     Provides an interface to get the right nameserver to communicate with.
     """
@@ -79,10 +79,10 @@ class Namseservers:
     def __init__(
         self, nameserver: Optional[List[str]] = None, protocol: str = "TCP"
     ) -> None:
+        self.protocol = protocol
+
         if nameserver is not None:
             self.set_nameservers(nameserver)
-
-        self.protocol = protocol
 
     @staticmethod
     def split_nameserver_from_port(
@@ -157,7 +157,7 @@ class Namseservers:
 
         return result
 
-    def set_nameservers(self, value: List[str]) -> "Namseservers":
+    def set_nameservers(self, value: List[str]) -> "Nameservers":
         """
         Sets the nameserver to use.
 
@@ -182,10 +182,19 @@ class Namseservers:
         for nameserver in value:
             if self.protocol.lower() == "https":
                 if not nameserver.startswith("https://"):
+                    netloc = self.url2netloc.set_data_to_convert(
+                        nameserver
+                    ).get_converted()
+
+                    if "/" in nameserver:
+                        path = nameserver[nameserver.find("/") :]
+                    else:
+                        path = ""
+
                     self.nameservers.append(
                         "https://"
                         # pylint: disable=line-too-long
-                        f"{self.url2netloc.set_data_to_convert(nameserver).get_converted()}"
+                        f"{netloc}{path}"
                     )
                 else:
                     self.nameservers.append(nameserver)
@@ -216,7 +225,7 @@ class Namseservers:
 
         return self.nameserver_ports
 
-    def guess_and_set_nameservers(self) -> "Namseservers":
+    def guess_and_set_nameservers(self) -> "Nameservers":
         """
         Try to guess and set the nameserver to use.
         """
@@ -227,18 +236,18 @@ class Namseservers:
                     self.set_nameservers(PyFunceble.storage.CONFIGURATION.dns.server)
                 else:
                     self.set_nameservers([PyFunceble.storage.CONFIGURATION.dns.server])
-            else:
-                # pragma: no cover
+            else:  # pragma: no cover
                 ## Well, I don't like playing with the default resolver.
                 self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
-        else:
-            # pragma: no cover
+        else:  # pragma: no cover
             ## Well, I don't like playing with the default resolver.
             self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
 
         return self
 
-    def guess_all_settings(self) -> "Namseservers":
+    def guess_all_settings(
+        self,
+    ) -> "Nameservers":  # pragma: no cover ## Method themselves are more important
         """
         Try to guess all settings.
         """
