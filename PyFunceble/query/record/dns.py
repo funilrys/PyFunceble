@@ -67,7 +67,7 @@ class DNSQueryToolRecord(RecordBase):
     nameserver: Optional[str] = None
     port: Optional[int] = None
     follow_nameserver_order: Optional[bool] = None
-    prefered_protocol: Optional[str] = None
+    preferred_protocol: Optional[str] = None
     used_protocol: Optional[str] = None
 
     query_record_type: Optional[str] = None
