@@ -62,6 +62,9 @@ from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 from PyFunceble.cli.migrators.alembic import Alembic
 from PyFunceble.cli.migrators.file_cleanup.hashes_file import HashesFileCleanupMigrator
 from PyFunceble.cli.migrators.file_cleanup.mining_file import MiningFileCleanupMigrator
+from PyFunceble.cli.migrators.file_cleanup.production_config_file import (
+    ProductionConfigFileCleanupMigrator,
+)
 from PyFunceble.cli.migrators.json2csv.inactive import InactiveJSON2CSVMigrator
 from PyFunceble.cli.migrators.json2csv.whois import WhoisJSON2CSVMigrator
 from PyFunceble.cli.migrators.mariadb.file_and_status import FileAndStatusMigrator
@@ -255,6 +258,40 @@ class MigratorProcessesManager(ProcessesManagerBase):
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped hashes_file_cleanup_target. File does not exist."
+            )
+
+    @staticmethod
+    def production_config_file_cleanup_target(
+        continuous_integration: ContinuousIntegrationBase,
+    ) -> None:
+        """
+        Provides the target for the cleanup of the production configuration file.
+        """
+
+        migrator = ProductionConfigFileCleanupMigrator(print_action_to_stdout=True)
+        migrator.continuous_integration = continuous_integration
+
+        if FileHelper(migrator.source_file).exists():
+            print(
+                f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                f"Started deletion of {migrator.source_file!r}."
+            )
+
+            migrator.start()
+
+            if migrator.done:
+                print(
+                    f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                    f"Finished deletion of {migrator.source_file!r}."
+                )
+            else:
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    f"Unfinished deletion of {migrator.source_file!r}."
+                )
+        else:
+            PyFunceble.facility.Logger.info(
+                "Stopped production_config_file_cleanup_target. File does not exist."
             )
 
     @staticmethod
