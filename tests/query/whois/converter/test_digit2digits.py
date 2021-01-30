@@ -60,6 +60,20 @@ class TestDigit2Digits(unittest.TestCase):
     Tests the digit2digits converter.
     """
 
+    def setUp(self) -> None:
+        """
+        Setups everything needed for the tests.
+        """
+
+        self.converter = Digit2Digits()
+
+    def tearDown(self) -> None:
+        """
+        Destroys everything needed for the tests.
+        """
+
+        del self.converter
+
     def test_set_data_to_convert_not_str(self) -> None:
         """
         Tests the method which let us set the data to work with for the case
@@ -68,9 +82,7 @@ class TestDigit2Digits(unittest.TestCase):
 
         given = ["Hello", "World"]
 
-        dig2digs = Digit2Digits()
-
-        self.assertRaises(TypeError, lambda: dig2digs.set_data_to_convert(given))
+        self.assertRaises(TypeError, lambda: self.converter.set_data_to_convert(given))
 
     def test_get_converted_already_formatted(self) -> None:
         """
@@ -79,7 +91,8 @@ class TestDigit2Digits(unittest.TestCase):
         """
 
         expected = "21"
-        actual = Digit2Digits("21").get_converted()
+
+        actual = self.converter.set_data_to_convert("21").get_converted()
 
         self.assertEqual(expected, actual)
 
@@ -90,7 +103,7 @@ class TestDigit2Digits(unittest.TestCase):
         """
 
         expected = "211"
-        actual = Digit2Digits("211").get_converted()
+        actual = self.converter.set_data_to_convert("211").get_converted()
 
         self.assertEqual(expected, actual)
 
