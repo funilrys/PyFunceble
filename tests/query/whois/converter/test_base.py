@@ -50,11 +50,9 @@ License:
     limitations under the License.
 """
 
-from typing import Type
 import unittest
 
 from PyFunceble.query.whois.converter.base import ConverterBase
-
 
 class TestConverterBase(unittest.TestCase):
     """
@@ -132,6 +130,7 @@ class TestConverterBase(unittest.TestCase):
         no data to convert was given.
         """
 
+        # pylint: disable=unnecessary-lambda
         self.assertRaises(TypeError, lambda: self.converter.get_converted())
 
     def test_get_converted_data(self) -> None:
@@ -141,6 +140,7 @@ class TestConverterBase(unittest.TestCase):
 
         self.converter.data_to_convert = "example.org"
 
+        # pylint: disable=unnecessary-lambda
         self.assertRaises(NotImplementedError, lambda: self.converter.get_converted())
 
 
