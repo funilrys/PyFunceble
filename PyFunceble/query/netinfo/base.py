@@ -63,7 +63,7 @@ class NetInfoBase:
     base: Optional[str] = None
 
     def __init__(self, subject: Optional[str] = None) -> None:
-        if subject:
+        if subject is not None:
             self.subject = subject
 
     def ensure_subject_is_given(func):  # pylint: disable=no-self-argument
@@ -75,7 +75,7 @@ class NetInfoBase:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
+        def wrapper(self, *args, **kwargs):
             if not isinstance(self.subject, str):
                 raise TypeError(
                     f"<self.subject> should be {str}, {type(self.subject)} given."
