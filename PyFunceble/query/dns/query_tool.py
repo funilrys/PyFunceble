@@ -97,7 +97,7 @@ class DNSQueryTool:
 
     _subject: Optional[str] = None
     _follow_nameserver_order: bool = True
-    _prefered_protocol: str = "UDP"
+    _preferred_protocol: str = "UDP"
     _query_timeout: float = 3.0
 
     dns_name: Optional[str] = None
@@ -110,17 +110,17 @@ class DNSQueryTool:
         *,
         nameservers: Optional[List[str]] = None,
         follow_nameserver_order: bool = True,
-        prefered_protocol: Optional[str] = None,
+        preferred_protocol: Optional[str] = None,
     ) -> None:
         if nameservers is not None:
             self.set_nameservers(nameservers)
         else:  # pragma: no cover ## I'm not playing with system resolver.
             self.nameservers.guess_and_set_nameservers()
 
-        if prefered_protocol is not None:
-            self.set_prefered_protocol(prefered_protocol)
+        if preferred_protocol is not None:
+            self.set_preferred_protocol(preferred_protocol)
         else:
-            self.guess_and_set_prefered_protocol()
+            self.guess_and_set_preferred_protocol()
 
         self.set_follow_nameserver_order(follow_nameserver_order)
 
@@ -183,8 +183,8 @@ class DNSQueryTool:
             if self.query_timeout != self.lookup_record.query_timeout:
                 self.lookup_record.query_timeout = self.query_timeout
 
-            if self.prefered_protocol != self.lookup_record.prefered_protocol:
-                self.lookup_record.prefered_protocol = self.prefered_protocol
+            if self.preferred_protocol != self.lookup_record.preferred_protocol:
+                self.lookup_record.preferred_protocol = self.preferred_protocol
 
             return result
 
@@ -197,19 +197,14 @@ class DNSQueryTool:
 
         :raise TypeError:
             If :code:`self.subject` is not a :py:class:`str`.
-        :raise ValueError:
-            If :code:`self.subject` is empty.
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
+        def wrapper(self, *args, **kwargs):
             if not isinstance(self.subject, str):
                 raise TypeError(
                     f"<self.subject> should be {str}, {type(self.subject)} given."
                 )
-
-            if not self.subject:
-                raise ValueError("<self.subject> should not be empty.")
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
@@ -222,7 +217,7 @@ class DNSQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
+        def wrapper(self, *args, **kwargs):
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             if result != self.lookup_record.response:
@@ -239,10 +234,10 @@ class DNSQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
+        def wrapper(self, *args, **kwargs):
             if self.query_message:
                 return func(self, *args, **kwargs)  # pylint: disable=not-callable
-            return []
+            return []  # pragma: no cover ## Safety
 
         return wrapper
 
@@ -470,17 +465,17 @@ class DNSQueryTool:
         return self
 
     @property
-    def prefered_protocol(self) -> Optional[str]:
+    def preferred_protocol(self) -> Optional[str]:
         """
-        Provides the current state of the :code:`_prefered_protocol` attribute.
+        Provides the current state of the :code:`_preferred_protocol` attribute.
         """
 
-        return self._prefered_protocol
+        return self._preferred_protocol
 
-    @prefered_protocol.setter
-    def prefered_protocol(self, value: str) -> None:
+    @preferred_protocol.setter
+    def preferred_protocol(self, value: str) -> None:
         """
-        Sets the prefered protocol.
+        Sets the preferred protocol.
 
         :param value:
             The protocol to use.
@@ -488,7 +483,7 @@ class DNSQueryTool:
         :raise TypeError:
             When the given :code:`value` is not a :py:class:`str`.
         :raise ValueError:
-            Whent the given :code:`value` is unkown or unsupported.
+            When the given :code:`value` is unknown or unsupported.
         """
 
         if not isinstance(value, str):
@@ -502,36 +497,38 @@ class DNSQueryTool:
                 f"(supported: {self.SUPPORTED_PROTOCOL!r})."
             )
 
-        self._prefered_protocol = self.nameservers.protocol = value
+        self._preferred_protocol = self.nameservers.protocol = value
 
-    def set_prefered_protocol(self, value: str) -> "DNSQueryTool":
+    def set_preferred_protocol(self, value: str) -> "DNSQueryTool":
         """
-        Sets the prefered protocol.
+        Sets the preferred protocol.
 
         :param value:
             The protocol to use.
         """
 
-        self.prefered_protocol = value
+        self.preferred_protocol = value
 
         return self
 
-    def guess_and_set_prefered_protocol(self) -> "DNSQueryTool":
+    def guess_and_set_preferred_protocol(self) -> "DNSQueryTool":
         """
-        Try to guess and set the prefered procol.
+        Try to guess and set the preferred procol.
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
             if PyFunceble.storage.CONFIGURATION.dns.protocol:
-                self.prefered_protocol = PyFunceble.storage.CONFIGURATION.dns.protocol
+                self.preferred_protocol = PyFunceble.storage.CONFIGURATION.dns.protocol
             else:
-                self.prefered_protocol = self.STD_PROTOCOL
+                self.preferred_protocol = self.STD_PROTOCOL
         else:
-            self.prefered_protocol = self.STD_PROTOCOL
+            self.preferred_protocol = self.STD_PROTOCOL
 
         return self
 
-    def guess_all_settings(self) -> "DNSQueryTool":
+    def guess_all_settings(
+        self,
+    ) -> "DNSQueryTool":  # pragma: no cover ## Method themselves are more important
         """
         Try to guess all settings.
         """
@@ -546,16 +543,9 @@ class DNSQueryTool:
 
         return self
 
-    def get_prefered_protocol(self) -> Optional[str]:
-        """
-        Provides the currently set prefered protocol.
-        """
-
-        return self.prefered_protocol
-
     def get_lookup_record(
         self,
-    ) -> Optional[DNSQueryToolRecord]:  # pragma: no cover ## It's just a dataclass
+    ) -> Optional[DNSQueryToolRecord]:
         """
         Provides the current query record.
         """
@@ -564,7 +554,7 @@ class DNSQueryTool:
 
     def _get_result_from_response(
         self, response: dns.message.Message
-    ) -> List[str]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> List[str]:  # pragma: no cover ## This just reads upstream result
         """
         Given a response, we return the best possible result.
         """
@@ -614,7 +604,7 @@ class DNSQueryTool:
     @update_lookup_record_response
     def tcp(
         self,
-    ) -> Optional[List[str]]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> Optional[List[str]]:
         """
         Request the chosen record through the TCP protocol.
         """
@@ -672,7 +662,7 @@ class DNSQueryTool:
     @update_lookup_record_response
     def udp(
         self,
-    ) -> Optional[List[str]]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> Optional[List[str]]:
         """
         Request the chosen record through the UTP protocol.
         """
@@ -711,7 +701,11 @@ class DNSQueryTool:
                     )
 
                     break
-            except (dns.exception.Timeout, socket.gaierror, ValueError):
+            except (
+                dns.exception.Timeout,
+                socket.gaierror,
+                ValueError,
+            ):
                 pass
 
             PyFunceble.facility.Logger.debug(
@@ -730,7 +724,7 @@ class DNSQueryTool:
     @update_lookup_record_response
     def https(
         self,
-    ) -> Optional[List[str]]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> Optional[List[str]]:
         """
         Request the chosen record through the https protocol.
         """
@@ -782,7 +776,7 @@ class DNSQueryTool:
     @update_lookup_record_response
     def tls(
         self,
-    ) -> Optional[List[str]]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> Optional[List[str]]:
         """
         Request the chosen record through the TLS protocol.
         """
@@ -842,9 +836,9 @@ class DNSQueryTool:
 
     def query(
         self,
-    ) -> Optional[List[str]]:  # pragma: no cover ## Let's trust upstream tests.
+    ) -> Optional[List[str]]:
         """
-        Process the query based on the prefered protocol.
+        Process the query based on the preferred protocol.
         """
 
-        return getattr(self, self.prefered_protocol.lower())()
+        return getattr(self, self.preferred_protocol.lower())()
