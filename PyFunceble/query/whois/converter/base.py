@@ -74,7 +74,7 @@ class ConverterBase:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
+        def wrapper(self, *args, **kwargs):
             if not isinstance(self.data_to_convert, str):
                 raise TypeError(
                     f"<self.subject> should be {str}, "
