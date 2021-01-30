@@ -31,6 +31,15 @@ PyFunceble.cli.migrators.file\_cleanup.mining\_file module
    :show-inheritance:
    :private-members:
 
+PyFunceble.cli.migrators.file\_cleanup.production\_config\_file module
+----------------------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.migrators.file_cleanup.production_config_file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 Module contents
 ---------------
 
