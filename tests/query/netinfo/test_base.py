@@ -154,6 +154,7 @@ class TestNetInfobase(unittest.TestCase):
         for the case that no subject is given.
         """
 
+        # pylint: disable=unnecessary-lambda
         self.assertRaises(TypeError, lambda: self.interface.get_info())
 
     def test_get_info(self) -> None:
@@ -165,6 +166,7 @@ class TestNetInfobase(unittest.TestCase):
 
         self.interface.subject = given
 
+        # pylint: disable=unnecessary-lambda
         self.assertRaises(NotImplementedError, lambda: self.interface.get_info())
 
 
