@@ -225,6 +225,7 @@ class ProductionPrep:
                 (r"\/blob\/%s\/" % "master", "/blob/%s/" % "dev"),
                 (r"\/pypi\/v\/pyfunceble\.png$", "/pypi/v/pyfunceble-%s.png" % "dev"),
                 (r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "master", "/\\1/%s/" % "dev"),
+                (r"\/(PyFunceble\/tree)\/%s" % "master", "/\\1/%s" % "dev"),
             ]
         elif self.branch == "master":
             regexes = [
@@ -243,6 +244,7 @@ class ProductionPrep:
                     "/pypi/v/pyfunceble-dev.png",
                 ),
                 (r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev", "/\\1/%s/" % "master"),
+                (r"\/(PyFunceble\/tree)\/%s" % "dev", "/\\1/%s" % "master"),
             ]
         else:
             regexes = {}
