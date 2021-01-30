@@ -110,7 +110,7 @@ What can PyFunceble do?
 .. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
     :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
-Please report to the `documentation for more GIF`_.
+Please report to the `homepage for more GIF`_.
 
 ___________________________________________
 
@@ -175,6 +175,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
+-   rusty-snake - `@rusty-snake`_
 -   ScriptTiger - `@ScriptTiger`_
 -   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
@@ -292,6 +293,7 @@ License
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@rthalley: https://github.com/rthalley
+.. _@rusty-snake: https://github.com/rusty-snake
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@SMed79: https://github.com/SMed79
@@ -305,6 +307,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
+.. _homepage for more GIF: http://pyfunceble.github.io/
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
