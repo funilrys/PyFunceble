@@ -96,7 +96,7 @@ class Month2Unified(ConverterBase):
         Provides the converted data (after conversion)
 
         .. warning::
-            If no month is found, the given data is given as reponse.
+            If no month is found, the given data is given as response.
         """
 
         for to_return, possibilities in self.MAP.items():
