@@ -374,6 +374,29 @@ class SystemLauncher(SystemBase):
                 return True
             return False
 
+        def create_trigger_file_if_necessary(parent_dirname: str) -> None:
+            """
+            Create the trigger file if necessary. The purpose of the trigger
+            file is to have a file that is always updated until a test is
+            completed done.
+            """
+
+            if self.continuous_integration.authorized:
+                cleanup_tool = FilesystemCleanup(parent_dirname)
+
+                trigger_file_helper = FileHelper(
+                    os.path.join(
+                        cleanup_tool.get_output_basedir(),
+                        PyFunceble.cli.storage.CI_TRIGGER_FILE,
+                    )
+                )
+
+                # Ensures that we always have something to commit.
+                trigger_file_helper.write(
+                    f"{self.sessions_id[parent_dirname]} " f"{secrets.token_hex(8)}",
+                    overwrite=True,
+                )
+
         def cleanup_if_necessary(parent_dirname: str) -> None:
             """
             Process the cleanup if it's necessary.
@@ -384,13 +407,6 @@ class SystemLauncher(SystemBase):
                 os.path.join(
                     cleanup_tool.get_output_basedir(),
                     PyFunceble.cli.storage.TEST_RUNNING_FILE,
-                )
-            )
-
-            trigger_file_helper = FileHelper(
-                os.path.join(
-                    cleanup_tool.get_output_basedir(),
-                    PyFunceble.cli.storage.CI_TRIGGER_FILE,
                 )
             )
 
@@ -412,14 +428,6 @@ class SystemLauncher(SystemBase):
                 except (ValueError, TypeError):
                     self.sessions_id[parent_dirname] = possible_session_id
 
-            if self.continuous_integration.authorized:
-                # Ensures that we always have somethin
-                trigger_file_helper.write(
-                    f"{self.sessions_id[parent_dirname]} "
-                    f"{datetime.datetime.utcnow().isoformat()}",
-                    overwrite=True,
-                )
-
         def match_output_directory_if_necessary(parent_dirname: str) -> None:
             """
             Restore missing directories from the current directory.
@@ -434,6 +442,7 @@ class SystemLauncher(SystemBase):
             possible decoding case before submitting a new subject to the queue.
             """
 
+            create_trigger_file_if_necessary(protocol["destination"])
             cleanup_if_necessary(protocol["destination"])
             match_output_directory_if_necessary(protocol["destination"])
 
@@ -479,6 +488,7 @@ class SystemLauncher(SystemBase):
                 for subject in self.continue_dataset.get_to_test(
                     protocol["session_id"]
                 ):
+
                     self.ci_stop_in_the_middle_if_time_exceeded()
 
                     to_send = copy.deepcopy(protocol)
