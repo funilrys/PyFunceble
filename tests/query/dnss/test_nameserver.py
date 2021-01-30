@@ -90,12 +90,20 @@ class TestNameserver(unittest.TestCase):
 
     @staticmethod
     def fake_resolve_response(data: str) -> object:
+        """
+        Provides a fake resolve response to use.
+        """
+
         return dataclasses.make_dataclass(
             "FakeResponse", [("address", str, dataclasses.field(default=data))]
         )
 
     @staticmethod
     def fake_resolver(_: str, rqtype: str):
+        """
+        Provides a fake resolution.
+        """
+
         if rqtype == "A":
             return [
                 TestNameserver.fake_resolve_response("192.168.1.1"),
