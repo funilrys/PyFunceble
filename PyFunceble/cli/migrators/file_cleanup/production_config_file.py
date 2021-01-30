@@ -51,11 +51,10 @@ License:
 """
 
 import os
-import tempfile
+
 import PyFunceble.cli.storage
 import PyFunceble.storage
 from PyFunceble.cli.migrators.file_cleanup.base import FileClenupMigratorBase
-from PyFunceble.utils.version import VersionUtility
 
 
 class ProductionConfigFileCleanupMigrator(FileClenupMigratorBase):
