@@ -236,6 +236,9 @@ def get_subjects_from_line(
 
     if checker_type.lower() != "syntax":
         for index, subject in enumerate(result):
+            if not subject:
+                continue
+
             netloc = url2netloc.set_data_to_convert(subject).get_converted()
 
             result[index] = subject.replace(netloc, netloc.lower())
