@@ -54,6 +54,7 @@ import unittest
 
 from PyFunceble.query.whois.converter.base import ConverterBase
 
+
 class TestConverterBase(unittest.TestCase):
     """
     Tests the base of all our converters.
