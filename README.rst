@@ -307,6 +307,6 @@ License
 .. _@ybreza: https://github.com/ybreza
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/master/in-action.html
+.. _homepage for more GIF: http://pyfunceble.github.io/
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y
