@@ -170,7 +170,7 @@ class CSVDatasetBase(DBDatasetBase):
         if self.remove_unneeded_fields:
             row = self.get_filtered_row(row)
 
-        our_temp_file = tempfile.NamedTemporaryFile("w", delete=False)
+        our_temp_file = tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8")
         our_temp_filename = our_temp_file.name
 
         writer = csv.DictWriter(our_temp_file, fieldnames=self.FIELDS)
