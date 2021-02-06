@@ -233,3 +233,86 @@ jobs:
           --pyfunceble-version="$(python setup.py --version)"
           --python-version="${DOCKER_PYTHON_VERSION}"
           --is-latest --publish --commit="$(git log -1 --format=format:'%H')"
+
+  deploy_to_aur:
+    needs: deploy_to_pypi
+    name: "Deploy 📦 to the AUR"
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+
+    container:
+      image: archlinux
+
+    steps:
+      - name: Store the SSH key
+        run: |
+          echo "${{ secrets.AUR_SSH_KEY }}" | install -Dm600 /dev/stdin /root/.ssh/id_rsa
+
+      - name: Get time for cache
+        id: cache_time
+        run: echo "::set-output name=time::$(date +%F-%T)"
+
+      - name: Set up cache
+        uses: actions/cache@master
+        with:
+          path: /var/cache/pacman/pkg
+          key: pacman-cache-x86_64-${{ steps.cache_time.outputs.time }}
+          restore-keys: pacman-cache-x86_64-
+
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools
+
+      - uses: actions/checkout@v2
+        name: Clone repository
+
+      - name: Publish 📦 to the AUR - if necessary
+        env:
+          GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+        run: |
+          aurRepoDir=/tmp/pyfunceble
+          githubRepoDir="${PWD}"
+          buildDir="/tmp/build"
+
+          latest=$(python3 setup.py --version)
+
+          git config --global user.name ${{ github.actor }}
+          git config --global user.email ${{ secrets.GIT_EMAIL }}
+          git clone ssh://aur@aur.archlinux.org/pyfunceble.git ${aurRepoDir}
+
+          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git'} ${aurRepoDir}/ ${buildDir}/
+
+          cd ${buildDir}
+
+          current=$(grep -P "^pkgver" PKGBUILD | cut -d= -f2)
+
+          echo "Previous version: ${current}"
+          echo "New version: ${latest}"
+
+          [[ "${current}" == "${latest}" ]] && exit 0
+
+          useradd makepkg
+          chown makepkg:root . -R
+
+          sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
+          sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
+
+          su makepkg -c "updpkgsums"
+          su makepkg -c "makepkg --printsrcinfo" > .SRCINFO
+
+          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git'} ${buildDir}/ ${aurRepoDir}/
+
+          cd ${aurRepoDir}
+
+          git add .
+          git diff --quiet --exit-code --cached || git commit -m "Update PyFunceble to v${latest}"
+          git push origin master
