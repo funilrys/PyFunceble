@@ -354,7 +354,7 @@ DEFAULT_CONFIG: dict = {
         "file_filter": None,
         "file_generation": {
             "analytic": True,
-            "hosts": True,
+            "hosts": False,
             "no_file": False,
             "plain": True,
             "unified_results": False,

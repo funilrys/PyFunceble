@@ -175,7 +175,7 @@ cli_testing:
     no_file: False
 
     # Activates the generation of the hosts file(s).
-    hosts: True
+    hosts: False
 
     # Activates the generation of the plain (or raw) file(s).
     plain: True
