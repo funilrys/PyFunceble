@@ -289,7 +289,7 @@ jobs:
           git config --global user.email ${{ secrets.GIT_EMAIL }}
           git clone ssh://aur@aur.archlinux.org/pyfunceble.git ${aurRepoDir}
 
-          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git'} ${aurRepoDir}/ ${buildDir}/
+          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git','LICENSE'} ${aurRepoDir}/ ${buildDir}/
 
           cd ${buildDir}
 
@@ -309,7 +309,7 @@ jobs:
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO
 
-          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git'} ${buildDir}/ ${aurRepoDir}/
+          rsync --progress --delete -r --exclude={'*.gz','*.xz','.github','pkg','src','.git','LICENSE'} ${buildDir}/ ${aurRepoDir}/
 
           cd ${aurRepoDir}
 
