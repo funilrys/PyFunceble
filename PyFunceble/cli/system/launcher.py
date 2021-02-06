@@ -442,8 +442,8 @@ class SystemLauncher(SystemBase):
             possible decoding case before submitting a new subject to the queue.
             """
 
-            create_trigger_file_if_necessary(protocol["destination"])
             cleanup_if_necessary(protocol["destination"])
+            create_trigger_file_if_necessary(protocol["destination"])
             match_output_directory_if_necessary(protocol["destination"])
 
             if download_file(protocol["subject"], protocol["destination"]):
