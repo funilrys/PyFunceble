@@ -258,3 +258,7 @@ class ReputationCheckerBase(CheckerBase):
             )
 
         return self
+
+    # pylint: disable=useless-super-delegation
+    def get_status(self) -> Optional[ReputationCheckerStatus]:
+        return super().get_status()

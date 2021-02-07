@@ -109,3 +109,7 @@ class SyntaxCheckerBase(CheckerBase):
     @CheckerBase.ensure_subject_is_given
     def is_valid(self) -> bool:
         raise NotImplementedError()
+
+    # pylint: disable=useless-super-delegation
+    def get_status(self) -> Optional[SyntaxCheckerStatus]:
+        return super().get_status()
