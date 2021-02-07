@@ -903,3 +903,7 @@ class AvailabilityCheckerBase(CheckerBase):
         """
 
         raise NotImplementedError()
+
+    # pylint: disable=useless-super-delegation
+    def get_status(self) -> Optional[AvailabilityCheckerStatus]:
+        return super().get_status()
