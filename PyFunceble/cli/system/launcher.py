@@ -817,13 +817,14 @@ class SystemLauncher(SystemBase):
         Starts our core processes.
         """
 
-        self.producer_process_manager.start()
-        self.tester_process_manager.send_feeding_signal(worker_name="main")
+        if not self.producer_process_manager.is_running():
+            self.producer_process_manager.start()
+            self.tester_process_manager.send_feeding_signal(worker_name="main")
 
-        self.tester_process_manager.start()
+            self.tester_process_manager.start()
 
-        if self.miner_process_manager:
-            self.miner_process_manager.start()
+            if self.miner_process_manager:
+                self.miner_process_manager.start()
 
     @SystemBase.ensure_args_is_given
     def start(self) -> "SystemLauncher":
