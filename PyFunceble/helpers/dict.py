@@ -391,7 +391,7 @@ class DictHelper:
                 for yek, eulav in (
                     DictHelper(value).flatten(separator=separator, previous=key).items()
                 ):
-                    if previous:
+                    if previous is not None:
                         result[f"{previous}{separator}{yek}"] = eulav
                     else:
                         result[yek] = eulav
@@ -399,9 +399,6 @@ class DictHelper:
             if previous:
                 result[previous] = data
             else:
-                while separator in result:
-                    separator += separator
-
                 result[separator] = data
 
         return result
@@ -423,7 +420,10 @@ class DictHelper:
             local_result = result
 
             if separator in key:
-                splitted_sep = key.split(separator)
+                splitted_sep = key.replace(separator + separator, separator).split(
+                    separator
+                )
+
                 for yek in splitted_sep[:-1]:
                     if yek not in local_result:
                         local_result[yek] = dict()
