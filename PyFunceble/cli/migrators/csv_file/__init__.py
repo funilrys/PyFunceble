@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the schema of our "whois_record" table.
+Provides the csv file(s) migrators.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -49,20 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from datetime import datetime
-
-from sqlalchemy import Column, DateTime, String, Text
-
-from PyFunceble.database.sqlalchemy.base_schema import SchemaBase
-
-
-class Inactive(SchemaBase):
-    """
-    Provides the schema of our inactive table.
-    """
-
-    idna_subject = Column(Text, nullable=False)
-    checker_type = Column(String(length=50), nullable=False)
-    destination = Column(Text, nullable=False)
-    tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)

@@ -255,8 +255,6 @@ class SystemLauncher(SystemBase):
                     "subject": domain,
                     "idna_subject": domain2idna.domain2idna(domain),
                     "source": None,
-                    "abs_source": None,
-                    "rel_source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -277,8 +275,6 @@ class SystemLauncher(SystemBase):
                     "subject": url,
                     "idna_subject": domain2idna.domain2idna(url),
                     "source": None,
-                    "abs_source": None,
-                    "rel_source": None,
                     "output_dir": None,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -298,8 +294,6 @@ class SystemLauncher(SystemBase):
                     # pylint: disable=line-too-long
                     "destination": get_destination_from_origin(file),
                     "source": file,
-                    "abs_source": os.path.abspath(file),
-                    "rel_source": os.path.relpath(file),
                     "subject": file,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -323,8 +317,6 @@ class SystemLauncher(SystemBase):
                     # pylint: disable=line-too-long
                     "destination": get_destination_from_origin(file),
                     "source": file,
-                    "abs_source": os.path.abspath(file),
-                    "rel_source": os.path.relpath(file),
                     "subject": file,
                     "checker_type": self.checker_type,
                     "session_id": None,
@@ -447,14 +439,11 @@ class SystemLauncher(SystemBase):
             match_output_directory_if_necessary(protocol["destination"])
 
             if download_file(protocol["subject"], protocol["destination"]):
-                protocol["subject"] = os.path.abspath(protocol["destination"])
-
-                protocol["abs_source"] = os.path.abspath(protocol["subject"])
-                protocol["rel_source"] = os.path.relpath(protocol["subject"])
+                protocol["subject"] = os.path.relpath(protocol["destination"])
             else:
-                protocol["subject"] = os.path.abspath(protocol["subject"])
+                protocol["subject"] = os.path.relpath(protocol["subject"])
 
-            protocol["source"] = os.path.abspath(protocol["destination"])
+            protocol["source"] = os.path.relpath(protocol["destination"])
             protocol["session_id"] = self.sessions_id[protocol["destination"]]
 
             if isinstance(self.continue_dataset, CSVContinueDataset):
@@ -533,7 +522,7 @@ class SystemLauncher(SystemBase):
             # Now, let's handle the inactive one :-)
             if bool(PyFunceble.storage.CONFIGURATION.cli_testing.inactive_db):
                 for dataset in self.inactive_dataset.get_to_retest(
-                    protocol["source"],
+                    protocol["destination"],
                     protocol["checker_type"],
                     # pylint: disable=line-too-long
                     min_days=PyFunceble.storage.CONFIGURATION.cli_testing.days_between.db_retest,

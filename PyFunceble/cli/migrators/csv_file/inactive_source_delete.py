@@ -11,16 +11,17 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the schema of our "whois_record" table.
+Provides the interface for the deletion of the 'source' column from the
+inactive dataset.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -50,19 +51,32 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime
+import os
+from typing import List
 
-from sqlalchemy import Column, DateTime, String, Text
+import PyFunceble.cli.storage
+import PyFunceble.storage
+from PyFunceble.cli.migrators.csv_file.base import CSVFileMigratorBase
 
-from PyFunceble.database.sqlalchemy.base_schema import SchemaBase
 
-
-class Inactive(SchemaBase):
+class InactiveDatasetDeleteSourceColumnMigrator(CSVFileMigratorBase):
     """
-    Provides the schema of our inactive table.
+    Provides the interface for the deletion of the 'source' column.
     """
 
-    idna_subject = Column(Text, nullable=False)
-    checker_type = Column(String(length=50), nullable=False)
-    destination = Column(Text, nullable=False)
-    tested_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
+    FIELDS: List[str] = [
+        "idna_subject",
+        "checker_type",
+        "destination",
+        "source",
+        "tested_at",
+    ]
+
+    TO_DELETE: List[str] = ["source"]
+
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.INACTIVE_DB_FILE
+        )
+
+        return super().__post_init__()

@@ -75,13 +75,13 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
 
     @CSVDatasetBase.execute_if_authorized(None)
     def get_to_retest(
-        self, source: str, checker_type: str, *, min_days: Optional[int]
+        self, destination: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
 
         days_ago = datetime.utcnow() - timedelta(days=min_days)
 
         for dataset in self.get_filtered_content(
-            {"source": source, "checker_type": checker_type}
+            {"destination": destination, "checker_type": checker_type}
         ):
             if not isinstance(dataset["tested_at"], datetime):
                 try:

@@ -334,7 +334,7 @@ class FilePreloader:
         self.__load_description()
 
         broken = False
-        file_helper = FileHelper(self.protocol["abs_source"])
+        file_helper = FileHelper(self.protocol["source"])
         self.__description["hash"] = HashHelper().hash_file(file_helper.path)
 
         if isinstance(self.continue_dataset, CSVContinueDataset):

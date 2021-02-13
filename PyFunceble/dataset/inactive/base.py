@@ -64,7 +64,6 @@ class InactiveDatasetBase(DBDatasetBase):
         "idna_subject",
         "checker_type",
         "destination",
-        "source",
         "tested_at",
     ]
 
@@ -72,12 +71,11 @@ class InactiveDatasetBase(DBDatasetBase):
         "idna_subject",
         "checker_type",
         "destination",
-        "source",
     ]
 
     @DBDatasetBase.execute_if_authorized(None)
     def get_to_retest(
-        self, source: str, checker_type: str, *, min_days: Optional[int] = 1
+        self, destination: str, checker_type: str, *, min_days: Optional[int] = 1
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
         """
         Provides the next row to restest.

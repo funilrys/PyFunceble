@@ -72,8 +72,6 @@ class ContinueDatasetBase(DBDatasetBase):
     COMPARISON_FIELDS: List[str] = [
         "idna_subject",
         "checker_type",
-        "destination",
-        "source",
         "session_id",
     ]
 
