@@ -54,6 +54,7 @@ License:
 
 import datetime
 import functools
+import secrets
 from typing import Any, Optional
 
 import PyFunceble.cli.continuous_integration.exceptions
@@ -1170,7 +1171,8 @@ class ContinuousIntegrationBase:
                     ("git add --all", True),
                     (
                         "git commit -a -m "
-                        f'"{self.end_commit_message} {self.end_commit_marker}"',
+                        f'"{self.end_commit_message} {self.end_commit_marker}\n\n'
+                        f'{secrets.token_bytes(18)}"',
                         True,
                     ),
                 ]
@@ -1215,7 +1217,9 @@ class ContinuousIntegrationBase:
                 [
                     ("git add --all", True),
                     (
-                        "git commit -a -m " f'"{self.commit_message}"',
+                        "git commit -a -m "
+                        f'"{self.commit_message}\n\n'
+                        f'{secrets.token_bytes(18)}"',
                         True,
                     ),
                 ]
