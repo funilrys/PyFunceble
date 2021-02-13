@@ -120,7 +120,13 @@ class ListHelper:
         Removes the duplicates of the current list.
         """
 
-        self.subject = list(set(self.subject))
+        result = []
+
+        for element in self.subject:
+            if element not in result:
+                result.append(element)
+
+        self.subject = result
 
         return self
 
