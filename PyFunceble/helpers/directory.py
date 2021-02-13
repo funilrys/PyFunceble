@@ -54,6 +54,8 @@ import os
 import shutil
 from typing import List, Optional
 
+from PyFunceble.helpers.list import ListHelper
+
 
 class DirectoryHelper:
     """
@@ -65,7 +67,7 @@ class DirectoryHelper:
     _path: Optional[str] = None
 
     def __init__(self, path: Optional[str] = None) -> None:
-        if path:
+        if path is not None:
             self.path = path
 
     @property
@@ -172,12 +174,11 @@ class DirectoryHelper:
         result = []
 
         if self.exists():
-            result = [x.path for x in os.scandir(self.path) if x.is_dir()]
+            for root, directories, _ in os.walk(self.path):
+                for directory in directories:
+                    result.append(os.path.join(root, directory))
 
-            for directory in result:
-                result.extend(DirectoryHelper(directory).list_all_subdirectories())
-
-        return result
+        return ListHelper(result).remove_duplicates().sort().subject
 
     def list_all_files(self) -> List[str]:
         """
@@ -188,12 +189,12 @@ class DirectoryHelper:
 
         if self.exists():
             for directory in self.list_all_subdirectories():
-                result.extend(
-                    [
-                        os.path.join(directory, x)
-                        for x in os.listdir(directory)
-                        if os.path.isfile(x)
-                    ]
-                )
+                for element in os.listdir(directory):
+                    possible_element = os.path.join(directory, element)
 
-        return result
+                    if not os.path.isfile(possible_element):
+                        continue
+
+                    result.append(possible_element)
+
+        return ListHelper(result).sort().subject
