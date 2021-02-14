@@ -49,6 +49,15 @@ PyFunceble.data.alembic.versions.459a0d7b8f09\_add\_idna\_subject\_column\_into\
    :show-inheritance:
    :private-members:
 
+PyFunceble.data.alembic.versions.6f4729deaf03\_delete\_inactive\_source\_column module
+--------------------------------------------------------------------------------------
+
+.. automodule:: PyFunceble.data.alembic.versions.6f4729deaf03_delete_inactive_source_column
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.data.alembic.versions.7bcf7fa64ba1\_rename\_created\_to\_created\_at\_and module
 -------------------------------------------------------------------------------------------
 
