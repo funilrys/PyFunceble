@@ -58,6 +58,7 @@ import unittest.mock
 
 from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.list import ListHelper
+from PyFunceble.utils.platform import PlatformUtility
 
 
 class TestDirectoryHelper(unittest.TestCase):
@@ -179,7 +180,11 @@ class TestDirectoryHelper(unittest.TestCase):
 
         getcwd_path.return_value = "/hello/world"
 
-        expected = "/hello/world/"
+        if PlatformUtility.is_windows():
+            expected = "/hello/world\\"
+        else:
+            expected = "/hello/world/"
+
         actual = self.helper.get_current(with_end_sep=True)
 
         self.assertEqual(expected, actual)
@@ -189,8 +194,12 @@ class TestDirectoryHelper(unittest.TestCase):
         Tests the method which let us join paths.
         """
 
-        given = "/hello/world"
-        expected = "/hello/world/hello/world"
+        if PlatformUtility.is_windows():
+            given = "\\hello\\world"
+            expected = "\\hello\\world\\hello\\world"
+        else:
+            given = "/hello/world"
+            expected = "/hello/world/hello/world"
 
         actual = DirectoryHelper(given).join_path("hello", "world")
 
