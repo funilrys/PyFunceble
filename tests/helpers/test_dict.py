@@ -295,7 +295,7 @@ class TestDictHelper(unittest.TestCase):
         file.
         """
 
-        output_file = tempfile.NamedTemporaryFile()
+        output_file = tempfile.NamedTemporaryFile("w")
 
         given = copy.deepcopy(self.test_subject)
         expected = copy.deepcopy(self.test_subject)
@@ -314,7 +314,7 @@ class TestDictHelper(unittest.TestCase):
         JSON file is given.
         """
 
-        output_file = tempfile.NamedTemporaryFile()
+        output_file = tempfile.NamedTemporaryFile("wb")
         output_file.write(b"Hello, World!")
 
         output_file.seek(0)
@@ -373,7 +373,7 @@ class TestDictHelper(unittest.TestCase):
         Tests the method which let us save and load a dict into/from a YAML file.
         """
 
-        output_file = tempfile.NamedTemporaryFile()
+        output_file = tempfile.NamedTemporaryFile("w")
 
         given = copy.deepcopy(self.test_subject)
 
