@@ -1113,8 +1113,8 @@ Sets the command to execute before the final commit.
 
 ------
 
-:code:`--ci-commit-message` "message"`
-""""""""""""""""""""""""""""""""""""""
+:code:`--ci-commit-message "message"`
+"""""""""""""""""""""""""""""""""""""
 .. versionchanged:: 4.0.0
 
 Sets the commit message to apply every time we have to apply a commit except
