@@ -71,15 +71,6 @@ The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunc
 
    $ docker pull pyfunceble/pyfunceble
 
-Using :code:`conda`
-^^^^^^^^^^^^^^^^^^^
-
-Our repository is located at https://anaconda.org/pyfunceble/pyfunceble
-
-::
-
-   conda install -c conda-forge -c pyfunceble pyfunceble=3
-
 Pure Python method
 ^^^^^^^^^^^^^^^^^^
 
