@@ -988,7 +988,7 @@ CPU - 2. Otherwise, it will 1.
 .. note::
 
     If you have a CPU with 4 cores or Threads (depends on it's age) Then the
-    number of workers will be 4 * 5 = 20 workers
+    number of workers will be 4 - 2 = 2 workers
 
 .. warning::
 
