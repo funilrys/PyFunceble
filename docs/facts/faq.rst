@@ -26,10 +26,10 @@ By default the number of workers is equal to:
 
 ::
 
-    CPU CORES * 5
+    CPU CORES - 2
 
 meaning that if you have 8 CPU cores, the value will be automatically set to
-:code:`40`.
+:code:`6`.
 
 
 .. warning::
