@@ -58,6 +58,7 @@ import multiprocessing
 import os
 import secrets
 import sys
+import traceback
 from typing import List, Optional
 
 import colorama
@@ -859,7 +860,12 @@ class SystemLauncher(SystemBase):
                 "Fatal error.",
                 exc_info=True,
             )
-            print(f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: {exception}")
+            print(
+                f"{colorama.Fore.RED}{colorama.Style.BRIGHT}Fatal Error: "
+                f"{exception}"
+            )
+
+            print(traceback.format_exc())
             sys.exit(1)
 
         PyFunceble.cli.utils.stdout.print_thanks()
