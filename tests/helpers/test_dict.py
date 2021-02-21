@@ -309,6 +309,8 @@ class TestDictHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        output_file.close()
+
         os.remove(output_file.name)
 
     def test_from_json_file_not_json(self) -> None:
@@ -326,6 +328,8 @@ class TestDictHelper(unittest.TestCase):
         actual = self.helper.from_json_file(output_file.name)
 
         self.assertEqual(expected, actual)
+
+        output_file.close()
 
         os.remove(output_file.name)
 
@@ -391,6 +395,8 @@ class TestDictHelper(unittest.TestCase):
         actual = self.helper.from_yaml_file(output_file.name)
 
         self.assertEqual(expected, actual)
+
+        output_file.close()
 
         os.remove(output_file.name)
 
