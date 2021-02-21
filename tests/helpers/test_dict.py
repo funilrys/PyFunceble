@@ -51,6 +51,7 @@ License:
 """
 
 import copy
+import os
 import tempfile
 import unittest
 
@@ -295,7 +296,7 @@ class TestDictHelper(unittest.TestCase):
         file.
         """
 
-        output_file = tempfile.NamedTemporaryFile("w")
+        output_file = tempfile.NamedTemporaryFile("w", delete=False)
 
         given = copy.deepcopy(self.test_subject)
         expected = copy.deepcopy(self.test_subject)
@@ -308,13 +309,15 @@ class TestDictHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+        os.remove(output_file.name)
+
     def test_from_json_file_not_json(self) -> None:
         """
         Tests the method which let us load a JSON file for the case that no
         JSON file is given.
         """
 
-        output_file = tempfile.NamedTemporaryFile("wb")
+        output_file = tempfile.NamedTemporaryFile("wb", delete=False)
         output_file.write(b"Hello, World!")
 
         output_file.seek(0)
@@ -323,6 +326,8 @@ class TestDictHelper(unittest.TestCase):
         actual = self.helper.from_json_file(output_file.name)
 
         self.assertEqual(expected, actual)
+
+        os.remove(output_file.name)
 
     def test_to_json(self) -> None:
         """
@@ -373,7 +378,7 @@ class TestDictHelper(unittest.TestCase):
         Tests the method which let us save and load a dict into/from a YAML file.
         """
 
-        output_file = tempfile.NamedTemporaryFile("w")
+        output_file = tempfile.NamedTemporaryFile("w", delete=False)
 
         given = copy.deepcopy(self.test_subject)
 
@@ -386,6 +391,8 @@ class TestDictHelper(unittest.TestCase):
         actual = self.helper.from_yaml_file(output_file.name)
 
         self.assertEqual(expected, actual)
+
+        os.remove(output_file.name)
 
     def test_to_yaml(self) -> None:
         """
