@@ -195,6 +195,8 @@ class MariaDBDatasetBase(DBDatasetBase):
                     self.ORM_OBJ.__table__.update().where(self.ORM_OBJ.id == row["id"]),
                     row,
                 )
+
+                db_session.commit()
         else:
             existing_row_id = self.get_existing_row_id(row)
 
