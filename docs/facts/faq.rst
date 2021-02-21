@@ -6,7 +6,7 @@ How to speed up the test process?
 
 .. warning::
     Beware, when talking about speed a lot a thing have to be taken in consideration.
-    Indeed here is a non exaustive list of things which fluctuate testing speed.
+    Indeed here is a non exhaustive list of things which fluctuate testing speed.
 
     * Bandwidth.
     * DNS Server response time.
@@ -20,16 +20,16 @@ I have a dedicated server or machine just for PyFunceble
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Simply increase the number of maximal workers PyFunceble is allowed to use
-throught the :code:`--max-workers` argument.
+through the `--max-workers <../usage/index.html#w-max-workers>`_ argument.
 
 By default the number of workers is equal to:
 
 ::
 
-    CPU CORES * 5
+    CPU CORES - 2
 
 meaning that if you have 8 CPU cores, the value will be automatically set to
-:code:`40`.
+:code:`6`.
 
 
 .. warning::
@@ -38,5 +38,5 @@ meaning that if you have 8 CPU cores, the value will be automatically set to
     need a single thread which read the submitted results and generate the
     outputs.
 
-    The reason we did that with :code:`4.0.0` is because, we don't want to
+    The reason we added this to PyFunceble :code:`4.0.0` is we don't want to
     have a wrongly formatted output file.

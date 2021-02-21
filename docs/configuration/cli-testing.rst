@@ -30,7 +30,7 @@
 
     ::
 
-        CPU cores * 5
+        CPU cores - 2
 
 :code:`cli_testing[autocontinue]`
 """""""""""""""""""""""""""""""""

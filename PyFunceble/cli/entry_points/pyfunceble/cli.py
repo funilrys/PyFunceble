@@ -816,7 +816,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
 
     return [
         (
-            ["--ci-max-minutes", "--autosave-minutes"],
+            ["--ci-max-minutes"],
             {
                 "dest": "cli_testing.ci.max_exec_minutes",
                 "type": int,
@@ -857,7 +857,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--cmd", "--ci-command"],
+            ["--ci-command"],
             {
                 "dest": "cli_testing.ci.command",
                 "type": str,
@@ -867,7 +867,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--cmd-before-end", "--ci-end-command"],
+            ["--ci-end-command"],
             {
                 "dest": "cli_testing.ci.end_command",
                 "type": str,
@@ -876,7 +876,7 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
-            ["--ci-commit-message", "--commit-autosave-message"],
+            ["--ci-commit-message"],
             {
                 "dest": "cli_testing.ci.commit_message",
                 "type": str,
@@ -888,7 +888,6 @@ def get_ci_group_data() -> List[Tuple[List[str], dict]]:
         (
             [
                 "--ci-end-commit-message",
-                "--commit-results-message",
             ],
             {
                 "dest": "cli_testing.ci.end_commit_message",

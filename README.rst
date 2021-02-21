@@ -214,6 +214,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
                                                      __/ |
                                                     |___/
 
+-   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -321,8 +322,9 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
-.. _@AnonymousPoster: https://github.com/AnonymousPoster
+.. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
 .. _@asciinema: https://github.com/asciinema
+.. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
@@ -344,7 +346,7 @@ License
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@SMed79: https://github.com/SMed79
 .. _@speedmann: https://github.com/speedmann
-.. _@spirillen: https://github.com/spirillen
+.. _@spirillen: https://www.mypdns.org/p/Spirillen/
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@Wally3K: https://github.com/WaLLy3K

@@ -16,7 +16,7 @@ Configuration
 .. _Dead-Hosts: https://github.com/dead-hosts
 
 
-::
+.. code-block:: yaml
 
     env:
         global:
@@ -88,7 +88,7 @@ Encrypting the token for future usage under the Travis CIs' containers
 
 To encrypt the token simply replace and execute the following according to your personal case.
 
-::
+.. code-block:: bash
 
     $ travis encrypt 'GH_TOKEN=theGeneratedToken' -r 'The content of TRAVIS_REPO_SLUG' --add
 

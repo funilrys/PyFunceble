@@ -1,8 +1,12 @@
 Logs Sharing
 ------------
 
-.. warning::
+:code:`--share-logs`
+""""""""""""""""""""
+
+.. info::
     This component is not activated by default.
+
 
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
@@ -13,15 +17,17 @@ working with millions of domains.
 The idea and purpose of this feature are **ONLY** to make PyFunceble a better
 tool.
 
-What do we share/collect?
-^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. note::
-   As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
+What is collected
+^^^^^^^^^^^^^^^^^
 
-   Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
-   to implement any of the data collection source code until the infrastructure
-   behind it is ready.
+.. versionchanged:: 4.0.0
+
+As of :code:`4.0.0`, we temporarly disabled and removed all data collection.
+
+Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
+to implement any of the data collection source code until the infrastructure
+behind it is ready.
 
 
 .. warning::
@@ -31,25 +37,26 @@ What do we share/collect?
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 | **Event**                                       | **Shared**                                      | **URL**                                                 |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
-| No WHOIS server (referer) is found.             | - The extension of the currently tested domain. | :code:`https://pyfunceble.funilrys.com/api/no-referer`  |
+| No WHOIS server (referrer) is found.            | - The extension of the currently tested domain. | :code:`https://pyfunceble.funilrys.com/api/no-referrer` |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 | The expiration date is not correctly formatted. | - The extracted expiration date.                | :code:`https://pyfunceble.funilrys.com/api/date-format` |
 |                                                 | - The currently tested domain.                  |                                                         |
 |                                                 | - The currently used WHOIS server (DNS) name.   |                                                         |
 +-------------------------------------------------+-------------------------------------------------+---------------------------------------------------------+
 
+
 How to share logs?
 ^^^^^^^^^^^^^^^^^^
 
 If you wish to share your logs simply change
 
-::
+.. code-block:: yaml
 
    share_logs:                   False
 
 to
 
-::
+.. code-block:: yaml
 
    share_logs:                   True
 

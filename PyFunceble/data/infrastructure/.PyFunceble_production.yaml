@@ -28,7 +28,7 @@ cli_testing:
   hosts_ip: "0.0.0.0"
 
   # Sets the number of maximal workers to use.
-  # If set to null, the system use: CPU Cores * 5.
+  # If set to null, the system use: CPU * Cores - 2
   max_workers: null
 
   # Activates the automatic continuation after a break or shortage.
@@ -323,4 +323,4 @@ links:
   # NOTE: Not implemented yet as the underlaying infrastructure will be
   # rewritten.
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
-  api_no_referer: "https://pyfunceble.funilrys.com/api/no-referer"
+  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"

@@ -144,7 +144,7 @@ OUTPUTS: Optional[Box] = Box(
                 "percentage": "percentage.txt",
                 "whois": "whois.json",
                 "date_format": "date_format.json",
-                "no_referer": "no_referer.json",
+                "no_referrer": "no_referrer.json",
                 "inactive_not_retested": "inactive_not_retested",
             },
         },

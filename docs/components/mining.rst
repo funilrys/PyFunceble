@@ -29,7 +29,7 @@ How to use it?
 
 You can simply change
 
-::
+.. code-block:: yaml
 
     cli_testing:
         # Activates the mining of data.
@@ -37,7 +37,7 @@ You can simply change
 
 to
 
-::
+.. code-block:: yaml
 
     cli_testing:
         # Activates the mining of data.
