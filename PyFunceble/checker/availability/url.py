@@ -147,6 +147,7 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         lookup_result = URLReputationChecker(self.status.idna_subject).get_status()
 
+        # pylint: disable=no-member
         if lookup_result and lookup_result.is_malicious():
             self.status.status = PyFunceble.storage.STATUS.up
             self.status.status_source = "REPUTATION"

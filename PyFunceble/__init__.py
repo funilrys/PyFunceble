@@ -591,6 +591,7 @@ def is_url(subject: str, **kwargs) -> bool:
         DeprecationWarning,
     )
 
+    # pylint: disable=no-member
     return URLSyntaxChecker(subject, **kwargs).get_status().is_valid()
 
 
@@ -632,6 +633,7 @@ def is_domain_malicious(subject: str, **kwargs) -> bool:
         DeprecationWarning,
     )
 
+    # pylint: disable=no-member
     return DomainReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 
@@ -673,6 +675,7 @@ def is_ipv4_malicious(subject: str, **kwargs) -> bool:
         DeprecationWarning,
     )
 
+    # pylint: disable=no-member
     return IPReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 
@@ -714,6 +717,7 @@ def is_url_malicious(subject: str, **kwargs) -> bool:
         DeprecationWarning,
     )
 
+    # pylint: disable=no-member
     return URLReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 

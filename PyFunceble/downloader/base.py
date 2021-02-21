@@ -206,11 +206,9 @@ class DownloaderBase:
             self.DOWNTIME_INDEX in self.all_downtimes
             and self.all_downtimes[self.DOWNTIME_INDEX]
             and all(
-                [
-                    x in self.all_downtimes[self.DOWNTIME_INDEX]
-                    and self.all_downtimes[self.DOWNTIME_INDEX][x]
-                    for x in ["iso", "timestamp"]
-                ]
+                x in self.all_downtimes[self.DOWNTIME_INDEX]
+                and self.all_downtimes[self.DOWNTIME_INDEX][x]
+                for x in ["iso", "timestamp"]
             )
         )
 

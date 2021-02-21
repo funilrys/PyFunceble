@@ -225,6 +225,8 @@ class TesterThread(ThreadsBase):
 
             # Don't worry, if we are not under a CI engine, the
             # is_time_exceeded will automatically return false (cf: decorators)
+
+            # pylint: disable=condition-evals-to-constant
             while (
                 self.continuous_integration
                 and not self.continuous_integration.is_time_exceeded()

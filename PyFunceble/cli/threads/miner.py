@@ -130,6 +130,7 @@ class MinerThread(ThreadsBase):
 
         stop_message_caught = False
 
+        # pylint: disable=condition-evals-to-constant
         while (
             self.continuous_integration
             and not self.continuous_integration.is_time_exceeded()

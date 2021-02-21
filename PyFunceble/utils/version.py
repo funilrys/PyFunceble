@@ -295,7 +295,7 @@ class VersionUtility:
         Compares if the local version is equal the given one.
         """
 
-        return all([x is None for x in self.__get_comparison(upstream_version)])
+        return all(x is None for x in self.__get_comparison(upstream_version))
 
     def is_recent(self, upstream_version: str) -> bool:
         """
@@ -351,10 +351,10 @@ class VersionUtility:
         ]
         list_of_dirs = ["docs", "PyFunceble", "tests", ".github"]
 
-        if not all([file_helper.set_path(x).exists() for x in list_of_files]):
+        if not all(file_helper.set_path(x).exists() for x in list_of_files):
             return False
 
-        if not all([directory_helper.set_path(x).exists() for x in list_of_dirs]):
+        if not all(directory_helper.set_path(x).exists() for x in list_of_dirs):
             return False
 
         return True
