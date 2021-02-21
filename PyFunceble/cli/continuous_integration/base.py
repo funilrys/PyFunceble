@@ -1172,7 +1172,7 @@ class ContinuousIntegrationBase:
                     (
                         "git commit -a -m "
                         f'"{self.end_commit_message} {self.end_commit_marker}\n\n'
-                        f'{secrets.token_bytes(18)}"',
+                        f'{secrets.token_urlsafe(18)}"',
                         True,
                     ),
                 ]
@@ -1219,7 +1219,7 @@ class ContinuousIntegrationBase:
                     (
                         "git commit -a -m "
                         f'"{self.commit_message}\n\n'
-                        f'{secrets.token_bytes(18)}"',
+                        f'{secrets.token_urlsafe(18)}"',
                         True,
                     ),
                 ]
