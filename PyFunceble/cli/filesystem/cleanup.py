@@ -69,8 +69,7 @@ class FilesystemCleanup(FilesystemDirBase):
 
     file_helper: FileHelper = FileHelper()
 
-    @staticmethod
-    def clean_database() -> "FilesystemCleanup":
+    def clean_database(self) -> "FilesystemCleanup":
         """
         Cleanups the uneeded data that were stored in the database.
 
@@ -78,7 +77,10 @@ class FilesystemCleanup(FilesystemDirBase):
             This method cleans everything except the WHOIS records.
         """
 
-        if PyFunceble.cli.facility.CredentialLoader.is_already_loaded():
+        if (
+            PyFunceble.cli.facility.CredentialLoader.is_already_loaded()
+            and self.db_session
+        ):
             to_clean = [Continue, Inactive]
 
             for orm_obj in to_clean:

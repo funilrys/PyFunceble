@@ -55,6 +55,8 @@ import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Union
 
+from sqlalchemy.orm import Session
+
 import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
@@ -117,6 +119,7 @@ class AvailabilityCheckerBase(CheckerBase):
         use_http_code_lookup: Optional[bool] = None,
         use_reputation_lookup: Optional[bool] = None,
         do_syntax_check_first: Optional[bool] = None,
+        db_session: Optional[Session] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool().guess_all_settings()
         self.whois_query_tool = WhoisQueryTool()
@@ -126,6 +129,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
+        self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
 
@@ -164,7 +168,9 @@ class AvailabilityCheckerBase(CheckerBase):
         else:
             self.guess_and_set_use_reputation_lookup()
 
-        super().__init__(subject, do_syntax_check_first=do_syntax_check_first)
+        super().__init__(
+            subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
+        )
 
     def query_syntax_checker_if_missing(func):  # pylint: disable=no-self-argument
         """
@@ -684,7 +690,9 @@ class AvailabilityCheckerBase(CheckerBase):
         )
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object()
+            whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
+                db_session=self.db_session
+            )
             known_record = whois_object[self.subject]
 
             if known_record and not isinstance(known_record, dict):

@@ -54,6 +54,8 @@ import functools
 import os
 from typing import Any, Optional
 
+from sqlalchemy.orm import Session
+
 try:
     import importlib.resources as package_resources
 except ImportError:  # pragma: no cover ## Retro compatibility
@@ -77,7 +79,16 @@ class Alembic:
     Provides our very own alambic handler.
     """
 
+    db_session: Optional[Session] = None
+    migrator_base: Optional[MariaDBMigratorBase] = None
+
     alembic_config: Optional[alembic.config.Config] = None
+
+    def __init__(self, db_session: Session) -> None:
+        self.db_session = db_session
+
+        self.migrator_base = MariaDBMigratorBase()
+        self.migrator_base.db_session = db_session
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
@@ -149,12 +160,11 @@ class Alembic:
             .revision
         )
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
+        statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
 
-            result = db_session.execute(statement, {"db_revision": revision_id})
+        result = self.db_session.execute(statement, {"db_revision": revision_id})
 
-            return result.fetchone() is None
+        return result.fetchone() is None
 
     @execute_if_authorized(None)
     def upgrade(self, revision: str = "head") -> "Alembic":
@@ -167,7 +177,7 @@ class Alembic:
 
         self.configure()
 
-        if not MariaDBMigratorBase.does_table_exists(
+        if not self.migrator_base.does_table_exists(
             "alembic_version"
         ) or self.is_revision_different(revision):
             PyFunceble.facility.Logger.info(
@@ -191,7 +201,7 @@ class Alembic:
 
         self.configure()
 
-        if not MariaDBMigratorBase.does_table_exists(
+        if not self.migrator_base.does_table_exists(
             "alembic_version"
         ) or self.is_revision_different(revision):
 

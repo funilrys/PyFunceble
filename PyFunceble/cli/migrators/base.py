@@ -53,6 +53,8 @@ License:
 
 from typing import Optional
 
+from sqlalchemy.orm import Session
+
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
 
 
@@ -63,6 +65,7 @@ class MigratorBase:
 
     done: bool = False
     continuous_integration: Optional[ContinuousIntegrationBase] = None
+    db_session: Optional[Session] = None
 
     print_action_to_stdout: bool = False
 

@@ -54,6 +54,7 @@ import os
 from typing import Optional
 
 import PyFunceble.cli.storage
+from PyFunceble.database.session import DBSession
 
 
 class FilesystemDirBase:
@@ -62,12 +63,20 @@ class FilesystemDirBase:
     """
 
     _parent_dirname: Optional[str] = None
+    db_session: Optional[DBSession] = None
 
-    def __init__(self, parent_dirname: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        parent_dirname: Optional[str] = None,
+        *,
+        db_session: Optional[DBSession] = None,
+    ) -> None:
         if parent_dirname is not None:
             self.parent_dirname = parent_dirname
         else:
             self.parent_dirname = PyFunceble.cli.storage.STD_PARENT_DIRNAME
+
+        self.db_session = db_session
 
     @property
     def parent_dirname(self) -> Optional[str]:

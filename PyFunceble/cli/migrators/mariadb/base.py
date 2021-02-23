@@ -81,33 +81,30 @@ class MariaDBMigratorBase(MigratorBase):
 
         return inner_metdhod
 
-    @staticmethod
-    def does_table_exists(name: str) -> bool:
+    def does_table_exists(self, name: str) -> bool:
         """
         Checks if the given table name exists.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            statement = (
-                "SELECT COUNT(*) "
-                "FROM information_schema.tables "
-                "WHERE table_schema = :database_name "
-                "AND table_name = :table_name "
-            )
+        statement = (
+            "SELECT COUNT(*) "
+            "FROM information_schema.tables "
+            "WHERE table_schema = :database_name "
+            "AND table_name = :table_name "
+        )
 
-            result = db_session.execute(
-                statement,
-                {
-                    "database_name": PyFunceble.cli.factory.DBSession.credential.name,
-                    "table_name": name,
-                },
-            ).fetchone()
+        result = self.db_session.execute(
+            statement,
+            {
+                "database_name": PyFunceble.cli.factory.DBSession.credential.name,
+                "table_name": name,
+            },
+        ).fetchone()
 
-            return result["COUNT(*)"] == 1
+        return result["COUNT(*)"] == 1
 
-    @staticmethod
     def get_rows(
-        statement: str, limit: int = 20
+        self, statement: str, limit: int = 20
     ) -> Generator[Tuple[str, int], dict, None]:
         """
         Run the given statement with a defined limit, and yield each row.
@@ -119,14 +116,13 @@ class MariaDBMigratorBase(MigratorBase):
         statement += f" LIMIT {limit}"
 
         while True:
-            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                db_result = list(db_session.execute(statement).fetchall())
+            db_result = list(self.db_session.execute(statement).fetchall())
 
-                if not db_result:
-                    break
+            if not db_result:
+                break
 
-                for result in db_result:
-                    yield dict(result)
+            for result in db_result:
+                yield dict(result)
 
     @property
     def authorized(self) -> bool:

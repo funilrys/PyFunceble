@@ -92,8 +92,7 @@ class DBMigratorBase(MigratorBase):
 
         return PyFunceble.cli.facility.CredentialLoader.is_already_loaded()
 
-    @staticmethod
-    def does_table_exists(table_name: str) -> bool:
+    def does_table_exists(self, table_name: str) -> bool:
         """
         Checks if the table exists.
 
@@ -101,24 +100,23 @@ class DBMigratorBase(MigratorBase):
             The name of the table to check.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            statement = (
-                "SELECT COUNT(*) "
-                "FROM information_schema.tables "
-                "WHERE table_schema = :database_name "
-                "AND table_name = :table_name "
-            )
+        statement = (
+            "SELECT COUNT(*) "
+            "FROM information_schema.tables "
+            "WHERE table_schema = :database_name "
+            "AND table_name = :table_name "
+        )
 
-            result = db_session.execute(
-                statement,
-                {
-                    # pylint: disable=line-too-long
-                    "database_name": PyFunceble.cli.facility.CredentialLoader.credential.name,
-                    "table_name": table_name,
-                },
-            )
+        result = self.db_session.execute(
+            statement,
+            {
+                # pylint: disable=line-too-long
+                "database_name": PyFunceble.cli.facility.CredentialLoader.credential.name,
+                "table_name": table_name,
+            },
+        )
 
-            result = dict(result.fetchone())
+        result = dict(result.fetchone())
 
         if result["COUNT(*)"] != 1:
             return False

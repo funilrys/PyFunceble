@@ -63,6 +63,7 @@ from typing import List, Optional
 
 import colorama
 import domain2idna
+from sqlalchemy.orm import Session
 
 import PyFunceble.checker.utils.whois
 import PyFunceble.cli.storage
@@ -151,15 +152,23 @@ class SystemLauncher(SystemBase):
     inactive_dataset: Optional[InactiveDatasetBase] = None
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
+    db_session: Optional[Session] = None
+
     checker_type: Optional[str] = None
 
     sessions_id: dict = dict()
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
+        self.db_session = (
+            PyFunceble.cli.factory.DBSession.get_db_session().get_new_session()()
+        )
+
         self.execution_time_holder = ExecutionTime().set_start_time()
         self.checker_type = get_testing_mode()
-        self.continue_dataset = get_continue_databaset_object()
-        self.inactive_dataset = get_inactive_dataset_object()
+        self.continue_dataset = get_continue_databaset_object(
+            db_session=self.db_session
+        )
+        self.inactive_dataset = get_inactive_dataset_object(db_session=self.db_session)
         self.continuous_integration = ci_object()
 
         if self.continuous_integration.authorized:
@@ -228,6 +237,10 @@ class SystemLauncher(SystemBase):
         )
 
         super().__init__(args)
+
+    def __del__(self ) -> None:
+        if self.db_session is not None:
+            self.db_session.close()
 
     @staticmethod
     def print_home_ascii() -> None:

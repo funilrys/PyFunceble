@@ -53,6 +53,8 @@ License:
 import os
 from typing import List, Optional, Union
 
+from sqlalchemy.orm import Session
+
 import PyFunceble.storage
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
@@ -89,11 +91,14 @@ def get_testing_mode() -> str:
     return "UNKNOWN"
 
 
-def get_continue_databaset_object() -> Union[
-    DatasetBase, CSVDatasetBase, DBDatasetBase
-]:
+def get_continue_databaset_object(
+    db_session: Optional[Session] = None,
+) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the continue object to work with.
+
+    :param db_session:
+        A database session to use.
 
     :raise ValueError:
         When the given database type is unkown.
@@ -104,9 +109,9 @@ def get_continue_databaset_object() -> Union[
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type in "csv":
         result = CSVContinueDataset()
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-        result = MariaDBContinueDataset()
+        result = MariaDBContinueDataset(db_session=db_session)
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-        result = MySQLContinueDataset()
+        result = MySQLContinueDataset(db_session=db_session)
 
     if result:
         result.set_authorized(
@@ -121,9 +126,14 @@ def get_continue_databaset_object() -> Union[
     )
 
 
-def get_inactive_dataset_object() -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
+def get_inactive_dataset_object(
+    db_session: Optional[Session] = None,
+) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the inactive object to work with.
+
+    :param db_session:
+        A database session to use.
 
     :raise ValueError:
         When the given database type is unkown.
@@ -134,9 +144,9 @@ def get_inactive_dataset_object() -> Union[DatasetBase, CSVDatasetBase, DBDatase
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
         result = CSVInactiveDataset()
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-        result = MariaDBInactiveDataset()
+        result = MariaDBInactiveDataset(db_session=db_session)
     elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-        result = MySQLInactiveDataset()
+        result = MySQLInactiveDataset(db_session=db_session)
 
     if result:
         result.set_authorized(

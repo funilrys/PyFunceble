@@ -50,7 +50,9 @@ License:
     limitations under the License.
 """
 
-from typing import Union
+from typing import Optional, Union
+
+from sqlalchemy.orm import Session
 
 import PyFunceble.facility
 import PyFunceble.storage
@@ -62,9 +64,14 @@ from PyFunceble.dataset.whois.mariadb import MariaDBWhoisDataset
 from PyFunceble.dataset.whois.mysql import MySQLWhoisDataset
 
 
-def get_whois_dataset_object() -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
+def get_whois_dataset_object(
+    *, db_session: Optional[Session] = None
+) -> Union[DatasetBase, CSVDatasetBase, DBDatasetBase]:
     """
     Provides the whois dataset object to work with.
+
+    :param db_session:
+        A database session to use.
 
     :raise ValueError:
         When the given database type is unkown.
@@ -78,9 +85,9 @@ def get_whois_dataset_object() -> Union[DatasetBase, CSVDatasetBase, DBDatasetBa
         if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
             result = CSVWhoisDataset()
         elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-            result = MariaDBWhoisDataset()
+            result = MariaDBWhoisDataset(db_session=db_session)
         elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-            result = MySQLWhoisDataset()
+            result = MySQLWhoisDataset(db_session=db_session)
 
         if result:
             result.set_authorized(

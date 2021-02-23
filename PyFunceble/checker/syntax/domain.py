@@ -52,6 +52,8 @@ License:
 
 from typing import Optional
 
+from sqlalchemy.orm import Session
+
 from PyFunceble.checker.syntax.base import SyntaxCheckerBase
 from PyFunceble.checker.syntax.domain_base import DomainSyntaxCheckerBase
 from PyFunceble.checker.syntax.second_lvl_domain import SecondLvlDomainSyntaxChecker
@@ -70,12 +72,15 @@ class DomainSyntaxChecker(DomainSyntaxCheckerBase, SyntaxCheckerBase):
     second_level_checker: Optional[SecondLvlDomainSyntaxChecker] = None
     subdomain_checker: Optional[SubDomainSyntaxChecker] = None
 
-    def __init__(self, subject: Optional[str] = None) -> None:
+    def __init__(
+        self, subject: Optional[str] = None, db_session: Optional[Session] = None
+    ) -> None:
         self.second_level_checker: SecondLvlDomainSyntaxChecker = (
             SecondLvlDomainSyntaxChecker()
         )
         self.subdomain_checker: SubDomainSyntaxChecker = SubDomainSyntaxChecker()
 
+        self.db_session = db_session
         super().__init__(subject)
 
     def subject_propagator(self) -> "DomainSyntaxChecker":

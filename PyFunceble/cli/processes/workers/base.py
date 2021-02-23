@@ -92,6 +92,7 @@ class WorkerBase(multiprocessing.Process):
     accept_waiting_delay: Optional[bool] = None
 
     concurrent_worker_names: Optional[List[str]] = None
+    db_session: Optional[PyFunceble.cli.factory.db_session] = None
 
     _parent_connection: Optional[multiprocessing.connection.Connection] = None
     _child_connection: Optional[multiprocessing.connection.Connection] = None
@@ -124,9 +125,17 @@ class WorkerBase(multiprocessing.Process):
         self.accept_waiting_delay = True
         self.concurrent_worker_names = list()
 
+        self.db_session = (
+            PyFunceble.cli.factory.DBSession.get_db_session().get_new_session()()
+        )
+
         super().__init__(name=name, daemon=daemon)
 
         self.__post_init__()
+
+    def __del__(self) -> None:
+        if self.db_session is not None:
+            self.db_session.close()
 
     def __post_init__(self) -> None:
         """

@@ -70,7 +70,10 @@ class MigratorWorker(WorkerBase):
     def run(self) -> None:
         try:
 
-            self.target(self.continuous_integration)
+            try:
+                self.target(self.continuous_integration, db_session=self.db_session)
+            except TypeError:
+                self.target(self.continuous_integration)
             self._child_connection.send(None)
         except Exception as exception:  # pylint: disable=broad-except
             PyFunceble.facility.Logger.critical(

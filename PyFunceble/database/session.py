@@ -155,7 +155,7 @@ class DBSession:
         return self
 
     @execute_if_authorized(None)
-    def get_db_session(self):
+    def get_db_session(self) -> "DBSession":
         """
         Provides a new session.
         """

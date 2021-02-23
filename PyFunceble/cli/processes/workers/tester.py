@@ -85,10 +85,14 @@ class TesterWorker(WorkerBase):
 
     def __post_init__(self) -> None:
         self.continue_dataset = (
-            PyFunceble.cli.utils.testing.get_continue_databaset_object()
+            PyFunceble.cli.utils.testing.get_continue_databaset_object(
+                db_session=self.db_session
+            )
         )
         self.inactive_dataset = (
-            PyFunceble.cli.utils.testing.get_inactive_dataset_object()
+            PyFunceble.cli.utils.testing.get_inactive_dataset_object(
+                db_session=self.db_session
+            )
         )
 
         return super().__post_init__()
@@ -139,8 +143,7 @@ class TesterWorker(WorkerBase):
 
         return False
 
-    @staticmethod
-    def get_testing_object(subject_type: str, checker_type: str) -> CheckerBase:
+    def get_testing_object(self, subject_type: str, checker_type: str) -> CheckerBase:
         """
         Provides the object to use for testing.
 
@@ -163,7 +166,7 @@ class TesterWorker(WorkerBase):
         if checker_type in known:
             if subject_type in known[checker_type]:
                 # Yes, we initialize before returning!
-                return known[checker_type][subject_type]()
+                return known[checker_type][subject_type](db_session=self.db_session)
 
             raise ValueError(f"<subject_type> ({subject_type!r}) is unknwon.")
         raise ValueError(f"<testing_mode> ({checker_type!r}) is unknwon.")

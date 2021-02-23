@@ -50,7 +50,10 @@ License:
     limitations under the License.
 """
 
+from typing import Optional
+
 import colorama
+from sqlalchemy.orm import Session
 
 import PyFunceble.checker.utils.whois
 import PyFunceble.cli.utils.stdout
@@ -157,6 +160,8 @@ class MigratorProcessesManager(ProcessesManagerBase):
     @staticmethod
     def mariadb_whois_record_idna_subject_target(
         continuous_integration: ContinuousIntegrationBase,
+        *,
+        db_session: Optional[Session] = None,
     ) -> None:
         """
         Provides the target for the whois addition of the missing
@@ -165,6 +170,7 @@ class MigratorProcessesManager(ProcessesManagerBase):
 
         migrator = WhoisRecordIDNASubjectMigrator(print_action_to_stdout=True)
         migrator.continuous_integration = continuous_integration
+        migrator.db_session = db_session
 
         if migrator.authorized:
             print(
@@ -194,6 +200,8 @@ class MigratorProcessesManager(ProcessesManagerBase):
     @staticmethod
     def mariadb_file_and_status_target(
         continuous_integration: ContinuousIntegrationBase,
+        *,
+        db_session: Optional[Session] = None,
     ) -> None:
         """
         Provides the target for the migration of the :code:`pyfunceble_file`
@@ -202,6 +210,7 @@ class MigratorProcessesManager(ProcessesManagerBase):
 
         migrator = FileAndStatusMigrator(print_action_to_stdout=True)
         migrator.continuous_integration = continuous_integration
+        migrator.db_session = db_session
 
         if migrator.authorized:
             print(
@@ -393,8 +402,10 @@ class MigratorProcessesManager(ProcessesManagerBase):
             self._created_workers.append(worker)
             PyFunceble.facility.Logger.info("Created worker for %r", method)
 
+    @ProcessesManagerBase.ensure_worker_obj_is_given
+    @ProcessesManagerBase.create_workers_if_missing
     def start(self) -> "ProcessesManagerBase":
         # We start the migration (as a standalone)
-        Alembic().upgrade()
+        Alembic(self._created_workers[0].db_session).upgrade()
 
         return super().start()

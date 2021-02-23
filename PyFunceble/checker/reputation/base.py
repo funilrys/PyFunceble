@@ -53,6 +53,8 @@ License:
 
 from typing import List, Optional
 
+from sqlalchemy.orm import Session
+
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
@@ -84,6 +86,7 @@ class ReputationCheckerBase(CheckerBase):
         self,
         subject: Optional[str] = None,
         do_syntax_check_first: Optional[bool] = None,
+        db_session: Optional[Session] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool().guess_all_settings()
         self.ipv4_reputation_query_tool = IPV4ReputationDataset()
@@ -97,7 +100,9 @@ class ReputationCheckerBase(CheckerBase):
         self.status.params = self.params
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
 
-        super().__init__(subject, do_syntax_check_first=do_syntax_check_first)
+        super().__init__(
+            subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
+        )
 
     def subject_propagator(self) -> "CheckerBase":
         """

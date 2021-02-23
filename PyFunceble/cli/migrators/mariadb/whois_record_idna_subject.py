@@ -73,50 +73,48 @@ class WhoisRecordIDNASubjectMigrator(MariaDBMigratorBase):
         """
 
         if PyFunceble.cli.facility.CredentialLoader.is_already_loaded():
-            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                # pylint: disable=singleton-comparison
-                return (
-                    db_session.query(WhoisRecord)
-                    .filter(WhoisRecord.idna_subject == None)
-                    .first()
-                    is not None
-                )
+            # pylint: disable=singleton-comparison
+            return (
+                self.db_session.query(WhoisRecord)
+                .filter(WhoisRecord.idna_subject == None)
+                .first()
+                is not None
+            )
         return False
 
     @MariaDBMigratorBase.execute_if_authorized(None)
     def migrate(self) -> "WhoisRecordIDNASubjectMigrator":
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            # pylint: disable=singleton-comparison
+        # pylint: disable=singleton-comparison
 
-            broken = False
+        broken = False
 
-            for row in db_session.query(WhoisRecord).filter(
-                WhoisRecord.idna_subject == None
+        for row in self.db_session.query(WhoisRecord).filter(
+            WhoisRecord.idna_subject == None
+        ):
+            if (
+                self.continuous_integration
+                and self.continuous_integration.is_time_exceeded()
             ):
-                if (
-                    self.continuous_integration
-                    and self.continuous_integration.is_time_exceeded()
-                ):
-                    broken = True
-                    break
+                broken = True
+                break
 
-                PyFunceble.facility.Logger.info(
-                    "Started to fix idna_subject field of %r", row.subject
-                )
-                row.idna_subject = domain2idna.domain2idna(row.subject)
+            PyFunceble.facility.Logger.info(
+                "Started to fix idna_subject field of %r", row.subject
+            )
+            row.idna_subject = domain2idna.domain2idna(row.subject)
 
-                db_session.add(row)
+            self.db_session.add(row)
 
-                if self.print_action_to_stdout:
-                    print_single_line()
+            if self.print_action_to_stdout:
+                print_single_line()
 
-                PyFunceble.facility.Logger.info(
-                    "Finished to fix idna_subject field of %r", row.subject
-                )
+            PyFunceble.facility.Logger.info(
+                "Finished to fix idna_subject field of %r", row.subject
+            )
 
-            db_session.commit()
+        self.db_session.commit()
 
-            if not broken:
-                self.done = True
+        if not broken:
+            self.done = True
 
         return self

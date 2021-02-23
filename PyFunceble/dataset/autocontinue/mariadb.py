@@ -81,15 +81,14 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
             The session ID to cleanup.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            db_session.query(self.ORM_OBJ).filter(
-                self.ORM_OBJ.session_id == session_id
-            ).delete(synchronize_session=False)
-            db_session.commit()
+        self.db_session.query(self.ORM_OBJ).filter(
+            self.ORM_OBJ.session_id == session_id
+        ).delete(synchronize_session=False)
+        self.db_session.commit()
 
-            PyFunceble.facility.Logger.debug(
-                "Deleted data related to %s (session_id", session_id
-            )
+        PyFunceble.facility.Logger.debug(
+            "Deleted data related to %s (session_id", session_id
+        )
 
         return self
 
@@ -97,12 +96,11 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
     def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
         twenty_years_ago = datetime.utcnow() - timedelta(days=365.25 * 20)
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            result = (
-                db_session.query(self.ORM_OBJ)
-                .filter(self.ORM_OBJ.session_id == session_id)
-                .filter(self.ORM_OBJ.tested_at < twenty_years_ago)
-            )
+        result = (
+            self.db_session.query(self.ORM_OBJ)
+            .filter(self.ORM_OBJ.session_id == session_id)
+            .filter(self.ORM_OBJ.tested_at < twenty_years_ago)
+        )
 
-            for row in result:
-                yield row.idna_subject
+        for row in result:
+            yield row.idna_subject

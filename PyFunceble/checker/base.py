@@ -55,6 +55,7 @@ import functools
 from typing import Optional
 
 import domain2idna
+from sqlalchemy.orm import Session
 
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
@@ -70,6 +71,8 @@ class CheckerBase:
     _subject: Optional[str] = None
     _idna_subject: Optional[str] = None
 
+    db_session: Optional[Session] = None
+
     status: Optional[CheckerStatusBase] = None
     params: Optional[CheckerParamsBase] = None
 
@@ -78,6 +81,7 @@ class CheckerBase:
         subject: Optional[str] = None,
         *,
         do_syntax_check_first: Optional[bool] = None,
+        db_session: Optional[Session] = None,
     ) -> None:
         if self.params is None:
             self.params = CheckerParamsBase()
@@ -90,6 +94,8 @@ class CheckerBase:
 
         if do_syntax_check_first is not None:
             self.do_syntax_check_first = do_syntax_check_first
+
+        self.db_session = db_session
 
     def propagate_subject(func):  # pylint: disable=no-self-argument
         """

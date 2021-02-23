@@ -53,8 +53,6 @@ License:
 from datetime import datetime, timedelta
 from typing import Generator, Optional, Tuple
 
-import PyFunceble.cli.factory
-import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Inactive
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
@@ -76,17 +74,16 @@ class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
 
         days_ago = datetime.utcnow() - timedelta(days=min_days)
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            result = (
-                db_session.query(self.ORM_OBJ)
-                .filter(self.ORM_OBJ.destination == destination)
-                .filter(self.ORM_OBJ.checker_type == checker_type)
-                .filter(self.ORM_OBJ.tested_at < days_ago)
-            )
+        result = (
+            self.db_session.query(self.ORM_OBJ)
+            .filter(self.ORM_OBJ.destination == destination)
+            .filter(self.ORM_OBJ.checker_type == checker_type)
+            .filter(self.ORM_OBJ.tested_at < days_ago)
+        )
 
-            for row in result:
-                if not hasattr(row, "tested_at"):
-                    # This is just a safety.
-                    continue
+        for row in result:
+            if not hasattr(row, "tested_at"):
+                # This is just a safety.
+                continue
 
-                yield row.to_dict()
+            yield row.to_dict()

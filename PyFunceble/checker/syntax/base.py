@@ -52,6 +52,8 @@ License:
 
 from typing import Optional
 
+from sqlalchemy.orm import Session
+
 import PyFunceble.storage
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.params import SyntaxCheckerParams
@@ -63,17 +65,23 @@ class SyntaxCheckerBase(CheckerBase):
     Provides the base of all our syntax checker classes.
     """
 
+    db_session: Optional[Session] = None
+
     status: Optional[SyntaxCheckerStatus] = None
 
     params: Optional[SyntaxCheckerParams] = None
 
-    def __init__(self, subject: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        subject: Optional[str] = None,
+        db_session: Optional[Session] = None,
+    ) -> None:
         self.params = SyntaxCheckerParams()
 
         self.status = SyntaxCheckerStatus()
         self.status.params = self.params
 
-        super().__init__(subject=subject)
+        super().__init__(subject=subject, db_session=db_session)
 
     def subject_propagator(self) -> "CheckerBase":
         """

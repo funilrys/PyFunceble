@@ -68,7 +68,6 @@ class MariaDBDatasetBase(DBDatasetBase):
     STD_KEEP_SESSION_OPEN: bool = False
     ORM_OBJ = None
 
-    _keep_db_session_open: Optional[bool] = None
     db_session: Optional[Session] = None
 
     def __init__(
@@ -76,13 +75,9 @@ class MariaDBDatasetBase(DBDatasetBase):
         *,
         authorized: Optional[bool] = None,
         remove_unneeded_fields: Optional[bool] = None,
-        keep_db_session_open: Optional[bool] = None,
+        db_session: Optional[Session] = None,
     ) -> None:
-
-        if keep_db_session_open is not None:
-            self.keep_db_session_open = keep_db_session_open
-        else:
-            self.keep_db_session_open = self.STD_KEEP_SESSION_OPEN
+        self.db_session = db_session
 
         super().__init__(
             authorized=authorized, remove_unneeded_fields=remove_unneeded_fields
@@ -93,10 +88,6 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     def __getitem__(self, value: Any) -> Any:
         raise KeyError(value)
-
-    def __del__(self) -> None:
-        if isinstance(self.db_session, Session):
-            self.db_session.close()
 
     def ensure_orm_obj_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -116,54 +107,16 @@ class MariaDBDatasetBase(DBDatasetBase):
 
         return wrapper
 
-    @property
-    def keep_db_session_open(self):
-        """
-        Provides the current valur of the :code:`_keep_db_session_open` attribute.
-        """
-
-        return self._keep_db_session_open
-
-    @keep_db_session_open.setter
-    def keep_db_session_open(self, value: bool) -> None:
-        """
-        Sets the value of the :code:`_keep_db_session_open` attribute.
-
-        :param value:
-            The value to set.
-
-        :raise TypeError:
-            When the given :code:`value` is not a :py:class:`bool`
-        """
-
-        if not isinstance(value, bool):
-            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
-
-        self._keep_db_session_open = value
-
-    def set_keep_db_session_open(self, value: bool) -> "MariaDBDatasetBase":
-        """
-        Sets the value of the :code:`_keep_db_session_open` attribute.
-
-        :param value:
-            The value to set.
-        """
-
-        self.keep_db_session_open = value
-
-        return self
-
     @DBDatasetBase.execute_if_authorized(None)
     def get_content(self) -> Generator[dict, None, None]:
         """
         Provides a generator which provides the next dataset to read.
         """
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            for row in db_session.query(self.ORM_OBJ):
-                row = row.to_dict()
+        for row in self.db_session.query(self.ORM_OBJ):
+            row = row.to_dict()
 
-                yield row
+            yield row
 
     @DBDatasetBase.execute_if_authorized(None)
     def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
@@ -190,13 +143,12 @@ class MariaDBDatasetBase(DBDatasetBase):
             row = row.to_dict()
 
         if "id" in row:
-            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                db_session.execute(
-                    self.ORM_OBJ.__table__.update().where(self.ORM_OBJ.id == row["id"]),
-                    row,
-                )
+            self.db_session.execute(
+                self.ORM_OBJ.__table__.update().where(self.ORM_OBJ.id == row["id"]),
+                row,
+            )
 
-                db_session.commit()
+            self.db_session.commit()
         else:
             existing_row_id = self.get_existing_row_id(row)
 
@@ -237,15 +189,13 @@ class MariaDBDatasetBase(DBDatasetBase):
             row_id = self.get_existing_row_id(row)
 
             if row_id is not None:
-                with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                    db_session.query(self.ORM_OBJ).filter(
-                        self.ORM_OBJ == row_id
-                    ).delete()
-                    db_session.commit()
+                self.db_session.query(self.ORM_OBJ).filter(
+                    self.ORM_OBJ == row_id
+                ).delete()
+                self.db_session.commit()
         else:
-            with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-                db_session.delete(row)
-                db_session.commit()
+            self.db_session.delete(row)
+            self.db_session.commit()
 
         PyFunceble.facility.Logger.debug("Removed row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to remove row.")
@@ -286,16 +236,15 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            result = db_session.query(self.ORM_OBJ.id)
+        result = self.db_session.query(self.ORM_OBJ.id)
 
-            for field in self.COMPARISON_FIELDS:
-                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
+        for field in self.COMPARISON_FIELDS:
+            result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
 
-            result = result.first()
+        result = result.first()
 
-            if result is not None:
-                return result.id
+        if result is not None:
+            return result.id
         return None
 
     @DBDatasetBase.execute_if_authorized(None)
@@ -316,11 +265,10 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            result = db_session.query(self.ORM_OBJ)
+        result = self.db_session.query(self.ORM_OBJ)
 
-            for field in self.COMPARISON_FIELDS:
-                result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
+        for field in self.COMPARISON_FIELDS:
+            result = result.filter(getattr(self.ORM_OBJ, field) == row[field])
 
         return result.first()
 
@@ -348,9 +296,8 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        with PyFunceble.cli.factory.DBSession.get_db_session() as db_session:
-            db_session.execute(self.ORM_OBJ.__table__.insert(), row)
-            db_session.commit()
+        self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)
+        self.db_session.commit()
 
         PyFunceble.facility.Logger.debug("Added row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to add row.")
