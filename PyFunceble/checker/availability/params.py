@@ -70,3 +70,4 @@ class AvailabilityCheckerParams(CheckerParamsBase):
     use_http_code_lookup: Optional[bool] = None
     use_reputation_lookup: Optional[bool] = None
     do_syntax_check_first: Optional[bool] = None
+    use_whois_db: Optional[bool] = None

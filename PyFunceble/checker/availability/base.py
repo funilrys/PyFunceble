@@ -88,6 +88,7 @@ class AvailabilityCheckerBase(CheckerBase):
     STD_USE_NETINFO_LOOKUP: bool = True
     STD_USE_HTTP_CODE_LOOKUP: bool = True
     STD_USE_REPUTATION_LOOKUP: bool = False
+    STD_USE_WHOIS_DB: bool = True
 
     dns_query_tool: Optional[DNSQueryTool] = None
     whois_query_tool: Optional[WhoisQueryTool] = None
@@ -104,6 +105,7 @@ class AvailabilityCheckerBase(CheckerBase):
     _use_netinfo_lookup: bool = False
     _use_http_code_lookup: bool = False
     _use_reputation_lookup: bool = False
+    _use_whois_db: bool = False
 
     status: Optional[AvailabilityCheckerStatus] = None
     params: Optional[AvailabilityCheckerParams] = None
@@ -120,6 +122,7 @@ class AvailabilityCheckerBase(CheckerBase):
         use_reputation_lookup: Optional[bool] = None,
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
+        use_whois_db: Optional[bool] = None,
     ) -> None:
         self.dns_query_tool = DNSQueryTool().guess_all_settings()
         self.whois_query_tool = WhoisQueryTool()
@@ -167,6 +170,11 @@ class AvailabilityCheckerBase(CheckerBase):
             self.use_reputation_lookup = use_reputation_lookup
         else:
             self.guess_and_set_use_reputation_lookup()
+
+        if use_whois_db is not None:
+            self.use_whois_db = use_whois_db
+        else:
+            self.guess_and_set_use_whois_db()
 
         super().__init__(
             subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
@@ -404,7 +412,7 @@ class AvailabilityCheckerBase(CheckerBase):
 
         self._use_reputation_lookup = self.params.use_reputation_lookup = value
 
-    def set_use_reputation_lookup(self, value) -> "AvailabilityCheckerBase":
+    def set_use_reputation_lookup(self, value: bool) -> "AvailabilityCheckerBase":
         """
         Sets the value which authorizes the usage of the reputation
         lookup.
@@ -414,6 +422,43 @@ class AvailabilityCheckerBase(CheckerBase):
         """
 
         self.use_reputation_lookup = value
+
+        return self
+
+    @property
+    def use_whois_db(self) -> bool:
+        """
+        Provides the current value of the :code:`_use_whois_db` attribute.
+        """
+
+        return self._use_whois_db
+
+    @use_whois_db.setter
+    def use_whois_db(self, value: bool) -> None:
+        """
+        Sets the value which authorizes the usage of the WHOIS DB.
+
+        :param value:
+            The value to set.
+
+        :param TypeError:
+            When the given :code:`use_whois_db` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._use_whois_db = self.params.use_whois_db = value
+
+    def set_use_whois_db(self, value: bool) -> "AvailabilityCheckerBase":
+        """
+        Sets the value which authorizes the usage of the WHOIS DB.
+
+        :param value:
+            The value to set.
+        """
+
+        self.use_whois_db = value
 
         return self
 
@@ -570,6 +615,16 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
+    def guess_and_set_use_whois_db(self) -> "AvailabilityCheckerBase":
+        """
+        Try to guess and set the value of the :code:`use_whois_db` attribute.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            self.use_whois_db = PyFunceble.storage.CONFIGURATION.cli_testing.whois_db
+        else:
+            self.use_whois_db = self.STD_USE_WHOIS_DB
+
     def guess_all_settings(self) -> "AvailabilityCheckerBase":
         """
         Try to guess all settings.
@@ -689,7 +744,7 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.idna_subject,
         )
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+        if self.use_whois_db:
             whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
                 db_session=self.db_session
             )
