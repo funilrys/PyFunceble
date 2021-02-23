@@ -571,7 +571,7 @@ def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
             ],
             {
                 "dest": "cli_testing.whois_db",
-                "type": int,
+                "action": "store_true",
                 "help": "Activates or disables the usage of a 'database' to\n"
                 "store the expiration date of all domains with a valid\n"
                 "expiration date. %s" % get_configured_value("cli_testing.whois_db"),
