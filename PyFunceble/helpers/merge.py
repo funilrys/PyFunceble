@@ -65,7 +65,7 @@ class Merge:
     _subject: Optional[Any] = None
 
     def __init__(self, subject: Optional[Any] = None):
-        if subject:
+        if subject is not None:
             self.subject = subject
 
     @property
@@ -104,13 +104,6 @@ class Merge:
         self.subject = value
 
         return self
-
-    def get_subject(self) -> Optional[Any]:
-        """
-        Provides currently set subject.
-        """
-
-        return self.subject
 
     def __list(self, origin: Any, strict: bool = True) -> List[Any]:
         """
