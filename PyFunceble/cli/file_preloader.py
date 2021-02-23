@@ -62,6 +62,7 @@ import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
+from PyFunceble.cli.processes.workers.tester import TesterWorker
 from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.cli.utils.testing import get_subjects_from_line
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
@@ -73,6 +74,7 @@ from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
+from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.file import FileHelper
 from PyFunceble.helpers.hash import HashHelper
@@ -136,6 +138,7 @@ class FilePreloader:
         subject2complements: Optional[Subject2Complements] = None,
         url2netloc: Optional[Url2Netloc] = None,
         continue_dataset: Optional[ContinueDatasetBase] = None,
+        inactive_dataset: Optional[InactiveDatasetBase] = None,
     ) -> None:
         if authorized is not None:
             self.authorized = authorized
@@ -156,6 +159,7 @@ class FilePreloader:
         self.subject2complements = subject2complements
         self.url2netloc = url2netloc
         self.continue_dataset = continue_dataset
+        self.inactive_dataset = inactive_dataset
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
@@ -398,6 +402,16 @@ class FilePreloader:
                             to_send["tested_at"] = datetime.utcnow() - timedelta(
                                 days=365.25 * 20
                             )
+
+                            if self.inactive_dataset.exists(to_send):
+                                print_single_line("I")
+                                continue
+
+                            if TesterWorker.should_be_ignored(
+                                subject=to_send["idna_subject"]
+                            ):
+                                print_single_line("X")
+                                continue
 
                             self.continue_dataset.update(to_send, ignore_if_exist=True)
 

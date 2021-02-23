@@ -237,11 +237,12 @@ class SystemLauncher(SystemBase):
             subject2complements=self.subject2complements,
             url2netloc=self.url2netloc,
             continue_dataset=self.continue_dataset,
+            inactive_dataset=self.inactive_dataset,
         )
 
         super().__init__(args)
 
-    def __del__(self ) -> None:
+    def __del__(self) -> None:
         if self.db_session is not None:
             self.db_session.close()
 
