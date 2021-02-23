@@ -159,9 +159,12 @@ class SystemLauncher(SystemBase):
     sessions_id: dict = dict()
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
-        self.db_session = (
-            PyFunceble.cli.factory.DBSession.get_db_session().get_new_session()()
-        )
+        try:
+            self.db_session = (
+                PyFunceble.cli.factory.DBSession.get_db_session().get_new_session()()
+            )
+        except TypeError:
+            self.db_session = None
 
         self.execution_time_holder = ExecutionTime().set_start_time()
         self.checker_type = get_testing_mode()
