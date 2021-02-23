@@ -381,7 +381,6 @@ class ProducerWorker(WorkerBase):
             )
             return None
 
-        self.run_stdout_printer(test_result)
         self.run_whois_backup(test_result)
         self.run_inactive_backup(test_dataset, test_result)
         self.run_continue_backup(test_dataset, test_result)
@@ -390,6 +389,7 @@ class ProducerWorker(WorkerBase):
             self.run_status_file_printer(test_dataset, test_result)
             self.run_counter(test_dataset, test_result)
 
+        self.run_stdout_printer(test_result)
         test_dataset["from_producer"] = True
 
         return test_dataset, test_result
