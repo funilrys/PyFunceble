@@ -109,33 +109,29 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
                 status_post_syntax_checker = self.status.status
 
         if (
-            self.should_we_continue_test(status_post_syntax_checker)
+            self.use_whois_lookup
             and self.status.second_level_domain_syntax
-            and self.use_whois_lookup
+            and self.should_we_continue_test(status_post_syntax_checker)
         ):
             self.try_to_query_status_from_whois()
 
-        if (
-            self.should_we_continue_test(status_post_syntax_checker)
-            and self.use_dns_lookup
+        if self.use_dns_lookup and self.should_we_continue_test(
+            status_post_syntax_checker
         ):
             self.try_to_query_status_from_dns()
 
-        if (
-            self.should_we_continue_test(status_post_syntax_checker)
-            and self.use_netinfo_lookup
+        if self.use_netinfo_lookup and self.should_we_continue_test(
+            status_post_syntax_checker
         ):
             self.try_to_query_status_from_netinfo()
 
-        if (
-            self.should_we_continue_test(status_post_syntax_checker)
-            and self.use_reputation_lookup
+        if self.use_reputation_lookup and self.should_we_continue_test(
+            status_post_syntax_checker
         ):
             self.try_to_query_status_from_reputation()
 
-        if (
-            self.should_we_continue_test(status_post_syntax_checker)
-            and self.use_http_code_lookup
+        if self.use_http_code_lookup and self.should_we_continue_test(
+            status_post_syntax_checker
         ):
             self.try_to_query_status_from_http_status_code()
 

@@ -179,9 +179,8 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
             if self.status.status:
                 status_post_syntax_checker = self.status.status
 
-        if (
-            self.should_we_continue_test(status_post_syntax_checker)
-            and self.use_reputation_lookup
+        if self.use_reputation_lookup and self.should_we_continue_test(
+            status_post_syntax_checker
         ):
             self.try_to_query_status_from_reputation()
 
