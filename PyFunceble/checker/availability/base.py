@@ -713,7 +713,7 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.idna_subject,
         )
 
-        if self.use_whois_db:
+        if PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db:
             whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
                 db_session=self.db_session
             )
