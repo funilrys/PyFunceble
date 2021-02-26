@@ -81,6 +81,8 @@ class DNSQueryTool:
 
     STD_PROTOCOL: str = "UDP"
     STD_TIMEOUT: float = 5.0
+    STD_FOLLOW_NAMESERVER_ORDER: bool = True
+    STD_TRUST_SERVER: bool = False
 
     SUPPORTED_PROTOCOL: List[str] = ["TCP", "UDP", "HTTPS", "TLS"]
     BREAKOFF: float = 0.2
@@ -98,7 +100,8 @@ class DNSQueryTool:
     _subject: Optional[str] = None
     _follow_nameserver_order: bool = True
     _preferred_protocol: str = "UDP"
-    _query_timeout: float = 3.0
+    _query_timeout: float = 5.0
+    _trust_server: bool = False
 
     dns_name: Optional[str] = None
 
@@ -109,20 +112,29 @@ class DNSQueryTool:
         self,
         *,
         nameservers: Optional[List[str]] = None,
-        follow_nameserver_order: bool = True,
+        follow_nameserver_order: Optional[bool] = None,
         preferred_protocol: Optional[str] = None,
+        trust_server: Optional[bool] = None,
     ) -> None:
         if nameservers is not None:
-            self.set_nameservers(nameservers)
+            self.nameservers.set_nameservers(nameservers)
         else:  # pragma: no cover ## I'm not playing with system resolver.
             self.nameservers.guess_and_set_nameservers()
 
         if preferred_protocol is not None:
-            self.set_preferred_protocol(preferred_protocol)
+            self.preferred_protocol = preferred_protocol
         else:
             self.guess_and_set_preferred_protocol()
 
-        self.set_follow_nameserver_order(follow_nameserver_order)
+        if follow_nameserver_order is not None:
+            self.follow_nameserver_order = follow_nameserver_order
+        else:
+            self.guess_and_set_follow_nameserver_order()
+
+        if trust_server is not None:
+            self.trust_server = trust_server
+        else:
+            self.guess_and_set_trust_server()
 
     def prepare_query(func):  # pylint: disable=no-self-argument
         """
@@ -303,7 +315,9 @@ class DNSQueryTool:
 
         return self
 
-    def set_nameservers(self, value: List[str]) -> "DNSQueryTool":
+    def set_nameservers(
+        self, value: List[str]
+    ) -> "DNSQueryTool":  # pragma: no cover ## Underlying already tested.
         """
         Sets the nameservers to work with.
 
@@ -449,6 +463,43 @@ class DNSQueryTool:
 
         return self
 
+    @property
+    def trust_server(self) -> Optional[bool]:
+        """
+        Provides the current state of the :code:`trust_server` attribute.
+        """
+
+        return self._trust_server
+
+    @trust_server.setter
+    def trust_server(self, value: bool) -> None:
+        """
+        Sets the value to apply.
+
+        :param value:
+            The value to apply.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._trust_server = value
+
+    def set_trust_server(self, value: bool) -> "DNSQueryTool":
+        """
+        Sets the value to apply.
+
+        :param value:
+            The value to apply.
+        """
+
+        self.trust_server = value
+
+        return self
+
     def guess_and_set_timeout(self) -> "DNSQueryTool":
         """
         Try to guess and set the timeout.
@@ -517,12 +568,47 @@ class DNSQueryTool:
         """
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            if PyFunceble.storage.CONFIGURATION.dns.protocol:
+            if isinstance(PyFunceble.storage.CONFIGURATION.dns.protocol, str):
                 self.preferred_protocol = PyFunceble.storage.CONFIGURATION.dns.protocol
             else:
                 self.preferred_protocol = self.STD_PROTOCOL
         else:
             self.preferred_protocol = self.STD_PROTOCOL
+
+        return self
+
+    def guess_and_set_follow_nameserver_order(self) -> "DNSQueryTool":
+        """
+        Try to guess and authorize the mix of the nameserver before each
+        query.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(
+                PyFunceble.storage.CONFIGURATION.dns.follow_server_order, bool
+            ):
+                self.follow_nameserver_order = (
+                    PyFunceble.storage.CONFIGURATION.dns.follow_server_order
+                )
+            else:
+                self.follow_nameserver_order = self.STD_FOLLOW_NAMESERVER_ORDER
+        else:
+            self.follow_nameserver_order = self.STD_FOLLOW_NAMESERVER_ORDER
+
+        return self
+
+    def guess_and_set_trust_server(self) -> "DNSQueryTool":
+        """
+        Try to guess and set the trust flag.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.CONFIGURATION.dns.trust_server, bool):
+                self.trust_server = PyFunceble.storage.CONFIGURATION.dns.trust_server
+            else:
+                self.trust_server = self.STD_TRUST_SERVER
+        else:
+            self.trust_server = self.STD_TRUST_SERVER
 
         return self
 
@@ -642,9 +728,16 @@ class DNSQueryTool:
                         nameserver,
                     )
 
+                    if not self.trust_server:  # pragma: no cover: Per case.
+                        break
+                if self.trust_server:  # pragma: no cover: Per case.
                     break
-            except (dns.exception.Timeout, ValueError):
+            except (dns.exception.Timeout, socket.error):
+                # Example: Resource temporarily unavailable.
                 pass
+            except ValueError:
+                # Example: Input is malformed.
+                break
 
             PyFunceble.facility.Logger.debug(
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
@@ -700,13 +793,16 @@ class DNSQueryTool:
                         nameserver,
                     )
 
+                    if not self.trust_server:  # pragma: no cover: Per case.
+                        break
+                if self.trust_server:  # pragma: no cover: Per case.
                     break
-            except (
-                dns.exception.Timeout,
-                socket.gaierror,
-                ValueError,
-            ):
+            except (dns.exception.Timeout, socket.error):
+                # Example: Resource temporarily unavailable.
                 pass
+            except ValueError:
+                # Example: Input is malformed.
+                break
 
             PyFunceble.facility.Logger.debug(
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
@@ -756,9 +852,16 @@ class DNSQueryTool:
                         nameserver,
                     )
 
+                    if not self.trust_server:  # pragma: no cover: Per case.
+                        break
+                if self.trust_server:  # pragma: no cover: Per case.
                     break
-            except (dns.exception.Timeout, ValueError):
+            except (dns.exception.Timeout, socket.error):
+                # Example: Resource temporarily unavailable.
                 pass
+            except ValueError:
+                # Example: Input is malformed.
+                break
 
             PyFunceble.facility.Logger.debug(
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
@@ -819,9 +922,16 @@ class DNSQueryTool:
                         nameserver,
                     )
 
+                    if not self.trust_server:  # pragma: no cover: Per case.
+                        break
+                if self.trust_server:  # pragma: no cover: Per case.
                     break
-            except (dns.exception.Timeout, ValueError):
+            except (dns.exception.Timeout, socket.error):
+                # Example: Resource temporarily unavailable.
                 pass
+            except ValueError:
+                # Example: Input is malformed.
+                break
 
             PyFunceble.facility.Logger.debug(
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",

@@ -53,7 +53,7 @@ License:
 import functools
 import multiprocessing
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -503,29 +503,6 @@ class AvailabilityCheckerBase(CheckerBase):
             or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
         )
 
-    @staticmethod
-    def is_record_type_in_result(
-        record_type: Union[str, List[str], Tuple[str]],
-        lookup_result: Dict[str, Optional[List[str]]],
-    ) -> bool:
-        """
-        Checks if the given :code:`record_type` is in the result and not empty.
-
-        :param record_type:
-            A :py:class:`list`, :py:class`str` or :py:class:`tuple` representing
-            what we have to check.
-        :param lookup_result:
-            The lookup result (so far).
-        """
-
-        if isinstance(record_type, (list, tuple)):
-            return any(
-                AvailabilityCheckerBase.is_record_type_in_result(x, lookup_result)
-                for x in record_type
-            )
-
-        return record_type in lookup_result and bool(lookup_result[record_type])
-
     def guess_and_set_use_extra_rules(self) -> "AvailabilityCheckerBase":
         """
         Try to guess and set the value of the :code:`use_extra_rules` attribute
@@ -674,14 +651,6 @@ class AvailabilityCheckerBase(CheckerBase):
     def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:
         """
         Tries to query the DNS record(s) of the given subject.
-
-        :param subject:
-            The subject to query the information for.
-
-        :raise TypeError:
-            When the given :code:`subject` is not a :py:class:`str`.
-        :raise ValueError:
-            When the given :code:`subject` is empty.
         """
 
         PyFunceble.facility.Logger.info(
@@ -691,26 +660,26 @@ class AvailabilityCheckerBase(CheckerBase):
 
         result = dict()
 
-        if self.status.domain_syntax:
-            lookup_order = ["NS", "CNAME", "DNAME", "A", "AAAA"]
+        if self.status.subdomain_syntax:
+            lookup_order = ["NS", "A", "AAAA", "CNAME", "DNAME"]
+        elif self.status.domain_syntax:
+            lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
         elif self.status.ip_syntax:
             lookup_order = ["PTR"]
         else:
             lookup_order = []
 
         if lookup_order:
-            to_check = list()
-
             for record_type in lookup_order:
-                to_check.append(record_type)
+                local_result = self.dns_query_tool.set_query_record_type(
+                    record_type
+                ).query()
 
-                if not self.is_record_type_in_result(to_check, result):
-                    local_result = self.dns_query_tool.set_query_record_type(
-                        record_type
-                    ).query()
+                if local_result:
+                    result[record_type] = local_result
 
-                    if local_result:
-                        result[record_type] = local_result
+                    break
+                continue
 
         PyFunceble.facility.Logger.debug("DNS Record:\n%r", result)
 

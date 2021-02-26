@@ -215,6 +215,15 @@ lookup:
 dns:
   # Provides everything related to the DNS lookup.
 
+  # Activates the follow-up of the given order.
+  follow_server_order: true
+
+  # Activates the trust mode. Meaning that if one of the DNS give us a negative
+  # response (without error), we take it as it is.
+  # When this mode is deactivated (false), when one of the DNS give us a negative
+  # response (without error), we still ask all other servers.
+  trust_server: false
+
   # Sets the list of server to communicate with.
   # It must be a list.
   # As example:

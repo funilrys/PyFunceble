@@ -258,6 +258,9 @@ class ConfigComparison:
             or "active" in self.local_config["http_codes"]
             or "not_found_default" in self.local_config["http_codes"]
             or "self_managed" not in self.local_config["http_codes"]
+            or "dns" not in self.local_config
+            or "follow_server_order" not in self.local_config["dns"]
+            or "trust_server" not in self.local_config["dns"]
         ):
             return False
 

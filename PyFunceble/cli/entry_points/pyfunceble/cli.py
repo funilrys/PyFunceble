@@ -503,6 +503,30 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
                 % get_configured_value("dns.protocol"),
             },
         ),
+        (
+            ["--follow-server-order"],
+            {
+                "dest": "dns.follow_server_order",
+                "action": "store_true",
+                "help": "Let us follow or mix the order of usage of the given\n"
+                "or found DNS server(s). %s"
+                % get_configured_value("dns.follow_server_order"),
+            },
+        ),
+        (
+            ["--trust-dns-server"],
+            {
+                "dest": "dns.trust_server",
+                "action": "store_true",
+                "help": "Activates or disable the trust mode.\n\n"
+                "When active, when the first read DNS server give us a negative\n"
+                "response - without error - we take it as it it.\n"
+                "Otherwise, if not active, when the first read DNS server give us\n"
+                "a negative response - without error - we still consolidate by\n"
+                "checking all given/found server.\n%s"
+                % get_configured_value("dns.trust_server"),
+            },
+        ),
     ]
 
 

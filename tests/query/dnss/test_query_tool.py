@@ -53,6 +53,7 @@ License:
 
 import dataclasses
 import secrets
+import socket
 import unittest
 import unittest.mock
 
@@ -63,7 +64,7 @@ import dns.query
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.query.dns.query_tool import DNSQueryTool, DNSQueryToolRecord
 
-# pylint: disable=protected-access
+# pylint: disable=protected-access, too-many-lines
 
 
 class TestDNSQueryTool(unittest.TestCase):
@@ -137,12 +138,28 @@ class TestDNSQueryTool(unittest.TestCase):
         del self.mock_tls_query
 
     @staticmethod
-    def timout_response(*args, **kwargs):
+    def timout_response(*args, **kwargs) -> None:
         """
         Provides a response which raise a timeout error exception.
         """
 
         raise dns.exception.Timeout()
+
+    @staticmethod
+    def malformed_response(*args, **kwargs) -> None:
+        """
+        Provides a response which raises a malformed value error.
+        """
+
+        raise ValueError("Input malformed")
+
+    @staticmethod
+    def socket_error(*args, **kwargs) -> None:
+        """
+        Provides a response which raises a socket error.
+        """
+
+        raise socket.gaierror("Socket Error.")
 
     def test_set_subject(self) -> None:
         """
@@ -232,6 +249,57 @@ class TestDNSQueryTool(unittest.TestCase):
         self.assertRaises(
             TypeError, lambda: self.query_tool.set_follow_nameserver_order(given)
         )
+
+    def test_set_follow_nameserver_order_through_init(self) -> None:
+        """
+        Tests the overwritting of the `follow_nameserver_attribute` attribute
+        through the class constructor.
+        """
+
+        given = False
+        expected = False
+
+        query_tool = DNSQueryTool(follow_nameserver_order=given)
+
+        actual = query_tool.follow_nameserver_order
+
+        self.assertEqual(expected, actual)
+
+    def test_guess_and_set_follow_nameserver_order(self) -> None:
+        """
+        Tests the method which let us guess and set the order of the server.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"follow_server_order": False}}).start()
+
+        self.query_tool.guess_and_set_follow_nameserver_order()
+
+        expected = False
+        actual = self.query_tool.follow_nameserver_order
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_follow_nameserver_order_none(self) -> None:
+        """
+        Tests the method which let us guess and set the order of the server.
+
+        In this test, we check the case that the given value is set to None.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"follow_server_order": None}}).start()
+
+        self.query_tool.guess_and_set_follow_nameserver_order()
+
+        expected = self.query_tool.STD_FOLLOW_NAMESERVER_ORDER
+        actual = self.query_tool.follow_nameserver_order
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
 
     def test_set_query_record_type_from_name(self) -> None:
         """
@@ -439,6 +507,84 @@ class TestDNSQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_set_trust_server(self) -> None:
+        """
+        Tests the method which let us trust all the given server.
+        """
+
+        given = True
+        expected = True
+
+        self.query_tool.set_trust_server(given)
+        actual = self.query_tool.trust_server
+
+        self.assertEqual(expected, actual)
+
+    def test_set_trust_server_not_bool(self) -> None:
+        """
+        Tests the method which let us trust all the given server.
+
+        In this test we check the case that a non-boolean value is given.
+        """
+
+        given = ["Hello", "World"]
+
+        self.assertRaises(TypeError, lambda: self.query_tool.set_trust_server(given))
+
+    def test_set_trust_server_through_init(self) -> None:
+        """
+        Tests the overwritting of the `trust_server` attribute through the class
+        constructor.
+        """
+
+        given = True
+        expected = True
+
+        query_tool = DNSQueryTool(trust_server=given)
+
+        actual = query_tool.trust_server
+
+        self.assertEqual(expected, actual)
+
+    def test_guess_and_set_trust_server(self) -> None:
+        """
+        Tests the method which let us guess and set the trust flag from the
+        configuration file.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"trust_server": True}}).start()
+
+        self.query_tool.guess_and_set_trust_server()
+
+        expected = True
+        actual = self.query_tool.trust_server
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_trust_server_none(self) -> None:
+        """
+        Tests the method which let us guess and set the trust flag from the
+        configuration file.
+
+        In this case, we test the case that None or implicitly a non boolean
+        value is given.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"trust_server": None}}).start()
+
+        self.query_tool.guess_and_set_trust_server()
+
+        expected = self.query_tool.STD_TRUST_SERVER
+        actual = self.query_tool.trust_server
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
     def test_set_preferred_protocol(self) -> None:
         """
         Tests the method which let us set the preferred protocol.
@@ -597,6 +743,46 @@ class TestDNSQueryTool(unittest.TestCase):
         self.mock_https_query.assert_not_called()
         self.mock_tls_query.assert_not_called()
 
+    def test_udp_query_malformed_input(self) -> None:
+        """
+        Tests the method which let us query through the UDP protocol.
+
+        In this case, we check the case that a ValueError is raised.
+        """
+
+        self.query_tool.preferred_protocol = "UDP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_udp_query.side_effect = self.malformed_response
+
+        _ = self.query_tool.query()
+
+        self.mock_udp_query.assert_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
+    def test_udp_query_socket_error(self) -> None:
+        """
+        Tests the method which let us query through the UDP protocol.
+
+        In this case, we check the case that a socket error is raised.
+        """
+
+        self.query_tool.preferred_protocol = "UDP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_udp_query.side_effect = self.socket_error
+
+        _ = self.query_tool.query()
+
+        self.mock_udp_query.assert_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
     def test_udp_query_with_result(self) -> None:
         """
         Tests the method which let us query through the UDP protocol.
@@ -653,6 +839,46 @@ class TestDNSQueryTool(unittest.TestCase):
         self.query_tool.subject = "example.org"
 
         self.mock_tcp_query.side_effect = self.timout_response
+
+        _ = self.query_tool.query()
+
+        self.mock_tcp_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
+    def test_tcp_query_malformed_input(self) -> None:
+        """
+        Tests the method which let us query through the TCP protocol.
+
+        In this case, we check the case that a ValueError is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TCP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tcp_query.side_effect = self.malformed_response
+
+        _ = self.query_tool.query()
+
+        self.mock_tcp_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
+    def test_tcp_query_socket_error(self) -> None:
+        """
+        Tests the method which let us query through the TCP protocol.
+
+        In this case, we check the case that a socket error is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TCP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tcp_query.side_effect = self.socket_error
 
         _ = self.query_tool.query()
 
@@ -725,6 +951,46 @@ class TestDNSQueryTool(unittest.TestCase):
         self.mock_tcp_query.assert_not_called()
         self.mock_tls_query.assert_not_called()
 
+    def test_https_query_malformed_input(self) -> None:
+        """
+        Tests the method which let us query through the HTTPS protocol.
+
+        In this case, we check the case that a ValueError is raised.
+        """
+
+        self.query_tool.preferred_protocol = "HTTPS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_https_query.side_effect = self.malformed_response
+
+        _ = self.query_tool.query()
+
+        self.mock_https_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
+    def test_https_query_socket_error(self) -> None:
+        """
+        Tests the method which let us query through the HTTPS protocol.
+
+        In this case, we check the case that a socket error is raised.
+        """
+
+        self.query_tool.preferred_protocol = "HTTPS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_https_query.side_effect = self.socket_error
+
+        _ = self.query_tool.query()
+
+        self.mock_https_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
     def test_https_query_with_result(self) -> None:
         """
         Tests the method which let us query through the HTTPS protocol.
@@ -781,6 +1047,46 @@ class TestDNSQueryTool(unittest.TestCase):
         self.query_tool.subject = "example.org"
 
         self.mock_tls_query.side_effect = self.timout_response
+
+        _ = self.query_tool.query()
+
+        self.mock_tls_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+
+    def test_tls_query_malformed_input(self) -> None:
+        """
+        Tests the method which let us query through the TLS protocol.
+
+        In this case, we check the case that a ValueError is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TLS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tls_query.side_effect = self.malformed_response
+
+        _ = self.query_tool.query()
+
+        self.mock_tls_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+
+    def test_tls_query_socket_error(self) -> None:
+        """
+        Tests the method which let us query through the TLS protocol.
+
+        In this case, we check the case that a socket error is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TLS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tls_query.side_effect = self.socket_error
 
         _ = self.query_tool.query()
 

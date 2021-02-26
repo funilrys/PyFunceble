@@ -370,7 +370,12 @@ DEFAULT_CONFIG: dict = {
         "whois_db": True,
     },
     "debug": {"active": False, "level": "info"},
-    "dns": {"protocol": "UDP", "server": None},
+    "dns": {
+        "follow_server_order": True,
+        "protocol": "UDP",
+        "server": None,
+        "trust_server": False,
+    },
     "http_codes": {
         "list": {
             "potentially_down": [400, 402, 404, 409, 410, 412, 414, 415, 416, 451],

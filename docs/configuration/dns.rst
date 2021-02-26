@@ -47,3 +47,27 @@
     **Available values:** :code:`UDP`, :code:`TCP`, :code:`HTTPS`, :code:`TLS`.
 
     **Description:** Sets the protocol to use for all DNS queries.
+
+:code:`dns[follow_server_order]`
+""""""""""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Activates or disables the follow-up of the given order.
+
+:code:`dns[trust_server]`
+"""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the trust mode. When the trust mode
+    is active and the first read DNS server gives us a negative response
+    (without any error), we take it as it is.
+
+    Otherwise, when the trust mode is disabled, when the first read DNS server
+    gives us a negative response (without any error), we still ask all other
+    DNS servers that were given or found.
