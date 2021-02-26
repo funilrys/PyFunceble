@@ -14,7 +14,6 @@ Subpackages
    PyFunceble.cli.processes
    PyFunceble.cli.scripts
    PyFunceble.cli.system
-   PyFunceble.cli.threads
    PyFunceble.cli.utils
 
 Submodules
