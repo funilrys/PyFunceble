@@ -234,12 +234,8 @@ class CSVDatasetBase(DBDatasetBase):
             raise TypeError(f"<filter_map> should be {dict}, {type(filter_map)} given.")
 
         for row in self.get_content():
-            for key, value in filter_map.items():
-                if key not in row:
-                    continue
-
-                if row[key] == value:
-                    yield row
+            if all(x in row and row[x] == y for x, y in filter_map.items()):
+                yield row
 
     def get_filtered_comparision_row(self, row: dict):
         """
