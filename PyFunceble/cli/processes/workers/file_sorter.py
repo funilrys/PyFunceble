@@ -142,6 +142,8 @@ class FileSorterWorker(WorkerBase):
         file_helper = FileHelper(file)
         sorted_files = []
 
+        sorting_key = get_best_sorting_key()
+
         with file_helper.open("r", encoding="utf-8") as file_stream:
             PyFunceble.facility.Logger.info("Started sort of %r.", file_helper.path)
 
@@ -159,7 +161,7 @@ class FileSorterWorker(WorkerBase):
                         "".join(
                             ListHelper(to_sort)
                             .remove_duplicates()
-                            .custom_sort(key_method=get_best_sorting_key())
+                            .custom_sort(key_method=sorting_key)
                             .subject
                         )
                     )
@@ -167,14 +169,16 @@ class FileSorterWorker(WorkerBase):
                     sorted_files.append(temp_file_stream.name)
 
             with contextlib.ExitStack() as stack:
-                sorted_files = [stack.enter_context(open(x)) for x in sorted_files]
-
                 if sorted_files:
+                    sorted_files = [stack.enter_context(open(x)) for x in sorted_files]
+
                     with file_helper.open("w", encoding="utf-8") as final_file_stream:
                         final_file_stream.write(FilePrinter.STD_FILE_GENERATION)
                         final_file_stream.write(FilePrinter.get_generation_date_line())
                         final_file_stream.write("\n\n")
-                        final_file_stream.writelines(heapq.merge(*sorted_files))
+                        final_file_stream.writelines(
+                            heapq.merge(*sorted_files, key=sorting_key)
+                        )
 
                 temp_final_filename = secrets.token_hex(6)
 

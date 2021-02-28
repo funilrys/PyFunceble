@@ -66,6 +66,11 @@ def standard(element: Any) -> List[Union[int, Any]]:
         The element to format.
     """
 
+    element = element.strip()
+
+    if not element:
+        return []
+
     regex_helper = RegexHelper()
 
     element = Url2Netloc(element).get_converted().strip()
@@ -90,6 +95,11 @@ def hierarchical(element: Any) -> List[Union[int, Any]]:
     :param element:
         The element to format.
     """
+
+    element = element.strip()
+
+    if not element:
+        return []
 
     element = Url2Netloc(element).get_converted().strip()
 
