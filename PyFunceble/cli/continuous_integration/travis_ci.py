@@ -66,12 +66,19 @@ class TravisCI(ContinuousIntegrationBase):
         Tries to guess the authorization.
         """
 
+        needed_environment_vars = ["TRAVIS_BUILD_DIR"]
+
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-            self.authorized = (
-                bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active)
-                and EnvironmentVariableHelper("TRAVIS_BUILD_DIR").exists()
-            )
-        elif EnvironmentVariableHelper("TRAVIS_BUILD_DIR").exists():
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active):
+                self.authorized = all(
+                    EnvironmentVariableHelper(x).exists()
+                    for x in needed_environment_vars
+                )
+            else:
+                super().guess_and_set_authorized()
+        elif all(
+            EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
+        ):
             self.authorized = True
         else:
             super().guess_and_set_authorized()

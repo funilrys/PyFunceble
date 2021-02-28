@@ -69,11 +69,11 @@ class GitLabCI(ContinuousIntegrationBase):
         needed_environment_vars = ["GITLAB_CI", "GITLAB_USER_ID"]
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
-
-            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active) and all(
-                EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
-            ):
-                self.authorized = True
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active):
+                self.authorized = all(
+                    EnvironmentVariableHelper(x).exists()
+                    for x in needed_environment_vars
+                )
             else:
                 super().guess_and_set_authorized()
         elif all(

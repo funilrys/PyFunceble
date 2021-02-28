@@ -63,7 +63,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
     A placeholder which provides the CI object to use.
     """
 
-    known_objects = [GitHubActions, TravisCI, GitLabCI, Jenkins]
+    known_objects = [Jenkins, GitHubActions, TravisCI, GitLabCI]
     result = None
 
     for known in known_objects:
@@ -79,7 +79,7 @@ def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
             return result
 
     PyFunceble.facility.Logger.debug(
-        "No known CI object authorized. Using: %r", known_objects[-1]
+        "No known CI object authorized. Using: %r", known_objects[0]
     )
 
     return known_objects[0](*args, **kwargs)
