@@ -56,7 +56,7 @@ import heapq
 import os
 import secrets
 import tempfile
-from itertools import groupby
+from itertools import groupby, islice
 from typing import Any, List, Optional, Tuple
 
 import PyFunceble.cli.storage
@@ -140,30 +140,23 @@ class FileSorterWorker(WorkerBase):
 
         temp_directory = tempfile.TemporaryDirectory()
         file_helper = FileHelper(file)
+        sorted_files = []
 
         with file_helper.open("r", encoding="utf-8") as file_stream:
             PyFunceble.facility.Logger.info("Started sort of %r.", file_helper.path)
 
-            to_sort = []
-            file_finished = False
-
             while True:
-                for _ in range(cls.MAX_LINES + 1):
-                    try:
-                        next_line = next(file_stream).strip()
-                    except StopIteration:
-                        file_finished = True
-                        break
+                to_sort = list(islice(file_stream, cls.MAX_LINES + 1))
 
-                    if next_line and not next_line.startswith("#"):
-                        to_sort.append(next_line)
+                if not to_sort:
+                    break
 
                 with FileHelper(
                     os.path.join(temp_directory.name, secrets.token_hex(6))
                 ).open("w", encoding="utf-8") as temp_file_stream:
                     # pylint: disable=line-too-long
                     temp_file_stream.write(
-                        "\n".join(
+                        "".join(
                             ListHelper(to_sort)
                             .remove_duplicates()
                             .custom_sort(key_method=get_best_sorting_key())
@@ -171,17 +164,10 @@ class FileSorterWorker(WorkerBase):
                         )
                     )
 
-                if file_finished:
-                    break
+                    sorted_files.append(temp_file_stream.name)
 
             with contextlib.ExitStack() as stack:
-                sorted_files = []
-
-                for root_temp_dir, _, new_files in os.walk(temp_directory.name):
-                    sorted_files = [
-                        stack.enter_context(open(os.path.join(root_temp_dir, x)))
-                        for x in new_files
-                    ]
+                sorted_files = [stack.enter_context(open(x)) for x in sorted_files]
 
                 if sorted_files:
                     with file_helper.open("w", encoding="utf-8") as final_file_stream:
@@ -201,7 +187,7 @@ class FileSorterWorker(WorkerBase):
                     temp_file_stream.write(
                         FilePrinter.get_generation_date_line().encode("utf-8")
                     )
-                    temp_file_stream.write("\n".encode("utf-8"))
+                    temp_file_stream.write(b"\n")
 
                     for key, _ in groupby(sorted(final_file_stream)):
                         if key[0] == ord("#"):
@@ -236,5 +222,11 @@ class FileSorterWorker(WorkerBase):
             for file in self.get_files_to_sort(output_dir):
                 submitted = executor.submit(self.process_file_sorting, file)
                 submitted_list.append(submitted)
+
+            for submitted in concurrent.futures.as_completed(submitted_list):
+                # Ensure that everything is finished
+
+                if submitted.exception():
+                    raise submitted.exception()
 
         return None
