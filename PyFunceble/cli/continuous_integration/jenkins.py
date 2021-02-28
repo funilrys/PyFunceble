@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides some utilities related to the CI.
+Provides the CI engine and detection tool for Jenkins.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -52,34 +52,46 @@ License:
 
 import PyFunceble.facility
 from PyFunceble.cli.continuous_integration.base import ContinuousIntegrationBase
-from PyFunceble.cli.continuous_integration.github_actions import GitHubActions
-from PyFunceble.cli.continuous_integration.gitlab_ci import GitLabCI
-from PyFunceble.cli.continuous_integration.jenkins import Jenkins
-from PyFunceble.cli.continuous_integration.travis_ci import TravisCI
+from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 
-def ci_object(*args, **kwargs) -> ContinuousIntegrationBase:
+class Jenkins(ContinuousIntegrationBase):
     """
-    A placeholder which provides the CI object to use.
+    Provides the interface which detects and work under several Jenkins
+    infrastructure.
     """
 
-    known_objects = [GitHubActions, TravisCI, GitLabCI, Jenkins]
-    result = None
+    def guess_and_set_authorized(self) -> "Jenkins":
+        """
+        Tries to guess the authorization.
+        """
 
-    for known in known_objects:
-        result = known(*args, **kwargs)
-        result.guess_all_settings()
+        needed_environment_vars = ["JENKINS_URL", "JENKINS_HOME"]
 
-        PyFunceble.facility.Logger.debug("Checking if %r is authorized.", result)
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if bool(PyFunceble.storage.CONFIGURATION.cli_testing.ci.active) and all(
+                EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
+            ):
+                self.authorized = True
+            else:
+                super().guess_and_set_authorized()
+        elif all(
+            EnvironmentVariableHelper(x).exists() for x in needed_environment_vars
+        ):
+            self.authorized = True
+        else:
+            super().guess_and_set_authorized()
 
-        if result.is_authorized():
-            PyFunceble.facility.Logger.debug(
-                "%r is authorized. Using it as CI object.", result
-            )
-            return result
+        return self
 
-    PyFunceble.facility.Logger.debug(
-        "No known CI object authorized. Using: %r", known_objects[-1]
-    )
+    def guess_and_set_token(self) -> "Jenkins":
+        """
+        Tries to guess and set the token.
+        """
 
-    return known_objects[0](*args, **kwargs)
+        environment_var = EnvironmentVariableHelper("GITHUB_TOKEN")
+
+        if environment_var.exists():
+            self.token = environment_var.get_value()
+
+        return self

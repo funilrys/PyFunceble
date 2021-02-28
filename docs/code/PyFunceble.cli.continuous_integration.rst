@@ -40,6 +40,15 @@ PyFunceble.cli.continuous\_integration.gitlab\_ci module
    :show-inheritance:
    :private-members:
 
+PyFunceble.cli.continuous\_integration.jenkins module
+-----------------------------------------------------
+
+.. automodule:: PyFunceble.cli.continuous_integration.jenkins
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
+
 PyFunceble.cli.continuous\_integration.travis\_ci module
 --------------------------------------------------------
 
