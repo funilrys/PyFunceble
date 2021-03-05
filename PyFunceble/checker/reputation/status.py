@@ -82,7 +82,7 @@ class ReputationCheckerStatus(CheckerStatusBase):
     ipv6_range_syntax: Optional[bool] = None
     url_syntax: Optional[bool] = None
 
-    dns_lookup: Optional[Dict[str, Optional[List[str]]]] = None
+    dns_lookup: Optional[List[str]] = None
 
     def __post_init__(self) -> None:
         self.dns_lookup_record = DNSQueryToolRecord()

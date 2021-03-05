@@ -70,7 +70,11 @@ class CheckerParamsBase:
         Converts the current object to dict.
         """
 
-        return {x: y for x, y in self.__dict__.items() if not x.startswith("__")}
+        return {
+            x: y if not hasattr(y, "to_dict") else y.to_dict()
+            for x, y in self.__dict__.items()
+            if not x.startswith("__")
+        }
 
     def to_json(self) -> str:
         """

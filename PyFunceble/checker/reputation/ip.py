@@ -62,7 +62,18 @@ class IPReputationChecker(ReputationCheckerBase):
     """
 
     def query_a_record(self) -> Optional[List[str]]:
-        return self.dns_query_tool.set_query_record_type("A").query()
+        result = set()
+
+        for subject in self.dns_query_tool.set_query_record_type("PTR").query():
+            result.update(
+                self.dns_query_tool.set_subject(subject)
+                .set_query_record_type("A")
+                .query()
+            )
+
+        self.dns_query_tool.subject = self.dns_query_tool.subject
+
+        return list(result)
 
     @staticmethod
     def is_valid() -> bool:

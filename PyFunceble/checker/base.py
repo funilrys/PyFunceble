@@ -66,6 +66,8 @@ class CheckerBase:
     Provides the base of all checker.
     """
 
+    STD_DO_SYNTAX_CHECK_FIRST: bool = False
+
     _do_syntax_check_first: bool = False
 
     _subject: Optional[str] = None
@@ -94,6 +96,8 @@ class CheckerBase:
 
         if do_syntax_check_first is not None:
             self.do_syntax_check_first = do_syntax_check_first
+        else:
+            self.do_syntax_check_first = self.STD_DO_SYNTAX_CHECK_FIRST
 
         self.db_session = db_session
 

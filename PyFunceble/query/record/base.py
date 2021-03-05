@@ -68,4 +68,8 @@ class RecordBase:
         Provides the dict representation of the current object.
         """
 
-        return {x: y for x, y in self.__dict__.items() if not x.startswith("__")}
+        return {
+            x: y if not hasattr(y, "to_dict") else y.to_dict()
+            for x, y in self.__dict__.items()
+            if not x.startswith("__")
+        }
