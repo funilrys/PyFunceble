@@ -111,6 +111,9 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
         "||examplhe.com$script,image": ["examplhe.com"],
         "||examplie.com^$domain=domain1.com|domain2.com": ["examplie.com"],
         "||examplje.com^$third-party,image": ["examplje.com"],
+        'examlple.com##[href^="http://hello.world."], [href^="http://example.net/"]': [
+            "examlple.com"
+        ],
     }
 
     def setUp(self) -> None:

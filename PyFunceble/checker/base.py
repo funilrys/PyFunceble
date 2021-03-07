@@ -195,7 +195,11 @@ class CheckerBase:
             raise ValueError("<value> should not be empty.")
 
         self._subject = value
-        self.idna_subject = domain2idna.domain2idna(value)
+
+        try:
+            self.idna_subject = domain2idna.domain2idna(value)
+        except ValueError:
+            self.idna_subject = value
 
     def set_subject(self, value: str) -> "CheckerBase":
         """

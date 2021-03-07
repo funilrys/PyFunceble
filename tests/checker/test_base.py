@@ -138,6 +138,26 @@ class TestCheckerBase(unittest.TestCase):
         self.assertEqual(expected_subject, actual_subject)
         self.assertEqual(expected_idna_subject, actual_idna_subject)
 
+    def test_set_subject_idna_not_wrong_ipv6_format(self) -> None:
+        """
+        Tests the initilization of the :code:`idna_subject` attribute when
+        we overwrite the subject.
+
+        In this case we check the case the wrongly formatted "IPv6" issue.
+        """
+
+        given = 'http://example.org."]'
+        expected_subject = 'http://example.org."]'
+        expected_idna_subject = 'http://example.org."]'
+
+        self.checker.subject = given
+
+        actual_subject = expected_subject
+        actual_idna_subject = expected_idna_subject
+
+        self.assertEqual(expected_subject, actual_subject)
+        self.assertEqual(expected_idna_subject, actual_idna_subject)
+
     def test_set_subject_through_init(self) -> None:
         """
         Tests the overwritting of the subjct through the class constructor.
