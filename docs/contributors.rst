@@ -26,6 +26,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
+-   rusty-snake - `@rusty-snake`_
 -   ScriptTiger - `@ScriptTiger`_
 -   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
@@ -33,8 +34,8 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
--   ZeroDot1 - `@ZeroDot1`_
 -   Yuki2718 -  `@Yuki2718`_
+-   ZeroDot1 - `@ZeroDot1`_
 
 .. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
@@ -47,14 +48,15 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 .. _@NeolithEra: https://github.com/NeolithEra
 .. _@Odyseus: https://github.com/Odyseus
 .. _@opav: https://github.com/opav
-.. _@sjhgvr: https://github.com/sjhgvr
+.. _@rusty-snake: https://github.com/rusty-snake
 .. _@ScriptTiger: https://github.com/ScriptTiger
+.. _@sjhgvr: https://github.com/sjhgvr
 .. _@speedmann: https://github.com/speedmann
 .. _@spirillen: https://www.mypdns.org/p/Spirillen/
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
-.. _@ZeroDot1: https://github.com/ZeroDot1
 .. _@Yuki2718: https://github.com/Yuki2718
+.. _@ZeroDot1: https://github.com/ZeroDot1
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble

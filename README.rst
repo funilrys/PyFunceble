@@ -225,15 +225,16 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   Odyseus - `@Odyseus`_
 -   opav - `@opav`_
 -   Reza Rizqullah - `@ybreza`_
--   sjhgvr - `@sjhgvr`_
+-   rusty-snake - `@rusty-snake`_
 -   ScriptTiger - `@ScriptTiger`_
+-   sjhgvr - `@sjhgvr`_
 -   speedmann - `@speedmann`_
 -   spirillen - `@spirillen`_
 -   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
--   ZeroDot1 - `@ZeroDot1`_
 -   Yuki2718 - `@Yuki2718`_
+-   ZeroDot1 - `@ZeroDot1`_
 
 ___________________________________________
 
@@ -343,6 +344,7 @@ License
 .. _@PromoFaux: https://github.com/PromoFaux
 .. _@publicsuffix: https://github.com/publicsuffix
 .. _@rthalley: https://github.com/rthalley
+.. _@rusty-snake: https://github.com/rusty-snake
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@SMed79: https://github.com/SMed79
@@ -354,8 +356,8 @@ License
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza
-.. _@ZeroDot1: https://github.com/ZeroDot1
 .. _@Yuki2718: https://github.com/Yuki2718
+.. _@ZeroDot1: https://github.com/ZeroDot1
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
