@@ -52,7 +52,7 @@ License:
 """
 
 import dataclasses
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
