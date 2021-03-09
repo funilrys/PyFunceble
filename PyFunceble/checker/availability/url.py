@@ -131,7 +131,8 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         if (
             lookup_result
-            and lookup_result != self.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
+            and lookup_result
+            != self.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
         ):
             self.status.http_status_code = lookup_result
 
