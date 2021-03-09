@@ -11,7 +11,6 @@ PyFunceble.cli.filesystem.printer.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.printer.file module
 ---------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.filesystem.printer.file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.printer.stdout module
 -----------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.filesystem.printer.stdout module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

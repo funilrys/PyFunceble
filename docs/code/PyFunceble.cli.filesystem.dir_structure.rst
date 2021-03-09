@@ -11,7 +11,6 @@ PyFunceble.cli.filesystem.dir\_structure.backup module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.dir\_structure.base module
 ----------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.filesystem.dir\_structure.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.dir\_structure.restore module
 -------------------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.filesystem.dir\_structure.restore module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

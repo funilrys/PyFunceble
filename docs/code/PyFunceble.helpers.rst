@@ -11,7 +11,6 @@ PyFunceble.helpers.command module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.dict module
 ------------------------------
@@ -20,7 +19,6 @@ PyFunceble.helpers.dict module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.directory module
 -----------------------------------
@@ -29,7 +27,6 @@ PyFunceble.helpers.directory module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.download module
 ----------------------------------
@@ -38,7 +35,6 @@ PyFunceble.helpers.download module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.environment\_variable module
 -----------------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.helpers.environment\_variable module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.exceptions module
 ------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.helpers.exceptions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.file module
 ------------------------------
@@ -65,7 +59,6 @@ PyFunceble.helpers.file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.hash module
 ------------------------------
@@ -74,7 +67,6 @@ PyFunceble.helpers.hash module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.list module
 ------------------------------
@@ -83,7 +75,6 @@ PyFunceble.helpers.list module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.merge module
 -------------------------------
@@ -92,7 +83,6 @@ PyFunceble.helpers.merge module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.helpers.regex module
 -------------------------------
@@ -101,7 +91,6 @@ PyFunceble.helpers.regex module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -110,4 +99,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

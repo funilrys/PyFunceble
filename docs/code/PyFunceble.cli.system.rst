@@ -11,7 +11,6 @@ PyFunceble.cli.system.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.system.integrator module
 ---------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.system.integrator module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.system.launcher module
 -------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.system.launcher module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

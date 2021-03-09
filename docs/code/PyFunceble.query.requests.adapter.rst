@@ -11,7 +11,6 @@ PyFunceble.query.requests.adapter.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.requests.adapter.http module
 ---------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.query.requests.adapter.http module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.requests.adapter.https module
 ----------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.query.requests.adapter.https module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

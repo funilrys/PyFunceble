@@ -20,7 +20,6 @@ PyFunceble.cli.filesystem.cleanup module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.counter module
 ----------------------------------------
@@ -29,7 +28,6 @@ PyFunceble.cli.filesystem.counter module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.dir\_base module
 ------------------------------------------
@@ -38,7 +36,6 @@ PyFunceble.cli.filesystem.dir\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.filesystem.status\_file module
 ---------------------------------------------
@@ -47,7 +44,6 @@ PyFunceble.cli.filesystem.status\_file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -56,4 +52,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

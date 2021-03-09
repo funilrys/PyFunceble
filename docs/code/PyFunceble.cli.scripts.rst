@@ -11,7 +11,6 @@ PyFunceble.cli.scripts.iana module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.scripts.production module
 ----------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.scripts.production module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.scripts.public\_suffix module
 --------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.scripts.public\_suffix module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

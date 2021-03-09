@@ -383,7 +383,7 @@ class ProductionPrep:
         source_code_destination = os.path.join(docs_dir_helper.realpath, "code")
 
         CommandHelper(
-            f"sphinx-apidoc -d 5 -f -H {header!r} -P -o "
+            f"sphinx-apidoc -d 5 -f -H {header!r} -o "
             f"{source_code_destination!r} {source_code_dir_helper.realpath}"
         ).execute(raise_on_error=True)
 

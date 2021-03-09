@@ -19,7 +19,6 @@ PyFunceble.cli.processes.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.processes.file\_sorter module
 --------------------------------------------
@@ -28,7 +27,6 @@ PyFunceble.cli.processes.file\_sorter module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.processes.migrator module
 ----------------------------------------
@@ -37,7 +35,6 @@ PyFunceble.cli.processes.migrator module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.processes.miner module
 -------------------------------------
@@ -46,7 +43,6 @@ PyFunceble.cli.processes.miner module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.processes.producer module
 ----------------------------------------
@@ -55,7 +51,6 @@ PyFunceble.cli.processes.producer module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.processes.tester module
 --------------------------------------
@@ -64,7 +59,6 @@ PyFunceble.cli.processes.tester module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -73,4 +67,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

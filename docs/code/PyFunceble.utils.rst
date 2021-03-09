@@ -11,7 +11,6 @@ PyFunceble.utils.platform module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.utils.profile module
 -------------------------------
@@ -20,7 +19,6 @@ PyFunceble.utils.profile module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.utils.version module
 -------------------------------
@@ -29,7 +27,6 @@ PyFunceble.utils.version module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

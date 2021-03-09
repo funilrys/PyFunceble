@@ -11,7 +11,6 @@ PyFunceble.cli.migrators.mariadb.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.mariadb.file\_and\_status module
 ---------------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.migrators.mariadb.file\_and\_status module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.mariadb.whois\_record\_idna\_subject module
 --------------------------------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.migrators.mariadb.whois\_record\_idna\_subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

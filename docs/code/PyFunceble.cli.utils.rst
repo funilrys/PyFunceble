@@ -11,7 +11,6 @@ PyFunceble.cli.utils.ascii\_logo module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.utils.sort module
 --------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.utils.sort module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.utils.stdout module
 ----------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.utils.stdout module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.utils.testing module
 -----------------------------------
@@ -38,7 +35,6 @@ PyFunceble.cli.utils.testing module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.utils.version module
 -----------------------------------
@@ -47,7 +43,6 @@ PyFunceble.cli.utils.version module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -56,4 +51,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

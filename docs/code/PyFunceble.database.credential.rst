@@ -11,7 +11,6 @@ PyFunceble.database.credential.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.credential.mariadb module
 ---------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.database.credential.mariadb module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.credential.mysql module
 -------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.database.credential.mysql module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

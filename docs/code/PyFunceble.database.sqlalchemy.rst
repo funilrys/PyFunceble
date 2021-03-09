@@ -11,7 +11,6 @@ PyFunceble.database.sqlalchemy.all\_schemas module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.sqlalchemy.base\_schema module
 --------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.database.sqlalchemy.base\_schema module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -29,4 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

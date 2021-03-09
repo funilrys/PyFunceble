@@ -11,7 +11,6 @@ PyFunceble.checker.syntax.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.domain module
 ---------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.checker.syntax.domain module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.domain\_base module
 ---------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.checker.syntax.domain\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.ip module
 -----------------------------------
@@ -38,7 +35,6 @@ PyFunceble.checker.syntax.ip module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.ipv4 module
 -------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.checker.syntax.ipv4 module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.ipv6 module
 -------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.checker.syntax.ipv6 module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.params module
 ---------------------------------------
@@ -65,7 +59,6 @@ PyFunceble.checker.syntax.params module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.second\_lvl\_domain module
 ----------------------------------------------------
@@ -74,7 +67,6 @@ PyFunceble.checker.syntax.second\_lvl\_domain module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.status module
 ---------------------------------------
@@ -83,7 +75,6 @@ PyFunceble.checker.syntax.status module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.subdomain module
 ------------------------------------------
@@ -92,7 +83,6 @@ PyFunceble.checker.syntax.subdomain module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.syntax.url module
 ------------------------------------
@@ -101,7 +91,6 @@ PyFunceble.checker.syntax.url module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -110,4 +99,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

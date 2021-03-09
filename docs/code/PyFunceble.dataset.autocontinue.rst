@@ -11,7 +11,6 @@ PyFunceble.dataset.autocontinue.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.autocontinue.csv module
 ------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.dataset.autocontinue.csv module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.autocontinue.mariadb module
 ----------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.dataset.autocontinue.mariadb module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.autocontinue.mysql module
 --------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.dataset.autocontinue.mysql module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -47,4 +43,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

@@ -22,7 +22,6 @@ PyFunceble.cli.migrators.alembic module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.base module
 ------------------------------------
@@ -31,7 +30,6 @@ PyFunceble.cli.migrators.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.db\_base module
 ----------------------------------------
@@ -40,7 +38,6 @@ PyFunceble.cli.migrators.db\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -49,4 +46,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

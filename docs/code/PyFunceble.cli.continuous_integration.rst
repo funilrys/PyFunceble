@@ -11,7 +11,6 @@ PyFunceble.cli.continuous\_integration.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.exceptions module
 --------------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.continuous\_integration.exceptions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.github\_actions module
 -------------------------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.continuous\_integration.github\_actions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.gitlab\_ci module
 --------------------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.cli.continuous\_integration.gitlab\_ci module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.jenkins module
 -----------------------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.cli.continuous\_integration.jenkins module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.travis\_ci module
 --------------------------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.cli.continuous\_integration.travis\_ci module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.continuous\_integration.utils module
 ---------------------------------------------------
@@ -65,7 +59,6 @@ PyFunceble.cli.continuous\_integration.utils module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -74,4 +67,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

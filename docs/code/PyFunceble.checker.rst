@@ -22,7 +22,6 @@ PyFunceble.checker.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.complex\_json\_encoder module
 ------------------------------------------------
@@ -31,7 +30,6 @@ PyFunceble.checker.complex\_json\_encoder module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.params\_base module
 --------------------------------------
@@ -40,7 +38,6 @@ PyFunceble.checker.params\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.status\_base module
 --------------------------------------
@@ -49,7 +46,6 @@ PyFunceble.checker.status\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -58,4 +54,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

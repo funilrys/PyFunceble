@@ -21,7 +21,6 @@ PyFunceble.dataset.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.csv\_base module
 -----------------------------------
@@ -30,7 +29,6 @@ PyFunceble.dataset.csv\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.db\_base module
 ----------------------------------
@@ -39,7 +37,6 @@ PyFunceble.dataset.db\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.iana module
 ------------------------------
@@ -48,7 +45,6 @@ PyFunceble.dataset.iana module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.ipv4\_reputation module
 ------------------------------------------
@@ -57,7 +53,6 @@ PyFunceble.dataset.ipv4\_reputation module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.mariadb\_base module
 ---------------------------------------
@@ -66,7 +61,6 @@ PyFunceble.dataset.mariadb\_base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.public\_suffix module
 ----------------------------------------
@@ -75,7 +69,6 @@ PyFunceble.dataset.public\_suffix module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.dataset.user\_agent module
 -------------------------------------
@@ -84,7 +77,6 @@ PyFunceble.dataset.user\_agent module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -93,4 +85,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

@@ -11,7 +11,6 @@ PyFunceble.checker.availability.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.domain module
 ---------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.checker.availability.domain module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.domain\_and\_ip module
 ------------------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.checker.availability.domain\_and\_ip module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.extra\_rules module
 ---------------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.checker.availability.extra\_rules module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.ip module
 -----------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.checker.availability.ip module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.params module
 ---------------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.checker.availability.params module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.status module
 ---------------------------------------------
@@ -65,7 +59,6 @@ PyFunceble.checker.availability.status module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.checker.availability.url module
 ------------------------------------------
@@ -74,7 +67,6 @@ PyFunceble.checker.availability.url module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -83,4 +75,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

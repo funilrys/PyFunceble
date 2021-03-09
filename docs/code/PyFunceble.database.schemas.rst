@@ -11,7 +11,6 @@ PyFunceble.database.schemas.autocontinue module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.schemas.inactive module
 -------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.database.schemas.inactive module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.schemas.status module
 -----------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.database.schemas.status module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.database.schemas.whois\_record module
 ------------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.database.schemas.whois\_record module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -47,4 +43,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

@@ -11,7 +11,6 @@ PyFunceble.config.compare module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.config.loader module
 -------------------------------
@@ -20,7 +19,6 @@ PyFunceble.config.loader module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -29,4 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

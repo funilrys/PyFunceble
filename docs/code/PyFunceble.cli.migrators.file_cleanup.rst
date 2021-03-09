@@ -11,7 +11,6 @@ PyFunceble.cli.migrators.file\_cleanup.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.file\_cleanup.hashes\_file module
 ----------------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.migrators.file\_cleanup.hashes\_file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.file\_cleanup.mining\_file module
 ----------------------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.migrators.file\_cleanup.mining\_file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.file\_cleanup.production\_config\_file module
 ----------------------------------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.cli.migrators.file\_cleanup.production\_config\_file module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -47,4 +43,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

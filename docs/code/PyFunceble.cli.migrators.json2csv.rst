@@ -11,7 +11,6 @@ PyFunceble.cli.migrators.json2csv.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.json2csv.inactive module
 -------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.migrators.json2csv.inactive module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.json2csv.whois module
 ----------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.cli.migrators.json2csv.whois module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

@@ -11,7 +11,6 @@ PyFunceble.query.record.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.record.dns module
 ----------------------------------
@@ -20,7 +19,6 @@ PyFunceble.query.record.dns module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.record.whois module
 ------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.query.record.whois module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

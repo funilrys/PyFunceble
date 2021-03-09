@@ -11,7 +11,6 @@ PyFunceble.query.netinfo.address module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.netinfo.base module
 ------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.query.netinfo.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.query.netinfo.hostbyaddr module
 ------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.query.netinfo.hostbyaddr module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -38,4 +35,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

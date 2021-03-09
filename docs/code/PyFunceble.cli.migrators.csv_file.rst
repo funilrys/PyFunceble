@@ -11,7 +11,6 @@ PyFunceble.cli.migrators.csv\_file.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.migrators.csv\_file.inactive\_source\_delete module
 ------------------------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.migrators.csv\_file.inactive\_source\_delete module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -29,4 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

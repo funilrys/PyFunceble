@@ -11,7 +11,6 @@ PyFunceble.cli.entry\_points.pyfunceble.argsparser module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.entry\_points.pyfunceble.cli module
 --------------------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.cli.entry\_points.pyfunceble.cli module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -29,4 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

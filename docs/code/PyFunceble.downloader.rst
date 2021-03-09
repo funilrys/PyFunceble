@@ -11,7 +11,6 @@ PyFunceble.downloader.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.downloader.exceptions module
 ---------------------------------------
@@ -20,7 +19,6 @@ PyFunceble.downloader.exceptions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.downloader.iana module
 ---------------------------------
@@ -29,7 +27,6 @@ PyFunceble.downloader.iana module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.downloader.ipv4\_reputation module
 ---------------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.downloader.ipv4\_reputation module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.downloader.public\_suffix module
 -------------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.downloader.public\_suffix module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.downloader.user\_agents module
 -----------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.downloader.user\_agents module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -65,4 +59,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

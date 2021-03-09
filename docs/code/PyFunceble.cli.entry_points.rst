@@ -19,7 +19,6 @@ PyFunceble.cli.entry\_points.clean module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.entry\_points.iana module
 ----------------------------------------
@@ -28,7 +27,6 @@ PyFunceble.cli.entry\_points.iana module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.entry\_points.production module
 ----------------------------------------------
@@ -37,7 +35,6 @@ PyFunceble.cli.entry\_points.production module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.cli.entry\_points.public\_suffix module
 --------------------------------------------------
@@ -46,7 +43,6 @@ PyFunceble.cli.entry\_points.public\_suffix module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -55,4 +51,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

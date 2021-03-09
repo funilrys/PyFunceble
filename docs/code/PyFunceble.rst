@@ -29,7 +29,6 @@ PyFunceble.exceptions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.facility module
 --------------------------
@@ -38,7 +37,6 @@ PyFunceble.facility module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.factory module
 -------------------------
@@ -47,7 +45,6 @@ PyFunceble.factory module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.logger module
 ------------------------
@@ -56,7 +53,6 @@ PyFunceble.logger module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.sessions module
 --------------------------
@@ -65,7 +61,6 @@ PyFunceble.sessions module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.storage module
 -------------------------
@@ -74,7 +69,6 @@ PyFunceble.storage module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.storage\_facility module
 -----------------------------------
@@ -83,7 +77,6 @@ PyFunceble.storage\_facility module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -92,4 +85,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:

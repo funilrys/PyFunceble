@@ -11,7 +11,6 @@ PyFunceble.converter.adblock\_input\_line2subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.base module
 --------------------------------
@@ -20,7 +19,6 @@ PyFunceble.converter.base module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.input\_line2subject module
 -----------------------------------------------
@@ -29,7 +27,6 @@ PyFunceble.converter.input\_line2subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.internal\_url module
 -----------------------------------------
@@ -38,7 +35,6 @@ PyFunceble.converter.internal\_url module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.rpz\_input\_line2subject module
 ----------------------------------------------------
@@ -47,7 +43,6 @@ PyFunceble.converter.rpz\_input\_line2subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.rpz\_policy2subject module
 -----------------------------------------------
@@ -56,7 +51,6 @@ PyFunceble.converter.rpz\_policy2subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.subject2complements module
 -----------------------------------------------
@@ -65,7 +59,6 @@ PyFunceble.converter.subject2complements module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.url2netloc module
 --------------------------------------
@@ -74,7 +67,6 @@ PyFunceble.converter.url2netloc module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 PyFunceble.converter.wildcard2subject module
 --------------------------------------------
@@ -83,7 +75,6 @@ PyFunceble.converter.wildcard2subject module
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
 
 Module contents
 ---------------
@@ -92,4 +83,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-   :private-members:
