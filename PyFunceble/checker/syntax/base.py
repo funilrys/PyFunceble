@@ -63,6 +63,9 @@ from PyFunceble.checker.syntax.status import SyntaxCheckerStatus
 class SyntaxCheckerBase(CheckerBase):
     """
     Provides the base of all our syntax checker classes.
+
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     db_session: Optional[Session] = None

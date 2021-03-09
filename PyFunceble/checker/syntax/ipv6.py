@@ -59,8 +59,8 @@ class IPv6SyntaxChecker(CheckerBase):
     """
     Provides an interface to check the syntax of an IPv6.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     @CheckerBase.ensure_subject_is_given

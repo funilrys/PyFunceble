@@ -59,6 +59,12 @@ from PyFunceble.checker.reputation.base import ReputationCheckerBase
 class IPReputationChecker(ReputationCheckerBase):
     """
     Provides the IP reputation checker.
+
+    :param str subject:
+        Optional, The subject to work with.
+    :param bool do_syntax_check_first:
+        Optional, Activates/Disables the check of the status before the actual
+        status gathering.
     """
 
     def query_a_record(self) -> Optional[List[str]]:

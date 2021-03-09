@@ -71,6 +71,12 @@ from PyFunceble.query.dns.query_tool import DNSQueryTool
 class ReputationCheckerBase(CheckerBase):
     """
     Provides the base of all our reputation checker classes.
+
+    :param str subject:
+        Optional, The subject to work with.
+    :param bool do_syntax_check_first:
+        Optional, Activates/Disables the check of the status before the actual
+        status gathering.
     """
 
     dns_query_tool: Optional[DNSQueryTool] = None

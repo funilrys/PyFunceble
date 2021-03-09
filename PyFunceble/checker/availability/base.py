@@ -78,6 +78,32 @@ from PyFunceble.query.whois.query_tool import WhoisQueryTool
 class AvailabilityCheckerBase(CheckerBase):
     """
     Provides the base of all our availability checker classes.
+
+    :param str subject:
+        Optional, The subject to work with.
+    :param bool use_extra_rules:
+        Optional, Activates/Disables the usage of our own set of extra rules.
+    :param bool use_whois_lookup:
+        Optional, Activates/Disables the usage of the WHOIS lookup to gather
+        the status of the given :code:`subject`.
+    :param bool use_dns_lookup:
+        Optional, Activates/Disables the usage of the DNS lookup to gather the
+        status of the given :code:`subject`.
+    :param bool use_netinfo_lookup:
+        Optional, Activates/Disables the usage of the network information
+        lookup module to gather the status of the given :code:`subject`.
+    :param bool use_http_code_lookup:
+        Optional, Activates/Disables the usage of the HTTP status code lookup
+        to gather the status of the given :code:`subject`.
+    :param bool use_reputation_lookup:
+        Optional, Activates/Disables the usage of the reputation dataset
+        lookup to gather the status of the given :code:`subject`.
+    :param bool do_syntax_check_first:
+        Optional, Activates/Disables the check of the status before the actual
+        status gathering.
+    :param bool use_whois_db:
+        Optional, Activates/Disable the usage of a local database to store the
+        WHOIS datasets.
     """
 
     # pylint: disable=too-many-public-methods, too-many-instance-attributes
@@ -699,7 +725,7 @@ class AvailabilityCheckerBase(CheckerBase):
             best database first.
 
             If it's not found it will try to query it from the best WHOIS server
-            then add it into the database (if the expirationd date
+            then add it into the database (if the expiration date
             extraction is successful).
 
         .. note::
@@ -859,7 +885,7 @@ class AvailabilityCheckerBase(CheckerBase):
 
         if (
             lookup_result
-            and lookup_result != self.http_status_code_query_tool.STD_UNKWON_STATUS_CODE
+            and lookup_result != self.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
         ):
             self.status.http_status_code = lookup_result
 

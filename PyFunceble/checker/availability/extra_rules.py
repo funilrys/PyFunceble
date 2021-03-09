@@ -66,6 +66,11 @@ from PyFunceble.helpers.regex import RegexHelper
 class ExtraRulesHandler:
     """
     Provides our very own extra rules handler.
+
+    :param status:
+        The previously gathered status.
+    :type status:
+        :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
 
     _status: Optional[AvailabilityCheckerStatus] = None

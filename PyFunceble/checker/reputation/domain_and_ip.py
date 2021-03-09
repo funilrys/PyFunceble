@@ -58,6 +58,12 @@ from PyFunceble.checker.reputation.ip import IPReputationChecker
 class DomainAndIPReputationChecker(ReputationCheckerBase):
     """
     Provides the interface for checking the reputation of an IP or domain.
+
+    :param str subject:
+        Optional, The subject to work with.
+    :param bool do_syntax_check_first:
+        Optional, Activates/Disables the check of the status before the actual
+        status gathering.
     """
 
     @ReputationCheckerBase.ensure_subject_is_given

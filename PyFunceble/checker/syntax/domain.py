@@ -65,8 +65,8 @@ class DomainSyntaxChecker(DomainSyntaxCheckerBase, SyntaxCheckerBase):
     """
     Provides an interface to check the syntax of a domain.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     second_level_checker: Optional[SecondLvlDomainSyntaxChecker] = None

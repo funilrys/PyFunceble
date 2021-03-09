@@ -60,8 +60,8 @@ class IPv4SyntaxChecker(CheckerBase):
     """
     Provides an interface to check the syntax of an IPv4.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     @staticmethod

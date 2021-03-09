@@ -58,8 +58,8 @@ class SubDomainSyntaxChecker(DomainSyntaxCheckerBase):
     """
     Provides an interface to check the syntax of a subdomain.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     # pylint: disable=line-too-long

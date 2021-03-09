@@ -63,8 +63,8 @@ class URLSyntaxChecker(SyntaxCheckerBase):
     """
     Provides an interface to check the syntax of a URL.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     @CheckerBase.ensure_subject_is_given

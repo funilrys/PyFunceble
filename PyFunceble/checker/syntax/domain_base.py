@@ -62,8 +62,8 @@ class DomainSyntaxCheckerBase(CheckerBase):
     """
     Provides an interface to check the syntax of a second domain.
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     # pylint: disable=line-too-long

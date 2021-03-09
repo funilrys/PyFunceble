@@ -63,8 +63,8 @@ class IPSyntaxChecker(SyntaxCheckerBase):
     """
     Provides an interface to check the syntax of an IP (v6 or v4).
 
-    :param subject:
-        The subject to work with.
+    :param str subject:
+        Optional, The subject to work with.
     """
 
     ipv4_checker: Optional[IPv4SyntaxChecker] = None
