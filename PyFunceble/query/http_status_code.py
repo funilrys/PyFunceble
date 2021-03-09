@@ -64,7 +64,7 @@ class HTTPStatusCode:
     Provides an interface for the extration of the HTTP status code.
     """
 
-    STD_UNKWON_STATUS_CODE: int = 99999999
+    STD_UNKNOWN_STATUS_CODE: int = 99999999
     STD_TIMEOUT: float = 5.0
     STD_VERIFY_CERTIFICATE: bool = True
     STD_ALLOW_REDIRECTS: bool = False
@@ -333,4 +333,4 @@ class HTTPStatusCode:
         ):
             pass
 
-        return self.STD_UNKWON_STATUS_CODE
+        return self.STD_UNKNOWN_STATUS_CODE
