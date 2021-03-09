@@ -979,8 +979,8 @@ Then you can share your logs with our backend API which collect all logs!
 
 .. versionchanged:: 4.0.0
 
-.. include:: ../components/logs-sharing.rst
-
+.. seealso::
+    `Logs Sharing Component </components/index.html#logs-sharing>`_.
 
 ------
 
