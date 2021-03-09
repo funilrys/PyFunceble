@@ -755,13 +755,13 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.status.expiration_date = (
                     self.whois_query_tool.get_expiration_date()
                 )
-                self.status.whois_record = self.whois_query_tool.get_record()
+                self.status.whois_record = self.whois_query_tool.record
 
                 if (
-                    not multiprocessing.current_process().name.startswith(
+                    self.status.expiration_date
+                    and not multiprocessing.current_process().name.startswith(
                         PyFunceble.storage.PROJECT_NAME.lower()
                     )
-                    and self.status.expiration_date
                 ):
                     whois_object.update(
                         {
@@ -780,7 +780,7 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.status.whois_record = None
         else:
             self.status.expiration_date = self.whois_query_tool.get_expiration_date()
-            self.status.whois_record = self.whois_query_tool.get_record()
+            self.status.whois_record = self.whois_query_tool.record
 
         if self.status.expiration_date:
             self.status.status = PyFunceble.storage.STATUS.up
@@ -885,7 +885,8 @@ class AvailabilityCheckerBase(CheckerBase):
 
         if (
             lookup_result
-            and lookup_result != self.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
+            and lookup_result
+            != self.http_status_code_query_tool.STD_UNKNOWN_STATUS_CODE
         ):
             self.status.http_status_code = lookup_result
 

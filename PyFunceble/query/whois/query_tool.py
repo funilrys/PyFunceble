@@ -52,10 +52,8 @@ License:
 
 import functools
 import socket
-from socket import SOCK_STREAM
 from typing import Optional, Union
 
-from PyFunceble.checker.syntax.domain_base import DomainSyntaxCheckerBase
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.query.record.whois import WhoisQueryToolRecord
 from PyFunceble.query.whois.converter.expiration_date import ExpirationDateExtractor
@@ -69,9 +67,8 @@ class WhoisQueryTool:
     BUFFER_SIZE: int = 4096
     STD_PORT: int = 43
 
-    expiration_date_extractor: ExpirationDateExtractor = ExpirationDateExtractor()
-    domain_syntax_checker_base: DomainSyntaxCheckerBase = DomainSyntaxCheckerBase()
-    iana_dataset: IanaDataset = IanaDataset()
+    expiration_date_extractor: Optional[ExpirationDateExtractor] = None
+    iana_dataset: Optional[IanaDataset] = None
 
     record: Optional[str] = None
 
@@ -88,6 +85,9 @@ class WhoisQueryTool:
         server: Optional[str] = None,
         query_timeout: Optional[float] = None,
     ) -> None:
+        self.expiration_date_extractor = ExpirationDateExtractor()
+        self.iana_dataset = IanaDataset()
+
         if subject is not None:
             self.subject = subject
 
@@ -191,12 +191,14 @@ class WhoisQueryTool:
 
     def query_record(func):  # pylint: disable=no-self-argument
         """
-        Queries the record before executin the decorated method.
+        Queries the record before executing the decorated method.
         """
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
-            self.query()
+
+            if not self.lookup_record or self.lookup_record.record is None:
+                self.query()
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
@@ -339,14 +341,14 @@ class WhoisQueryTool:
         Provides the whois server to work with.
         """
 
-        extension = self.domain_syntax_checker_base.set_subject(
-            self.subject
-        ).get_extension()
+        if self.subject.endswith("."):
+            extension = self.subject[:-1]
+        else:
+            extension = self.subject
 
-        if self.iana_dataset.is_extension(extension):
-            return self.iana_dataset.get_whois_server(extension)
+        extension = extension[extension.rfind(".") + 1 :]
 
-        return None
+        return self.iana_dataset.get_whois_server(extension)
 
     def get_lookup_record(
         self,
@@ -364,49 +366,51 @@ class WhoisQueryTool:
         Queries the WHOIS record and return the current object.
         """
 
-        if not self.server:
-            whois_server = self.get_whois_server()
-        else:
-            whois_server = self.server
+        if not self.record:
 
-        self.lookup_record.server = whois_server
-        self.lookup_record.query_timeout = self.query_timeout
+            if not self.server:
+                whois_server = self.get_whois_server()
+            else:
+                whois_server = self.server
 
-        if whois_server and not self.record:
-            req = socket.socket(socket.AF_INET, SOCK_STREAM)
-            req.settimeout(self.query_timeout)
+            if whois_server:
+                self.lookup_record.server = whois_server
+                self.lookup_record.query_timeout = self.query_timeout
 
-            try:
-                req.connect((whois_server, self.STD_PORT))
-                could_connect = True
-            except socket.error:
-                could_connect = False
-
-            if could_connect:
-                req.send(f"{self.subject}\r\n".encode())
-
-                response = "".encode()
-
-                while True:
-                    try:
-                        data = req.recv(self.BUFFER_SIZE)
-                    except (ConnectionResetError, socket.timeout):
-                        req.close()
-                        break
-
-                    response += data
-
-                    if not data:
-                        req.close()
-                        break
+                req = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                req.settimeout(self.query_timeout)
 
                 try:
-                    self.record = response.decode()
-                except UnicodeDecodeError:
-                    # Note: Because we don't want to deal with other issue, we
-                    # decided to use `replace` in order to automatically replace
-                    # all non utf-8 encoded characters.
-                    self.record = response.decode("utf-8", "replace")
+                    req.connect((whois_server, self.STD_PORT))
+                    req.send(f"{self.subject}\r\n".encode())
+
+                    response = "".encode()
+
+                    while True:
+                        try:
+                            data = req.recv(self.BUFFER_SIZE)
+                        except (ConnectionResetError, socket.timeout):
+                            break
+
+                        response += data
+
+                        if not data:
+                            break
+
+                    req.close()
+
+                    try:
+                        self.record = response.decode()
+                    except UnicodeDecodeError:
+                        # Note: Because we don't want to deal with other issue, we
+                        # decided to use `replace` in order to automatically replace
+                        # all non utf-8 encoded characters.
+                        self.record = response.decode("utf-8", "replace")
+                except socket.error:
+                    pass
+
+            if self.record is None:
+                self.record = ""
 
         return self
 
