@@ -12,8 +12,6 @@ For that case simply add the following.
     """
 
     import copy
-    import os
-    import sys
 
     import colorama
 
@@ -23,21 +21,25 @@ For that case simply add the following.
     from PyFunceble.cli.filesystem.dir_structure.restore import (
         DirectoryStructureRestoration,
     )
-    from PyFunceble.cli.threads.producer import ProducerThread
+    from PyFunceble.cli.processes.producer import ProducerProcessesManager
+    from PyFunceble.cli.utils import ascii_logo
 
     # We initiate the coloration.
     colorama.init(autoreset=True)
 
+
     # We are in control, so we need to manually start the loading.
     PyFunceble.facility.ConfigLoader.custom_config = {
-        "cli_testing": {"file_generation": {"plain": True}, "display_mode": {"quiet": True}}
+        "cli_testing": {"file_generation": {"plain": True}, "display_mode": {"quiet": True, "color": True}}
     }
     PyFunceble.facility.ConfigLoader.start()
 
+    print(ascii_logo.get_home_representation())
 
-    # This is needed as our idea is to communicate with the producer thread instead
-    # of trying to reimplement everything.
-    # So, this describes the dataset as they are sent to the tester thread (normally)
+    # This is needed as our idea is to communicate with the producer process instead
+    # of trying to implement everything again.
+    # So, this describes the dataset as they are sent to the tester process
+    # (normally from the CLi).
     STD_COMMUNICATION_DATASET = {
         "type": "single",
         "subject_type": "domain",
@@ -58,9 +60,13 @@ For that case simply add the following.
         parent_dirname=STD_COMMUNICATION_DATASET["destination"]
     ).restore_from_backup()
 
-    # We start the producer thread.
-    producer_thread = ProducerThread()
-    producer_thread.start()
+    # We start the producer process.
+    producer_proc = ProducerProcessesManager()
+    # We send our feeding signal to inform all workers that we are the only one
+    # allowed to feed it.
+    producer_proc.send_feeding_signal(worker_name="main")
+    # We start the process manager now that we are ready.
+    producer_proc.start()
 
     # We start and configure our availability checker.
     avail_checker = DomainAvailabilityChecker(use_whois_lookup=False)
@@ -87,14 +93,16 @@ For that case simply add the following.
 
         # We order the generation of the status file by putting our information
         # to the producer queue.
-        producer_thread.add_to_the_queue((communication_dataset, test_result))
+        producer_proc.add_to_input_queue(
+            (communication_dataset, test_result), worker_name="main"
+        )
 
     # We are now done, it's time to send the stop signal.
-    # The stop signal will inform the producer thread that it needs to stop
+    # The stop signal will inform the producer process that it needs to stop
     # listening to new order (from the time it reads the stop signal).
-    producer_thread.send_stop_signal()
+    producer_proc.send_stop_signal()
 
     # Now we wait until it's done.
-    producer_thread.wait()
+    producer_proc.wait()
 
     # From here all files were generated we can do whatever we want with them.

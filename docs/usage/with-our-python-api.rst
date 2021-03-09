@@ -9,8 +9,8 @@ This section will present some example of the way you can interact
 with PyFunceble from anything written in Python.
 
 
-Get the availability of a domain
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Check the availability of a domain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python3
 
@@ -39,8 +39,8 @@ Get the availability of a domain
     print(f"Is {to_test} INVALID ?", status.is_invalid())
 
 
-Get the availability of an IP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Check the availability of an IP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python3
 
@@ -70,8 +70,8 @@ Get the availability of an IP
     print(f"Is {to_test} INVALID ?", status.is_invalid())
 
 
-Get the availability of an IP or domain
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Check the availability of an IP or domain
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python3
 
@@ -101,8 +101,8 @@ Get the availability of an IP or domain
     print(f"Is {to_test} INVALID ?", status.is_invalid())
 
 
-Get the availability of URL
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Check the availability of URL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python3
 

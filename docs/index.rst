@@ -105,14 +105,6 @@ Happy testing with PyFunceble!
 .. toctree::
    :maxdepth: 3
 
-   facts/they-use-d-it
-   facts/faq
-   facts/known_issues
-   facts/contact
-
-.. toctree::
-   :maxdepth: 3
-
    dead-hosts/index
 
 .. toctree::
@@ -159,6 +151,14 @@ Happy testing with PyFunceble!
    :maxdepth: 5
 
    code/modules
+
+.. toctree::
+   :maxdepth: 3
+
+   facts/they-use-d-it
+   facts/faq
+   facts/known_issues
+   facts/contact
 
 Indices and tables
 ==================

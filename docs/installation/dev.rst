@@ -55,9 +55,12 @@ From PyPi
    $ pip3 install --user PyFunceble-dev
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on
+   `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers or CI engines.
 
 From GitHub
 ~~~~~~~~~~~
@@ -67,9 +70,12 @@ From GitHub
    $ pip3 install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
-   We recommend the :code:`--user` flag which installs the required dependencies at the user level. More information about it can be found on `pip documentation`_.
+   We recommend the :code:`--user` flag which installs the required dependencies
+   at the user level. More information about it can be found on
+   `pip documentation`_.
 .. warning::
-   We do not recommend the :code:`--user` flag when using :code:`PyFunceble` into containers like - for example - Travis CI.
+   We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
+   into containers or CI engines.
 
 Using the AUR (for Arch Linux users)
 """"""""""""""""""""""""""""""""""""
@@ -127,7 +133,7 @@ Execute the following and enjoy PyFunceble!
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers like - for example - Travis CI.
+   into containers or CI engines.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers

@@ -12,7 +12,7 @@ For development
 .. note::
    As you previously installed with
 
-   .. code-block:: 
+   .. code-block::
 
       $ . venv/bin/activate && pip3 install -e .
 
@@ -38,7 +38,7 @@ From PyPi
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers like - for example - Travis CI.
+   into containers or CI engines.
 
 
 From GitHub
@@ -55,7 +55,7 @@ From GitHub
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers like - for example - Travis CI.
+   into containers or CI engines.
 
 Using the AUR (for Arch Linux users)
 """"""""""""""""""""""""""""""""""""
@@ -107,11 +107,12 @@ Execute the following and enjoy PyFunceble!
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
-   at the user level. More information about it can be found on `pip documentation`_.
+   at the user level. More information about it can be found on
+   `pip documentation`_.
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers  or CI engines.
+   into containers or CI engines.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers

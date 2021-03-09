@@ -1,10 +1,7 @@
 Logs Sharing
 ------------
 
-:code:`--share-logs`
-""""""""""""""""""""
-
-.. info::
+.. note::
     This component is not activated by default.
 
 

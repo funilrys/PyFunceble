@@ -57,6 +57,24 @@ we are currently located.
 
 .. _GitLab CI/CD: https://docs.gitlab.com/ee/ci/
 
+GitHub Actions
+^^^^^^^^^^^^^^
+
+Under `GitHub Actions`_, we search or initiate the configuration at the directory
+we are currently located.
+
+.. warning::
+    We don't care about the distribution, as long as the :code:`GITHUB_ACTIONS`
+    environment variable is set,
+    we search or initiate the configuration in the current directory.
+
+.. note::
+    If you want to force the directory where we should work, you can initiate
+    the :code:`PYFUNCEBLE_CONFIG_DIR` environment variable with the path where
+    we should work.
+
+.. _GitHub Actions: https://github.com/features/actions
+
 Linux and MacOS (Darwin Kernel)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

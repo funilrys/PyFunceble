@@ -16,7 +16,9 @@ Components
 .. include:: dns-lookup.rst
 .. include:: environment-variables.rst
 .. include:: execution-time.rst
+.. include:: expiration-date.rst
 .. include:: filter.rst
+.. include:: http-status-code.rst
 .. include:: iana.rst
 .. include:: local.rst
 .. include:: logs-sharing.rst
@@ -26,4 +28,7 @@ Components
 .. include:: percentage.rst
 .. include:: public-suffix.rst
 .. include:: sorting.rst
+.. include:: special-rules.rst
+.. include:: status.rst
+.. include:: status-source.rst
 .. include:: whois-lookup.rst

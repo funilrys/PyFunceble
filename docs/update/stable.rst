@@ -93,7 +93,7 @@ Execute the following and enjoy PyFunceble!
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers like - for example - Travis CI.
+   into containers or CI engines.
 
 
 .. _the ArchWiki page: https://wiki.archlinux.org/index.php/AUR_helpers

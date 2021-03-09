@@ -33,7 +33,7 @@ From GitHub
 
 .. warning::
    We do not recommend the :code:`--user` flag when using :code:`PyFunceble`
-   into containers like - for example - Travis CI.
+   into containers or CI engines.
 
 Using the AUR (for Arch Linux users)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
