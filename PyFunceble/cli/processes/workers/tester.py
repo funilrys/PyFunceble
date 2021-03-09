@@ -82,6 +82,9 @@ class TesterWorker(WorkerBase):
 
     continue_dataset: Optional[ContinueDatasetBase] = None
     inactive_dataset: Optional[InactiveDatasetBase] = None
+    testing_object: Optional[CheckerBase] = None
+
+    known_testing_objects: dict = dict()
 
     def __post_init__(self) -> None:
         self.continue_dataset = (
@@ -94,6 +97,18 @@ class TesterWorker(WorkerBase):
                 db_session=self.db_session
             )
         )
+
+        self.known_testing_objects = {
+            "SYNTAX": {"domain": DomainSyntaxChecker, "url": URLSyntaxChecker},
+            "AVAILABILITY": {
+                "domain": DomainAndIPAvailabilityChecker,
+                "url": URLAvailabilityChecker,
+            },
+            "REPUTATION": {
+                "domain": DomainAndIPReputationChecker,
+                "url": URLReputationChecker,
+            },
+        }
 
         return super().__post_init__()
 
@@ -143,33 +158,41 @@ class TesterWorker(WorkerBase):
 
         return False
 
-    def get_testing_object(self, subject_type: str, checker_type: str) -> CheckerBase:
+    def _init_testing_object(
+        self, subject_type: str, checker_type: str
+    ) -> Optional[CheckerBase]:
         """
         Provides the object to use for testing.
 
         :raise ValueError:
-            When the given subject type is unkown.
+            When the given subject type is unknown.
         """
 
-        known = {
-            "SYNTAX": {"domain": DomainSyntaxChecker, "url": URLSyntaxChecker},
-            "AVAILABILITY": {
-                "domain": DomainAndIPAvailabilityChecker,
-                "url": URLAvailabilityChecker,
-            },
-            "REPUTATION": {
-                "domain": DomainAndIPReputationChecker,
-                "url": URLReputationChecker,
-            },
-        }
-
-        if checker_type in known:
-            if subject_type in known[checker_type]:
+        if checker_type in self.known_testing_objects:
+            if subject_type in self.known_testing_objects[checker_type]:
                 # Yes, we initialize before returning!
-                return known[checker_type][subject_type](db_session=self.db_session)
 
-            raise ValueError(f"<subject_type> ({subject_type!r}) is unknwon.")
-        raise ValueError(f"<testing_mode> ({checker_type!r}) is unknwon.")
+                if not isinstance(
+                    self.known_testing_objects[checker_type][subject_type],
+                    type(self.testing_object),
+                ):
+                    self.testing_object = self.known_testing_objects[checker_type][
+                        subject_type
+                    ](db_session=self.db_session)
+
+                    # We want to always check the syntax first (ONLY UNDER THE CLI)
+                    self.testing_object.set_do_syntax_check_first(
+                        not bool(
+                            PyFunceble.storage.CONFIGURATION.cli_testing.local_network
+                        )
+                    )
+
+                    return self.testing_object
+
+                return None
+
+            raise ValueError(f"<subject_type> ({subject_type!r}) is unknown.")
+        raise ValueError(f"<testing_mode> ({checker_type!r}) is unknown.")
 
     def target(self, consumed: dict) -> Optional[Tuple[Any, ...]]:
         """
@@ -244,17 +267,12 @@ class TesterWorker(WorkerBase):
             test_dataset["idna_subject"],
         )
 
-        testing_object = self.get_testing_object(
+        self._init_testing_object(
             test_dataset["subject_type"], test_dataset["checker_type"]
         )
 
-        # We want to always check the syntax first (ONLY UNDER THE CLI)
-        testing_object.set_do_syntax_check_first(
-            not bool(PyFunceble.storage.CONFIGURATION.cli_testing.local_network)
-        )
-
         result = (
-            testing_object.set_subject(test_dataset["idna_subject"])
+            self.testing_object.set_subject(test_dataset["idna_subject"])
             .query_status()
             .get_status()
         )
