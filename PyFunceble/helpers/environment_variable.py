@@ -144,13 +144,13 @@ class EnvironmentVariableHelper:
             The name to set.
         """
 
-        self.name = value
+        self.env_file_path = value
 
         return self
 
     def exists(self) -> bool:
         """
-        Checks if the given environement variable name exists.
+        Checks if the given environment variable name exists.
         """
 
         return self.name in os.environ
@@ -204,6 +204,10 @@ class EnvironmentVariableHelper:
         """
         Sets the given value and save it into the given dotenv file.
 
+        .. warning::
+            This method also set the environment variable from the current
+            environment.
+
         :param value:
             The value to set.
         """
@@ -227,7 +231,13 @@ class EnvironmentVariableHelper:
     def delete_from_env_file(self) -> "EnvironmentVariableHelper":
         """
         Deletes the given environment file from the given dotenv file.
+
+        .. warning::
+            This method also delete the environment variable from the current
+            environment.
         """
+
+        self.delete()
 
         dotenv.unset_key(self.env_file_path, self.name)
 
