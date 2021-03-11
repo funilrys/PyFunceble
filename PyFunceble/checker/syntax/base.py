@@ -122,5 +122,5 @@ class SyntaxCheckerBase(CheckerBase):
         raise NotImplementedError()
 
     # pylint: disable=useless-super-delegation
-    def get_status(self) -> Optional[SyntaxCheckerStatus]:
+    def get_status(self) -> Optional[SyntaxCheckerStatus]: # pragma: no cover ## Safety.
         return super().get_status()

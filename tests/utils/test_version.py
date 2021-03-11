@@ -312,7 +312,7 @@ class TestVersionUtility(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def is_recent_almost_same(self) -> None:
+    def test_is_recent_almost_same(self) -> None:
         """
         Tests the method which let us check if the local version is older
         than the given one.

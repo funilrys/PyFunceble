@@ -17,6 +17,7 @@ omit =
     PyFunceble/dataset/inactive/mysql.py
     PyFunceble/dataset/whois/mariadb.py
     PyFunceble/dataset/whois/mysql.py
+    PyFunceble/__init__.py
 
     PyFunceble/database/*
 
