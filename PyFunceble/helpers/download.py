@@ -221,7 +221,7 @@ class DownloadHelper:
 
         :param destination: The download destination.
 
-        :raise UnableToDownload: When could not unable to donwload the URL.
+        :raise UnableToDownload: When could not unable to download the URL.
         """
 
         session = requests.Session()
@@ -240,8 +240,10 @@ class DownloadHelper:
             if destination and isinstance(destination, str):
                 FileHelper(destination).write(req.text, overwrite=True)
 
+            req.close()
             return response
 
+        session.close()
         raise PyFunceble.helpers.exceptions.UnableToDownload(
             f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
         )
