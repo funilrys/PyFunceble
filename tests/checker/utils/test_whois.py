@@ -52,12 +52,11 @@ License:
 
 import unittest
 
+from PyFunceble.checker.utils import whois
 from PyFunceble.config.loader import ConfigLoader
-
 from PyFunceble.dataset.whois.csv import CSVWhoisDataset
 from PyFunceble.dataset.whois.mariadb import MariaDBWhoisDataset
 from PyFunceble.dataset.whois.mysql import MySQLWhoisDataset
-from PyFunceble.checker.utils import whois
 
 # pylint: disable=unnecessary-lambda
 
