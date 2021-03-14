@@ -114,7 +114,7 @@ def get_timezone(
 
     if sign == "+":
         sign = 1
-    else: # pragma: no cover ## Not covered by default.
+    else:  # pragma: no cover ## Not covered by default.
         sign = -1
 
     delta = timedelta(
