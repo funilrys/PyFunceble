@@ -183,6 +183,21 @@ class ProcessesManagerBase:
 
         return wrapper
 
+    def ignore_if_running(func):  # pylint: disable=no-self-argument
+        """
+        Ignore the launching of the decorated method if the workers are
+        running.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            if not self.is_running():
+                return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+            return self
+
+        return wrapper
+
     @property
     def max_worker(self) -> Optional[int]:
         """
@@ -434,6 +449,7 @@ class ProcessesManagerBase:
 
     @ensure_worker_obj_is_given
     @create_workers_if_missing
+    # @ignore_if_running
     def start(self) -> "ProcessesManagerBase":
         """
         Starts a defined number of worker.
