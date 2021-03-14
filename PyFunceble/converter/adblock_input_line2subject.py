@@ -51,10 +51,8 @@ License:
     limitations under the License.
 """
 
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Set, Union
 
-from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
-from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.converter.base import ConverterBase
 from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.helpers.list import ListHelper
@@ -63,16 +61,13 @@ from PyFunceble.helpers.regex import RegexHelper
 
 class AdblockInputLine2Subject(ConverterBase):
     """
-    Converts/Extract the subjects to test from an inputed AdBlock line.
-
-    In order to decode the given line, this class and its conversion method
-    will go though a brunch of decoding method.
+    Provides an interface for the conversion or extraction of valuable subjects
+    from an inputted AdBlock line.
     """
 
-    OPTION_SEPARATOR: str = ","
-    OPTIONS_SEPARATOR: str = "$"
-
     _aggressive: bool = False
+
+    __regex_helper: Optional[RegexHelper] = None
 
     def __init__(
         self, data_to_convert: Optional[Any] = None, aggressive: bool = False
@@ -80,7 +75,9 @@ class AdblockInputLine2Subject(ConverterBase):
         if aggressive is not None:
             self.aggressive = aggressive
 
-        super().__init__(data_to_convert)
+        self.__regex_helper = RegexHelper()
+
+        super().__init__(data_to_convert=data_to_convert)
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
@@ -136,219 +133,302 @@ class AdblockInputLine2Subject(ConverterBase):
         Checks if we should ignore the given line.
         """
 
-        to_ignore = r"(^!|^@@|^\/|^\[|^\.|^-|^_|^\?|^&)"
+        starting_chars = ["!", "@@", "/", "[", ".", "-", "_", "?", "&"]
 
-        return RegexHelper(to_ignore).match(line.strip(), return_match=False)
+        return any(line.startswith(x) for x in starting_chars)
 
-    @classmethod
-    def extract_base(cls, subject: Union[str, list]) -> str:
+    @staticmethod
+    def extract_base(subject: Union[str, List[str]]) -> Union[str, List[str]]:
         """
-        Extracts the base of the given element (supposed URL).
+        Extracts the base of the given subject (supposely URL).
 
-        As example:
+        :param subject:
+            The subject to work with.
+
+        Example:
+
             Giving :code:`"hello.world/?is=beautiful"` returns :code:`"hello.world"`
         """
 
         if isinstance(subject, list):
-            return [cls.extract_base(x) for x in subject]
+            return [AdblockInputLine2Subject.extract_base(x) for x in subject]
+
+        subject = subject.replace("*", "").replace("~", "")
 
         try:
             return Url2Netloc(subject).get_converted()
         except ValueError:
             return subject
 
-    @classmethod
-    def __format_decoded(
-        cls, decoded: str, *, result: Optional[List[str]] = None
-    ) -> List[str]:
+    def _decode_multiple_subject(self, decoded: str) -> Set[str]:
         """
-        A recursive method which infinitly filter and format the decoded data
-        in order to delete uneeded parts.
+        Implementation of the decoding of the case that multiple
+        subjects are possible in the given :py:class:`str`.
 
         :param decoded:
-            The decoded part.
+            The decoded part to split.
         """
 
-        if result is None:
-            result = []
+        result = set()
 
-        chars_to_split = ["^", "#", ",", "!", "|"]
+        rematch = self.__regex_helper.set_regex(r"((?:[^~\*,]+))").match(
+            decoded, rematch=True, return_match=True
+        )
 
-        for data in decoded:
-            if not data:
-                continue
-
-            for char_to_split in chars_to_split:
-                if char_to_split in data:
-                    return cls.__format_decoded(
-                        data.split(char_to_split), result=result
-                    )
-
-            data = cls.extract_base(data)
-
-            if data and (
-                DomainSyntaxChecker(data).is_valid() or IPSyntaxChecker(data).is_valid()
-            ):
-                result.append(data)
+        if rematch:
+            result.update({self.extract_base(x) for x in rematch})
 
         return result
 
-    def __filter_options(self, options: List[str]) -> Union[bool, List[str]]:
+    def _decode_options(self, decoded_options: List[str]) -> Set[str]:
         """
-        Filters the interessting parts of the given list of options.
+        Handle the decoding of the options.
 
-        :param options:
-            The extracted options to filter.
+        What it does:
 
-        .. warning::
-            Thís method only works if the aggressive method is given.
+            - It extracts all :code:`domain=` component - when found.
+            - It extracts all :code:`href` URL base - when found.
+
+
+        :param decoded_options:
+            The splitted list of options.
         """
 
-        result = []
+        result = set()
 
-        regex_domain_in_option = r"domain=(.*)"
+        for rule in decoded_options:
+            if "domain=" in rule:
+                rule = rule.replace("domain=", "").replace("|", ",")
 
-        for option in options:
-            try:
-                domains = RegexHelper(regex_domain_in_option).match(
-                    option, return_match=True, rematch=True, group=0
-                )[-1]
-            except TypeError:
+                result.update(self._decode_multiple_subject(rule))
                 continue
 
-            result.extend(
-                [x for x in domains.split("|") if x and not x.startswith("~")]
-            )
+            if "href" in rule:
+                matched = self.__regex_helper.set_regex(
+                    r"((?:\"|\')(.*)(?:\"|\'))"
+                ).match(rule, return_match=True, rematch=True, group=1)
 
-        if self.aggressive:
+                result.add(self.extract_base(matched))
+                continue
+
+        return result
+
+    def _decode_v1(self, line: str) -> Set[str]:
+        """
+        Implementation of our first decoding mode.
+
+        In this mode we try to decode the simple:
+
+            ||ads.example.com^
+
+        rule.
+
+        :param line:
+            The line to decode.
+        """
+
+        result = set()
+
+        local_line = line.strip()
+
+        if local_line.startswith("||") and (
+            local_line.endswith("^") or local_line.endswith("$")
+        ):
+            local_line = local_line.replace("||", "", 1)
+
+            if local_line.endswith("^"):
+                local_line = "".join(local_line.rsplit("^", 1))
+            elif local_line.endswith("$"):
+                local_line = "".join(local_line.rsplit("$", 1))
+
+            result.update(self._decode_multiple_subject(local_line))
+
+        return {x for x in result if "." in x}
+
+    def _decode_v2(self, line: str) -> Set[str]:
+        """
+        Implementation of our second decoding mode.
+
+        In this mode, we try to decode the simple:
+
+            |https://ads.example.com|
+
+        rule.
+
+        :param line:
+            The line to decode.
+        """
+
+        result = set()
+
+        local_line = line.strip()
+
+        if local_line.startswith("|") and local_line.endswith("|"):
+            local_line = local_line.replace("|", "", 1)
+            local_line = "".join(local_line.rsplit("|", 1))
+
+            result.add(self.extract_base(local_line))
+
+        return {x for x in result if "." in x}
+
+    def _decode_v3(self, line: str) -> Set[str]:
+        """
+        Implementation of our third decoding mode.
+
+        In this mode, we try to decode the simple:
+
+            ||ads.example.com^$script,image,domain=example.com|~foo.example.info
+            ||ads.example.com$script,image,domain=example.com|~foo.example.info
+
+        rule.
+
+        :param line:
+            The line to decode.
+        """
+
+        result = set()
+
+        local_line = line.strip()
+
+        if not local_line.startswith("||"):
             return result
 
-        return bool(result)
+        if "$" in local_line:
+            v1_mode, options = local_line.split("$", 1)
 
-    def __decode_v1(self, line: str) -> List[str]:
+            if not v1_mode.endswith("^"):
+                v1_mode += "^"
+
+            result.update(self._decode_v1(v1_mode))
+
+            if self.aggressive:
+                result.update(self._decode_options(options.split(",")))
+        elif "^" not in local_line:
+            result.update(self._decode_v1(f"{local_line}^"))
+        else:
+            result.update(self._decode_v1(local_line[: local_line.find("^") + 1]))
+
+        return {x for x in result if "." in x}
+
+    def _decode_v4(self, line: str) -> Set[str]:
         """
-        Our first decoding version.
+        Implementation of our fourth decoding mode.
 
-        The main idea is to filter based on option and a pattern common to all
-        AdBlock / Ublock format.
+        In this mode, we try to decode the simple:
+
+            @@||ads.example.com/notbanner^$~script
+
+        rule.
 
         :param line:
             The line to decode.
         """
 
-        result = []
+        result = set()
+        local_line = line.strip()
 
-        # Get all groups :-)
-        rematch = RegexHelper(r"^(?:.*\|\|)([^\/\$\^]{1,}).*$").match(
-            line, return_match=True, group=0, rematch=True
+        if (
+            not self.aggressive
+            or not local_line.startswith("@@||")
+            or "^$" not in local_line
+        ):
+            return result
+
+        print(not local_line.startswith("@@||"), "^$" not in local_line)
+
+        v1_mode, options = local_line.split("$", 1)
+
+        result.update(
+            {self.extract_base(x) for x in self._decode_v1(v1_mode.replace("@@", ""))}
         )
 
-        if rematch:
-            if self.OPTIONS_SEPARATOR in line:
-                # We get the list of options for filtering.
-                options = line.split(self.OPTIONS_SEPARATOR)[-1].split(
-                    self.OPTION_SEPARATOR
-                )
+        result.update(self._decode_options(options.split(",")))
 
-                # pylint: disable=too-many-boolean-expressions
-                if (
-                    not options[-1]
-                    or "third-party" in options
-                    or "script" in options
-                    or "popup" in options
-                    or "xmlhttprequest" in options
-                    or "all" in options
-                    or "document" in options
-                ):
-                    result.extend(self.extract_base(rematch))
+        return {x for x in result if "." in x}
 
-                extra = self.__filter_options(options)
-
-                if extra:
-                    if isinstance(extra, list):
-                        extra.extend(self.extract_base(rematch))
-                        result.extend(self.extract_base(extra))
-                    else:
-                        result.extend(self.extract_base(rematch))
-            else:
-                result.extend(self.extract_base(rematch))
-
-        return result
-
-    def __decode_v2(self, line: str) -> List[str]:
+    def _decode_v5(self, line: str) -> Set[str]:
         """
-        Our second decoding version.
+        Implementation of our fifth decoding mode.
 
-        The main idea here is that we will match simple records.
+        In this mode, we try to decode the simple:
+
+            example.com,example.net##.advert
+            exception.example.com#@#.advert
+            example.com,example.net#?#div:-abp-has(> div > img.advert)
+            exception.example.com#@#div:-abp-has(> div > img.advert)
+
+        rule.
 
         :param line:
             The line to decode.
         """
 
-        result = []
+        local_line = line.strip()
+        result = set()
 
-        rematch = RegexHelper(r"^\|(.*\..*)\|$").match(
-            line, return_match=True, rematch=True, group=0
-        )
+        if not self.aggressive:
+            return result
 
-        if rematch:
-            result.extend(self.__format_decoded(rematch))
+        separators = ["##", "#@#", "#?#"]
 
-        return result
+        obj_of_interest, options = "", ""
 
-    def __decode_v3(self, line: str) -> List[str]:
+        for separator in separators:
+            if separator in local_line:
+                obj_of_interest, options = local_line.split(separator, 1)
+                break
+
+        result.update(self._decode_multiple_subject(obj_of_interest))
+        result.update(self._decode_options(options.split(",")))
+
+        return {x for x in result if "." in x}
+
+    def _decode_v6(self, line: str) -> Set[str]:
         """
-        Our third decoding version.
+        Implementation of our sixth decoding mode.
 
-        This one is for more complex formats (and Ublock).
+        In this mode we try to decode the simple:
+
+            $domain=exam.pl|elpmaxe.pl|example.pl
+
+        rule.
 
         :param line:
             The line to decode.
         """
 
-        result = []
+        local_line = line.strip()
+        result = set()
 
-        rematch = RegexHelper(
-            r"(?:#+(?:[a-z]+?)?\[[a-z]+(?:\^|\*)\=(?:\'|\"))(.*\..*)(?:(?:\'|\")\])"
-        ).match(line, return_match=True, rematch=True, group=0)
+        if not self.aggressive:
+            return result
 
-        if rematch:
-            result.extend(self.__format_decoded(rematch))
+        separators = ["$"]
 
-        return result
+        for separator in separators:
+            if not local_line.startswith(separator):
+                continue
 
-    def __decode_v4(self, line: str) -> List[str]:
-        """
-        Our fourth decoding version.
+            options = local_line[len(separator) :]
 
-        This is is for the one who are surrounded by #.
+            result.update(self._decode_options(options.split(",")))
 
-        :param line:
-            The line to decode.
-        """
-
-        result = []
-
-        rematch = RegexHelper(r"^(.*?)(?:#{2}|#@#)").match(
-            line, return_match=True, rematch=True, group=0
-        )
-
-        if rematch:
-            result.extend(self.__format_decoded(rematch))
-
-        return result
+        return {x for x in result if "." in x}
 
     def get_converted(self) -> List[str]:
         """
-        Provides the subjects to test.
+        Provides the converted data.
         """
 
-        result = []
+        result = set()
 
         if not self.should_be_ignored(self.data_to_convert.strip()):
-            result.extend(self.__decode_v1(self.data_to_convert))
-            result.extend(self.__decode_v2(self.data_to_convert))
-            result.extend(self.__decode_v3(self.data_to_convert))
-            result.extend(self.__decode_v4(self.data_to_convert))
+            result.update(self._decode_v1(self.data_to_convert))
+            result.update(self._decode_v2(self.data_to_convert))
+            result.update(self._decode_v3(self.data_to_convert))
+            result.update(self._decode_v5(self.data_to_convert))
+            result.update(self._decode_v6(self.data_to_convert))
 
-        return ListHelper(result).remove_duplicates().sort().subject
+        result.update(self._decode_v4(self.data_to_convert))
+
+        return ListHelper(list(result)).sort().subject

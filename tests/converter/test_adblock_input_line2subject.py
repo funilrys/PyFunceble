@@ -51,6 +51,7 @@ License:
 """
 
 import unittest
+from typing import List
 
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
 
@@ -60,61 +61,206 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
     Tests our adblock 2 subject converter.
     """
 
-    TEST_SUBJECT: dict = {
-        '##[href^="https://funceble.funilrys.com/"]': ["funceble.funilrys.com"],
-        '##div[href^="http://funilrys.com/"]': ["funilrys.com"],
-        'com##[href^="ftp://funceble.funilrys-funceble.com/"]': [
-            "funceble.funilrys-funceble.com"
-        ],
-        "!@@||funceble.world/js": [],
-        "!||world.hello/*ad.xml": [],
-        "!funilrys.com##body": [],
-        "[AdBlock Plus 2.0]": [],
-        "@@||cnn.com/*ad.xml": [],
-        "/banner/*/img^": [],
-        "||ad.google.co.uk^": ["ad.google.co.uk"],
-        "||ad.google.co.fr^$image,test": [],
-        "||api.funilrys.com/widget/$": ["api.funilrys.com"],
-        "||api.google.com/papi/action$popup": ["api.google.com"],
-        "||funilrys.github.io$script,image": ["funilrys.github.io"],
-        "||google.com^$script,image": ["google.com"],
-        "||static.quantcast.mgr.consensu.org/*/cmpui-banner.js": [
-            "static.quantcast.mgr.consensu.org"
-        ],
-        "$domain=memy.pl|pwn.pl|translatica.pl": [],
-        "||twitter.com^helloworld.com": ["twitter.com"],
-        "|github.io|": ["github.io"],
-        "~github.com,hello.world##.wrapper": ["hello.world"],
-        "bing.com,bingo.com#@##adBanner": ["bing.com", "bingo.com"],
-        "facebook.com###player-above-2": ["facebook.com"],
-        "hello#@#badads": [],
-        "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld": [
-            "hubgit.com",
-            "oohay.com",
-        ],
-        "yahoo.com,~msn.com,api.hello.world#@#awesomeWorld": [
-            "api.hello.world",
-            "yahoo.com",
-        ],
-        ".com": [],
-        "||ggggggggggg.gq^$all": ["ggggggggggg.gq"],
-        "||exaaaaaaample.org$document": ["exaaaaaaample.org"],
-        "facebook.com##.search": ["facebook.com"],
-        "||test.hello.world^$domain=hello.world": ["test.hello.world"],
-        "||test.hwllo.world^$third-party": ["test.hwllo.world"],
-        "||examplae.com": ["examplae.com"],
-        "||examplbe.com^": ["examplbe.com"],
-        "||examplce.com$third-party": ["examplce.com"],
-        "||examplde.com^$third-party": ["examplde.com"],
-        '##[href^="https://examplee.com/"]': ["examplee.com"],
-        "||examplfe.com^examplge.com": ["examplfe.com"],
-        "||examplhe.com$script,image": ["examplhe.com"],
-        "||examplie.com^$domain=domain1.com|domain2.com": ["examplie.com"],
-        "||examplje.com^$third-party,image": ["examplje.com"],
-        'examlple.com##[href^="http://hello.world."], [href^="http://example.net/"]': [
-            "examlple.com"
-        ],
-    }
+    EXTENDED_TEST_SUBJECT: List[dict] = [
+        {
+            "subject": '##[href^="https://funceble.funilrys.com/"]',
+            "expected": {
+                "aggressive": ["funceble.funilrys.com"],
+                "standard": [],
+            },
+        },
+        {
+            "subject": "||test.hello.world^$domain=hello.world",
+            "expected": {
+                "aggressive": ["hello.world", "test.hello.world"],
+                "standard": ["test.hello.world"],
+            },
+        },
+        {
+            "subject": '##div[href^="http://funilrys.com/"]',
+            "expected": {"aggressive": ["funilrys.com"], "standard": []},
+        },
+        {
+            "subject": 'com##[href^="ftp://funceble.funilrys-funceble.com/"]',
+            "expected": {
+                "aggressive": ["funceble.funilrys-funceble.com"],
+                "standard": [],
+            },
+        },
+        {
+            "subject": "!@@||funceble.world/js",
+            "expected": {"aggressive": [], "standard": []},
+        },
+        {
+            "subject": "!||world.hello/*ad.xml",
+            "expected": {"aggressive": [], "standard": []},
+        },
+        {
+            "subject": "!funilrys.com##body",
+            "expected": {"aggressive": [], "standard": []},
+        },
+        {
+            "subject": "[AdBlock Plus 2.0]",
+            "expected": {"aggressive": [], "standard": []},
+        },
+        # {
+        #     "subject": "@@||cnn.com/*ad.xml",
+        #     "expected": {
+        #         "aggressive": ["cnn.com"],
+        #         "standard": []
+        #     }
+        # }
+        {"subject": "/banner/*/img^", "expected": {"aggressive": [], "standard": []}},
+        {
+            "subject": "||ad.example.co.uk^",
+            "expected": {
+                "aggressive": ["ad.example.co.uk"],
+                "standard": ["ad.example.co.uk"],
+            },
+        },
+        {
+            "subject": "||ad.example.fr^$image,test",
+            "expected": {
+                "aggressive": ["ad.example.fr"],
+                "standard": ["ad.example.fr"],
+            },
+        },
+        {
+            "subject": "||api.funilrys.com/widget/$",
+            "expected": {
+                "aggressive": ["api.funilrys.com"],
+                "standard": ["api.funilrys.com"],
+            },
+        },
+        {
+            "subject": "||api.example.com/papi/action$popup",
+            "expected": {
+                "aggressive": ["api.example.com"],
+                "standard": ["api.example.com"],
+            },
+        },
+        {
+            "subject": "||funilrys.github.io$script,image",
+            "expected": {
+                "aggressive": ["funilrys.github.io"],
+                "standard": ["funilrys.github.io"],
+            },
+        },
+        {
+            "subject": "||example.net^$script,image",
+            "expected": {"aggressive": ["example.net"], "standard": ["example.net"]},
+        },
+        {
+            "subject": "||static.hello.world.examoke.org/*/exit-banner.js",
+            "expected": {
+                "aggressive": ["static.hello.world.examoke.org"],
+                "standard": ["static.hello.world.examoke.org"],
+            },
+        },
+        {
+            "subject": "$domain=exam.pl|elpmaxe.pl|example.pl",
+            "expected": {
+                "aggressive": ["elpmaxe.pl", "exam.pl", "example.pl"],
+                "standard": [],
+            },
+        },
+        {
+            "subject": "||example.de^helloworld.com",
+            "expected": {
+                "aggressive": ["example.de"],
+                "standard": ["example.de"],
+            },
+        },
+        {
+            "subject": "|github.io|",
+            "expected": {"aggressive": ["github.io"], "standard": ["github.io"]},
+        },
+        {
+            "subject": "~github.com,hello.world##.wrapper",
+            "expected": {"aggressive": ["github.com", "hello.world"], "standard": []},
+        },
+        {
+            "subject": "bing.com,bingo.com#@##adBanner",
+            "expected": {"aggressive": ["bing.com", "bingo.com"], "standard": []},
+        },
+        {
+            "subject": "example.org#@##test",
+            "expected": {"aggressive": ["example.org"], "standard": []},
+        },
+        {
+            "subject": "hubgit.com|oohay.com|ipa.elloh.dlorw#@#awesomeWorld",
+            "expected": {
+                "aggressive": ["hubgit.com|oohay.com|ipa.elloh.dlorw"],
+                "standard": [],
+            },
+        },
+        {"subject": ".com", "expected": {"aggressive": [], "standard": []}},
+        {
+            "subject": "||ggggggggggg.gq^$all",
+            "expected": {
+                "aggressive": ["ggggggggggg.gq"],
+                "standard": ["ggggggggggg.gq"],
+            },
+        },
+        {
+            "subject": "facebook.com##.search",
+            "expected": {"aggressive": ["facebook.com"], "standard": []},
+        },
+        {
+            "subject": "||test.hello.world^$domain=hello.world",
+            "expected": {
+                "aggressive": ["hello.world", "test.hello.world"],
+                "standard": ["test.hello.world"],
+            },
+        },
+        {
+            "subject": "||examplae.com",
+            "expected": {"aggressive": ["examplae.com"], "standard": ["examplae.com"]},
+        },
+        {
+            "subject": "||examplbe.com^",
+            "expected": {"aggressive": ["examplbe.com"], "standard": ["examplbe.com"]},
+        },
+        {
+            "subject": "||examplce.com$third-party",
+            "expected": {"aggressive": ["examplce.com"], "standard": ["examplce.com"]},
+        },
+        {
+            "subject": "||examplde.com^$third-party",
+            "expected": {"aggressive": ["examplde.com"], "standard": ["examplde.com"]},
+        },
+        {
+            "subject": '##[href^="https://examplee.com/"]',
+            "expected": {"aggressive": ["examplee.com"], "standard": []},
+        },
+        {
+            "subject": "||examplfe.com^examplge.com",
+            "expected": {"aggressive": ["examplfe.com"], "standard": ["examplfe.com"]},
+        },
+        {
+            "subject": "||examplhe.com$script,image",
+            "expected": {"aggressive": ["examplhe.com"], "standard": ["examplhe.com"]},
+        },
+        {
+            "subject": "||examplie.com^$domain=domain1.com|domain2.com",
+            "expected": {
+                "aggressive": [
+                    "domain1.com",
+                    "domain2.com",
+                    "examplie.com",
+                ],
+                "standard": ["examplie.com"],
+            },
+        },
+        {
+            "subject": 'examlple.com##[href^="http://hello.world."], '
+            '[href^="http://example.net/"]',
+            "expected": {
+                "aggressive": ["examlple.com", "example.net", "hello.world."],
+                "standard": [],
+            },
+        },
+    ]
 
     def setUp(self) -> None:
         """
@@ -207,27 +353,30 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
         Tests the method which let us get the converted data.
         """
 
-        for given, expected in self.TEST_SUBJECT.items():
+        for test_dataset in self.EXTENDED_TEST_SUBJECT:
+            given = test_dataset["subject"]
+            expected_std = test_dataset["expected"]["standard"]
+            expected_aggressive = test_dataset["expected"]["aggressive"]
+
             self.converter.data_to_convert = given
+
+            self.converter.aggressive = True
             actual = self.converter.get_converted()
 
-            self.assertEqual(expected, actual, given)
+            self.assertEqual(
+                expected_aggressive,
+                actual,
+                f"Aggressive: {self.converter.aggressive} | {given}",
+            )
 
-    def test_get_converted_aggressive(self) -> None:
-        """
-        Tests the method which let us get the converted data for the case that
-        the aggressive mode is activated.
-        """
+            self.converter.aggressive = False
+            actual = self.converter.get_converted()
 
-        self.converter.aggressive = True
-
-        given = "||test.hello.world^$domain=hello.world"
-        expected = ["hello.world", "test.hello.world"]
-
-        self.converter.data_to_convert = given
-        actual = self.converter.get_converted()
-
-        self.assertEqual(expected, actual)
+            self.assertEqual(
+                expected_std,
+                actual,
+                f"Aggressive: {self.converter.aggressive} | {given}",
+            )
 
     def test_extract_base(self) -> None:
         """
