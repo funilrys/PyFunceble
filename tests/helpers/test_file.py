@@ -56,6 +56,7 @@ import tempfile
 import unittest
 
 from PyFunceble.helpers.file import FileHelper
+from PyFunceble.utils.platform import PlatformUtility
 
 
 class TestFileHelper(unittest.TestCase):
@@ -114,7 +115,11 @@ class TestFileHelper(unittest.TestCase):
         """
 
         given = "/hello/world"
-        expected = "/hello/world/hello/world"
+
+        if PlatformUtility.is_windows():
+            expected = "/hello/world\\hello\\world"
+        else:
+            expected = "/hello/world/hello/world"
 
         actual = FileHelper(given).join_path("hello", "world")
 
@@ -240,7 +245,7 @@ class TestFileHelper(unittest.TestCase):
         Tests the method which let us write a file.
         """
 
-        given = tempfile.NamedTemporaryFile()
+        given = tempfile.NamedTemporaryFile(delete=False)
 
         file_helper = FileHelper(given.name)
 
@@ -309,7 +314,7 @@ class TestFileHelper(unittest.TestCase):
         Tests the method which let us read (bytes) a file.
         """
 
-        given = tempfile.NamedTemporaryFile()
+        given = tempfile.NamedTemporaryFile(delete=False)
 
         file_helper = FileHelper(given.name)
 

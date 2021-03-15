@@ -175,7 +175,7 @@ class TestHashHelper(unittest.TestCase):
         Tests the method which let us hash the content of a given file.
         """
 
-        our_file = tempfile.NamedTemporaryFile()
+        our_file = tempfile.NamedTemporaryFile(delete=False)
 
         our_file.write("\n".join(self.hashing_subject).encode())
         our_file.seek(0)

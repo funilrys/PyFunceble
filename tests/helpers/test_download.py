@@ -246,7 +246,7 @@ class TestDownloadHelper(unittest.TestCase):
         url for the case that we want the response into a file.
         """
 
-        destination = tempfile.NamedTemporaryFile()
+        destination = tempfile.NamedTemporaryFile(delete=False)
 
         given = "https://exmaple.org"
 
@@ -273,7 +273,7 @@ class TestDownloadHelper(unittest.TestCase):
         url for the case that the response is not ok.
         """
 
-        destination = tempfile.NamedTemporaryFile()
+        destination = tempfile.NamedTemporaryFile(delete=False)
 
         given = "https://exmaple.org"
 
