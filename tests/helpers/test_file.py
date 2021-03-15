@@ -278,7 +278,7 @@ class TestFileHelper(unittest.TestCase):
         Tests the method which let us read a file.
         """
 
-        given = tempfile.NamedTemporaryFile()
+        given = tempfile.NamedTemporaryFile(delete=False)
 
         file_helper = FileHelper(given.name)
 
