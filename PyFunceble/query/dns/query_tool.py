@@ -268,7 +268,7 @@ class DNSQueryTool:
                 except ValueError:
                     return dns.name.from_text(self.subject)
             return dns.name.from_text(self.subject)
-        except dns.name.LabelTooLong:
+        except (dns.name.LabelTooLong, dns.name.EmptyLabel):
             return None
 
     @property
