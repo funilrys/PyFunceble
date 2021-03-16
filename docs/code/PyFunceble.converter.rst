@@ -20,6 +20,14 @@ PyFunceble.converter.base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.converter.cidr2subject module
+----------------------------------------
+
+.. automodule:: PyFunceble.converter.cidr2subject
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.converter.input\_line2subject module
 -----------------------------------------------
 
