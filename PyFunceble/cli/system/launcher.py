@@ -101,6 +101,7 @@ from PyFunceble.cli.utils.testing import (
 )
 from PyFunceble.cli.utils.version import print_central_messages
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.converter.cidr2subject import CIDR2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
@@ -133,6 +134,7 @@ class SystemLauncher(SystemBase):
     rpz_policy2subject: RPZPolicy2Subject = RPZPolicy2Subject()
     rpz_inputline2subject: RPZInputLine2Subject = RPZInputLine2Subject()
     url2netloc: Url2Netloc = Url2Netloc()
+    cidr2subject: CIDR2Subject = CIDR2Subject()
 
     stdout_printer: StdoutPrinter = StdoutPrinter()
     file_printer: FilePrinter = FilePrinter()
@@ -528,6 +530,7 @@ class SystemLauncher(SystemBase):
                             inputline2subject=self.inputline2subject,
                             subject2complements=self.subject2complements,
                             url2netloc=self.url2netloc,
+                            cidr2subject=self.cidr2subject,
                         ):
                             to_send = copy.deepcopy(protocol)
                             to_send["subject"] = subject
@@ -575,6 +578,7 @@ class SystemLauncher(SystemBase):
                     inputline2subject=self.inputline2subject,
                     subject2complements=self.subject2complements,
                     url2netloc=self.url2netloc,
+                    cidr2subject=self.cidr2subject,
                 ):
                     to_send = copy.deepcopy(protocol)
                     to_send["subject"], to_send["idna_subject"] = (

@@ -66,6 +66,7 @@ from PyFunceble.cli.processes.workers.tester import TesterWorker
 from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.cli.utils.testing import get_subjects_from_line
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.converter.cidr2subject import CIDR2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
@@ -122,6 +123,7 @@ class FilePreloader:
     rpz_policy2subject: Optional[RPZPolicy2Subject] = None
     rpz_inputline2subject: Optional[RPZInputLine2Subject] = None
     url2netloc: Optional[Url2Netloc] = None
+    cidr2subject: Optional[CIDR2Subject] = None
 
     def __init__(
         self,
@@ -139,6 +141,7 @@ class FilePreloader:
         url2netloc: Optional[Url2Netloc] = None,
         continue_dataset: Optional[ContinueDatasetBase] = None,
         inactive_dataset: Optional[InactiveDatasetBase] = None,
+        cidr2subject: Optional[CIDR2Subject] = None,
     ) -> None:
         if authorized is not None:
             self.authorized = authorized
@@ -160,6 +163,7 @@ class FilePreloader:
         self.url2netloc = url2netloc
         self.continue_dataset = continue_dataset
         self.inactive_dataset = inactive_dataset
+        self.cidr2subject = cidr2subject
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
@@ -394,6 +398,7 @@ class FilePreloader:
                             inputline2subject=self.inputline2subject,
                             subject2complements=self.subject2complements,
                             url2netloc=self.url2netloc,
+                            cidr2subject=self.cidr2subject,
                         ):
 
                             to_send = copy.deepcopy(self.protocol)

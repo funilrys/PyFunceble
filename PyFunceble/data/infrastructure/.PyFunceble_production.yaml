@@ -45,6 +45,9 @@ cli_testing:
   # Activates the generation of complements.
   complements: False
 
+  # Activates the expansion of CIDR to single addresses.
+  cidr_expand: False
+
   # Sets the cooldown time to apply between each tests.
   cooldown_time: 0.0
 

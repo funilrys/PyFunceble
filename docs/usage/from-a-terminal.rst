@@ -173,6 +173,14 @@ PyFunceble from where to obtain the given list.
     You can not combine the usage of :code:`-f`, :code:`-uf` and
     :code:`--adblock` at the same time
 
+------
+
+:code:`--cidr`
+""""""""""""""
+
+This feature will expand CIDR formatted addresses.
+
+**Default value:** :code:`cidr_expand: False`
 
 ------
 
@@ -188,7 +196,7 @@ is given and vice-versa.
 ------
 
 :code:`--filter "RegEx"`
-""""""""""""""""""""""""""""
+""""""""""""""""""""""""
 
 A Regex string to match in order to test a given line.
 
@@ -1330,6 +1338,9 @@ Global overview
 
     Source filtering, decoding, conversion and expansion:
         --adblock             Activates or deactivates the decoding of the adblock format.
+                                Configured value: False
+        --cidr                Activates or disables the expansion of CIDR formatted
+                                addresses.
                                 Configured value: False
         --complements         Activates or disables the generation and test of the
                                 complements.

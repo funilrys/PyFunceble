@@ -65,6 +65,16 @@
     We do not recomend you to disable this. In fact, this is your safety against
     the rate limite imposed by most WHOIS servers.
 
+:code:`cli_testing[cidr_expand]`
+""""""""""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the expansion of CIDR formatted
+    addresses.
+
 :code:`cli_testing[complements]`
 """"""""""""""""""""""""""""""""
 

@@ -220,6 +220,15 @@ def get_filtering_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--cidr"],
+            {
+                "dest": "cli_testing.cidr_expand",
+                "action": "store_true",
+                "help": "Activates or disables the expansion of CIDR formatted\n"
+                "addresses. %s" % get_configured_value("cli_testing.cidr_expand"),
+            },
+        ),
+        (
             [
                 "--complements",
             ],

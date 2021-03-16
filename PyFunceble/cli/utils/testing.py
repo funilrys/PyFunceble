@@ -57,6 +57,7 @@ from sqlalchemy.orm import Session
 
 import PyFunceble.storage
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.converter.cidr2subject import CIDR2Subject
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 from PyFunceble.converter.rpz_input_line2subject import RPZInputLine2Subject
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
@@ -186,6 +187,7 @@ def get_subjects_from_line(
     inputline2subject: Optional[InputLine2Subject] = None,
     subject2complements: Optional[Subject2Complements] = None,
     url2netloc: Optional[Url2Netloc] = None,
+    cidr2subject: Optional[CIDR2Subject] = None,
 ) -> List[str]:
     """
     Provides the list of subject to test.
@@ -213,6 +215,9 @@ def get_subjects_from_line(
 
     if url2netloc is None:
         url2netloc = Url2Netloc()
+
+    if cidr2subject is None:
+        cidr2subject = CIDR2Subject()
 
     if PyFunceble.storage.CONFIGURATION.cli_decoding.adblock:
         result.extend(
@@ -243,6 +248,13 @@ def get_subjects_from_line(
                 for y in subject2complements.set_data_to_convert(x).get_converted()
             ]
         )
+
+    if PyFunceble.storage.CONFIGURATION.cli_testing.cidr_expand:
+        result = [
+            y
+            for x in result
+            for y in cidr2subject.set_data_to_convert(x).get_converted()
+        ]
 
     if checker_type.lower() != "syntax":
         for index, subject in enumerate(result):
