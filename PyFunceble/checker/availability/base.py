@@ -841,6 +841,8 @@ class AvailabilityCheckerBase(CheckerBase):
             lookup_result = self.addressinfo_query_tool.get_info()
         elif self.status.ip_syntax:
             lookup_result = self.hostbyaddr_query_tool.get_info()
+        elif self.status.idna_subject.isdigit():
+            lookup_result = None
         else:
             lookup_result = self.addressinfo_query_tool.get_info()
 
