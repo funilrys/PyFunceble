@@ -217,6 +217,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
+-   keczuppp - `@keczuppp`_
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   NeolithEra - `@NeolithEra`_
@@ -332,6 +333,7 @@ License
 .. _@funilrys: https://github.com/funilrys
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
+.. _@keczuppp: https://github.com/keczuppp
 .. _@kennethreitz: https://github.com/kennethreitz
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
