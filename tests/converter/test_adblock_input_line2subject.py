@@ -260,6 +260,7 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
                 "standard": [],
             },
         },
+        {"subject": "##.ad-href1", "expected": {"aggressive": [], "standard": []}},
     ]
 
     def setUp(self) -> None:

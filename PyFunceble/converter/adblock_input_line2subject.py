@@ -208,7 +208,8 @@ class AdblockInputLine2Subject(ConverterBase):
                     r"((?:\"|\')(.*)(?:\"|\'))"
                 ).match(rule, return_match=True, rematch=True, group=1)
 
-                result.add(self.extract_base(matched))
+                if matched:
+                    result.add(self.extract_base(matched))
                 continue
 
         return result
