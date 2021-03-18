@@ -335,8 +335,6 @@ class AdblockInputLine2Subject(ConverterBase):
         ):
             return result
 
-        print(not local_line.startswith("@@||"), "^$" not in local_line)
-
         v1_mode, options = local_line.split("$", 1)
 
         result.update(
