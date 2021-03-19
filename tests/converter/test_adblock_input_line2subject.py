@@ -261,6 +261,21 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
             },
         },
         {"subject": "##.ad-href1", "expected": {"aggressive": [], "standard": []}},
+        {
+            "subject": "^hello^$domain=example.com",
+            "expected": {"standard": [], "aggressive": ["example.com"]},
+        },
+        {
+            "subject": "hello$domain=example.net|example.com",
+            "expected": {"standard": [], "aggressive": ["example.com", "example.net"]},
+        },
+        {
+            "subject": "hello^$domain=example.org|example.com|example.net",
+            "expected": {
+                "standard": [],
+                "aggressive": ["example.com", "example.net", "example.org"],
+            },
+        },
     ]
 
     def setUp(self) -> None:

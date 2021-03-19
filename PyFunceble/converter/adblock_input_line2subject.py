@@ -389,6 +389,7 @@ class AdblockInputLine2Subject(ConverterBase):
         In this mode we try to decode the simple:
 
             $domain=exam.pl|elpmaxe.pl|example.pl
+            ^hello^$domain=example.com
 
         rule.
 
@@ -405,10 +406,10 @@ class AdblockInputLine2Subject(ConverterBase):
         separators = ["$"]
 
         for separator in separators:
-            if not local_line.startswith(separator):
+            if separator not in line:
                 continue
 
-            options = local_line[len(separator) :]
+            options = local_line[local_line.find(separator) + 1 :]
 
             result.update(self._decode_options(options.split(",")))
 
