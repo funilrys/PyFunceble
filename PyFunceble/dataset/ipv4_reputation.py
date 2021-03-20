@@ -83,12 +83,6 @@ class IPV4ReputationDataset(DatasetBase):
 
         return False
 
-    def __getattr__(self, value: Any):
-        raise AttributeError(value)
-
-    def __getitem__(self, value: Any):
-        raise KeyError(value)
-
     @DatasetBase.ensure_source_file_exists
     def get_content(self) -> open:
         """
