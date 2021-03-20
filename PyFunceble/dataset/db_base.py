@@ -91,15 +91,6 @@ class DBDatasetBase(DatasetBase):
         A method to be called (automatically) after __init__.
         """
 
-    def __contains__(self, value: str) -> bool:
-        raise NotImplementedError()
-
-    def __getattr__(self, value: Any) -> Any:
-        raise AttributeError(value)
-
-    def __getitem__(self, value: Any) -> Any:
-        raise KeyError(value)
-
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
         """
         Executes the decorated method only if we are authorized to process.
