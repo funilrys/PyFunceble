@@ -103,13 +103,10 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
             "subject": "[AdBlock Plus 2.0]",
             "expected": {"aggressive": [], "standard": []},
         },
-        # {
-        #     "subject": "@@||cnn.com/*ad.xml",
-        #     "expected": {
-        #         "aggressive": ["cnn.com"],
-        #         "standard": []
-        #     }
-        # }
+        {
+            "subject": "@@||ads.example.com/notbanner^$~script",
+            "expected": {"aggressive": ["ads.example.com"], "standard": []},
+        },
         {"subject": "/banner/*/img^", "expected": {"aggressive": [], "standard": []}},
         {
             "subject": "||ad.example.co.uk^",

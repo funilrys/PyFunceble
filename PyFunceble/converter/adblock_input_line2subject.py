@@ -150,9 +150,6 @@ class AdblockInputLine2Subject(ConverterBase):
             Giving :code:`"hello.world/?is=beautiful"` returns :code:`"hello.world"`
         """
 
-        if isinstance(subject, list):
-            return [AdblockInputLine2Subject.extract_base(x) for x in subject]
-
         subject = subject.replace("*", "").replace("~", "")
 
         try:
