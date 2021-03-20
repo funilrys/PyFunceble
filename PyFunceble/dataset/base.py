@@ -69,19 +69,19 @@ class DatasetBase:
 
     source_file: Optional[str] = None
 
-    def __contains__(self, value: Any):
+    def __contains__(self, value: Any):  # pragma: no cover
         raise NotImplementedError()
 
-    def __getattr__(self, value: Any):
+    def __getattr__(self, value: Any):  # pragma: no cover
         raise AttributeError(value)
 
-    def __getitem__(self, value: Any):
+    def __getitem__(self, value: Any):  # pragma: no cover
         raise KeyError(value)
 
-    def __getstate__(self):
+    def __getstate__(self):  # pragma: no cover
         return vars(self)
 
-    def __setstate__(self, state):
+    def __setstate__(self, state):  # pragma: no cover
         vars(self).update(state)
 
     def ensure_source_file_exists(func):  # pylint: disable=no-self-argument
@@ -104,7 +104,7 @@ class DatasetBase:
                 )
 
             if not self.source_file:
-                raise ValueError("<self.source_file> should not be emtpy.")
+                raise ValueError("<self.source_file> should not be empty.")
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
