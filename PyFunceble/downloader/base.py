@@ -214,7 +214,7 @@ class DownloaderBase:
 
     def get_current_downtime(self):
         """
-        Provides the download times of th ecurrent :code:`DOWN_TIME_INDEX`.
+        Provides the download times of the current :code:`DOWN_TIME_INDEX`.
         """
 
         if self.is_downtime_set():
@@ -244,9 +244,9 @@ class DownloaderBase:
             self.downtimes_file.path
         )
 
-    def is_last_download_exipired(self) -> bool:
+    def is_last_download_expired(self) -> bool:
         """
-        Checks if the last downloaded file is exipred (if exists).
+        Checks if the last downloaded file is expired (if exists).
         """
 
         if not FileHelper(self.destination).exists() or not self.is_downtime_set():
@@ -275,7 +275,7 @@ class DownloaderBase:
         Starts the download process.
         """
 
-        if self.authorized and self.is_last_download_exipired():
+        if self.authorized and self.is_last_download_expired():
             if not hasattr(self, "destination") or not self.destination:
                 raise PyFunceble.downloader.exceptions.NoDownloadDestinationGiven()
 

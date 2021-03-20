@@ -240,9 +240,11 @@ class DownloadHelper:
             if destination and isinstance(destination, str):
                 FileHelper(destination).write(req.text, overwrite=True)
 
+            adapter.close()
             req.close()
             return response
 
+        adapter.close()
         session.close()
         raise PyFunceble.helpers.exceptions.UnableToDownload(
             f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
