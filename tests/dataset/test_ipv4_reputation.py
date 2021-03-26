@@ -67,7 +67,7 @@ class TestIPV4ReputationDataset(unittest.TestCase):
         Setups everything needed by the tests.
         """
 
-        self.tempfile = tempfile.NamedTemporaryFile("w", delete=False)
+        self.tempfile = tempfile.NamedTemporaryFile("wb", delete=False)
 
         self.our_dataset = """
 127.176.134.253#4#3#Malicious Host
