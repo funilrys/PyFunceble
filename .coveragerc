@@ -11,13 +11,10 @@ omit =
 
     # omit the following file
     PyFunceble/dataset/mariadb_base.py
-    PyFunceble/dataset/autocontinue/mariadb.py
-    PyFunceble/dataset/autocontinue/mysql.py
-    PyFunceble/dataset/inactive/mariadb.py
-    PyFunceble/dataset/inactive/mysql.py
-    PyFunceble/dataset/whois/mariadb.py
-    PyFunceble/dataset/whois/mysql.py
+    PyFunceble/dataset/*/mariadb.py
+    PyFunceble/dataset/*/mysql.py
     PyFunceble/__init__.py
+    PyFunceble/logger.py
 
     PyFunceble/database/*
 
