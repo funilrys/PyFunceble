@@ -735,6 +735,9 @@ class DNSQueryTool:
             except (dns.exception.Timeout, socket.error):
                 # Example: Resource temporarily unavailable.
                 pass
+            except dns.query.UnexpectedSource:
+                # Example: got a response from XXX instead of XXX.
+                pass
             except ValueError:
                 # Example: Input is malformed.
                 break
@@ -800,6 +803,9 @@ class DNSQueryTool:
             except (dns.exception.Timeout, socket.error):
                 # Example: Resource temporarily unavailable.
                 pass
+            except dns.query.UnexpectedSource:
+                # Example: got a response from XXX instead of XXX.
+                pass
             except ValueError:
                 # Example: Input is malformed.
                 break
@@ -858,6 +864,9 @@ class DNSQueryTool:
                     break
             except (dns.exception.Timeout, socket.error):
                 # Example: Resource temporarily unavailable.
+                pass
+            except dns.query.UnexpectedSource:
+                # Example: got a response from XXX instead of XXX.
                 pass
             except ValueError:
                 # Example: Input is malformed.
@@ -928,6 +937,9 @@ class DNSQueryTool:
                     break
             except (dns.exception.Timeout, socket.error):
                 # Example: Resource temporarily unavailable.
+                pass
+            except dns.query.UnexpectedSource:
+                # Example: got a response from XXX instead of XXX.
                 pass
             except ValueError:
                 # Example: Input is malformed.

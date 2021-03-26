@@ -154,6 +154,14 @@ class TestDNSQueryTool(unittest.TestCase):
         raise ValueError("Input malformed")
 
     @staticmethod
+    def unexpected_source_response(*args, **kwargs) -> None:
+        """
+        Provides a response which raises an unexpected source exception.
+        """
+
+        raise dns.query.UnexpectedSource("got a response from XXX instead of XXX.")
+
+    @staticmethod
     def socket_error(*args, **kwargs) -> None:
         """
         Provides a response which raises a socket error.
@@ -763,6 +771,27 @@ class TestDNSQueryTool(unittest.TestCase):
         self.mock_https_query.assert_not_called()
         self.mock_tls_query.assert_not_called()
 
+    def test_udp_query_unexpected_source(self) -> None:
+        """
+        Tests the method which let us query through the UDP protocol.
+
+        In this case, we check the case that an UnexpectedSource exception
+        is raised.
+        """
+
+        self.query_tool.preferred_protocol = "UDP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_udp_query.side_effect = self.unexpected_source_response
+
+        _ = self.query_tool.query()
+
+        self.mock_udp_query.assert_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
     def test_udp_query_socket_error(self) -> None:
         """
         Tests the method which let us query through the UDP protocol.
@@ -859,6 +888,27 @@ class TestDNSQueryTool(unittest.TestCase):
         self.query_tool.subject = "example.org"
 
         self.mock_tcp_query.side_effect = self.malformed_response
+
+        _ = self.query_tool.query()
+
+        self.mock_tcp_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
+    def test_tcp_query_unexpected_source(self) -> None:
+        """
+        Tests the method which let us query through the TCP protocol.
+
+        In this case, we check the case that an UnexpectedSource exception
+        is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TCP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tcp_query.side_effect = self.unexpected_source_response
 
         _ = self.query_tool.query()
 
@@ -991,6 +1041,27 @@ class TestDNSQueryTool(unittest.TestCase):
         self.mock_tcp_query.assert_not_called()
         self.mock_tls_query.assert_not_called()
 
+    def test_https_query_unexpected_source(self) -> None:
+        """
+        Tests the method which let us query through the HTTPS protocol.
+
+        In this case, we check the case that an UnexpectedSource exception
+        is raised.
+        """
+
+        self.query_tool.preferred_protocol = "HTTPS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_https_query.side_effect = self.unexpected_source_response
+
+        _ = self.query_tool.query()
+
+        self.mock_https_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
     def test_https_query_with_result(self) -> None:
         """
         Tests the method which let us query through the HTTPS protocol.
@@ -1087,6 +1158,27 @@ class TestDNSQueryTool(unittest.TestCase):
         self.query_tool.subject = "example.org"
 
         self.mock_tls_query.side_effect = self.socket_error
+
+        _ = self.query_tool.query()
+
+        self.mock_tls_query.assert_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+
+    def test_tls_query_unexpected_source(self) -> None:
+        """
+        Tests the method which let us query through the TLS protocol.
+
+        In this case, we check the case that an UnexpectedSource exception
+        is raised.
+        """
+
+        self.query_tool.preferred_protocol = "TLS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org"
+
+        self.mock_tls_query.side_effect = self.unexpected_source_response
 
         _ = self.query_tool.query()
 
