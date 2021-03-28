@@ -86,7 +86,7 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
-from PyFunceble.cli.processes.file_sorter import FileSorterProcessesManager
+from PyFunceble.cli.processes.dir_files_sorter import DirFileSorterProcessesManager
 from PyFunceble.cli.processes.migrator import MigratorProcessesManager
 from PyFunceble.cli.processes.miner import MinerProcessesManager
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
@@ -147,7 +147,7 @@ class SystemLauncher(SystemBase):
     tester_process_manager: Optional[TesterProcessesManager] = None
     producer_process_manager: Optional[ProducerProcessesManager] = None
     miner_process_manager: Optional[MinerProcessesManager] = None
-    file_sorter_process_manager: Optional[FileSorterProcessesManager] = None
+    dir_files_sorter_process_manager: Optional[DirFileSorterProcessesManager] = None
     migrator_process_manager: Optional[MigratorProcessesManager] = None
 
     continue_dataset: Optional[ContinueDatasetBase] = None
@@ -196,7 +196,7 @@ class SystemLauncher(SystemBase):
             input_queue=self.tester_process_manager.output_queue[0],
             daemon=True,
         )
-        self.file_sorter_process_manager = FileSorterProcessesManager(
+        self.dir_files_sorter_process_manager = DirFileSorterProcessesManager(
             self.manager,
             max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
             continuous_integration=self.continuous_integration,
@@ -562,7 +562,9 @@ class SystemLauncher(SystemBase):
                         to_send, worker_name="main"
                     )
 
-            self.file_sorter_process_manager.add_to_input_queue(protocol)
+            self.dir_files_sorter_process_manager.add_to_input_queue(
+                {"directory": protocol["output_dir"]}
+            )
 
         for protocol in self.testing_protocol:
             self.ci_stop_in_the_middle_if_time_exceeded()
@@ -807,9 +809,9 @@ class SystemLauncher(SystemBase):
         try:
             # From here, we are sure that every test and files are produced.
             # We now format the generated file(s).
-            self.file_sorter_process_manager.start()
-            self.file_sorter_process_manager.send_stop_signal()
-            self.file_sorter_process_manager.wait()
+            self.dir_files_sorter_process_manager.start()
+            self.dir_files_sorter_process_manager.send_stop_signal()
+            self.dir_files_sorter_process_manager.wait()
         except AssertionError:
             # Example: Already started previously.
             pass
