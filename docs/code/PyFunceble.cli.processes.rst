@@ -20,6 +20,14 @@ PyFunceble.cli.processes.base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.processes.dir\_files\_sorter module
+--------------------------------------------------
+
+.. automodule:: PyFunceble.cli.processes.dir_files_sorter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.cli.processes.file\_sorter module
 --------------------------------------------
 

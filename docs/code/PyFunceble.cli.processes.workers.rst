@@ -12,10 +12,26 @@ PyFunceble.cli.processes.workers.base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.processes.workers.dir\_files\_sorter module
+----------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.processes.workers.dir_files_sorter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.cli.processes.workers.file\_sorter module
 ----------------------------------------------------
 
 .. automodule:: PyFunceble.cli.processes.workers.file_sorter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+PyFunceble.cli.processes.workers.file\_sorter\_base module
+----------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.processes.workers.file_sorter_base
    :members:
    :undoc-members:
    :show-inheritance:
