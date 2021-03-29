@@ -154,7 +154,7 @@ class ProcessesManagerBase:
 
     def ensure_worker_obj_is_given(func):  # pylint: disable=no-self-argument
         """
-        Ensures that the worker is proprelly declared before launching the
+        Ensures that the worker is properly declared before launching the
         decorated method.
         """
 
@@ -201,7 +201,7 @@ class ProcessesManagerBase:
     @property
     def max_worker(self) -> Optional[int]:
         """
-        Provides the number of maximul worker we are allowed to generate.
+        Provides the number of maximum worker we are allowed to generate.
         """
 
         return self._max_worker
@@ -209,7 +209,7 @@ class ProcessesManagerBase:
     @max_worker.setter
     def max_worker(self, value: int) -> None:
         """
-        Sets the number of maximul worker we are authorized to generate.
+        Sets the number of maximum worker we are authorized to generate.
 
         :param value:
             The value to set.
@@ -230,7 +230,7 @@ class ProcessesManagerBase:
 
     def set_max_worker(self, value: int) -> "ProcessesManagerBase":
         """
-        Sets the number of maximul worker we are authorized to generate.
+        Sets the number of maximum worker we are authorized to generate.
 
         :param value:
             The value to set.
@@ -449,10 +449,10 @@ class ProcessesManagerBase:
 
     @ensure_worker_obj_is_given
     @create_workers_if_missing
-    # @ignore_if_running
+    @ignore_if_running
     def start(self) -> "ProcessesManagerBase":
         """
-        Starts a defined number of worker.
+        Starts all - previously - created workers.
         """
 
         for worker in self._created_workers:
