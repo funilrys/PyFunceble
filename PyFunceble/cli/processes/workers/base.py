@@ -409,13 +409,6 @@ class WorkerBase(multiprocessing.Process):
                     time.sleep(self.BREAKOFF)
                     continue
 
-                if break_from_feeder(feeding_worker) and break_now():
-                    PyFunceble.facility.Logger.info(
-                        "Got stop message from all feeders. Stopping current worker."
-                    )
-                    self.add_to_output_queue("stop")
-                    break
-
                 result = self.target(consumed)
 
                 if result is not None:
@@ -424,6 +417,13 @@ class WorkerBase(multiprocessing.Process):
                 break_time = datetime.utcnow() + timedelta(
                     seconds=self.MINING_WAIT_TIME
                 )
+
+                if break_from_feeder(feeding_worker) and break_now():
+                    PyFunceble.facility.Logger.info(
+                        "Got stop message from all feeders. Stopping current worker."
+                    )
+                    self.add_to_output_queue("stop")
+                    break
         except Exception as exception:  # pylint: disable=broad-except
             PyFunceble.facility.Logger.critical(
                 "Error while running target", exc_info=True
