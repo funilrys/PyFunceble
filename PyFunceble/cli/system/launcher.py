@@ -221,9 +221,9 @@ class SystemLauncher(SystemBase):
 
             del self.producer_process_manager.output_queue
 
-            self.producer_process_manager.output_queue = (
+            self.producer_process_manager.output_queue = [
                 self.miner_process_manager.input_queue
-            )
+            ]
 
         if self.continuous_integration.authorized:
             self.continuous_integration.set_start_time()
