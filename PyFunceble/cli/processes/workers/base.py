@@ -261,14 +261,14 @@ class WorkerBase(multiprocessing.Process):
             while True:
                 if self.global_exit_event.is_set():
                     PyFunceble.facility.Logger.info(
-                        "Got global exit event. Stopping runner."
+                        "Got global exit event. Stopping worker."
                     )
 
                     self.add_to_input_queue("stop")
                     break
 
                 if self.exit_it.is_set():
-                    PyFunceble.facility.Logger.info("Got exit event. Stopping runner.")
+                    PyFunceble.facility.Logger.info("Got exit event. Stopping worker.")
 
                     self.add_to_output_queue("stop")
                     break
@@ -278,7 +278,7 @@ class WorkerBase(multiprocessing.Process):
                     and self.continuous_integration.is_time_exceeded()
                 ):
                     PyFunceble.facility.Logger.info(
-                        "CI time exceeded. Stopping runner."
+                        "CI time exceeded. Stopping worker."
                     )
 
                     if break_now():
@@ -291,7 +291,7 @@ class WorkerBase(multiprocessing.Process):
                 try:
                     worker_name, destination_worker, consumed = self.input_queue.get()
                 except EOFError:
-                    PyFunceble.facility.Logger.info("Got EOFError. Stopping runner.")
+                    PyFunceble.facility.Logger.info("Got EOFError. Stopping worker.")
                     self.global_exit_event.set()
                     break
 
@@ -435,7 +435,7 @@ class WorkerBase(multiprocessing.Process):
 
     def terminate(self) -> None:
         """
-        Terminate our runner.
+        Terminate our worker.
         """
 
         self.exit_it.set()
