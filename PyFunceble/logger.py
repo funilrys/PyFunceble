@@ -82,8 +82,8 @@ class Logger:
     # pylint: disable=line-too-long
     OWN_FORMAT: str = (
         "[%(asctime)s | %(levelname)s | %(origin_path)s:"
-        "%(origin_line)s@%(origin_func)s | TPID%(thread)d:%(threadName)s"
-        " | PPID%(process)d:%(processName)s]:\n%(message)s"
+        "%(origin_line)s@%(origin_func)s | PPID%(process)d:%(processName)s]:\n"
+        "%(message)s\n"
     )
     """
     Our very own format.
@@ -337,6 +337,9 @@ class Logger:
 
         line = interest[1].strip().split()[-1].strip()
         func_name = interest[2].strip()[3:]
+
+        if PyFunceble.storage.PROJECT_NAME in file:
+            file = os.path.relpath(file)
 
         return {"origin_path": file, "origin_line": line, "origin_func": func_name}
 
