@@ -292,9 +292,17 @@ class ProcessesManagerBase:
         """
 
         for worker in self._running_workers:
+            PyFunceble.facility.Logger.info(
+                "Waiting for %r to finish.",
+                worker.name,
+            )
             worker.join()
 
             self._running_workers.remove(worker)
+            PyFunceble.facility.Logger.info(
+                "Still running: %r.",
+                self._running_workers,
+            )
 
         for worker in self._created_workers:
             if worker.exception:

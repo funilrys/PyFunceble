@@ -86,7 +86,6 @@ class MinerWorker(WorkerBase):
         PyFunceble.factory.Requester.guess_all_settings()
 
         self.url2netloc = Url2Netloc()
-        self.send_feeding_message = False
 
         return super().__post_init__()
 
@@ -159,6 +158,9 @@ class MinerWorker(WorkerBase):
             subject = test_result.idna_subject
 
         print_single_line("M")
+
+        self.add_to_output_queue("pyfunceble")
+        self.share_waiting_message()
         mined = self.mine_from(subject)
 
         for url in mined:
