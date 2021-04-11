@@ -349,7 +349,7 @@ class ConfigLoader:
                 config = Merge(
                     self.dict_helper.from_yaml_file(self.path_to_overwrite_config)
                 ).into(config)
-        else:
+        else:  # pragma: no cover  ## Just make it visible to end-user.
             self.file_helper.write("")
 
         return config
