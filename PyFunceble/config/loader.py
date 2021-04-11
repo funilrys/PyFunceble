@@ -89,6 +89,7 @@ class ConfigLoader:
 
     path_to_config: Optional[str] = None
     path_to_default_config: Optional[str] = None
+    path_to_overwrite_config: Optional[str] = None
 
     _custom_config: dict = dict()
     _merge_upstream: bool = False
@@ -106,6 +107,11 @@ class ConfigLoader:
         self.path_to_config = os.path.join(
             PyFunceble.storage.CONFIG_DIRECTORY,
             PyFunceble.storage.CONFIGURATION_FILENAME,
+        )
+
+        self.path_to_overwrite_config = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.storage.CONFIGURATION_OVERWRITE_FILENAME,
         )
 
         if merge_upstream is not None:
@@ -333,6 +339,18 @@ class ConfigLoader:
             ).get_merged()
 
             self.dict_helper.set_subject(config).to_yaml_file(self.path_to_config)
+
+        if self.file_helper.set_path(self.path_to_overwrite_config).exists():
+            overwrite_data = self.dict_helper.from_yaml_file(
+                self.path_to_overwrite_config
+            )
+
+            if overwrite_data:
+                config = Merge(
+                    self.dict_helper.from_yaml_file(self.path_to_overwrite_config)
+                ).into(config)
+        else:
+            self.file_helper.write("")
 
         return config
 

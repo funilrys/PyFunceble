@@ -81,6 +81,7 @@ class TestConfigLoader(unittest.TestCase):
         self.our_config = Box(copy.deepcopy(pyf_test_dataset.DEFAULT_CONFIG))
 
         self.default_config_file = tempfile.NamedTemporaryFile(delete=False)
+        self.overwrite_config_file = tempfile.NamedTemporaryFile(delete=False)
         self.config_file = tempfile.NamedTemporaryFile(delete=False)
 
         self.merge_upstream = False
@@ -89,6 +90,7 @@ class TestConfigLoader(unittest.TestCase):
 
         self.config_loader.merge_upstream = self.merge_upstream
         self.config_loader.path_to_default_config = self.default_config_file.name
+        self.config_loader.path_to_overwrite_config = self.overwrite_config_file.name
         self.config_loader.path_to_config = self.config_file.name
 
     def tearDown(self) -> None:
@@ -101,6 +103,7 @@ class TestConfigLoader(unittest.TestCase):
 
         os.unlink(self.config_file.name)
         os.unlink(self.default_config_file.name)
+        os.unlink(self.overwrite_config_file.name)
 
         del self.our_config
         del self.default_config_file
@@ -486,6 +489,93 @@ class TestConfigLoader(unittest.TestCase):
         actual = self.config_loader.conditional_switch(given)
 
         self.assertEqual(expected, actual)
+
+    def test_overwite_file_found(self) -> None:
+        """
+        Tests the loading of the configuration file for the case the an
+        overwrite file is given.
+        """
+
+        given = {"Hello": "World!"}
+
+        self.overwrite_config_file.write(yaml.dump(given).encode())
+        self.overwrite_config_file.seek(0)
+
+        self.config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.config_file.seek(0)
+
+        response = self.config_loader.start()
+
+        self.assertIsInstance(response, ConfigLoader)
+
+        expected_with_overwrite = dict(
+            copy.deepcopy(self.our_config.to_dict()), **given
+        )
+        self.assertEqual(
+            expected_with_overwrite,
+            PyFunceble.storage.CONFIGURATION,
+        )
+
+        self.assertTrue("Hello" in PyFunceble.storage.CONFIGURATION)
+
+    def test_overwite_file_found_but_empty(self) -> None:
+        """
+        Tests the loading of the configuration file for the case the an
+        overwrite file is given but is empty.
+        """
+
+        given = {}
+
+        self.overwrite_config_file.write(yaml.dump(given).encode())
+        self.overwrite_config_file.seek(0)
+
+        self.config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.config_file.seek(0)
+
+        response = self.config_loader.start()
+
+        self.assertIsInstance(response, ConfigLoader)
+
+        expected = self.our_config.to_dict()
+
+        self.assertEqual(
+            expected,
+            PyFunceble.storage.CONFIGURATION,
+        )
+
+    def test_overwite_file_found_but_overwrote_by_custom(self) -> None:
+        """
+        Tests the loading of the configuration file for the case the an
+        overwrite file is given, but the custom configuration is also given.
+
+        When the custom configuration is given, it overwrites everything,
+        including the overwrites file.
+        """
+
+        given = {"Hello": "World"}
+
+        self.overwrite_config_file.write(yaml.dump(given).encode())
+        self.overwrite_config_file.seek(0)
+
+        given_custom = {"Hello": "Funilrys!"}
+        self.config_loader.set_custom_config(given_custom)
+
+        self.config_file.write(yaml.dump(self.our_config.to_dict()).encode())
+        self.config_file.seek(0)
+
+        response = self.config_loader.start()
+
+        self.assertIsInstance(response, ConfigLoader)
+
+        expected_with_custom = dict(
+            copy.deepcopy(self.our_config.to_dict()), **given_custom
+        )
+        self.assertEqual(
+            expected_with_custom,
+            PyFunceble.storage.CONFIGURATION,
+        )
+
+        self.assertTrue(PyFunceble.storage.CONFIGURATION["Hello"] == "Funilrys!")
 
 
 if __name__ == "__main__":

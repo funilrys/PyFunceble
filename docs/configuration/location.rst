@@ -11,6 +11,20 @@ Problematics
 To answer those problematics, we moved the configuration location elsewhere in
 the place where most users expect to have their configuration file(s).
 
+Filename-s
+^^^^^^^^^^
+
+At any of the listed configuration location, the following file will be read:
+
+- :code:`.PyFunceble.yaml`
+    - This file is generated automatically if missing.
+    - This file is may be automatically updated if you choose to merge the
+      upstream configuration when a new key is introduced or removed.
+
+- :code:`.PyFunceble.overwrite.yaml`
+    - This file can only be maintained by a human-controlled
+      process. PyFunceble will never write into this file.
+
 Repository clone
 ^^^^^^^^^^^^^^^^
 
