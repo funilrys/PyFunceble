@@ -112,7 +112,7 @@ class HTTPStatusCode:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
+        def wrapper(self, *args, **kwargs):
             if not isinstance(self.subject, str):
                 raise TypeError(
                     f"<self.subject> should be {str}, {type(self.subject)} given."
@@ -203,7 +203,7 @@ class HTTPStatusCode:
             The timeout to apply.
         """
 
-        self.timeout = float(value)
+        self.timeout = value
 
         return self
 
