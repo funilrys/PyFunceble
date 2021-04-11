@@ -110,6 +110,7 @@ venv.bak/
 .pyfunceble_intern_downtime.json
 .pyfunceble-env
 .PyFunceble.yaml
+.PyFunceble.overwrite.yaml
 dir_structure.json
 hashes_tracker.json
 iana-domains-db.json
