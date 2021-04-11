@@ -81,7 +81,3 @@ class DomainAndIPReputationChecker(ReputationCheckerBase):
         query_object.__dict__ = self.__dict__
 
         return query_object.query_status()
-
-    @staticmethod
-    def is_valid() -> bool:
-        raise NotImplementedError()

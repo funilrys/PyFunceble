@@ -78,7 +78,3 @@ class URLReputationChecker(ReputationCheckerBase):
         return (
             self.dns_query_tool.set_query_record_type("A").set_subject(url_base).query()
         )
-
-    @staticmethod
-    def is_valid() -> bool:
-        raise NotImplementedError()

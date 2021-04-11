@@ -80,7 +80,3 @@ class IPReputationChecker(ReputationCheckerBase):
         self.dns_query_tool.subject = self.dns_query_tool.subject
 
         return list(result)
-
-    @staticmethod
-    def is_valid() -> bool:
-        raise NotImplementedError()

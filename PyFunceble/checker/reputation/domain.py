@@ -69,7 +69,3 @@ class DomainReputationChecker(ReputationCheckerBase):
 
     def query_a_record(self) -> Optional[List[str]]:
         return self.dns_query_tool.set_query_record_type("A").query()
-
-    @staticmethod
-    def is_valid() -> bool:
-        raise NotImplementedError()

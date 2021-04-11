@@ -110,6 +110,10 @@ class ReputationCheckerBase(CheckerBase):
             subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
         )
 
+    @staticmethod
+    def is_valid() -> bool:
+        raise NotImplementedError()
+
     def subject_propagator(self) -> "CheckerBase":
         """
         Propagate the currently set subject.
