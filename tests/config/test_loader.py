@@ -100,6 +100,7 @@ class TestConfigLoader(unittest.TestCase):
 
         self.config_file.close()
         self.default_config_file.close()
+        self.overwrite_config_file.close()
 
         os.unlink(self.config_file.name)
         os.unlink(self.default_config_file.name)
