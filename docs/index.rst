@@ -47,9 +47,9 @@ My main idea was to check the availability of domains in hosts files.
 But 3 years later, PyFunceble is now capable of a lot including:
 
 - The testing of domains, IPs, and URLs.
-- The checking of the syntax or reputation of a domain, IPs, and URLs.
-- The decoding of AdBlock filters, RPZ records, or plain files before a test
-  from the CLI.
+- The checking of the syntax or reputation of a domain, IP, and URL.
+- The decoding of AdBlock filters, RPZ records, hosts or plain files before a
+  test from the CLI.
 
 PyFunceble evolved and will probably continue to evolve with the time
 and the people using it.
