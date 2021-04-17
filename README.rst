@@ -20,68 +20,55 @@ The tool to check the availability or syntax of domain, IP or URL
 .. image:: https://pepy.tech/badge/pyfunceble-dev/week
     :target: https://pepy.tech/project/pyfunceble-dev
 
-Welcome to PyFunceble!
+**PyFunceble** aims to provide an accurate availability check through the usage
+of multiple sources which are for example - to only list them:
 
-PyFunceble  is the little sister of `Funceble`_ which was archived on 13th March
-2018. In March 2018, because Funceble was starting to become a huge unmanageable
-script, I - Nissar Chababy aka `@funilrys`_ - decided to make it a Python tool
-for the purpose of extending my Python knowledge. It was meant for my own use case.
+- the WHOIS record(s).
+- the DNS record(s).
+- the HTTP status code.
 
-Back then, my problem was that I didn't want to download a huge hosts file
-knowing that most of the entries do not exist anymore. That's how Py-Funceble
-started.
+PyFunceble can be included in your existing project through:
 
-My objective - now - through this tool is to provide a tool and a Python API
-which helps the world test the availability of domains, IPs and URL through
-the gathering and interpretation of information from existing tools or
-protocols like WHOIS records, DNS lookup, or even HTTP status codes.
+- its standard built-in CLI implementation.
+- its `Python API`_.
+- the `PyFunceble web-worker`_ project that provides the core functionalities
+  of PyFunceble behind a web API.
 
-The base of this tool was my idea.
-But as with many Open Source (related) projects, communities or
-individuals, we evolve with the people we meet, exchange with or just discuss
-with privately. PyFunceble was and is still not an exception to that.
-
-My main idea was to check the availability of domains in hosts files.
-But 3 years later, PyFunceble is now capable of a lot including:
-
-- The testing of domains, IPs, and URLs.
-- The checking of the syntax or reputation of a domain, IPs, and URLs.
-- The decoding of AdBlock filters, RPZ records, or plain files before a test
-  from the CLI.
-
-PyFunceble evolved and will probably continue to evolve with the time
-and the people using it.
-
-In June 2020, The PyFunceble-dev PyPI package - which gets everything as
-soon as possible compared to the PyFunceble (stable) package - reached 1 million
-total downloads. I never noticed it until I was reached by someone informing me
-of it. But, I was shocked.
-
-I never thought that something I built from A to Z in my free time will ever
-reach that point.
-I was thankful to that nice person for informing me of it. But at the same time
-concerned about PyFunceble and how it will evolve. That's why I started the
-development of PyFunceble 4.0.0. My idea as I was refactoring it was to provide
-a better Python API and implementation of my core ideas along with a better
-incorporation and extension capability.
-Indeed, in the last few years, I was so much obsessed with the CLI that I
-really never wrote each component individually. They were all dependent - if
-not part of - the CLI. With 4.0.0, you can now import one of the components
-of PyFunceble and start straight away. No real need to play with the
-configuration unless you want something very specific.
-That's how I see the future of PyFunceble.
+The PyFunceble CLI can test from a hosts file, a plain list of subjects, an
+AdBlock filter list or even an RPZ record.
 
 As of today, PyFunceble is running actively - if not daily - within several
 servers, laptops, PCs, and Raspberry Pis. It is even used - thanks to our
-auto continue dataset and component - with CI engines like GitHub Action,
-Travis CI, and GitLab CI.
+auto continue mechanism - with CI engines like GitHub Action, Travis CI, or
+GitLab CI.
 
-PyFunceble is my tool. But it is indirectly also become yours.
-Therefore, I invite you to let me know how you use PyFunceble or simply open a
-discussion - or join an existing one - about anything you do with PyFunceble.
-But also anything that you - would - like - or dislike - in PyFunceble.
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
-Happy testing with PyFunceble!
+.. _Python API: https://pyfunceble.readthedocs.io/en/dev/api/index.html
+.. _PyFunceble web-worker: https://github.com/pyfunceble/web-worker
+
+
+___________________________________________
+
+Installation
+------------
+
+:code:`pip`
+^^^^^^^^^^^
+
+::
+
+    $ pip install --upgrade --pre pyfunceble-dev
+    $ pyfunceble --version
+
+:code:`docker`
+^^^^^^^^^^^^^^
+
+::
+
+    $ docker pull pyfunceble/pyfunceble-dev
+    $ docker run -it pyfunceble/pyfunceble-dev --version
 
 ___________________________________________
 
@@ -108,60 +95,6 @@ Simply run the following and enjoy the documentation!
 
 ___________________________________________
 
-What can PyFunceble do?
------------------------
-
-- Test the availability of a domain.
-- Test the availability of an IPv4.
-- Test the availability of an IPv6.
-- Test the availability of a URL.
-- Test the availability of a domain/DNS name in a private or local network.
-- Test the availability of an IPv4 in a private or local network.
-- Test the availability of an IPv6 in a private or local network.
-- Test the availability of a URL in a private or local network.
-- Test the syntax of a domain.
-- Test the syntax of an IPv4.
-- Test the syntax of an IPv6.
-- Test the syntax of a URL.
-- Test against the AlienVault's reputation of an IPv4.
-- Test of domain or IP which are present into an Adblock formatted file.
-- Test from a given raw link.
-- Test using multiprocessing (from CLI only).
-- Save test result(s) in file(s) (hosts file, plain text and/or JSON format).
-- Save test result(s) in a MySQL or MariaDB database.
-- Show test result(s) on screen.
-- Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`,
-  :code:`INVALID`)
-- Sort outputs hierarchically.
-- "Mining" of domain or IP which are related to the tested element.
-- Auto-continuation of tests in case of system crash or script stop.
-- Filtering of a file content.
-
-  - This feature will let us for example test all blogspot domain of the given
-    file no matter the content of the file.
-
-- Set the user-agent to use for the tests.
-- Give some analytic depending of the HTTP status code (:code:`ACTIVE`,
-  :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
-- Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
-- Print the execution time on screen and file.
-- Customisation of the different option via command-line arguments or
-  configuration file.
-- Continuous tests under Travis CI or GitLab CI/CI
-
-  - ... with the help of an auto saving and database system.
-  - Set the branch to push the result to. For the autosaving system.
-  - Set the minimal time before we autosave in order to avoid CI/CD limitation.
-  - Set a command to execute at the end of the test.
-  - Set the commit message for the autosaving system.
-
-- ... and a lot more!
-
-.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
-
-___________________________________________
-
 Supporting the project
 ----------------------
 
@@ -172,7 +105,8 @@ time and a lot of coffee!
 This project helps you and/or you like it?
 
 GitHub Sponsor
-""""""""""""""
+^^^^^^^^^^^^^^
+
 `@funilrys`_ is part of the GitHub Sponsor program!
 
 .. image:: https://github.com/PyFunceble/logo/raw/master/pyfunceble_github.png
@@ -182,7 +116,7 @@ GitHub Sponsor
 `Sponsor me`_!
 
 Ko-Fi
-"""""
+^^^^^
 
 Don't want to use the GitHub Sponsor program ?
 Single donations are welcome too!
