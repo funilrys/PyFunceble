@@ -74,5 +74,5 @@ class IPV4ReputationDownloader(DownloaderBase):
         super().__init__()
 
     @property
-    def authorized(self) -> bool: # pragma: no cover ## Always True.
+    def authorized(self) -> bool:  # pragma: no cover ## Always True.
         return True
