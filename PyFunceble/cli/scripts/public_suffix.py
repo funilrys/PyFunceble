@@ -59,7 +59,6 @@ from PyFunceble.dataset.public_suffix import PublicSuffixDataset
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.list import ListHelper
-from PyFunceble.helpers.merge import Merge
 
 
 class PublicSuffixGenerator:
@@ -137,7 +136,7 @@ class PublicSuffixGenerator:
 
         return self
 
-    def parse_line(self, line: str, *, idna_check=False) -> dict:
+    def parse_line(self, line: str) -> dict:
         """
         Parses and provides the dataset to save.
         """
@@ -146,25 +145,18 @@ class PublicSuffixGenerator:
         result = dict()
 
         if not any(line.startswith(x) for x in self.COMMENT_SIGN) and "." in line:
-            if not idna_check:
-                idna_line = line.encode("idna").decode("utf-8")
-            else:
-                idna_line = None
+            lines = [line, line.encode("idna").decode("utf-8")]
+            lines = [
+                self.wildacrd2subject.set_data_to_convert(x).get_converted()
+                for x in lines
+            ]
+            extension = lines[0].rsplit(".", 1)[-1]
 
-            line = self.wildacrd2subject.set_data_to_convert(line).get_converted()
-
-            extension = line.rsplit(".", 1)[-1]
-
-            if extension in result:
-                result[extension].append(line)
-            else:
-                result[extension] = [line]
-
-            if idna_line:
-                local_result = self.parse_line(idna_line, idna_check=True)
-
-                if local_result:
-                    result = Merge(local_result).into(result)
+            for suffix in lines:
+                if extension in result:
+                    result[extension].append(suffix)
+                else:
+                    result[extension] = [suffix]
 
         return result
 
@@ -188,7 +180,9 @@ class PublicSuffixGenerator:
                     )
 
         for extension, suffixes in self.database.items():
-            self.database[extension] = ListHelper(suffixes).remove_duplicates().subject
+            self.database[extension] = (
+                ListHelper(suffixes).remove_duplicates().remove_empty().sort().subject
+            )
 
         DictHelper(self.database).to_json_file(self.destination)
 
