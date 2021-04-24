@@ -16,6 +16,7 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
     DirectoryStructureRestoration,
 )
 from PyFunceble.cli.processes.producer import ProducerProcessesManager
+from PyFunceble.utils.platform import PlatformUtility
 
 # This is needed as our idea is to communicate with the producer thread instead
 # of trying to reimplement everything.
@@ -33,6 +34,7 @@ STD_COMMUNICATION_DATASET = {
 }
 
 DOMAINS = ["github.com", "twitter.com"]
+
 
 if __name__ == "__main__":
     # We initiate the coloration.
@@ -99,11 +101,15 @@ if __name__ == "__main__":
 
     # From here all files were generated we can do whatever we want with them.
 
-    if os.path.isfile(
-        os.path.join(
-            dir_structure_restoration.get_output_basedir(), "domains", "ACTIVE", "list"
-        )
-    ):
+    unix_path = os.path.join(
+        dir_structure_restoration.get_output_basedir(), "domains", "ACTIVE", "list"
+    )
+
+    win_path = f"{unix_path}.txt"
+
+    path_to_use = unix_path if PlatformUtility.is_unix() else win_path
+
+    if os.path.isfile(path_to_use):
         print(
             f"{colorama.Style.BRIGHT}{colorama.Fore.GREEN}All right, "
             "files correctly generated!"
