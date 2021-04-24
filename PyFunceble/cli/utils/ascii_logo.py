@@ -55,7 +55,6 @@ import colorama
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
-from PyFunceble.utils.platform import PlatformUtility
 
 
 def colorify(color: str) -> str:
@@ -81,10 +80,7 @@ def colorify(color: str) -> str:
     color_to_apply = getattr(colorama.Fore, color)
     result = []
 
-    if PlatformUtility.is_windows():
-        to_color = PyFunceble.cli.storage.WIN_ASCII_PYFUNCEBLE
-    else:
-        to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
+    to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
 
     if (
         PyFunceble.facility.ConfigLoader.is_already_loaded()

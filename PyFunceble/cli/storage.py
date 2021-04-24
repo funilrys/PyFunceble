@@ -57,6 +57,8 @@ import colorama
 from box import Box
 
 import PyFunceble.cli.storage_facility
+from PyFunceble.helpers.merge import Merge
+from PyFunceble.utils.platform import PlatformUtility
 
 STD_EPILOG: str = (
     f"Crafted with {colorama.Fore.RED}♥{colorama.Fore.RESET} by "
@@ -68,23 +70,24 @@ STD_EPILOG: str = (
     f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
 )
 
-ASCII_PYFUNCEBLE = """
-██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
-██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
-██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
-██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
-██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
-╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
-"""
-
-WIN_ASCII_PYFUNCEBLE = """
-########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
-##     ##  ##  ##  ##       ##     ## ###   ## ##    ## ##       ##     ## ##       ##
-##     ##   ####   ##       ##     ## ####  ## ##       ##       ##     ## ##       ##
-########     ##    ######   ##     ## ## ## ## ##       ######   ########  ##       ######
-##           ##    ##       ##     ## ##  #### ##       ##       ##     ## ##       ##
-##           ##    ##       ##     ## ##   ### ##    ## ##       ##     ## ##       ##
-##           ##    ##        #######  ##    ##  ######  ######## ########  ######## ########
+if PlatformUtility.is_unix():
+    ASCII_PYFUNCEBLE = """
+    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+    """
+else:
+    ASCII_PYFUNCEBLE = """
+    ########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
+    ##     ##  ##  ##  ##       ##     ## ###   ## ##    ## ##       ##     ## ##       ##
+    ##     ##   ####   ##       ##     ## ####  ## ##       ##       ##     ## ##       ##
+    ########     ##    ######   ##     ## ## ## ## ##       ######   ########  ##       ######
+    ##           ##    ##       ##     ## ##  #### ##       ##       ##     ## ##       ##
+    ##           ##    ##       ##     ## ##   ### ##    ## ##       ##     ## ##       ##
+    ##           ##    ##        #######  ##    ##  ######  ######## ########  ######## ########
 """
 
 DONE: str = f"{colorama.Fore.GREEN}✔"
@@ -117,40 +120,80 @@ PRE_LOADER_FILE = "preload.json"
 STD_PARENT_DIRNAME: str = "__pyfunceble_origin__"
 STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 
-OUTPUTS: Optional[Box] = Box(
-    {
-        "domains": {"directory": "domains", "filename": "list"},
-        "hosts": {"directory": "hosts", "filename": "hosts", "ip_filename": "ips"},
-        "analytic": {
-            "directories": {
-                "parent": "Analytic",
-                "potentially_down": "POTENTIALLY_INACTIVE",
-                "potentially_up": "POTENTIALLY_ACTIVE",
-                "up": "ACTIVE",
-                "suspicious": "SUSPICIOUS",
-            },
-            "filenames": {
-                "potentially_down": "down_or_potentially_down",
-                "potentially_up": "potentially_up",
-                "up": "active_and_merged_in_results",
-                "suspicious": "suspicious_and_merged_in_results",
-            },
-        },
-        "logs": {
-            "directories": {"parent": "logs", "percentage": "percentage"},
-            "filenames": {
-                "auto_continue": "continue.json",
-                "execution_time": "execution_time.json",
-                "percentage": "percentage.txt",
-                "whois": "whois.json",
-                "date_format": "date_format.json",
-                "no_referrer": "no_referrer.json",
-                "inactive_not_retested": "inactive_not_retested",
-            },
-        },
-        "parent_directory": "output",
-        "splitted": {"directory": "splitted"},
+UNIX_OUTPUTS: dict = {
+    "domains": {"filename": "list"},
+    "hosts": {"filename": "hosts", "ip_filename": "ips"},
+    "analytic": {
+        "filenames": {
+            "potentially_down": "down_or_potentially_down",
+            "potentially_up": "potentially_up",
+            "up": "active_and_merged_in_results",
+            "suspicious": "suspicious_and_merged_in_results",
+        }
     },
+    "logs": {
+        "filenames": {
+            "inactive_not_retested": "inactive_not_retested",
+        },
+    },
+}
+
+WIN_OUTPUTS: dict = {
+    "domains": {"filename": "list.txt"},
+    "hosts": {"filename": "hosts.txt", "ip_filename": "ips.txt"},
+    "analytic": {
+        "filenames": {
+            "potentially_down": "down_or_potentially_down.txt",
+            "potentially_up": "potentially_up.txt",
+            "up": "active_and_merged_in_results.txt",
+            "suspicious": "suspicious_and_merged_in_results.txt",
+        }
+    },
+    "logs": {
+        "filenames": {
+            "inactive_not_retested": "inactive_not_retested.txt",
+        },
+    },
+}
+
+UNIVERSAL_OUTPUTS: dict = {
+    "domains": {"directory": "domains", "filename": "list"},
+    "hosts": {"directory": "hosts", "filename": "hosts", "ip_filename": "ips"},
+    "analytic": {
+        "directories": {
+            "parent": "Analytic",
+            "potentially_down": "POTENTIALLY_INACTIVE",
+            "potentially_up": "POTENTIALLY_ACTIVE",
+            "up": "ACTIVE",
+            "suspicious": "SUSPICIOUS",
+        },
+        "filenames": {
+            "potentially_down": "down_or_potentially_down",
+            "potentially_up": "potentially_up",
+            "up": "active_and_merged_in_results",
+            "suspicious": "suspicious_and_merged_in_results",
+        },
+    },
+    "logs": {
+        "directories": {"parent": "logs", "percentage": "percentage"},
+        "filenames": {
+            "auto_continue": "continue.json",
+            "execution_time": "execution_time.json",
+            "percentage": "percentage.txt",
+            "whois": "whois.json",
+            "date_format": "date_format.json",
+            "no_referrer": "no_referrer.json",
+            "inactive_not_retested": "inactive_not_retested",
+        },
+    },
+    "parent_directory": "output",
+    "splitted": {"directory": "splitted"},
+}
+
+OUTPUTS: Optional[Box] = Box(
+    Merge(UNIX_OUTPUTS).into(UNIVERSAL_OUTPUTS)
+    if PlatformUtility.is_unix()
+    else Merge(WIN_OUTPUTS).into(UNIVERSAL_OUTPUTS),
     frozen_box=True,
 )
 

@@ -67,6 +67,7 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.helpers.directory import DirectoryHelper
+from PyFunceble.utils.platform import PlatformUtility
 
 
 class StatusFileGenerator(FilesystemDirBase):
@@ -694,6 +695,10 @@ class StatusFileGenerator(FilesystemDirBase):
             PyFunceble.cli.storage.OUTPUTS.splitted.directory,
             self.status.status.upper(),
         )
+
+        if not PlatformUtility.is_unix():
+            self.file_printer.destination += ".txt"
+
         self.file_printer.template_to_use = "all"
         self.file_printer.dataset = self.status.to_dict()
         self.file_printer.print_interpolated_line()
