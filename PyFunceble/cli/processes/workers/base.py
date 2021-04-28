@@ -311,9 +311,6 @@ class WorkerBase(multiprocessing.Process):
                     break
 
                 if self.exit_it.is_set():
-                    if self.send_stop_message:
-                        self.add_to_output_queue("stop")
-
                     PyFunceble.facility.Logger.info("Got exit event. Stopping worker.")
                     break
 
@@ -367,6 +364,7 @@ class WorkerBase(multiprocessing.Process):
                                     worker_name,
                                 )
                                 self.exit_it.set()
+                                self.add_to_input_queue("stop", worker_name=worker_name)
                                 continue
 
                             PyFunceble.facility.Logger.info(
@@ -498,4 +496,6 @@ class WorkerBase(multiprocessing.Process):
 
         self.exit_it.set()
         self.add_to_input_queue("stop", destination_worker=self.name)
-        self.add_to_output_queue("stop", worker_name=self.name)
+
+        if self.send_stop_message:
+            self.add_to_output_queue("stop", worker_name=self.name)

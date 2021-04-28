@@ -305,6 +305,12 @@ class ProcessesManagerBase:
             )
 
         for worker in self._created_workers:
+
+            # This will force the sharing of the stop message into the
+            # output queue.
+            if worker.send_stop_message:
+                worker.add_to_output_queue("stop", worker_name=worker.name)
+
             if worker.exception:
                 worker_error, _ = worker.exception
 
