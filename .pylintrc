@@ -146,6 +146,9 @@ disable=print-statement,
         too-many-instance-attributes,
         too-many-branches,
 
+
+        consider-using-with,
+
         # Temporary until pylint fix it
         unsubscriptable-object,
 
