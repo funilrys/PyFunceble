@@ -57,12 +57,6 @@ from PyFunceble.checker.reputation.url import URLReputationChecker
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 try:
-    import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
-
-
-try:
     import reputation_test_base
 except ModuleNotFoundError:  # pragma: no cover
     from . import reputation_test_base

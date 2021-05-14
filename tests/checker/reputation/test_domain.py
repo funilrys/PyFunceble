@@ -54,13 +54,7 @@ import unittest
 import unittest.mock
 
 from PyFunceble.checker.reputation.domain import DomainReputationChecker
-from  PyFunceble.query.dns.query_tool import DNSQueryTool
-
-try:
-    import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
-
+from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 try:
     import reputation_test_base
@@ -88,7 +82,6 @@ class TestDomainReputationChecker(reputation_test_base.ReputationCheckerTestBase
 
         # Not needed in this scope :-)
         self.checker.do_syntax_check_first = False
-
 
         return upstream_result
 
@@ -145,6 +138,7 @@ class TestDomainReputationChecker(reputation_test_base.ReputationCheckerTestBase
 
         self.assertEqual(expected_status, actual_status)
         self.assertEqual(expected_source, actual_source)
+
 
 if __name__ == "__main__":
     unittest.main()
