@@ -80,4 +80,8 @@ class DomainAndIPReputationChecker(ReputationCheckerBase):
 
         query_object.__dict__ = self.__dict__
 
-        return query_object.query_status()
+        result = query_object.query_status()
+
+        self.__dict__.update(query_object.__dict__)
+
+        return result
