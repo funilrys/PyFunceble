@@ -77,6 +77,7 @@ class IPReputationChecker(ReputationCheckerBase):
                 .query()
             )
 
-        self.dns_query_tool.subject = self.dns_query_tool.subject
+        # Do not break future usage of the query tool.
+        self.dns_query_tool.subject = self.idna_subject
 
         return list(result)
