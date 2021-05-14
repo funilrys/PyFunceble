@@ -72,9 +72,38 @@ class URLReputationChecker(ReputationCheckerBase):
     def query_a_record(self) -> Optional[List[str]]:
         url_base = Url2Netloc(self.status.subject).get_converted()
 
-        if IPSyntaxChecker(url_base).is_valid_v4():
+        ip_syntax_checker = IPSyntaxChecker(url_base)
+
+        if ip_syntax_checker.is_valid_v4():
             return [url_base]
 
-        return (
+        if ip_syntax_checker.is_valid_v6() or (
+            url_base.startswith("[") and url_base.endswith("]")
+        ):
+
+            url_base = url_base.replace("[", "").replace("]", "")
+
+            result = set()
+
+            for subject in (
+                self.dns_query_tool.set_query_record_type("PTR")
+                .set_subject(url_base)
+                .query()
+            ):
+                result.update(
+                    self.dns_query_tool.set_subject(subject)
+                    .set_query_record_type("A")
+                    .query()
+                )
+
+            self.dns_query_tool.subject = self.idna_subject
+
+            return result
+
+        result = (
             self.dns_query_tool.set_query_record_type("A").set_subject(url_base).query()
         )
+
+        self.dns_query_tool.subject = self.idna_subject
+
+        return result
