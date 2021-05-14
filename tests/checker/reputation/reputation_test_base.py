@@ -120,3 +120,14 @@ class ReputationCheckerTestBase(unittest.TestCase):
 
         _ = args
         _ = kwargs
+
+    @staticmethod
+    def fake_query_a_record_not_known(*args, **kwargs) -> Optional[List[str]]:
+        """
+        A fake method which provides a fake IP for the testing.
+        """
+
+        _ = args
+        _ = kwargs
+
+        return ["93.184.216.34"]
