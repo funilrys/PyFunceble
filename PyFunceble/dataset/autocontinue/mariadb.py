@@ -103,4 +103,7 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
         )
 
         for row in result:
+            if not row.idna_subject:
+                continue
+
             yield row.idna_subject

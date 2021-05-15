@@ -183,4 +183,7 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
             if (datetime.utcnow() - data["tested_at"]).days < min_days:
                 continue
 
+            if not data["idna_subject"]:
+                continue
+
             yield data["idna_subject"]
