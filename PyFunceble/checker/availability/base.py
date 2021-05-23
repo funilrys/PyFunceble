@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import functools
 import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -205,23 +204,6 @@ class AvailabilityCheckerBase(CheckerBase):
         super().__init__(
             subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
         )
-
-    def query_syntax_checker_if_missing(func):  # pylint: disable=no-self-argument
-        """
-        Queries the status if it's missing.
-
-        :raise RuntimeError:
-            If the subject is not a string.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
-            if not self.status.status:
-                self.query_syntax_checker()
-
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
 
     @property
     def use_extra_rules(self) -> bool:
@@ -581,13 +563,6 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    def get_use_netinfo_lookup(self) -> bool:
-        """
-        Sets the current value of the :code:`use_netinfo_lookup` attribute.
-        """
-
-        return self.use_netinfo_lookup
-
     def guess_and_set_use_http_code_lookup(self) -> "AvailabilityCheckerBase":
         """
         Try to guess and set the value of the :code:`use_http_code_lookup` attribute
@@ -628,7 +603,9 @@ class AvailabilityCheckerBase(CheckerBase):
         else:
             self.use_whois_db = self.STD_USE_WHOIS_DB
 
-    def guess_all_settings(self) -> "AvailabilityCheckerBase":
+    def guess_all_settings(
+        self,
+    ) -> "AvailabilityCheckerBase":  # pragma: no cover ## Method are more important
         """
         Try to guess all settings.
         """
@@ -705,7 +682,6 @@ class AvailabilityCheckerBase(CheckerBase):
                     result[record_type] = local_result
 
                     break
-                continue
 
         PyFunceble.facility.Logger.debug("DNS Record:\n%r", result)
 
@@ -716,7 +692,9 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return result
 
-    def try_to_query_status_from_whois(self) -> "AvailabilityCheckerBase":
+    def try_to_query_status_from_whois(
+        self,
+    ) -> "AvailabilityCheckerBase":
         """
         Tries to get and the status from the WHOIS record.
 
@@ -739,7 +717,9 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.idna_subject,
         )
 
-        if PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db:
+        if (
+            PyFunceble.facility.ConfigLoader.is_already_loaded() and self.use_whois_db
+        ):  # pragma: no cover ## Not interesting enough to spend time on it.
             whois_object = PyFunceble.checker.utils.whois.get_whois_dataset_object(
                 db_session=self.db_session
             )
@@ -755,7 +735,7 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.status.expiration_date = (
                     self.whois_query_tool.get_expiration_date()
                 )
-                self.status.whois_record = self.whois_query_tool.record
+                self.status.whois_record = self.whois_query_tool.lookup_record.record
 
                 if (
                     self.status.expiration_date
@@ -780,7 +760,7 @@ class AvailabilityCheckerBase(CheckerBase):
                 self.status.whois_record = None
         else:
             self.status.expiration_date = self.whois_query_tool.get_expiration_date()
-            self.status.whois_record = self.whois_query_tool.record
+            self.status.whois_record = self.whois_query_tool.lookup_record.record
 
         if self.status.expiration_date:
             self.status.status = PyFunceble.storage.STATUS.up
@@ -892,14 +872,18 @@ class AvailabilityCheckerBase(CheckerBase):
         ):
             self.status.http_status_code = lookup_result
 
-            if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if (
+                PyFunceble.facility.ConfigLoader.is_already_loaded()
+            ):  # pragma: no cover ## Special behavior.
                 dataset = PyFunceble.storage.HTTP_CODES
             else:
                 dataset = PyFunceble.storage.STD_HTTP_CODES
 
             if (
-                self.status.status == PyFunceble.storage.STATUS.down
-                and self.status.http_status_code in dataset.list.up
+                not self.status.status
+                or self.status.status == PyFunceble.storage.STATUS.down
+            ) and (
+                self.status.http_status_code in dataset.list.up
                 or self.status.http_status_code in dataset.list.potentially_up
             ):
                 self.status.status = PyFunceble.storage.STATUS.up
