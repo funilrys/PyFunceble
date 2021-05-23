@@ -70,8 +70,6 @@ class WhoisQueryTool:
     expiration_date_extractor: Optional[ExpirationDateExtractor] = None
     iana_dataset: Optional[IanaDataset] = None
 
-    record: Optional[str] = None
-
     _subject: Optional[str] = None
     _server: Optional[str] = None
     _query_timeout: float = 5.0
@@ -106,7 +104,7 @@ class WhoisQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
+        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just safety.
             if not isinstance(self.subject, str):
                 raise TypeError(
                     f"<self.subject> should be {str}, {type(self.subject)} given."
@@ -133,25 +131,8 @@ class WhoisQueryTool:
             if self.query_timeout != self.lookup_record.query_timeout:
                 self.lookup_record.query_timeout = self.query_timeout
 
-            if self.record != self.lookup_record.record:
-                self.lookup_record.record = self.record
-
-            return result
-
-        return wrapper
-
-    def update_lookup_record_record(func):  # pylint: disable=no-self-argument
-        """
-        Ensures that the record of the decorated method is set as response
-        in our record.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            if result != self.lookup_record.record:
-                self.lookup_record.response = result
+            if self.server != self.lookup_record.server:
+                self.lookup_record.server = self.server
 
             return result
 
@@ -166,7 +147,7 @@ class WhoisQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Just common sense
+        def wrapper(self, *args, **kwargs):  # pragma: no cover ## It just works.
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             if result != self.lookup_record.expiration_date:
@@ -182,8 +163,9 @@ class WhoisQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
-            self.record = None
+        def wrapper(self, *args, **kwargs):
+            if self.lookup_record:
+                self.lookup_record.record = None
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
@@ -195,8 +177,7 @@ class WhoisQueryTool:
         """
 
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
-
+        def wrapper(self, *args, **kwargs):  # pragma: no cover ## It just works.
             if not self.lookup_record or self.lookup_record.record is None:
                 self.query()
 
@@ -336,7 +317,9 @@ class WhoisQueryTool:
         return self
 
     @ensure_subject_is_given
-    def get_whois_server(self) -> Optional[str]:
+    def get_whois_server(
+        self,
+    ) -> Optional[str]:  # pragma: no cover ## Test the underlying method instead.
         """
         Provides the whois server to work with.
         """
@@ -352,7 +335,7 @@ class WhoisQueryTool:
 
     def get_lookup_record(
         self,
-    ) -> Optional[WhoisQueryToolRecord]:  # pragma: no cover ## It's just a dataclass
+    ) -> Optional[WhoisQueryToolRecord]:
         """
         Provides the current query record.
         """
@@ -361,12 +344,15 @@ class WhoisQueryTool:
 
     @ensure_subject_is_given
     @update_lookup_record
-    def query(self) -> "WhoisQueryTool":
+    def query(
+        self,
+    ) -> str:  # pragma: no cover ## The effect of the response of this method
+        ## are more important.
         """
         Queries the WHOIS record and return the current object.
         """
 
-        if not self.record:
+        if self.lookup_record.record is None:
 
             if not self.server:
                 whois_server = self.get_whois_server()
@@ -400,39 +386,48 @@ class WhoisQueryTool:
                     req.close()
 
                     try:
-                        self.record = response.decode()
+                        self.lookup_record.record = response.decode()
                     except UnicodeDecodeError:
                         # Note: Because we don't want to deal with other issue, we
                         # decided to use `replace` in order to automatically replace
                         # all non utf-8 encoded characters.
-                        self.record = response.decode("utf-8", "replace")
+                        self.lookup_record.record = response.decode("utf-8", "replace")
                 except socket.error:
                     pass
 
-            if self.record is None:
-                self.record = ""
+            if self.lookup_record.record is None:
+                self.lookup_record.record = ""
 
-        return self
+        return self.lookup_record.record
 
     @query_record
-    @update_lookup_record_record
-    def get_record(self) -> Optional[str]:
+    def get_record(
+        self,
+    ) -> Optional[str]:  # pragma: no cover ## Just a dataclass attribute.
         """
         Provides the current record.
+
+        Side Effect:
+            The record will be queried if it is non existent.
         """
 
-        return self.record
+        return self.lookup_record.record
 
     @query_record
     @update_lookup_record_expiration_date
-    def get_expiration_date(self) -> Optional[str]:
+    def get_expiration_date(
+        self,
+    ) -> Optional[str]:  # pragma: no cover ## Underlying method is more interesting.
         """
         Provides the expiration date of the record.
+
+        Side Effect:
+            The record will be queried if it is non existent.
         """
 
-        if self.record:
+        if self.lookup_record.record:
             return self.expiration_date_extractor.set_data_to_convert(
-                self.record
+                self.lookup_record.record
             ).get_converted()
 
         return None
