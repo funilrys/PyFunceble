@@ -136,7 +136,9 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
         ):
             self.status.http_status_code = lookup_result
 
-            if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if (
+                PyFunceble.facility.ConfigLoader.is_already_loaded()
+            ):  # pragma: no cover ## Special behavior
                 dataset = PyFunceble.storage.HTTP_CODES
             else:
                 dataset = PyFunceble.storage.STD_HTTP_CODES
@@ -193,10 +195,14 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
     @AvailabilityCheckerBase.ensure_subject_is_given
     @AvailabilityCheckerBase.update_status_date_after_query
-    def query_status(self) -> "URLAvailabilityChecker":
+    def query_status(
+        self,
+    ) -> "URLAvailabilityChecker":  # pragma: no cover
         """
         Queries the result without anything more.
         """
+
+        ## Test Methods are more important.
 
         status_post_syntax_checker = None
 

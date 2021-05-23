@@ -121,10 +121,14 @@ class IPAvailabilityChecker(AvailabilityCheckerBase):
 
     @AvailabilityCheckerBase.ensure_subject_is_given
     @AvailabilityCheckerBase.update_status_date_after_query
-    def query_status(self) -> "IPAvailabilityChecker":
+    def query_status(
+        self,
+    ) -> "IPAvailabilityChecker":  # pragma: no cover
         """
         Queries the result without anything more.
         """
+
+        ## Test Methods are more important.
 
         status_post_syntax_checker = None
 

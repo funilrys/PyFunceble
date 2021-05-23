@@ -90,7 +90,9 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
 
     @AvailabilityCheckerBase.ensure_subject_is_given
     @AvailabilityCheckerBase.update_status_date_after_query
-    def query_status(self) -> "DomainAndIPAvailabilityChecker":
+    def query_status(
+        self,
+    ) -> "DomainAndIPAvailabilityChecker":  # pragma: no cover ## Just a switch.
         """
         Queries the result without anything more.
         """
@@ -104,7 +106,11 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
 
         query_object.__dict__ = self.__dict__
 
-        return query_object.query_status()
+        result = query_object.query_status()
+
+        self.__dict__.update(query_object.__dict__)
+
+        return result
 
     @staticmethod
     def is_valid() -> bool:

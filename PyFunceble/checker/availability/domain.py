@@ -121,10 +121,13 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
 
     @AvailabilityCheckerBase.ensure_subject_is_given
     @AvailabilityCheckerBase.update_status_date_after_query
-    def query_status(self) -> "DomainAvailabilityChecker":
+    def query_status(
+        self,
+    ) -> "DomainAvailabilityChecker":  # pragma: no cover
         """
         Queries the result without anything more.
         """
+        ## Test Methods are more important.
 
         status_post_syntax_checker = None
 
