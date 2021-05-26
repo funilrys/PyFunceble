@@ -738,6 +738,10 @@ class DNSQueryTool:
             except dns.query.UnexpectedSource:
                 # Example: got a response from XXX instead of XXX.
                 pass
+            except dns.query.BadResponse:
+                # Example: A DNS query response does not respond to the question
+                # asked.
+                pass
             except ValueError:
                 # Example: Input is malformed.
                 break
@@ -806,6 +810,10 @@ class DNSQueryTool:
             except dns.query.UnexpectedSource:
                 # Example: got a response from XXX instead of XXX.
                 pass
+            except dns.query.BadResponse:
+                # Example: A DNS query response does not respond to the question
+                # asked.
+                pass
             except ValueError:
                 # Example: Input is malformed.
                 break
@@ -867,6 +875,10 @@ class DNSQueryTool:
                 pass
             except dns.query.UnexpectedSource:
                 # Example: got a response from XXX instead of XXX.
+                pass
+            except dns.query.BadResponse:
+                # Example: A DNS query response does not respond to the question
+                # asked.
                 pass
             except ValueError:
                 # Example: Input is malformed.
@@ -940,6 +952,10 @@ class DNSQueryTool:
                 pass
             except dns.query.UnexpectedSource:
                 # Example: got a response from XXX instead of XXX.
+                pass
+            except dns.query.BadResponse:
+                # Example: A DNS query response does not respond to the question
+                # asked.
                 pass
             except ValueError:
                 # Example: Input is malformed.
