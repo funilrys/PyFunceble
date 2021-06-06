@@ -63,6 +63,7 @@ class InputLine2Subject(ConverterBase):
     """
 
     COMMENT: str = "#"
+    PARTICULAR_COMMENT: List[str] = ["!"]
     SPACE: str = " "
     NSLOOKUP_SPACE: str = "\\032"
     TAB: str = "\t"
@@ -91,7 +92,10 @@ class InputLine2Subject(ConverterBase):
 
         subject = self.data_to_convert.strip()
 
-        if subject and not subject.startswith(self.COMMENT):
+        if subject and (
+            not subject.startswith(self.COMMENT)
+            and any(not subject.startswith(x) for x in self.PARTICULAR_COMMENT)
+        ):
             if self.COMMENT in subject:
                 subject = subject[: subject.find(self.COMMENT)].strip()
 

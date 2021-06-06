@@ -224,6 +224,34 @@ class TestInputLine2Subject(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_converted_startswith_exclamation_char_as_comment(self) -> None:
+        """
+        Tests the method which let us get the converted data for the case that a
+        line starts with the :code:`!` character.
+        """
+
+        given = "! example.org"
+        expected = []
+
+        self.converter.data_to_convert = given
+        actual = self.converter.get_converted()
+
+        self.assertEqual(expected, actual)
+
+    def test_get_converted_exclamation_char_as_comment(self) -> None:
+        """
+        Tests the method which let us get the converted data for the case that
+        contains a :code:`!` character as comment separator.
+        """
+
+        given = "example.org  ! DO NOT VISIT"
+        expected = ["example.org", "!", "DO", "NOT", "VISIT"]
+
+        self.converter.data_to_convert = given
+        actual = self.converter.get_converted()
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == "__main__":
     unittest.main()
