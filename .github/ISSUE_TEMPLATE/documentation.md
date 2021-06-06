@@ -1,22 +1,15 @@
 ---
-name: Ducomentation
-about: Create a report to help us improve the documentation
+name: Documentation
+about: Create a report to help us improve the documentation.
 title: 'DOC: '
 labels: documentation
-assignees: 'spirillen funilrys'
+assignees: funilrys
 ---
 
-## Describe your suggestion
-<!-- For example 
-I don't understand the...
-Missing description for -->
+## Description
 
+<!-- A clear description of the part that is missing or not easy to understand. -->
 
-### Missing description of
-<!-- Type the argument as `--arg` -->
+## Suggestion / Improvement
 
-### Improvement for
-<!-- Type the argument as `--arg` and suggestion-->
-
-## Additional text
-Add any other context about the enhangement here.
+<!-- A clear description of your suggestion and what you would like to improve -->
