@@ -215,7 +215,7 @@ class ProductionPrep:
             regexes = [
                 (r"PyFunceble\/%s\/" % "master", "PyFunceble/%s/" % "dev"),
                 ("=%s" % "master", "=%s" % "dev"),
-                (r"/{1,}en\/%s" % "master", "/en/%s" % "dev"),
+                (r"/{1,}en\/%s" % "latest", "/en/%s" % "dev"),
                 (r"\/pyfunceble-dev.png", "/pyfunceble-%s.png" % "dev"),
                 (r"\/project\/pyfunceble$", "/project/pyfunceble-%s" % "dev"),
                 (
@@ -231,7 +231,7 @@ class ProductionPrep:
             regexes = [
                 (r"PyFunceble\/%s\/" % "dev", "PyFunceble/%s/" % "master"),
                 ("=%s" % "dev", "=%s" % "master"),
-                (r"/{1,}en\/%s" % "dev", "/en/%s" % "master"),
+                (r"/{1,}en\/%s" % "dev", "/en/%s" % "latest"),
                 (r"\/pyfunceble-dev.png", "/pyfunceble-dev.png"),
                 (r"\/project\/pyfunceble-%s$" % "dev", "/project/pyfunceble"),
                 (
@@ -278,6 +278,8 @@ class ProductionPrep:
         Updates all URL in the documentation files.
         """
 
+        to_ignore = ["they-use-d-it.rst"]
+
         self.update_urls(
             os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "README.rst")
         )
@@ -286,7 +288,12 @@ class ProductionPrep:
             os.path.join(PyFunceble.storage.CONFIG_DIRECTORY, "docs")
         ):
             for file in files:
-                if not files.endswith(".rst"):
+                if not file.endswith(".rst"):
+                    continue
+
+                full_path = os.path.join(root, file)
+
+                if any (x in full_path for x in to_ignore):
                     continue
 
                 self.update_urls(os.path.join(root, file))
