@@ -241,7 +241,7 @@ class ProductionPrep:
                 (r"\/blob\/%s\/" % "dev", "/blob/%s/" % "master"),
                 (
                     r"\/pypi\/v\/pyfunceble-%s\.png$" % "dev",
-                    "/pypi/v/pyfunceble-dev.png",
+                    "/pypi/v/pyfunceble.png",
                 ),
                 (r"\/(logo|graphmls|gifs\/raw)\/%s\/" % "dev", "/\\1/%s/" % "master"),
                 (r"\/(PyFunceble\/tree)\/%s" % "dev", "/\\1/%s" % "master"),

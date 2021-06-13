@@ -106,9 +106,18 @@ def producer() -> None:  # pylint: disable=too-many-statements
         print(traceback.format_exc())
         sys.exit(1)
 
-    print("Update URL is source code and tests", end=" ")
+    print("Update URL in source code and tests", end=" ")
     try:
         utility.update_code_urls()
+        print(PyFunceble.cli.storage.DONE)
+    except:  # pylint: disable=bare-except
+        print(PyFunceble.cli.storage.ERROR)
+        print(traceback.format_exc())
+        sys.exit(1)
+
+    print("Update URL in documentation", end=" ")
+    try:
+        utility.update_docs_urls()
         print(PyFunceble.cli.storage.DONE)
     except:  # pylint: disable=bare-except
         print(PyFunceble.cli.storage.ERROR)
