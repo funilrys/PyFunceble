@@ -62,9 +62,6 @@ For that case simply add the following.
 
     # We start the producer process.
     producer_proc = ProducerProcessesManager()
-    # We send our feeding signal to inform all workers that we are the only one
-    # allowed to feed it.
-    producer_proc.send_feeding_signal(worker_name="main")
     # We start the process manager now that we are ready.
     producer_proc.start()
 

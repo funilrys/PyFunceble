@@ -89,7 +89,6 @@ class WorkerBase(multiprocessing.Process):
     exit_it: Optional[multiprocessing.Event] = None
 
     send_stop_message: Optional[bool] = None
-    send_feeding_message: Optional[bool] = None
     accept_waiting_delay: Optional[bool] = None
 
     concurrent_worker_names: Optional[List[str]] = None
@@ -122,7 +121,6 @@ class WorkerBase(multiprocessing.Process):
         self._parent_connection, self._child_connection = multiprocessing.Pipe()
         self._exception = None
 
-        self.send_feeding_message = True
         self.send_stop_message = True
         self.accept_waiting_delay = True
         self.concurrent_worker_names = list()
@@ -261,20 +259,6 @@ class WorkerBase(multiprocessing.Process):
             self.add_to_output_queue("wait")
 
     def run(self) -> None:  # pylint: disable=too-many-statements
-        def break_from_feeder(feeding_worker_events: dict) -> bool:
-            """
-            Checks if we should from based on the current state of the
-            feeding worker events.
-
-            :param feeding_worker_events:
-                The events which were caught so far.
-            """
-
-            if not feeding_worker_events:
-                return False
-
-            return all(not x for x in feeding_worker_events.values())
-
         def break_now() -> bool:
             """
             Checks if it is time to make a break.
@@ -292,9 +276,6 @@ class WorkerBase(multiprocessing.Process):
             PyFunceble.facility.ConfigLoader.start()
             PyFunceble.cli.facility.CredentialLoader.start()
             PyFunceble.cli.factory.DBSession.init_db_sessions()
-
-        feeding_worker = dict()
-        feeding_shared = []
 
         wait_for_stop = (
             bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining) is True
@@ -350,45 +331,9 @@ class WorkerBase(multiprocessing.Process):
                 )
 
                 if consumed == "stop":
-                    if feeding_worker:
-                        if worker_name in feeding_worker:
-                            feeding_worker[worker_name] = False
-
-                            PyFunceble.facility.Logger.info(
-                                "Feeding workers: %r", feeding_worker
-                            )
-
-                            if break_now() and break_from_feeder(feeding_worker):
-                                PyFunceble.facility.Logger.info(
-                                    "Got stop message from %r (all feeders). Applying.",
-                                    worker_name,
-                                )
-                                self.exit_it.set()
-                                self.add_to_input_queue("stop", worker_name=worker_name)
-                                continue
-
-                            PyFunceble.facility.Logger.info(
-                                "Got stop message from %r. Keeping track of it.",
-                                worker_name,
-                            )
-
-                            self.share_waiting_message(apply_breakoff=wait_for_stop)
-                            continue
-
-                        # We assume that that stop message was not for us
-                        # because we already working with it.
-                        self.add_to_input_queue("stop", worker_name=worker_name)
-
-                        self.share_waiting_message(apply_breakoff=wait_for_stop)
-                        continue
-
-                    PyFunceble.facility.Logger.info(
-                        "Feeding workers: %r", feeding_worker
-                    )
-
                     if break_now():
                         PyFunceble.facility.Logger.info(
-                            "Got stop message from %r (all feeders?). Applying.",
+                            "Got stop message from %r. Applying.",
                             worker_name,
                         )
 
@@ -396,50 +341,6 @@ class WorkerBase(multiprocessing.Process):
                         continue
 
                     self.share_waiting_message(apply_breakoff=wait_for_stop)
-                    continue
-
-                if consumed == "feeding":
-
-                    if (
-                        self.name[: self.name.rfind("_")] not in worker_name
-                        and worker_name not in feeding_worker
-                    ):
-                        PyFunceble.facility.Logger.info(
-                            "%r is feeding this worker.  "
-                            "Keeping track of that information.",
-                            worker_name,
-                        )
-
-                        feeding_worker[worker_name] = True
-                    elif worker_name not in feeding_shared:
-                        # We assume that that feeding message was not for us
-                        # because we already working with it.
-                        # Therefore, we just resend it to our input queue so
-                        # that one of the concurrent worker that is not
-                        # tracking the worker can work with it.
-                        self.add_to_input_queue(
-                            consumed,
-                            worker_name=worker_name,
-                            destination_worker=destination_worker,
-                        )
-                        continue
-
-                    PyFunceble.facility.Logger.info(
-                        "Feeding workers: %r", feeding_worker
-                    )
-
-                    if self.send_feeding_message and worker_name not in feeding_shared:
-                        self.add_to_output_queue(consumed, worker_name=self.name)
-
-                    if worker_name not in feeding_shared:
-                        feeding_shared.append(worker_name)
-
-                        self.add_to_input_queue(
-                            consumed,
-                            worker_name=worker_name,
-                            destination_worker=destination_worker,
-                        )
-
                     continue
 
                 if consumed == "wait":
@@ -452,11 +353,7 @@ class WorkerBase(multiprocessing.Process):
                         )
 
                         # The real (break) action shouldn't be handled here.
-                        self.add_to_input_queue(
-                            "stop",
-                            worker_name=worker_name,
-                            destination_worker=destination_worker,
-                        )
+                        self.exit_it.set()
                         continue
 
                     PyFunceble.facility.Logger.debug(
@@ -487,6 +384,7 @@ class WorkerBase(multiprocessing.Process):
             trace = traceback.format_exc()
             self._child_connection.send((exception, trace))
 
+            self.exit_it.set()
             raise exception
 
     def terminate(self) -> None:
@@ -495,7 +393,7 @@ class WorkerBase(multiprocessing.Process):
         """
 
         self.exit_it.set()
-        self.add_to_input_queue("stop", destination_worker=self.name)
 
-        if self.send_stop_message:
-            self.add_to_output_queue("stop", worker_name=self.name)
+        if self.input_queue:
+            # Necessary to avoid blocking.
+            self.add_to_input_queue("stop", destination_worker=self.name)

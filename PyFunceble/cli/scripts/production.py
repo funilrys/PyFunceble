@@ -293,7 +293,7 @@ class ProductionPrep:
 
                 full_path = os.path.join(root, file)
 
-                if any (x in full_path for x in to_ignore):
+                if any(x in full_path for x in to_ignore):
                     continue
 
                 self.update_urls(os.path.join(root, file))

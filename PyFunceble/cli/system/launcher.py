@@ -188,6 +188,7 @@ class SystemLauncher(SystemBase):
             max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
             continuous_integration=self.continuous_integration,
             daemon=True,
+            output_workers_count=1,
         )
         self.producer_process_manager = ProducerProcessesManager(
             self.manager,
@@ -195,12 +196,15 @@ class SystemLauncher(SystemBase):
             continuous_integration=self.continuous_integration,
             input_queue=self.tester_process_manager.output_queue[0],
             daemon=True,
+            output_workers_count=1,
         )
         self.dir_files_sorter_process_manager = DirFileSorterProcessesManager(
             self.manager,
             max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
             continuous_integration=self.continuous_integration,
             daemon=True,
+            generate_output_queue=False,
+            output_workers_count=0,
         )
         self.migrator_process_manager = MigratorProcessesManager(
             self.manager,
@@ -208,6 +212,7 @@ class SystemLauncher(SystemBase):
             daemon=True,
             generate_input_queue=False,
             generate_output_queue=False,
+            output_workers_count=0,
         )
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.mining:
@@ -217,6 +222,7 @@ class SystemLauncher(SystemBase):
                 continuous_integration=self.continuous_integration,
                 output_queue=self.tester_process_manager.input_queue,
                 daemon=True,
+                output_workers_count=self.tester_process_manager.max_worker,
             )
 
             del self.producer_process_manager.output_queue
@@ -832,7 +838,6 @@ class SystemLauncher(SystemBase):
 
         if not self.producer_process_manager.is_running():
             self.producer_process_manager.start()
-            self.tester_process_manager.send_feeding_signal(worker_name="main")
 
             self.tester_process_manager.start()
 

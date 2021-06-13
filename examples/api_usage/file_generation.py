@@ -59,7 +59,6 @@ if __name__ == "__main__":
     producer_process_manager = ProducerProcessesManager(
         max_worker=1, daemon=True, generate_output_queue=False
     )
-    producer_process_manager.send_feeding_signal(worker_name="main")
     producer_process_manager.start()
 
     # We start and configure our availability checker.

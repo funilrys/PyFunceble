@@ -54,7 +54,6 @@ import functools
 import multiprocessing
 import os
 import queue
-import time
 from typing import Any, List, Optional
 
 import PyFunceble.facility
@@ -95,6 +94,7 @@ class ProcessesManagerBase:
 
     _created_workers: Optional[List[WorkerBase]] = None
     _running_workers: Optional[List[WorkerBase]] = None
+    _output_workers_count: Optional[int] = None
 
     _max_worker: Optional[int] = None
 
@@ -110,6 +110,7 @@ class ProcessesManagerBase:
         generate_input_queue: bool = True,
         generate_output_queue: bool = True,
         output_queue_num: int = 1,
+        output_workers_count: Optional[int] = None,
     ) -> None:
         if manager is not None:
             self.manager = manager
@@ -151,6 +152,11 @@ class ProcessesManagerBase:
 
         self._running_workers = list()
         self._created_workers = list()
+
+        if output_workers_count is None:
+            self._output_workers_count = 1
+        else:
+            self._output_workers_count = int(output_workers_count)
 
     def ensure_worker_obj_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -254,19 +260,6 @@ class ProcessesManagerBase:
 
         return False
 
-    def send_feeding_signal(
-        self, *, worker_name: Optional[str] = None
-    ) -> "ProcessesManagerBase":
-        """
-        Sends a feeding messate to all workers. The idea is to keep track of
-        everyone which is supposed to feed a worker and track when they are
-        done.
-        """
-
-        self.add_to_all_input_queues(
-            "feeding", worker_name=worker_name, include_destination=True
-        )
-
     def send_stop_signal(
         self, *, worker_name: Optional[str] = None
     ) -> "ProcessesManagerBase":
@@ -280,11 +273,26 @@ class ProcessesManagerBase:
 
     def terminate(self) -> "ProcessesManagerBase":
         """
-        Terminates all workers.
+        Terminates all workers and send a stop message to the declared output
+        queues - which are implicitly dependend of this process "pool".
         """
 
-        for worker in self._running_workers:
+        if self._running_workers:
+            workers = self._running_workers
+        else:
+            workers = self._created_workers
+
+        if workers[0].global_exit_event:
+            workers[0].global_exit_event.set()
+
+        for worker in workers:
             worker.terminate()
+            worker.join()
+
+        # When all worker of the current process are down or finished, send the
+        # stop message to the depending workers.
+
+        self.add_to_all_output_queues("stop")
 
     def wait(self) -> "ProcessesManagerBase":
         """
@@ -305,16 +313,13 @@ class ProcessesManagerBase:
             )
 
         for worker in self._created_workers:
-
-            # This will force the sharing of the stop message into the
-            # output queue.
-            if worker.send_stop_message:
-                worker.add_to_output_queue("stop", worker_name=worker.name)
-
             if worker.exception:
                 worker_error, _ = worker.exception
 
+                self.terminate()
                 raise worker_error
+
+        self.terminate()
 
     @create_workers_if_missing
     def add_to_all_input_queues(
@@ -355,29 +360,18 @@ class ProcessesManagerBase:
         data: Any,
         *,
         worker_name: Optional[str] = None,
-        include_destination: bool = False,
     ) -> "ProcessesManagerBase":
         """
         Adds the given data to the output queues.
 
         :param data:
             The data to add into the queue.
-        :param include_destination:
-            Authorizes the addition of the destination into the message.
+        :param worker_name:
+            The name of the worker that is sending the message.
         """
 
-        if self.is_running():
-            queues = self._running_workers
-        else:
-            queues = self._created_workers
-
-        for worker in queues:
-            if include_destination:
-                worker.add_to_output_queue(
-                    data, worker_name=worker_name, destination_worker=worker.name
-                )
-            else:
-                worker.add_to_output_queue(data, worker_name=worker_name)
+        for _ in range(self._output_workers_count):
+            self.add_to_output_queue(data, worker_name=worker_name)
 
         PyFunceble.facility.Logger.debug("Added to all (output) queues: %r", data)
 
@@ -473,9 +467,6 @@ class ProcessesManagerBase:
             worker.start()
 
             self._running_workers.append(worker)
-
-        # Give them the change to get through the feeding process.
-        time.sleep(0.09)
 
         PyFunceble.facility.Logger.info(
             "Started %r workers of %r. Details:\n%r",
