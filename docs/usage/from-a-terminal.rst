@@ -762,7 +762,6 @@ Multiple space separated statuses can be given.
     duckduckgo.com                                       ACTIVE      DNSLOOKUP
     google-analytics.com                                 INACTIVE    STDLOOKUP
 
-
 *Show only active and inactive*
 
 .. code-block:: console
@@ -785,6 +784,14 @@ Multiple space separated statuses can be given.
     Subject                                              Status      Source
     ---------------------------------------------------- ----------- ----------
     google-analytics.com                                 INACTIVE    STDLOOKUP
+
+.. note::
+    If you have provided more than one $DOMAIN_FILE as input source, then the
+    printed status will be in same order as your $DOMAIN_FILE was given in the
+    input.
+
+    For an example you can visit:
+    `github <https://github.com/funilrys/PyFunceble/issues/238>`_
 
 
 ------
