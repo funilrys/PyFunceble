@@ -871,6 +871,26 @@ class TestDNSQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, self.query_tool.lookup_record.response)
 
+    def test_udp_query_bad_escape(self) -> None:
+        """
+        Tests the method which let us query through the UDP protocol.
+
+        In this case we check the case that a subject has some bad escape
+        character.
+        """
+
+        self.query_tool.preferred_protocol = "UDP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org\\"
+
+        _ = self.query_tool.query()
+
+        # Not called because inputted is invalid.
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+
     def test_tcp_query(self) -> None:
         """
         Tests the method which let us query through the TCP protocol.
@@ -1016,6 +1036,26 @@ class TestDNSQueryTool(unittest.TestCase):
         self.assertEqual(expected, actual)
 
         self.assertEqual(expected, self.query_tool.lookup_record.response)
+
+    def test_tcp_query_bad_escape(self) -> None:
+        """
+        Tests the method which let us query through the TCP protocol.
+
+        In this case we check the case that a subject has some bad escape
+        character.
+        """
+
+        self.query_tool.preferred_protocol = "TCP"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org\\"
+
+        _ = self.query_tool.query()
+
+        # Not called because inputted is invalid.
+        self.mock_tcp_query.assert_not_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
 
     def test_https_query(self) -> None:
         """
@@ -1163,6 +1203,28 @@ class TestDNSQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, self.query_tool.lookup_record.response)
 
+    def test_https_query_bad_escape(self) -> None:
+        """
+        Tests the method which let us query through the HTTPS protocol.
+
+        In this case we check the case that a subject has some bad escape
+        character.
+        """
+
+        self.query_tool.preferred_protocol = "HTTPS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org\\"
+
+        self.query_tool._get_result_from_response = lambda _: ["93.184.216.34"]
+
+        _ = self.query_tool.query()
+
+        # Not called because inputted is invalid.
+        self.mock_https_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_tls_query.assert_not_called()
+
     def test_tls_query(self) -> None:
         """
         Tests the method which let us query through the TLS protocol.
@@ -1308,6 +1370,26 @@ class TestDNSQueryTool(unittest.TestCase):
         self.assertEqual(expected, actual)
 
         self.assertEqual(expected, self.query_tool.lookup_record.response)
+
+    def test_tls_query_bad_escape(self) -> None:
+        """
+        Tests the method which let us query through the TLS protocol.
+
+        In this case we check the case that a subject has some bad escape
+        character.
+        """
+
+        self.query_tool.preferred_protocol = "TLS"
+        self.query_tool.query_record_type = "A"
+        self.query_tool.subject = "example.org\\"
+
+        _ = self.query_tool.query()
+
+        # Not called because inputted is invalid.
+        self.mock_tls_query.assert_not_called()
+        self.mock_tcp_query.assert_not_called()
+        self.mock_udp_query.assert_not_called()
+        self.mock_https_query.assert_not_called()
 
 
 class TestDNSQueryToolRecord(unittest.TestCase):
