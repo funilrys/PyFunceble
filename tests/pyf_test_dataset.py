@@ -157,6 +157,8 @@ NOT_VALID_DOMAINS: List[str] = [
     "world.hello:80",
     "world@hello.com",
     "hello_world.co.uk",
+    "example.com\\",
+    "ex\\ample.com",
 ]
 
 VALID_SUBDOMAINS: List[str] = [
@@ -196,6 +198,8 @@ NOT_VALID_SUBDOMAINS: List[str] = [
     "hello-.world",
     "hello-world",
     "pogotowie-komputerowe-warszawa.com.pl",
+    "hello.world.example.com\\",
+    "he\\llo.world.example.com",
 ]
 
 VALID_IPV4: List[str] = ["15.47.85.65", "45.66.255.240", "255.45.65.0/24"]
