@@ -72,6 +72,13 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             self.timeout = float(kwargs["timeout"])
             del kwargs["timeout"]
 
+        if "max_retries" in kwargs:
+            kwargs["max_retries"] = requests.adapters.Retry(
+                total=kwargs["max_retries"], respect_retry_after_header=False
+            )
+
+        self.dns_query_tool = DNSQueryTool().guess_all_settings()
+
         super().__init__(*args, **kwargs)
 
     def resolve_with_cache(self, hostname: str) -> Optional[str]:
