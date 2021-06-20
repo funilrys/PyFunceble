@@ -325,13 +325,6 @@ class Requester:
 
         return self
 
-    def get_max_retries(self) -> int:
-        """
-        Provides the current value of :code:`max_retries`.
-        """
-
-        return self.max_retries
-
     def get_verify_certificate(self) -> bool:
         """
         Provides the current value of the certificate validation.
