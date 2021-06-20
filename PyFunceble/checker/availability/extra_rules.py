@@ -84,6 +84,7 @@ class ExtraRulesHandler:
             r"\.000webhostapp\.com": [
                 (self.__switch_to_down_if, 410),
             ],
+            r"\.24\.eu$": [(self.__switch_to_down_if, 503)],
             r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
