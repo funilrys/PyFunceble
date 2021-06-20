@@ -159,8 +159,9 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
         ):
             self.try_to_query_status_from_reputation()
 
-        if self.use_http_code_lookup and self.should_we_continue_test(
-            status_post_syntax_checker
+        if self.use_extra_rules or (
+            self.use_http_code_lookup
+            and self.should_we_continue_test(status_post_syntax_checker)
         ):
             self.try_to_query_status_from_http_status_code()
 
