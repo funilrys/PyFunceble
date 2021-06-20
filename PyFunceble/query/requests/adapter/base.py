@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import time
 from typing import Optional
 
 import requests.adapters
@@ -91,8 +92,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
 
         return self.resolving_cache[hostname]
 
-    @staticmethod
-    def resolve_without_cache(hostname: str) -> Optional[str]:
+    def resolve_without_cache(self, hostname: str) -> Optional[str]:
         """
         Resolves the IP of the given hostname.
 
@@ -100,16 +100,57 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             The hostname to get resolve.
         """
 
-        result = (
-            DNSQueryTool()
-            .guess_all_settings()
-            .set_query_record_type("A")
-            .set_subject(hostname)
-            .query()
-        )
+        def get_last_cname(subject: str) -> Optional[str]:
+            """
+            Given a subject, this function tries to query the CNAME until there
+            is none.
+
+            :param subject:
+                The first subject.
+            """
+
+            last_cname_result = list()
+            last_cname_new_subject = subject
+
+            while True:
+                local_last_cname_result = (
+                    self.dns_query_tool.set_query_record_type("CNAME")
+                    .set_subject(last_cname_new_subject)
+                    .query()
+                )
+
+                last_cname_result.extend(local_last_cname_result)
+
+                if local_last_cname_result:
+                    last_cname_new_subject = local_last_cname_result[0]
+                    time.sleep(self.dns_query_tool.BREAKOFF)
+                else:
+                    break
+
+            try:
+                return last_cname_result[-1]
+            except IndexError:
+                return None
+
+        result = set()
+
+        last_cname = get_last_cname(hostname)
+
+        if last_cname:
+            result.update(
+                self.dns_query_tool.set_query_record_type("A")
+                .set_subject(last_cname)
+                .query()
+            )
+        else:
+            result.update(
+                self.dns_query_tool.set_query_record_type("A")
+                .set_subject(hostname)
+                .query()
+            )
 
         if result:
-            return result[0]
+            return result.pop()
         return None
 
     def resolve(self, hostname: str) -> Optional[str]:
