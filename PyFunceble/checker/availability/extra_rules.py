@@ -75,27 +75,24 @@ class ExtraRulesHandler:
 
     _status: Optional[AvailabilityCheckerStatus] = None
 
-    regex_active2inactive_through_potentially_down: dict = dict()
-    regex_active2inactive_through_potentially_up: dict = dict()
+    regex_active2inactive: dict = dict()
 
     http_codes_dataset: Optional[Box] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus]) -> None:
-        self.regex_active2inactive_through_potentially_down = {
-            r"\.000webhostapp\.com": [self.__switch_to_down_if_410],
-            r"\.angelfire\.com$": [self.__switch_to_down_if_404],
+        self.regex_active2inactive = {
+            r"\.000webhostapp\.com": [
+                (self.__switch_to_down_if, 410),
+            ],
+            r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
-            r"\.canalblog\.com$": [self.__switch_to_down_if_404],
-            r"\.github\.io$": [self.__switch_to_down_if_404],
-            r"\.hpg.com.br$": [self.__switch_to_down_if_404],
-            r"\.liveadvert\.com$": [self.__switch_to_down_if_404],
-            r"\.skyrock\.com$": [self.__switch_to_down_if_404],
-            r"\.tumblr\.com$": [self.__switch_to_down_if_404],
-            r"\.wix\.com$": [self.__switch_to_down_if_404],
-        }
-
-        self.regex_active2inactive_through_potentially_up = {
-            r"\.blogspot\.": [self.__handle_blogspot],
+            r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.github\.io$": [(self.__switch_to_down_if, 404)],
+            r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
+            r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
             r"\.wordpress\.com$": [self.__handle_wordpress_dot_com],
         }
 
@@ -209,12 +206,15 @@ class ExtraRulesHandler:
 
         for (
             regex,
-            methods,
+            data,
         ) in regex_registry.items():
             broken = False
-            for method in methods:
+            for element in data:
                 if RegexHelper(regex).match(self.status.subject, return_match=False):
-                    method()
+                    if isinstance(element, tuple):
+                        element[0](*element[1:])
+                    else:
+                        element()
 
                     broken = True
                     break
@@ -234,22 +234,13 @@ class ExtraRulesHandler:
 
         return self
 
-    def __switch_to_down_if_404(self) -> "ExtraRulesHandler":
+    def __switch_to_down_if(self, status_code: int) -> "ExtraRulesHandler":
         """
-        Switches the status to inactive if the status code is set to 404.
-        """
-
-        if self.status.http_status_code == 404:
-            self.__switch_to_down()
-
-        return self
-
-    def __switch_to_down_if_410(self) -> "ExtraRulesHandler":
-        """
-        Switches the status to inactive if the status code is set to 410.
+        Switches the status to inactive if the status code is matching the
+        given one.
         """
 
-        if self.status.http_status_code == 410:
+        if self.status.http_status_code == status_code:
             self.__switch_to_down()
 
         return self
@@ -300,37 +291,13 @@ class ExtraRulesHandler:
 
         return self
 
-    def __handle_potentially_down(self) -> "ExtraRulesHandler":
+    def __handle_active2inactive(self) -> "ExtraRulesHandler":
         """
-        Handles the status deescalation though the list of potentially DOWN
-        status code.
-        """
-
-        if (
-            self.status.http_status_code
-            and self.status.http_status_code
-            in self.http_codes_dataset.list.potentially_down
-        ):
-            self.__regex_registry_handler(
-                self.regex_active2inactive_through_potentially_down
-            )
-
-        return self
-
-    def __handle_potentially_up(self) -> "ExtraRulesHandler":
-        """
-        Handles the status deescalation though the list of potentially UP
-        status code.
+        Handles the status deescalation.
         """
 
-        if (
-            self.status.http_status_code
-            and self.status.http_status_code
-            in self.http_codes_dataset.list.potentially_up
-        ):
-            self.__regex_registry_handler(
-                self.regex_active2inactive_through_potentially_up
-            )
+        if self.status.http_status_code:
+            self.__regex_registry_handler(self.regex_active2inactive)
 
         return self
 
@@ -349,14 +316,7 @@ class ExtraRulesHandler:
         self.status.status_source_before_extra_rules = self.status.status_source
 
         if self.status.status_before_extra_rules == PyFunceble.storage.STATUS.up:
-            if (
-                self.status.http_status_code
-                in self.http_codes_dataset.list.potentially_down
-            ):
-                self.__handle_potentially_down()
-
-            if not self.status.status_after_extra_rules:
-                self.__handle_potentially_up()
+            self.__handle_active2inactive()
 
         if (
             not self.status.status_after_extra_rules
