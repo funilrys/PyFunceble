@@ -222,6 +222,22 @@ class TestVersionUtility(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_is_older_than_release_candidate(self) -> None:
+        """
+        Tests the method which let us check if the local version is older
+        than the given one - which is a release candidate.
+        """
+
+        given_local = "1.0.0a1.dev (Hello, World)"
+        given_upstream = "1.0.0rc1.dev (Hello, World)"
+
+        expected = True
+
+        self.utility.local_version = given_local
+        actual = self.utility.is_older_than(given_upstream)
+
+        self.assertEqual(expected, actual)
+
     def test_is_older_than_huge_number(self) -> None:
         """
         Tests the method which let us check if the local version is older
@@ -251,7 +267,7 @@ class TestVersionUtility(unittest.TestCase):
         given_local = "1.0.0a1.dev (Hello, World)"
         given_upstream = "1.0.0a10.dev (Hello, World)"
 
-        expected = False
+        expected = True
 
         self.utility.local_version = given_local
         actual = self.utility.is_older_than(given_upstream)

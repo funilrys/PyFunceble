@@ -52,6 +52,8 @@ License:
 
 from typing import List, Optional, Tuple
 
+import packaging.version
+
 from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.file import FileHelper
 
@@ -97,6 +99,14 @@ class VersionUtility:
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
         self._local_version = value
+
+    @property
+    def real_local_version(self) -> str:
+        """
+        Provides the real local version.
+        """
+
+        return self.get_real_parsed_version(self.local_version)
 
     def set_local_version(self, value: str) -> "VersionUtility":
         """
@@ -156,6 +166,16 @@ class VersionUtility:
 
         return get_version_part(), get_codename_part()
 
+    def get_real_parsed_version(self, version: str) -> str:
+        """
+        Provides the real version to work with.
+
+        :param version:
+            The version to parse.
+        """
+
+        return ".".join(self.get_splitted(version)[0])
+
     def literally_compare(self, upstream_version: str) -> bool:
         """
         Compares :code:`new_version` with the given base version.
@@ -170,146 +190,32 @@ class VersionUtility:
 
         return self.local_version == upstream_version
 
-    @staticmethod
-    def __get_version_number_pep440(version_part: str) -> str:
-        """
-        Given a version part it returns the actual version.
-
-        As example:
-            Given :code:`0a1` returns `0971`.
-        """
-
-        result = []
-
-        for part in version_part:
-            if part.isdigit():
-                result.append(part)
-            else:
-                local_result = ""
-
-                for char in part:
-                    if char.isdigit():  # pragma: no cover ## Safety.
-                        local_result += local_result
-                    else:
-                        local_result += str(ord(char))
-
-                result.append(local_result)
-
-        return "".join(result)
-
-    def __get_comparison(self, upstream_version: str) -> List[bool]:
-        """
-        Process the comparison and provides a list representing the result
-        of the comparison.
-
-        :return:
-            A list, representing the comparison of the first 3 digits parts of the
-            given versions.
-
-            Each index will get :py:class:`None` if both are equal,
-            :py:class:`True` if the local is lower than the upstream one,
-            and :py:class`False` if the local version is greater than the
-            upstream one.
-        """
-
-        def compare(version_number: int, upstream_number: int) -> Optional[bool]:
-            """
-            Compare and provides the result of the comparison.
-            """
-
-            # pylint: disable=too-many-return-statements
-
-            # ORD A ==> 65 ==> 650
-            if upstream_number < 650 < version_number:
-                return True
-
-            if version_number < 650 < upstream_number:
-                return False
-
-            if version_number > 650 and upstream_number > 650:
-
-                local_upstream_number = str(upstream_number)
-
-                for index, value in enumerate(str(version_number)):
-                    try:
-                        if value == local_upstream_number[index]:
-                            continue
-                    except IndexError:
-                        # Example: Comparison of b10 to b1
-                        return False
-
-                    if value < local_upstream_number[index]:
-                        return True
-
-                    if value > local_upstream_number[index]:
-                        return False
-
-                return None
-
-            if version_number < upstream_number:
-                return True
-
-            if version_number > upstream_number:
-                return False
-
-            return None
-
-        local_digits, _ = self.get_splitted(self.local_version)
-        upstream_digits, _ = self.get_splitted(upstream_version)
-
-        result = []
-
-        for index, version_number in enumerate(local_digits):
-            try:
-                version_number = int(version_number)
-            except ValueError:
-                version_number = int(self.__get_version_number_pep440(version_number))
-
-            try:
-                upstream_number = int(upstream_digits[index])
-            except ValueError:
-                upstream_number = int(
-                    self.__get_version_number_pep440(upstream_digits[index])
-                )
-
-            result.append(compare(version_number, upstream_number))
-
-        return result
-
     def is_older_than(self, upstream_version: str) -> bool:
         """
         Compares if the local version is older that the given one.
         """
 
-        comparison = self.__get_comparison(upstream_version)
-
-        try:
-            first_not_none = [x for x in comparison if x is not None][0]
-
-            return first_not_none is True
-        except IndexError:
-            return False
+        return packaging.version.parse(
+            self.real_local_version
+        ) < packaging.version.parse(self.get_real_parsed_version(upstream_version))
 
     def is_equal_to(self, upstream_version: str) -> bool:
         """
         Compares if the local version is equal the given one.
         """
 
-        return all(x is None for x in self.__get_comparison(upstream_version))
+        return packaging.version.parse(
+            self.real_local_version
+        ) == packaging.version.parse(self.get_real_parsed_version(upstream_version))
 
     def is_recent(self, upstream_version: str) -> bool:
         """
         Compares if the upstream version is older that the given one.
         """
 
-        comparison = self.__get_comparison(upstream_version)
-
-        try:
-            first_not_none = [x for x in comparison if x is not None][0]
-
-            return first_not_none is False
-        except IndexError:
-            return False
+        return packaging.version.parse(
+            self.get_real_parsed_version(upstream_version)
+        ) < packaging.version.parse(self.real_local_version)
 
     def is_dev(self) -> bool:
         """
