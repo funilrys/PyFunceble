@@ -495,8 +495,8 @@ class Logger:
             else:
                 handler = logging.handlers.RotatingFileHandler(
                     os.path.join(self.output_directory, f"{level_name.lower()}.log"),
-                    maxBytes=10_000_000_000,
-                    backupCount=20,
+                    maxBytes=100_000_000,
+                    backupCount=5,
                 )
 
             if level_name in specials:
