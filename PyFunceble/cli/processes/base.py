@@ -464,7 +464,11 @@ class ProcessesManagerBase:
         """
 
         for worker in self._created_workers:
-            worker.start()
+            try:
+                worker.start()
+            except AssertionError:
+                # Example: cannot start a process twice
+                pass
 
             self._running_workers.append(worker)
 
