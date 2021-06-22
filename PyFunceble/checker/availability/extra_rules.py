@@ -264,7 +264,7 @@ class ExtraRulesHandler:
 
         regex_blogger = [r"create-blog.g?", r"87065", r"doesn&#8217;t&nbsp;exist"]
 
-        if self.status.subject.starts("http:"):
+        if self.status.subject.startswith("http:"):
             url = self.status.subject
         else:
             url = f"http://{self.status.subject}:80"
@@ -283,7 +283,7 @@ class ExtraRulesHandler:
 
         regex_wordpress = [r"doesn&#8217;t&nbsp;exist"]
 
-        if self.status.subject.starts("http:"):
+        if self.status.subject.startswith("http:"):
             url = self.status.subject
         else:
             url = f"http://{self.status.subject}:80"
