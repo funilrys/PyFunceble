@@ -327,7 +327,7 @@ class TestEnvironmentVariableHelper(unittest.TestCase):
         self.helper.set_value_in_env_file("no")
 
         with open(self.temp_env_file.name, "r", encoding="utf-8") as file_stream:
-            self.assertTrue(expected in file_stream.readlines())
+            self.assertTrue("no" in file_stream.read())
 
         expected = "no"
 
