@@ -126,22 +126,6 @@ Availability checkers
 
     - :code:`from PyFunceble import IPAvailabilityChecker`
 
-
-- IPv4:
-    - :class:`PyFunceble.checker.availability.ipv4.IPv4AvailabilityChecker`
-
-    or
-
-    - :code:`from PyFunceble import IPv4AvailabilityChecker`
-
-
-- IPv6:
-    - :class:`PyFunceble.checker.availability.ipv6.IPv6AvailabilityChecker`
-
-    or
-
-    - :code:`from PyFunceble import IPv6AvailabilityChecker`
-
 Syntax checkers
 ^^^^^^^^^^^^^^^
 
@@ -233,19 +217,3 @@ Reputation checkers
     or
 
     - :code:`from PyFunceble import IPReputationChecker`
-
-
-- IPv4:
-    - :class:`PyFunceble.checker.reputation.ipv4.IPv4ReputationChecker`
-
-    or
-
-    - :code:`from PyFunceble import IPv4ReputationChecker`
-
-
-- IPv6:
-    - :class:`PyFunceble.checker.reputation.ipv6.IPv6ReputationChecker`
-
-    or
-
-    - :code:`from PyFunceble import IPv6ReputationChecker`
