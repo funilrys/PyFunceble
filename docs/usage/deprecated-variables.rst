@@ -151,7 +151,7 @@ In the .code:`.PyFunceble_production.yaml` the value have changed from
 """""""""""""""""""""""""""
     .. deprecated:: 4.0.0
 
-    Integrated into `-w | --max-workers <index.html#w-max-workers>`_ 
+    Integrated into `-w | --max-workers <index.html#w-max-workers>`_
 
 
 ------
@@ -160,7 +160,7 @@ In the .code:`.PyFunceble_production.yaml` the value have changed from
 """"""""""""""""""""""""
     .. deprecated:: 4.0.0
 
-    Replaced with `-w | --max-workers <index.html#w-max-workers>`_ 
+    Replaced with `-w | --max-workers <index.html#w-max-workers>`_
 
 
 ------
@@ -187,7 +187,7 @@ In the .code:`.PyFunceble_production.yaml` the value have changed from
 """""""""""""
     .. deprecated:: 4.0.0
 
-    Replaced with `--ci-command <index.html#ci-command-something-cmd-something>`
+    Replaced with `--ci-command <index.html#ci-command-something-cmd-something>`_
 
 
 ------
