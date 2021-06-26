@@ -57,6 +57,7 @@ from typing import Optional, Union
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
+from PyFunceble.converter.url2netloc import Url2Netloc
 
 
 class HTTPStatusCode:
@@ -73,6 +74,7 @@ class HTTPStatusCode:
     _timeout: float = 5.0
     _verify_certificate: bool = True
     _allow_redirects: bool = False
+    _url2netloc: Optional[Url2Netloc] = None
 
     def __init__(
         self,
@@ -99,6 +101,8 @@ class HTTPStatusCode:
             self.allow_redirects = allow_redirects
         else:
             self.allow_redirects = self.STD_ALLOW_REDIRECTS
+
+        self._url2netloc = Url2Netloc()
 
         # Be sure that all settings are loaded proprely!!
         PyFunceble.factory.Requester.guess_all_settings()
@@ -311,15 +315,50 @@ class HTTPStatusCode:
     def get_status_code(self) -> int:
         """
         Provides the status code.
-        """
+
+        .. note::
+            The HTTP status code provided will differs regarding the following
+            conditions.
+
+            Assuming, that :code:`allow_redirects` is set to :py:class:`False`,
+            you will be provided the following:
+
+                - :code:`http://example.org (302) -> https://example.org (200) ===> 200`
+
+                - :code:`http://example.org (302) -> https://test.example.rog (200) ===> 302`
+
+                - :code:`http://example.org (302) -> https://test.example.org (301) -> https://example.org (200) ===> 302
+
+            On the other site if the :code:`allow_redirects` property is set to
+            :py:class:`True`, this method will provide the status of the
+            last one in the redirection order.
+
+            In case of any error, this method will provide the default one.
+        """  # pylint: disable=line-too-long
 
         try:
-            req = PyFunceble.factory.Requester.head(
+            req = PyFunceble.factory.Requester.get(
                 self.subject,
                 timeout=self.timeout,
                 verify=self.verify_certificate,
-                allow_redirects=self.allow_redirects,
+                allow_redirects=True,
             )
+
+            first_origin = self._url2netloc.set_data_to_convert(
+                req.history[0].url
+            ).get_converted()
+
+            if len(req.history) > 1:
+                final_origin = self._url2netloc.set_data_to_convert(
+                    req.history[1].url
+                ).get_converted()
+            else:
+                final_origin = self._url2netloc.set_data_to_convert(
+                    req.url
+                ).get_converted()
+
+            if not self.allow_redirects and first_origin != final_origin:
+                return req.history[0].status_code
 
             return req.status_code
         except (

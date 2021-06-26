@@ -427,7 +427,7 @@ class TestHTTPStatusCode(unittest.TestCase):
         # pylint: disable=unnecessary-lambda
         self.assertRaises(TypeError, lambda: self.query_tool.get_status_code())
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "head")
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
     def test_get_status_code(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject.
@@ -437,10 +437,13 @@ class TestHTTPStatusCode(unittest.TestCase):
             response_content = "I'm a teapot."
 
             response = requests.models.Response()
+            response.url = "https://example.org"
             response.status_code = 418
 
             # pylint: disable=protected-access
             response._content = str.encode(response_content)
+
+            response.history = [response]
 
             return response
 
@@ -453,7 +456,7 @@ class TestHTTPStatusCode(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    @unittest.mock.patch.object(PyFunceble.factory.Requester, "head")
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
     def test_get_status_code_error(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
@@ -470,6 +473,211 @@ class TestHTTPStatusCode(unittest.TestCase):
         request_mock.side_effect = mocking
 
         expected = self.query_tool.STD_UNKNOWN_STATUS_CODE
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_http_to_https(self, request_mock) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that a redirection from HTTP to HTTPS is done.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            first_response = requests.models.Response()
+            first_response.headers = {"Location": "https://example.org"}
+            first_response.url = "http://example.org"
+            first_response.status_code = 302
+
+            final_response = requests.models.Response()
+            final_response.url = "https://example.org"
+            final_response.status_code = 200
+
+            # pylint: disable=protected-access
+            final_response._content = "Hello, World!".encode("utf-8")
+
+            final_response.history = [first_response]
+
+            return final_response
+
+        self.query_tool.subject = "http://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = 200
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_http_to_https_different_subject(
+        self, request_mock
+    ) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that a redirection from HTTP to HTTPS is done but the
+        subject of the HTTPS query is different from the original one.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            first_response = requests.models.Response()
+            first_response.headers = {"Location": "https://test.example.org"}
+            first_response.url = "http://example.org"
+            first_response.status_code = 302
+
+            final_response = requests.models.Response()
+            final_response.url = "https://test.example.org"
+            final_response.status_code = 200
+
+            # pylint: disable=protected-access
+            final_response._content = "Hello, World!".encode("utf-8")
+
+            final_response.history = [first_response]
+
+            return final_response
+
+        self.query_tool.subject = "http://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = 302
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_http_to_https_different_subject_allow_redirects(
+        self, request_mock
+    ) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that a redirection from HTTP to HTTPS is done but the
+        subject of the HTTPS query is different from the original one.
+
+        In this case, we forces the interface to follow the redirect. Meaning
+        that the status code of the final one should be always returned.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            first_response = requests.models.Response()
+            first_response.headers = {"Location": "https://test.example.org"}
+            first_response.url = "http://example.org"
+            first_response.status_code = 302
+
+            final_response = requests.models.Response()
+            final_response.url = "https://test.example.org"
+            final_response.status_code = 200
+
+            # pylint: disable=protected-access
+            final_response._content = "Hello, World!".encode("utf-8")
+
+            final_response.history = [first_response]
+
+            return final_response
+
+        self.query_tool.allow_redirects = True
+        self.query_tool.subject = "http://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = 200
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_http_to_https_multiple_jump(self, request_mock) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that a redirection from HTTP to HTTPS is done but other
+        redirect came along the route.
+
+        In this case, only the first one (in the row) should be provided.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            first_response = requests.models.Response()
+            first_response.headers = {"Location": "https://test.example.org"}
+            first_response.url = "http://example.org"
+            first_response.status_code = 301
+
+            second_response = requests.models.Response()
+            second_response.headers = {"Location": "https://test2.example.org"}
+            second_response.url = "https://test.example.org"
+            second_response.status_code = 302
+
+            third_response = requests.models.Response()
+            third_response.headers = {"Location": "https://example.org"}
+            third_response.url = "https://test2.example.org"
+            third_response.status_code = 302
+
+            final_response = requests.models.Response()
+            final_response.url = "https://test.example.org"
+            final_response.status_code = 200
+
+            # pylint: disable=protected-access
+            final_response._content = "Hello, World!".encode("utf-8")
+
+            final_response.history = [first_response, second_response, third_response]
+
+            return final_response
+
+        self.query_tool.subject = "http://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = 301
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_http_to_https_multiple_jump_allow_redirects(
+        self, request_mock
+    ) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that a redirection from HTTP to HTTPS is done but other
+        redirect came along the route.
+
+        In this case we force the interface to follow the redirect. Meaning that
+        the final status code should be provided.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            first_response = requests.models.Response()
+            first_response.headers = {"Location": "https://test.example.org"}
+            first_response.url = "http://example.org"
+            first_response.status_code = 301
+
+            second_response = requests.models.Response()
+            second_response.headers = {"Location": "https://test2.example.org"}
+            second_response.url = "https://test.example.org"
+            second_response.status_code = 302
+
+            third_response = requests.models.Response()
+            third_response.headers = {"Location": "https://example.org"}
+            third_response.url = "https://test2.example.org"
+            third_response.status_code = 302
+
+            final_response = requests.models.Response()
+            final_response.url = "https://test.example.org"
+            final_response.status_code = 200
+
+            # pylint: disable=protected-access
+            final_response._content = "Hello, World!".encode("utf-8")
+
+            final_response.history = [first_response, second_response, third_response]
+
+            return final_response
+
+        self.query_tool.allow_redirects = True
+        self.query_tool.subject = "http://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = 200
         actual = self.query_tool.get_status_code()
 
         self.assertEqual(expected, actual)
