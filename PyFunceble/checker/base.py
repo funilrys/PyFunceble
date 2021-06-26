@@ -64,6 +64,14 @@ from PyFunceble.checker.status_base import CheckerStatusBase
 class CheckerBase:
     """
     Provides the base of all checker.
+
+    :param str subject:
+        Optional, The subject to work with.
+    :param bool do_syntax_check_first:
+        Optional, Forces the checker to first perform a syntax check,
+
+        .. warning::
+            This does not apply to the syntax checker - itself.
     """
 
     STD_DO_SYNTAX_CHECK_FIRST: bool = False
