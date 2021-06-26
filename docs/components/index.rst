@@ -23,7 +23,7 @@ Components
 .. include:: local.rst
 .. include:: logs-sharing.rst
 .. include:: mining.rst
-.. include:: multithreading.rst
+.. include:: multiprocessing.rst
 .. include:: output-files.rst
 .. include:: percentage.rst
 .. include:: public-suffix.rst
