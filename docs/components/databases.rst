@@ -41,7 +41,7 @@ we offer multiple database types which are (as per configuration) :code:`csv`
 Why different database types?
 """""""""""""""""""""""""""""
 
-With the introduction of the multithreading logic, it became natural to
+With the introduction of the multiprocessing logic, it became natural to
 introduce other database formats.
 
 How to use the :code:`mysql` or :code:`mariadb` format?

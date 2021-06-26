@@ -34,8 +34,8 @@ meaning that if you have 8 CPU cores, the value will be automatically set to
 
 .. warning::
     Keep in mind that the :code:`--max-workers` mostly - if not only - affects
-    the tester threads. Because we want to safely write the files, we still
-    need a single thread which read the submitted results and generate the
+    the tester processes. Because we want to safely write the files, we still
+    need a single processes which read the submitted results and generate the
     outputs.
 
     The reason we added this to PyFunceble :code:`4.0.0` is we don't want to

@@ -14,7 +14,8 @@ The tool to check the availability or syntax of domain, IP or URL.
 Provides all our the logic behind our multiprocessing mechanism.
 
 .. note::
-    Our threads submodules or class does not extends the multiprocessing module.
+    Our processes submodules or class does not extends the multiprocessing
+    module.
     They are just there to clarify our workflow for future contributors :-)
 
 Author:

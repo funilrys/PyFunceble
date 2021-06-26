@@ -21,7 +21,7 @@
 
     **Default value:** :code:`null`
 
-    **Description:** Sets the number of maximal threads workers that we are
+    **Description:** Sets the number of maximal processes workers that we are
     allowed to allocate for the testing.
 
 .. warning::

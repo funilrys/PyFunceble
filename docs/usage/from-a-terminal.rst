@@ -1024,13 +1024,13 @@ Sets the number of maximal worker to use.
 
 Keep in mind that the :code:`--max-workers` mostly - if not only - affects
 the number of tester sub-processes. Because we want to safely write the
-files, we still need a single thread which read the submitted results and
+files, we still need a single process which read the submitted results and
 generate the outputs.
 
 The reason we added this to PyFunceble :code:`4.0.0` is we don't want to
 have a wrongly formatted output file.
 
-If you have more than 2 CPU cores/threads the default will be number of
+If you have more than 2 CPU cores/processes the default will be number of
 CPU - 2. Otherwise, it will 1.
 
 **Default value:** :code:`max_workers: null`

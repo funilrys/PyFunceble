@@ -814,7 +814,7 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
 
 def get_multiprocessing_group_data() -> List[Tuple[List[str], dict]]:
     """
-    Provides the argument of the multithreading group data.
+    Provides the argument of the multiprocessing group data.
     """
 
     available_cpu = os.cpu_count()

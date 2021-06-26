@@ -708,7 +708,7 @@ class AvailabilityCheckerBase(CheckerBase):
 
         .. note::
             The addition into the WHOIS database is only done if this method is
-            running in a thread with a name that does not starts with
+            running in a process with a name that does not starts with
             :code:`PyFunceble` (case sensitive).
         """
 

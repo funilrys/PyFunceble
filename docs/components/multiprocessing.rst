@@ -26,9 +26,9 @@ How does it work?
 ^^^^^^^^^^^^^^^^^
 
 We read the given inputs, add them into some queues and generate some outputs
-through other queues or threads.
+through other queues or processes.
 
-Here is a short representation of the thread model behind the CLI testing:
+Here is a short representation of the process model behind the CLI testing:
 
 .. image:: https://raw.githubusercontent.com/PyFunceble/draw.io/master/dist/Process_Model_PyFunceble_CLI.png
     :alt: PyFunceble CLI Thread Model

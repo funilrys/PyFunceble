@@ -15,7 +15,7 @@ How does it work?
 
 .. note::
     Want to read the code ? It's here
-    :class:`~PyFunceble.cli.threads.mining.MinerThread`!
+    :class:`~PyFunceble.cli.processes.workers.miner.MinerWorker`!
 
 We access the given domain/URL and get the redirection history which we then
 test once we finished the normal test.
