@@ -345,7 +345,7 @@ class HTTPStatusCode:
             )
 
             first_origin = self._url2netloc.set_data_to_convert(
-                req.history[0].url
+                self.subject
             ).get_converted()
 
             if len(req.history) > 1:
