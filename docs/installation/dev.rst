@@ -87,7 +87,7 @@ With makepkg
 
 ::
 
-   $ wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev
+   $ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev -o PKGBUILD
    $ makepkg
    $ sudo pacman -U pyfunceble-dev*.tar.xz
 

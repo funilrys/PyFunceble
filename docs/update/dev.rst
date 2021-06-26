@@ -6,8 +6,8 @@ For development
 
 .. code-block:: bash
 
-   cd PyFunceble && git checkout dev
-   git fetch origin && git merge origin/dev
+   $ cd PyFunceble && git checkout dev
+   $ git fetch origin && git merge origin/dev
 
 .. note::
    As you previously installed with
@@ -29,7 +29,7 @@ From PyPi
 
 .. code-block:: bash
 
-   pip3 install --user --upgrade PyFunceble-dev
+   $ pip3 install --user --upgrade PyFunceble-dev
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
@@ -46,7 +46,7 @@ From GitHub
 
 .. code-block:: bash
 
-   pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+   $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
@@ -65,9 +65,9 @@ With makepkg
 
 .. code-block:: bash
 
-   wget https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev
-   makepkg
-   sudo pacman -U python-pyfunceble-dev*.tar.xz
+   $ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev -o PKGBUILD
+   $ makepkg
+   $ sudo pacman -U python-pyfunceble-dev*.tar.xz
 
 With your favorite AUR helper
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,7 +80,7 @@ With your favorite AUR helper
 
 .. code-block:: bash
 
-   yourFavoriteAurHelper -Syu python-pyfunceble-dev
+   $ yourFavoriteAurHelper -Syu python-pyfunceble-dev
 
 Using docker (hub)
 """"""""""""""""""
@@ -89,7 +89,7 @@ The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunc
 
 .. code-block:: bash
 
-   docker pull pyfunceble/pyfunceble-dev
+   $ docker pull pyfunceble/pyfunceble-dev
 
 
 Pure Python method
@@ -99,11 +99,11 @@ Execute the following and enjoy PyFunceble!
 
 .. code-block:: bash
 
-   cd PyFunceble && git checkout dev
-   git fetch origin && git merge origin/dev
-   python3 setup.py test
-   python3 setup.py install # Avoid this if you want to uninstall one day.
-   pip3 install --user --upgrade -e . # Prefer this method.
+   $ cd PyFunceble && git checkout dev
+   $ git fetch origin && git merge origin/dev
+   $ python3 setup.py test
+   $ python3 setup.py install # Avoid this if you want to uninstall one day.
+   $ pip3 install --user --upgrade -e . # Prefer this method.
 
 .. note::
    We recommend the :code:`--user` flag which installs the required dependencies
