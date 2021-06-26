@@ -42,6 +42,8 @@ servers, laptops, PCs, and Raspberry Pis. It is even used - thanks to our
 auto continue mechanism - with CI engines like GitHub Action, Travis CI, or
 GitLab CI.
 
+Happy testing with PyFunceble!
+
 .. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
     :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
