@@ -28,8 +28,9 @@ PyFunceble!
 * `Phishing.Database`_
 * `polish-adblock-filters`_
 * `polish-pihole-filters`_
-* `pornhosts`_
 * `porn-records`_
+* `pornhosts`_
+* `Steven Black ad-hoc list`_
 * `Stop.Google.Analytics.Ghost.Spam.HOWTO`_
 * `The-Big-List-of-Hacked-Malware-Web-Sites`_
 * `Top-Attacking-IP-Addresses-Against-Wordpress-Sites`_
@@ -60,11 +61,12 @@ PyFunceble!
 .. _Phishing.Database : https://github.com/mitchellkrogza/Phishing.Database
 .. _polish-adblock-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-adblock-filters/adblock.txt
 .. _polish-pihole-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-pihole-filters/hostfile.txt
-.. _pornhosts : https://github.com/Import-External-Sources/pornhosts
 .. _porn-records : https://www.mypdns.org/project/view/10/
+.. _pornhosts : https://github.com/Import-External-Sources/pornhosts
+.. _Steven Black ad-hoc list : https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts
 .. _Stop.Google.Analytics.Ghost.Spam.HOWTO : https://github.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO
 .. _The-Big-List-of-Hacked-Malware-Web-Sites : https://github.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites
 .. _Top-Attacking-IP-Addresses-Against-Wordpress-Sites : https://github.com/mitchellkrogza/Top-Attacking-IP-Addresses-Against-Wordpress-Sites
-.. _Ultimate.Hosts.Blacklist : https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist
 .. _Ultimate-Hosts-Blacklist : https://github.com/Ultimate-Hosts-Blacklist
+.. _Ultimate.Hosts.Blacklist : https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist
 .. _UncheckyAds : https://github.com/FadeMind/hosts.extras/tree/master/UncheckyAds
