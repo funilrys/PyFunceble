@@ -4,7 +4,7 @@ History of the project
 PyFunceble  is the little sister of `Funceble`_ which was archived on 13th March
 2018. In March 2018, because Funceble was starting to become a huge unmanageable
 script, I - Nissar Chababy aka `@funilrys`_ - decided to make it a Python tool
-for the purpose of extending my Python knowledge. It was meant for my own use
+while extending my Python knowledge. It was meant for my own use
 case.
 
 Back then, my problem was that I didn't want to download a huge hosts file
@@ -17,11 +17,11 @@ the gathering and interpretation of information from existing tools or
 protocols like WHOIS records, DNS lookup, or even HTTP status codes.
 
 The base of this tool was my idea.
-But as with many Open Source projects, communities or individuals, we evolve
+But as with many Open Source projects, communities, or individuals, we evolve
 with the people we meet, exchange with or just discuss
 with privately. PyFunceble was and is still not an exception to that.
 
-My main idea was to check the availability of domains in hosts files.
+My main idea was to check the availability of domains in a hosts files.
 But 3 years later, PyFunceble is now capable of a lot including:
 
 - The testing of domains, IPs, and URLs.
