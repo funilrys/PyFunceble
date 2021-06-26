@@ -60,6 +60,12 @@ Happy testing with PyFunceble!
    special-thanks
    supporting-the-project
 
+.. toctree::
+   :maxdepth: 3
+
+   respect/license
+   respect/code-of-conduct
+
 
 .. toctree::
    :maxdepth: 3
@@ -94,24 +100,12 @@ Happy testing with PyFunceble!
 .. toctree::
    :maxdepth: 3
 
-   respect/license
-   respect/code-of-conduct
-
-
-.. toctree::
-   :maxdepth: 3
-
    components/index
 
 .. toctree::
    :maxdepth: 3
 
    contributing/index
-
-.. toctree::
-   :maxdepth: 5
-
-   code/modules
 
 .. toctree::
    :maxdepth: 3
@@ -125,6 +119,11 @@ Happy testing with PyFunceble!
    facts/faq
    facts/known_issues
    facts/contact
+
+.. toctree::
+   :maxdepth: 5
+
+   code/modules
 
 Indices and tables
 ==================
