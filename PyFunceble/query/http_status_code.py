@@ -362,14 +362,12 @@ class HTTPStatusCode:
 
             return req.status_code
         except (
-            PyFunceble.factory.Requester.exceptions.ConnectionError,
+            PyFunceble.factory.Requester.exceptions.RequestException,
             PyFunceble.factory.Requester.exceptions.InvalidSchema,
             PyFunceble.factory.Requester.exceptions.InvalidURL,
             PyFunceble.factory.Requester.exceptions.MissingSchema,
-            PyFunceble.factory.Requester.exceptions.Timeout,
             socket.timeout,
             PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
-            PyFunceble.factory.Requester.exceptions.TooManyRedirects,
         ):
             pass
 
