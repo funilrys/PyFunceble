@@ -369,6 +369,7 @@ class HTTPStatusCode:
             PyFunceble.factory.Requester.exceptions.Timeout,
             socket.timeout,
             PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            PyFunceble.factory.Requester.exceptions.TooManyRedirects,
         ):
             pass
 

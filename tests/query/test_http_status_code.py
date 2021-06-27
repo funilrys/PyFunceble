@@ -478,6 +478,27 @@ class TestHTTPStatusCode(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
+    def test_get_status_code_too_many_redirects(self, request_mock) -> None:
+        """
+        Tests the method which let us get the status code of the given subject
+        for the case that too many redirects happened during the request.
+        """
+
+        def mocking(*args, **kwargs):  # pylint: disable=unused-argument
+            raise PyFunceble.factory.Requester.exceptions.TooManyRedirects(
+                "Exceeded 30 redirects."
+            )
+
+        self.query_tool.subject = "https://example.org"
+
+        request_mock.side_effect = mocking
+
+        expected = self.query_tool.STD_UNKNOWN_STATUS_CODE
+        actual = self.query_tool.get_status_code()
+
+        self.assertEqual(expected, actual)
+
+    @unittest.mock.patch.object(PyFunceble.factory.Requester, "get")
     def test_get_status_code_http_to_https(self, request_mock) -> None:
         """
         Tests the method which let us get the status code of the given subject
