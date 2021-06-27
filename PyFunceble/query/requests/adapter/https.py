@@ -130,7 +130,7 @@ class RequestHTTPSAdapter(RequestAdapterBase):
                 "assert_hostname", parsed_url.hostname
             )
 
-            request.url = f"https://{PyFunceble.storage.NOT_RESOLVED_STD_HOSTNAME}"
+            return self.fake_response()
 
         response = super().send(request, **kwargs)
         response.url = response.url.replace(hostname_ip, parsed_url.hostname)
