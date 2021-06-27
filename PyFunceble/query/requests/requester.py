@@ -68,6 +68,15 @@ from PyFunceble.query.requests.adapter.https import RequestHTTPSAdapter
 class Requester:
     """
     Provides our very own requests handler.
+
+    :param int max_retries:
+        Optional, The maximum number of retries to perform.
+    :param bool verify_certificate:
+        Optional, Should we verify and validate the SSL/TLS certificate ?
+    :param float timeout:
+        Optional, The timeout to apply to the query.
+    :param int max_redirects:
+        Optional, The maximum number of redirects to allow.
     """
 
     STD_VERIFY_CERTIFICATE: bool = False
@@ -79,6 +88,7 @@ class Requester:
     _timeout: float = 5.0
     _max_retries: int = 3
     _verify_certificate: bool = True
+    _max_redirects: int = 60
 
     session: Optional[requests.Session] = None
 
@@ -88,6 +98,7 @@ class Requester:
         max_retries: Optional[int] = None,
         verify_certificate: Optional[bool] = None,
         timeout: Optional[float] = None,
+        max_redirects: Optional[int] = None,
     ) -> None:
         if max_retries is not None:
             self.max_retries = max_retries
@@ -101,6 +112,9 @@ class Requester:
             self.timeout = timeout
         else:
             self.guess_and_set_timeout()
+
+        if max_redirects is not None:
+            self.max_redirects = max_redirects
 
         self.session = self.get_session()
 
@@ -182,7 +196,7 @@ class Requester:
             raise TypeError(f"<value> should be {int}, {type(value)} given.")
 
         if value < 1:
-            raise ValueError(f"<value> ({value!r}) should be less than 1.")
+            raise ValueError(f"<value> ({value!r}) should not be less than 1.")
 
         self._max_retries = value
 
@@ -195,6 +209,49 @@ class Requester:
         """
 
         self.max_retries = value
+
+        return self
+
+    @property
+    def max_redirects(self) -> int:
+        """
+        Provides the current state of the :code:`_max_redirects` attribute.
+        """
+
+        return self._max_redirects
+
+    @max_redirects.setter
+    @recreate_session
+    def max_redirects(self, value: int) -> None:
+        """
+        Sets the max redirects value to apply to all subsequent requests.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`int`.
+        :raise ValueError:
+            When the given :code:`value` is less than :code:`1`.
+        """
+
+        if not isinstance(value, int):
+            raise TypeError(f"<value> should be {int}, {type(value)} given.")
+
+        if value < 1:
+            raise ValueError(f"<value> ({value!r}) should not be less than 1.")
+
+        self._max_redirects = value
+
+    def set_max_redirects(self, value: int) -> "Requester":
+        """
+        Sets the max redirects value to apply to all subsequent requests.
+
+        :param value:
+            The value to set.
+        """
+
+        self.max_redirects = value
 
         return self
 
@@ -347,6 +404,7 @@ class Requester:
         session = requests.Session()
 
         session.verify = self.verify_certificate
+        session.max_redirects = self.max_redirects
 
         session.mount(
             "https://",
