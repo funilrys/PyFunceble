@@ -53,6 +53,8 @@ License:
 import argparse
 from typing import Optional, Sequence, Text
 
+# pylint: disable=raising-bad-type
+
 
 class OurArgumentParser(argparse.ArgumentParser):
     """
