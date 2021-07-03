@@ -657,39 +657,33 @@ class SystemLauncher(SystemBase):
         are processed.
         """
 
-        def remove_running_file(parent_dirname: str) -> None:
+        def remove_running_file(protocol: str) -> None:
             """
             Removes the running file.
 
-            :param parent_dirname:
-                The name of the directory to work from (under the output
-                directory).
+            :param protocol:
+                The protocol to work with.
             """
-
-            cleanup_tool = FilesystemCleanup(parent_dirname)
 
             file_helper.set_path(
                 os.path.join(
-                    cleanup_tool.get_output_basedir(),
+                    protocol["output_dir"],
                     PyFunceble.cli.storage.TEST_RUNNING_FILE,
                 )
             ).delete()
             PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
-        def remove_trigger_file(parent_dirname: str) -> None:
+        def remove_trigger_file(protocol: str) -> None:
             """
             Removes the trigger file.
 
-            :param parent_dirname:
-                The name of the directory to work from (under the output
-                directory).
+            :param protocol:
+                The protocol to work with.
             """
-
-            cleanup_tool = FilesystemCleanup(parent_dirname)
 
             file_helper.set_path(
                 os.path.join(
-                    cleanup_tool.get_output_basedir(),
+                    protocol["output_dir"],
                     PyFunceble.cli.storage.CI_TRIGGER_FILE,
                 )
             ).delete()
@@ -717,15 +711,32 @@ class SystemLauncher(SystemBase):
                     session_id=self.sessions_id[protocol["destination"]]
                 )
 
+        def remove_preload_dataset(protocol: dict) -> None:
+            """
+            Removes the preloader dataset file.
+
+            :param protocol:
+                The protocol to work with.
+            """
+
+            if self.file_preloader.authorized:
+                file_helper.set_path(
+                    os.path.join(
+                        protocol["output_dir"],
+                        PyFunceble.cli.storage.PRE_LOADER_FILE,
+                    )
+                ).delete()
+                PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
+
         file_helper = FileHelper()
 
         for protocol in self.testing_protocol:
-            if protocol["destination"]:
-                remove_running_file(protocol["destination"])
-                remove_trigger_file(protocol["destination"])
+            if "destination" in protocol or "output_dir" in protocol:
+                remove_running_file(protocol)
+                remove_trigger_file(protocol)
 
-            if protocol["output_dir"]:
                 remove_continue_dataset(protocol)
+                remove_preload_dataset(protocol)
 
         return self
 
