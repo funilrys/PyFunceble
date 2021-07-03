@@ -660,18 +660,19 @@ class SystemLauncher(SystemBase):
         def remove_running_file(protocol: str) -> None:
             """
             Removes the running file.
-
-            :param protocol:
-                The protocol to work with.
+            :param parent_dirname:
+                The name of the directory to work from (under the output
+                directory).
             """
 
-            file_helper.set_path(
-                os.path.join(
-                    protocol["output_dir"],
-                    PyFunceble.cli.storage.TEST_RUNNING_FILE,
-                )
-            ).delete()
-            PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
+            if protocol["output_dir"]:
+                file_helper.set_path(
+                    os.path.join(
+                        protocol["output_dir"],
+                        PyFunceble.cli.storage.TEST_RUNNING_FILE,
+                    )
+                ).delete()
+                PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
         def remove_trigger_file(protocol: str) -> None:
             """
@@ -681,13 +682,14 @@ class SystemLauncher(SystemBase):
                 The protocol to work with.
             """
 
-            file_helper.set_path(
-                os.path.join(
-                    protocol["output_dir"],
-                    PyFunceble.cli.storage.CI_TRIGGER_FILE,
-                )
-            ).delete()
-            PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
+            if protocol["output_dir"]:
+                file_helper.set_path(
+                    os.path.join(
+                        protocol["output_dir"],
+                        PyFunceble.cli.storage.CI_TRIGGER_FILE,
+                    )
+                ).delete()
+                PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
         def remove_continue_dataset(protocol: dict) -> None:
             """
@@ -697,13 +699,16 @@ class SystemLauncher(SystemBase):
                 The protocol to work with.
             """
 
-            if isinstance(self.continue_dataset, CSVContinueDataset):
+            if (
+                isinstance(self.continue_dataset, CSVContinueDataset)
+                and protocol["output_dir"]
+            ):
                 # CSV file :-)
                 self.continue_dataset.set_base_directory(protocol["output_dir"])
                 file_helper.set_path(self.continue_dataset.source_file).delete()
 
                 PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
-            else:
+            elif protocol["destination"]:
                 # MariaDB / MySQL
 
                 #   ## We specially have different signature.
@@ -719,7 +724,7 @@ class SystemLauncher(SystemBase):
                 The protocol to work with.
             """
 
-            if self.file_preloader.authorized:
+            if self.file_preloader.authorized and protocol["output_dir"]:
                 file_helper.set_path(
                     os.path.join(
                         protocol["output_dir"],
@@ -875,7 +880,9 @@ class SystemLauncher(SystemBase):
 
             del self.migrator_process_manager
 
-            if not self.file_preloader.authorized:
+            if not self.file_preloader.authorized or (
+                not self.args.files and not self.args.url_files
+            ):
                 self.__start_core_processes()
 
             self.fill_protocol()
