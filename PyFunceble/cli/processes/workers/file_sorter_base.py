@@ -56,7 +56,7 @@ import secrets
 import tempfile
 from io import TextIOWrapper
 from itertools import islice
-from typing import Generator, List, Tuple
+from typing import Any, Generator, List, Tuple
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
@@ -85,8 +85,12 @@ class FileSorterWorkerBase(WorkerBase):
 
     @classmethod
     def process_file_sorting(
-        cls, file: str, remove_duplicates: bool = True, write_header: bool = True
-    ) -> None:  # pylint: disable=too-many-locals
+        cls,
+        file: str,
+        remove_duplicates: bool = True,
+        write_header: bool = True,
+        sorting_key: Any = None,
+    ) -> None:
         """
         Process the sorting of the given file.
 
@@ -105,7 +109,14 @@ class FileSorterWorkerBase(WorkerBase):
                 When this is set to :py:class:`True`, we assume that the header
                 itself was already given. Meaning that the first 2 commented
                 lines will be excluded from the sorting and regenerated.
+        :param sorting_key:
+            The sorting key to apply while sorting.
+
+            This is the lambda/function that goes into the :code:`key` argument
+            of the :py:class:`sorted` function.
         """
+
+        # pylint: disable=too-many-locals,too-many-statements
 
         def merge_files(
             files: List[TextIOWrapper],
@@ -166,7 +177,9 @@ class FileSorterWorkerBase(WorkerBase):
         temp_directory = tempfile.TemporaryDirectory()
         temporary_output_file = os.path.join(temp_directory.name, secrets.token_hex(6))
 
-        sorting_key = get_best_sorting_key()
+        if not sorting_key:
+            sorting_key = get_best_sorting_key()
+
         file_helper = FileHelper(file)
 
         sorted_files = []
