@@ -1,5 +1,5 @@
-Using the PyFunceble (Python) API
----------------------------------
+PyFunceble Python API
+---------------------
 
 If you are working with a python script, module or even class,
 you can integrate **PyFunceble** to your main logic by importing

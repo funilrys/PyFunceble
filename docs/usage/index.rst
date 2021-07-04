@@ -1,9 +1,10 @@
 Usage
 =====
 
-.. include:: with-our-python-api.rst
-.. include:: from-a-terminal.rst
+.. include:: bash-terminal.rst
+.. include:: github-ci.rst
+.. include:: gitlab-ci.rst
+.. include:: travis-ci.rst
 .. include:: deprecated-variables.rst
-.. include:: from-github-actions.rst
-.. include:: from-gitlab-ci.rst
-.. include:: from-travis-ci.rst
+
+.. include:: python-api.rst

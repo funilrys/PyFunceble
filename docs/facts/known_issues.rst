@@ -140,15 +140,19 @@ on a closed source Windows computer.
 
 Among these issues is the default settings for the installation programs,
 where we all know the users tend to just click next next next without reading
-the questions, and path to hell continues.
+the questions, and the path toward hell continues.
 
-  1. To have Python to become installed in `PATH:` by the installer, you are
-     required to use the advanced install option (I was told @spirillen).
+  1. To have Python to become installed within the system :code:`PATH:` by the
+     installer, you are required to use the advanced install option.
+     (spirillen_ Was told).
 
-  2. Cygwin do not INCLUDE- and therefore not exporting current PATH to running
-     environment. Full path is always required, be set by own scripts.
+  2. Cygwin do not INCLUDE- and therefore not exporting current :code:`PATH` to running
+     environment. Full path is always required, to be set by your scripts or
+     command line.
 
-Since any of this isn't a @PyFunceble issue we have left a Cygwin_ related
-issue at github.
+Since any of these problems, ain't @PyFunceble related issues we have left a
+Cygwin_ related issue at github.
 
 .. _Cygwin: https://github.com/funilrys/PyFunceble/issues/127
+
+.. _spirillen: https://mypdns.org/spirillen
