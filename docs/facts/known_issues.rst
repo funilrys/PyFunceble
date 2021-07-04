@@ -130,8 +130,8 @@ to do this or manually run this SQL code insode your database.
 .. sectionauthor:: @spirillen
 
 
-Windows with Python or Cygwin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Windows Powershell with Python or Cygwin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. versionadded:: all
 
