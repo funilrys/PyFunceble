@@ -76,7 +76,9 @@ simultaneously.
 
 ------
 
+
 .. sectionauthor:: @spirillen
+
 
 Sql Missing default data in :code:`whois` table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,3 +123,32 @@ to do this or manually run this SQL code insode your database.
 .. _SQLAlchemy: https://www.sqlalchemy.org/
 
 .. _dBeaver: https://dbeaver.io/
+
+------
+
+
+.. sectionauthor:: @spirillen
+
+
+Windows with Python or Cygwin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: all
+
+There are a number of well Known limitation by running or even installing Python
+on a closed source Windows computer.
+
+Among these issues is the default settings for the installation programs,
+where we all know the users tend to just click next next next without reading
+the questions, and path to hell continues.
+
+  1. To have Python to become installed in `PATH:` by the installer, you are
+     required to use the advanced install option (I was told @spirillen).
+
+  2. Cygwin do not INCLUDE- and therefore not exporting current PATH to running
+     environment. Full path is always required, be set by own scripts.
+
+Since any of this isn't a @PyFunceble issue we have left a Cygwin_ related
+issue at github.
+
+.. _Cygwin: https://github.com/funilrys/PyFunceble/issues/127
