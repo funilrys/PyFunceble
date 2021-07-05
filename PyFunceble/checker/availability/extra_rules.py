@@ -89,6 +89,7 @@ class ExtraRulesHandler:
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
+            r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
             r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
             r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
             r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
