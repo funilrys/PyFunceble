@@ -97,7 +97,7 @@ class ExtraRulesHandler:
             r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
             r"\.wordpress\.com$": [self.__handle_wordpress_dot_com],
             r"\.weebly\.com$": [
-                (self.__switch_to_down_if, 406)
+                (self.__switch_to_down_if, 404)
             ],
         }
 
