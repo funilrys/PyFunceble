@@ -676,10 +676,13 @@ class SystemLauncher(SystemBase):
             ):
                 break
 
-                if (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
-                ):
-                    break
+            generate_percentage_file(protocol["destination"])
+
+            # pylint: disable=line-too-long
+            if (
+                PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+            ):
+                break
 
         return self
 
