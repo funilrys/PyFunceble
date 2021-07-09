@@ -314,6 +314,7 @@ class SystemLauncher(SystemBase):
 
         if self.args.files:
             for file in self.args.files:
+                # pylint: disable=line-too-long
                 if (
                     not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
                 ):
@@ -346,6 +347,7 @@ class SystemLauncher(SystemBase):
 
         if self.args.url_files:
             for file in self.args.url_files:
+                # pylint: disable=line-too-long
                 if (
                     not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
                 ):
@@ -664,13 +666,16 @@ class SystemLauncher(SystemBase):
                         self.stdout_printer.print_interpolated_line()
 
         for protocol in self.testing_protocol:
-            if protocol["destination"]:
-                generate_percentage_file(protocol["destination"])
+            if not protocol["destination"]:
+                continue
 
-                if (
-                    PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
-                ):
-                    break
+            generate_percentage_file(protocol["destination"])
+
+            # pylint: disable=line-too-long
+            if (
+                PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+            ):
+                break
 
         return self
 
