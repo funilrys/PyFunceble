@@ -676,6 +676,11 @@ class SystemLauncher(SystemBase):
             ):
                 break
 
+                if (
+                    PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                ):
+                    break
+
         return self
 
     def remove_unwanted_files(self) -> "SystemLauncher":
