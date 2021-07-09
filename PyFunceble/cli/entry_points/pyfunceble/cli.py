@@ -668,6 +668,18 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--dots",
+            ],
+            {
+                "dest": "cli_testing.display_mode.dots",
+                "action": "store_true",
+                "help": "Activate or disables the display of dots or other\n"
+                "characters when we skip the test of a subject. %s"
+                % get_configured_value("cli_testing.display_mode.dots"),
+            },
+        ),
+        (
+            [
                 "--hierarchical",
             ],
             {
@@ -698,6 +710,19 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "type": str,
                 "help": "Sets the IP to prefix each lines of the hosts file. %s"
                 % get_configured_value("cli_testing.hosts_ip"),
+            },
+        ),
+        (
+            [
+                "--merge-output",
+            ],
+            {
+                "dest": "cli_testing.file_generation.merge_output_dirs",
+                "action": "store_true",
+                "help": "Activates or disables the merging of the outputs of all\n"
+                "inputted files inside a single subdirectory as opposed to the\n"
+                "normal behavior. %s"
+                % get_configured_value("cli_testing.file_generation.merge_output_dirs"),
             },
         ),
         (
@@ -761,18 +786,6 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "RAW file(s). What is meant is a list with only a list of\n"
                 "subject (one per line). %s"
                 % get_configured_value("cli_testing.file_generation.plain"),
-            },
-        ),
-        (
-            [
-                "--dots",
-            ],
-            {
-                "dest": "cli_testing.display_mode.dots",
-                "action": "store_true",
-                "help": "Activate or disables the display of dots or other\n"
-                "characters when we skip the test of a subject. %s"
-                % get_configured_value("cli_testing.display_mode.dots"),
             },
         ),
         (

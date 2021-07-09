@@ -363,6 +363,7 @@ DEFAULT_CONFIG: dict = {
             "no_file": False,
             "plain": True,
             "unified_results": False,
+            "merge_output_dirs": False,
         },
         "hosts_ip": "0.0.0.0",
         "inactive_db": True,

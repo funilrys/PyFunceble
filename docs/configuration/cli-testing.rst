@@ -156,7 +156,6 @@
         This option does not have any effect if the auto continue subsystem is
         disabled.
 
-
 :code:`cli_testing[ci]`
 """""""""""""""""""""""
 
@@ -542,5 +541,15 @@
     **Description:** Activates or disables the generation of the unified results
     file instead of the splitted one.
 
+:code:`cli_testing[file_generation][merge_output_dirs]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the merging of the outputs of all
+    inputted files inside a single subdirectory as opposed to the normal
+    behavior.
 
 

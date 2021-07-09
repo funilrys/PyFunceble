@@ -187,6 +187,7 @@ UNIVERSAL_OUTPUTS: dict = {
         },
     },
     "parent_directory": "output",
+    "merged_directory": "merged_results",
     "splitted": {"directory": "splitted"},
 }
 
