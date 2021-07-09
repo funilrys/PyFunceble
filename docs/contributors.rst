@@ -36,6 +36,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   Yuki2718 -  `@Yuki2718`_
+-   Zachinquarantine - `@Zachinquarantine`_
 -   ZeroDot1 - `@ZeroDot1`_
 
 .. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
@@ -59,6 +60,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
 .. _@Yuki2718: https://github.com/Yuki2718
+.. _@Zachinquarantine: https://github.com/Zachinquarantine
 .. _@ZeroDot1: https://github.com/ZeroDot1
 .. _Funceble: https://github.com/funilrys/funceble
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
