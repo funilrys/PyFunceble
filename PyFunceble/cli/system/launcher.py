@@ -314,11 +314,20 @@ class SystemLauncher(SystemBase):
 
         if self.args.files:
             for file in self.args.files:
+                if (
+                    not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                ):
+                    destination = get_destination_from_origin(file)
+                else:
+                    destination = get_destination_from_origin(
+                        PyFunceble.cli.storage.OUTPUTS.merged_directory
+                    )
+
                 to_append = {
                     "type": "file",
                     "subject_type": "domain",
                     # pylint: disable=line-too-long
-                    "destination": get_destination_from_origin(file),
+                    "destination": destination,
                     "source": file,
                     "subject": file,
                     "checker_type": self.checker_type,
@@ -337,11 +346,20 @@ class SystemLauncher(SystemBase):
 
         if self.args.url_files:
             for file in self.args.url_files:
+                if (
+                    not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                ):
+                    destination = get_destination_from_origin(file)
+                else:
+                    destination = get_destination_from_origin(
+                        PyFunceble.cli.storage.OUTPUTS.merged_directory
+                    )
+
                 to_append = {
                     "type": "file",
                     "subject_type": "url",
                     # pylint: disable=line-too-long
-                    "destination": get_destination_from_origin(file),
+                    "destination": destination,
                     "source": file,
                     "subject": file,
                     "checker_type": self.checker_type,
@@ -469,7 +487,7 @@ class SystemLauncher(SystemBase):
             else:
                 protocol["subject"] = os.path.relpath(protocol["subject"])
 
-            protocol["source"] = os.path.relpath(protocol["destination"])
+            protocol["source"] = os.path.relpath(protocol["source"])
             protocol["session_id"] = self.sessions_id[protocol["destination"]]
 
             if isinstance(self.continue_dataset, CSVContinueDataset):
@@ -648,6 +666,11 @@ class SystemLauncher(SystemBase):
         for protocol in self.testing_protocol:
             if protocol["destination"]:
                 generate_percentage_file(protocol["destination"])
+
+                if (
+                    PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+                ):
+                    break
 
         return self
 
