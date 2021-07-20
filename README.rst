@@ -169,6 +169,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
 -   Yuki2718 - `@Yuki2718`_
+-   Zachinquarantine - `@Zachinquarantine`_
 -   ZeroDot1 - `@ZeroDot1`_
 
 ___________________________________________
@@ -293,6 +294,7 @@ License
 .. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza
 .. _@Yuki2718: https://github.com/Yuki2718
+.. _@Zachinquarantine: https://github.com/Zachinquarantine
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
 .. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html

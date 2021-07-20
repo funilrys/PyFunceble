@@ -107,8 +107,9 @@ class FilePreloader:
     _authorized: Optional[bool] = False
     _protocol: Optional[dict] = None
 
-    __description: dict = dict()
+    __description: list = list()
     __description_file: Optional[str] = None
+    __matching_index: int = 0
 
     continuous_integration: Optional[ContinuousIntegrationBase] = None
 
@@ -310,16 +311,52 @@ class FilePreloader:
 
     def __load_description(self) -> "FilePreloader":
         """
-        Loads the description into the interface.
+        Loads the descriptoin into the interface.
         """
 
+        def set_new_dataset(*, append: bool = False, new_index: int = 0) -> None:
+            """
+            Sets the default dataset into the given index.
+
+            :param new_index:
+                The index to write into.
+            :param append:
+                Append instead.
+            """
+
+            new_dataset = copy.deepcopy(self.protocol)
+            new_dataset["previous_hash"] = None
+            new_dataset["hash"] = None
+            new_dataset["line_number"] = 1
+
+            if append:
+                self.__description.append(new_dataset)
+            elif self.__description:
+                self.__description[new_index] = new_dataset
+            else:
+                self.__description = [new_dataset]
+
         if self.does_preloader_description_file_exists():
-            self.__description = DictHelper().from_json_file(self.__description_file)
+            dataset = DictHelper().from_json_file(self.__description_file)
+
+            if not isinstance(dataset, list):
+                dataset = [dataset]
+
+            found = False
+
+            for index, descr in enumerate(dataset):
+                if all(x in descr and descr[x] == y for x, y in self.protocol.items()):
+                    self.__matching_index = index
+                    found = True
+                    break
+
+            self.__description = dataset
+
+            if not found:
+                set_new_dataset(append=True)
+                self.__matching_index = len(self.__description) - 1
         else:
-            self.__description = copy.deepcopy(self.protocol)
-            self.__description["previous_hash"] = None
-            self.__description["hash"] = None
-            self.__description["line_number"] = 1
+            set_new_dataset()
 
         return self
 
@@ -328,7 +365,7 @@ class FilePreloader:
         Saves the description at its destination.
         """
 
-        self.__description.update(self.protocol)
+        self.__description[self.__matching_index].update(self.protocol)
 
         DictHelper(self.__description).to_json_file(self.__description_file)
 
@@ -343,14 +380,18 @@ class FilePreloader:
 
         broken = False
         file_helper = FileHelper(self.protocol["subject"])
-        self.__description["hash"] = HashHelper().hash_file(file_helper.path)
+        self.__description[self.__matching_index]["hash"] = HashHelper().hash_file(
+            file_helper.path
+        )
 
         if isinstance(self.continue_dataset, CSVContinueDataset):
             self.continue_dataset.set_base_directory(self.protocol["output_dir"])
 
         if (
-            self.__description["checker_type"] != self.protocol["checker_type"]
-            or self.__description["subject_type"] != self.protocol["subject_type"]
+            self.__description[self.__matching_index]["checker_type"]
+            != self.protocol["checker_type"]
+            or self.__description[self.__matching_index]["subject_type"]
+            != self.protocol["subject_type"]
         ):
             try:
                 self.continue_dataset.cleanup()
@@ -358,24 +399,31 @@ class FilePreloader:
                 self.continue_dataset.cleanup(session_id=self.protocol["session_id"])
 
         if (
-            self.__description["previous_hash"]
-            and self.__description["hash"] != self.__description["previous_hash"]
+            self.__description[self.__matching_index]["previous_hash"]
+            and self.__description[self.__matching_index]["hash"]
+            != self.__description[self.__matching_index]["previous_hash"]
         ):
             # Forces the reading of each lines because there is literally no
             # way to know where something has been changed.
-            self.__description["line_number"] = 1
+            self.__description[self.__matching_index]["line_number"] = 1
 
         if (
-            self.__description["checker_type"] != self.protocol["checker_type"]
-            or self.__description["subject_type"] != self.protocol["subject_type"]
-            or self.__description["hash"] != self.__description["previous_hash"]
+            self.__description[self.__matching_index]["checker_type"]
+            != self.protocol["checker_type"]
+            or self.__description[self.__matching_index]["subject_type"]
+            != self.protocol["subject_type"]
+            or self.__description[self.__matching_index]["hash"]
+            != self.__description[self.__matching_index]["previous_hash"]
         ):
             try:
                 with file_helper.open("r", encoding="utf-8") as file_stream:
                     line_num = 1
 
                     for line in file_stream:
-                        if line_num < self.__description["line_number"]:
+                        if (
+                            line_num
+                            < self.__description[self.__matching_index]["line_number"]
+                        ):
                             line_num += 1
                             continue
 
@@ -426,14 +474,16 @@ class FilePreloader:
                             if print_dots:
                                 print_single_line()
 
-                        self.__description["line_number"] += 1
+                        self.__description[self.__matching_index]["line_number"] += 1
                         line_num += 1
             except KeyboardInterrupt as exception:
                 self.__save_description()
                 raise exception
 
         if not broken:
-            self.__description["previous_hash"] = self.__description["hash"]
+            self.__description[self.__matching_index][
+                "previous_hash"
+            ] = self.__description[self.__matching_index]["hash"]
 
         self.__save_description()
 

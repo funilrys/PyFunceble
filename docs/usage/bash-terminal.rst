@@ -872,6 +872,17 @@ Optional values. (From less to more information)
     * :code:`--logging-level warning` ==> WARNING
     * :code:`--logging-level debug` ==> DEBUG
 
+------
+
+.. _merge-output
+
+:code:`--merge-output`
+""""""""""""""""""""""
+
+Activates or disables the merging of the outputs of all inputted files inside a
+single subdirectory as opposed to the normal behavior.
+
+**Default value:** :code:`merge_output_dirs: False`
 
 ------
 

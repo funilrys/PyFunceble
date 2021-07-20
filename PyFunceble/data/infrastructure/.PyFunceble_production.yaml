@@ -190,6 +190,10 @@ cli_testing:
     # outputted to STDOUT.
     unified_results: False
 
+    # Activates or disables the merging of the results of all inputted files into
+    # one single output subdirectory.
+    merge_output_dirs: False
+
 lookup:
   # Provides everything related to the lookup.
 

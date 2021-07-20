@@ -89,12 +89,14 @@ class ExtraRulesHandler:
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
+            r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
             r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
             r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
             r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
             r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
             r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
             r"\.wordpress\.com$": [self.__handle_wordpress_dot_com],
+            r"\.weebly\.com$": [(self.__switch_to_down_if, 404)],
         }
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
