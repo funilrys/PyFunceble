@@ -18,8 +18,12 @@ At any of the listed configuration location, the following file will be read:
 
 - :code:`.PyFunceble.yaml`
     - This file is generated automatically if missing.
-    - This file is may be automatically updated if you choose to merge the
-      upstream configuration when a new key is introduced or removed.
+    - This file is automatically replaced if you choose to merge the
+      upstream configuration when a features key is introduced or removed.
+      
+      This "new" behavior was introduced at the same time `.PyFunceble.overwrite.yaml`
+      was. This is to ensure PyFunceble at all time is running on a fully compatible
+      version of `.PyFunceble.yaml`
 
 - :code:`.PyFunceble.overwrite.yaml`
     - This file can only be maintained by a human-controlled
