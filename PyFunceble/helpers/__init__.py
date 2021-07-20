@@ -17,10 +17,10 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,14 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from .command import Command
-from .dict import Dict
-from .directory import Directory
-from .download import Download
-from .environment_variable import EnvironmentVariable
-from .file import File
-from .hash import Hash
-from .list import List
-from .merge import Merge
-from .regex import Regex

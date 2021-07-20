@@ -17,18 +17,18 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../"))
 
-from setup import _get_version
+from setup import get_version
 
 # -- Project information -----------------------------------------------------
 
 project = "PyFunceble"
-copyright = "2017, 2018, 2019, 2020 Nissar Chababy (@funilrys)"
+copyright = "2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys)"
 author = "Nissar Chababy (@funilrys)"
 
 # The short X.Y version
-version = _get_version()
+version = get_version()
 # The full version, including alpha/beta/rc tags
-release = _get_version()
+release = get_version()
 
 
 # -- General configuration ---------------------------------------------------

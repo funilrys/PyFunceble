@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the downloader of the user agents file.
+Provides the downloader of the latest user agents database file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,26 +50,29 @@ License:
     limitations under the License.
 """
 
-import PyFunceble
+import os
 
-from .base import DownloaderBase
+import PyFunceble.storage
+from PyFunceble.downloader.base import DownloaderBase
 
 
 class UserAgentsDownloader(DownloaderBase):
     """
-    Provides the downloader of the user agents file.
+    Provides the downloader of our user agent file.
     """
 
-    DOWNTIME_INDEX = "user_agents"
-    REDOWNLOAD_AFTER = 1
+    DOWNTIME_INDEX: str = "user_agents"
+    DOWNLOAD_FREQUENCY: int = 1
 
-    def __init__(self):
-        self.download_link = PyFunceble.CONFIGURATION.links.user_agents
-        self.destination = (
-            f"{PyFunceble.CONFIG_DIRECTORY}"
-            f"{PyFunceble.abstracts.Infrastructure.USER_AGENT_FILENAME}"
+    def __init__(self) -> None:
+        self.destination = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.storage.USER_AGENT_FILENAME,
         )
+        self.download_link = PyFunceble.storage.USER_AGENT_DUMP_LINK
 
         super().__init__()
 
-        self.process()
+    @property
+    def authorized(self) -> bool:
+        return True

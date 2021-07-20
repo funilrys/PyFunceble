@@ -1,4 +1,4 @@
-# pylint:disable=invalid-name, cyclic-import
+# pylint: disable=invalid-name
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -16,10 +16,10 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -34,7 +34,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -48,736 +48,712 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
 import warnings
-from datetime import datetime
-from os import path
-from os import sep as directory_separator
-from time import sleep
+from typing import List
 
-from colorama import Fore
-from dotenv import load_dotenv
+import PyFunceble.storage
+from PyFunceble.checker.availability.domain import DomainAvailabilityChecker
+from PyFunceble.checker.availability.domain_and_ip import DomainAndIPAvailabilityChecker
+from PyFunceble.checker.availability.ip import IPAvailabilityChecker
+from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
+from PyFunceble.checker.availability.url import URLAvailabilityChecker
+from PyFunceble.checker.reputation.domain import DomainReputationChecker
+from PyFunceble.checker.reputation.domain_and_ip import DomainAndIPReputationChecker
+from PyFunceble.checker.reputation.ip import IPReputationChecker
+from PyFunceble.checker.reputation.url import URLReputationChecker
+from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.ip import IPSyntaxChecker
+from PyFunceble.checker.syntax.ipv4 import IPv4SyntaxChecker
+from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker
+from PyFunceble.checker.syntax.second_lvl_domain import SecondLvlDomainSyntaxChecker
+from PyFunceble.checker.syntax.subdomain import SubDomainSyntaxChecker
+from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.converter.subject2complements import Subject2Complements
 
-from PyFunceble import abstracts
-from PyFunceble import config as cconfig
-from PyFunceble import (
-    converter,
-    core,
-    database,
-    downloader,
-    engine,
-    exceptions,
-    extractor,
-    helpers,
-    lookup,
-    output,
-    status,
-)
-from PyFunceble.check import Check
-
-# We set our project name.
-NAME = abstracts.Package.NAME
-# We set out project version.
-VERSION = abstracts.Package.VERSION
-
-load_dotenv(".env")
-load_dotenv(abstracts.Infrastructure.ENV_FILENAME)
-
-if helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").exists():  # pragma: no cover
-    # We handle the case that the `PYFUNCEBLE_CONFIG_DIR` environnement variable is set.
-    CONFIG_DIRECTORY = helpers.EnvironmentVariable("PYFUNCEBLE_CONFIG_DIR").get_value()
-elif helpers.EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").exists():  # pragma: no cover
-    # We hande the retro compatibility.
-    CONFIG_DIRECTORY = helpers.EnvironmentVariable("PYFUNCEBLE_OUTPUT_DIR").get_value()
-elif abstracts.Version.is_local_cloned():  # pragma: no cover
-    # We handle the case that we are in a cloned.
-    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-elif helpers.EnvironmentVariable("TRAVIS_BUILD_DIR").exists():  # pragma: no cover
-    # We handle the case that we are under Travis CI.
-    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-elif (
-    helpers.EnvironmentVariable("CI_PROJECT_DIR").exists()
-    and helpers.EnvironmentVariable("GITLAB_CI").exists()
-):  # pragma: no cover
-    # We handle the case that we are under GitLab CI/CD.
-    CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-else:  # pragma: no cover
-    # We handle all other case and distributions specific cases.
-
-    if abstracts.Platform.is_unix():
-        # We are under a Linux distribution.
-
-        # We set the default configuration location path.
-        config_dir_path = (
-            path.expanduser("~" + directory_separator + ".config") + directory_separator
-        )
-
-        if helpers.Directory(config_dir_path).exists():
-            # Everything went right:
-            #   * `~/.config` exists.
-            # We set our configuration location path as the directory we are working with.
-            CONFIG_DIRECTORY = config_dir_path
-        elif helpers.Directory(path.expanduser("~")).exists():
-            # Something went wrong:
-            #   * `~/.config` does not exists.
-            #   * `~` exists.
-            # We set `~/` as the directory we are working with.
-            #
-            # Note: The `.` at the end is because we want to hide the directory we are
-            # going to create.
-            CONFIG_DIRECTORY = (
-                path.expanduser("~") + directory_separator + "."
-            )  # pylint: disable=line-too-long
-        else:
-            # Everything went wrong:
-            #   * `~/.config` does not exists.
-            #   * `~` soes not exists.
-            # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-    elif abstracts.Platform.is_windows():
-        # We are under Windows or CygWin.
-
-        if helpers.EnvironmentVariable("APPDATA").exists():
-            # Everything went right:
-            #   * `APPDATA` is into the environnement variables.
-            # We set it as the directory we are working with.
-            CONFIG_DIRECTORY = helpers.EnvironmentVariable("APPDATA").get_value()
-        else:
-            # Everything went wrong:
-            #   * `APPDATA` is not into the environnement variables.
-            # We set the current directory as the directory we are working with.
-            CONFIG_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-
-    if not CONFIG_DIRECTORY.endswith(directory_separator):
-        # If the directory we are working with does not ends with the directory
-        # separator, we append it to the end.
-        CONFIG_DIRECTORY += directory_separator
-
-    # We append the name of the project to the directory we are working with.
-    CONFIG_DIRECTORY += NAME + directory_separator
-
-    if not helpers.Directory(CONFIG_DIRECTORY).exists():
-        # If the directory does not exist we create it.
-        helpers.Directory(CONFIG_DIRECTORY).create()
-
-if not CONFIG_DIRECTORY.endswith(directory_separator):  # pragma: no cover
-    # Again for safety, if the directory we are working with does not ends with
-    # the directory separator, we append it to the end.
-    CONFIG_DIRECTORY += directory_separator
-
-load_dotenv(CONFIG_DIRECTORY + ".env")
-load_dotenv(CONFIG_DIRECTORY + abstracts.Infrastructure.ENV_FILENAME)
-
-if helpers.EnvironmentVariable(
-    "PYFUNCEBLE_OUTPUT_LOCATION"
-).exists():  # pragma: no cover
-    # We set the location of the `output/` directory.
-    OUTPUT_DIRECTORY = helpers.EnvironmentVariable(
-        "PYFUNCEBLE_OUTPUT_LOCATION"
-    ).get_value()
-else:  # pragma: no cover
-    # We set the location of the `output` directory which should always be in the current
-    # directory.
-    OUTPUT_DIRECTORY = helpers.Directory.get_current(with_end_sep=True)
-
-if not OUTPUT_DIRECTORY.endswith(directory_separator):  # pragma: no cover
-    # Again for safety, if the directory we are working with does not ends with
-    # the directory separator, we append it to the end.
-    OUTPUT_DIRECTORY += directory_separator
-
-# We initiate the location where we are going to save our whole configuration content.
-CONFIGURATION = None
-# We initiate the location where we are going to get all statuses.
-STATUS = None
-# We initiate the location where we are going to get all outputs.
-OUTPUTS = None
-# We initiate the location where we are going to get the map of the classification
-# of each status codes for the analytic part.
-HTTP_CODE = None
-# We initiate the location where we are going to get all links.
-LINKS = None
-# We initiate a location which will have all internal data.
-INTERN = None
-# We initiate the location of the Logger.
-LOGGER = None
-# We initiate the location of the HTTP requests.
-REQUESTS = None
-# We initiate the DNS resolver.
-DNSLOOKUP = None
-# We initiate the PSL lookup.
-PSLOOOKUP = None
-# We initiate the IANA lookup.
-IANALOOKUP = None
-# We initate the loader.
-LOADER = None
-
-# We initiate the CLI logo of PyFunceble.
-ASCII_PYFUNCEBLE = """
-██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
-██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
-██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
-██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
-██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
-╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
-"""
+__version__ = PyFunceble.storage.PROJECT_VERSION
 
 
-def test(subject, complete=False, config=None):  # pragma: no cover
+def load_config(*args, **kwargs) -> None:
     """
-    Test the availability of the given subject (domain or IP).
+    Placeholder before deletion.
 
-    :param subject: The subject (IP or domain) to test.
-    :type subject: str|list
+    Since 4.0.0, you are not required to load the configuration before hand.
+    If you still want too because you may want to use a special CLI related
+    method, you can doing it so:
 
-    :param bool complete:
-        Activate the return of a dict with some significant data from
-        the test.
+    ::
 
-    :param dict config:
-        A dict with the configuration index (from .PyFunceble.yaml) to update.
+        import PyFunceble.facility
 
-    :return: The status or the informations of the domain.
-    :rtype: str|dict
-
-    .. note::
-        If :code:`config` is given, the given :code:`dict` overwrite
-        the last value of the given indexes in the configuration.
-
-        It's actually something like following:
-
-        ::
-
-            pyfunceble.configuration.update(config_given_by_user)
-
-    .. note::
-        If :code:`complete` is set to :code:`True`, we return the following indexes.
-
-        ::
-
-            {
-                "_status_source": None,
-                "_status": None,
-                "dns_lookup": [],
-                "domain_syntax_validation": None,
-                "expiration_date": None,
-                "http_status_code": None,
-                "ipv4_range_syntax_validation": None,
-                "ipv4_syntax_validation": None,
-                "ipv6_range_syntax_validation": None,
-                "ipv6_syntax_validation": None,
-                "status": None,
-                "status_source": None,
-                "subdomain_syntax_validation": None,
-                "tested": None,
-                "url_syntax_validation": None,
-                "whois_record": None,
-                "whois_server": None,
-            }
-    """
-
-    if subject:
-        # The subject is not empty nor None.
-
-        # We return the status of the given subject.
-        return core.API(
-            subject, complete=complete, configuration=config
-        ).domain_and_ip()
-
-    # We return None, there is nothing to test.
-    return None
-
-
-def url_test(subject, complete=False, config=None):  # pragma: no covere
-    """
-    Test the availability of the given subject (URL).
-
-    :param subject: The subject (URL) to test.
-    :type subject: str|list
-
-    :param bool complete:
-        Activate the return of a dict with some significant data from
-        the test.
-
-    :param dict config:
-        A dict with the configuration index (from .PyFunceble.yaml) to update.
-
-    :return: The status or the informations of the URL.
-    :rtype: str|dict
-
-    .. note::
-        If :code:`config` is given, the given :code:`dict` overwrite
-        the last value of the given indexes in the configuration.
-
-        It's actually something like following:
-
-        ::
-
-            pyfunceble.configuration.update(config_given_by_user)
-
-    .. note::
-        If :code:`complete` is set to :code:`True`, we return the following indexes.
-
-        ::
-
-            {
-                "_status_source": None,
-                "_status": None,
-                "dns_lookup": [],
-                "domain_syntax_validation": None,
-                "expiration_date": None,
-                "http_status_code": None,
-                "ipv4_range_syntax_validation": None,
-                "ipv4_syntax_validation": None,
-                "ipv6_range_syntax_validation": None,
-                "ipv6_syntax_validation": None,
-                "status": None,
-                "status_source": None,
-                "subdomain_syntax_validation": None,
-                "tested": None,
-                "url_syntax_validation": None,
-                "whois_record": None,
-                "whois_server": None,
-            }
-    """
-
-    if subject:
-        # The given URL is not empty nor None.
-
-        # We retunr the status of the the url.
-        return core.API(subject, complete=complete, configuration=config).url()
-
-    # We return None, there is nothing to test.
-    return None
-
-
-def dns_lookup(
-    subject, dns_server=None, complete=False, lifetime=3
-):  # pragma: no cover
-    """
-    Make a DNS lookup of the given subject.
-
-    :param str subject: The subject we are working with.
-    :param dns_server: A (or list of) DNS server to use while resolving.
-    :type dns_server: str|int
-    :param bool complete:
-        Tell us to look for everything instead of :code:`NS` only.
-    :param int lifetime: The query lifetime.
-
-    :return:
-        A dict with following index if the given subject is not registered into the
-        given DNS server. (More likely local subjects).
-
-            ::
-
-                {
-                    "hostname": "",
-                    "aliases": [],
-                    "ips": []
-                }
-
-        A dict with following index for everything else (and if found).
-
-            ::
-
-                {
-                    "A": [],
-                    "AAAA": [],
-                    "CNAME": [],
-                    "MX": [],
-                    "NS": [],
-                    "TXT": [],
-                    "PTR": []
-                }
-
-    :rtype: dict
-    """
-
-    if subject:
-        # The subject is not empty nor None.
-
-        # We return the lookup.
-        return lookup.Dns(dns_server=dns_server, lifetime=lifetime).request(
-            subject, complete=complete
-        )
-
-    # We return None, there is nothing to work with.
-    return None
-
-
-def whois(subject, server=None, timeout=3):  # pragma: no cover
-    """
-    Request the WHOIS record of the given subject.
-
-    :param str subject: The subject we are working with.
-    :param str server:
-        The WHOIS server to communicate with.
-
-        .. note::
-            If :code:`None` is given, we look for the best one.
-    :param int timeout: The timeout to apply to the request.
-
-    :return: None or the WHOIS record.
-    :rtype: None|str
-    """
-
-    if subject:
-        # The subject is not empty nor None.
-
-        # We return the whois record.
-        return lookup.Whois(subject, server=server, timeout=timeout).request()
-
-    # We return None, there is nothing to work with.
-    return None
-
-
-def syntax_check(domain):  # pragma: no cover
-    """
-    Check the syntax of the given domain.
-
-    :param domain: The domain to check the syntax from.
-    :type domain: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-
-    .. warning::
-        This method will be deprecated one day in the future.
-
-        Please report to :func:`~PyFunceble.is_domain`.
+        PyFunceble.facility.ConfigLoader.start()
     """
 
     warnings.warn(
-        "`PyFunceble.syntax_check` will be deprecated in future version. "
-        "Please use `PyFunceble.is_domain` instead.",
+        "PyFunceble.load_config may be removed in the future."
+        "As of today, because the configuration is not necessary (anymore), "
+        "this method does nothing. Consider it a placeholder.I"
+        "Please consider using PyFunceble.facility.ConfigLoader.start instead.",
         DeprecationWarning,
     )
 
-    return is_domain(domain)
+    _, _ = args, kwargs
 
 
-def is_domain(subject):  # pragma: no cover
+def test(subject: str, **kwargs) -> AvailabilityCheckerStatus:
     """
-    Check if the given subject is a syntactically valid domain.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validiry of the given subject.
-        return core.API(subject).domain_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def is_subdomain(subject):  # pragma: no cover
-    """
-    Check if the given subject is a syntactically valid subdomain.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We retun the validity of the given subject.
-        return core.API(subject).subdomain_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def ipv4_syntax_check(ip):  # pragma: no cover
-    """
-    Check the syntax of the given IPv4.
-
-    :param ip: The IPv4 to check the syntax for.
-    :type ip: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
+    Checks the avaialbility of the given subject assuming that it is a domain
+    or an IP.
 
     .. warning::
-        This method will be deprecated one day in the future.
+        This method may be removed in the future.
+        It is still available for convenience.
 
-        Please report to :func:`~PyFunceble.is_ipv4`.
-    """
-
-    warnings.warn(
-        "`PyFunceble.ipv4_syntax_check` will be deprecated in future version. "
-        "Please use `PyFunceble.is_ipv4` instead.",
-        DeprecationWarning,
-    )
-
-    return is_ipv4(ip)
-
-
-def is_ip(subject):  # pragma: no cover
-    """
-    Checks if the given subject is a syntactivally valid IPv4 or IPv6.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).ip_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def is_ipv4(subject):  # pragma: no cover
-    """
-    Check if the given subject is a syntactically valid IPv4.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).ipv4_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def is_ipv6(subject):  # pragma: no cover
-    """
-    Checks if the given subject is syntactivally valid IPv6.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str, list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty not None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).ipv6_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def is_ip_range(subject):  # pragma: no cover
-    """
-    Check if the given subject is a syntactically valid IPv4 or IPv6 range.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The IPv4 range state.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).ip_range_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def is_ipv4_range(subject):  # pragma: no cover
-    """
-    Check if the given subject is a syntactically valid IPv4 range.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The IPv4 range state.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).ipv4_range_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def url_syntax_check(url):  # pragma: no cover
-    """
-    Check the syntax of the given URL.
-
-    :param url: The URL to check the syntax for.
-    :type url: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-
-    .. warning::
-        This method will be deprecated one day in the future.
-
-        Please report to :func:`~PyFunceble.is_url`.
-    """
-
-    warnings.warn(
-        "`PyFunceble.url_syntax_check` will be deprecated in future version. "
-        "Please use `PyFunceble.is_url` instead.",
-        DeprecationWarning,
-    )
-
-    return is_url(url)
-
-
-def is_url(subject):  # pragma: no cover
-    """
-    Check if the given subject is a syntactically valid URL.
-
-    :param subject: The subject to check the syntax from.
-    :type subject: str|list
-
-    :return: The syntax validity.
-    :rtype: bool|dict
-    """
-
-    if subject:
-        # The given subject is not empty nor None.
-
-        # We return the validity of the given subject.
-        return core.API(subject).url_syntax()
-
-    # We return None, there is nothing to check.
-    return None
-
-
-def load_config(generate_directory_structure=False, custom=None):  # pragma: no cover
-    """
-    Load the configuration.
-
-    :param bool generate_directory_structure:
-        Tell us if we generate the directory structure
-        along with loading the configuration file.
-
-    :param dict custom:
-        A dict with the configuration index (from .PyFunceble.yaml) to update.
-
-    .. note::
-        If :code:`config` is given, the given :code:`dict` overwrite
-        the last value of the given indexes in the configuration.
-
-        It's actually something like following:
+        Please consider the following alternative example:
 
         ::
 
-            pyfunceble.configuration.update(config_given_by_user)
+            from PyFunceble import DomainAndIPAvailabilityChecker
+
+            my_subject = "example.org"
+            the_status = DomainAndIPAvailabilityChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is available.
+            print(f"{my_subject} is available ? {the_status.is_available()}")
+
+    :param subject:
+        The subject to work with.
     """
 
-    if not LOADER:
-        loader = cconfig.Loader()
-        loader.set_path_to_config(CONFIG_DIRECTORY)
-        loader.get_config()
-        loader.set_custom_config(custom)
-    elif not LOADER.was_configuration_loaded():
-        LOADER.set_path_to_config(CONFIG_DIRECTORY)
-        LOADER.get_config()
-        LOADER.set_custom_config(custom)
-    else:
-        LOADER.set_custom_config(custom)
+    warnings.warn(
+        "PyFunceble.test may be removed in the future."
+        "Please consider using PyFunceble.DomainAndIPAvailabilityChecker explicitly.",
+        DeprecationWarning,
+    )
 
-    if generate_directory_structure:
-        output.Constructor()
+    return DomainAndIPAvailabilityChecker(subject, **kwargs).get_status()
 
 
-def is_domain_malicious(subject):  # pragma: no cover
+def url_test(subject: str, **kwargs) -> AvailabilityCheckerStatus:
+    """
+    Checks the availability of the given subject assuming that it is a URL.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import URLAvailabilityChecker
+
+            my_subject = "http://example.org"
+            the_status = URLAvailabilityChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is available.
+            print(f"{my_subject} is available ? {the_status.is_available()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.test may be removed in the future."
+        "Please consider using PyFunceble.URLAvailabilityChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return URLAvailabilityChecker(subject, **kwargs).get_status()
+
+
+def is_second_level_domain(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid second level domain.
+
+    .. warning::
+        This method was added for retrocompatibility.
+        It may be removed in the future and is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import SecondLvlDomainSyntaxChecker
+
+            my_subject = "example.org"
+            the_status = SecondLvlDomainSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is a second level domain.
+            print(f"{my_subject} is 2nd level domain ? {the_status.is_valid()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_second_level_domain was added for retro compatibility. "
+        "It may be removed in the future."
+        "Please consider using PyFunceble.SecondLvlDomainSyntaxChecker explicitly.",
+    )
+
+    return SecondLvlDomainSyntaxChecker(subject, **kwargs).is_valid()
+
+
+def is_domain(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid second level domain
+    or subdomain.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import DomainSyntaxChecker
+
+            my_subject = "example.org"
+            the_status = DomainSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is a domain (2nd level or subdomain).
+            print(f"{my_subject} is domain ? {the_status.is_valid()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_domain may be removed in the future."
+        "Please consider using PyFunceble.DomainSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return DomainSyntaxChecker(subject, **kwargs).is_valid()
+
+
+def is_subdomain(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid subdomain.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import SubDomainSyntaxChecker
+
+            my_subject = "hello.example.org"
+            the_status = SubDomainSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is a subdomain.
+            print(f"{my_subject} is subdomain ? {the_status.is_valid()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_subdomain may be removed in the future."
+        "Please consider using PyFunceble.SubDomainSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return SubDomainSyntaxChecker(subject, **kwargs).is_valid()
+
+
+def is_ip(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IP range.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "192.168.0.0"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is an IP (v4 or v6).
+            print(f"{my_subject} is IP ? {the_status.is_valid()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ip may be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid()
+
+
+def is_ipv4(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IPv4.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "192.168.0.0"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is an IPv4.
+            print(f"{my_subject} is IPv4 ? {the_status.is_valid_v4()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ipv4 be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid_v4()
+
+
+def is_ipv6(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IPv6.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "192.168.0.0"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is an IPv6.
+            print(f"{my_subject} is IPv6 ? {the_status.is_valid_v6()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ipv6 be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid_v6()
+
+
+def is_ip_range(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IP range.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "192.168.0.0"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is an IP range (v4 or v6).
+            print(f"{my_subject} is IP range ? {the_status.is_valid_range()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ip_range may be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid_range()
+
+
+def is_ipv4_range(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IPv4 range.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "192.168.0.0"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is IPv4 range.
+            print(f"{my_subject} is IPv4 range ? {the_status.is_valid_v4_range()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ipv4_range may be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid_v4_range()
+
+
+def is_ipv6_range(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is a syntactically valid IPv6 range.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPSyntaxChecker
+
+            my_subject = "::1"
+            the_status = IPSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is IPv6 range.
+            print(f"{my_subject} is IPv6 range ? {the_status.is_valid_v6_range()}")
+
+    :param subject:
+        The subject to work with.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_ipv6_range may be removed in the future."
+        "Please consider using PyFunceble.IPSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    return IPSyntaxChecker(subject, **kwargs).is_valid_v6_range()
+
+
+def is_url(subject: str, **kwargs) -> bool:
+    """
+    Checks if the given subject is syntactically a valid URL.
+
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import DomainReputationChecker
+
+            my_subject = "https://example.org"
+            the_status = URLSyntaxChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is a URL.
+            print(f"{my_subject} is URL ? {the_status.is_valid()}")
+
+    :parma subject:
+        The subject to check.
+    """
+
+    warnings.warn(
+        "PyFunceble.is_url may be removed in the future."
+        "Please consider using PyFunceble.URLSyntaxChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    # pylint: disable=no-member
+    return URLSyntaxChecker(subject, **kwargs).get_status().is_valid()
+
+
+def is_domain_malicious(subject: str, **kwargs) -> bool:
     """
     Checks if the given domain is malicious.
 
-    :param str subject: The subject to work with.
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
 
-    :rtype: bool
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import DomainReputationChecker
+
+            my_subject = "example.org"
+            the_status = DomainReputationChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is malicious.
+            print(f"{my_subject} is Malicious ? {the_status.is_malicious()}")
+
+    :param subject:
+        The subject to work with.
     """
 
-    if subject:
-        return core.API(subject).reputation("domain") == "MALICIOUS"
-    return None
+    warnings.warn(
+        "PyFunceble.is_domain_malicious may be removed in the future."
+        "Please consider using PyFunceble.DomainReputationChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    # pylint: disable=no-member
+    return DomainReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 
-def is_ipv4_malicious(subject):  # pragma: no cover
+def is_ipv4_malicious(subject: str, **kwargs) -> bool:
     """
     Checks if the given IPv4 is malicious.
 
-    :rtype: bool
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
+
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import IPReputationChecker
+
+            my_subject = "192.168.0.1"
+            the_status = IPReputationChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is malicious.
+            print(f"{my_subject} is Malicious ? {the_status.is_malicious()}")
+
+    :param subject:
+        The subject to work with.
     """
 
-    return is_domain_malicious(subject)
+    warnings.warn(
+        "PyFunceble.is_ipv4_malicious may be removed in the future."
+        "Please consider using PyFunceble.IPReputationChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    # pylint: disable=no-member
+    return IPReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 
-def is_url_malicious(subject):  # pragma: no cover
+def is_url_malicious(subject: str, **kwargs) -> bool:
     """
     Checks if the given URL is malicious.
 
-    :param str subject: The subject to work with.
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
 
-    :rtype: bool
+        Please consider the following alternative example:
+
+        ::
+
+            from PyFunceble import URLReputationChecker
+
+            my_subject = "https://example.org"
+            the_status = URLReputationChecker(
+                my_subject
+            ).get_status()
+
+            # Get the status in dict format.
+            print(the_status.to_dict())
+
+            # Get the status in json format.
+            print(the_status.to_json())
+
+            # Check if it is malicious.
+            print(f"{my_subject} is Malicious ? {the_status.is_malicious()}")
+
+    :param subject:
+        The subject to work with.
     """
 
-    if subject:
-        return core.API(subject).reputation("url") == "MALICIOUS"
-    return None
+    warnings.warn(
+        "PyFunceble.is_url_malicious may be removed in the future."
+        "Please consider using PyFunceble.URLReputationChecker explicitly.",
+        DeprecationWarning,
+    )
+
+    # pylint: disable=no-member
+    return URLReputationChecker(subject, **kwargs).get_status().is_malicious()
 
 
-def get_complements(subject, include_given=False):
+def get_complements(subject: str, include_given: bool = False) -> List[str]:
     """
-    Provides the complements of the given subject(s).
+    Provides the complements of a given subject.
 
-    A complement is for example :code:`example.com` if :code:`www.example.com`
+    A complement is a for example :code:`example.org` if :code:`www.example.org`
     is given and vice-versa.
 
-    :param subject: The subject to get the complement for.
-    :type subject: str, list
+    .. warning::
+        This method may be removed in the future.
+        It is still available for convenience.
 
-    :param bool include_given:
-        Tell us to add the given one into the result.
+        Please consider the following alternative example:
 
-    :rtype: list
+        ::
+
+            from PyFunceble import Subject2Complements
+
+            my_subject = "example.org"
+            complements = Subject2Complements(
+                my_subject
+            ).get_converted(include_given=True)
+
+    :param subject:
+        The subject to work with.
+
+    :param include_given:
+        Include the given subject in the result.
     """
 
-    complements = []
+    warnings.warn(
+        "PyFunceble.get_complements may be removed in the future."
+        "Please consider using PyFunceble.Subject2Complements explicitly",
+        DeprecationWarning,
+    )
 
-    if isinstance(subject, str):
-        checker = Check(subject)
-
-        if include_given and subject not in complements:
-            complements.append(subject)
-
-        if subject.startswith("www."):
-            complements.append(subject[4:])
-        elif checker.is_domain() and not checker.is_subdomain():
-            complements.append(f"www.{subject}")
-    elif isinstance(subject, (list, set)):
-        for subj in subject:
-            complements.extend(get_complements(subj, include_given=include_given))
-
-    return complements
+    return Subject2Complements(subject, include_given=include_given).get_converted()

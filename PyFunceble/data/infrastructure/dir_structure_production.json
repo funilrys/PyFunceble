@@ -1,0 +1,134 @@
+{
+    "Analytic": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n!/ACTIVE/\n!/POTENTIALLY_ACTIVE/\n!/POTENTIALLY_INACTIVE/\n!/SUSPICIOUS/\n",
+            "hash": "27caf2edf9b0fbbd3cb1a2dde931ed6c8aa380f5b5aac83b9433ec11"
+        }
+    },
+    "Analytic/ACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "Analytic/POTENTIALLY_ACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "Analytic/POTENTIALLY_INACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "Analytic/SUSPICIOUS": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n!/ACTIVE/\n!/INACTIVE/\n!/INVALID/\n!/MALICIOUS/\n!/SANE/\n!/VALID/\n",
+            "hash": "a273966a13322ad4da9fbad4bd7247ca046de503de543c6f909e5e2b"
+        }
+    },
+    "domains/ACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains/INACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains/INVALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains/MALICIOUS": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains/SANE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "domains/VALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n!/ACTIVE/\n!/INACTIVE/\n!/INVALID/\n!/MALICIOUS/\n!/SANE/\n!/VALID/\n",
+            "hash": "a273966a13322ad4da9fbad4bd7247ca046de503de543c6f909e5e2b"
+        }
+    },
+    "hosts/ACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts/INACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts/INVALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts/MALICIOUS": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts/SANE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "hosts/VALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "logs": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n!/date_format/\n!/no_referrer/\n!/percentage/\n!/whois/\n",
+            "hash": "7e533b26a45b8712a1ed4895b52b2cc798a03a632074800af98a52e7"
+        }
+    },
+    "logs/percentage": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "splitted": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    }
+}

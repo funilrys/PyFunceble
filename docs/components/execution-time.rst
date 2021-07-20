@@ -13,9 +13,10 @@ How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.cli.execution_time.ExecutionTime`!
+    Want to read the code ? It's here
+    :class:`PyFunceble.cli.execution_time.ExecutionTime`!
 
-It shows the exection time on screen (:code:`stdout`) and at the end of the :code:`output/logs/percentage/percentage.txt` file if :code:`show_percentage` is activated.
+It shows the execution time on screen (:code:`stdout`).
 
 How to use it?
 ^^^^^^^^^^^^^^
@@ -24,13 +25,18 @@ You can simply change
 
 ::
 
-    show_execution_time: False
+    display_mode:
+        # Activates the printing of the execution time.
+        execution_time: False
 
 to
 
 ::
 
-    show_execution_time: True
+    display_mode:
+        # Activates the printing of the execution time.
+        execution_time: True
 
 
-into your personal :code:`.PyFunceble.yaml` or use the :code:`--execution` argument from the CLI to activate it.
+into your personal :code:`.PyFunceble.yaml` or use the :code:`--execution`
+argument from the CLI to activate it.

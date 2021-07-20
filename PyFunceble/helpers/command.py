@@ -17,10 +17,10 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,12 +50,13 @@ License:
     limitations under the License.
 """
 
+import os
+import subprocess
 import sys
-from os import environ
-from subprocess import PIPE, STDOUT, Popen
+from typing import Generator, Optional, Union
 
 
-class Command:
+class CommandHelper:
     """
     Shell command execution.
 
@@ -63,26 +64,102 @@ class Command:
     :param str encoding: The encoding to use to decode the shell output.
     """
 
-    def __init__(self, command, encoding="utf-8"):  # pragma: no cover
-        # We set the default decoding type.
-        self.decode_type = encoding
+    _command: Optional[str] = None
+    _encoding: str = "utf-8"
 
-        if isinstance(command, list):
-            # The given command is a list.
+    def __init__(
+        self,
+        command: Optional[Union[str, list]] = None,
+        *,
+        encoding: Optional[str] = None,
+    ) -> None:
 
-            # We construct the command we are going to run.
-            self.command = " ".join(command)
-        elif isinstance(command, str):
-            # The given command is a string.
+        if command is not None:
+            self.command = command
 
-            # We set the command we are going to run.
-            self.command = command.strip()
-        else:
-            raise NotImplementedError(
-                "Unknown command type: `{}`".format(type(command))
+        if encoding is not None:
+            self.encoding = encoding
+
+    @property
+    def command(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_command` attribute.
+        """
+
+        return self._command
+
+    @command.setter
+    def command(self, value: Union[str, list]) -> None:
+        """
+        Sets the command to use.
+
+        :param value:
+            The command to use/execute.
+
+        :raise TypeError:
+            When the value is not a :py:class:`list` or :py:class:`str`
+        """
+
+        if not isinstance(value, (str, list)):
+            raise TypeError(
+                f"<value> should be {str} or {list}, " f"{type(value)} given."
             )
 
-    def _decode_output(self, to_decode):
+        if isinstance(value, list):
+            self._command = " ".join(value)
+        else:
+            self._command = value
+
+    def set_command(self, value: Union[str, list]) -> "CommandHelper":
+        """
+        Sets the command to use.
+
+        :param value:
+            The command to use/execute.
+        """
+
+        self.command = value
+
+        return self
+
+    @property
+    def encoding(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_encoding` attribute.
+        """
+
+        return self._encoding
+
+    @encoding.setter
+    def encoding(self, value: str) -> None:
+        """
+        Sets the encoding to use.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the value is not a :py:class:`str`
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._encoding = value
+
+    def set_encoding(self, value: str) -> "CommandHelper":
+        """
+        Sets the encoding to use.
+
+        :param value:
+            The value to set.
+        """
+
+        self.encoding = value
+
+        return self
+
+    def _decode_output(self, to_decode: bytes) -> str:
         """
         Decode the output of a shell command in order to be readable.
 
@@ -93,80 +170,75 @@ class Command:
         """
 
         if to_decode:
-            return to_decode.decode(self.decode_type)
+            return to_decode.decode(self.encoding)
 
         return ""
 
-    def execute(self):
+    def execute(self, *, raise_on_error: bool = False) -> str:
         """
         Execute the given command.
 
+        :parma raise_on_error:
+            Raises on error if set to :py:class:`True`.
+
         :return: The output of the command.
-        :rtype: str
+
+        :raise RuntimeError:
+            When the exit code is not equal to 0.
         """
 
         # We initiate a process and parse the command to it.
-        with Popen(
-            self.command, stdout=PIPE, stderr=STDOUT, shell=True, env=environ
+        with subprocess.Popen(
+            self.command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            env=os.environ,
         ) as process:
-            # We communicate the command and get the output and the error.
-            (stdout, stderr) = process.communicate()
+            stdout, stderr = process.communicate()
 
-            if process.returncode != 0:  # pragma: no cover
-                # The return code is different to 0.
-
-                # We return the decoded error.
+            if process.returncode != 0:
+                if raise_on_error:
+                    raise RuntimeError(repr(self._decode_output(stderr)))
                 return self._decode_output(stderr)
-
-            # The return code (or exit code if you prefer) if equal to 0.
-
-            # We return the decoded output of the executed command.
             return self._decode_output(stdout)
 
-    def run(self, rstrip=True):
+    def run(self, rstrip: bool = True) -> Generator[str, None, None]:
         """
         Run the given command and yield each line(s) one by one.
 
         .. note::
-            The difference between this method and :func:`~PyFunceble.helpers.Command.execute`
-            is that :func:`~PyFunceble.helpers.Command.execute` wait for the process to end
-            in order to return its output while this method return each line one by one
+            The difference between this method and
+            :func:`~PyFunceble.helpers.Command.execute`
+            is that :func:`~PyFunceble.helpers.Command.execute` wait for the
+            process to end in order to return its output while this method
+            return each line one by one
             - as they are outputed.
 
         :param bool rstrip:
             Deactivates the rstrip of the output.
         """
 
-        with Popen(
-            self.command, stdout=PIPE, stderr=STDOUT, shell=True, env=environ
+        with subprocess.Popen(
+            self.command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            env=os.environ,
         ) as process:
-            # We initiate a process and parse the command to it.
-
             while True:
-                # We loop infinitly because we want to get the output
-                # until there is none.
-
-                # We get the current line from the process stdout.
-                #
                 # Note: we use rstrip() because we are paranoid :-)
                 current_line = process.stdout.readline()
 
                 if not current_line and process.poll() is not None:
-                    # The current line is empty or equal to None.
-
-                    # We break the loop.
                     break
 
-                # The line is not empty nor equal to None.
-
                 if rstrip:
-                    # We encode and yield the current line
                     yield self._decode_output(current_line.rstrip())
                 else:
-                    # We encode and yield the current line
                     yield self._decode_output(current_line)
 
-    def run_to_stdout(self):
+    def run_to_stdout(self) -> None:
         """
         Run the given command and print each line(s) to stdout.
         """

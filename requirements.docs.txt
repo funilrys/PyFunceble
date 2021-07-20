@@ -1,0 +1,4 @@
+alabaster<0.8,>=0.7
+sphinx>=3.4.3
+sphinx_rtd_theme
+Pygments>=2.0

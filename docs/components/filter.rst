@@ -7,7 +7,8 @@ List filtering
 Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
-While testing for file, you may find yourself in a situation where you only want to test subject which matches a given pattern.
+While testing for file, you may find yourself in a situation where you only want
+to test subject which matches a given pattern.
 That's what this component do.
 
 How does it work?
@@ -22,13 +23,21 @@ You can simply change
 
 ::
 
-    filter: ""
+    cli_testing:
+        # Sets the filter to apply while reading the given input.
+        # For example, if you give `\.info`, we will only test the subjects
+        # who match `\.info`.
+        file_filter: null
 
 to
 
 ::
 
-    filter: "\.org"
+    cli_testing:
+        # Sets the filter to apply while reading the given input.
+        # For example, if you give `\.info`, we will only test the subjects
+        # who match `\.info`.
+        file_filter: "\.org"
 
 (for example)
 

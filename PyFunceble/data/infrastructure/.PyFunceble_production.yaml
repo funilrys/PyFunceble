@@ -1,0 +1,338 @@
+debug:
+  # Provides everything related to the debug mode.
+
+  # Activates the debug/logging.
+  active: False
+  # Sets the logging level.
+  level: info
+
+cli_decoding:
+  # Provides everything related to the decoding from the CLI.
+
+  # Activates the aggressive decoding.
+  adblock_aggressive: False
+
+  # Activates the decoding using the adblock decoder.
+  adblock: False
+
+  # Activates the decoding using the RPZ decoder.
+  rpz: False
+
+  # Activated the decoding using the Wildcard decoder.
+  wildcard: False
+
+cli_testing:
+  # Provides everything directly related to the CLI testing.
+
+  # Sets the Hosts IP to use while generation the hosts file(s)
+  hosts_ip: "0.0.0.0"
+
+  # Sets the number of maximal workers to use.
+  # If set to null, the system use: CPU * Cores - 2
+  max_workers: null
+
+  # Activates the automatic continuation after a break or shortage.
+  autocontinue: False
+
+  # Activates the storage and creation of a database of all INACTIVA and INVALID
+  # subjects for continuous testing.
+  inactive_db: True
+
+  # Activates the storage of some WHOIS information in order to avoid having
+  # to spam the WHOIS servers.
+  whois_db: True
+
+  # Activates the generation of complements.
+  complements: False
+
+  # Activates the expansion of CIDR to single addresses.
+  cidr_expand: False
+
+  # Sets the cooldown time to apply between each tests.
+  cooldown_time: 0.0
+
+  # Sets the Database Connector type to use.
+  # Available: csv | mariadb | mysql
+  db_type: csv
+
+  # Sets the filter to apply while reading the given input.
+  # For example, if you give `\.info`, we will only test the subjects who match
+  # `\.info`.
+  file_filter: null
+
+  # Activates the mining of data.
+  mining: False
+
+  # Acknowledges that we may test for local network component.
+  # NOTE: Activating this, will remove the syntax checker completely.
+  local_network: False
+
+  # Activates or disable the preloading of the given input file(s).
+  # When this is activated, we take the time to pre load and decode the content
+  # of your file so that we can optimize some of our process regarding the
+  # auto continue.
+  #
+  # Note: This has no effect if the auto-continue is deactivated.
+  preload_file: False
+
+  ci:
+    # Provides everything related to the Continuous integration.
+
+    # Activates the continuous integration mode.
+    # WARNING: Do not activate without asking or knowing what you are doing.
+    active: False
+
+    # Sets the commit message to apply everytime except for the last one.
+    commit_message: "PyFunceble - AutoSave"
+
+    # Sets the commit message to apply at the very end of the test.
+    end_commit_message: "PyFunceble - Results"
+
+    # Sets the number of minutes  to wait before starting to save and stop
+    # a session.
+    max_exec_minutes: 15
+
+    # Sets the working branch. This is the branch from where we are testing.
+    branch: master
+
+    # Sets the distribution branch. This is the branch that is going to get
+    # the (final) results.
+    distribution_branch: master
+
+    # Sets the command to execute everytime before each commits except the last
+    # one.
+    command: null
+
+    # Sets the command to execute before the last commit.
+    end_command: null
+
+  display_mode:
+    # Provides everything related to the display mode.
+
+    # Activates the printing of dots.
+    dots: False
+
+    # Activates the printing of the execution time.
+    execution_time: False
+
+    # Activates the output of the percentage information.
+    percentage: True
+
+    # Activates the quiet mode.
+    quiet: False
+
+    # Activates the output of very few information.
+    less: True
+
+    # Activates the output of all information.
+    all: False
+
+    # Activates the output of the status and it's status (only)
+    simple: False
+
+    # Activates the coloration of stdout.
+    colour: True
+
+    # Sets the status do display to STDOUT.
+    # NOTE: This does not have any effect with the generated files.
+    # Available values: ALL | ACTIVE | INACTIVE | INVALID | SANE | MALICIOUS
+    status: all
+
+  testing_mode:
+    # Provides all available testing modes.
+    # WARNING: Only one can be used at a time.
+
+    # Activates the availability test.
+    availability: True
+
+    # Activates the syntax test.
+    syntax: False
+
+    # Activates the reputation test.
+    reputation: False
+
+  days_between:
+    # Provides everything which is x days periodic.
+
+    # NOT IMPLEMENTED (Anticipation for future usage).
+    db_clean: 28
+
+    # Provides the number of days to wait before retesting subject which were
+    # stored into the inactive database.
+    db_retest: 1
+
+  sorting_mode:
+    # Provides all our sorting mode.
+    # WARNING: The sorting mode is only applied to the files. NOT STDOUT.
+
+    # Activates the hierarchical sorting.
+    hierarchical: False
+
+    # Activates the standard sorting.
+    standard: True
+
+  file_generation:
+    # Provides everything related to the generation of file.
+
+    # Deactivates the generation of any status file.
+    no_file: False
+
+    # Activates the generation of the hosts file(s).
+    hosts: False
+
+    # Activates the generation of the plain (or raw) file(s).
+    plain: True
+
+    # Activates the generation of the analytic file(s).
+    analytic: True
+
+    # Activate the generation of an unified file for the copy of what is
+    # outputted to STDOUT.
+    unified_results: False
+
+lookup:
+  # Provides everything related to the lookup.
+
+  # Activates the usage of the DNS lookup.
+  dns: True
+
+  # Activates the usage of the HTTP status code lookup.
+  http_status_code: True
+
+  # Activates the usage of the network information socket.
+  netinfo: True
+
+  # Activates the usage of our special rules.
+  special: True
+
+  # Activates the usage of the WHOIS record.
+  whois: True
+
+  # Activates the usage of the reputation data reputation.
+  reputation: False
+
+  # Sets the timeout to apply to each of our lookup tools who support a timeout
+  # option.
+  timeout: 5
+
+dns:
+  # Provides everything related to the DNS lookup.
+
+  # Activates the follow-up of the given order.
+  follow_server_order: true
+
+  # Activates the trust mode. Meaning that if one of the DNS give us a negative
+  # response (without error), we take it as it is.
+  # When this mode is deactivated (false), when one of the DNS give us a negative
+  # response (without error), we still ask all other servers.
+  trust_server: false
+
+  # Sets the list of server to communicate with.
+  # It must be a list.
+  # As example:
+  #   - first.dns
+  #   - second.dns
+  #
+  server: null
+
+  # Sets the protocol to use.
+  # Available: UDP | TCP | HTTPS | TLS
+  protocol: UDP
+
+# Not Implemented yet. Reserved for future usage and implementation.
+share_logs: False
+
+user_agent:
+  # Provides everything related to the user agent choice.
+  # Note:
+  #   Please report to https://git.io/JLWe5 for more insight about the
+  #   browser and platform available..
+
+  browser: chrome
+  platform: linux
+
+  # Sets the user agent to use.
+  # WARNING: If given, this will be used systematically.
+  custom: null
+
+# Activates the verification of the certificate.
+verify_ssl_certificate: False
+
+http_codes:
+  # Provides everything related to the HTTP code lookup interpretation.
+
+  # Informs PyFunceble that the end-user (not PyFunceble) is managing this list.
+  # This means that you won't get any update in this section.
+  self_managed: False
+
+  list:
+    up:
+      - 100
+      - 101
+      - 102
+      - 200
+      - 201
+      - 202
+      - 203
+      - 204
+      - 205
+      - 206
+      - 207
+      - 208
+      - 226
+      - 429
+    potentially_down:
+      - 400
+      - 402
+      - 404
+      - 409
+      - 410
+      - 412
+      - 414
+      - 415
+      - 416
+      - 451
+    potentially_up:
+      - 000
+      - 300
+      - 301
+      - 302
+      - 303
+      - 304
+      - 305
+      - 307
+      - 308
+      - 403
+      - 405
+      - 406
+      - 407
+      - 408
+      - 411
+      - 413
+      - 417
+      - 418
+      - 421
+      - 422
+      - 423
+      - 424
+      - 426
+      - 428
+      - 431
+      - 500
+      - 501
+      - 502
+      - 503
+      - 504
+      - 505
+      - 506
+      - 507
+      - 508
+      - 510
+      - 511
+
+links:
+  # Provides some of our API links.
+  # NOTE: Not implemented yet as the underlaying infrastructure will be
+  # rewritten.
+  api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
+  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"

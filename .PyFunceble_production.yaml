@@ -42,7 +42,7 @@ generate_json: False
 header_printed: False
 # Tell to the system to use the historical sorting instead of the alphabetical sorting.
 hierarchical_sorting: False
-# Set the server to call to get the whois referer of a given element.
+# Set the server to call to get the whois referrer of a given element.
 iana_whois_server: whois.iana.org
 # Tell to the system to convert all domain to IDNA if possible.
 idna_conversion: False
@@ -79,6 +79,8 @@ use_reputation_data: False
 # Enable/Disable the reputation checking mode.
 # In this mode we only check against the reputation.
 reputation: False
+# Enable/Disable the support of RPZ policies.
+rpz: False
 # Enable / Disable the usage and generation of a shadow file before a file
 # test starts.
 shadow_file: False
@@ -177,7 +179,7 @@ outputs:
       percentage: percentage.txt
       whois: whois.json
       date_format: date_format.json
-      no_referer: no_referer.json
+      no_referrer: no_referrer.json
 
   # This is the main directory which we call output/ in all our communication.
   parent_directory: output/
@@ -281,7 +283,7 @@ http_codes:
 
 links:
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
-  api_no_referer: "https://pyfunceble.funilrys.com/api/no-referer"
+  api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
   config: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/.PyFunceble_production.yaml"
   dir_structure: "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/dir_structure_production.json"
   iana: "https://raw.githubusercontent.com/PyFunceble/iana/master/iana-domains-db.json"

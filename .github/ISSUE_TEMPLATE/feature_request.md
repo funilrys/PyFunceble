@@ -1,16 +1,25 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest a feature or an idea for this project.
+title: 'FEATURE: '
+labels: features, enhancement
+assignees: funilrys
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when ...
+## Description
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+<!-- A clear description of the feature you wish PyFunceble had. -->
+<!-- Example: I'm always frustrated when ... -->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## Possible Solution
+
+<!-- A clear description of the solution that you'd like. -->
+
+## Considered Alternative
+
+<!-- A clear description of any alternative solutions or features you've considered. -->
+
+## Additional context
+
+<!-- A clear description of any other context or screenshots about your feature request. -->

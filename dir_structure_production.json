@@ -206,7 +206,7 @@
         },
         "logs/": {
             ".gitignore": {
-                "content": "*@@@!.gitignore@@@!/date_format/@@@!/no_referer/@@@!/percentage/@@@!/whois/",
+                "content": "*@@@!.gitignore@@@!/date_format/@@@!/no_referrer/@@@!/percentage/@@@!/whois/",
                 "sha512": "475d7b0dedad050e4551466a8a17bff7cf0af0a5ef5e463979981cba"
             }
         },
