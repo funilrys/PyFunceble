@@ -49,7 +49,7 @@ Check the availability of an IP
 
     checker = IPAvailabilityChecker()
 
-    to_test = "192.168.1.1"
+    to_test = "192.0.2.1"
 
     # You can do it this way.
     status = checker.set_subject(to_test).get_status()
@@ -173,7 +173,7 @@ Check the syntax of IP (v4 or v6)
 
     checker = IPSyntaxChecker()
 
-    to_test = "192.168.1.1"
+    to_test = "192.0.2.1"
 
     # You can do it this way.
     status = checker.set_subject(to_test).get_status()
