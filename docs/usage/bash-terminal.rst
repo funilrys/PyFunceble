@@ -4,6 +4,11 @@
     $DOMAIN or $URI as single instances
     $DOMAIN_FILE or $URL_FILES as files with content of same type
 
+    Usage of example.tld
+
+    We should strive to use the example.org for likeable examples and
+    example.com for the evil (blacklistable) domains
+
     These values are set as UPPERCase as ref to output variables from a
     script. / @spirillen
 
@@ -39,9 +44,9 @@ Test sources
 :code:`-d "$DOMAIN"` | :code:`--domain "$DOMAIN"`
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-Test one or more :term:domains, separated by spaces.
+This argument takes one or more values separated by spaces.
 
-This argument takes one or more values.
+Test one or more :code:`$DOMAIN`s, 
 
 .. code-block:: console
 
