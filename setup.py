@@ -112,20 +112,70 @@ License:
     limitations under the License.
 """
 
-from re import compile as comp
+import os
+import platform
+import re
+from typing import List
 
-from setuptools import find_packages, setup
+import setuptools
 
 
-def get_requirements():
+def is_win_platform():
+    """
+    Checks if the current platform is Windows.
+    """
+
+    WIN_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
+
+    return platform.system().lower() in WIN_PLATFORMS
+
+
+def get_requirements(*, mode="standard"):
     """
     This function extract all requirements from requirements.txt.
     """
 
-    with open("requirements.txt") as file:
-        requirements = file.read().splitlines()
+    mode2files = {
+        "standard": ["requirements.txt"],
+        "dev": ["requirements.dev.txt"],
+        "docs": ["requirements.docs.txt"],
+    }
 
-    return requirements
+    if is_win_platform():
+        for mode, files in mode2files.items():
+            new_files = set()
+
+            for file in files:
+                win_file = file.replace(".txt", ".win.txt")
+
+                if os.path.isfile(win_file):
+                    new_files.add(win_file)
+                else:
+                    new_files.add(file)
+
+            mode2files[mode] = list(new_files)
+
+    mode2files["full"] = [y for x in mode2files.values() for y in x]
+
+    result = set()
+
+    for file in mode2files[mode]:
+        with open(file, "r", encoding="utf-8") as file_stream:
+            for line in file_stream:
+                line = line.strip()
+
+                if not line or line.startswith("#"):
+                    continue
+
+                if "#" in line:
+                    line = line[: line.find("#")].strip()
+
+                if not line:
+                    continue
+
+                result.add(line)
+
+    return list(result)
 
 
 def get_version():
@@ -133,7 +183,7 @@ def get_version():
     This function will extract the version from PyFunceble/__init__.py
     """
 
-    to_match = comp(r'PROJECT_VERSION.*=\s+"(.*)"')
+    to_match = re.compile(r'PROJECT_VERSION.*=\s+"(.*)"')
 
     try:
         extracted = to_match.findall(
@@ -157,11 +207,16 @@ def get_long_description():  # pragma: no cover
 
 
 if __name__ == "__main__":
-    setup(
+    setuptools.setup(
         name="PyFunceble-dev",
         version=get_version(),
         python_requires=">=3.6, <4",
-        install_requires=get_requirements(),
+        install_requires=get_requirements(mode="standard"),
+        extras_require={
+            "docs": get_requirements(mode="docs"),
+            "dev": get_requirements(mode="dev"),
+            "full": get_requirements(mode="full"),
+        },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
         author="funilrys",
@@ -175,7 +230,9 @@ if __name__ == "__main__":
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",
         },
         platforms=["any"],
-        packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
+        packages=setuptools.find_packages(
+            exclude=("*.tests", "*.tests.*", "tests.*", "tests")
+        ),
         include_package_data=True,
         keywords=[
             "PyFunceble",
