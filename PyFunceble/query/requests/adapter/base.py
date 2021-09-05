@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import time
 from typing import Optional
 
 import requests.adapters
@@ -137,7 +136,6 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
 
                 if local_last_cname_result:
                     last_cname_new_subject = local_last_cname_result[0]
-                    time.sleep(self.dns_query_tool.BREAKOFF)
                 else:
                     break
 
