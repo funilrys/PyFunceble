@@ -120,7 +120,7 @@ class SystemIntegrator(SystemBase):
         dict_helper = DictHelper(PyFunceble.storage.CONFIGURATION)
         flatten_config = dict_helper.flatten()
 
-        to_update = dict()
+        to_update = {}
 
         for key, value in vars(self.args).items():
             if value in (False, None):

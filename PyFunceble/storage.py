@@ -90,9 +90,9 @@ REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
 NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
 
-IANA: Optional[dict] = dict()
-PUBLIC_SUFFIX: Optional[dict] = dict()
-USER_AGENTS: Optional[dict] = dict()
+IANA: Optional[dict] = {}
+PUBLIC_SUFFIX: Optional[dict] = {}
+USER_AGENTS: Optional[dict] = {}
 
 load_dotenv(".env")
 load_dotenv(ENV_FILENAME)

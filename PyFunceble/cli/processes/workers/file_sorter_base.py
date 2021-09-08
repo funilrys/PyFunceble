@@ -211,7 +211,9 @@ class FileSorterWorkerBase(WorkerBase):
                 new_file.seek(0)
                 sorted_files.append(new_file)
 
-        with open(temporary_output_file, "w", cls.FILE_BUFFER_SIZE) as file_stream:
+        with open(
+            temporary_output_file, "w", cls.FILE_BUFFER_SIZE, encoding="utf-8"
+        ) as file_stream:
             if write_header:
                 file_stream.write(FilePrinter.STD_FILE_GENERATION)
                 file_stream.write(FilePrinter.get_generation_date_line())

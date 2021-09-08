@@ -66,7 +66,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
     adapter.
     """
 
-    resolving_cache: dict = dict()
+    resolving_cache: dict = {}
     resolving_use_cache: bool = False
     timeout: float = 5.0
 
@@ -122,7 +122,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                 The first subject.
             """
 
-            last_cname_result = list()
+            last_cname_result = []
             last_cname_new_subject = subject
 
             while True:

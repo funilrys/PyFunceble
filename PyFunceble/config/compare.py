@@ -164,8 +164,8 @@ class ConfigComparison:
         ],
     }
 
-    _local_config: dict = dict()
-    _upsteam_config: dict = dict()
+    _local_config: dict = {}
+    _upsteam_config: dict = {}
 
     dict_helper: DictHelper = DictHelper()
 

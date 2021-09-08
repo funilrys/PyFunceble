@@ -176,8 +176,8 @@ class Nameservers:
         if not value:
             raise ValueError("<value> should not be empty.")
 
-        self.nameserver_ports = dict()
-        self.nameservers = list()
+        self.nameserver_ports = {}
+        self.nameservers = []
 
         for nameserver in value:
             if self.protocol.lower() == "https":

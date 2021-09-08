@@ -661,7 +661,7 @@ class AvailabilityCheckerBase(CheckerBase):
             self.status.idna_subject,
         )
 
-        result = dict()
+        result = {}
 
         if self.status.subdomain_syntax:
             lookup_order = ["NS", "A", "AAAA", "CNAME", "DNAME"]

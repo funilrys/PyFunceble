@@ -158,7 +158,7 @@ class SystemLauncher(SystemBase):
 
     checker_type: Optional[str] = None
 
-    sessions_id: dict = dict()
+    sessions_id: dict = {}
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
         try:

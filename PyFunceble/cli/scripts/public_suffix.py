@@ -81,7 +81,7 @@ class PublicSuffixGenerator:
 
     _destination: Optional[str] = None
 
-    database: dict() = dict()
+    database: dict = {}
     """
     An internal storage of our map.
     """
@@ -142,7 +142,7 @@ class PublicSuffixGenerator:
         """
 
         line = line.strip()
-        result = dict()
+        result = {}
 
         if not any(line.startswith(x) for x in self.COMMENT_SIGN) and "." in line:
             lines = [line, line.encode("idna").decode("utf-8")]

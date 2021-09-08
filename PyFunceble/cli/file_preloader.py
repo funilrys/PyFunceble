@@ -107,7 +107,7 @@ class FilePreloader:
     _authorized: Optional[bool] = False
     _protocol: Optional[dict] = None
 
-    __description: list = list()
+    __description: list = []
     __description_file: Optional[str] = None
     __matching_index: int = 0
 
