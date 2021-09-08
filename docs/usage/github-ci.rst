@@ -1,5 +1,5 @@
-Github Actions
---------------
+Github Actions CI/CD
+--------------------
 
 Example of how you can run PyFunceble inside Github Actions.
 
@@ -51,7 +51,7 @@ Example of how you can run PyFunceble inside Github Actions.
 
         - name: Install dependencies
             run: |
-            pip install --pre PyFunceble-dev 
+            pip install --pre PyFunceble-dev
 
         - name: Get PyFunceble version
             run: |
@@ -86,7 +86,7 @@ Example of how you can run PyFunceble inside Github Actions.
 
         - name: Install dependencies
             run: |
-            pip install --pre PyFunceble-dev 
+            pip install --pre PyFunceble-dev
 
         - name: Get PyFunceble version
             run: |

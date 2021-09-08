@@ -1,5 +1,5 @@
-From a GitLab CI/CD environment
--------------------------------
+GitLab Runner CI/CD
+-------------------
 
 As we offer an argument named :code:`--ci` which will
 autosave in a GitLab CI/CI environment, this document try to
@@ -14,7 +14,7 @@ Personal Access Token
 A personal access token is needed in order for PyFunceble to
 automatically push the results.
 
-You should get `a personal GitLab access token`_ with 
+You should get `a personal GitLab access token`_ with
 the :code:`read_repository` and :code:`write_repository` scopes.
 
 Once created and copied in a safe place, create **a new masked variable**
@@ -29,10 +29,10 @@ access token.
 
 .. note::
     This part only present a commented :code:`.gitlab-ci.yml`.
-    This is just an example do not take the following as 
-    necessarly true. 
+    This is just an example do not take the following as
+    necessarly true.
 
-    You're invited to submit changes if something stated in 
+    You're invited to submit changes if something stated in
     this document is wrong.
 
 
@@ -55,7 +55,7 @@ access token.
 
     run:
         script:
-            # Let's say we want our results and our PyFunceble 
+            # Let's say we want our results and our PyFunceble
             # infrastructure to be saved in a directory called `PyFunceble-tests`
 
             # We move inside it.

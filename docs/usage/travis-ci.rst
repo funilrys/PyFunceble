@@ -1,7 +1,7 @@
-From a Travis CI container
---------------------------
+Travis container CI/CD
+----------------------
 
-As we offer an argument named :code:`--ci` to activate 
+As we offer an argument named :code:`--ci` to activate
 the usage of PyFunceble in a Travis CI instance,
 we document here what you need to know!
 
@@ -48,13 +48,13 @@ Configuration
         - pip3
 
     install:
-        # We install the development version of PyFunceble. If you prefer the stable version replace 
+        # We install the development version of PyFunceble. If you prefer the stable version replace
         # `pyfunceble-dev` with `pyfunceble`.
         - pip3 install pyfunceble-dev
 
     # Our tests start here.
     script:
-        # Let's say we want our results and our PyFunceble infrastructure to be saved in a directory 
+        # Let's say we want our results and our PyFunceble infrastructure to be saved in a directory
         # called `PyFunceble-tests`
 
         # We move inside it.
@@ -75,7 +75,7 @@ Getting a GitHub token
 
 For the :code:`secure` index of the :code:`.travis.yml` file, you have to generate a `new GitHub token`_.
 
-After you got your token, please write it or save it in a safe place as you're going to need it 
+After you got your token, please write it or save it in a safe place as you're going to need it
 every time you're going to interact with Travis CI.
 
 .. note::
@@ -93,10 +93,10 @@ To encrypt the token simply replace and execute the following according to your 
     $ travis encrypt 'GH_TOKEN=theGeneratedToken' -r 'The content of TRAVIS_REPO_SLUG' --add
 
 .. warning::
-    Please do not execute the following explicitly without replacing :code:`theGeneratedToken` 
-    with your previously generated GitHub token and :code:`The content of TRAVIS_REPO_SLUG` with 
+    Please do not execute the following explicitly without replacing :code:`theGeneratedToken`
+    with your previously generated GitHub token and :code:`The content of TRAVIS_REPO_SLUG` with
     your repository slug.
 
 .. note::
-    The usage of :code:`--add` ensure that the :code:`travis` program automatically add the :code:`secure` 
+    The usage of :code:`--add` ensure that the :code:`travis` program automatically add the :code:`secure`
     index to the :code:`.travis.yml` file.

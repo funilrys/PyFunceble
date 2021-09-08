@@ -4,6 +4,11 @@
     $DOMAIN or $URI as single instances
     $DOMAIN_FILE or $URL_FILES as files with content of same type
 
+    Usage of example.tld
+
+    We should strive to use the example.org for likeable examples and
+    example.com for the evil (blacklistable) domains
+
     These values are set as UPPERCase as ref to output variables from a
     script. / @spirillen
 
@@ -12,8 +17,8 @@
 From a terminal
 ---------------
 
-This chapter also relates to writing bash scripts
-and PowerShell scripts as the syntaxes used is equal.
+This chapter also relates to writing scripts in bash and PowerShell as
+the uses the same syntaxes.
 
 
 :code:`--help`
@@ -39,9 +44,9 @@ Test sources
 :code:`-d "$DOMAIN"` | :code:`--domain "$DOMAIN"`
 """""""""""""""""""""""""""""""""""""""""""""""""
 
-Test one or more :term:domains, separated by spaces.
+This argument takes one or more values separated by spaces.
 
-This argument takes one or more values.
+Test one or more :code:`$DOMAIN`s, 
 
 .. code-block:: console
 
@@ -173,6 +178,7 @@ PyFunceble from where to obtain the given list.
     You can not combine the usage of :code:`-f`, :code:`-uf` and
     :code:`--adblock` at the same time
 
+
 ------
 
 :code:`--cidr`
@@ -181,6 +187,7 @@ PyFunceble from where to obtain the given list.
 This feature will expand CIDR formatted addresses.
 
 **Default value:** :code:`cidr_expand: False`
+
 
 ------
 
@@ -588,7 +595,8 @@ Case-Sensitive
 
 .. code-block:: console
 
-    $ pyfunceble --dns 95.216.209.53:53 --dns doh.powerdns.org --dns-protocol HTTPS
+    $ pyfunceble --dns 192.0.2.2:53 --dns doh.powerdns.org --dns-protocol HTTPS
+
 
 ------
 
@@ -625,6 +633,7 @@ Activates or disable the trust mode.
     Otherwise, if not active, when the first read DNS server give us
     a negative response - without error - we still consolidate by
     checking all given/found server.
+
 
 ------
 
@@ -839,6 +848,7 @@ result file for each status.
     later on.
     `Flip defaults for host <https://github.com/funilrys/PyFunceble/issues/178>`_
 
+
 ------
 
 :code:`-ip "ip-address"` | :code:`--hosts-ip` "ip-address"
@@ -872,6 +882,7 @@ Optional values. (From less to more information)
     * :code:`--logging-level warning` ==> WARNING
     * :code:`--logging-level debug` ==> DEBUG
 
+
 ------
 
 .. _merge-output
@@ -883,6 +894,7 @@ Activates or disables the merging of the outputs of all inputted files inside a
 single subdirectory as opposed to the normal behavior.
 
 **Default value:** :code:`merge_output_dirs: False`
+
 
 ------
 
@@ -1007,6 +1019,7 @@ Then you can share your logs with our backend API which collect all logs!
 
 .. seealso::
     `Logs Sharing Component </components/index.html#logs-sharing>`_.
+
 
 ------
 
@@ -1230,6 +1243,7 @@ This argument activates or deactivates the auto-continue subsystem.
 Indeed, as we can automatically continue if the script has been stopped,
 this switch allows us to disable or enable the usage of that specific
 subsystem.
+
 
 ------
 
