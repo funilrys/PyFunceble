@@ -1039,8 +1039,8 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         # pylint: disable=unnecessary-lambda
         self.checker.subject = "example.org"
         self.checker.query_dns_record = (
-            lambda: dict()
-        )  # pylint: disable=use-dict-literal
+            lambda: dict()  # pylint: disable=use-dict-literal
+        )
 
         self.checker.try_to_query_status_from_dns()
 

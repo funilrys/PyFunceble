@@ -324,7 +324,7 @@ class TestDictHelper(unittest.TestCase):
 
         output_file.seek(0)
 
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
         actual = self.helper.from_json_file(output_file.name)
 
         self.assertEqual(expected, actual)
@@ -372,7 +372,7 @@ class TestDictHelper(unittest.TestCase):
 
         given = "Hello, World!"
 
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
         actual = self.helper.from_json(given)
 
         self.assertEqual(expected, actual)

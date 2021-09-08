@@ -101,7 +101,7 @@ class TestHostByAddrInfo(unittest.TestCase):
 
         given = "example.org"
 
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
         actual = HostByAddrInfo(given).get_info()
 
         self.assertEqual(expected, actual)
