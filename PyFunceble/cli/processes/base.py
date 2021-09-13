@@ -150,8 +150,8 @@ class ProcessesManagerBase:
 
         self.global_exit_event = multiprocessing.Event()
 
-        self._running_workers = list()
-        self._created_workers = list()
+        self._running_workers = []
+        self._created_workers = []
 
         if output_workers_count is None:
             self._output_workers_count = 1

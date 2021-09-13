@@ -75,7 +75,7 @@ class ExtraRulesHandler:
 
     _status: Optional[AvailabilityCheckerStatus] = None
 
-    regex_active2inactive: dict = dict()
+    regex_active2inactive: dict = {}
 
     http_codes_dataset: Optional[Box] = None
 

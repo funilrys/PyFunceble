@@ -292,21 +292,27 @@ class TestDirectoryHelper(unittest.TestCase):
         for directory in dirname:
             self.helper.set_path(os.path.join(self.temp_path.name, directory)).create()
 
-            with open(os.path.join(self.helper.path, filename), "w") as file_stream:
+            with open(
+                os.path.join(self.helper.path, filename), "w", encoding="utf-8"
+            ) as file_stream:
                 file_stream.write("Hello")
 
             self.helper.set_path(
                 os.path.join(self.temp_path.name, directory, directory)
             ).create()
 
-            with open(os.path.join(self.helper.path, filename), "w") as file_stream:
+            with open(
+                os.path.join(self.helper.path, filename), "w", encoding="utf-8"
+            ) as file_stream:
                 file_stream.write("Hello")
 
             self.helper.set_path(
                 os.path.join(self.temp_path.name, directory, directory, directory)
             ).create()
 
-            with open(os.path.join(self.helper.path, filename), "w") as file_stream:
+            with open(
+                os.path.join(self.helper.path, filename), "w", encoding="utf-8"
+            ) as file_stream:
                 file_stream.write("Hello")
 
         self.helper.set_path(self.temp_path.name)

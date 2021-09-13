@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.0.0b64.dev (Blue Duckling)"
+PROJECT_VERSION: str = "4.0.0b65.dev (Blue Duckling)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -90,9 +90,9 @@ REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
 NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
 
-IANA: Optional[dict] = dict()
-PUBLIC_SUFFIX: Optional[dict] = dict()
-USER_AGENTS: Optional[dict] = dict()
+IANA: Optional[dict] = {}
+PUBLIC_SUFFIX: Optional[dict] = {}
+USER_AGENTS: Optional[dict] = {}
 
 load_dotenv(".env")
 load_dotenv(ENV_FILENAME)

@@ -123,7 +123,7 @@ class WorkerBase(multiprocessing.Process):
 
         self.send_stop_message = True
         self.accept_waiting_delay = True
-        self.concurrent_worker_names = list()
+        self.concurrent_worker_names = []
 
         try:
             self.db_session = (

@@ -86,4 +86,4 @@ class HostByAddrInfo(NetInfoBase):
         except (socket.gaierror, socket.herror):
             pass
 
-        return dict()
+        return dict()  # pylint: disable=use-dict-literal

@@ -185,7 +185,7 @@ class FilesystemCounter(FilesystemDirBase):
             When the current testing mode is not supported (yet?).
         """
 
-        result = dict()
+        result = {}
         testing_mode = PyFunceble.cli.utils.testing.get_testing_mode()
 
         if testing_mode not in self.PERCENTAGE_STATUSES:

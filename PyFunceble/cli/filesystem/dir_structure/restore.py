@@ -73,7 +73,7 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
         data = DictHelper().from_json_file(self.source_file)
 
         if PlatformUtility.is_windows():
-            result = dict()
+            result = {}
 
             for directory, files in data.items():
                 result[os.path.normpath(directory)] = files

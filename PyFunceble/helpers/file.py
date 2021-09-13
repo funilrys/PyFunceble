@@ -199,7 +199,7 @@ class FileHelper:
         A wrapper for the built-in :py:class:`open` function.
         """
 
-        return open(self.path, *args, **kwargs)
+        return open(self.path, *args, **kwargs)  # pylint: disable=unspecified-encoding
 
     def copy(self, destination: str) -> "FileHelper":
         """

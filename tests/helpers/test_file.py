@@ -138,7 +138,7 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        with open(file_helper.path, "w") as file_stream:
+        with open(file_helper.path, "w", encoding="utf-8") as file_stream:
             file_stream.write("Hello, World!")
 
         expected = True
@@ -166,7 +166,7 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        with open(file_helper.path, "w") as file_stream:
+        with open(file_helper.path, "w", encoding="utf-8") as file_stream:
             file_stream.write("Hello, World!")
 
         expected = True
@@ -194,7 +194,7 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        with open(file_helper.path, "w") as file_stream:
+        with open(file_helper.path, "w", encoding="utf-8") as file_stream:
             file_stream.write("")
 
         expected = True
@@ -202,7 +202,7 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        with open(file_helper.path, "w") as file_stream:
+        with open(file_helper.path, "w", encoding="utf-8") as file_stream:
             file_stream.write("Hello, World!")
 
         expected = False
@@ -225,7 +225,7 @@ class TestFileHelper(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-        with open(file_helper.path, "w") as file_stream:
+        with open(file_helper.path, "w", encoding="utf-8") as file_stream:
             file_stream.write("")
 
         expected = True

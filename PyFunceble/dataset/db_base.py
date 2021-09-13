@@ -182,7 +182,7 @@ class DBDatasetBase(DatasetBase):
 
         return self
 
-    @execute_if_authorized(dict())
+    @execute_if_authorized(dict())  # pylint: disable=use-dict-literal
     def get_filtered_row(self, row: dict) -> dict:
         """
         Removes all unkowns fields (not declared) from the given row.
@@ -191,7 +191,7 @@ class DBDatasetBase(DatasetBase):
             The row to work with.
         """
 
-        result = dict()
+        result = {}
 
         for key, value in row.items():
             if value is None:

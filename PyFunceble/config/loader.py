@@ -91,7 +91,7 @@ class ConfigLoader:
     path_to_default_config: Optional[str] = None
     path_to_overwrite_config: Optional[str] = None
 
-    _custom_config: dict = dict()
+    _custom_config: dict = {}
     _merge_upstream: bool = False
 
     file_helper: FileHelper = FileHelper()
@@ -419,6 +419,6 @@ class ConfigLoader:
             pass
 
         # This is not a mistake.
-        self._custom_config = dict()
+        self._custom_config = {}
 
         return self

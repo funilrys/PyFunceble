@@ -259,7 +259,7 @@ class PrinterBase:
 
         ignore_header = ["simple", "hosts", "plain", "execution_time"]
 
-        to_print_data = [dict(), dict()]
+        to_print_data = [dict(), dict()]  # pylint: disable=use-dict-literal
 
         if self.template_to_use not in ignore_header:
             for key, value in self.HEADERS.items():
