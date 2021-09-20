@@ -148,6 +148,7 @@ disable=print-statement,
 
 
         consider-using-with,
+        consider-using-f-string,
 
         # Temporary until pylint fix it
         unsubscriptable-object,
