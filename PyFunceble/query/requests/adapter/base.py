@@ -132,6 +132,9 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                     .query()
                 )
 
+                if any(x in last_cname_result for x in local_last_cname_result):
+                    break
+
                 last_cname_result.extend(local_last_cname_result)
 
                 if local_last_cname_result:
