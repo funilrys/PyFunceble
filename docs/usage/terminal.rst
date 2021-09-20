@@ -63,7 +63,7 @@ This is a domain: :code:`example.org`
 
 ------
 
-:code:`-url "$URI"` | :code:`--url "$URI"`
+:code:`-u "$URI"` | :code:`--url "$URI"`
 """"""""""""""""""""""""""""""""""""""""""
 
 Test one or more full URL, separated by spaces.
