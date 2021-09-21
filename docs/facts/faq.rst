@@ -5,8 +5,8 @@ How to speed up the test process?
 ---------------------------------
 
 .. warning::
-    Beware, when talking about speed a lot a thing have to be taken in consideration.
-    Indeed here is a non exhaustive list of things which fluctuate testing speed.
+    Beware, when talking about speed a lot of things have to be taken into consideration.
+    Indeed here is a non-exhaustive list of things that fluctuate the testing speed.
 
     * Bandwidth.
     * DNS Server response time.
@@ -15,7 +15,7 @@ How to speed up the test process?
     * Our databases management (do not apply for MySQL and MariaDB format).
     * Amount of data to test.
     * Disk I/O in particular as PyFunceble is heavy on the I/O
-      * RamDrives and NVME disks are very suiteble for PyFunceble CSV db.
+      * RamDrives and NVME disks are very suitable for PyFunceble CSV db.
     * ...
 
 I have a dedicated server or machine just for PyFunceble
@@ -24,7 +24,7 @@ I have a dedicated server or machine just for PyFunceble
 Simply increase the number of maximal workers PyFunceble is allowed to use
 through the `--max-workers <../usage/index.html#w-max-workers>`_ argument.
 
-By default the number of workers is equal to:
+By default, the number of workers is equal to:
 
 ::
 
@@ -37,8 +37,8 @@ automatically set to :code:`6`.
 .. warning::
     Keep in mind that the :code:`--max-workers` (:code:`-w`) mostly - if
     not only - affects the tester processes. Because we want to safely
-    write the files(Disk I/O), we still need a single processes which read the
-    submitted results and generate the outputs.
+    write the files(Disk I/O), we still need a single process that reads the
+    submitted results and generates the outputs.
 
     The reason we added this to PyFunceble :code:`4.0.0` is we don't want
     to have a wrongly formatted file output.
@@ -72,7 +72,7 @@ fstab may look like this:
 * :code:`/mnt/ramfs` is a mount point, where the ramfs filesystem will be
   mounted. Directory **most** exist.
 * :code:`noauto` option prevents this from being mounted automatically
-  (e.g. at system's boot up).
+  (e.g. at system's boot-up).
 * :code:`user` makes this mountable by regular users.
 * :code:`size` sets this "ramdisk's" size (you can use :code:`M` and
   :code:`G` here)
@@ -83,9 +83,9 @@ fstab may look like this:
 
 .. note::
 
-    We recommends you to set the file mode to :code:`0777` in case you
-    are using this in relation with any kind of scripting, to ensure
-    subprocesses have access. In all other cases you should set the folder
+    We recommend you to set the file mode to :code:`0777` in case you
+    are using this in relation to any kind of scripting, to ensure
+    subprocesses have access to the file(s). In all other cases, you should set the folder
     permision to :code:`0770`.
 
 **Mount**
@@ -102,16 +102,16 @@ fstab may look like this:
       $ umount /mnt/ramfs/
 
 
-This chapter have practically been copied from
+This chapter has practically been copied from
 `<https://unix.stackexchange.com/a/325421>`_ creditted to Neurotransmitter
-as it is well written and cover our purpose for descriping how to setup a
+as it is well written and cover our purpose for describing how to setup a
 ramFS to be used for testing with PyFunceble.
 
-Next we needs to configure PyFunceble to use the newly created and mounted
+Next, we need to configure PyFunceble to use the newly created and mounted
 ramFS. This is done with the 
 `PYFUNCEBLE_OUTPUT_LOCATION <../usage/index.html#global-variables>`_ ; now
 all outputs are stored in the ramFS, so remember to copy the results to a
-stationary file path when your done.
+stationary file path when you are done.
 
 Next time you are going to run a test with PyFunceble are will do:
   1. Mount the ramFS
