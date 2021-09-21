@@ -1072,7 +1072,7 @@ CPU - 2. Otherwise, it will 1.
     - **This means you should be experimenting a bit your self.**
 
     To follow the "behind the scene" talk about the subject, please take a
-    look at `issue <https://github.com/spirillen/PyFunceble/issues/34>`_
+    look at `issue <https://mypdns.org/spirillen/PyFunceble/-/issues/34>`_
 
 
 ------
