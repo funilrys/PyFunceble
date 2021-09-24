@@ -34,6 +34,7 @@ PyFunceble!
 * `Stop.Google.Analytics.Ghost.Spam.HOWTO`_
 * `The-Big-List-of-Hacked-Malware-Web-Sites`_
 * `Top-Attacking-IP-Addresses-Against-Wordpress-Sites`_
+* `ubo-filters`_
 * `Ultimate.Hosts.Blacklist`_ // `Ultimate-Hosts-Blacklist`_
 * `UncheckyAds`_
 
@@ -67,6 +68,7 @@ PyFunceble!
 .. _Stop.Google.Analytics.Ghost.Spam.HOWTO : https://github.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO
 .. _The-Big-List-of-Hacked-Malware-Web-Sites : https://github.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites
 .. _Top-Attacking-IP-Addresses-Against-Wordpress-Sites : https://github.com/mitchellkrogza/Top-Attacking-IP-Addresses-Against-Wordpress-Sites
+.. _ubo-filters : https://github.com/LanikSJ/ubo-filters
 .. _Ultimate-Hosts-Blacklist : https://github.com/Ultimate-Hosts-Blacklist
 .. _Ultimate.Hosts.Blacklist : https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist
 .. _UncheckyAds : https://github.com/FadeMind/hosts.extras/tree/master/UncheckyAds
