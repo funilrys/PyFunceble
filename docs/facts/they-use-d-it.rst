@@ -37,6 +37,7 @@ PyFunceble!
 * `ubo-filters`_
 * `Ultimate.Hosts.Blacklist`_ // `Ultimate-Hosts-Blacklist`_
 * `UncheckyAds`_
+* `Yuki2718 adblock`_
 
 .. _.pl-host-file : https://github.com/xxcriticxx/.pl-host-file
 .. _add.2o7Net : https://github.com/FadeMind/hosts.extras/tree/master/add.2o7Net
@@ -72,3 +73,4 @@ PyFunceble!
 .. _Ultimate-Hosts-Blacklist : https://github.com/Ultimate-Hosts-Blacklist
 .. _Ultimate.Hosts.Blacklist : https://github.com/mitchellkrogza/Ultimate.Hosts.Blacklist
 .. _UncheckyAds : https://github.com/FadeMind/hosts.extras/tree/master/UncheckyAds
+.. _Yuki2718 adblock : https://github.com/Yuki2718/adblock
