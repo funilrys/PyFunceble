@@ -77,8 +77,8 @@ class WorkerBase(multiprocessing.Process):
 
     STD_NAME: str = "pyfunceble_base_worker"
 
-    MINING_WAIT_TIME: int = 10
-    BREAKOFF: float = 0.5
+    MINING_WAIT_TIME: int = 60
+    BREAKOFF: float = 2.0
 
     input_queue: Optional[queue.Queue] = None
     output_queue: Optional[queue.Queue] = None
