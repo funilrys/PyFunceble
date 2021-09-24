@@ -243,6 +243,11 @@ dns:
   # Available: UDP | TCP | HTTPS | TLS
   protocol: UDP
 
+  # Sets the delay (seconds) to apply between each queries.
+  # When a value > 0.00000 is given, we will wait for the given amount of
+  # seconds between each queries.
+  delay: 0.0
+
 # Not Implemented yet. Reserved for future usage and implementation.
 share_logs: False
 

@@ -46,7 +46,7 @@ Test sources
 
 This argument takes one or more values separated by spaces.
 
-Test one or more :code:`$DOMAIN`s, 
+Test one or more :code:`$DOMAIN`s,
 
 .. code-block:: console
 
@@ -634,6 +634,25 @@ Activates or disable the trust mode.
     a negative response - without error - we still consolidate by
     checking all given/found server.
 
+------
+
+
+.. _dns-delay:
+
+:code:`--dns-delay`
+"""""""""""""""""""
+
+.. versionadded:: 4.0.0
+
+Sets the delay to apply between each DNS query.
+
+**Default value:** :code:`0.0`
+
+.. note::
+    When greater that :code:`0.0`, a delay will be applied between each DNS
+    query.
+
+    Otherwise, if equal to `0.0`, no delay will be applied.
 
 ------
 
@@ -1468,6 +1487,11 @@ Global overview
                                 checking all given/found server.
 
                                 Configured value: False
+        --dns-delay DNS__DELAY
+                                Sets the delay (in seconds) to apply between each DNS
+                                queries.
+
+                                Configured value: 0.0
 
     Databases:
         --inactive-db         Activates or disables the usage of a 'database' to

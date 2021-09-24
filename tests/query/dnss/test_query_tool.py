@@ -692,6 +692,97 @@ class TestDNSQueryTool(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_set_delay(self) -> None:
+        """
+        Tests the method which let us set the delay.
+        """
+
+        given = 0.48
+        expected = 0.48
+
+        self.query_tool.set_delay(given)
+        actual = self.query_tool.delay
+
+        self.assertEqual(expected, actual)
+
+    def test_set_delay_through_init(self) -> None:
+        """
+        Tests the method which let us set the delay.
+
+        In this test we check that the transfert of the delay
+        through the constructor is working.
+        """
+
+        given = 0.55
+
+        query_tool = DNSQueryTool(delay=given)
+
+        expected = 0.55
+        actual = query_tool.delay
+
+        self.assertEqual(expected, actual)
+
+    def test_set_delay_not_float(self) -> None:
+        """
+        Tests the method which let us set the delay for the case
+        that the given delay is not a float or int.
+        """
+
+        given = ["Hello", "World"]
+
+        self.assertRaises(TypeError, lambda: self.query_tool.set_delay(given))
+
+    def test_guess_and_set_delay(self) -> None:
+        """
+        Tests the method which let us guess and set the delay between each
+        queries.
+
+        In this test, we check the case that the given delay is set to a value
+        greater than 0.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"delay": 0.45}}).start()
+
+        self.query_tool.guess_and_set_delay()
+
+        expected = 0.45
+        actual = self.query_tool.delay
+
+        self.assertEqual(expected, actual)
+
+    def test_guess_and_set_delay_less_than_zero(self) -> None:
+        """
+        Tests the method which let us guess and set the delay between each
+        queries.
+
+        In this test, we check the case that the given delay is set to a value
+        less than 0.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"delay": -3.0}}).start()
+
+        self.assertRaises(ValueError, lambda: self.query_tool.guess_and_set_delay())
+
+    def test_guess_and_set_delay_none(self) -> None:
+        """
+        Tests the method which let us guess and set the delay between each
+        queries.
+
+        In this test, we check the case that the given delay is set to None.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"dns": {"delay": None}}).start()
+
+        self.query_tool.guess_and_set_delay()
+
+        expected = self.query_tool.STD_DELAY
+        actual = self.query_tool.delay
+
+        self.assertEqual(expected, actual)
+
     def test_get_lookup_record(self) -> None:
         """
         Tests the method which let us get the lookup record.

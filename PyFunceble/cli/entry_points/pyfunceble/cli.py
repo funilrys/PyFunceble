@@ -536,6 +536,17 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
                 % get_configured_value("dns.trust_server"),
             },
         ),
+        (
+            [
+                "--dns-delay",
+            ],
+            {
+                "dest": "dns.delay",
+                "type": float,
+                "help": "Sets the delay (in seconds) to apply between each DNS\n "
+                "queries.\n %s" % get_configured_value("dns.delay"),
+            },
+        ),
     ]
 
 

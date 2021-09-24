@@ -71,3 +71,12 @@
     Otherwise, when the trust mode is disabled, when the first read DNS server
     gives us a negative response (without any error), we still ask all other
     DNS servers that were given or found.
+
+:code:`dns[delay]`
+""""""""""""""""""
+
+    **Type:** :code:`float`
+
+    **Default value:** :code:`0.0`
+
+    **Description:** Sets the delay to apply between each DNS query.
