@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import copy
 import functools
 import ipaddress

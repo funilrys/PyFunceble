@@ -763,6 +763,7 @@ class TestDNSQueryTool(unittest.TestCase):
         config_loader = ConfigLoader()
         config_loader.set_custom_config({"dns": {"delay": -3.0}}).start()
 
+        # pylint: disable=unnecessary-lambda
         self.assertRaises(ValueError, lambda: self.query_tool.guess_and_set_delay())
 
     def test_guess_and_set_delay_none(self) -> None:
