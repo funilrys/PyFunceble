@@ -810,6 +810,8 @@ class TestCollectionQueryTool(unittest.TestCase):
             return response
 
         self.query_tool.url_base = "https://example.org"
+        self.query_tool.token = secrets.token_urlsafe(6)
+
         request_mock.side_effect = mocking
 
         expected = response_dict
@@ -1019,6 +1021,7 @@ class TestCollectionQueryTool(unittest.TestCase):
         """
 
         self.availability_status_dataset["checker_type"] = "GIT"
+        self.query_tool.token = secrets.token_urlsafe(6)
 
         self.assertRaises(
             ValueError,
