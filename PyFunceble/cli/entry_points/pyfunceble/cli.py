@@ -349,6 +349,25 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--collection-preferred-origin"],
+            {
+                "dest": "collection.preferred_status_origin",
+                "type": str,
+                "choices": ["frequent", "latest"],
+                "help": "Sets the preferred status origin. %s"
+                % get_configured_value("collection.preferred_status_origin"),
+            },
+        ),
+        (
+            ["--collection-lookup"],
+            {
+                "dest": "lookup.collection",
+                "action": "store_true",
+                "help": "Activates or disables the usage of the Collection lookup\n"
+                "whether possible. %s" % get_configured_value("lookup.collection"),
+            },
+        ),
+        (
             ["--dns-lookup"],
             {
                 "dest": "lookup.dns",
@@ -819,6 +838,17 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "dest": "share_logs",
                 "action": "store_true",
                 "help": argparse.SUPPRESS,
+            },
+        ),
+        (
+            [
+                "--push-collection",
+            ],
+            {
+                "dest": "collection.push",
+                "action": "store_true",
+                "help": "Activates or disables the push of test result into the\n"
+                "collection API. %s" % get_configured_value("collection.push"),
             },
         ),
         (
