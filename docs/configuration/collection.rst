@@ -38,7 +38,7 @@
 
     **Default value:** :code:`frequent`
 
-    **Available values:** :code:`frequent`, :code:`latest`
+    **Available values:** :code:`frequent`, :code:`latest` , :code:`recommended`
 
     **Description:** Sets the preferred status origin when fetching data from
     the collection

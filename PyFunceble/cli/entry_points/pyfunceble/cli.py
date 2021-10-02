@@ -353,7 +353,7 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "collection.preferred_status_origin",
                 "type": str,
-                "choices": ["frequent", "latest"],
+                "choices": ["frequent", "latest", "recommended"],
                 "help": "Sets the preferred status origin. %s"
                 % get_configured_value("collection.preferred_status_origin"),
             },

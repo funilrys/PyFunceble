@@ -368,5 +368,5 @@ collection:
   # When choosing, `latest`, the system will pull the latest status that is
   # provided and available into the collection.
   #
-  # Available: frequent | latest
+  # Available: frequent | latest | recommended
   preferred_status_origin: frequent

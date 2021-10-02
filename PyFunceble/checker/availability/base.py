@@ -969,6 +969,12 @@ class AvailabilityCheckerBase(CheckerBase):
             ):
                 self.status.status = data["status"]["availability"]["latest"]["status"]
                 self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "recommended"
+                and data["status"]["availability"]["recommended"]
+            ):
+                self.status.status = data["status"]["availability"]["recommended"]
+                self.status.status_source = "COLLECTION"
 
             PyFunceble.facility.Logger.info(
                 "Could define the status of %r from: Collection Lookup",

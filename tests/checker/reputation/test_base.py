@@ -472,6 +472,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
                         "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                     },
                     "frequent": "INVALID",
+                    "recommended": "VALID",
                 },
                 "availability": {
                     "latest": {
@@ -481,6 +482,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
                         "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                     },
                     "frequent": "INACTIVE",
+                    "recommended": "ACTIVE",
                 },
                 "reputation": {
                     "latest": {
@@ -490,6 +492,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
                         "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                     },
                     "frequent": "MALICIOUS",
+                    "recommended": "MALICIOUS",
                 },
                 "whois": {
                     "expiration_date": "2021-09-28T19:32:07.167Z",
@@ -514,7 +517,6 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
 
         # Let's check the case that the subject is known.
         self.checker.subject = "example.com"
-
         self.checker.collection_query_tool.preferred_status_origin = "frequent"
         self.checker.collection_query_tool.pull = self.fake_pull_response
 
@@ -522,12 +524,10 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
 
         expected_status = "MALICIOUS"
         actual_status = self.checker.status.status
-
         self.assertEqual(expected_status, actual_status)
 
         expected_status_source = "COLLECTION"
         actual_status_source = self.checker.status.status_source
-
         self.assertEqual(expected_status_source, actual_status_source)
 
         self.checker.collection_query_tool.preferred_status_origin = "latest"
@@ -536,29 +536,36 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
 
         expected_status = "SANE"
         actual_status = self.checker.status.status
-
         self.assertEqual(expected_status, actual_status)
 
         expected_status_source = "COLLECTION"
         actual_status_source = self.checker.status.status_source
+        self.assertEqual(expected_status_source, actual_status_source)
 
+        self.checker.collection_query_tool.preferred_status_origin = "recommended"
+
+        self.checker.try_to_query_status_from_collection()
+
+        expected_status = "MALICIOUS"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        expected_status_source = "COLLECTION"
+        actual_status_source = self.checker.status.status_source
         self.assertEqual(expected_status_source, actual_status_source)
 
         # Let's check the case that the subject is unknown.
         self.checker.subject = "102117110105108114121115"
-
         self.checker.collection_query_tool.pull = self.fake_response_no_data
 
         self.checker.try_to_query_status_from_collection()
 
         expected_status = None
         actual_status = self.checker.status.status
-
         self.assertEqual(expected_status, actual_status)
 
         expected_status_source = None
         actual_status_source = self.checker.status.status_source
-
         self.assertEqual(expected_status_source, actual_status_source)
 
     def test_get_status(self) -> None:

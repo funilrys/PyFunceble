@@ -358,7 +358,7 @@ Sets the preferred status origin.
 
 **Default value:** :code:`collection.preferred_status_origin: frequent`
 
-**Available values:** :code:`frequent`, :code:`latest`
+**Available values:** :code:`frequent`, :code:`latest`, :code:`recommended`
 
 
 ------
@@ -1473,7 +1473,7 @@ Global overview
         --local               Activates or disables the consideration of the test(s)
                                 in or for a local or private network context.
                                 Configured value: False
-        --collection-preferred-origin {frequent,latest}
+        --collection-preferred-origin {frequent,latest,recommended}
                               Sets the preferred status origin.
                                 Configured value: 'frequent'
         --collection-lookup   Activates or disables the usage of the Collection lookup

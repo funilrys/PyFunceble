@@ -275,6 +275,12 @@ class ReputationCheckerBase(CheckerBase):
             ):
                 self.status.status = data["status"]["reputation"]["latest"]["status"]
                 self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "recommended"
+                and data["status"]["reputation"]["recommended"]
+            ):
+                self.status.status = data["status"]["reputation"]["recommended"]
+                self.status.status_source = "COLLECTION"
 
             PyFunceble.facility.Logger.info(
                 "Could define the status of %r from: Collection Lookup",

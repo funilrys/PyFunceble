@@ -82,11 +82,11 @@ class CollectionQueryTool:
 
     :param preferred_status_origin:
         The preferred data origin.
-        It can be :code:`frequent` or :code:`latest`.
+        It can be :code:`frequent`, :code:`latest` or :code:`recommended`.
     """
 
     SUPPORTED_CHECKERS: List[str] = ["syntax", "reputation", "availability"]
-    SUPPORTED_STATUS_ORIGIN: List[str] = ["frequent", "latest"]
+    SUPPORTED_STATUS_ORIGIN: List[str] = ["frequent", "latest", "recommended"]
 
     STD_URL_BASE: str = "http://localhost:8001"
     STD_PREFERRED_STATUS_ORIGIN: str = "frequent"
