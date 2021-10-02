@@ -138,7 +138,7 @@ jobs:
           parallel-finished: true
 
   deploy_to_pypi:
-    needs: [run_cli, run_cli_mariadb]
+    needs: test
     name: "Deploy 📦 to the PyPi"
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -181,7 +181,7 @@ jobs:
           skip_existing: true
 
   deploy_to_docker_hub:
-    needs: [run_cli, run_cli_mariadb]
+    needs: test
     name: "Deploy 📦 to the Docker Hub"
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
