@@ -63,7 +63,7 @@ PyFunceble!
 .. _Phishing.Database : https://github.com/mitchellkrogza/Phishing.Database
 .. _polish-adblock-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-adblock-filters/adblock.txt
 .. _polish-pihole-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-pihole-filters/hostfile.txt
-.. _porn-records : https://www.mypdns.org/project/view/10/
+.. _porn-records : https://mypdns.org/my-privacy-dns/porn-records
 .. _pornhosts : https://github.com/Import-External-Sources/pornhosts
 .. _Steven Black ad-hoc list : https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts
 .. _Stop.Google.Analytics.Ghost.Spam.HOWTO : https://github.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO
