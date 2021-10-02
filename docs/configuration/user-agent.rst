@@ -12,8 +12,10 @@
 
     **Default value:** :code:`chrome`
 
+    **Available values:** :code:`chrome`, :code:`edge`, :code:`firefox`,
+    :code:`ie`, :code:`opera`, :code:`safari`.
+
     **Description:** Sets the browser to get the get the latest user agent from.
-    Available values: :code:`chrome`, :code:`edge`, :code:`firefox`, :code:`ie`, :code:`opera`, :code:`safari`
 
 .. warning::
     This option is not taken in consideration if :code:`user_agent[custom]` is
@@ -26,8 +28,9 @@
 
     **Default value:** :code:`linux`
 
+    **Available values:** :code:`linux`, :code:`macosx`, :code:`win10`
+
     **Description:** Sets the platform to get the get the latest user agent for.
-    Available values: :code:`linux`, :code:`macosx`, :code:`win10`
 
 .. warning::
     This option is not taken in consideration if :code:`user_agent[custom]` is

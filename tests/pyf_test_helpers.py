@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -27,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,10 +49,11 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-# pylint: enable=line-too-long
+
+from datetime import timedelta, timezone
 
 
-def convert_ipv4_to_rpz(subject):
+def convert_ipv4_to_rpz(subject: str) -> str:
     """
     Converts the given IPv4 into a policy format which can later be used in the
     tests.
@@ -62,7 +62,7 @@ def convert_ipv4_to_rpz(subject):
     return ".".join(reversed(subject.replace("/", ".").split(".")))
 
 
-def convert_ipv6_to_rpz(subject):
+def convert_ipv6_to_rpz(subject: str) -> str:
     """
     Converts the given IPV6 into a policy format which can later be used in the
     tests.
@@ -79,3 +79,52 @@ def convert_ipv6_to_rpz(subject):
             starting_point = starting_point.replace("::", ".zz")
 
     return ".".join(reversed(starting_point.replace(":", ".").split(".")))
+
+
+def get_timezone(
+    sign: str = "+",
+    days: int = 0,
+    seconds: int = 0,
+    microseconds: int = 0,
+    milliseconds: int = 0,
+    minutes: int = 0,
+    hours: int = 0,
+    weeks: int = 0,
+) -> timezone:
+    """
+    Provides a timezone.
+
+    :param str sign:
+        The sign to apply. Should be :code:`+` or :code:`-`.
+    :param int weeks:
+        The number of weeks from UTC.
+    :param int days:
+        The number of days from UTC.
+    :param int hours:
+        The number of hours from UTC.
+    :param int minutes:
+        The number of minutes from UTC.
+    :param int seconds:
+        The number of seconds from UTC.
+    :param int milliseconds:
+        The number of days from UTC.
+    :param int microseconds:
+        The number of microseconds from UTC.
+    """
+
+    if sign == "+":
+        sign = 1
+    else:  # pragma: no cover ## Not covered by default.
+        sign = -1
+
+    delta = timedelta(
+        days=days,
+        seconds=seconds,
+        microseconds=microseconds,
+        milliseconds=milliseconds,
+        minutes=minutes,
+        hours=hours,
+        weeks=weeks,
+    )
+
+    return timezone(sign * delta)

@@ -3,13 +3,14 @@ Requirements
 
 Here is the list of requirements:
 
--   Python 3.6.11+
+-   Python 3.7.0+
 -   :code:`alembic`
 -   :code:`colorama`
 -   :code:`cryptography`
 -   :code:`dnspython`
 -   :code:`domain2idna`
 -   :code:`inflection`
+-   :code:`packaging`
 -   :code:`PyMySQL`
 -   :code:`python-box`
 -   :code:`python-dotenv`
@@ -18,12 +19,13 @@ Here is the list of requirements:
 -   :code:`setuptools`
 -   :code:`sqlalchemy`
 
-Python 3.6.11+
+Python 3.7.0+
 ^^^^^^^^^^^^^^
 
-The specification :code:`3.6.11+` is because we test PyFunceble (daily)
-in all (:code:`3.x`) versions from :code:`3.6.11`.
-Otherwise, more semantically, PyFunceble is written for all Python 3.6+ version.
+The specification :code:`3.7.0+` is because we test PyFunceble (daily)
+in all (:code:`3.x`) versions from :code:`3.7.0`.
+Otherwise, more semantically, PyFunceble is written for all Python 3.7+
+version.
 
 :code:`alembic`
 ^^^^^^^^^^^^^^^
@@ -50,12 +52,13 @@ As we use it to do the DNS lookups, :code:`dnspython` is required.
 :code:`domain2idna`
 ^^^^^^^^^^^^^^^^^^^
 
-As we propose the conversion of domains to IDNA, :code:`domain2idna` is required.
+As we propose the conversion of domains to IDNA, :code:`domain2idna` is
+required.
 
 .. note::
     :code:`domain2idna` is maintained and developed by
     `Nissar Chababy (@funilrys)`_, the developer of PyFunceble.
-    Its source code can be found `on GitHub`_.
+    The source code can be found `on GitHub`_.
 
 .. _Nissar Chababy (@funilrys): https://github.com/funilrys
 .. _on GitHub: https://github.com/PyFunceble/domain2idna
@@ -64,7 +67,13 @@ As we propose the conversion of domains to IDNA, :code:`domain2idna` is required
 ^^^^^^^^^^^^^^^^^^
 
 We don't necessarily want to reinvent the wheel while generating the (database)
-tables name from our schama descriptions. This tool is a relief!
+tables name from our schema descriptions. This tool is a relief!
+
+:code:`packaging`
+^^^^^^^^^^^^^^^^^
+
+we don't necessarily want to reinvent the wheel to compare the current with the
+latest (upstream) version. This module is a relief - too !
 
 :code:`PyMySQL`
 ^^^^^^^^^^^^^^^
@@ -75,7 +84,8 @@ As we propose the :code:`MariaDB` or :code:`MySQL` database types,
 :code:`python-box`
 ^^^^^^^^^^^^^^^^^^
 
-As we use :code:`python-box` for a better code access to the configuration, it is required.
+As we use :code:`python-box` for a better code access to the configuration,
+it is required.
 
 :code:`python-dotenv`
 ^^^^^^^^^^^^^^^^^^^^^
@@ -85,17 +95,20 @@ As we are able to load dotenv files, :code:`python-dotenv` is required.
 :code:`PyYAML`
 ^^^^^^^^^^^^^^
 
-As our configuration file is written in :code:`.yaml`, :code:`PyYAML` is required.
+As our configuration file is written in :code:`.yaml`, :code:`PyYAML` is
+required.
 
 :code:`requests`
 ^^^^^^^^^^^^^^^^
 
-As we use :code:`requests` multiple times to communicate with webservices, :code:`requests` is required.
+As we use :code:`requests` multiple times to communicate with webservices,
+:code:`requests` is required.
 
 :code:`setuptools`
 ^^^^^^^^^^^^^^^^^^
 
-As we use :code:`install_requires=xx` inside our :code:`setup.py`, :code:`setuptools` is required.
+As we use :code:`install_requires=xx` inside our :code:`setup.py`,
+:code:`setuptools` is required.
 
 :code:`sqlalchemy`
 ^^^^^^^^^^^^^^^^^^

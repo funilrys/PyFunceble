@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,15 +50,30 @@ License:
     limitations under the License.
 """
 
+# pylint: skip-file
+# flake8: noqa
+
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from PyFunceble.engine.database.loader.base import DatabaseBase
-from PyFunceble.engine.database.loader.credential import Credential
+import PyFunceble.cli.facility
+import PyFunceble.facility
+from PyFunceble.database.sqlalchemy.all_schemas import Continue, Inactive, WhoisRecord
+from PyFunceble.database.sqlalchemy.base_schema import SchemaBase
 
-# pylint: disable=no-member
 config = context.config
-target_metadata = DatabaseBase.metadata
+target_metadata = SchemaBase.metadata
+
+if not PyFunceble.facility.ConfigLoader.is_already_loaded():
+    # We load the configuration because we don't want to manually give
+    # the db type. In fact, we may not know about it yet.
+    PyFunceble.facility.ConfigLoader.start()
+    PyFunceble.cli.facility.CredentialLoader.set_db_type(
+        PyFunceble.storage.CONFIGURATION.cli_testing.db_type
+    )
+
+PyFunceble.cli.facility.CredentialLoader.start()
+credential_uri = PyFunceble.cli.facility.CredentialLoader.get_uri()
 
 
 def run_migrations_offline():
@@ -74,12 +89,12 @@ def run_migrations_offline():
     script output.
     """
 
-    url = Credential().get_uri()
     context.configure(
-        url=url,
+        url=credential_uri,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -95,7 +110,7 @@ def run_migrations_online():
     """
 
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = Credential().get_uri()
+    configuration["sqlalchemy.url"] = credential_uri
 
     connectable = engine_from_config(
         configuration,
@@ -104,7 +119,9 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection, target_metadata=target_metadata, compare_type=True
+        )
 
         with context.begin_transaction():
             context.run_migrations()

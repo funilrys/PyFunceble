@@ -5,10 +5,10 @@ The tool to check the availability or syntax of domain, IP or URL
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=3.x
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=3.x
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/3.x/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
 .. image:: https://img.shields.io/pypi/v/pyfunceble.png
     :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -20,97 +20,80 @@ The tool to check the availability or syntax of domain, IP or URL
 .. image:: https://pepy.tech/badge/pyfunceble/week
     :target: https://pepy.tech/project/pyfunceble
 
-PyFunceble is the little sister of `Funceble`_ which was archived on 13th
-March 2018.
+**PyFunceble** aims to provide an accurate availability check through the usage
+of multiple sources which are for example - to only list them:
 
-**EOL of PyFunceble 3.x**. Please do read more about this in the
-`EOL <https://pyfunceble.readthedocs.io/en/3.x/installation/index.html#eol-of-any-version-3-x>`_
-chapter of the documentation.
+- the WHOIS record(s).
+- the DNS record(s).
+- the HTTP status code.
 
-Its main objective is to provide the availability of domains, IPs and since
-recently URL by generating an accurate result based on results from WHOIS,
-NSLOOKUP and HTTP status codes.
+PyFunceble can be included in your existing project through:
 
-PyFunceble provides some useful features for continuous testing.
+- its standard built-in CLI implementation.
+- its `Python API`_.
+- the `PyFunceble web-worker`_ project that provides the core functionalities
+  of PyFunceble behind a web API.
 
-As an example, its auto-continue system coupled with its auto-save system
-allows it to run nice and smoothly under Travis CI without even reaching
-Travis CI time restriction. In the other side, its internal inactive database
-system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs
-being automatically retested over time on next run.
+The PyFunceble CLI can test from a hosts file, a plain list of subjects, an
+AdBlock filter list or even an RPZ record.
+
+As of today, PyFunceble is running actively - if not daily - within several
+servers, laptops, PCs, and Raspberry Pis. It is even used - thanks to our
+auto continue mechanism - with CI engines like GitHub Action, Travis CI, or
+GitLab CI.
+
+Happy testing with PyFunceble!
+
+.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+
+.. _Python API: https://pyfunceble.readthedocs.io/en/latest/api/index.html
+.. _PyFunceble web-worker: https://github.com/pyfunceble/web-worker
+
+
+___________________________________________
+
+Installation
+------------
+
+:code:`pip`
+^^^^^^^^^^^
+
+::
+
+    $ pip install --upgrade pyfunceble
+    $ pyfunceble --version
+
+:code:`docker`
+^^^^^^^^^^^^^^
+
+::
+
+    $ docker pull pyfunceble/pyfunceble
+    $ docker run -it pyfunceble/pyfunceble --version
+
 ___________________________________________
 
 Documentation as the place to be!
 ---------------------------------
 
-Want to know more about **PyFunceble**?
-We invite you to read the documentation at https://pyfunceble.readthedocs.io/en/master/!
+Want to know more about details **PyFunceble**?
+I invite you to read the documentation at https://pyfunceble.readthedocs.io/en/latest/!
 
-Want a local copy? We get you covered!
+Want a local copy? I get you covered!
 
 Simply run the following and enjoy the documentation!
 
 ::
 
+    $ pip install --user -r requirements.docs.txt # Install dependencies.
     $ cd docs/
-    $ make html
+    $ make clean html
     $ palemoon _build/html/index.html # palemoon or whatever browser you use.
 
-___________________________________________
-
-What can PyFunceble do?
------------------------
-
-- Test the availability of a domain.
-- Test the availability of an IPv4.
-- Test the availability of an IPv6.
-- Test the availability of a URL.
-- Test the availability of a domain/DNS name in a private or local network.
-- Test the availability of an IPv4 in a private or local network.
-- Test the availability of an IPv6 in a private or local network.
-- Test the availability of a URL in a private or local network.
-- Test the syntax of a domain.
-- Test the syntax of an IPv4.
-- Test the syntax of an IPv6.
-- Test the syntax of a URL.
-- Test the AlienVault's reputation of an IPv4.
-- Test of domain or IP which are present into an Adblock formatted file.
-- Test from a given raw link.
-- Test using multiprocessing (from CLI only).
-- Save test result(s) in file(s) (hosts file, plain text and/or JSON format).
-- Save test result in a SQL database.
-- Show test result(s) on screen.
-- Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`,
-  :code:`INVALID`)
-- Sort outputs hierarchically.
-- "Mining" of domain or IP which are related to the tested element.
-- Auto-continuation of tests in case of system crash or script stop.
-- Filtering of a file content.
-
-  - This feature will let us for example test all blogspot domain of the given
-    file no matter the content of the file.
-
-- Set the user-agent to use for the tests.
-- Give some analytic depending of the HTTP status code (:code:`ACTIVE`,
-  :code:`POTENTIALLY_ACTIVE`, :code:`POTENTIALLY_INACTIVE`, :code:`SUSPICIOUS`).
-- Retest overtime of :code:`INACTIVE` and :code:`INVALID` domains.
-- Print the execution time on screen and file.
-- Customisation of the different option via command-line arguments or
-  configuration file.
-- Continuous tests under Travis CI or GitLab CI/CI
-
-  - ... with the help of an auto saving and database system.
-  - Set the branch to push the result to. For the autosaving system.
-  - Set the minimal time before we autosave in order to avoid CI/CD limitation.
-  - Set a command to execute at the end of the test.
-  - Set the commit message for the autosaving system.
-
-- ... and a lot more!
-
-.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-
-Please report to the `homepage for more GIF`_.
+.. note::
+    You are also invited to submit changes and improvement to the documentation
+    through a new Pull Request.
 
 ___________________________________________
 
@@ -118,15 +101,15 @@ Supporting the project
 ----------------------
 
 
-`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free time and a lot of coffee!
+`PyFunceble`_, `Dead-Hosts`_, and all other analog projects are powered by free
+time and a lot of coffee!
 
 This project helps you and/or you like it?
 
 GitHub Sponsor
-""""""""""""""
-`@funilrys`_ is part of the GitHub Sponsor program!
+^^^^^^^^^^^^^^
 
-*GitHub will match all donation for the coming months!*
+`@funilrys`_ is part of the GitHub Sponsor program!
 
 .. image:: https://github.com/PyFunceble/logo/raw/master/pyfunceble_github.png
     :target: https://github.com/sponsors/funilrys
@@ -135,10 +118,10 @@ GitHub Sponsor
 `Sponsor me`_!
 
 Ko-Fi
-"""""
+^^^^^
 
 Don't want to use the GitHub Sponsor program ?
-Single donation are welcome too!
+Single donations are welcome too!
 
 .. image:: https://az743702.vo.msecnd.net/cdn/kofi3.png
     :target: https://ko-fi.com/V7V3EH2Y
@@ -151,7 +134,8 @@ ___________________________________________
 Contributors
 ------------
 
-Thanks to those awesome peoples for their awesome and crazy idea(s), contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
+Thanks to those awesome peoples for their awesome and crazy idea(s),
+contribution(s) and or issue report which made or make `PyFunceble`_ a better tool.
 
 ::
 
@@ -169,6 +153,7 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   hawkeye116477 - `@hawkeye116477`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
+-   keczuppp - `@keczuppp`_
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
 -   NeolithEra - `@NeolithEra`_
@@ -183,6 +168,8 @@ Thanks to those awesome peoples for their awesome and crazy idea(s), contributio
 -   The Unknown - `@AnonymousPoster`_
 -   WaLLy3K - `@WaLLy3K`_
 -   xxcriticxx - `@xxcriticxx`_
+-   Yuki2718 - `@Yuki2718`_
+-   Zachinquarantine - `@Zachinquarantine`_
 -   ZeroDot1 - `@ZeroDot1`_
 
 ___________________________________________
@@ -273,7 +260,7 @@ License
 .. _yWorks: https://www.yworks.com/company
 
 .. _@adblockplus: https://github.com/adblockplus
-.. _@AnonymousPoster: https://github.com/AnonymousPoster
+.. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
 .. _@asciinema: https://github.com/asciinema
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
@@ -283,6 +270,7 @@ License
 .. _@funilrys: https://github.com/funilrys
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
+.. _@keczuppp: https://github.com/keczuppp
 .. _@kennethreitz: https://github.com/kennethreitz
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
@@ -298,15 +286,17 @@ License
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@SMed79: https://github.com/SMed79
 .. _@speedmann: https://github.com/speedmann
-.. _@spirillen: https://github.com/spirillen
+.. _@spirillen: https://www.mypdns.org/p/Spirillen/
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@yaml: https://github.com/yaml
 .. _@ybreza: https://github.com/ybreza
+.. _@Yuki2718: https://github.com/Yuki2718
+.. _@Zachinquarantine: https://github.com/Zachinquarantine
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _homepage for more GIF: http://pyfunceble.github.io/
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/latest/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

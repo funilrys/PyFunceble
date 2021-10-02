@@ -6,10 +6,10 @@ The tool to check the availability or syntax of domain, IP or URL.
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=3.x
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=3.x
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/3.x/LICENSE
+    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
 .. image:: https://img.shields.io/pypi/v/pyfunceble.png
     :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
@@ -21,29 +21,40 @@ The tool to check the availability or syntax of domain, IP or URL.
 .. image:: https://pepy.tech/badge/pyfunceble/week
     :target: https://pepy.tech/project/pyfunceble
 
-PyFunceble is the little sister of `Funceble`_ which was archived on 13th
-March 2018.
 
-**EOL of PyFunceble 3.x**. Please do read more about this in the
-`EOL <installation/index.html#eol-of-any-version-3-x>`_ chapter.
+Welcome to PyFunceble!
 
-Its main objective is to provide the availability of domains, IPs and since
-recently URL by generating an accurate result based on results from WHOIS,
-NSLOOKUP and HTTP status codes.
+**PyFunceble** is a tool that aims to provide an accurate availability check
+through the usage of multiple sources which are for example - to only list them:
 
-PyFunceble provides some useful features for continuous testing.
+- the WHOIS record(s).
+- the DNS record(s).
+- the HTTP status code.
 
-As an example, its auto-continue system coupled with its auto-save system
-allows it to run nice and smoothly under Travis CI without even reaching
-Travis CI time restriction. In the other side, its internal inactive database
-system let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs
-being automatically retested over time on next run.
+PyFunceble can be included in your existing project through:
 
-.. _Funceble: https://github.com/funilrys/funceble
+- its standard built-in CLI implementation.
+- its `Python API`_.
+- the `PyFunceble web-worker`_ project that provides the core functionalities
+  of PyFunceble behind a web API.
+
+The PyFunceble CLI can test from a hosts file, a plain list of subjects, an
+AdBlock filter list or even an RPZ record.
+
+As of today, PyFunceble is running actively - if not daily - within several
+servers, laptops, PCs, and Raspberry Pis. It is even used - thanks to our
+auto continue mechanism - with CI engines like GitHub Action, Travis CI, or
+GitLab CI.
+
+Happy testing with PyFunceble!
+
+.. _Python API: api/index.html
+.. _PyFunceble web-worker: https://github.com/pyfunceble/web-worker
 
 .. toctree::
    :maxdepth: 3
 
+   history
    what-can-we-do
    contributors
    special-thanks
@@ -55,18 +66,6 @@ being automatically retested over time on next run.
    respect/license
    respect/code-of-conduct
 
-.. toctree::
-   :maxdepth: 3
-
-   facts/they-use-d-it
-   facts/faq
-   facts/known_issues
-   facts/contact
-
-.. toctree::
-   :maxdepth: 3
-
-   dead-hosts/index
 
 .. toctree::
    :maxdepth: 3
@@ -79,7 +78,7 @@ being automatically retested over time on next run.
    update/index
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
 
    configuration/index
 
@@ -111,7 +110,20 @@ being automatically retested over time on next run.
 .. toctree::
    :maxdepth: 3
 
-   code/index
+   dead-hosts/index
+
+.. toctree::
+   :maxdepth: 3
+
+   facts/they-use-d-it
+   facts/faq
+   facts/known_issues
+   facts/contact
+
+.. toctree::
+   :maxdepth: 5
+
+   code/modules
 
 Indices and tables
 ==================

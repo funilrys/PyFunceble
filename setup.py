@@ -11,41 +11,84 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-PyFunceble is the little sister of Funceble (https://github.com/funilrys/funceble)
-which was archived on 13th March 2018.
+Welcome to PyFunceble!
 
-Its main objective is to provide the availability of domains, IPs and since recently
-URL by generating an accurate result based on results from WHOIS, NSLOOKUP and
-HTTP status codes.
+PyFunceble  is the little sister of Funceble
+(https://github.com/funilrys/funceble) which was archived on 13th March
+2018. In March 2018, because Funceble was starting to become a huge unmanageable
+script, I - Nissar Chababy aka `@funilrys`_ - decided to make it a Python tool
+for the purpose of extending my Python knowledge. It was meant for my own use case.
 
-PyFunceble is currently running actively and daily with the help of Travis CI under
-60+ repositories. It is used to clean or test the availability of data which are
-present in hosts files, list of IP, list of domains, block lists or even AdBlock
-filter lists.
+Back then, my problem was that I didn't want to download a huge hosts file
+knowing that most of the entries do not exist anymore. That's how Py-Funceble
+started.
 
-PyFunceble provides some useful features for continuous testing.
+My objective - now - through this tool is to provide a tool and a Python API
+which helps the world test the availability of domains, IPs and URL through
+the gathering and interpretation of information from existing tools or
+protocols like WHOIS records, DNS lookup, or even HTTP status codes.
 
-As an example, its auto-continue system coupled with its auto-save system allows
-it to run nice and smoothly under Travis CI without even reaching Travis CI time
-restriction. In the other side, its internal inactive database system
-let :code:`INACTIVE` and :code:`INVALID` caught domains, IPs or URLs being
-automatically retested over time on next run.
+The base of this tool was my idea.
+But as with many Open Source (related) projects, communities or
+individuals, we evolve with the people we meet, exchange with or just discuss
+with privately. PyFunceble was and is still not an exception to that.
 
+My main idea was to check the availability of domains in hosts files.
+But 3 years later, PyFunceble is now capable of a lot including:
+
+- The testing of domains, IPs, and URLs.
+- The checking of the syntax or reputation of a domain, IPs, and URLs.
+- The decoding of AdBlock filters, RPZ records, or plain files before a test
+  from the CLI.
+
+PyFunceble evolved and will probably continue to evolve with the time
+and the people using it.
+
+In June 2020, The PyFunceble-dev PyPI package - which gets everything as
+soon as possible compared to the PyFunceble (stable) package - reached 1 million
+total downloads. I never noticed it until I was reached by someone informing me
+of it. But, I was shocked.
+
+I never thought that something I built from A to Z in my free time will ever
+reach that point.
+I was thankful to that nice person for informing me of it. But at the same time
+concerned about PyFunceble and how it will evolve. That's why I started the
+development of PyFunceble 4.0.0. My idea as I was refactoring it was to provide
+a better Python API and implementation of my core ideas along with a better
+incorporation and extension capability.
+Indeed, in the last few years, I was so much obsessed with the CLI that I
+really never wrote each component individually. They were all dependent - if
+not part of - the CLI. With 4.0.0, you can now import one of the components
+of PyFunceble and start straight away. No real need to play with the
+configuration unless you want something very specific.
+That's how I see the future of PyFunceble.
+
+As of today, PyFunceble is running actively - if not daily - within several
+servers, laptops, PCs, and Raspberry Pis. It is even used - thanks to our
+auto continue dataset and component - with CI engines like GitHub Action,
+Travis CI, and GitLab CI.
+
+PyFunceble is my tool. But it is indirectly also become yours.
+Therefore, I invite you to let me know how you use PyFunceble or simply open a
+discussion - or join an existing one - about anything you do with PyFunceble.
+But also anything that you - would - like - or dislike - in PyFunceble.
+
+Happy testing with PyFunceble!
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -69,53 +112,93 @@ License:
     limitations under the License.
 """
 
-from re import compile as comp
-from unittest import TestLoader
+import os
+import platform
+import re
+from typing import List
 
-from setuptools import setup, find_packages
+import setuptools
 
 
-def _test_suite():
+def is_win_platform():
     """
-    This function will discover and run all the tests.
+    Checks if the current platform is Windows.
     """
 
-    test_loader = TestLoader()
-    test_suite = test_loader.discover("tests", pattern="test_*.py")
-    return test_suite
+    WIN_PLATFORMS = ["windows", "cygwin", "cygwin_nt-10.0"]
+
+    return platform.system().lower() in WIN_PLATFORMS
 
 
-def _get_requirements():
+def get_requirements(*, mode="standard"):
     """
     This function extract all requirements from requirements.txt.
     """
 
-    with open("requirements.txt") as file:
-        requirements = file.read().splitlines()
+    mode2files = {
+        "standard": ["requirements.txt"],
+        "dev": ["requirements.dev.txt"],
+        "docs": ["requirements.docs.txt"],
+    }
 
-    return requirements
+    if is_win_platform():
+        for mode, files in mode2files.items():
+            new_files = set()
+
+            for file in files:
+                win_file = file.replace(".txt", ".win.txt")
+
+                if os.path.isfile(win_file):
+                    new_files.add(win_file)
+                else:
+                    new_files.add(file)
+
+            mode2files[mode] = list(new_files)
+
+    mode2files["full"] = [y for x in mode2files.values() for y in x]
+
+    result = set()
+
+    for file in mode2files[mode]:
+        with open(file, "r", encoding="utf-8") as file_stream:
+            for line in file_stream:
+                line = line.strip()
+
+                if not line or line.startswith("#"):
+                    continue
+
+                if "#" in line:
+                    line = line[: line.find("#")].strip()
+
+                if not line:
+                    continue
+
+                result.add(line)
+
+    return list(result)
 
 
-def _get_version():
+def get_version():
     """
     This function will extract the version from PyFunceble/__init__.py
     """
 
-    to_match = comp(r'VERSION\s=\s"(.*)"\n')
+    to_match = re.compile(r'PROJECT_VERSION.*=\s+"(.*)"')
 
     try:
         extracted = to_match.findall(
-            open("PyFunceble/abstracts/package.py", encoding="utf-8").read()
+            open("PyFunceble/storage.py", encoding="utf-8").read()
         )[0]
+
     except FileNotFoundError:  # pragma: no cover
         extracted = to_match.findall(
-            open("../PyFunceble/abstracts/package.py", encoding="utf-8").read()
+            open("../PyFunceble/storage.py", encoding="utf-8").read()
         )[0]
 
-    return ".".join([x for x in extracted.split(".") if x.isdigit()])
+    return extracted[: extracted.rfind(".")]
 
 
-def _get_long_description():  # pragma: no cover
+def get_long_description():  # pragma: no cover
     """
     This function return the long description.
     """
@@ -124,39 +207,38 @@ def _get_long_description():  # pragma: no cover
 
 
 if __name__ == "__main__":
-    setup(
-        name="PyFunceble",
-        version=_get_version(),
+    setuptools.setup(
+        name="PyFunceble-dev",
+        version=get_version(),
         python_requires=">=3.6, <4",
-        install_requires=_get_requirements(),
+        install_requires=get_requirements(mode="standard"),
+        extras_require={
+            "docs": get_requirements(mode="docs"),
+            "dev": get_requirements(mode="dev"),
+            "full": get_requirements(mode="full"),
+        },
         description="The tool to check the availability or syntax of domain, IP or URL.",
-        long_description=_get_long_description(),
+        long_description=get_long_description(),
         author="funilrys",
         author_email="contact@funilrys.com",
         license="Apache 2.0",
         url="https://github.com/funilrys/PyFunceble",
         project_urls={
-            "Documentation": "https://pyfunceble.readthedocs.io/en/master/",
+            "Documentation": "https://pyfunceble.readthedocs.io/en/latest/",
             "Funding": "https://github.com/sponsors/funilrys",
-            "Source": "https://github.com/funilrys/PyFunceble",
+            "Source": "https://github.com/funilrys/PyFunceble/tree/master",
             "Tracker": "https://github.com/funilrys/PyFunceble/issues",
         },
         platforms=["any"],
-        packages=find_packages(exclude=("*.tests", "*.tests.*", "tests.*", "tests")),
+        packages=setuptools.find_packages(
+            exclude=("*.tests", "*.tests.*", "tests.*", "tests")
+        ),
+        include_package_data=True,
         keywords=[
-            "availability",
-            "dns",
-            "domain",
-            "IP",
-            "IPv4",
-            "IPv6",
-            "URL",
-            "nslookup",
             "PyFunceble",
-            "Python",
             "syntax-checker",
-            "syntax",
-            "WHOIS",
+            "reputation-checker",
+            "availability-checker",
         ],
         classifiers=[
             "Environment :: Console",
@@ -170,8 +252,12 @@ if __name__ == "__main__":
         test_suite="setup._test_suite",
         entry_points={
             "console_scripts": [
-                "PyFunceble=PyFunceble.cli:tool",
-                "pyfunceble=PyFunceble.cli:tool",
+                "PyFunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+                "pyfunceble=PyFunceble.cli.entry_points.pyfunceble.cli:tool",
+                "public-suffix-pyfunceble=PyFunceble.cli.entry_points.public_suffix:generator",
+                "iana-pyfunceble=PyFunceble.cli.entry_points.iana:generator",
+                "production-pyfunceble=PyFunceble.cli.entry_points.production:producer",
+                "clean-pyfunceble=PyFunceble.cli.entry_points.clean:cleaner",
             ]
         },
     )

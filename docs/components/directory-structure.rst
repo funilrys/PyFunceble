@@ -5,31 +5,30 @@ Why do we need it?
 ^^^^^^^^^^^^^^^^^^
 
 As we wanted the end-user to be able to work from everywhere into the filesystem,
-we created a logic which will create and keep the :code:`output/` directory which complies
-with our code.
+we created a logic which will create and keep the :code:`output/` directory which
+complies with our source code.
 
 How does it work?
 ^^^^^^^^^^^^^^^^^
 
 .. note::
-    Want to read the code ? It's here :func:`PyFunceble.output.constructor.Constructor`!
+    Want to read the code ?
+    It's here
+    :class:`PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup`
+    and
+    :class:`PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureRestoration`!
 
-After each version, the maintainer does a :code:`--production` which will prepare the repository
-for production.
-That has the side effect to map the maintainer version of the :code:`output/`
-directory into a file called :code:`dir_structure_production.json`.
+After each version, the maintainer run the :code:`production-pyfunceble` CLI
+which will prepare the repository for production.
 
-Once pushed, on the end-user side, when testing for file, that file is downloaded into
+That has the side effect to map the maintainer's version of the
+:code:`output/__pyfunceble_origin__` directory into a file called
+:code:`dir_structure_production.json` which is then bundled into the PyPI
+package.
+
+Once pushed, on the end-user side, when testing for file, that file is
+copied from the Python Package into
 a file called :code:`dir_structure.json` which is then used to restore/create a
 a perfect copy of the output directory the maintainer had when pushing the new
 version.
 
-.. note::
-    If you find yourself in a case that a directory is not found, please try first to
-    delete the :code:`dir_structure*.json` files to force a resynchronization.
-
-
-How to generate it manually?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can't. But using the :code:`--dir-structure` argument will do the job on purpose.

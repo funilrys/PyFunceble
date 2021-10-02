@@ -9,31 +9,25 @@ about databases, we are indirectly talking about the following subsystems.
 
 * Autocontinue
 * InactiveDB
-* Mining
 * WhoisDB
-
-.. warning::
-    There is a difference between what we are talking here and the
-    :code:`--database` argument which only enable/disable the InactiveDB
-    subsystem.
 
 How do we manage them?
 ^^^^^^^^^^^^^^^^^^^^^^
 
-They consist of simple JSON files which are read and updated on the fly.
+They consist of simple CSV files which are read and updated on the fly.
 
 Warnings around Database (self) management
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. warning::
     If you plan to delete everything and still manage to use PyFunceble in the
-    future, please use the :code:`--clean-all` argument.
+    future, please use the :code:`clean-pyfunceble` CLI.
 
-    Indeed, it will delete everything which is related to what we generated,
-    except things like the whois database file/table which saves (almost)
-    static data which can be reused in the future.
+    Indeed, it will delete everything that we generated,
+    except the things like the WHOIS database file/table which saves (almost)
+    static data which should be reused in the future.
 
-    Deleting, for example, the whois database file/table will just make
+    Deleting, for example, the WHOIS database file/table will just make
     your test run for a much longer time if you retest subject that used to be
     indexed into the whois database file/table.
 
@@ -41,20 +35,14 @@ Databases types
 ^^^^^^^^^^^^^^^
 
 Since PyFunceble :code:`2.0.0` (equivalent of :code:`>=1.18.0.dev`),
-we offer multiple database types which are (as per configuration) :code:`json`
-(default), :code:`mariadb` and :code:`mysql`.
+we offer multiple database types which are (as per configuration) :code:`csv`
+(default since :code:`4.0.0`), :code:`mariadb` and :code:`mysql`.
 
 Why different database types?
 """""""""""""""""""""""""""""
 
 With the introduction of the multiprocessing logic, it became natural to
-introduce other database format as it's a nightmare to update a JSON formatted
-file.
-
-In order to write or use a JSON formatted database, we have to load it and
-overwrite it completely.
-It's great while working with a single CPU/process but as soon as we get out of
-that scope it become unmanageable.
+introduce other database formats.
 
 How to use the :code:`mysql` or :code:`mariadb` format?
 """""""""""""""""""""""""""""""""""""""""""""""""""""""

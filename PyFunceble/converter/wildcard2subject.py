@@ -18,16 +18,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -52,8 +52,9 @@ License:
 """
 # pylint: enable=line-too-long
 
-from ..exceptions import WrongParameterType
-from .base import ConverterBase
+from typing import Any
+
+from PyFunceble.converter.base import ConverterBase
 
 
 class Wildcard2Subject(ConverterBase):
@@ -61,23 +62,26 @@ class Wildcard2Subject(ConverterBase):
     Converts a given wildcard into a testable subject.
     """
 
-    def __init__(self, data_to_convert):
-        if not isinstance(data_to_convert, str):
-            raise WrongParameterType(
-                f"<data_to_convert> should be {str}, {type(data_to_convert)} given."
-            )
+    WILDCARD: str = "*."
 
-        super().__init__(data_to_convert)
+    @ConverterBase.data_to_convert.setter
+    def data_to_convert(self, value: Any) -> None:
+        """
+        Overrites the default behavior.
 
-    def get_converted(self):
+        :raise TypeError:
+            When the given data to convert is not :py:class:`str`
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        # pylint: disable=no-member
+        super(Wildcard2Subject, self.__class__).data_to_convert.fset(self, value)
+
+    def get_converted(self) -> str:
         """
         Provides the converted data.
-
-        .. warning::
-            This method returns return None if no subject
-            of interest was found.
-
-        :rtype: None, str, list
         """
 
         subject = self.data_to_convert.strip()
@@ -85,7 +89,7 @@ class Wildcard2Subject(ConverterBase):
         if not subject:
             return None
 
-        if subject.startswith("*."):
+        if subject.startswith(self.WILDCARD):
             return subject[2:]
 
         return subject

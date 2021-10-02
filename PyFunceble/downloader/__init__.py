@@ -11,22 +11,22 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the downloaders of all our static files.
+Provides all downloaders.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -49,9 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-from .config import ConfigDownloader as Config
-from .directory_structure import DirectoryStructureDownloader as DirectoryStructure
-from .iana import IANADownloader as IANA
-from .ipv4_reputation import IPv4ReputationDownloader as IPv4Reputation
-from .publicsuffix import PublicSuffixDownloader as PublicSuffix
-from .user_agents import UserAgentsDownloader as UserAgents

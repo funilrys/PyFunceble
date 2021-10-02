@@ -11,22 +11,22 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the downloader of the iana database file.
+Provides the downloader of the latest iana database file.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,25 +50,29 @@ License:
     limitations under the License.
 """
 
-import PyFunceble
+import os
 
-from .base import DownloaderBase
+import PyFunceble.storage
+from PyFunceble.downloader.base import DownloaderBase
 
 
 class IANADownloader(DownloaderBase):
     """
-    Provides the downloader of the iana database file.
+    Provides the downloader of our iana file.
     """
 
-    DOWNTIME_INDEX = "iana"
-    REDOWNLOAD_AFTER = 1
+    DOWNTIME_INDEX: str = "iana"
+    DOWNLOAD_FREQUENCY: int = 1
 
-    def __init__(self):
-        self.download_link = PyFunceble.CONFIGURATION.links.iana
-        self.destination = (
-            f"{PyFunceble.CONFIG_DIRECTORY}{PyFunceble.OUTPUTS.default_files.iana}"
+    def __init__(self) -> None:
+        self.destination = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY,
+            PyFunceble.storage.IANA_DUMP_FILENAME,
         )
+        self.download_link = PyFunceble.storage.IANA_DUMP_LINK
 
         super().__init__()
 
-        self.process()
+    @property
+    def authorized(self) -> bool:
+        return True

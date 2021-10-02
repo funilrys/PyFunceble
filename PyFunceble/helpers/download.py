@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,49 +50,167 @@ License:
     limitations under the License.
 """
 
+from typing import Optional
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from ..exceptions import NoInternetConnection, UnableToDownload
-from .file import File
+import PyFunceble.helpers.exceptions
+from PyFunceble.helpers.file import FileHelper
 
 
-class Download:
+class DownloadHelper:
     """
     Simplification of the downloads.
 
     :param str url:
-        The url to download.
-    :param bool verify_certificate:
-        Allows/Disallows the certificate verification.
     :param int retry:
         The number of time we have to retry before raising an exception.
     """
 
-    def __init__(self, url, verify_certificate=True, retry=3):
-        if not isinstance(url, str):
-            raise TypeError(f"<url> must be {str}, {type(url)} given.")
+    _url: Optional[str] = None
+    _certificate_validation: bool = True
+    _retries: int = 3
 
-        if not isinstance(verify_certificate, bool):
-            raise TypeError(
-                f"<verify_certificate> must be {bool}, {type(verify_certificate)} given."
-            )
+    def __init__(
+        self,
+        url: Optional[str] = None,
+        *,
+        certificate_validation: bool = True,
+        retries: int = 3,
+    ) -> None:
+        if url:
+            self.url = url
 
-        self.url = url
-        self.certificate_verification = verify_certificate
+        if certificate_validation:
+            self.certificate_validation = certificate_validation
 
-        if not isinstance(retry, int):
-            raise TypeError(f"<retry> should be {int}, {type(retry)} given.")
+        if retries:
+            self.retries = retries
 
-        if retry <= 0:
-            retry = 1
-
-        self.retry = retry
-
-    def text(self, destination=None):
+    @property
+    def url(self) -> Optional[str]:
         """
-        Download the body of the given url.
+        Provides the current state of the :code:`_url` attribute.
+        """
+
+        return self._url
+
+    @url.setter
+    def url(self, value: str) -> None:
+        """
+        Sets the url to work with.
+
+        :param value:
+            The URL to set.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        self._url = value
+
+    def set_url(self, value: str) -> "DownloadHelper":
+        """
+        Sets the url to work with.
+
+        :param value:
+            The URL to set.
+        """
+
+        self.url = value
+
+        return self
+
+    @property
+    def certificate_validation(self) -> bool:
+        """
+        Provides the current state of the :code:`certificate_validation`
+        attribute.
+        """
+
+        return self._certificate_validation
+
+    @certificate_validation.setter
+    def certificate_validation(self, value: bool) -> None:
+        """
+        Sets the value of the certificate validation.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`bool`
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._certificate_validation = value
+
+    def set_certificate_validation(self, value: bool) -> "DownloadHelper":
+        """
+        Sets the value of the certificate validation.
+
+        :param value:
+            The value to set.
+        """
+
+        self.certificate_validation = value
+
+        return self
+
+    @property
+    def retries(self) -> int:
+        """
+        Provides the current state of the :code:`_retries` attributes.
+        """
+
+        return self._retries
+
+    @retries.setter
+    def retries(self, value: int) -> None:
+        """
+        Sets the number of retries we are allowed to perform before raising an
+        exception.
+
+        :param value:
+            The number of retry to apply.i
+
+        :raise TypeError:
+            When :code:`value` is not a :py:class:`int`.
+        :raise ValueError:
+            When :code:`value` is lower than :code:`0`.
+        """
+
+        if not isinstance(value, int):
+            raise TypeError(f"<value> should be {int}, {type(value)} given.")
+
+        if value <= 0:
+            raise ValueError("<value> should greater than zero.")
+
+        self._retries = value
+
+    def set_retries(self, value: int) -> "DownloadHelper":
+        """
+        Sets the number of retries we are allowed to perform before raising an
+        exception.
+
+        :param value:
+            The number of retry to apply.i
+        """
+
+        self.retries = value
+
+        return self
+
+    def download_text(self, *, destination: Optional[str] = None) -> str:
+        """
+        Download the body of the set url.
 
         .. note::
             if :code:`destination` is set to :code:`None`,
@@ -101,33 +219,33 @@ class Download:
             Otherwise, we save the output into the given
             destination, but we also return the output.
 
-        :param str destination: The download destination.
-        :rtype: str:
-        :raise Exception: When the status code is not 200.
-        :raise NoInternetConnection: When no connection could be made.
+        :param destination: The download destination.
+
+        :raise UnableToDownload: When could not unable to download the URL.
         """
 
         session = requests.Session()
 
-        retries = Retry(total=self.retry, backoff_factor=3)
+        retries = Retry(total=self.retries, backoff_factor=3)
         adapter = HTTPAdapter(max_retries=retries)
 
         session.mount("http://", adapter)
         session.mount("https://", adapter)
 
-        try:
-            req = session.get(self.url, verify=self.certificate_verification)
+        req = session.get(self.url, verify=self.certificate_validation)
 
-            if req.status_code == 200:
-                response = req.text
+        if req.status_code == 200:
+            response = req.text
 
-                if destination and isinstance(destination, str):
-                    File(destination).write(req.text, overwrite=True)
+            if destination and isinstance(destination, str):
+                FileHelper(destination).write(req.text, overwrite=True)
 
-                return response
+            adapter.close()
+            req.close()
+            return response
 
-            raise UnableToDownload(
-                f"{req.url} (retries: {self.retry} | status code: {req.status_code})"
-            )
-        except requests.exceptions.ConnectionError as exception:
-            raise NoInternetConnection(self.url) from exception
+        adapter.close()
+        session.close()
+        raise PyFunceble.helpers.exceptions.UnableToDownload(
+            f"{req.url} (retries: {self.retries} | status code: {req.status_code})"
+        )

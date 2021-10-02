@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -49,14 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from .command import Command
-from .dict import Dict
-from .directory import Directory
-from .download import Download
-from .environment_variable import EnvironmentVariable
-from .file import File
-from .hash import Hash
-from .list import List
-from .merge import Merge
-from .regex import Regex

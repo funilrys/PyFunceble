@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -49,63 +49,115 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-from re import MULTILINE
-from re import compile as re_compile
-from re import escape as re_escape
-from re import split as re_split
-from re import sub as re_sub
+
+import re
+from typing import List, Optional, Union
 
 
-class Regex:
+class RegexHelper:
     """
     Simplify the regex matching and usage.
 
     :param str regex: The regex to use.
-    :param bool escape: Escapes the given regex.
+    :param escape_regex: Escapes the given regex.
     """
 
-    def __init__(self, regex, escape=False):
-        if escape:
-            self.regex = re_escape(regex)
-        else:
+    _regex: Optional[str] = None
+    escape_regex: bool = False
+
+    def __init__(self, regex: Optional[str] = None, escape_regex: bool = False):
+        self.escape_regex = escape_regex
+
+        if regex is not None:
             self.regex = regex
 
-    def get_not_matching_list(self, data):
+    @property
+    def regex(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_regex` attribute.
+        """
+
+        return self._regex
+
+    @regex.setter
+    def regex(self, value: str) -> None:
+        """
+        Sets the regex to work with.
+
+        :param value:
+            The regex to work with.
+
+        :raise TypeError:
+            When :code:`value` is not :py:class:`str`.
+        """
+
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(str)} given.")
+
+        if not self.escape_regex:
+            self._regex = value
+        else:
+            self._regex = re.escape(value)
+
+    def set_regex(self, value: str) -> "RegexHelper":
+        """
+        Sets the regex to work with.
+
+        :param value:
+            The regex to work with.
+
+        :raise TypeError:
+            When :code:`value` is not :py:class:`str`.
+        """
+
+        self.regex = value
+
+        return self
+
+    def get_not_matching_list(self, data: List[str]) -> List[str]:
         """
         Returns the strings which does not the match the regex
         in the given data.
         """
 
-        pre_result = re_compile(self.regex)
+        pre_result = re.compile(self.regex)
 
         return [x for x in data if not pre_result.search(str(x))]
 
-    def get_matching_list(self, data):
+    def get_matching_list(self, data: List[str]) -> List[str]:
         """
         Returns the strings which does the match the regex
         in the given data.
         """
 
-        pre_result = re_compile(self.regex)
+        pre_result = re.compile(self.regex)
 
         return [x for x in data if pre_result.search(str(x))]
 
-    def match(self, data, rematch=False, group=0, return_match=True):
+    def match(
+        self,
+        data: str,
+        *,
+        rematch: bool = False,
+        group: int = 0,
+        return_match: bool = True,
+    ) -> Union[bool, str, List[str]]:
         """
         Checks if the given data match the given regex string.
 
-        :param str data: The data to work with.
-        :param bool rematch:
+        :param data: The data to work with.
+        :param rematch:
             The equivalent of the $BASH_REMATCH but in Python.
 
             It's basically a list of all groups.
-        :param bool group:
+        :param group:
             The group to return when return_match is set to :code:`True`.
-        :param bool return_match:
+        :param return_match:
             Return the part that match the given regex string.
         """
+
         result = []
-        to_match = re_compile(self.regex)
+        to_match = re.compile(self.regex)
 
         if rematch:
             pre_result = to_match.findall(data)
@@ -117,7 +169,7 @@ class Regex:
                 for res in pre_result:
                     if isinstance(res, tuple):
                         result.extend(list(res))
-                    else:
+                    else:  # pragma: no cover ## Safety
                         result.append(res)
 
                 if group != 0:
@@ -131,33 +183,38 @@ class Regex:
             return True
         return False
 
-    def replace_match(self, data, replacement, occurences=0, multiline=False):
+    def replace_match(
+        self,
+        data: str,
+        replacement: str,
+        *,
+        occurences: int = 0,
+        multiline: bool = False,
+    ) -> str:
         """
         Replaces the string which match the regex string with
         the given replacement.
 
-        :param str data: The data to work with.
-        :param str replacement: The replacement of the matched regex.
-        :param int occurences:
+        :param data: The data to work with.
+        :param replacement: The replacement of the matched regex.
+        :param occurences:
             The number of occurences to replace.
 
             .. note::
                 :code:`0` means all occurences.
-
-        :rtype: str
         """
 
         if isinstance(replacement, str):
-            return re_sub(
+            return re.sub(
                 self.regex,
                 replacement,
                 data,
                 occurences,
-                flags=MULTILINE if multiline else 0,
+                flags=re.MULTILINE if multiline else 0,
             )
         return data
 
-    def split(self, data):
+    def split(self, data: str) -> List[str]:
         """
         Split the reference of the given regex.
 
@@ -165,4 +222,4 @@ class Regex:
         :rtype: list
         """
 
-        return re_split(self.regex, data)
+        return re.split(self.regex, data)

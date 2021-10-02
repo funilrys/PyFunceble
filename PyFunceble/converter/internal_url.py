@@ -17,16 +17,16 @@ Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,13 +50,14 @@ License:
     limitations under the License.
 """
 
-from PyFunceble.abstracts import Version
-from PyFunceble.exceptions import WrongParameterType
+from typing import Any
 
-from .base import ConverterBase
+import PyFunceble.storage
+from PyFunceble.converter.base import ConverterBase
+from PyFunceble.utils.version import VersionUtility
 
 
-class InternalUrl(ConverterBase):
+class InternalUrlConverter(ConverterBase):
     """
     Converter of the internal URLs.
 
@@ -65,25 +66,27 @@ class InternalUrl(ConverterBase):
         do with what we are going to test.
 
         They are only relevant for the software itself.
-
-    :param str data_to_convert: The data to convert
     """
 
-    def __init__(self, data_to_convert):
-        if not isinstance(data_to_convert, str):
-            raise WrongParameterType(
-                f"<data_to_convert> should be {str}, {type(data_to_convert)} given."
-            )
-
-        super().__init__(data_to_convert)
-
-        self.converted_data = self.to_right_url()
-
-    def to_right_url(self):
+    @ConverterBase.data_to_convert.setter
+    def data_to_convert(self, value: Any) -> None:
         """
-        Process the conversion to the right URL.
+        Overrites the default behavior.
+
+        :raise TypeError:
+            When the given data to convert is not :py:class:`str`
+        """
+        if not isinstance(value, str):
+            raise TypeError(f"<value> should be {str}, {type(value)} given.")
+
+        # pylint: disable=no-member
+        super(InternalUrlConverter, self.__class__).data_to_convert.fset(self, value)
+
+    def get_converted(self) -> str:
+        """
+        Provides the converted data (after conversion)
         """
 
-        if Version.is_local_dev():
+        if VersionUtility(PyFunceble.storage.PROJECT_VERSION).is_dev():
             return self.data_to_convert.replace("master", "dev")
         return self.data_to_convert.replace("dev", "master")

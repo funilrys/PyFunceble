@@ -1,0 +1,14 @@
+alembic
+colorama
+cryptography<3.4
+dnspython[DOH]>=2.0.0
+domain2idna>=1.12.0
+inflection
+packaging
+PyMySQL
+python-box[all]>=5.0.0
+python-dotenv
+PyYAML
+requests<3
+setuptools
+SQLAlchemy>=1.3.20

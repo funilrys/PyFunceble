@@ -1,4 +1,3 @@
-# pylint:disable=line-too-long
 """
 The tool to check the availability or syntax of domain, IP or URL.
 
@@ -27,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/master/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -50,39 +49,55 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-# pylint: enable=line-too-long
 
-VALID_DOMAINS = [
-    "_hello_.abuse.co.za.",
-    "_hello_.abuse.co.za",
-    "_hello_world_.abuse.co.za.",
-    "_hello_world_.abuse.co.za",
+from typing import List
+
+VALID_SECOND_LVL_DOMAINS: List[str] = [
+    "example.org",
+    "example.net",
+    "example.co.uk",
+    "example.de",
+    "985.com",
+]
+
+NOT_VALID_SECOND_LVL_DOMAINS: List[str] = [
+    "hello.example.org",
+    "world.example.net",
+    "hello.world.example.co.uk",
+    "world.hello.example.de",
+]
+
+VALID_DOMAINS: List[str] = [
+    "_hello_.example.co.uk.",
+    "_hello_.example.co.uk",
+    "_hello_world_.example.co.uk.",
+    "_hello_world_.example.co.uk",
     "_hello_world_.hello.eu.com.",
     "_hello_world_.hello.eu.com",
     "_hello-beautiful-world_.wold.eu.com.",
     "_hello-beautiful-world_.wold.eu.com",
-    "_hello-world.abuse.co.za.",
-    "_hello-world.abuse.co.za",
-    "_hello._world.abuse.co.za.",
-    "_hello._world.abuse.co.za",
-    "_hello.abuse.co.za.",
-    "_hello.abuse.co.za",
+    "_hello-world.example.co.uk.",
+    "_hello-world.example.co.uk",
+    "_hello._world.example.co.uk.",
+    "_hello._world.example.co.uk",
+    "_hello.example.co.uk.",
+    "_hello.example.co.uk",
     "_world_.hello.eu.com.",
     "_world_.hello.eu.com",
     "_world.hello.eu.com.",
     "_world.hello.eu.com",
     "hello_.world.eu.com.",
     "hello_.world.eu.com",
-    "hello_world.abuse.co.za.",
-    "hello_world.abuse.co.za",
+    "hello_world.example.co.uk.",
+    "hello_world.example.co.uk",
     "hello_world.world.com.",
     "hello_world.world.com",
     "hello_world.world.hello.com.",
     "hello_world.world.hello.com",
     "hello---world.com.",
     "hello---world.com",
-    "hello-.abuse.co.za.",
-    "hello-.abuse.co.za",
+    "hello-.example.co.uk.",
+    "hello-.example.co.uk",
     "hello-world.com.",
     "hello-world.com",
     "hello.onion",
@@ -106,41 +121,47 @@ VALID_DOMAINS = [
     "xn--cyptopia-4e0d.com",
     "www.hello_world.blogspot.co.nz",
     "hello_world.blogspot.co.nz",
-]
-
-NOT_VALID_DOMAINS = [
-    "_world._hello.eu.com",
-    "_world.hello_.eu.com",
-    "-hello-.abuse.co.za",
-    "-hello-world_.abuse.co.za",
-    "-hello-world_all-mine_.hello.eu.com",
-    "-hello.abuse.co.za",
-    "-hello.world",
-    "-world.hello",
-    "..",
-    ".",
+    "example.org",
     "bịllogram.com",
     "bittréẋ.com",
     "coinbȧse.com",
     "cryptopiạ.com",
     "cṙyptopia.com",
+    "985.com",
+    "hello-world.example.msn.cn",
+]
+
+NOT_VALID_DOMAINS: List[str] = [
+    "_world._hello.eu.com",
+    "_world.hello_.eu.com",
+    "-hello-.example.co.uk",
+    "-hello-world_.example.co.uk",
+    "-hello-world_all-mine_.hello.eu.com",
+    "-hello.example.co.uk",
+    "-hello.world",
+    "-world.hello",
+    "..",
+    ".",
+    r"bịl\llogram.com",
     "hello_world_.com",
     "hello_world.com",
     "hello-.world",
     "hello-world",
-    "hello.-hello-world_.abuse.co.za",
+    "hello.-hello-world_.example.co.uk",
     "hello@world.com",
     "httpWd",
-    "test.-hello-world_all-mine_.abuse.co.za",
+    "test.-hello-world_all-mine_.example.co.uk",
     "world_hello.com",
     "world-.hello",
     "world-hello",
     "world.hello:80",
     "world@hello.com",
-    "hello_world.co.za",
+    "hello_world.co.uk",
+    "example.com\\",
+    "ex\\ample.com",
 ]
 
-VALID_SUBDOMAINS = [
+VALID_SUBDOMAINS: List[str] = [
     "hello_world.world.com",
     "hello_world.world.hello.com",
     "hello.world_hello.world.com",
@@ -150,17 +171,21 @@ VALID_SUBDOMAINS = [
     "_world_.hello.eu.com",
     "_hello-beautiful-world_.wold.eu.com",
     "_hello_world_.hello.eu.com",
-    "_hello.abuse.co.za",
-    "_hello_.abuse.co.za",
-    "_hello._world.abuse.co.za",
-    "_hello-world.abuse.co.za",
-    "_hello_world_.abuse.co.za",
-    "hello_world.abuse.co.za",
-    "hello-.abuse.co.za",
+    "_hello.example.co.uk",
+    "_hello_.example.co.uk",
+    "_hello._world.example.co.uk",
+    "_hello-world.example.co.uk",
+    "_hello_world_.example.co.uk",
+    "hello_world.example.co.uk",
+    "hello-.example.co.uk",
     "hello.world.onion",
+    "test.hello.blogspot.co.uk",
+    "888.0769.com",
+    "1661599812.hello.985.com",
+    "hi.hello.example.world.s3.ap-northeast-2.amazonaws.com",
 ]
 
-NOT_VALID_SUBDOMAINS = [
+NOT_VALID_SUBDOMAINS: List[str] = [
     "-hello.world",
     "bịllogram.com",
     "bittréẋ.com",
@@ -173,11 +198,13 @@ NOT_VALID_SUBDOMAINS = [
     "hello-.world",
     "hello-world",
     "pogotowie-komputerowe-warszawa.com.pl",
+    "hello.world.example.com\\",
+    "he\\llo.world.example.com",
 ]
 
-VALID_IPV4 = ["15.47.85.65", "45.66.255.240", "255.45.65.0/24"]
+VALID_IPV4: List[str] = ["15.47.85.65", "45.66.255.240", "255.45.65.0/24"]
 
-VALID_IPV6 = [
+VALID_IPV6: List[str] = [
     "2001:db8::",
     "2001:db8::1000",
     "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
@@ -207,9 +234,9 @@ VALID_IPV6 = [
     "ff00::/8",
 ]
 
-NOT_VALID_IPV4 = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
+NOT_VALID_IPV4: List[str] = ["google.com", "287.468.45.26", "245.85.69.17:8081"]
 
-NOT_VALID_IPV6 = [
+NOT_VALID_IPV6: List[str] = [
     "google.com",
     "287.468.45.26",
     "2001:db8::/4839",
@@ -218,20 +245,20 @@ NOT_VALID_IPV6 = [
     "2001:db8:85a3:8d3:1319:8a2e:370:7348/129",
 ]
 
-VALID_IPV4_RANGES = ["255.45.65.0/24", "255.45.65.6/18"]
+VALID_IPV4_RANGES: List[str] = ["255.45.65.0/24", "255.45.65.6/18"]
 
-VALID_IPV6_RANGES = [
+VALID_IPV6_RANGES: List[str] = [
     "2001:db8::/128",
     "2001:db8:1234::/48",
     "2001:db8:a::/64",
     "2001:db8:a::123/64",
 ]
 
-NOT_VALID_IPV4_RANGES = ["15.47.85.65", "45.66.255.240", "github.com"]
+NOT_VALID_IPV4_RANGES: List[str] = ["15.47.85.65", "45.66.255.240", "github.com"]
 
-NOT_VALID_IPV6_RANGES = ["2001:db8::/129", "github.com", "2001:db8:a::"]
+NOT_VALID_IPV6_RANGES: List[str] = ["2001:db8::/129", "github.com", "2001:db8:a::"]
 
-RESERVED_IPV4 = [
+RESERVED_IPV4: List[str] = [
     "0.45.23.59",
     "10.39.93.13",
     "100.64.35.85",
@@ -253,7 +280,7 @@ RESERVED_IPV4 = [
     "255.255.255.255",
 ]
 
-RESERVED_IPV6 = [
+RESERVED_IPV6: List[str] = [
     "::",
     "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
     "::1",
@@ -279,9 +306,14 @@ RESERVED_IPV6 = [
     "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
 ]
 
-NOT_RESERVED_IPV4 = ["hello.world", "::1", "45.34.29.15"]
+NOT_RESERVED_IPV4: List[str] = [
+    "hello.world",
+    "192.243.198.89",
+    "45.34.29.15",
+    "127.0.0.53/32",
+]
 
-NOT_RESERVED_IPV6 = [
+NOT_RESERVED_IPV6: List[str] = [
     "2001:db8::/128",
     "hello.world",
     "2001:db8:1234::/48",
@@ -289,3 +321,140 @@ NOT_RESERVED_IPV6 = [
     "2001:db8:a::123/64",
     "github.com",
 ]
+
+DEFAULT_CONFIG: dict = {
+    "cli_decoding": {
+        "adblock": False,
+        "adblock_aggressive": False,
+        "rpz": False,
+        "wildcard": False,
+    },
+    "cli_testing": {
+        "autocontinue": False,
+        "ci": {
+            "active": False,
+            "branch": "master",
+            "command": None,
+            "commit_message": "PyFunceble - AutoSave",
+            "distribution_branch": "master",
+            "end_command": None,
+            "end_commit_message": "PyFunceble - Results",
+            "max_exec_minutes": 15,
+        },
+        "complements": False,
+        "cooldown_time": 0.0,
+        "days_between": {"db_clean": 28, "db_retest": 1},
+        "db_type": "csv",
+        "display_mode": {
+            "all": False,
+            "colour": True,
+            "dots": False,
+            "execution_time": False,
+            "less": True,
+            "percentage": True,
+            "quiet": False,
+            "simple": False,
+            "status": "all",
+        },
+        "file_filter": None,
+        "file_generation": {
+            "analytic": True,
+            "hosts": False,
+            "no_file": False,
+            "plain": True,
+            "unified_results": False,
+            "merge_output_dirs": False,
+        },
+        "hosts_ip": "0.0.0.0",
+        "inactive_db": True,
+        "local_network": False,
+        "max_workers": None,
+        "mining": False,
+        "preload_file": False,
+        "sorting_mode": {"hierarchical": False, "standard": True},
+        "testing_mode": {"availability": True, "reputation": False, "syntax": False},
+        "whois_db": True,
+    },
+    "debug": {"active": False, "level": "info"},
+    "dns": {
+        "follow_server_order": True,
+        "protocol": "UDP",
+        "server": None,
+        "trust_server": False,
+    },
+    "http_codes": {
+        "list": {
+            "potentially_down": [400, 402, 404, 409, 410, 412, 414, 415, 416, 451],
+            "potentially_up": [
+                300,
+                301,
+                302,
+                303,
+                304,
+                305,
+                307,
+                308,
+                403,
+                405,
+                406,
+                407,
+                408,
+                411,
+                413,
+                417,
+                418,
+                421,
+                422,
+                423,
+                424,
+                426,
+                428,
+                431,
+                500,
+                501,
+                502,
+                503,
+                504,
+                505,
+                506,
+                507,
+                508,
+                510,
+                511,
+            ],
+            "up": [
+                100,
+                101,
+                102,
+                200,
+                201,
+                202,
+                203,
+                204,
+                205,
+                206,
+                207,
+                208,
+                226,
+                429,
+            ],
+        },
+        "self_managed": False,
+    },
+    "links": {
+        "api_date_format": "https://pyfunceble.funilrys.com/api/date-format",
+        "api_no_referrer": "https://pyfunceble.funilrys.com/api/no-referrer",
+    },
+    "lookup": {
+        "dns": True,
+        "http_status_code": True,
+        "netinfo": True,
+        "reputation": False,
+        "special": True,
+        "timeout": 5,
+        "whois": True,
+    },
+    "share_logs": False,
+    "user_agent": {"browser": "chrome", "custom": None, "platform": "linux"},
+    "verify_ssl_certificate": False,
+}

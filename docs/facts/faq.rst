@@ -5,87 +5,116 @@ How to speed up the test process?
 ---------------------------------
 
 .. warning::
-    Beware, when talking about speed a lot a thing have to be taken in consideration.
-    Indeed here is a non exaustive list of things which fluctuate testing speed.
+    Beware, when talking about speed a lot of things have to be taken into consideration.
+    Indeed here is a non-exhaustive list of things that fluctuate the testing speed.
 
     * Bandwidth.
     * DNS Server response time.
     * CPU.
-    * ISP blocking a big amount of connection to the outside world.
+    * ISP's who blocks a big amount of connection to the outside world.
     * Our databases management (do not apply for MySQL and MariaDB format).
     * Amount of data to test.
+    * Disk I/O in particular as PyFunceble is heavy on the I/O
+      * RamDrives and NVME disks are very suitable for PyFunceble CSV db.
     * ...
 
-I have multiple CPU
-^^^^^^^^^^^^^^^^^^^
+I have a dedicated server or machine just for PyFunceble
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Simply use the :code:`-m | --multiprocess` argument to activate
-the usage of multiple processes.
-You should in addition to the :code:`-m` specify the :code:`-p | --processes`
-argument.
+Simply increase the number of maximal workers PyFunceble is allowed to use
+through the `--max-workers <../usage/index.html#w-max-workers>`_ argument.
 
-If :code:`-p | --processes` is avoided, the script will use the number of
-available CPU cores.
-
-You might therefore which to specify the number of simultaneous processes to
-be used, otherwise your will be "unable" to use the computer/server for other
-things while running PyFunceble as all of your CPU threads is used by PyFunceble.
-
-.. note::
-    A good number for :code:`-p` is your number of :code:`CPU_cores -1`, to leave room for orther processes to work.
-    Unless you have a dedicated installation for this work.
-
-
-    Inside a Unix based system, you can use this code snippet to see how many CPU and cores you have.
-
-    ::
-
-        $: lscpu | grep -E '^Thread|^Core|^Socket|^CPU\('
-
-    or
-
-    ::
-
-	$: nproc --ignore=1
-
-	This will count the number of CPU threads subtracted 1 to use for DB,
-	SQL. If you runs PyFunceble on your workstation you might subtract 2
-	threads, or you computer will be pretty "dead"
-
-	See also ``man nproc`` or ``nproc --help``
-
-.. warning::
-    DO NOT try to exceed your total number of CPU cores with (:code:`-p | --processes`),
-    if you want to keep your machine somehow alive and healthy.
-
-I do not have multiple CPU
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In case you only have a single core, you should disable the usage of
-the WHOIS lookup by adding the :code:`--no-whois` to your command line
-or switching the value of :code:`no_whois` to :code:`True` in your
-configuration file.
-
-As example:
+By default, the number of workers is equal to:
 
 ::
 
-    $ PyFunceble --no-whois -d example.net
+    CPU CORES - 2
 
+meaning that if you have :code:`8` CPU threads, the value will be
+automatically set to :code:`6`.
 
-This action will speed up the script because it only
-use the equivalent of :code:`nslookup` and the
-:code:`HTTP status code` to determine the availability status.
 
 .. warning::
+    Keep in mind that the :code:`--max-workers` (:code:`-w`) mostly - if
+    not only - affects the tester processes. Because we want to safely
+    write the files(Disk I/O), we still need a single process that reads the
+    submitted results and generates the outputs.
 
-    PyFunceble request the WHOIS record in order to avoid specific false
-    positive cases.
-    If the usage of WHOIS request is disabled, all domains which are still
-    registered but not assigned to an IP address, would be flagged as
-    :code:`INACTIVE`.
+    The reason we added this to PyFunceble :code:`4.0.0` is we don't want
+    to have a wrongly formatted file output.
 
-    It's not a problem if you keep/use the database system because the domain
-    will be retested over time.
-    But please keep in mind, that without the database system, the accuracy
-    of the result is not guaranteed.
+
+Setup and use ramfs
+-------------------
+What is a ramfs and why not use tmpfs?
+
+:code:`ramfs` is better than :code:`tmpfs` when data needs to be secret,
+since :code:`ramfs` data never gets swapped (saved to a physical storage
+drive), while tmpfs may get swapped.
+Third parties who later gain root or physical access to the machine then
+can inspect the swap space and extract sensitive data.
+
+The HOWTO solution
+^^^^^^^^^^^^^^^^^^
+You can prepare :code:`ramfs` mount so any non-privileged user can
+mount/unmount it on-demand.
+
+To do this, you will need root privilege, once. Ask the administrator of
+your system to set this up for you, if you lack root privileges.
+
+At first, you need to add a line to the :code:`/etc/fstab`. The line in
+fstab may look like this:
+
+
+.. :code-block:: console
+    none    /mnt/ramfs    ramfs    noauto,user,size=1024M,mode=0777    0    0
+
+* :code:`/mnt/ramfs` is a mount point, where the ramfs filesystem will be
+  mounted. Directory **most** exist.
+* :code:`noauto` option prevents this from being mounted automatically
+  (e.g. at system's boot-up).
+* :code:`user` makes this mountable by regular users.
+* :code:`size` sets this "ramdisk's" size (you can use :code:`M` and
+  :code:`G` here)
+* :code:`mode` is very important, with the octal :code 0770 only root and
+  user, who mounted this filesystem, will be able to read and write to
+  it, not the others (you may use different :code of your choice as well,
+  but be very sure about it!).
+
+.. note::
+
+    We recommend you to set the file mode to :code:`0777` in case you
+    are using this in relation to any kind of scripting, to ensure
+    subprocesses have access to the file(s). In all other cases, you should set the folder
+    permision to :code:`0770`.
+
+**Mount**
+
+  .. code-block:: console
+
+      $ mount /mnt/ramfs/
+
+
+**Unmount**
+
+  .. code-block:: console
+
+      $ umount /mnt/ramfs/
+
+
+This chapter has practically been copied from
+`<https://unix.stackexchange.com/a/325421>`_ creditted to Neurotransmitter
+as it is well written and cover our purpose for describing how to setup a
+ramFS to be used for testing with PyFunceble.
+
+Next, we need to configure PyFunceble to use the newly created and mounted
+ramFS. This is done with the 
+`PYFUNCEBLE_OUTPUT_LOCATION <../usage/index.html#global-variables>`_ ; now
+all outputs are stored in the ramFS, so remember to copy the results to a
+stationary file path when you are done.
+
+Next time you are going to run a test with PyFunceble are will do:
+  1. Mount the ramFS
+  2. Copy the last test results to the ramFS
+  3. Run your test
+  4. Copy your results from ramFS to a stationary file path.
