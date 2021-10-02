@@ -1,24 +1,24 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
 
 The tool to check the availability or syntax of domain, IP or URL
 -----------------------------------------------------------------
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
-.. image:: https://img.shields.io/pypi/v/pyfunceble.png
-    :target: https://pypi.org/project/pyfunceble
+    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
+.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
+    :target: https://pypi.org/project/pyfunceble-dev
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://pepy.tech/badge/pyfunceble
-    :target: https://pepy.tech/project/pyfunceble
-.. image:: https://pepy.tech/badge/pyfunceble/month
-    :target: https://pepy.tech/project/pyfunceble
-.. image:: https://pepy.tech/badge/pyfunceble/week
-    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble-dev
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/month
+    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble-dev/week
+    :target: https://pepy.tech/project/pyfunceble-dev
 
 **PyFunceble** aims to provide an accurate availability check through the usage
 of multiple sources which are for example - to only list them:
@@ -44,10 +44,10 @@ GitLab CI.
 
 Happy testing with PyFunceble!
 
-.. image:: https://github.com/PyFunceble/gifs/raw/master/domain.gif
-    :target: https://github.com/PyFunceble/gifs/raw/master/domain.gif
+.. image:: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
+    :target: https://github.com/PyFunceble/gifs/raw/dev/domain.gif
 
-.. _Python API: https://pyfunceble.readthedocs.io/en/latest/api/index.html
+.. _Python API: https://pyfunceble.readthedocs.io/en/dev/api/index.html
 .. _PyFunceble web-worker: https://github.com/pyfunceble/web-worker
 
 
@@ -61,7 +61,7 @@ Installation
 
 ::
 
-    $ pip install --upgrade pyfunceble
+    $ pip install --upgrade --pre pyfunceble-dev
     $ pyfunceble --version
 
 :code:`docker`
@@ -69,7 +69,7 @@ Installation
 
 ::
 
-    $ docker pull pyfunceble/pyfunceble
+    $ docker pull pyfunceble/pyfunceble-dev
     $ docker run -it pyfunceble/pyfunceble --version
 
 ___________________________________________
@@ -78,7 +78,7 @@ Documentation as the place to be!
 ---------------------------------
 
 Want to know more about details **PyFunceble**?
-I invite you to read the documentation at https://pyfunceble.readthedocs.io/en/latest/!
+I invite you to read the documentation at https://pyfunceble.readthedocs.io/en/dev/!
 
 Want a local copy? I get you covered!
 
@@ -297,6 +297,6 @@ License
 .. _@Zachinquarantine: https://github.com/Zachinquarantine
 .. _@ZeroDot1: https://github.com/ZeroDot1
 
-.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/latest/in-action.html
+.. _documentation for more GIF: https://pyfunceble.readthedocs.io/en/dev/in-action.html
 .. _Sponsor me: https://github.com/sponsors/funilrys
 .. _Buy me a coffee: https://ko-fi.com/V7V3EH2Y

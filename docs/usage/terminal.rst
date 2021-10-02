@@ -1599,7 +1599,7 @@ Global overview
                                 Configured value: 'PyFunceble - Results'
 
     For an in-depth usage, explanation and examples of the arguments,
-    you should read the documentation at https://pyfunceble.readthedocs.io/en/latest/
+    you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
