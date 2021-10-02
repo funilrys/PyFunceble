@@ -398,6 +398,7 @@ class ConfigLoader:
         PyFunceble.storage.HTTP_CODES = Box(
             copy.deepcopy(config["http_codes"]),
         )
+        PyFunceble.storage.COLLECTION = Box(copy.deepcopy(config["collection"]))
         PyFunceble.storage.LINKS = Box(
             copy.deepcopy(config["links"]),
         )
@@ -414,6 +415,7 @@ class ConfigLoader:
                 {},
             )
             PyFunceble.storage.HTTP_CODES = Box({})
+            PyFunceble.storage.COLLECTION = Box({})
             PyFunceble.storage.LINKS = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
