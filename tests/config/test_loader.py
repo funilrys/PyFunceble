@@ -395,7 +395,7 @@ class TestConfigLoader(unittest.TestCase):
         loaded yet.
         """
 
-        PyFunceble.storage.CONFIGURATION = self.our_config
+        self.config_loader.set_custom_config(self.our_config).start()
 
         given = "cli_testing.testing_mode.syntax"
         actual = self.config_loader.get_configured_value(given)
