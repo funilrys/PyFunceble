@@ -111,6 +111,7 @@ CONFIG_DIRECTORY: str = get_config_directory(
 
 
 CONFIGURATION: Optional[Box] = Box({})
+FLATTEN_CONFIGURATION: Optional[dict] = {}
 STATUS: Optional[Box] = Box(
     {
         "up": "ACTIVE",
