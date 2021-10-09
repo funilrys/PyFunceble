@@ -21,6 +21,25 @@ This chapter also relates to writing scripts in bash and PowerShell as
 the uses the same syntaxes.
 
 
+:code:`--show-completion "shell"`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Show shell completion script and exit.
+
+**Available Values**: :code:`bash`, :code:`zsh`
+
+.. note::
+    This argument provides the  autocompletion script that you can use to get
+    access to the autocompletion assistance.
+
+    It is meant to be used like this:
+
+    .. code-block:: console
+
+        $ source <(pyfunceble --show-completion bash)
+        $ pyfunceble --do[TAB]
+        --domain  --dots
+
 :code:`--help`
 ^^^^^^^^^^^^^^
 

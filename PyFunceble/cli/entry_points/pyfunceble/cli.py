@@ -58,6 +58,7 @@ import sys
 from typing import Any, List, Optional, Tuple, Union
 
 import colorama
+import shtab
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
@@ -1079,6 +1080,11 @@ def tool() -> None:
 
     # pylint:  disable=possibly-unused-variable
 
+    shtab.add_argument_to(
+        parser,
+        option_string=["--show-completion"],
+        help="Show Shell completion script and exit.",
+    )
     source_group = parser.add_argument_group("Test sources")
     filtering_group = parser.add_argument_group(
         "Source filtering, decoding, conversion and expansion"
