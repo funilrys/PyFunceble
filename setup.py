@@ -139,6 +139,7 @@ def get_requirements(*, mode="standard"):
         "standard": ["requirements.txt"],
         "dev": ["requirements.dev.txt"],
         "docs": ["requirements.docs.txt"],
+        "test": ["requirements.test.txt"],
     }
 
     if is_win_platform():
@@ -215,6 +216,7 @@ if __name__ == "__main__":
         extras_require={
             "docs": get_requirements(mode="docs"),
             "dev": get_requirements(mode="dev"),
+            "test": get_requirements(mode="test"),
             "full": get_requirements(mode="full"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
