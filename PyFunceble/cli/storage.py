@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -94,7 +94,7 @@ DONE: str = f"{colorama.Fore.GREEN}✔"
 ERROR: str = f"{colorama.Fore.RED}✘"
 
 VERSION_DUMP_LINK: str = (
-    "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
+    "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"
 )
 
 HASHES_FILENAME: str = "hashes_tracker.json"

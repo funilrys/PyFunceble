@@ -20,7 +20,7 @@ How does it work?
     **Contribution to the SPECIAL rules**
 
     To add directly to the special rules please modify both the source code
-    `extra_rules.py <https://github.com/funilrys/PyFunceble/blob/dev/PyFunceble/checker/availability/extra_rules.py>`_
+    `extra_rules.py <https://github.com/funilrys/PyFunceble/blob/master/PyFunceble/checker/availability/extra_rules.py>`_
     and the documentation (here).
 
 Below is the list of all special rules that are implemented into PyFunceble.

@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/dev/
+    https://pyfunceble.readthedocs.io/en/latest/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -1067,7 +1067,7 @@ def tool() -> None:
         f"{colorama.Style.BRIGHT}{colorama.Fore.YELLOW}For an in-depth usage, "
         "explanation and examples of the arguments,\n"
         f"you should read the documentation at{colorama.Fore.GREEN} "
-        "https://pyfunceble.readthedocs.io/en/dev/"
+        "https://pyfunceble.readthedocs.io/en/latest/"
         f"{colorama.Style.RESET_ALL}\n\n"
     )
 

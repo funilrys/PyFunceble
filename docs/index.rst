@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/PyFunceble/logo/dev/Green/HD/RM.png
+.. image:: https://raw.githubusercontent.com/PyFunceble/logo/master/Green/HD/RM.png
     :alt: PyFunceble logo
 
 The tool to check the availability or syntax of domain, IP or URL.
@@ -6,20 +6,20 @@ The tool to check the availability or syntax of domain, IP or URL.
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.png
     :target: https://github.com/ambv/black
-.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=dev
-    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=dev
+.. image:: https://coveralls.io/repos/github/funilrys/PyFunceble/badge.png?branch=master
+    :target: https://coveralls.io/github/funilrys/PyFunceble?branch=master
 .. image:: https://img.shields.io/github/license/funilrys/PyFunceble.png
-    :target: https://github.com/funilrys/PyFunceble/blob/dev/LICENSE
-.. image:: https://img.shields.io/pypi/v/pyfunceble-dev.png
-    :target: https://pypi.org/project/pyfunceble-dev
+    :target: https://github.com/funilrys/PyFunceble/blob/master/LICENSE
+.. image:: https://img.shields.io/pypi/v/pyfunceble.png
+    :target: https://pypi.org/project/pyfunceble
 .. image:: https://img.shields.io/github/issues/funilrys/PyFunceble.png
     :target: https://github.com/funilrys/PyFunceble/issues
-.. image:: https://pepy.tech/badge/pyfunceble-dev
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/month
-    :target: https://pepy.tech/project/pyfunceble-dev
-.. image:: https://pepy.tech/badge/pyfunceble-dev/week
-    :target: https://pepy.tech/project/pyfunceble-dev
+.. image:: https://pepy.tech/badge/pyfunceble
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/month
+    :target: https://pepy.tech/project/pyfunceble
+.. image:: https://pepy.tech/badge/pyfunceble/week
+    :target: https://pepy.tech/project/pyfunceble
 
 
 Welcome to PyFunceble!
