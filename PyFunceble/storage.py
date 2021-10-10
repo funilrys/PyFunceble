@@ -124,6 +124,7 @@ STATUS: Optional[Box] = Box(
     frozen_box=True,
 )
 HTTP_CODES: Optional[Box] = Box({})
+COLLECTION: Optional[Box] = Box({})
 LINKS: Optional[Box] = Box({})
 
 

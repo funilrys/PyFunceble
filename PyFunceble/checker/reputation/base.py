@@ -65,6 +65,7 @@ from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.dataset.ipv4_reputation import IPV4ReputationDataset
+from PyFunceble.query.collection import CollectionQueryTool
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 
@@ -93,12 +94,14 @@ class ReputationCheckerBase(CheckerBase):
         subject: Optional[str] = None,
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
+        use_collection: Optional[bool] = None,
     ) -> None:
-        self.dns_query_tool = DNSQueryTool().guess_all_settings()
+        self.dns_query_tool = DNSQueryTool()
         self.ipv4_reputation_query_tool = IPV4ReputationDataset()
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
+        self.collection_query_tool = CollectionQueryTool()
 
         self.params = ReputationCheckerParams()
 
@@ -107,7 +110,10 @@ class ReputationCheckerBase(CheckerBase):
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
 
         super().__init__(
-            subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
+            subject,
+            do_syntax_check_first=do_syntax_check_first,
+            db_session=db_session,
+            use_collection=use_collection,
         )
 
     @staticmethod
@@ -244,6 +250,48 @@ class ReputationCheckerBase(CheckerBase):
 
         return self
 
+    def try_to_query_status_from_collection(self) -> "ReputationCheckerBase":
+        """
+        Tries to get and set the status from the Collection API.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Collection Lookup",
+            self.status.idna_subject,
+        )
+
+        data = self.collection_query_tool[self.idna_subject]
+
+        if data and "status" in data:
+            if (
+                self.collection_query_tool.preferred_status_origin == "frequent"
+                and data["status"]["reputation"]["frequent"]
+            ):
+                self.status.status = data["status"]["reputation"]["frequent"]
+                self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "latest"
+                and data["status"]["reputation"]["latest"]
+            ):
+                self.status.status = data["status"]["reputation"]["latest"]["status"]
+                self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "recommended"
+                and data["status"]["reputation"]["recommended"]
+            ):
+                self.status.status = data["status"]["reputation"]["recommended"]
+                self.status.status_source = "COLLECTION"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Collection Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Collection Lookup",
+            self.status.idna_subject,
+        )
+
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query
     def query_status(self) -> "ReputationCheckerBase":
@@ -252,6 +300,11 @@ class ReputationCheckerBase(CheckerBase):
         """
 
         status_post_syntax_checker = None
+
+        if (
+            not self.status.status and self.use_collection
+        ):  # pragma: no cover ## Underlying tested
+            self.try_to_query_status_from_collection()
 
         if not self.status.status and self.do_syntax_check_first:
             self.try_to_query_status_from_syntax_lookup()

@@ -53,6 +53,7 @@ License:
 import unittest
 
 from PyFunceble.checker.base import CheckerBase, CheckerStatusBase
+from PyFunceble.config.loader import ConfigLoader
 
 
 class TestCheckerBase(unittest.TestCase):
@@ -295,6 +296,106 @@ class TestCheckerBase(unittest.TestCase):
         self.assertRaises(
             TypeError, lambda: self.checker.set_do_syntax_check_first(given)
         )
+
+    def test_set_use_collection_return(self) -> None:
+        """
+        Tests the response of the method which let us define that we want to
+        interact with the collection.
+        """
+
+        given = True
+
+        actual = self.checker.set_use_collection(given)
+
+        self.assertIsInstance(actual, CheckerBase)
+
+    def test_set_use_collection_method(self) -> None:
+        """
+        Tests the method which let us define that we want ti interact with the
+        collection.
+        """
+
+        given = False
+        expected = False
+
+        self.checker.set_use_collection(given)
+
+        actual = self.checker.use_collection
+
+        self.assertEqual(expected, actual)
+
+    def test_set_use_collection_init(self) -> None:
+        """
+        Tests the definition of the :code:`use_collection` attribute
+        through the class constructor.
+        """
+
+        given = True
+        expected = True
+
+        checker = CheckerBase(use_collection=given)
+
+        actual = checker.use_collection
+
+        self.assertEqual(expected, actual)
+
+    def test_set_use_collection_not_bool(self) -> None:
+        """
+        Tests the case that we want to overwrite the
+        :code:`use_collection` attribute with a non-boolean value.
+        """
+
+        given = ["Hello", "World!"]
+
+        self.assertRaises(TypeError, lambda: self.checker.set_use_collection(given))
+
+    def test_guess_and_set_use_collection(self) -> None:
+        """
+        Tests the method that let us guess and set the collection from the
+        configuration.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"lookup": {"collection": True}}).start()
+
+        self.checker.guess_and_set_use_collection()
+        actual = self.checker.use_collection
+        expected = True
+
+        self.assertEqual(expected, actual)
+
+    def test_guess_and_set_use_collection_not_boolean(self) -> None:
+        """
+        Tests the method that let us guess and set the collection from the
+        configuration.
+
+        In this case, we test the case that the given value is not a boolean.
+        """
+
+        config_loader = ConfigLoader()
+        config_loader.set_custom_config({"lookup": {"collection": None}}).start()
+
+        self.checker.guess_and_set_use_collection()
+        actual = self.checker.use_collection
+        expected = False
+
+        self.assertEqual(expected, actual)
+
+        del config_loader
+
+    def test_guess_and_set_use_collection_no_configuration(self) -> None:
+        """
+        Tests the method that let us guess and set the collection from the
+        configuration.
+
+        In this case, we test the case that no configuration is loaded.
+        """
+
+        self.checker.guess_and_set_use_collection()
+        actual = self.checker.use_collection
+        expected = False
+
+        self.assertEqual(expected, actual)
 
     def test_get_status(self) -> None:
         """

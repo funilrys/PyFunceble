@@ -63,7 +63,8 @@ Availability Checker
             "use_netinfo_lookup": true,
             "use_reputation_lookup": false,
             "use_whois_db": true,
-            "use_whois_lookup": false
+            "use_whois_lookup": false,
+            "use_collection": false
         },
         "second_level_domain_syntax": true,
         "status": "ACTIVE",
@@ -119,7 +120,8 @@ Reputation Checker
         "ipv6_range_syntax": false,
         "ipv6_syntax": false,
         "params": {
-            "do_syntax_check_first": false
+            "do_syntax_check_first": false,
+            "use_collection": false
         },
         "second_level_domain_syntax": true,
         "status": "SANE",
