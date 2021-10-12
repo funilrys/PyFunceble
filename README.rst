@@ -70,7 +70,7 @@ Installation
 ::
 
     $ docker pull pyfunceble/pyfunceble-dev
-    $ docker run -it pyfunceble/pyfunceble --version
+    $ docker run -it pyfunceble/pyfunceble-dev --version
 
 ___________________________________________
 
