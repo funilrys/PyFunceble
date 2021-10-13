@@ -215,6 +215,9 @@ lookup:
   # Activates the usage of the reputation data reputation.
   reputation: False
 
+  # Activate the usage of the collection.
+  collection: False
+
   # Sets the timeout to apply to each of our lookup tools who support a timeout
   # option.
   timeout: 5
@@ -242,6 +245,11 @@ dns:
   # Sets the protocol to use.
   # Available: UDP | TCP | HTTPS | TLS
   protocol: UDP
+
+  # Sets the delay (seconds) to apply between each queries.
+  # When a value > 0.00000 is given, we will wait for the given amount of
+  # seconds between each queries.
+  delay: 0.0
 
 # Not Implemented yet. Reserved for future usage and implementation.
 share_logs: False
@@ -340,3 +348,25 @@ links:
   # rewritten.
   api_date_format: "https://pyfunceble.funilrys.com/api/date-format"
   api_no_referrer: "https://pyfunceble.funilrys.com/api/no-referrer"
+
+collection:
+  # Provides everything related to the collection.
+
+  # Provides the base of the URL to access to communicate with the collection.
+  url_base: https://collection.dead-hosts.funilrys.com
+
+  # Activates the push of dataset into the collection.
+  # WARNING: This is useless, if you don't have an API Token set as the
+  # COLLECTION_API_TOKEN environment variable.
+  push: False
+
+  # Sets the preferred pull origin.
+  #
+  # When choosing, `frequent`, the system will pull the most frequent status
+  # that is provided and calculated by the collection.
+  #
+  # When choosing, `latest`, the system will pull the latest status that is
+  # provided and available into the collection.
+  #
+  # Available: frequent | latest | recommended
+  preferred_status_origin: recommended

@@ -245,7 +245,6 @@ class VersionUtility:
 
         list_of_files = [
             ".coveragerc",
-            ".coveralls.yml",
             ".gitignore",
             "CODE_OF_CONDUCT.rst",
             "CONTRIBUTING.rst",

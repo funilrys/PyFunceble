@@ -210,6 +210,7 @@ which helped and/or still help me build, test and or make `PyFunceble`_ a better
 -   Daniel - `@dnmTX`_
 -   Jonathan Hartley - `@tartley`_ (`colorama`_)
 -   `IANA`_ - `ICANN`_ (`Root Zone Database`_)
+-   `Iterative`_ (`shtab`_)
 -   Kenneth Reitz - `@kennethreitz`_ (`requests`_)
 -   Mitchell Krog - `@mitchellkrogza`_
 -   Mohammad Fares - `@faressoft`_ (`Terminalizer`_)
@@ -250,11 +251,13 @@ License
 .. _Funceble: https://github.com/funilrys/funceble
 .. _IANA: https://www.iana.org/
 .. _ICANN: https://www.icann.org/
+.. _Iterative: https://github.com/iterative
 .. _PyFunceble: https://github.com/funilrys/PyFunceble
 .. _python-dotenv: https://github.com/theskumar/python-dotenv
 .. _pyyaml: https://github.com/yaml/pyyaml
 .. _requests: https://github.com/kennethreitz/requests
 .. _Root Zone Database: https://www.iana.org/domains/root/db
+.. _shtab: https://github.com/iterative/shtab
 .. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
 .. _yWorks: https://www.yworks.com/company

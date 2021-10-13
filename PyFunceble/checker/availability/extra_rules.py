@@ -88,6 +88,7 @@ class ExtraRulesHandler:
             r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.fc2\.com$": [self.__handle_fc2_dot_com],
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
             r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
             r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
@@ -291,6 +292,26 @@ class ExtraRulesHandler:
             url = f"http://{self.status.subject}:80"
 
         self.__web_regex_handler(url, regex_wordpress, self.__switch_to_down)
+
+        return self
+
+    def __handle_fc2_dot_com(self) -> "ExtraRulesHandler":
+        """
+        Handles the :code:`fc2.com` case.
+
+        .. warning::
+            This method assume that we know that we are handling a fc2 domain.
+        """
+
+        if self.status.subject.startswith("http:"):
+            url = self.status.subject
+        else:
+            url = f"http://{self.status.subject}:80"
+
+        req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
+
+        if "error.fc2.com" in req.headers["Location"]:
+            self.__switch_to_down()
 
         return self
 

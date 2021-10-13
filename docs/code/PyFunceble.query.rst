@@ -16,6 +16,14 @@ Subpackages
 Submodules
 ----------
 
+PyFunceble.query.collection module
+----------------------------------
+
+.. automodule:: PyFunceble.query.collection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.query.http\_status\_code module
 ------------------------------------------
 

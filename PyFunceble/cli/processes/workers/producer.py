@@ -74,6 +74,7 @@ from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
 from PyFunceble.dataset.whois.base import WhoisDatasetBase
+from PyFunceble.query.collection import CollectionQueryTool
 
 
 class ProducerWorker(WorkerBase):
@@ -92,6 +93,7 @@ class ProducerWorker(WorkerBase):
     continue_dataset: Optional[ContinueDatasetBase] = None
     status_file_generator: Optional[StatusFileGenerator] = None
     counter: Optional[FilesystemCounter] = None
+    collection_query_tool: Optional[CollectionQueryTool] = None
 
     header_already_printed: Optional[bool] = None
 
@@ -110,6 +112,7 @@ class ProducerWorker(WorkerBase):
         )
         self.status_file_generator = StatusFileGenerator().guess_all_settings()
         self.counter = FilesystemCounter()
+        self.collection_query_tool = CollectionQueryTool()
 
         self.header_already_printed = False
 
@@ -374,12 +377,18 @@ class ProducerWorker(WorkerBase):
             self.run_ignored_file_printer(test_dataset, test_result)
             return None
 
-        if not isinstance(consumed[1], CheckerStatusBase):
+        if not isinstance(test_result, CheckerStatusBase):
             PyFunceble.facility.Logger.info(
                 "Skipping latest dataset because consumed status is not "
                 "a status object.."
             )
             return None
+
+        if (
+            PyFunceble.storage.CONFIGURATION.collection.push
+            and test_result.status_source != "COLLECTION"
+        ):
+            self.collection_query_tool.push(test_result)
 
         self.run_whois_backup(test_result)
         self.run_inactive_backup(test_dataset, test_result)

@@ -58,6 +58,7 @@ import sys
 from typing import Any, List, Optional, Tuple, Union
 
 import colorama
+import shtab
 
 import PyFunceble.cli.storage
 import PyFunceble.facility
@@ -349,6 +350,25 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--collection-preferred-origin"],
+            {
+                "dest": "collection.preferred_status_origin",
+                "type": str,
+                "choices": ["frequent", "latest", "recommended"],
+                "help": "Sets the preferred status origin. %s"
+                % get_configured_value("collection.preferred_status_origin"),
+            },
+        ),
+        (
+            ["--collection-lookup"],
+            {
+                "dest": "lookup.collection",
+                "action": "store_true",
+                "help": "Activates or disables the usage of the Collection lookup\n"
+                "whether possible. %s" % get_configured_value("lookup.collection"),
+            },
+        ),
+        (
             ["--dns-lookup"],
             {
                 "dest": "lookup.dns",
@@ -534,6 +554,17 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
                 "a negative response - without error - we still consolidate by\n"
                 "checking all given/found server.\n%s"
                 % get_configured_value("dns.trust_server"),
+            },
+        ),
+        (
+            [
+                "--dns-delay",
+            ],
+            {
+                "dest": "dns.delay",
+                "type": float,
+                "help": "Sets the delay (in seconds) to apply between each DNS\n "
+                "queries.\n %s" % get_configured_value("dns.delay"),
             },
         ),
     ]
@@ -812,6 +843,17 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--push-collection",
+            ],
+            {
+                "dest": "collection.push",
+                "action": "store_true",
+                "help": "Activates or disables the push of test result into the\n"
+                "collection API. %s" % get_configured_value("collection.push"),
+            },
+        ),
+        (
+            [
                 "-s",
                 "--simple",
             ],
@@ -1068,6 +1110,11 @@ def tool() -> None:
 
     # pylint:  disable=possibly-unused-variable
 
+    shtab.add_argument_to(
+        parser,
+        option_string=["--show-completion"],
+        help="Show Shell completion script and exit.",
+    )
     source_group = parser.add_argument_group("Test sources")
     filtering_group = parser.add_argument_group(
         "Source filtering, decoding, conversion and expansion"

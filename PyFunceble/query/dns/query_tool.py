@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import copy
 import functools
 import ipaddress
@@ -83,9 +85,9 @@ class DNSQueryTool:
     STD_TIMEOUT: float = 5.0
     STD_FOLLOW_NAMESERVER_ORDER: bool = True
     STD_TRUST_SERVER: bool = False
+    STD_DELAY: float = 0.0
 
     SUPPORTED_PROTOCOL: List[str] = ["TCP", "UDP", "HTTPS", "TLS"]
-    BREAKOFF: float = 0.2
 
     value2rdata_type: Dict[int, str] = {
         x.value: x.name for x in dns.rdatatype.RdataType
@@ -102,6 +104,7 @@ class DNSQueryTool:
     _preferred_protocol: str = "UDP"
     _query_timeout: float = 5.0
     _trust_server: bool = False
+    _delay: float = 0.0
 
     dns_name: Optional[str] = None
 
@@ -115,6 +118,7 @@ class DNSQueryTool:
         follow_nameserver_order: Optional[bool] = None,
         preferred_protocol: Optional[str] = None,
         trust_server: Optional[bool] = None,
+        delay: Optional[bool] = None,
     ) -> None:
         if nameservers is not None:
             self.nameservers.set_nameservers(nameservers)
@@ -135,6 +139,11 @@ class DNSQueryTool:
             self.trust_server = trust_server
         else:
             self.guess_and_set_trust_server()
+
+        if delay is not None:
+            self.delay = delay
+        else:
+            self.guess_and_set_delay()
 
     def prepare_query(func):  # pylint: disable=no-self-argument
         """
@@ -562,6 +571,50 @@ class DNSQueryTool:
 
         return self
 
+    @property
+    def delay(self) -> float:
+        """
+        Provides the current state of the :code:`_delay` attribute.
+        """
+
+        return self._delay
+
+    @delay.setter
+    @update_lookup_record
+    def delay(self, value: Union[int, float]) -> None:
+        """
+        Sets the delay to apply.
+
+        :param value:
+            The delay to apply.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`float`
+            nor :py:class.`int`.
+        :raise ValueError:
+            When the given :code:`value` is not a positive.
+        """
+
+        if not isinstance(value, (float, int)):
+            raise TypeError(f"<value> should be {float} or {int}, {type(value)} given.")
+
+        if value < 0:
+            raise ValueError(f"<value> should be positive, {value} given.")
+
+        self._delay = float(value)
+
+    def set_delay(self, value: Union[int, float]) -> "DNSQueryTool":
+        """
+        Sets the delay to apply.
+
+        :param value:
+            The delay to apply.
+        """
+
+        self.delay = value
+
+        return self
+
     def guess_and_set_preferred_protocol(self) -> "DNSQueryTool":
         """
         Try to guess and set the preferred procol.
@@ -611,6 +664,19 @@ class DNSQueryTool:
             self.trust_server = self.STD_TRUST_SERVER
 
         return self
+
+    def guess_and_set_delay(self) -> "DNSQueryTool":
+        """
+        Try to guess and set the delay to apply.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if PyFunceble.storage.CONFIGURATION.dns.delay:
+                self.delay = PyFunceble.storage.CONFIGURATION.dns.delay
+            else:
+                self.delay = self.STD_DELAY
+        else:
+            self.delay = self.STD_DELAY
 
     def guess_all_settings(
         self,
@@ -750,10 +816,10 @@ class DNSQueryTool:
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
                 self.subject,
                 nameserver,
-                self.BREAKOFF,
+                self.delay,
             )
 
-            time.sleep(self.BREAKOFF)
+            time.sleep(self.delay)
 
         return ListHelper(result).remove_duplicates().subject
 
@@ -822,10 +888,10 @@ class DNSQueryTool:
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
                 self.subject,
                 nameserver,
-                self.BREAKOFF,
+                self.delay,
             )
 
-            time.sleep(self.BREAKOFF)
+            time.sleep(self.delay)
 
         return ListHelper(result).remove_duplicates().subject
 
@@ -888,10 +954,10 @@ class DNSQueryTool:
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
                 self.subject,
                 nameserver,
-                self.BREAKOFF,
+                self.delay,
             )
 
-            time.sleep(self.BREAKOFF)
+            time.sleep(self.delay)
 
         return ListHelper(result).remove_duplicates().subject
 
@@ -965,10 +1031,10 @@ class DNSQueryTool:
                 "Unsuccessfully queried information of %r from %r. Sleeping %fs.",
                 self.subject,
                 nameserver,
-                self.BREAKOFF,
+                self.delay,
             )
 
-            time.sleep(self.BREAKOFF)
+            time.sleep(self.delay)
 
         return ListHelper(result).remove_duplicates().subject
 

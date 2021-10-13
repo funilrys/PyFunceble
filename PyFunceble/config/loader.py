@@ -373,12 +373,10 @@ class ConfigLoader:
         if not self.is_already_loaded():
             raise RuntimeError("Configuration not loaded, yet.")
 
-        flat_config = DictHelper(PyFunceble.storage.CONFIGURATION).flatten()
-
-        if entry not in flat_config:
+        if entry not in PyFunceble.storage.FLATTEN_CONFIGURATION:
             raise ValueError(f"<entry> ({entry!r}) not in loaded configuration.")
 
-        return flat_config[entry]
+        return PyFunceble.storage.FLATTEN_CONFIGURATION[entry]
 
     def start(self) -> "ConfigLoader":
         """
@@ -395,9 +393,13 @@ class ConfigLoader:
         PyFunceble.storage.CONFIGURATION = Box(
             copy.deepcopy(config),
         )
+        PyFunceble.storage.FLATTEN_CONFIGURATION = DictHelper(
+            PyFunceble.storage.CONFIGURATION
+        ).flatten()
         PyFunceble.storage.HTTP_CODES = Box(
             copy.deepcopy(config["http_codes"]),
         )
+        PyFunceble.storage.COLLECTION = Box(copy.deepcopy(config["collection"]))
         PyFunceble.storage.LINKS = Box(
             copy.deepcopy(config["links"]),
         )
@@ -413,7 +415,9 @@ class ConfigLoader:
             PyFunceble.storage.CONFIGURATION = Box(
                 {},
             )
+            PyFunceble.storage.FLATTEN_CONFIGURATION = {}
             PyFunceble.storage.HTTP_CODES = Box({})
+            PyFunceble.storage.COLLECTION = Box({})
             PyFunceble.storage.LINKS = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass

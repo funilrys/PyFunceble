@@ -118,6 +118,7 @@ jobs:
           COVERALLS_PARALLEL: true
 
   coveralls:
+    continue-on-error: true
     needs: test
     name: Finish Coveralls
 

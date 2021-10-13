@@ -55,7 +55,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 .. _@ScriptTiger: https://github.com/ScriptTiger
 .. _@sjhgvr: https://github.com/sjhgvr
 .. _@speedmann: https://github.com/speedmann
-.. _@spirillen: https://www.mypdns.org/p/Spirillen/
+.. _@spirillen: https://mypdns.org/spirillen
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@ybreza: https://github.com/ybreza
