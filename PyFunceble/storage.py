@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.0.0b62.dev (Blue Duckling)"
+PROJECT_VERSION: str = "4.0.2b1.dev (Blue Duckling: Chestnut)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -90,9 +90,9 @@ REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
 NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
 
-IANA: Optional[dict] = dict()
-PUBLIC_SUFFIX: Optional[dict] = dict()
-USER_AGENTS: Optional[dict] = dict()
+IANA: Optional[dict] = {}
+PUBLIC_SUFFIX: Optional[dict] = {}
+USER_AGENTS: Optional[dict] = {}
 
 load_dotenv(".env")
 load_dotenv(ENV_FILENAME)
@@ -111,6 +111,7 @@ CONFIG_DIRECTORY: str = get_config_directory(
 
 
 CONFIGURATION: Optional[Box] = Box({})
+FLATTEN_CONFIGURATION: Optional[dict] = {}
 STATUS: Optional[Box] = Box(
     {
         "up": "ACTIVE",
@@ -123,6 +124,7 @@ STATUS: Optional[Box] = Box(
     frozen_box=True,
 )
 HTTP_CODES: Optional[Box] = Box({})
+COLLECTION: Optional[Box] = Box({})
 LINKS: Optional[Box] = Box({})
 
 

@@ -77,8 +77,8 @@ class WorkerBase(multiprocessing.Process):
 
     STD_NAME: str = "pyfunceble_base_worker"
 
-    MINING_WAIT_TIME: int = 10
-    BREAKOFF: float = 0.5
+    MINING_WAIT_TIME: int = 60
+    BREAKOFF: float = 2.0
 
     input_queue: Optional[queue.Queue] = None
     output_queue: Optional[queue.Queue] = None
@@ -123,7 +123,7 @@ class WorkerBase(multiprocessing.Process):
 
         self.send_stop_message = True
         self.accept_waiting_delay = True
-        self.concurrent_worker_names = list()
+        self.concurrent_worker_names = []
 
         try:
             self.db_session = (

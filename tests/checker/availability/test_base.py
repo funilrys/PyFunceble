@@ -906,7 +906,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         dns_query_patch.return_value = []
         given = "example.net"
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
 
         self.checker.subject = given
 
@@ -976,7 +976,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         dns_query_patch.return_value = []
         given = "a1"
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
 
         self.checker.subject = given
 
@@ -1038,7 +1038,9 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         # Let's test the case that no answer is given back.
         # pylint: disable=unnecessary-lambda
         self.checker.subject = "example.org"
-        self.checker.query_dns_record = lambda: dict()
+        self.checker.query_dns_record = (
+            lambda: dict()  # pylint: disable=use-dict-literal
+        )
 
         self.checker.try_to_query_status_from_dns()
 
@@ -1241,6 +1243,123 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         actual_source = self.checker.status.status_source
 
         self.assertEqual(expected_source, actual_source)
+
+    @staticmethod
+    def fake_pull_response(subject: str) -> dict:
+        """
+        Provides a fake pull response to work with.
+
+        :param subject:
+            The subject to work with.
+        """
+
+        return {
+            "subject": subject,
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "status": {
+                "syntax": {
+                    "latest": {
+                        "status": "INVALID",
+                        "status_source": "SYNTAX",
+                        "tested_at": "2021-09-28T19:32:07.167Z",
+                        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    },
+                    "frequent": "VALID",
+                    "recommended": "VALID",
+                },
+                "availability": {
+                    "latest": {
+                        "status": "INACTIVE",
+                        "status_source": "DNSLOOKUP",
+                        "tested_at": "2021-09-28T19:32:07.167Z",
+                        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    },
+                    "frequent": "ACTIVE",
+                    "recommended": "ACTIVE",
+                },
+                "reputation": {
+                    "latest": {
+                        "status": "MALICIOUS",
+                        "status_source": "REPUTATION",
+                        "tested_at": "2021-09-28T19:32:07.167Z",
+                        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    },
+                    "frequent": "SANE",
+                    "recommended": "MALICIOUS",
+                },
+                "whois": {
+                    "expiration_date": "2021-09-28T19:32:07.167Z",
+                    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "subject_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                },
+            },
+        }
+
+    @staticmethod
+    def fake_response_no_data(_: str) -> None:
+        """
+        Provides an empty response.
+        """
+
+        return None
+
+    def test_try_to_query_status_from_collection(self) -> None:
+        """
+        Tests the method that tries to define the status from the collection lookup.
+        """
+
+        # Let's check the case that the subject is known.
+        self.checker.subject = "example.com"
+        self.checker.collection_query_tool.preferred_status_origin = "frequent"
+        self.checker.collection_query_tool.pull = self.fake_pull_response
+
+        self.checker.try_to_query_status_from_collection()
+
+        expected_status = "ACTIVE"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        expected_status_source = "COLLECTION"
+        actual_status_source = self.checker.status.status_source
+        self.assertEqual(expected_status_source, actual_status_source)
+
+        self.checker.collection_query_tool.preferred_status_origin = "latest"
+
+        self.checker.try_to_query_status_from_collection()
+
+        expected_status = "INACTIVE"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        expected_status_source = "COLLECTION"
+        actual_status_source = self.checker.status.status_source
+        self.assertEqual(expected_status_source, actual_status_source)
+
+        self.checker.collection_query_tool.preferred_status_origin = "recommended"
+
+        self.checker.try_to_query_status_from_collection()
+
+        expected_status = "ACTIVE"
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        expected_status_source = "COLLECTION"
+        actual_status_source = self.checker.status.status_source
+        self.assertEqual(expected_status_source, actual_status_source)
+
+        # Let's check the case that the subject is unknown.
+        self.checker.subject = "102117110105108114121115"
+        self.checker.collection_query_tool.pull = self.fake_response_no_data
+
+        self.checker.try_to_query_status_from_collection()
+
+        expected_status = None
+        actual_status = self.checker.status.status
+        self.assertEqual(expected_status, actual_status)
+
+        expected_status_source = None
+        actual_status_source = self.checker.status.status_source
+        self.assertEqual(expected_status_source, actual_status_source)
 
     def test_get_status(self) -> None:
         """

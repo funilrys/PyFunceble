@@ -1,12 +1,15 @@
-Deprecated variables
+Deprecated arguments
 --------------------
 
-The following values have been in use in previous versions
-of PyFunceble but is now deprecated and should be replaced
-with new values.
+The following arguments have previous been in use by PyFunceble, these are
+now deprecated and should in some cases be replaced with alternative args.
 
-This is happening because PyFunceble is evolving over time
-and features comes and goes.
+In other cases the old feature have either been included into a other functional
+or simply been removed as it was obselete to keep the function within 
+Pyfunceble v4.x.
+
+This is happening because PyFunceble is evolving over time and features
+comes and goes.
 
 ------
 

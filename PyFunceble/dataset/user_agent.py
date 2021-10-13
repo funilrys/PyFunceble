@@ -82,7 +82,7 @@ class UserAgentDataset(DatasetBase):
         if value in self:
             return self.get_content()[value]
 
-        return dict()
+        return dict()  # pylint: disable=use-dict-literal
 
     def __getitem__(self, value: Any) -> dict:
         return self.__getattr__(value)

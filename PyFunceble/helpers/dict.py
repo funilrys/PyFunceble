@@ -384,7 +384,7 @@ class DictHelper:
         if data is None:
             data = self.subject
 
-        result = dict()
+        result = {}
 
         if isinstance(data, dict):
             for key, value in data.items():
@@ -414,7 +414,7 @@ class DictHelper:
         if data is None:
             data = self.subject
 
-        result = dict()
+        result = {}
 
         for key, value in data.items():
             local_result = result
@@ -426,7 +426,7 @@ class DictHelper:
 
                 for yek in splitted_sep[:-1]:
                     if yek not in local_result:
-                        local_result[yek] = dict()
+                        local_result[yek] = {}
 
                     local_result = local_result[yek]
                 local_result[splitted_sep[-1]] = value

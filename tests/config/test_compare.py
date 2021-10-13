@@ -554,7 +554,7 @@ class TestConfigCompare(unittest.TestCase):
         never happens.
         """
 
-        given_local = dict()
+        given_local = dict()  # pylint: disable=use-dict-literal
         given_upstream = copy.deepcopy(self.our_config)
 
         config_comparison = ConfigComparison(

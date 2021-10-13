@@ -137,7 +137,7 @@ class IanaDBGenerator:
 
     _destination: Optional[str] = None
 
-    database: dict() = dict()
+    database: dict = {}
     """
     An internal storage map.
     """

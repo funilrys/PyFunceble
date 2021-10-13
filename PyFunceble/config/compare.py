@@ -164,8 +164,8 @@ class ConfigComparison:
         ],
     }
 
-    _local_config: dict = dict()
-    _upsteam_config: dict = dict()
+    _local_config: dict = {}
+    _upsteam_config: dict = {}
 
     dict_helper: DictHelper = DictHelper()
 
@@ -261,6 +261,8 @@ class ConfigComparison:
             or "dns" not in self.local_config
             or "follow_server_order" not in self.local_config["dns"]
             or "trust_server" not in self.local_config["dns"]
+            or "collection" not in self.local_config
+            or "collection" not in self.local_config["lookup"]
         ):
             return False
 

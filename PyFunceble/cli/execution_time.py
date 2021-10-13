@@ -129,7 +129,7 @@ class ExecutionTime:
 
         difference = end.timestamp() - start.timestamp()
 
-        result = dict()
+        result = {}
 
         result["days"] = difference // (24 * 60 * 60)
         result["hours"] = (difference // (60 * 60)) % 24

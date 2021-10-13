@@ -158,7 +158,7 @@ class SystemLauncher(SystemBase):
 
     checker_type: Optional[str] = None
 
-    sessions_id: dict = dict()
+    sessions_id: dict = {}
 
     def __init__(self, args: Optional[argparse.Namespace] = None) -> None:
         try:
@@ -189,6 +189,7 @@ class SystemLauncher(SystemBase):
             continuous_integration=self.continuous_integration,
             daemon=True,
             output_workers_count=1,
+            output_queue_num=2,
         )
         self.producer_process_manager = ProducerProcessesManager(
             self.manager,
@@ -197,6 +198,7 @@ class SystemLauncher(SystemBase):
             input_queue=self.tester_process_manager.output_queue[0],
             daemon=True,
             output_workers_count=1,
+            generate_output_queue=True,
         )
         self.dir_files_sorter_process_manager = DirFileSorterProcessesManager(
             self.manager,
@@ -220,16 +222,13 @@ class SystemLauncher(SystemBase):
                 self.manager,
                 max_worker=1,
                 continuous_integration=self.continuous_integration,
+                input_queue=self.tester_process_manager.output_queue[1],
                 output_queue=self.tester_process_manager.input_queue,
+                generate_input_queue=False,
+                generate_output_queue=False,
                 daemon=True,
                 output_workers_count=self.tester_process_manager.max_worker,
             )
-
-            del self.producer_process_manager.output_queue
-
-            self.producer_process_manager.output_queue = [
-                self.miner_process_manager.input_queue
-            ]
 
         if self.continuous_integration.authorized:
             self.continuous_integration.set_start_time()

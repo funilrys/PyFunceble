@@ -395,7 +395,7 @@ class TestConfigLoader(unittest.TestCase):
         loaded yet.
         """
 
-        PyFunceble.storage.CONFIGURATION = self.our_config
+        self.config_loader.set_custom_config(self.our_config).start()
 
         given = "cli_testing.testing_mode.syntax"
         actual = self.config_loader.get_configured_value(given)
@@ -439,13 +439,13 @@ class TestConfigLoader(unittest.TestCase):
 
         self.assertIsInstance(response, ConfigLoader)
 
-        expected_custom = dict()
+        expected_custom = dict()  # pylint: disable=use-dict-literal
         actual = self.config_loader.custom_config
 
         self.assertEqual(expected_custom, actual)
 
         expected_indexes = ["http_codes", "links"]
-        expected = dict()
+        expected = dict()  # pylint: disable=use-dict-literal
 
         for index in expected_indexes:
             actual = getattr(PyFunceble.storage, index.upper())

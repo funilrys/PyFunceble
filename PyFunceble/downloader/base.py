@@ -89,7 +89,7 @@ class DownloaderBase:
         every hour.
     """
 
-    all_downtimes: Optional[dict] = dict()
+    all_downtimes: Optional[dict] = {}
     """
     Stores the download time of all files (self managed).
     """

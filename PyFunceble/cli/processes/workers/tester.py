@@ -84,7 +84,7 @@ class TesterWorker(WorkerBase):
     inactive_dataset: Optional[InactiveDatasetBase] = None
     testing_object: Optional[CheckerBase] = None
 
-    known_testing_objects: dict = dict()
+    known_testing_objects: dict = {}
 
     def __post_init__(self) -> None:
         self.continue_dataset = (
