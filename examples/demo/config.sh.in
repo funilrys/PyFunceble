@@ -1,0 +1,17 @@
+# Common config for demo scripts
+configure() {
+    DELAY=0.12
+    DELAY_SEP=0.3
+    DELAY_PROMPT=0.6
+# No messages/warnings in the current versions of the scripts
+    # COLOR_WARNING='1;91'
+    # COLOR_MESSAGE='1;32'
+    # If you want to use the colorful prompt
+    TUTERM_NAME='PyFunceble-demo'
+}
+
+prompt() {
+    # A more colorful prompt
+    # echo -ne "\033[1;94m$TUTERM_NAME \033[1;35m$(pwd | sed "s:$HOME:~:")\033[0;33m $\033[0m "
+    echo -n '[funilrys@funilrys PyFunceble]$ '
+}
