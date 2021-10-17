@@ -3,7 +3,7 @@
 source config.sh.in
 
 run() {
-    echo
+    c PyFunceble --version
     c PyFunceble -d 192.168.178.60 # TODO doesn't print the status
     c PyFunceble -d 192.168.178.250 # TODO doesn't print the status
     c PyFunceble -d 192.168.178.259

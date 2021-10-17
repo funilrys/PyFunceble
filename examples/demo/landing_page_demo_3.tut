@@ -3,7 +3,7 @@
 source config.sh.in
 
 run() {
-    echo
+    c PyFunceble --version
     c PyFunceble -u https://github.com/funilrys
     c PyFunceble -u https://github.com/microsoft_google
     c PyFunceble -u https://microsoft_google.com

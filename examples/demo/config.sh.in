@@ -3,11 +3,15 @@ configure() {
     DELAY=0.12
     DELAY_SEP=0.3
     DELAY_PROMPT=0.6
+
 # No messages/warnings in the current versions of the scripts
+# but if we add them, their colors can be changed here
     # COLOR_WARNING='1;91'
     # COLOR_MESSAGE='1;32'
+
     # If you want to use the colorful prompt
     TUTERM_NAME='PyFunceble-demo'
+    # Set the terminal width/height
 }
 
 prompt() {
