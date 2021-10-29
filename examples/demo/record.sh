@@ -3,6 +3,7 @@
 set -e
 
 # Pre-warm PyFunceble for better performance
+echo Pre-warming for better recording performance
 for i in $(seq 1 10); do
     PyFunceble --version >/dev/null
 done

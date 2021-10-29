@@ -1,7 +1,7 @@
 # Common config for demo scripts
 configure() {
-    DELAY=0.12
-    DELAY_SEP=0.3
+    DELAY=0.07
+    DELAY_SEP=0.22
     DELAY_PROMPT=0.6
 
 # No messages/warnings in the current versions of the scripts
@@ -15,7 +15,7 @@ configure() {
 }
 
 prompt() {
-    # A more colorful prompt
+# For a more colorful prompt, uncomment the following:
     # echo -ne "\033[1;94m$TUTERM_NAME \033[1;35m$(pwd | sed "s:$HOME:~:")\033[0;33m $\033[0m "
     echo -n '[funilrys@funilrys PyFunceble]$ '
 }
