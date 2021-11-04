@@ -51,6 +51,7 @@ License:
 """
 
 import os
+import sys
 from typing import Optional
 
 import colorama
@@ -70,7 +71,7 @@ STD_EPILOG: str = (
     f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
 )
 
-if PlatformUtility.is_unix():
+if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
     ASCII_PYFUNCEBLE = """
     ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
     ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
