@@ -391,18 +391,16 @@ class ConfigLoader:
         config = self.conditional_switch(config)
 
         PyFunceble.storage.CONFIGURATION = Box(
-            copy.deepcopy(config),
+            config,
         )
         PyFunceble.storage.FLATTEN_CONFIGURATION = DictHelper(
             PyFunceble.storage.CONFIGURATION
         ).flatten()
         PyFunceble.storage.HTTP_CODES = Box(
-            copy.deepcopy(config["http_codes"]),
+            config["http_codes"],
         )
-        PyFunceble.storage.COLLECTION = Box(copy.deepcopy(config["collection"]))
-        PyFunceble.storage.LINKS = Box(
-            copy.deepcopy(config["links"]),
-        )
+        PyFunceble.storage.COLLECTION = Box(config["collection"])
+        PyFunceble.storage.LINKS = Box(config["links"])
 
         return self
 
