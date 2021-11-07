@@ -24,12 +24,14 @@ PyFunceble!
 * `KADhosts`_
 * `MobileAdTrackers`_
 * `My Privacy DNS`_
+* `Phishing`_
 * `Phishing-URL-Testing-Database-of-Link-Statuses`_
 * `Phishing.Database`_
 * `polish-adblock-filters`_
 * `polish-pihole-filters`_
-* `porn-records`_
-* `pornhosts`_
+* `Porn Records`_ (**NSFW**: A Anti pornographic project)
+* `porn-hosts`_  (Formerly `https://github.com/Clefspeare13/pornhosts`) (**NSFW**: A Anti pornographic project)
+* `pornhosts`_ (**NSFW**: A Anti pornographic project)
 * `Steven Black ad-hoc list`_
 * `Stop.Google.Analytics.Ghost.Spam.HOWTO`_
 * `The-Big-List-of-Hacked-Malware-Web-Sites`_
@@ -58,13 +60,15 @@ PyFunceble!
 .. _Google AdService and ID.Google tracking hosts : https://github.com/kowith337/PersonalFilterListCollection/blob/master/hosts/hosts_google_adservice_id.txt
 .. _KADhosts : https://github.com/azet12/KADhosts
 .. _MobileAdTrackers : https://github.com/jawz101/MobileAdTrackers
-.. _My Privacy DNS : https://www.mypdns.org
+.. _My Privacy DNS : https://mypdns.org
+.. _Phishing : https://github.com/mitchellkrogza/Phishing
 .. _Phishing-URL-Testing-Database-of-Link-Statuses : https://github.com/mitchellkrogza/Phishing-URL-Testing-Database-of-Link-Statuses
 .. _Phishing.Database : https://github.com/mitchellkrogza/Phishing.Database
 .. _polish-adblock-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-adblock-filters/adblock.txt
 .. _polish-pihole-filters : https://github.com/MajkiIT/polish-ads-filter/blob/master/polish-pihole-filters/hostfile.txt
-.. _porn-records : https://mypdns.org/my-privacy-dns/porn-records
-.. _pornhosts : https://github.com/Import-External-Sources/pornhosts
+.. _Porn Records : https://mypdns.org/my-privacy-dns/porn-records
+.. _porn-hosts : https://mypdns.org/clefspeare13/pornhosts
+.. _pornhosts : https://mypdns.org/import-external-sources/pornhosts
 .. _Steven Black ad-hoc list : https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts
 .. _Stop.Google.Analytics.Ghost.Spam.HOWTO : https://github.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO
 .. _The-Big-List-of-Hacked-Malware-Web-Sites : https://github.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites
