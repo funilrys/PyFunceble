@@ -310,7 +310,7 @@ class ExtraRulesHandler:
 
         req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
 
-        if "error.fc2.com" in req.headers["Location"]:
+        if "Location" in req.headers and "error.fc2.com" in req.headers["Location"]:
             self.__switch_to_down()
 
         return self
