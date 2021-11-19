@@ -103,7 +103,7 @@ class Infrastructure:
     :type: str
     """
 
-    PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
+    PROD_CONFIG_LINK = "https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/.PyFunceble_production.yaml"  # pylint: disable=line-too-long
     """
     Sets the link to the production configuration file.
 

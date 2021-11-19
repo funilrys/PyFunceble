@@ -33,7 +33,7 @@
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/master/.PyFunceble_production.yaml`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/.PyFunceble_production.yaml`
 
     **Description:** Set the upstream link to the configuration file.
 
@@ -42,7 +42,7 @@
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/master/dir_structure_production.json`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/dir_structure_production.json`
 
     **Description:** Set the upstream link to the directory structure dump file.
 
@@ -51,7 +51,7 @@
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/master/iana-domains-db.json`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/iana-domains-db.json`
 
     **Description:** Set the upstream link to the IANA zone file configuration file.
 
@@ -60,7 +60,7 @@
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/master/public-suffix.json`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/public-suffix.json`
 
     **Description:** Set the upstream link to the public suffix database file.
 
@@ -79,6 +79,6 @@
 
     **Type:** :code:`string`
 
-    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/master/requirements.txt`
+    **Default value:** :code:`https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/requirements.txt`
 
     **Description:** Set the upstream link to the :code:`requirements.txt` file.

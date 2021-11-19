@@ -419,7 +419,7 @@ class CLICore:
         # We initiate the link to the upstream version file.
         # It is hard coded because we may not have the chance to have the
         # configuration file everytime we need it.
-        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/master/version.yaml"  # pylint: disable=line-too-long
+        upstream_link = "https://raw.githubusercontent.com/funilrys/PyFunceble/3.x/version.yaml"  # pylint: disable=line-too-long
 
         upstream_link = PyFunceble.converter.InternalUrl(upstream_link).get_converted()
 
