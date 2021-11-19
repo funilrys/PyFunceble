@@ -398,7 +398,8 @@ class ConfigLoader:
         PyFunceble.storage.HTTP_CODES = Box(
             config["http_codes"],
         )
-        PyFunceble.storage.COLLECTION = Box(config["collection"])
+        if "collection" in config:
+            PyFunceble.storage.COLLECTION = Box(config["collection"])
         PyFunceble.storage.LINKS = Box(config["links"])
 
         return self
