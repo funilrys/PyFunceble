@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import copy
 import functools
 import os
 from typing import Any, Optional
