@@ -1,4 +1,4 @@
-current_version: '3.3.9. (Teal Blauwbok: Termite)'
+current_version: '3.3.10. (Teal Blauwbok: Termite)'
 deprecated:
 - 1.0.0
 - 1.2.1
@@ -112,6 +112,7 @@ deprecated:
 - 3.0.21
 - 3.1.20
 - 3.2.13
+- 3.10.0
 force_update:
     minimal_version:
     - 0.0.0
@@ -142,3 +143,7 @@ messages:
             '
         type: warning
         until: 3.2.2
+    1.0.0:
+    -   message: '🚨 ⚠️ ⚡ 🚨 You are using a non-supported version! 🚨 ⚠️ ⚡ 🚨 '
+        type: warning
+        until: 4.0.1
