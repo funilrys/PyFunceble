@@ -176,6 +176,8 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         Resolves with the prefered method.
         """
 
-        if self.resolving_use_cache:
-            return self.resolve_with_cache(hostname)
-        return self.resolve_without_cache(hostname)
+        if hostname:
+            if self.resolving_use_cache:
+                return self.resolve_with_cache(hostname)
+            return self.resolve_without_cache(hostname)
+        return None
