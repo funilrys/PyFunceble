@@ -61,17 +61,17 @@ import PyFunceble.cli.storage_facility
 from PyFunceble.helpers.merge import Merge
 from PyFunceble.utils.platform import PlatformUtility
 
-STD_EPILOG: str = (
-    f"Crafted with {colorama.Fore.RED}♥{colorama.Fore.RESET} by "
-    f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
-    f"{colorama.Style.RESET_ALL} "
-    f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-    f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
-    f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-    f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
-)
-
 if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
+    STD_EPILOG: str = (
+        f"Crafted with {colorama.Fore.RED}♥{colorama.Fore.RESET} by "
+        f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
+        f"{colorama.Style.RESET_ALL} "
+        f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+    )
+
     ASCII_PYFUNCEBLE = """
     ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
     ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
@@ -80,7 +80,18 @@ if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
     """
+    DONE: str = f"{colorama.Fore.GREEN}✔"
+    ERROR: str = f"{colorama.Fore.RED}✘"
 else:
+    STD_EPILOG: str = (
+        f"Crafted with {colorama.Fore.RED}HEART{colorama.Fore.RESET} by "
+        f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
+        f"{colorama.Style.RESET_ALL} "
+        f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+    )
     ASCII_PYFUNCEBLE = """
     ########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
     ##     ##  ##  ##  ##       ##     ## ###   ## ##    ## ##       ##     ## ##       ##
@@ -90,9 +101,8 @@ else:
     ##           ##    ##       ##     ## ##   ### ##    ## ##       ##     ## ##       ##
     ##           ##    ##        #######  ##    ##  ######  ######## ########  ######## ########
 """
-
-DONE: str = f"{colorama.Fore.GREEN}✔"
-ERROR: str = f"{colorama.Fore.RED}✘"
+    DONE: str = f"{colorama.Fore.GREEN}DONE"
+    ERROR: str = f"{colorama.Fore.RED}ERROR"
 
 VERSION_DUMP_LINK: str = (
     "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
