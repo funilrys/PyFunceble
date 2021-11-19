@@ -8,39 +8,6 @@ on:
       - 3.x
 
 jobs:
-  lint:
-    name: Lint PyFunceble
-
-    runs-on: "${{ matrix.os }}"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.9.1"
-        os:
-          - ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        name: Clone repository
-
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pylint
-
-      - name: Lint PyFunceble with Pylint
-        run: pylint PyFunceble
-
-      - name: Lint tests with Pylint
-        run: pylint tests
-
   deps_safety_check:
     name: Check the safety of our dependencies.
 
@@ -72,7 +39,7 @@ jobs:
         run: safety check
 
   test:
-    needs: [lint, deps_safety_check]
+    needs: [deps_safety_check]
     name: "[${{ matrix.os }}] Test PyFunceble with Python ${{ matrix.python_version }}"
 
     runs-on: "${{ matrix.os }}"
@@ -101,39 +68,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install tox coveralls
+          pip install tox
 
       - name: Test PyFunceble as defined by tox.ini
         run: |
           tox -c tox.ini
-
-      - name: Upload Coverage
-        run: |
-          coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          COVERALLS_PARALLEL: true
-
-  coveralls:
-    needs: test
-    name: Finish Coveralls
-
-    runs-on: "${{ matrix.os }}"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.9"
-        os:
-          - ubuntu-latest
-
-    steps:
-      - name: Sending finish flag to coveralls.io
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
 
   run_cli:
     needs: test
