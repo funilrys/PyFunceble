@@ -38,54 +38,11 @@ jobs:
       - name: Check the safety of our dependencies.
         run: safety check
 
-  deploy_dev_to_pypi:
+  deploy_3x_to_pypi:
     needs: [deps_safety_check]
     name: "Deploy 📦 to the PyPi"
 
     if: github.event_name == 'push' && github.ref == 'refs/heads/3.x'
-
-    runs-on: "${{ matrix.os }}"
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python_version:
-          - "3.9"
-        os:
-          - ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        name: Clone repository
-
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install dependencies
-        run: |
-          pip install twine wheel setuptools
-
-      - name: Build 📦
-        run: |
-          python setup.py sdist bdist_wheel
-
-      - name: Check 📦
-        run: |
-          twine check dist/*
-
-      - name: Publish 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.PYPI_DEV_API_TOKEN }}
-          skip_existing: true
-
-  deploy_stable_to_pypi:
-    needs: [deps_safety_check]
-    name: "Deploy 📦 to the PyPi"
-
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     runs-on: "${{ matrix.os }}"
 
