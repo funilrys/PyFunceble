@@ -80,7 +80,11 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                 total=kwargs["max_retries"], respect_retry_after_header=False
             )
 
-        self.dns_query_tool = DNSQueryTool().guess_all_settings()
+        if "dns_query_tool" in kwargs:
+            self.dns_query_tool = kwargs["dns_query_tool"]
+            del kwargs["dns_query_tool"]
+        else:
+            self.dns_query_tool = DNSQueryTool()
 
         super().__init__(*args, **kwargs)
 
