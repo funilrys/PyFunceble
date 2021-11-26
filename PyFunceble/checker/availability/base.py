@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional
