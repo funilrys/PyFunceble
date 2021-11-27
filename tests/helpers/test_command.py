@@ -294,7 +294,7 @@ class TestCommandHelper(StdoutBase):
             expected = ["Hello, World!"]
             actual = list(CommandHelper("echo 'Hello, World!'").run())
 
-            self.assertEqual(expected, actual)
+            self.assertEqual(expected, actual[:1])
 
     def test_run_to_stdout(self) -> None:
         """
