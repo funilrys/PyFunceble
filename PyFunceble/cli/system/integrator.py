@@ -53,6 +53,8 @@ License:
 
 import os
 
+import colorama
+
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.cli.storage
@@ -152,6 +154,30 @@ class SystemIntegrator(SystemBase):
         return self
 
     @SystemBase.ensure_args_is_given
+    def check_config(self) -> "SystemIntegrator":
+        """
+        Checks or do some sanity check of the configuration.
+
+        This method will basically check that the common mistakes while mixing
+        configuration and CLI arguments are not found.
+
+        .. warning::
+            The messages are not directly printed, but rather stored in the
+            PyFunceble.cli.storage.EXTRA_MESSAGES list.
+        """
+
+        if (
+            not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.hosts
+            and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.plain
+        ):
+            PyFunceble.cli.storage.EXTRA_MESSAGES.append(
+                f"{colorama.Style.BRIGHT}{colorama.Fore.MAGENTA}Your setup won't "
+                "generate any output! "
+                "Reason: file_generation.hosts and file_generation.plain are "
+                "both disabled."
+            )
+
+    @SystemBase.ensure_args_is_given
     def start(self) -> "SystemIntegrator":
         """
         Starts a group of actions provided by this interface.
@@ -170,6 +196,7 @@ class SystemIntegrator(SystemBase):
         PyFunceble.facility.Logger.debug("Given arguments:\n%r", self.args)
 
         self.inject_into_config()
+        self.check_config()
 
         PyFunceble.cli.facility.CredentialLoader.start()
         PyFunceble.cli.factory.DBSession.init_db_sessions()

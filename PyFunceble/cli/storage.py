@@ -52,7 +52,7 @@ License:
 
 import os
 import sys
-from typing import Optional
+from typing import List, Optional
 
 import colorama
 from box import Box
@@ -213,3 +213,6 @@ OUTPUT_DIRECTORY: str = os.path.join(
     PyFunceble.cli.storage_facility.get_output_directory(),
     OUTPUTS.parent_directory,
 )
+
+# This one will store some extra messages to print to the user.
+EXTRA_MESSAGES: Optional[List[str]] = []
