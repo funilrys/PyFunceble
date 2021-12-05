@@ -52,7 +52,8 @@ With the availability checker, the following is provided.
         "use_netinfo_lookup": true,
         "use_reputation_lookup": false,
         "use_whois_db": true,
-        "use_whois_lookup": false
+        "use_whois_lookup": false,
+        "use_collection": false
     }
 
 :code:`do_syntax_check_first`
@@ -110,6 +111,12 @@ the status of the given subject.
 This parameter lets the checker know that is it allowed to perform a WHOIS
 lookup to determine the status of the given subject.
 
+:code:`use_collection`
+~~~~~~~~~~~~~~~~~~~~~~
+
+This parameter lets the checker know that it is allowed to perform a lookup into
+the collection API before starting an extensive local test.
+
 Reputation Checker
 """"""""""""""""""
 
@@ -118,7 +125,8 @@ With the availability checker, the following is provided.
 .. code-block:: json
 
     {
-        "do_syntax_check_first": false
+        "do_syntax_check_first": false,
+        "use_collection": false
     }
 
 :code:`do_syntax_check_first`
@@ -127,6 +135,12 @@ With the availability checker, the following is provided.
 This parameter lets the checker know that it has to do a syntax check before
 starting an extensive test. Meaning that the status strongly depends on the
 caught syntax.
+
+:code:`use_collection`
+~~~~~~~~~~~~~~~~~~~~~~
+
+This parameter lets the checker know that it is allowed to perform a lookup into
+the collection API before starting an extensive local test.
 
 :code:`status`
 ^^^^^^^^^^^^^^
@@ -194,6 +208,7 @@ It should be one of the following:
 - :code:`NETINFO`
 - :code:`HTTP CODE`
 - :code:`SPECIAL` (extra rules)
+- :code:`COLLECTION`
 
 :code:`status_source_after_extra_rules`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -224,6 +239,7 @@ It should be one of the following:
 - :code:`DNSLOOKUP`
 - :code:`NETINFO`
 - :code:`HTTP CODE`
+- :code:`COLLECTION`
 
 If no rules were matched, :code:`null` is provided.
 

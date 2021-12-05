@@ -228,6 +228,10 @@ class FilesystemCounter(FilesystemDirBase):
                 f"<status> should be {CheckerStatusBase}, {type(status)} given."
             )
 
+        if "counter" not in self.dataset:
+            self.dataset["counter"] = {}
+            self.dataset["percentage"] = {}
+
         self.dataset["counter"][status.status] += 1
         self.dataset["counter"]["total"] += 1
 

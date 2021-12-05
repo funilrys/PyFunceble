@@ -76,3 +76,12 @@
     **Description:** Sets the default timeout to apply to each lookup utilities
     everytime it is possible to define a timeout.
 
+:code:`lookup[collection]`
+""""""""""""""""""""""""""
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`True`
+
+    **Description:** Activates or disables the usage of the collection dataset
+    whether possible.

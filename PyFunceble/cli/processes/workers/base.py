@@ -277,6 +277,9 @@ class WorkerBase(multiprocessing.Process):
             PyFunceble.cli.facility.CredentialLoader.start()
             PyFunceble.cli.factory.DBSession.init_db_sessions()
 
+        # Be sure that all settings are loaded proprely!!
+        PyFunceble.factory.Requester.guess_all_settings()
+
         wait_for_stop = (
             bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining) is True
         )

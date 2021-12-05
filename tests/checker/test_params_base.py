@@ -81,8 +81,9 @@ class TestCheckerParamsBase(unittest.TestCase):
         """
 
         self.params.do_syntax_check_first = True
+        self.params.use_collection = False
 
-        expected = {"do_syntax_check_first": True}
+        expected = {"do_syntax_check_first": True, "use_collection": False}
 
         actual = self.params.to_dict()
 
@@ -95,9 +96,11 @@ class TestCheckerParamsBase(unittest.TestCase):
         """
 
         self.params.do_syntax_check_first = True
+        self.params.use_collection = False
 
         expected = """{
-    "do_syntax_check_first": true
+    "do_syntax_check_first": true,
+    "use_collection": false
 }"""
 
         actual = self.params.to_json()

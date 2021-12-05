@@ -375,6 +375,11 @@ DEFAULT_CONFIG: dict = {
         "testing_mode": {"availability": True, "reputation": False, "syntax": False},
         "whois_db": True,
     },
+    "collection": {
+        "url_base": "http://localhost:8080",
+        "push": False,
+        "preferred_data_origin": "frequent",
+    },
     "debug": {"active": False, "level": "info"},
     "dns": {
         "follow_server_order": True,
@@ -453,6 +458,7 @@ DEFAULT_CONFIG: dict = {
         "special": True,
         "timeout": 5,
         "whois": True,
+        "collection": False,
     },
     "share_logs": False,
     "user_agent": {"browser": "chrome", "custom": None, "platform": "linux"},

@@ -357,7 +357,11 @@ class HTTPStatusCode:
                     req.url
                 ).get_converted()
 
-            if not self.allow_redirects and first_origin != final_origin:
+            if (
+                not self.allow_redirects
+                and first_origin != final_origin
+                and req.history
+            ):
                 return req.history[0].status_code
 
             return req.status_code

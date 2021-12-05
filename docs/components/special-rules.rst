@@ -65,6 +65,14 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.fc2.com`
+"""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`error.fc2.com` subdomain
+is into the `Location` headers are supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.github.io`
 """""""""""""""""""
 

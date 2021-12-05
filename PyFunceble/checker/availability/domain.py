@@ -55,7 +55,6 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
-from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
 from PyFunceble.checker.reputation.domain import DomainReputationChecker
 
 
@@ -131,6 +130,9 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
 
         status_post_syntax_checker = None
 
+        if not self.status.status and self.use_collection:
+            self.try_to_query_status_from_collection()
+
         if not self.status.status and self.do_syntax_check_first:
             self.try_to_query_status_from_syntax_lookup()
 
@@ -176,7 +178,7 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
             )
 
         if self.use_extra_rules:
-            ExtraRulesHandler(self.status).start()
+            self.extra_rules_handler.set_status(self.status).start()
 
         return self
 

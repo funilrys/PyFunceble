@@ -57,8 +57,11 @@ from typing import Optional
 import domain2idna
 from sqlalchemy.orm import Session
 
+import PyFunceble.facility
+import PyFunceble.storage
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
+from PyFunceble.query.collection import CollectionQueryTool
 
 
 class CheckerBase:
@@ -75,13 +78,16 @@ class CheckerBase:
     """
 
     STD_DO_SYNTAX_CHECK_FIRST: bool = False
+    STD_USE_COLLECTION: bool = False
 
     _do_syntax_check_first: bool = False
+    _use_collection: bool = False
 
     _subject: Optional[str] = None
     _idna_subject: Optional[str] = None
 
     db_session: Optional[Session] = None
+    collection_query_tool: Optional[CollectionQueryTool] = None
 
     status: Optional[CheckerStatusBase] = None
     params: Optional[CheckerParamsBase] = None
@@ -92,7 +98,10 @@ class CheckerBase:
         *,
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
+        use_collection: Optional[bool] = None,
     ) -> None:
+        self.collection_query_tool = CollectionQueryTool()
+
         if self.params is None:
             self.params = CheckerParamsBase()
 
@@ -106,6 +115,11 @@ class CheckerBase:
             self.do_syntax_check_first = do_syntax_check_first
         else:
             self.do_syntax_check_first = self.STD_DO_SYNTAX_CHECK_FIRST
+
+        if use_collection is not None:
+            self.use_collection = use_collection
+        else:
+            self.guess_and_set_use_collection()
 
         self.db_session = db_session
 
@@ -300,6 +314,56 @@ class CheckerBase:
         self.do_syntax_check_first = value
 
         return self
+
+    @property
+    def use_collection(self) -> bool:
+        """
+        Provides the current value of the :code:`_use_collection` attribute.
+        """
+
+        return self._use_collection
+
+    @use_collection.setter
+    def use_collection(self, value: bool) -> None:
+        """
+        Sets the value which authorizes the usage of the Collection.
+
+        :param value:
+            The value to set.
+
+        :param TypeError:
+            When the given :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._use_collection = self.params.use_collection = value
+
+    def set_use_collection(self, value: bool) -> "CheckerBase":
+        """
+        Sets the value which authorizes the usage of the Collection.
+
+        :param value:
+            The value to set.
+        """
+
+        self.use_collection = value
+
+        return self
+
+    def guess_and_set_use_collection(self) -> "CheckerBase":
+        """
+        Try to guess and set the value of the :code:`use_collection` attribute.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded():
+            if isinstance(PyFunceble.storage.CONFIGURATION.lookup.collection, bool):
+                self.use_collection = PyFunceble.storage.CONFIGURATION.lookup.collection
+            else:
+                self.use_collection = self.STD_USE_COLLECTION
+        else:
+            self.use_collection = self.STD_USE_COLLECTION
 
     def subject_propagator(self) -> "CheckerBase":
         """

@@ -261,6 +261,8 @@ class ConfigComparison:
             or "dns" not in self.local_config
             or "follow_server_order" not in self.local_config["dns"]
             or "trust_server" not in self.local_config["dns"]
+            or "collection" not in self.local_config
+            or "collection" not in self.local_config["lookup"]
         ):
             return False
 

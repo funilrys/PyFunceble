@@ -61,6 +61,7 @@ import urllib3.exceptions
 import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.dataset.user_agent import UserAgentDataset
+from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.requests.adapter.http import RequestHTTPAdapter
 from PyFunceble.query.requests.adapter.https import RequestHTTPSAdapter
 
@@ -91,6 +92,7 @@ class Requester:
     _max_redirects: int = 60
 
     session: Optional[requests.Session] = None
+    dns_query_tool: Optional[DNSQueryTool] = None
 
     def __init__(
         self,
@@ -99,6 +101,7 @@ class Requester:
         verify_certificate: Optional[bool] = None,
         timeout: Optional[float] = None,
         max_redirects: Optional[int] = None,
+        dns_query_tool: Optional[DNSQueryTool] = None,
     ) -> None:
         if max_retries is not None:
             self.max_retries = max_retries
@@ -115,6 +118,11 @@ class Requester:
 
         if max_redirects is not None:
             self.max_redirects = max_redirects
+
+        if dns_query_tool is not None:
+            self.dns_query_tool = dns_query_tool
+        else:
+            self.dns_query_tool = DNSQueryTool()
 
         self.session = self.get_session()
 
@@ -408,11 +416,19 @@ class Requester:
 
         session.mount(
             "https://",
-            RequestHTTPSAdapter(max_retries=self.max_retries, timeout=self.timeout),
+            RequestHTTPSAdapter(
+                max_retries=self.max_retries,
+                timeout=self.timeout,
+                dns_query_tool=self.dns_query_tool,
+            ),
         )
         session.mount(
             "http://",
-            RequestHTTPAdapter(max_retries=self.max_retries, timeout=self.timeout),
+            RequestHTTPAdapter(
+                max_retries=self.max_retries,
+                timeout=self.timeout,
+                dns_query_tool=self.dns_query_tool,
+            ),
         )
 
         custom_headers = {"User-Agent": UserAgentDataset().get_latest()}

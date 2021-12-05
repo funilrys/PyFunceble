@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import copy
 import functools
 import os
 from typing import Any, Optional
@@ -391,17 +390,17 @@ class ConfigLoader:
         config = self.conditional_switch(config)
 
         PyFunceble.storage.CONFIGURATION = Box(
-            copy.deepcopy(config),
+            config,
         )
         PyFunceble.storage.FLATTEN_CONFIGURATION = DictHelper(
             PyFunceble.storage.CONFIGURATION
         ).flatten()
         PyFunceble.storage.HTTP_CODES = Box(
-            copy.deepcopy(config["http_codes"]),
+            config["http_codes"],
         )
-        PyFunceble.storage.LINKS = Box(
-            copy.deepcopy(config["links"]),
-        )
+        if "collection" in config:
+            PyFunceble.storage.COLLECTION = Box(config["collection"])
+        PyFunceble.storage.LINKS = Box(config["links"])
 
         return self
 
@@ -416,6 +415,7 @@ class ConfigLoader:
             )
             PyFunceble.storage.FLATTEN_CONFIGURATION = {}
             PyFunceble.storage.HTTP_CODES = Box({})
+            PyFunceble.storage.COLLECTION = Box({})
             PyFunceble.storage.LINKS = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass

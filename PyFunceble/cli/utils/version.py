@@ -60,6 +60,7 @@ from box import Box
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.storage
+from PyFunceble.cli.utils.stdout import print_single_line
 from PyFunceble.converter.internal_url import InternalUrlConverter
 from PyFunceble.helpers.dict import DictHelper
 from PyFunceble.helpers.download import DownloadHelper
@@ -340,7 +341,7 @@ def handle_messages(upstream_version: Box) -> None:
 
 def print_central_messages(check_force_update: bool = False) -> None:
     """
-    Compares the version with the upstream one and handle the messages.
+    Collect all possible messages from upstream and downstream and print them.
     """
 
     upstream_version = get_upstream_version()
@@ -355,3 +356,6 @@ def print_central_messages(check_force_update: bool = False) -> None:
     )
 
     handle_messages(upstream_version)
+
+    for extra_message in PyFunceble.cli.storage.EXTRA_MESSAGES:
+        print_single_line(extra_message, force=True)

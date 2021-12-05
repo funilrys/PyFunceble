@@ -82,9 +82,6 @@ class MinerWorker(WorkerBase):
     url2netloc: Optional[Url2Netloc] = None
 
     def __post_init__(self) -> None:
-        # Be sure that all settings are loaded proprely!!
-        PyFunceble.factory.Requester.guess_all_settings()
-
         self.url2netloc = Url2Netloc()
 
         return super().__post_init__()

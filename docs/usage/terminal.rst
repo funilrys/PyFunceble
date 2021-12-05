@@ -366,6 +366,32 @@ the limitation which does not apply to private networks.
 
 **Default value:** :code:`local_network: False`
 
+------
+
+:code:`--collection-preferred-origin`
+"""""""""""""""""""""""""""""""""""""
+
+.. versionadded: 4.0.0
+
+Sets the preferred status origin.
+
+**Default value:** :code:`collection.preferred_status_origin: frequent`
+
+**Available values:** :code:`frequent`, :code:`latest`, :code:`recommended`
+
+
+------
+
+:code:`--collection-lookup`
+"""""""""""""""""""""""""""
+
+.. versionadded: 4.0.0
+
+Activates or disables the usage of the collection lookup whether possible.
+
+**Default value:** :code:`lookup.collection: False`
+
+Want to take advantage of the collection API ? This argument is for you.
 
 ------
 
@@ -1041,6 +1067,23 @@ Activates or disables the display of output to the terminal.
 
 **Default value:** :code:`quiet: False`
 
+------
+
+:code:`--push-collection`
+""""""""""""""""""""""""
+
+.. versionadded: 4.0.0
+
+Activates or disables the push of the test results into the collection API.
+
+**Default value:** :code:`collection.push: False`
+
+Want to take submit data into the collection API ? This argument is for you.
+
+.. warning::
+
+    This argument is useless if the :code:`PYFUNCEBLE_COLLECTION_API` environment
+    variable is not defined.
 
 ------
 
@@ -1321,51 +1364,53 @@ are set.
     If used in a script like bash or a terminal directly you have to use the
     :code:`export` as PyFunceble is running as sub-processes
 
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| **Environment Variable**              | **How to use them?**                                                                                                 |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                           |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MariaDB charset to use.                                                                                  |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host or the Unix socket (absolute file path) of the MariaDB database.                                    |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_NAME`            | Tell us the name of the MariaDB database to use.                                                                     |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_PASSWORD`        | Tell us the MariaDB user password to use.                                                                            |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_PORT`            | Tell us the MariaDB connection port to use.                                                                          |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the MariaDB user-name to use.                                                                                |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DEBUG_LVL`          | Sets the logging level to use. :ref:`logging-level`                                                                  |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_LOGGING_LVL`        | Same as :code:`PYFUNCEBLE_DEBUG_LVL`. :ref:`logging-level`                                                           |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`    | Tell us to log everything to :code:`stdout` bool (true | false)                                                      |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_CONFIG_DIR`         | Tell us the location of the directory to use as the configuration directory.                                         |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_OUTPUT_LOCATION`    | Tell us where we should generate the :code:`output/` directory.                                                      |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`APPDATA`                       | Used under Windows to construct/get the configuration directory if :code:`PYFUNCEBLE_CONFIG_DIR` is not found.       |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GH_TOKEN`                      | Tell us the GitHub token to set into the repository configuration when using PyFunceble under Travis CI.             |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GL_TOKEN`                      | Tell us the GitLab token to set into the repository configuration when using PyFunceble under GitLab CI/CD.          |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GIT_EMAIL`                     | Tell us the :code:`git.email` configuration to set when using PyFunceble under any supported CI environment.         |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GIT_NAME`                      | Tell us the :code:`git.name` configuration to set when using PyFunceble under any supported CI environment.          |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`TRAVIS_BUILD_DIR`              | Used to confirm that we are running under a Travis CI container.                                                     |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GITLAB_CI`                     | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`GITLAB_USER_ID`                | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
-+---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| **Environment Variable**                | **How to use them?**                                                                                                 |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_AUTO_CONFIGURATION`   | Tell us if we have to install/update the configuration file automatically.                                           |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_COLLECTION_API_TOKEN` | Sets the API token to use when pushing data into the collection API.                                                 |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_CONFIG_DIR`           | Tell us the location of the directory to use as the configuration directory.                                         |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_CHARSET`           | Tell us the MariaDB charset to use.                                                                                  |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_HOST`              | Tell us the host or the Unix socket (absolute file path) of the MariaDB database.                                    |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_NAME`              | Tell us the name of the MariaDB database to use.                                                                     |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_PASSWORD`          | Tell us the MariaDB user password to use.                                                                            |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_PORT`              | Tell us the MariaDB connection port to use.                                                                          |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DB_USERNAME`          | Tell us the MariaDB user-name to use.                                                                                |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG`                | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_LVL`            | Sets the logging level to use. :ref:`logging-level`                                                                  |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_DEBUG_ON_SCREEN`      | Tell us to log everything to :code:`stdout` bool (true | false)                                                      |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_LOGGING_LVL`          | Same as :code:`PYFUNCEBLE_DEBUG_LVL`. :ref:`logging-level`                                                           |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`PYFUNCEBLE_OUTPUT_LOCATION`      | Tell us where we should generate the :code:`output/` directory.                                                      |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`APPDATA`                         | Used under Windows to construct/get the configuration directory if :code:`PYFUNCEBLE_CONFIG_DIR` is not found.       |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GH_TOKEN`                        | Tell us the GitHub token to set into the repository configuration when using PyFunceble under Travis CI.             |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GL_TOKEN`                        | Tell us the GitLab token to set into the repository configuration when using PyFunceble under GitLab CI/CD.          |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GIT_EMAIL`                       | Tell us the :code:`git.email` configuration to set when using PyFunceble under any supported CI environment.         |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GIT_NAME`                        | Tell us the :code:`git.name` configuration to set when using PyFunceble under any supported CI environment.          |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`TRAVIS_BUILD_DIR`                | Used to confirm that we are running under a Travis CI container.                                                     |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GITLAB_CI`                       | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
+| :code:`GITLAB_USER_ID`                  | Used to confirm that we are running under a GitLab CI/CD environment.                                                |
++-----------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 
 
 Global overview
@@ -1446,6 +1491,12 @@ Global overview
                                 Configured value: 0.0
         --local               Activates or disables the consideration of the test(s)
                                 in or for a local or private network context.
+                                Configured value: False
+        --collection-preferred-origin {frequent,latest,recommended}
+                              Sets the preferred status origin.
+                                Configured value: 'frequent'
+        --collection-lookup   Activates or disables the usage of the Collection lookup
+                                whether possible.
                                 Configured value: False
         --dns-lookup          Activates or disables the usage of the DNS lookup
                                 whether possible.
@@ -1574,6 +1625,9 @@ Global overview
                                 Configured value: False
         -q, --quiet           Activates or disables the display of output to the
                                 terminal.
+                                Configured value: False
+        --push-collection     Activates or disables the push of the test results into the
+                                collection API.
                                 Configured value: False
         -s, --simple          Activates or disables the simple output mode.
                             Configured value: False

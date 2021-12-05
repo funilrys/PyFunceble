@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -60,6 +62,7 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
+from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
@@ -123,6 +126,7 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
+    extra_rules_handler: Optional[ExtraRulesHandler] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -148,8 +152,9 @@ class AvailabilityCheckerBase(CheckerBase):
         do_syntax_check_first: Optional[bool] = None,
         db_session: Optional[Session] = None,
         use_whois_db: Optional[bool] = None,
+        use_collection: Optional[bool] = None,
     ) -> None:
-        self.dns_query_tool = DNSQueryTool().guess_all_settings()
+        self.dns_query_tool = DNSQueryTool()
         self.whois_query_tool = WhoisQueryTool()
         self.addressinfo_query_tool = AddressInfo()
         self.hostbyaddr_query_tool = HostByAddrInfo()
@@ -157,6 +162,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
+        self.extra_rules_handler = ExtraRulesHandler()
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -202,7 +208,10 @@ class AvailabilityCheckerBase(CheckerBase):
             self.guess_and_set_use_whois_db()
 
         super().__init__(
-            subject, do_syntax_check_first=do_syntax_check_first, db_session=db_session
+            subject,
+            do_syntax_check_first=do_syntax_check_first,
+            db_session=db_session,
+            use_collection=use_collection,
         )
 
     @property
@@ -939,6 +948,48 @@ class AvailabilityCheckerBase(CheckerBase):
         """
 
         raise NotImplementedError()
+
+    def try_to_query_status_from_collection(self) -> "AvailabilityCheckerBase":
+        """
+        Tries to get and set the status from the Collection API.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Collection Lookup",
+            self.status.idna_subject,
+        )
+
+        data = self.collection_query_tool.pull(self.idna_subject)
+
+        if data and "status" in data:
+            if (
+                self.collection_query_tool.preferred_status_origin == "frequent"
+                and data["status"]["availability"]["frequent"]
+            ):
+                self.status.status = data["status"]["availability"]["frequent"]
+                self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "latest"
+                and data["status"]["availability"]["latest"]
+            ):
+                self.status.status = data["status"]["availability"]["latest"]["status"]
+                self.status.status_source = "COLLECTION"
+            elif (
+                self.collection_query_tool.preferred_status_origin == "recommended"
+                and data["status"]["availability"]["recommended"]
+            ):
+                self.status.status = data["status"]["availability"]["recommended"]
+                self.status.status_source = "COLLECTION"
+
+            PyFunceble.facility.Logger.info(
+                "Could define the status of %r from: Collection Lookup",
+                self.status.idna_subject,
+            )
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Collection Lookup",
+            self.status.idna_subject,
+        )
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query
