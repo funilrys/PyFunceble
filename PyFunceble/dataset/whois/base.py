@@ -62,7 +62,13 @@ class WhoisDatasetBase(DBDatasetBase):
     Provides the base of all Whois related interface.
     """
 
-    FIELDS: List[str] = ["subject", "idna_subject", "expiration_date", "epoch"]
+    FIELDS: List[str] = [
+        "subject",
+        "idna_subject",
+        "expiration_date",
+        "epoch",
+        "registrar",
+    ]
 
     COMPARISON_FIELDS: List[str] = ["subject", "idna_subject"]
 

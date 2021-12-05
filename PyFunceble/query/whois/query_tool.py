@@ -57,6 +57,9 @@ from typing import Optional, Union
 from PyFunceble.dataset.iana import IanaDataset
 from PyFunceble.query.record.whois import WhoisQueryToolRecord
 from PyFunceble.query.whois.converter.expiration_date import ExpirationDateExtractor
+from PyFunceble.query.whois.converter.registrar import RegistarExtractor
+
+# pylint: disable=protected-access
 
 
 class WhoisQueryTool:
@@ -68,11 +71,15 @@ class WhoisQueryTool:
     STD_PORT: int = 43
 
     expiration_date_extractor: Optional[ExpirationDateExtractor] = None
+    registrar_extractor: Optional[RegistarExtractor] = None
     iana_dataset: Optional[IanaDataset] = None
 
     _subject: Optional[str] = None
     _server: Optional[str] = None
     _query_timeout: float = 5.0
+    _expiration_date: Optional[str] = None
+    _record: Optional[str] = None
+    _registrar: Optional[str] = None
 
     lookup_record: Optional[WhoisQueryToolRecord] = None
 
@@ -83,6 +90,7 @@ class WhoisQueryTool:
         server: Optional[str] = None,
         query_timeout: Optional[float] = None,
     ) -> None:
+        self.registrar_extractor = RegistarExtractor()
         self.expiration_date_extractor = ExpirationDateExtractor()
         self.iana_dataset = IanaDataset()
 
@@ -134,24 +142,11 @@ class WhoisQueryTool:
             if self.server != self.lookup_record.server:
                 self.lookup_record.server = self.server
 
-            return result
+            if self._expiration_date != self.lookup_record.expiration_date:
+                self.lookup_record.expiration_date = self._expiration_date
 
-        return wrapper
-
-    def update_lookup_record_expiration_date(
-        func,
-    ):  # pylint: disable=no-self-argument
-        """
-        Ensures that the record of the decorated method is set as response
-        in our record.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## It just works.
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            if result != self.lookup_record.expiration_date:
-                self.lookup_record.response = result
+            if self._registrar != self.lookup_record.registrar:
+                self.lookup_record.registrar = self._registrar
 
             return result
 
@@ -165,7 +160,9 @@ class WhoisQueryTool:
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
             if self.lookup_record:
-                self.lookup_record.record = None
+                self.lookup_record.record = self._record = None
+                self.lookup_record.expiration_date = self._expiration_date = None
+                self.lookup_record.registrar = self._registrar = None
 
             return func(self, *args, **kwargs)  # pylint: disable=not-callable
 
@@ -316,6 +313,45 @@ class WhoisQueryTool:
 
         return self
 
+    @property
+    @query_record
+    @update_lookup_record
+    def expiration_date(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_expiration_date` attribute.
+        """
+
+        if self.lookup_record.record:
+            self._expiration_date = self.expiration_date_extractor.set_data_to_convert(
+                self.lookup_record.record
+            ).get_converted()
+
+        return self._expiration_date
+
+    @property
+    @query_record
+    def record(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_record` attribute.
+        """
+
+        return self.lookup_record.record
+
+    @property
+    @query_record
+    @update_lookup_record
+    def registrar(self) -> Optional[str]:
+        """
+        Provides the current state of the :code:`_registrar` attribute.
+        """
+
+        if self.lookup_record.record:
+            self._registrar = self.registrar_extractor.set_data_to_convert(
+                self.lookup_record.record
+            ).get_converted()
+
+        return self._registrar
+
     @ensure_subject_is_given
     def get_whois_server(
         self,
@@ -386,17 +422,24 @@ class WhoisQueryTool:
                     req.close()
 
                     try:
-                        self.lookup_record.record = response.decode()
+                        self.lookup_record.record = self._record = response.decode()
                     except UnicodeDecodeError:
                         # Note: Because we don't want to deal with other issue, we
                         # decided to use `replace` in order to automatically replace
                         # all non utf-8 encoded characters.
-                        self.lookup_record.record = response.decode("utf-8", "replace")
+                        self.lookup_record.record = self._record = response.decode(
+                            "utf-8", "replace"
+                        )
                 except socket.error:
                     pass
 
-            if self.lookup_record.record is None:
-                self.lookup_record.record = ""
+            if self.lookup_record.record is None or not self.lookup_record.record:
+                self.lookup_record.record = self._record = ""
+                self.lookup_record.expiration_date = self._expiration_date = ""
+                self.lookup_record.registrar = self._record = ""
+            else:
+                self.lookup_record.expiration_date = self.expiration_date
+                self.lookup_record.registrar = self.registrar
 
         return self.lookup_record.record
 
@@ -412,22 +455,3 @@ class WhoisQueryTool:
         """
 
         return self.lookup_record.record
-
-    @query_record
-    @update_lookup_record_expiration_date
-    def get_expiration_date(
-        self,
-    ) -> Optional[str]:  # pragma: no cover ## Underlying method is more interesting.
-        """
-        Provides the expiration date of the record.
-
-        Side Effect:
-            The record will be queried if it is non existent.
-        """
-
-        if self.lookup_record.record:
-            return self.expiration_date_extractor.set_data_to_convert(
-                self.lookup_record.record
-            ).get_converted()
-
-        return None

@@ -1024,6 +1024,31 @@ percentage - file - of each status.
 This argument will disable or enable the generation of the percentage of each
 status.
 
+------
+
+:code:`--registrar`
+"""""""""""""""""""
+
+.. versionadded:: 4.1.0b1.dev
+
+Activates or disables the display and generation of the (top) registrar stats -
+file.
+
+**Default value:** :code:`registrar: False`
+
+------
+
+:code:`--max-registrar`
+"""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b1.dev
+
+Sets the maximum number of registrar to display.
+
+**Default value:** :code:`max_registrar: 15`
+
+.. note::
+    This option does not take effect on the generated file.
 
 ------
 
@@ -1418,18 +1443,46 @@ Global overview
 
 ::
 
-    usage: pyfunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]] [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]] [--adblock] [--complements] [--preload] [--filter CLI_TESTING__FILE_FILTER] [--mining]
-                    [--rpz] [--wildcard] [-c] [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local] [--dns-lookup] [--http] [--netinfo-lookup] [--special-lookup] [--whois-lookup] [--reputation-lookup]
-                    [--reputation] [--syntax] [-t LOOKUP__TIMEOUT] [-ua USER_AGENT__CUSTOM] [-vsc] [--dns DNS__SERVER [DNS__SERVER ...]] [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
-                    [--trust-dns-server] [--inactive-db] [--database-type {csv,mariadb,mysql}] [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST] [-wdb] [-a] [-ex] [--colour]
-                    [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]] [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP] [--no-files]
-                    [--output-location OUTPUT_LOCATION] [--unified-results] [--percentage] [--plain] [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS] [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
-                    [--ci-branch CLI_TESTING__CI__BRANCH] [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH] [--ci-command CLI_TESTING__CI__COMMAND] [--ci-end-command CLI_TESTING__CI__END_COMMAND]
-                    [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE] [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE] [--help] [-v]
+    usage: PyFunceble [--show-completion {bash,zsh}] [-d DOMAINS [DOMAINS ...]]
+                    [-u URLS [URLS ...]] [-f FILES [FILES ...]]
+                    [-uf URL_FILES [URL_FILES ...]] [--adblock] [--cidr]
+                    [--complements] [--preload]
+                    [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
+                    [--wildcard] [-c]
+                    [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
+                    [--collection-preferred-origin {frequent,latest,recommended}]
+                    [--collection-lookup] [--dns-lookup] [--http]
+                    [--netinfo-lookup] [--special-lookup] [--whois-lookup]
+                    [--reputation-lookup] [--reputation] [--syntax]
+                    [-t LOOKUP__TIMEOUT] [-ua USER_AGENT__CUSTOM] [-vsc]
+                    [--dns DNS__SERVER [DNS__SERVER ...]]
+                    [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
+                    [--trust-dns-server] [--dns-delay DNS__DELAY]
+                    [--inactive-db] [--database-type {csv,mariadb,mysql}]
+                    [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST] [-wdb] [-a]
+                    [-ex] [--colour]
+                    [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]]
+                    [--dots] [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
+                    [--merge-output] [--no-files]
+                    [--output-location OUTPUT_LOCATION] [--unified-results]
+                    [--percentage] [--registrar]
+                    [--max-registrar CLI_TESTING__DISPLAY_MODE__MAX_REGISTRAR]
+                    [--plain] [-q] [--push-collection] [-s]
+                    [-w CLI_TESTING__MAX_WORKERS]
+                    [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
+                    [--ci-branch CLI_TESTING__CI__BRANCH]
+                    [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
+                    [--ci-command CLI_TESTING__CI__COMMAND]
+                    [--ci-end-command CLI_TESTING__CI__END_COMMAND]
+                    [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
+                    [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
+                    [--help] [-v]
 
     PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
     optional arguments:
+        --show-completion {bash,zsh}
+                                Show Shell completion script and exit.
         --help                Show this help message and exit.
         -v, --version         Show the version of PyFunceble and exit.
 
@@ -1471,15 +1524,15 @@ Global overview
                                 Configured value: False
         --filter CLI_TESTING__FILE_FILTER
                                 Regex to match in order to test a given line.
-                                Configured value: ''
+                                Configured value: None
         --mining              Activates or disables the mining subsystem.
                                 Configured value: False
         --rpz                 Activates or disables the decoding of RPZ policies
                                 from each given input files.
                                 Configured value: False
         --wildcard            Activates or disables the decoding of wildcards for
-                            each given input files.
-                            Configured value: False
+                                each given input files.
+                                Configured value: False
 
     Test control:
         -c, --auto-continue, --continue
@@ -1493,8 +1546,8 @@ Global overview
                                 in or for a local or private network context.
                                 Configured value: False
         --collection-preferred-origin {frequent,latest,recommended}
-                              Sets the preferred status origin.
-                                Configured value: 'frequent'
+                                Sets the preferred status origin.
+                                Configured value: 'recommended'
         --collection-lookup   Activates or disables the usage of the Collection lookup
                                 whether possible.
                                 Configured value: False
@@ -1546,12 +1599,13 @@ Global overview
                                 Sets the protocol to use for the DNS queries.
                                 Configured value: 'UDP'
         --follow-server-order
-                                Let us follow or mix the order of usage of the given DNS server(s).
+                                Let us follow or mix the order of usage of the given
+                                or found DNS server(s).
                                 Configured value: True
         --trust-dns-server    Activates or disable the trust mode.
 
-                                When active, when the first read DNS server give us a negative response
-                                - without error - we take it as it it.
+                                When active, when the first read DNS server give us a negative
+                                response - without error - we take it as it it.
                                 Otherwise, if not active, when the first read DNS server give us
                                 a negative response - without error - we still consolidate by
                                 checking all given/found server.
@@ -1594,15 +1648,22 @@ Global overview
 
                                 Multiple space separated statuses can be given.
                                 Configured value: 'all'
+        --dots                Activate or disables the display of dots or other
+                                characters when we skip the test of a subject.
+                                Configured value: False
         --hierarchical        Activates or disables the sorting of the files
                                 content (output) in a hierarchical order.
                                 Configured value: False
         -h, --host            Activates or disables the generation of the
                                 hosts file(s).
-                                Configured value: True
+                                Configured value: False
         -ip CLI_TESTING__HOSTS_IP, --hosts-ip CLI_TESTING__HOSTS_IP
                                 Sets the IP to prefix each lines of the hosts file.
                                 Configured value: '0.0.0.0'
+        --merge-output        Activates or disables the merging of the outputs of all
+                                inputted files inside a single subdirectory as opposed to the
+                                normal behavior.
+                                Configured value: False
         --no-files            Activates or disables the generation of any non-logs
                                 file(s).
                                 Configured value: False
@@ -1616,21 +1677,30 @@ Global overview
         --percentage          Activates or disables the display and generation
                                 of the percentage - file - of each status.
                                 Configured value: True
+        --registrar           Activates or disables the display and generation
+                                of the registrar - file - status at the end of a test.
+                                The registrar file contains the top domain registrar found
+                                while testing.
+                                Configured value: True
+        --max-registrar CLI_TESTING__DISPLAY_MODE__MAX_REGISTRAR
+                                Sets the maximal number of registrar to display.
+                                Note: This argument has no effect when the --registrar
+                                argument is not set. This argument only takes effect on
+                                display but not
+                                in the log file
+                                Configured value: 15
         --plain               Activates or disables the generation of the
                                 RAW file(s). What is meant is a list with only a list of
                                 subject (one per line).
-                                Configured value: False
-        --dots                Activate or disables the display of dots or other
-                                characters when we skip the test of a subject.
-                                Configured value: False
+                                Configured value: True
         -q, --quiet           Activates or disables the display of output to the
                                 terminal.
                                 Configured value: False
-        --push-collection     Activates or disables the push of the test results into the
+        --push-collection     Activates or disables the push of test result into the
                                 collection API.
                                 Configured value: False
         -s, --simple          Activates or disables the simple output mode.
-                            Configured value: False
+                                Configured value: False
 
     Multiprocessing:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
@@ -1650,7 +1720,7 @@ Global overview
                                 Sets our git working branch. This is the branch
                                 from where we are supposed to store the tests
                                 (excepts the final results).
-                                Configured value: 'dev'
+                                Configured value: 'master'
         --ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH
                                 Sets our git distributions branch. This is the
                                 branch from where we are supposed to store and push
@@ -1659,10 +1729,10 @@ Global overview
         --ci-command CLI_TESTING__CI__COMMAND
                                 Sets the command to execute before each commit
                                 (except the final one).
-                                Configured value: ''
+                                Configured value: None
         --ci-end-command CLI_TESTING__CI__END_COMMAND
                                 Sets the command to execute before the final commit.
-                                Configured value: ''
+                                Configured value: None
         --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE
                                 Sets the commit message to apply every time we have
                                 to apply a commit except for the really last one.
@@ -1676,6 +1746,5 @@ Global overview
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
-
 
 .. _RPZ: https://www.mypdns.org/w/rpz/
