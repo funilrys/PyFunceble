@@ -358,11 +358,12 @@ each test cycles is done.
 :code:`--local`
 """""""""""""""
 
-Activates or disables the consideration of the test(s) in or for a local or
-private network context.
+Activates or disables the consideration of the test(s) in or for a local
+or private network context.
 
-Want to run a test over a local or private network? This argument will disable
-the limitation which does not apply to private networks.
+This option is to include testing ability of records only availeble for 
+local and private network. This argument will enable this functionality
+by removing the usual limitation which do not apply to intranets.
 
 **Default value:** :code:`local_network: False`
 
