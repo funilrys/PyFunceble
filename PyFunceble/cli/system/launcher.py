@@ -676,6 +676,14 @@ class SystemLauncher(SystemBase):
             ):
                 break
 
+            generate_percentage_file(protocol["destination"])
+
+            # pylint: disable=line-too-long
+            if (
+                PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.merge_output_dirs
+            ):
+                break
+
         return self
 
     def remove_unwanted_files(self) -> "SystemLauncher":
