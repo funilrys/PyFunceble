@@ -933,7 +933,16 @@ Sets the IP to prefix each lines of the hosts file.
 
 You can configure the logging level to be outputted in STDOUT (screen)
 when you uses :code:`--no-files`. Default outputs to
-:code:`output/*_logging_/**.log`
+:code:`output/__pyfunceble_loggging__/*.log`
+
+Please notice this is a separated folder at the same lever as your
+tested sources.
+
+.. code-block:: console
+
+    ├── /tmp/pyfunceble/output/__pyfunceble_loggging__/
+    ├── /tmp/pyfunceble/output/my-blacklist/
+
 
 Optional values. (From less to more information)
 
