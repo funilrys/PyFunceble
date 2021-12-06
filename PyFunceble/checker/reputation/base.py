@@ -65,7 +65,6 @@ from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.dataset.ipv4_reputation import IPV4ReputationDataset
-from PyFunceble.query.collection import CollectionQueryTool
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 
@@ -101,7 +100,6 @@ class ReputationCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
-        self.collection_query_tool = CollectionQueryTool()
 
         self.params = ReputationCheckerParams()
 
