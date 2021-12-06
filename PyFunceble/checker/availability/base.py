@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -60,6 +62,7 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
+from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
@@ -123,6 +126,7 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
+    extra_rules_handler: Optional[ExtraRulesHandler] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -158,6 +162,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
+        self.extra_rules_handler = ExtraRulesHandler()
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
