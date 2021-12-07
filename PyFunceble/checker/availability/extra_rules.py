@@ -88,6 +88,7 @@ class ExtraRulesHandler:
             r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.dr\.ag$": [(self.__switch_to_down_if, 503)],
             r"\.fc2\.com$": [self.__handle_fc2_dot_com],
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
             r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
