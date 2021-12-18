@@ -117,7 +117,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             The hostname to get resolve.
         """
 
-        def get_last_cname(subject: str) -> Optional[str]:
+        def get_last_cname(subject: str, recursion_depth: int = 60) -> Optional[str]:
             """
             Given a subject, this function tries to query the CNAME until there
             is none.
@@ -129,12 +129,16 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             last_cname_result = []
             last_cname_new_subject = subject
 
-            while True:
+            depth = 0
+
+            while depth < recursion_depth:
                 local_last_cname_result = (
                     self.dns_query_tool.set_query_record_type("CNAME")
                     .set_subject(last_cname_new_subject)
                     .query()
                 )
+
+                depth += 1
 
                 if any(x in last_cname_result for x in local_last_cname_result):
                     break
