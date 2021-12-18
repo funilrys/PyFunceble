@@ -229,8 +229,7 @@ class FilesystemCounter(FilesystemDirBase):
             )
 
         if "counter" not in self.dataset:
-            self.dataset["counter"] = {}
-            self.dataset["percentage"] = {}
+            self.dataset = copy.deepcopy(self.STD_DATASET)
 
         self.dataset["counter"][status.status] += 1
         self.dataset["counter"]["total"] += 1
