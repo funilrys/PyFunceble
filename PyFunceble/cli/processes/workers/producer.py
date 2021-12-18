@@ -230,7 +230,7 @@ class ProducerWorker(WorkerBase):
         the dataset storage. Otherwise, we just keep it in there :-)
         """
 
-        if test_dataset["type"] != "single":
+        if test_dataset["type"] != "single" and self.inactive_dataset.authorized:
             dataset = test_result.to_dict()
             dataset.update(test_dataset)
 
@@ -259,7 +259,7 @@ class ProducerWorker(WorkerBase):
         Runs the backup or update of the auto-continue dataset storage.
         """
 
-        if test_dataset["type"] != "single":
+        if test_dataset["type"] != "single" and self.continue_dataset.authorized:
             dataset = test_result.to_dict()
             dataset.update(test_dataset)
 
