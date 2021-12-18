@@ -587,7 +587,7 @@ class SystemLauncher(SystemBase):
                         to_send, worker_name="main"
                     )
 
-            self.dir_files_sorter_process_manager.add_to_input_queue(
+            self.dir_files_sorter_process_manager.input_datasets.append(
                 {"directory": protocol["output_dir"]}
             )
 
