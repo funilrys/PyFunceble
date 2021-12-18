@@ -527,6 +527,17 @@ every time it is possible to define a timeout.
 
 **Default value:** :code:`timeout: 5` seconds
 
+------
+
+.. versionadded:: 4.0.3b1.dev
+
+:code:`--max-http-retries "number"`
+"""""""""""""""""""""""""""""""""""
+
+
+Sets the maximum number of retries for an HTTP request.
+
+**Default value:** :code:`max_http_retries: 3`
 
 ------
 
@@ -1524,6 +1535,9 @@ Global overview
                                 Sets the default timeout to apply to each lookup
                                 utilities every time it is possible to define a timeout.
                                 Configured value: 5
+        --max-http-retries MAX_HTTP_RETRIES
+                                Sets the maximum number of retries for an HTTP request.
+                                Configured value: 3
         -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
                                 Sets the user agent to use.
 

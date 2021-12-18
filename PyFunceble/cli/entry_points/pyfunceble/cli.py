@@ -472,6 +472,18 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--max-http-retries",
+            ],
+            {
+                "dest": "max_http_retries",
+                "type": int,
+                "default": 3,
+                "help": "Sets the maximum number of retries for an HTTP "
+                "request. %s" % get_configured_value("max_http_retries"),
+            },
+        ),
+        (
+            [
                 "-ua",
                 "--user-agent",
             ],

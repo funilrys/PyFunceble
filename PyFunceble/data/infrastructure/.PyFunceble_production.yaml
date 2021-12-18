@@ -270,6 +270,10 @@ user_agent:
 # Activates the verification of the certificate.
 verify_ssl_certificate: False
 
+# Set the maximum number of retries to perform.
+# This should be an integer >= 0.
+max_http_retries: 3
+
 http_codes:
   # Provides everything related to the HTTP code lookup interpretation.
 

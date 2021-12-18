@@ -30,3 +30,12 @@
     Indeed if the certificate is not registered to the CA or is simply
     invalid and the domain is still alive, you will always get
     :code:`INACTIVE` as output.
+
+:code:`max_http_retries`
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`3`
+
+    **Description:** Sets the maximum number of retries for an HTTP request.
