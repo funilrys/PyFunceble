@@ -741,9 +741,8 @@ class AvailabilityCheckerBase(CheckerBase):
             if not known_record:
                 # We assume that expired dataset are never saved into the
                 # dataset.
-                self.status.expiration_date = (
-                    self.whois_query_tool.get_expiration_date()
-                )
+                self.status.expiration_date = self.whois_query_tool.expiration_date
+                self.status.registrar = self.whois_query_tool.lookup_record.registrar
                 self.status.whois_record = self.whois_query_tool.lookup_record.record
 
                 if (
@@ -766,9 +765,11 @@ class AvailabilityCheckerBase(CheckerBase):
                     )
             else:
                 self.status.expiration_date = known_record["expiration_date"]
+                self.status.registrar = known_record["registrar"]
                 self.status.whois_record = None
         else:
-            self.status.expiration_date = self.whois_query_tool.get_expiration_date()
+            self.status.expiration_date = self.whois_query_tool.expiration_date
+            self.status.registrar = self.whois_query_tool.lookup_record.registrar
             self.status.whois_record = self.whois_query_tool.lookup_record.record
 
         if self.status.expiration_date:

@@ -118,6 +118,9 @@ cli_testing:
     # Activates the output of the percentage information.
     percentage: True
 
+    # Activates the output of the top registrar information.
+    registrar: False
+
     # Activates the quiet mode.
     quiet: False
 
@@ -137,6 +140,10 @@ cli_testing:
     # NOTE: This does not have any effect with the generated files.
     # Available values: ALL | ACTIVE | INACTIVE | INVALID | SANE | MALICIOUS
     status: all
+
+    # Sets the maximum number of registrar to display.
+    # NOTE: This does not have any effect with the generated files.
+    max_registrar: 15
 
   testing_mode:
     # Provides all available testing modes.

@@ -86,6 +86,7 @@ class AvailabilityCheckerStatus(CheckerStatusBase):
     url_syntax: Optional[bool] = None
 
     expiration_date: Optional[str] = None
+    registrar: Optional[str] = None
     whois_record: Optional[str] = None
 
     status_before_extra_rules: Optional[str] = None

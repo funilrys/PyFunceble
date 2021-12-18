@@ -436,6 +436,7 @@ class CollectionQueryTool:
                     "expiration_date": datetime.strptime(
                         checker_status.expiration_date, "%d-%b-%Y"
                     ).isoformat(),
+                    "registrar": checker_status.registrar,
                 }
             )
 

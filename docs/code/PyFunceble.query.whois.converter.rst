@@ -36,6 +36,14 @@ PyFunceble.query.whois.converter.month2unified module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.query.whois.converter.registrar module
+-------------------------------------------------
+
+.. automodule:: PyFunceble.query.whois.converter.registrar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

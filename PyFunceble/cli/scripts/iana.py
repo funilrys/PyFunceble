@@ -201,7 +201,7 @@ class IanaDBGenerator:
         iana_record = (
             whois_query_tool.set_server(self.IANA_WHOIS_SERVER)
             .set_subject(dummy_domain)
-            .get_record()
+            .record
         )
 
         if iana_record and "refer" in iana_record:
@@ -215,7 +215,7 @@ class IanaDBGenerator:
                 return matched
 
         possible_server = f"whois.nic.{extension}"
-        response = whois_query_tool.set_server(possible_server).get_record()
+        response = whois_query_tool.set_server(possible_server).record
 
         if response:
             return possible_server
@@ -223,7 +223,7 @@ class IanaDBGenerator:
         if extension in self.MANUAL_SERVER:
             possible_server = self.MANUAL_SERVER[extension]
 
-            response = whois_query_tool.set_server(possible_server).get_record()
+            response = whois_query_tool.set_server(possible_server).record
 
             if response:
                 return possible_server

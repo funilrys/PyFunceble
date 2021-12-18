@@ -172,6 +172,27 @@ With the reputation checker, it may be one of the following:
 - :code:`SANE`
 - :code:`MALICIOUS`
 
+:code:`registrar`
+^^^^^^^^^^^^^^^^^
+
+The registrar. It describes the registrar of the given subject as described in
+its WHOIS record.
+
+Syntax Checker
+""""""""""""""
+
+Non-existent.
+
+Availability Checker
+""""""""""""""""""""
+
+Provides the - found - registrar. Otherwise, :code:`null` is provided.
+
+Reputation Checker
+""""""""""""""""""
+
+Non-existent.
+
 :code:`status_after_extra_rules`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -290,6 +290,15 @@
     **Description:** Activates or disables the display and generation of the
     percentage - file - of each status.
 
+:code:`cli_testing[display_mode][registrar]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the display and generation of the
+    (top) registrar - file.
 
 :code:`cli_testing[display_mode][quiet]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -361,6 +370,21 @@
     **Default value:** :code:`True`
 
     **Description:** Activates or disables the coloration to STDOUT.
+
+:code:`cli_testing[display_mode][max_registrar]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`15`
+
+    **Description:** Sets the maximum number of registrar to display.
+
+.. warning::
+    This value is only used when the registrar mode is activated.
+
+.. note::
+    This value doesn't have any effect with the generated files.
 
 :code:`cli_testing[testing_mode]`
 """""""""""""""""""""""""""""""""
