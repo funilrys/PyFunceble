@@ -1,9 +1,10 @@
-current_version: '4.0.2.dev (Blue Duckling: Grandiflora)'
+current_version: '4.1.0b2.dev (Blue Duckling: Grandiflora)'
 deprecated:
 - 3.0.21
 - 3.1.20
 - 3.2.13
 - 4.0.0a1
+- 4.1.0b1
 force_update:
     minimal_version:
     - 2.58.0

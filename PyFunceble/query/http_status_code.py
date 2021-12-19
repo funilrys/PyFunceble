@@ -104,9 +104,6 @@ class HTTPStatusCode:
 
         self._url2netloc = Url2Netloc()
 
-        # Be sure that all settings are loaded proprely!!
-        PyFunceble.factory.Requester.guess_all_settings()
-
     def ensure_subject_is_given(func):  # pylint: disable=no-self-argument
         """
         Ensures that the subject is given before running the decorated method.

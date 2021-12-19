@@ -66,6 +66,9 @@ from PyFunceble.cli.migrators.alembic import Alembic
 from PyFunceble.cli.migrators.csv_file.inactive_source_delete import (
     InactiveDatasetDeleteSourceColumnMigrator,
 )
+from PyFunceble.cli.migrators.csv_file.whois_registrar_add import (
+    WhoisDatasetAddRegistrarColumnMigrator,
+)
 from PyFunceble.cli.migrators.file_cleanup.hashes_file import HashesFileCleanupMigrator
 from PyFunceble.cli.migrators.file_cleanup.mining_file import MiningFileCleanupMigrator
 from PyFunceble.cli.migrators.file_cleanup.production_config_file import (
@@ -383,6 +386,49 @@ class MigratorProcessesManager(ProcessesManagerBase):
         else:
             PyFunceble.facility.Logger.info(
                 "Stopped csv_file_delete_source_column_target. File does not exist."
+            )
+
+    @staticmethod
+    def csv_file_add_registrar_column_target(
+        continuous_integration: ContinuousIntegrationBase,
+    ) -> None:
+        """
+        Provides the target for the addition of the registrar column.
+        """
+
+        migrator = WhoisDatasetAddRegistrarColumnMigrator(print_action_to_stdout=True)
+        migrator.continuous_integration = continuous_integration
+
+        file_helper = FileHelper(migrator.source_file)
+
+        if file_helper.exists():
+            with file_helper.open("r", encoding="utf-8") as file_stream:
+                first_line = next(file_stream)
+
+            if any(x not in first_line for x in migrator.TO_ADD):
+                print(
+                    f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                    "Started addition of the 'registrar' column into "
+                    f"{migrator.source_file!r}."
+                )
+
+                migrator.start()
+
+                if migrator.done:
+                    print(
+                        f"{colorama.Fore.GREEN}{colorama.Style.BRIGHT}"
+                        "Finished addition of the 'registrar' column into "
+                        f"{migrator.source_file!r}."
+                    )
+                else:
+                    print(
+                        f"{colorama.Fore.MAGENTA}{colorama.Style.BRIGHT}"
+                        "unfinished addition of the 'registrar' column into "
+                        f"{migrator.source_file!r}."
+                    )
+        else:
+            PyFunceble.facility.Logger.info(
+                "Stopped csv_file_add_registrar_column_target. File does not exist."
             )
 
     def create(self) -> "ProcessesManagerBase":

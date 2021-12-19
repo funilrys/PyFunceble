@@ -37,6 +37,22 @@ PyFunceble.cli.filesystem.dir\_base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.filesystem.json\_base module
+-------------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.json_base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+PyFunceble.cli.filesystem.registrar\_counter module
+---------------------------------------------------
+
+.. automodule:: PyFunceble.cli.filesystem.registrar_counter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.cli.filesystem.status\_file module
 ---------------------------------------------
 

@@ -83,8 +83,17 @@ class OurArgumentParser(argparse.ArgumentParser):
         ):
             raise self.error("--max-workers must be a positive digit.")
 
+        if (
+            namespace.cli_testing__display_mode__max_registrar is not None
+            and namespace.cli_testing__display_mode__max_registrar <= 0
+        ):
+            raise self.error("--max-registrar must be a positive digit.")
+
         if namespace.dns__delay is not None and namespace.dns__delay < 0:
             raise self.error("--dns-delay must be zero or a positive digit.")
+
+        if namespace.max_http_retries is not None and namespace.max_http_retries < 0:
+            raise self.error("--max-http-retries must be zero or a positive digit.")
 
         if namespace.cli_decoding__adblock and namespace.cli_decoding__wildcard:
             raise self.error("--adblock and --wildcard are incompatible.")

@@ -124,6 +124,7 @@ RESULTS_RAW_FILE = "results.txt"
 WHOIS_DB_FILE = "whois.csv"
 EXECUTION_TIME_FILE = "execution_time.json"
 COUNTER_FILE = "counter.json"
+REGISTRAR_COUNTER_FILE = "registrar_counter.json"
 TEST_RUNNING_FILE = ".running"
 
 PRE_LOADER_FILE = "preload.json"
@@ -186,11 +187,15 @@ UNIVERSAL_OUTPUTS: dict = {
         },
     },
     "logs": {
-        "directories": {"parent": "logs", "percentage": "percentage"},
+        "directories": {
+            "parent": "logs",
+            "percentage": "percentage",
+        },
         "filenames": {
             "auto_continue": "continue.json",
             "execution_time": "execution_time.json",
             "percentage": "percentage.txt",
+            "registrar": "registrar.txt",
             "whois": "whois.json",
             "date_format": "date_format.json",
             "no_referrer": "no_referrer.json",

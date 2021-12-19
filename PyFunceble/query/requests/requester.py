@@ -82,6 +82,7 @@ class Requester:
 
     STD_VERIFY_CERTIFICATE: bool = False
     STD_TIMEOUT: float = 3.0
+    STD_MAX_RETRIES: int = 3
 
     urllib3_exceptions = urllib3.exceptions
     exceptions = requests.exceptions
@@ -105,6 +106,8 @@ class Requester:
     ) -> None:
         if max_retries is not None:
             self.max_retries = max_retries
+        else:
+            self.guess_and_set_max_retries()
 
         if verify_certificate is not None:
             self.verify_certificate = verify_certificate
@@ -203,8 +206,8 @@ class Requester:
         if not isinstance(value, int):
             raise TypeError(f"<value> should be {int}, {type(value)} given.")
 
-        if value < 1:
-            raise ValueError(f"<value> ({value!r}) should not be less than 1.")
+        if value < 0:
+            raise ValueError(f"<value> ({value!r}) should be positive.")
 
         self._max_retries = value
 
@@ -217,6 +220,22 @@ class Requester:
         """
 
         self.max_retries = value
+
+        return self
+
+    def guess_and_set_max_retries(self) -> "Requester":
+        """
+        Try to guess the value from the configuration and set it.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded() and bool(
+            PyFunceble.storage.CONFIGURATION.max_http_retries
+        ):
+            self.set_max_retries(
+                bool(PyFunceble.storage.CONFIGURATION.max_http_retries)
+            )
+        else:
+            self.set_max_retries(self.STD_MAX_RETRIES)
 
         return self
 

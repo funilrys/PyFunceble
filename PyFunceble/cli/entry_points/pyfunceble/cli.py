@@ -472,6 +472,18 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
         (
             [
+                "--max-http-retries",
+            ],
+            {
+                "dest": "max_http_retries",
+                "type": int,
+                "default": 3,
+                "help": "Sets the maximum number of retries for an HTTP "
+                "request. %s" % get_configured_value("max_http_retries"),
+            },
+        ),
+        (
+            [
                 "-ua",
                 "--user-agent",
             ],
@@ -804,6 +816,36 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the display and generation\n"
                 "of the percentage - file - of each status. %s"
                 % get_configured_value("cli_testing.display_mode.percentage"),
+            },
+        ),
+        (
+            [
+                "--registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.registrar",
+                "action": "store_true",
+                "help": "Activates or disables the display and generation\n"
+                "of the registrar - file - status at the end of a test.\n"
+                "The registrar file contains the top domain registrar found\n"
+                "while testing. %s"
+                % get_configured_value("cli_testing.display_mode.registrar"),
+            },
+        ),
+        (
+            [
+                "--max-registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.max_registrar",
+                "type": int,
+                "default": 15,
+                "help": "Sets the maximal number of registrar to display.\n"
+                "Note: This argument has no effect when the --registrar\n"
+                "argument is not set. This argument only takes effect on\n"
+                "display but not\n"
+                "in the log file %s"
+                % get_configured_value("cli_testing.display_mode.max_registrar"),
             },
         ),
         (

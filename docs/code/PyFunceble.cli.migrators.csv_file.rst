@@ -20,6 +20,14 @@ PyFunceble.cli.migrators.csv\_file.inactive\_source\_delete module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.migrators.csv\_file.whois\_registrar\_add module
+---------------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.migrators.csv_file.whois_registrar_add
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -86,6 +86,7 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
+from PyFunceble.cli.filesystem.registrar_counter import RegistrarCounter
 from PyFunceble.cli.processes.dir_files_sorter import DirFileSorterProcessesManager
 from PyFunceble.cli.processes.migrator import MigratorProcessesManager
 from PyFunceble.cli.processes.miner import MinerProcessesManager
@@ -139,6 +140,7 @@ class SystemLauncher(SystemBase):
     stdout_printer: StdoutPrinter = StdoutPrinter()
     file_printer: FilePrinter = FilePrinter()
     counter: FilesystemCounter = FilesystemCounter()
+    registrar_counter: RegistrarCounter = RegistrarCounter()
 
     execution_time_holder: Optional[ExecutionTime] = None
     file_preloader: Optional[FilePreloader] = None
@@ -587,7 +589,7 @@ class SystemLauncher(SystemBase):
                         to_send, worker_name="main"
                     )
 
-            self.dir_files_sorter_process_manager.add_to_input_queue(
+            self.dir_files_sorter_process_manager.input_datasets.append(
                 {"directory": protocol["output_dir"]}
             )
 
@@ -664,11 +666,55 @@ class SystemLauncher(SystemBase):
 
                         self.stdout_printer.print_interpolated_line()
 
+        def generate_registrar_file(parent_dirname: str) -> None:
+            """
+            Generates the registrar file.
+            """
+
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                self.registrar_counter.set_parent_dirname(parent_dirname)
+
+                destination = os.path.join(
+                    self.counter.get_output_basedir(),
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
+                    PyFunceble.cli.storage.OUTPUTS.logs.filenames.registrar,
+                )
+
+                stdout_header_printed = False
+
+                self.stdout_printer.template_to_use = "registrar"
+                self.file_printer.template_to_use = "registrar"
+                self.file_printer.destination = destination
+
+                registrar_limit = 0
+                for data in self.registrar_counter.get_dataset_for_printer():
+                    self.file_printer.set_dataset(data).print_interpolated_line()
+
+                    # pylint: disable=line-too-long
+                    if (
+                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.registrar
+                        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                        and registrar_limit
+                        < PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.max_registrar
+                    ):
+                        self.stdout_printer.dataset = data
+
+                        if not stdout_header_printed:
+                            self.stdout_printer.print_header()
+                            stdout_header_printed = True
+
+                        self.stdout_printer.print_interpolated_line()
+                        registrar_limit += 1
+
         for protocol in self.testing_protocol:
             if not protocol["destination"]:
                 continue
 
             generate_percentage_file(protocol["destination"])
+
+            if protocol["checker_type"] in self.registrar_counter.SUPPORTED_TEST_MODES:
+                generate_registrar_file(protocol["destination"])
 
             # pylint: disable=line-too-long
             if (

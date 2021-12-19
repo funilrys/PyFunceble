@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our record classes.
+Provides a base for the manipulation of JSON files.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,42 +50,90 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import json
-from typing import Any
+import copy
+import functools
+import os
+from typing import Dict, Optional, Union
+
+from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
+from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.helpers.file import FileHelper
 
 
-@dataclasses.dataclass
-class RecordBase:
+class FilesystemJSONBase(FilesystemDirBase):
     """
-    Provides the base of all query record classes.
+    A base interface for the manipulation of JSON files.
     """
 
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
+    dataset: Dict[str, int] = {}
+    source_file_path: Optional[str] = None
 
-    def to_dict(self) -> dict:
+    SOURCE_FILE: Optional[str] = None
+    STD_DATASET: Union[dict, list] = {}
+
+    def update_source_file_path_beforehand(func):  # pylint: disable=no-self-argument
         """
-        Provides the dict representation of the current object.
-        """
-
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
-
-    def to_json(self, *, pretty_print: bool = False) -> str:
-        """
-        Provides the JSON representation of the current object.
-
-        :param pretty_print:
-            If True, the JSON will be formatted.
+        Updates the source file before launching the decorated method.
         """
 
-        return json.dumps(
-            self.to_dict(),
-            indent=4 if pretty_print else None,
-            ensure_ascii=False,
-            sort_keys=True if pretty_print else None,
-        )
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.source_file_path = os.path.join(
+                self.get_output_basedir(), self.SOURCE_FILE
+            )
+
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+        return wrapper
+
+    def fetch_dataset_beforehand(func):  # pylint: disable=no-self-argument
+        """
+        Updates the dataset to work with before launching the decorated method.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.fetch_dataset()
+
+            return func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+        return wrapper
+
+    def save_dataset_afterwards(func):  # pylint: disable=no-self-argument
+        """
+        Saves the dataset after launching the decorated method.
+        """
+
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
+
+            self.save_dataset()
+
+            return result
+
+        return wrapper
+
+    @update_source_file_path_beforehand
+    def fetch_dataset(self) -> "FilesystemJSONBase":
+        """
+        Fetch the dataset from the source file.
+        """
+
+        file_helper = FileHelper(self.source_file_path)
+
+        if file_helper.exists():
+            self.dataset = DictHelper().from_json_file(file_helper.path)
+        else:
+            self.dataset = copy.deepcopy(self.STD_DATASET)
+
+        return self
+
+    def save_dataset(self) -> "FilesystemJSONBase":
+        """
+        Saves the current dataset into it's final destination.
+        """
+
+        DictHelper(self.dataset).to_json_file(self.source_file_path)
+
+        return self

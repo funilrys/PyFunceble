@@ -66,6 +66,7 @@ Availability Checker
             "use_whois_lookup": false,
             "use_collection": false
         },
+        "registrar": null,
         "second_level_domain_syntax": true,
         "status": "ACTIVE",
         "status_after_extra_rules": null,
@@ -83,7 +84,8 @@ Availability Checker
             "query_timeout": 5.0,
             "record": null,
             "server": null,
-            "subject": "example.com"
+            "subject": "example.com",
+            "registrar": null
         },
         "whois_record": null
     }
