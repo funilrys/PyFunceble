@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import copy
 from typing import Dict, List, Union
 
 import PyFunceble.cli.storage
