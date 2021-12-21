@@ -17,6 +17,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 
 -   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
+-   gwarser - `@gwarser`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Human Being - `@T145`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -44,6 +45,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
+.. _@gwarser: https://github.com/gwarser
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@keczuppp: https://github.com/keczuppp
