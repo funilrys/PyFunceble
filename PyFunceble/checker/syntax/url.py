@@ -71,6 +71,9 @@ class URLSyntaxChecker(SyntaxCheckerBase):
     def is_valid(self) -> bool:
         """
         Validate the given subject.
+
+        .. versionchanged:: 4.1.0b5.dev
+           URL with scheme and port are no longer :code:`INVALID`.
         """
 
         parsed = urllib.parse.urlparse(self.idna_subject)
@@ -78,9 +81,17 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         if not parsed.scheme or not parsed.netloc:
             return False
 
+        if parsed.hostname:
+            if parsed.hostname != parsed.netloc:
+                hostname = parsed.hostname
+            else:
+                hostname = parsed.netloc
+        else:
+            hostname = parsed.netloc
+
         if (
-            DomainSyntaxChecker(parsed.netloc).is_valid()
-            or IPSyntaxChecker(parsed.netloc).is_valid()
+            DomainSyntaxChecker(hostname).is_valid()
+            or IPSyntaxChecker(hostname).is_valid()
         ):
             return True
 
