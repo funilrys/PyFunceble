@@ -12,6 +12,22 @@ PyFunceble.cli.processes.workers.base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.cli.processes.workers.chancy\_producer module
+--------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.processes.workers.chancy_producer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+PyFunceble.cli.processes.workers.chancy\_tester module
+------------------------------------------------------
+
+.. automodule:: PyFunceble.cli.processes.workers.chancy_tester
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.cli.processes.workers.dir\_files\_sorter module
 ----------------------------------------------------------
 
