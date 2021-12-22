@@ -1128,7 +1128,7 @@ Activates or disables the display of output to the terminal.
 ------
 
 :code:`--push-collection`
-""""""""""""""""""""""""
+"""""""""""""""""""""""""
 
 .. versionadded:: 4.0.0
 
