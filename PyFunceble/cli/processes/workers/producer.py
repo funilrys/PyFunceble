@@ -399,13 +399,16 @@ class ProducerWorker(WorkerBase):
         ):
             self.collection_query_tool.push(test_result)
 
-        self.run_whois_backup(test_result)
-        self.run_inactive_backup(test_dataset, test_result)
-        self.run_continue_backup(test_dataset, test_result)
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
+            self.run_whois_backup(test_result)
+            self.run_inactive_backup(test_dataset, test_result)
+            self.run_continue_backup(test_dataset, test_result)
 
         if not self.should_we_block_status_file_printer(test_dataset, test_result):
             self.run_status_file_printer(test_dataset, test_result)
-            self.run_counter(test_dataset, test_result)
+
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
+                self.run_counter(test_dataset, test_result)
 
         self.run_stdout_printer(test_result)
         test_dataset["from_producer"] = True

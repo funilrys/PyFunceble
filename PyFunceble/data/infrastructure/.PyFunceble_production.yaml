@@ -75,6 +75,21 @@ cli_testing:
   # Note: This has no effect if the auto-continue is deactivated.
   preload_file: False
 
+  # Activates or disables a chancy tester mode that unleashes the safety
+  # workflow in place.
+  #
+  # WARNING:
+  #   You shouldn't have to use this unless you feel really lucky and trust your
+  #   machine.
+  #
+  #   This mode makes things look 'fast', but it may produce some unexpected
+  #   results if :code:`N` process simultaneously write the same output file.
+  #
+  #   This mode makes the graphical CLI output unparsable - either.
+  #
+  #   **MAY THE FORCE BE WITH YOU!**
+  chancy_tester: False
+
   ci:
     # Provides everything related to the Continuous integration.
 

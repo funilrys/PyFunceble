@@ -344,6 +344,28 @@ This feature is related to the `--rpz <index.html#rpz>`_
 Test control
 ^^^^^^^^^^^^
 
+:code:`--chancy`
+""""""""""""""""
+
+.. versionadded:: 4.1.0b4.dev
+
+Activates a chancy mode that unleashes the safety workflow in place.
+
+**Default value**: :code:`chancy_tester: False`
+
+.. warning::
+    You shouldn't have to use this unless you feel really lucky and trust your
+    machine.
+
+    This mode makes things look 'fast', but it may produce some unexpected
+    results if :code:`N` process simultaneously write the same output file.
+
+    This mode makes the graphical CLI output unparsable - either.
+
+    **MAY THE FORCE BE WITH YOU!**
+
+------
+
 :code:`--cooldown-time`
 """""""""""""""""""""""
 
@@ -371,7 +393,7 @@ the limitation which does not apply to private networks.
 :code:`--collection-preferred-origin`
 """""""""""""""""""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Sets the preferred status origin.
 
@@ -385,7 +407,7 @@ Sets the preferred status origin.
 :code:`--collection-lookup`
 """""""""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Activates or disables the usage of the collection lookup whether possible.
 
@@ -1108,7 +1130,7 @@ Activates or disables the display of output to the terminal.
 :code:`--push-collection`
 """"""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Activates or disables the push of the test results into the collection API.
 
@@ -1546,6 +1568,19 @@ Global overview
                                 Configured value: False
 
     Test control:
+        --chancy, --ludicrous
+                                Activates a chancy mode that unleashes the safety
+                                workflow in place.
+
+                                WARNING: You shouldn't have to use this unless you feel really lucky
+                                and trust your machine. This mode makes things look 'fast',
+                                but it may produce some unexpected results if N process
+                                simultaneously write the same output file.
+                                This mode makes the graphical CLI output unparsable - either.
+
+                                MAY THE FORCE BE WITH YOU!
+
+                                Configured value: False
         -c, --auto-continue, --continue
                                 Activates or disables the autocontinue subsystem.
                                 Configured value: False
