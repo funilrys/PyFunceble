@@ -315,6 +315,27 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
     return [
         (
             [
+                "--chancy",
+                "--ludicrous",
+            ],
+            {
+                "dest": "cli_testing.chancy_tester",
+                "action": "store_true",
+                "help": "Activates a chancy mode that unleashes the safety\n"
+                "workflow in place. \n\n"
+                f"{colorama.Fore.RED}WARNING: You shouldn't have to use this "
+                "unless you feel really lucky\n"
+                "and trust your machine. This mode makes things look 'fast',\n"
+                "but it may produce some unexpected results if N process\n"
+                "simultaneously write the same output file.\n"
+                "This mode makes the graphical CLI output unparsable - either.\n"
+                f"\n{colorama.Fore.GREEN}MAY THE FORCE BE WITH YOU!"
+                f"\n{colorama.Style.RESET_ALL}%s"
+                % get_configured_value("cli_testing.chancy_tester"),
+            },
+        ),
+        (
+            [
                 "-c",
                 "--auto-continue",
                 "--continue",
