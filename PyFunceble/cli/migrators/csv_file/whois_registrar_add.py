@@ -11,7 +11,8 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our record classes.
+Provides the interface for the addition of the 'registrar' column from the
+whois dataset.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,42 +51,27 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import json
-from typing import Any
+import os
+from typing import List
+
+import PyFunceble.cli.storage
+import PyFunceble.storage
+from PyFunceble.cli.migrators.csv_file.base import CSVFileMigratorBase
 
 
-@dataclasses.dataclass
-class RecordBase:
+class WhoisDatasetAddRegistrarColumnMigrator(CSVFileMigratorBase):
     """
-    Provides the base of all query record classes.
+    Provides the interface for the addition of the 'registrar' column.
     """
 
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
+    FIELDS: List[str] = ["subject", "idna_subject", "expiration_date", "epoch"]
 
-    def to_dict(self) -> dict:
-        """
-        Provides the dict representation of the current object.
-        """
+    TO_DELETE: List[str] = []
+    TO_ADD: List[str] = ["registrar"]
 
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
-
-    def to_json(self, *, pretty_print: bool = False) -> str:
-        """
-        Provides the JSON representation of the current object.
-
-        :param pretty_print:
-            If True, the JSON will be formatted.
-        """
-
-        return json.dumps(
-            self.to_dict(),
-            indent=4 if pretty_print else None,
-            ensure_ascii=False,
-            sort_keys=True if pretty_print else None,
+    def __post_init__(self) -> None:
+        self.source_file = os.path.join(
+            PyFunceble.storage.CONFIG_DIRECTORY, PyFunceble.cli.storage.WHOIS_DB_FILE
         )
+
+        return super().__post_init__()

@@ -33,6 +33,9 @@ By default, the number of workers is equal to:
 meaning that if you have :code:`8` CPU threads, the value will be
 automatically set to :code:`6`.
 
+If that's not sufficient for you, you may try the dangerous
+`--chancy <../usage/index.html#chancy>`_  argument.
+
 
 .. warning::
     Keep in mind that the :code:`--max-workers` (:code:`-w`) mostly - if
@@ -108,7 +111,7 @@ as it is well written and cover our purpose for describing how to setup a
 ramFS to be used for testing with PyFunceble.
 
 Next, we need to configure PyFunceble to use the newly created and mounted
-ramFS. This is done with the 
+ramFS. This is done with the
 `PYFUNCEBLE_OUTPUT_LOCATION <../usage/index.html#global-variables>`_ ; now
 all outputs are stored in the ramFS, so remember to copy the results to a
 stationary file path when you are done.

@@ -68,6 +68,14 @@ PyFunceble.data.alembic.versions.83ada95132bf\_delete\_the\_file\_table module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.data.alembic.versions.912bbcb77a6c\_add\_registrar\_column module
+----------------------------------------------------------------------------
+
+.. automodule:: PyFunceble.data.alembic.versions.912bbcb77a6c_add_registrar_column
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.data.alembic.versions.95dc17ddd729\_introduction\_of\_the\_session\_id\_column module
 ------------------------------------------------------------------------------------------------
 

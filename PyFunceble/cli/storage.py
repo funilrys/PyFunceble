@@ -51,7 +51,8 @@ License:
 """
 
 import os
-from typing import Optional
+import sys
+from typing import List, Optional
 
 import colorama
 from box import Box
@@ -60,17 +61,17 @@ import PyFunceble.cli.storage_facility
 from PyFunceble.helpers.merge import Merge
 from PyFunceble.utils.platform import PlatformUtility
 
-STD_EPILOG: str = (
-    f"Crafted with {colorama.Fore.RED}♥{colorama.Fore.RESET} by "
-    f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
-    f"{colorama.Style.RESET_ALL} "
-    f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-    f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
-    f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-    f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
-)
+if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
+    STD_EPILOG: str = (
+        f"Crafted with {colorama.Fore.RED}♥{colorama.Fore.RESET} by "
+        f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
+        f"{colorama.Style.RESET_ALL} "
+        f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+    )
 
-if PlatformUtility.is_unix():
     ASCII_PYFUNCEBLE = """
     ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
     ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
@@ -79,7 +80,18 @@ if PlatformUtility.is_unix():
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
     """
+    DONE: str = f"{colorama.Fore.GREEN}✔"
+    ERROR: str = f"{colorama.Fore.RED}✘"
 else:
+    STD_EPILOG: str = (
+        f"Crafted with {colorama.Fore.RED}HEART{colorama.Fore.RESET} by "
+        f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
+        f"{colorama.Style.RESET_ALL} "
+        f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
+        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+    )
     ASCII_PYFUNCEBLE = """
     ########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
     ##     ##  ##  ##  ##       ##     ## ###   ## ##    ## ##       ##     ## ##       ##
@@ -89,9 +101,8 @@ else:
     ##           ##    ##       ##     ## ##   ### ##    ## ##       ##     ## ##       ##
     ##           ##    ##        #######  ##    ##  ######  ######## ########  ######## ########
 """
-
-DONE: str = f"{colorama.Fore.GREEN}✔"
-ERROR: str = f"{colorama.Fore.RED}✘"
+    DONE: str = f"{colorama.Fore.GREEN}DONE"
+    ERROR: str = f"{colorama.Fore.RED}ERROR"
 
 VERSION_DUMP_LINK: str = (
     "https://raw.githubusercontent.com/funilrys/PyFunceble/dev/version.yaml"
@@ -113,6 +124,7 @@ RESULTS_RAW_FILE = "results.txt"
 WHOIS_DB_FILE = "whois.csv"
 EXECUTION_TIME_FILE = "execution_time.json"
 COUNTER_FILE = "counter.json"
+REGISTRAR_COUNTER_FILE = "registrar_counter.json"
 TEST_RUNNING_FILE = ".running"
 
 PRE_LOADER_FILE = "preload.json"
@@ -175,11 +187,15 @@ UNIVERSAL_OUTPUTS: dict = {
         },
     },
     "logs": {
-        "directories": {"parent": "logs", "percentage": "percentage"},
+        "directories": {
+            "parent": "logs",
+            "percentage": "percentage",
+        },
         "filenames": {
             "auto_continue": "continue.json",
             "execution_time": "execution_time.json",
             "percentage": "percentage.txt",
+            "registrar": "registrar.txt",
             "whois": "whois.json",
             "date_format": "date_format.json",
             "no_referrer": "no_referrer.json",
@@ -202,3 +218,6 @@ OUTPUT_DIRECTORY: str = os.path.join(
     PyFunceble.cli.storage_facility.get_output_directory(),
     OUTPUTS.parent_directory,
 )
+
+# This one will store some extra messages to print to the user.
+EXTRA_MESSAGES: Optional[List[str]] = []

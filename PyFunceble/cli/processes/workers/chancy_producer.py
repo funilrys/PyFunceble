@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our record classes.
+Provides our producer worker.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,42 +50,63 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import json
-from typing import Any
+from typing import Any, Optional, Tuple
+
+import PyFunceble.facility
+import PyFunceble.storage
+from PyFunceble.checker.status_base import CheckerStatusBase
+from PyFunceble.cli.processes.workers.producer import ProducerWorker
 
 
-@dataclasses.dataclass
-class RecordBase:
+class ChancyProducerWorker(ProducerWorker):
     """
-    Provides the base of all query record classes.
+    Provides our chancy producer worker.
+
+    .. warning::
+        This chancy producer does not provide any guarantee. The flow that keep
+        PyFunceble safe are here unleashed.
+
+        USE AT YOUR OWN RISK. GOOD LUCK!
     """
 
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
+    STD_NAME: str = "pyfunceble_chancy_producer_worker"
 
-    def to_dict(self) -> dict:
-        """
-        Provides the dict representation of the current object.
-        """
+    def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
+        if not isinstance(consumed, tuple):
+            PyFunceble.facility.Logger.info(
+                "Skipping latest dataset because consumed data was not a tuple."
+            )
+            return None
 
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
+        # Just for human brain.
+        test_dataset, test_result = consumed
 
-    def to_json(self, *, pretty_print: bool = False) -> str:
-        """
-        Provides the JSON representation of the current object.
+        if not isinstance(test_dataset, dict):
+            PyFunceble.facility.Logger.info(
+                "Skipping because test dataset is not a dictionnary."
+            )
+            return None
 
-        :param pretty_print:
-            If True, the JSON will be formatted.
-        """
+        if self.should_we_ignore(test_result):
+            PyFunceble.facility.Logger.info(
+                "Ignored test dataset. Reason: No output wanted."
+            )
+            return None
 
-        return json.dumps(
-            self.to_dict(),
-            indent=4 if pretty_print else None,
-            ensure_ascii=False,
-            sort_keys=True if pretty_print else None,
-        )
+        if not isinstance(test_result, CheckerStatusBase):
+            PyFunceble.facility.Logger.info(
+                "Skipping latest dataset because consumed status is not "
+                "a status object.."
+            )
+            return None
+
+        self.run_whois_backup(test_result)
+        self.run_inactive_backup(test_dataset, test_result)
+        self.run_continue_backup(test_dataset, test_result)
+
+        if not self.should_we_block_status_file_printer(test_dataset, test_result):
+            self.run_counter(test_dataset, test_result)
+
+        test_dataset["from_chancy_producer"] = True
+
+        return test_dataset, test_result

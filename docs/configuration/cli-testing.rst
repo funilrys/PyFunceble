@@ -156,6 +156,29 @@
         This option does not have any effect if the auto continue subsystem is
         disabled.
 
+:code:`cli_testing[chancy_tester]`
+""""""""""""""""""""""""""""""""""
+
+    .. versionadded:: 4.1.0b4.dev
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates a chancy mode that unleashes the safety workflow
+    in place.
+
+    .. warning::
+        You shouldn't have to use this unless you feel really lucky and trust your
+        machine.
+
+        This mode makes things look 'fast', but it may produce some unexpected
+        results if :code:`N` process simultaneously write the same output file.
+
+        This mode makes the graphical CLI output unparsable - either.
+
+        **MAY THE FORCE BE WITH YOU!**
+
 :code:`cli_testing[ci]`
 """""""""""""""""""""""
 
@@ -290,6 +313,15 @@
     **Description:** Activates or disables the display and generation of the
     percentage - file - of each status.
 
+:code:`cli_testing[display_mode][registrar]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`boolean`
+
+    **Default value:** :code:`False`
+
+    **Description:** Activates or disables the display and generation of the
+    (top) registrar - file.
 
 :code:`cli_testing[display_mode][quiet]`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -361,6 +393,21 @@
     **Default value:** :code:`True`
 
     **Description:** Activates or disables the coloration to STDOUT.
+
+:code:`cli_testing[display_mode][max_registrar]`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    **Type:** :code:`integer`
+
+    **Default value:** :code:`15`
+
+    **Description:** Sets the maximum number of registrar to display.
+
+.. warning::
+    This value is only used when the registrar mode is activated.
+
+.. note::
+    This value doesn't have any effect with the generated files.
 
 :code:`cli_testing[testing_mode]`
 """""""""""""""""""""""""""""""""

@@ -2,7 +2,6 @@ Usage
 =====
 
 .. include:: python-api.rst
-
 .. include:: terminal.rst
 .. include:: github-ci.rst
 .. include:: gitlab-ci.rst

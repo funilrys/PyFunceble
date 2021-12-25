@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides everything related to our counter tracker.
+Provides everything related to the registrar counter.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,64 +50,41 @@ License:
     limitations under the License.
 """
 
-import copy
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 import PyFunceble.cli.storage
-import PyFunceble.cli.utils.testing
-import PyFunceble.storage
-from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.filesystem.json_base import FilesystemJSONBase
+from PyFunceble.helpers.list import ListHelper
 
 
-class FilesystemCounter(FilesystemJSONBase):
+class RegistrarCounter(FilesystemJSONBase):
     """
-    Provides our counter.
+    Provides our registrar stats counter.
     """
 
     STD_DATASET: Dict[str, int] = {
         "counter": {
-            PyFunceble.storage.STATUS.up: 0,
-            PyFunceble.storage.STATUS.valid: 0,
-            PyFunceble.storage.STATUS.sane: 0,
-            PyFunceble.storage.STATUS.down: 0,
-            PyFunceble.storage.STATUS.malicious: 0,
-            PyFunceble.storage.STATUS.invalid: 0,
             "total": 0,
         },
-        "percentage": {
-            PyFunceble.storage.STATUS.up: 0,
-            PyFunceble.storage.STATUS.valid: 0,
-            PyFunceble.storage.STATUS.sane: 0,
-            PyFunceble.storage.STATUS.down: 0,
-            PyFunceble.storage.STATUS.malicious: 0,
-            PyFunceble.storage.STATUS.invalid: 0,
-            "total": 0,
-        },
+        "percentage": {"total": 0},
     }
 
-    PERCENTAGE_STATUSES: Dict[str, List[str]] = {
-        "SYNTAX": [
-            PyFunceble.storage.STATUS.valid,
-            PyFunceble.storage.STATUS.invalid,
-        ],
-        "REPUTATION": [
-            PyFunceble.storage.STATUS.sane,
-            PyFunceble.storage.STATUS.malicious,
-        ],
-        "AVAILABILITY": [
-            PyFunceble.storage.STATUS.up,
-            PyFunceble.storage.STATUS.down,
-            PyFunceble.storage.STATUS.invalid,
-        ],
-    }
+    SUPPORTED_TEST_MODES: List[str] = ["AVAILABILITY"]
 
-    SOURCE_FILE: str = PyFunceble.cli.storage.COUNTER_FILE
+    SOURCE_FILE: str = PyFunceble.cli.storage.REGISTRAR_COUNTER_FILE
 
     @FilesystemJSONBase.fetch_dataset_beforehand
-    def get_dataset_for_printer(self) -> List[Dict[str, Union[str, int]]]:
+    def get_dataset_for_printer(
+        self, *, limit: Optional[int] = 15
+    ) -> List[Dict[str, Union[str, int]]]:
         """
         Provides the dataset that the printer may understand.
+
+        :param limit:
+            Maximum number of registrars to display.
+
+            .. warning::
+                If set to :code:`None`, all registrars will be displayed.
 
         :raise ValueError:
             When the current testing mode is not supported (yet?).
@@ -116,55 +93,62 @@ class FilesystemCounter(FilesystemJSONBase):
         result = {}
         testing_mode = PyFunceble.cli.utils.testing.get_testing_mode()
 
-        if testing_mode not in self.PERCENTAGE_STATUSES:
+        if testing_mode not in self.SUPPORTED_TEST_MODES:
             raise ValueError("<testing_mode> ({testing_mode!r}) is not supported.")
 
-        for status, value in self.dataset["counter"].items():
-            if (
-                status == "total"
-                or status not in self.PERCENTAGE_STATUSES[testing_mode]
-            ):
+        for registrar, value in self.dataset["counter"].items():
+            if registrar == "total":
                 continue
 
-            result[status] = {"status": status, "amount": value}
+            result[registrar] = {"registrar": registrar, "amount": value}
 
-        for status, value in self.dataset["percentage"].items():
-            if (
-                status == "total"
-                or status not in self.PERCENTAGE_STATUSES[testing_mode]
-            ):
+        for registrar, value in self.dataset["percentage"].items():
+            if registrar == "total":
                 continue
 
-            result[status]["percentage"] = f"{round(value)}%"
+            result[registrar]["percentage"] = f"{round(value)}%"
 
         # Apply the right order.
-        return [result[x] for x in self.PERCENTAGE_STATUSES[testing_mode]]
+        result = (
+            ListHelper([y for _, y in result.items()])
+            .custom_sort(key_method=lambda x: x["amount"], reverse=True)
+            .subject
+        )
+
+        return result[:limit] if limit else result
 
     @FilesystemJSONBase.update_source_file_path_beforehand
     @FilesystemJSONBase.fetch_dataset_beforehand
     @FilesystemJSONBase.save_dataset_afterwards
-    def count(self, status: CheckerStatusBase) -> "FilesystemCounter":
+    def count(self, registrar: str) -> "RegistrarCounter":
         """
         Starts the counting process.
 
-        :param status:
-            The status to count into our dataset.
+        :param registrar:
+            The registrar to count into our dataset.
         """
 
-        if not isinstance(status, CheckerStatusBase):
-            raise TypeError(
-                f"<status> should be {CheckerStatusBase}, {type(status)} given."
-            )
+        if not isinstance(registrar, str):
+            raise TypeError(f"<registrar> should be {str}, {type(registrar)} given.")
 
-        if "counter" not in self.dataset:
-            self.dataset = copy.deepcopy(self.STD_DATASET)
+        if registrar not in self.dataset["counter"]:
+            self.dataset["counter"][registrar] = 1
+        else:
+            self.dataset["counter"][registrar] += 1
 
-        self.dataset["counter"][status.status] += 1
         self.dataset["counter"]["total"] += 1
 
-        self.dataset["percentage"][status.status] = (
-            self.dataset["counter"][status.status] * 100
+        self.dataset["percentage"][registrar] = (
+            self.dataset["counter"][registrar] * 100
         ) / self.dataset["counter"]["total"]
+
+        for key in self.dataset["percentage"]:
+            if key in ("total", registrar):
+                continue
+
+            self.dataset["percentage"][key] = (
+                self.dataset["counter"][key] * 100
+            ) / self.dataset["counter"]["total"]
 
         self.dataset["percentage"]["total"] = sum(
             [y for x, y in self.dataset["percentage"].items() if x != "total"]

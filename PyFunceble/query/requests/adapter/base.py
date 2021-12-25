@@ -80,7 +80,11 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                 total=kwargs["max_retries"], respect_retry_after_header=False
             )
 
-        self.dns_query_tool = DNSQueryTool().guess_all_settings()
+        if "dns_query_tool" in kwargs:
+            self.dns_query_tool = kwargs["dns_query_tool"]
+            del kwargs["dns_query_tool"]
+        else:
+            self.dns_query_tool = DNSQueryTool()
 
         super().__init__(*args, **kwargs)
 
@@ -113,7 +117,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             The hostname to get resolve.
         """
 
-        def get_last_cname(subject: str) -> Optional[str]:
+        def get_last_cname(subject: str, recursion_depth: int = 60) -> Optional[str]:
             """
             Given a subject, this function tries to query the CNAME until there
             is none.
@@ -125,12 +129,16 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             last_cname_result = []
             last_cname_new_subject = subject
 
-            while True:
+            depth = 0
+
+            while depth < recursion_depth:
                 local_last_cname_result = (
                     self.dns_query_tool.set_query_record_type("CNAME")
                     .set_subject(last_cname_new_subject)
                     .query()
                 )
+
+                depth += 1
 
                 if any(x in last_cname_result for x in local_last_cname_result):
                     break
@@ -176,6 +184,8 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         Resolves with the prefered method.
         """
 
-        if self.resolving_use_cache:
-            return self.resolve_with_cache(hostname)
-        return self.resolve_without_cache(hostname)
+        if hostname:
+            if self.resolving_use_cache:
+                return self.resolve_with_cache(hostname)
+            return self.resolve_without_cache(hostname)
+        return None

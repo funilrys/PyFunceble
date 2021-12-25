@@ -11,7 +11,9 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our record classes.
+Provides our chancy tester worker. The chancy tester worker is a worker that
+abstract from the standard tester worker. It just get rid of the walls between
+some of the component of our data workflow.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,42 +52,37 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import json
-from typing import Any
+from typing import Any, Optional, Tuple
+
+from PyFunceble.cli.processes.workers.producer import ProducerWorker
+from PyFunceble.cli.processes.workers.tester import TesterWorker
 
 
-@dataclasses.dataclass
-class RecordBase:
+class ChancyTesterWorker(TesterWorker):
     """
-    Provides the base of all query record classes.
+    Provides our chancy tester worker. The chancy worker breaks the walls
+    between some of the core component of our data workflow.
+
+    .. warning::
+        This chancy tester does not provide any guarantee. The flow that keep
+        PyFunceble safe are here unleashed.
+
+        USE AT YOUR OWN RISK. GOOD LUCK!
     """
 
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
+    STD_NAME: str = "pyfunceble_chancy_tester_worker"
 
-    def to_dict(self) -> dict:
+    def __post_init__(self) -> None:
+        self.producer_worker = ProducerWorker(**self._params)
+
+        return super().__post_init__()
+
+    def target(self, consumed: dict) -> Optional[Tuple[Any, ...]]:
         """
-        Provides the dict representation of the current object.
-        """
+        The actually wall destructor.
 
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
-
-    def to_json(self, *, pretty_print: bool = False) -> str:
-        """
-        Provides the JSON representation of the current object.
-
-        :param pretty_print:
-            If True, the JSON will be formatted.
+        :param consummed:
+            The data that needs to be tested.
         """
 
-        return json.dumps(
-            self.to_dict(),
-            indent=4 if pretty_print else None,
-            ensure_ascii=False,
-            sort_keys=True if pretty_print else None,
-        )
+        return self.producer_worker.target(super().target(consumed))

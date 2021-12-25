@@ -71,3 +71,4 @@ class WhoisQueryToolRecord(RecordBase):
 
     record: Optional[str] = None
     expiration_date: Optional[str] = None
+    registrar: Optional[str] = None

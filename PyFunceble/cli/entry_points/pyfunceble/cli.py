@@ -315,6 +315,27 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
     return [
         (
             [
+                "--chancy",
+                "--ludicrous",
+            ],
+            {
+                "dest": "cli_testing.chancy_tester",
+                "action": "store_true",
+                "help": "Activates a chancy mode that unleashes the safety\n"
+                "workflow in place. \n\n"
+                f"{colorama.Fore.RED}WARNING: You shouldn't have to use this "
+                "unless you feel really lucky\n"
+                "and trust your machine. This mode makes things look 'fast',\n"
+                "but it may produce some unexpected results if N process\n"
+                "simultaneously write the same output file.\n"
+                "This mode makes the graphical CLI output unparsable - either.\n"
+                f"\n{colorama.Fore.GREEN}MAY THE FORCE BE WITH YOU!"
+                f"\n{colorama.Style.RESET_ALL}%s"
+                % get_configured_value("cli_testing.chancy_tester"),
+            },
+        ),
+        (
+            [
                 "-c",
                 "--auto-continue",
                 "--continue",
@@ -468,6 +489,18 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Sets the default timeout to apply to each lookup\n"
                 "utilities every time it is possible to define a timeout. %s"
                 % get_configured_value("lookup.timeout"),
+            },
+        ),
+        (
+            [
+                "--max-http-retries",
+            ],
+            {
+                "dest": "max_http_retries",
+                "type": int,
+                "default": 3,
+                "help": "Sets the maximum number of retries for an HTTP "
+                "request. %s" % get_configured_value("max_http_retries"),
             },
         ),
         (
@@ -804,6 +837,36 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the display and generation\n"
                 "of the percentage - file - of each status. %s"
                 % get_configured_value("cli_testing.display_mode.percentage"),
+            },
+        ),
+        (
+            [
+                "--registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.registrar",
+                "action": "store_true",
+                "help": "Activates or disables the display and generation\n"
+                "of the registrar - file - status at the end of a test.\n"
+                "The registrar file contains the top domain registrar found\n"
+                "while testing. %s"
+                % get_configured_value("cli_testing.display_mode.registrar"),
+            },
+        ),
+        (
+            [
+                "--max-registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.max_registrar",
+                "type": int,
+                "default": 15,
+                "help": "Sets the maximal number of registrar to display.\n"
+                "Note: This argument has no effect when the --registrar\n"
+                "argument is not set. This argument only takes effect on\n"
+                "display but not\n"
+                "in the log file %s"
+                % get_configured_value("cli_testing.display_mode.max_registrar"),
             },
         ),
         (

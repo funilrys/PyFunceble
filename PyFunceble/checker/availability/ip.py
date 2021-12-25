@@ -55,7 +55,6 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
-from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
 from PyFunceble.checker.reputation.ip import IPReputationChecker
 
 
@@ -171,7 +170,7 @@ class IPAvailabilityChecker(AvailabilityCheckerBase):
             )
 
         if self.use_extra_rules:
-            ExtraRulesHandler(self.status).start()
+            self.extra_rules_handler.set_status(self.status).start()
 
         return self
 

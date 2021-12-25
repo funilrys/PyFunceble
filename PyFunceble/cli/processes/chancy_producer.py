@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our record classes.
+Provides the chancy producer manager.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,42 +50,20 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import json
-from typing import Any
+from PyFunceble.cli.processes.base import ProcessesManagerBase
+from PyFunceble.cli.processes.workers.chancy_producer import ChancyProducerWorker
 
 
-@dataclasses.dataclass
-class RecordBase:
+class ChancyProducerProcessesManager(ProcessesManagerBase):
     """
-    Provides the base of all query record classes.
+    Provides the chancy producer manager.
+
+    .. warning::
+        The chancy tester shouldn't be used without any recommendation from
+        a developer or someone in charge of the source code.
+
+        It can harm and produce output overflow. You should rely on this ONLY
+        if you believe in your own luck.
     """
 
-    def __getitem__(self, key: str) -> Any:
-        return getattr(self, key)
-
-    def to_dict(self) -> dict:
-        """
-        Provides the dict representation of the current object.
-        """
-
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
-
-    def to_json(self, *, pretty_print: bool = False) -> str:
-        """
-        Provides the JSON representation of the current object.
-
-        :param pretty_print:
-            If True, the JSON will be formatted.
-        """
-
-        return json.dumps(
-            self.to_dict(),
-            indent=4 if pretty_print else None,
-            ensure_ascii=False,
-            sort_keys=True if pretty_print else None,
-        )
+    WORKER_OBJ: ChancyProducerWorker = ChancyProducerWorker

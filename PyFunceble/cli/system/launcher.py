@@ -51,6 +51,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import argparse
 import copy
 import datetime
@@ -59,7 +61,7 @@ import os
 import secrets
 import sys
 import traceback
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import colorama
 import domain2idna
@@ -86,6 +88,9 @@ from PyFunceble.cli.filesystem.dir_structure.restore import (
 )
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
+from PyFunceble.cli.filesystem.registrar_counter import RegistrarCounter
+from PyFunceble.cli.processes.chancy_producer import ChancyProducerProcessesManager
+from PyFunceble.cli.processes.chancy_tester import ChancyTesterProcessesManager
 from PyFunceble.cli.processes.dir_files_sorter import DirFileSorterProcessesManager
 from PyFunceble.cli.processes.migrator import MigratorProcessesManager
 from PyFunceble.cli.processes.miner import MinerProcessesManager
@@ -139,13 +144,18 @@ class SystemLauncher(SystemBase):
     stdout_printer: StdoutPrinter = StdoutPrinter()
     file_printer: FilePrinter = FilePrinter()
     counter: FilesystemCounter = FilesystemCounter()
+    registrar_counter: RegistrarCounter = RegistrarCounter()
 
     execution_time_holder: Optional[ExecutionTime] = None
     file_preloader: Optional[FilePreloader] = None
 
     manager: Optional[multiprocessing.Manager]
-    tester_process_manager: Optional[TesterProcessesManager] = None
-    producer_process_manager: Optional[ProducerProcessesManager] = None
+    tester_process_manager: Optional[
+        Union[TesterProcessesManager, ChancyTesterProcessesManager]
+    ] = None
+    producer_process_manager: Optional[
+        Union[ProducerProcessesManager, ChancyProducerProcessesManager]
+    ] = None
     miner_process_manager: Optional[MinerProcessesManager] = None
     dir_files_sorter_process_manager: Optional[DirFileSorterProcessesManager] = None
     migrator_process_manager: Optional[MigratorProcessesManager] = None
@@ -183,23 +193,41 @@ class SystemLauncher(SystemBase):
 
         self.manager = multiprocessing.Manager()
 
-        self.tester_process_manager = TesterProcessesManager(
-            self.manager,
-            max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
-            continuous_integration=self.continuous_integration,
-            daemon=True,
-            output_workers_count=1,
-            output_queue_num=2,
-        )
-        self.producer_process_manager = ProducerProcessesManager(
-            self.manager,
-            max_worker=1,
-            continuous_integration=self.continuous_integration,
-            input_queue=self.tester_process_manager.output_queue[0],
-            daemon=True,
-            output_workers_count=1,
-            generate_output_queue=True,
-        )
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
+            self.tester_process_manager = TesterProcessesManager(
+                self.manager,
+                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+                continuous_integration=self.continuous_integration,
+                daemon=True,
+                output_workers_count=1,
+                output_queue_num=2,
+            )
+            self.producer_process_manager = ProducerProcessesManager(
+                self.manager,
+                max_worker=1,
+                continuous_integration=self.continuous_integration,
+                input_queue=self.tester_process_manager.output_queue[0],
+                daemon=True,
+                generate_output_queue=False,
+            )
+        else:
+            self.tester_process_manager = ChancyTesterProcessesManager(
+                self.manager,
+                max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
+                continuous_integration=self.continuous_integration,
+                daemon=True,
+                output_workers_count=1,
+                output_queue_num=2,
+            )
+            self.producer_process_manager = ChancyProducerProcessesManager(
+                self.manager,
+                max_worker=1,
+                continuous_integration=self.continuous_integration,
+                input_queue=self.tester_process_manager.output_queue[0],
+                daemon=True,
+                generate_output_queue=False,
+            )
+
         self.dir_files_sorter_process_manager = DirFileSorterProcessesManager(
             self.manager,
             max_worker=PyFunceble.storage.CONFIGURATION.cli_testing.max_workers,
@@ -587,7 +615,7 @@ class SystemLauncher(SystemBase):
                         to_send, worker_name="main"
                     )
 
-            self.dir_files_sorter_process_manager.add_to_input_queue(
+            self.dir_files_sorter_process_manager.input_datasets.append(
                 {"directory": protocol["output_dir"]}
             )
 
@@ -664,11 +692,55 @@ class SystemLauncher(SystemBase):
 
                         self.stdout_printer.print_interpolated_line()
 
+        def generate_registrar_file(parent_dirname: str) -> None:
+            """
+            Generates the registrar file.
+            """
+
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
+                self.registrar_counter.set_parent_dirname(parent_dirname)
+
+                destination = os.path.join(
+                    self.counter.get_output_basedir(),
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.parent,
+                    PyFunceble.cli.storage.OUTPUTS.logs.directories.percentage,
+                    PyFunceble.cli.storage.OUTPUTS.logs.filenames.registrar,
+                )
+
+                stdout_header_printed = False
+
+                self.stdout_printer.template_to_use = "registrar"
+                self.file_printer.template_to_use = "registrar"
+                self.file_printer.destination = destination
+
+                registrar_limit = 0
+                for data in self.registrar_counter.get_dataset_for_printer():
+                    self.file_printer.set_dataset(data).print_interpolated_line()
+
+                    # pylint: disable=line-too-long
+                    if (
+                        PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.registrar
+                        and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                        and registrar_limit
+                        < PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.max_registrar
+                    ):
+                        self.stdout_printer.dataset = data
+
+                        if not stdout_header_printed:
+                            self.stdout_printer.print_header()
+                            stdout_header_printed = True
+
+                        self.stdout_printer.print_interpolated_line()
+                        registrar_limit += 1
+
         for protocol in self.testing_protocol:
             if not protocol["destination"]:
                 continue
 
             generate_percentage_file(protocol["destination"])
+
+            if protocol["checker_type"] in self.registrar_counter.SUPPORTED_TEST_MODES:
+                generate_registrar_file(protocol["destination"])
 
             # pylint: disable=line-too-long
             if (

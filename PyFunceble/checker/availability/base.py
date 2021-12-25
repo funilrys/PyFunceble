@@ -50,6 +50,8 @@ License:
     limitations under the License.
 """
 
+# pylint: disable=too-many-lines
+
 import multiprocessing
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -60,6 +62,7 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
+from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
@@ -123,6 +126,7 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
+    extra_rules_handler: Optional[ExtraRulesHandler] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -158,6 +162,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
+        self.extra_rules_handler = ExtraRulesHandler()
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -736,9 +741,8 @@ class AvailabilityCheckerBase(CheckerBase):
             if not known_record:
                 # We assume that expired dataset are never saved into the
                 # dataset.
-                self.status.expiration_date = (
-                    self.whois_query_tool.get_expiration_date()
-                )
+                self.status.expiration_date = self.whois_query_tool.expiration_date
+                self.status.registrar = self.whois_query_tool.lookup_record.registrar
                 self.status.whois_record = self.whois_query_tool.lookup_record.record
 
                 if (
@@ -761,9 +765,11 @@ class AvailabilityCheckerBase(CheckerBase):
                     )
             else:
                 self.status.expiration_date = known_record["expiration_date"]
+                self.status.registrar = known_record["registrar"]
                 self.status.whois_record = None
         else:
-            self.status.expiration_date = self.whois_query_tool.get_expiration_date()
+            self.status.expiration_date = self.whois_query_tool.expiration_date
+            self.status.registrar = self.whois_query_tool.lookup_record.registrar
             self.status.whois_record = self.whois_query_tool.lookup_record.record
 
         if self.status.expiration_date:

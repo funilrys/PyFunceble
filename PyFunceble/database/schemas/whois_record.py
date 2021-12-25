@@ -64,3 +64,4 @@ class WhoisRecord(SchemaBase):
     idna_subject = Column(Text, nullable=True, unique=False)
     expiration_date = Column(Text, nullable=False)
     epoch = Column(Integer, nullable=False)
+    registrar = Column(Text, nullable=True)

@@ -75,6 +75,16 @@ class ProcessesManagerBase:
 
     WORKER_OBJ: Optional[WorkerBase] = None
 
+    input_datasets: Optional[List] = []
+    """
+    Use this variable if you want to differ the addition in the input queue.
+    """
+
+    output_datasets: Optional[List] = []
+    """
+    Use this variable if you want to differ the addition in the output queue.
+    """
+
     input_queue: Optional[queue.Queue] = None
     """
     The input queue. Dataset will be given through this.
@@ -471,6 +481,14 @@ class ProcessesManagerBase:
                 pass
 
             self._running_workers.append(worker)
+
+        if self.input_datasets:
+            while self.input_datasets:
+                self.add_to_input_queue(self.input_datasets.pop())
+
+        if self.output_datasets:
+            while self.output_datasets:
+                self.add_to_output_queue(self.output_datasets.pop())
 
         PyFunceble.facility.Logger.info(
             "Started %r workers of %r. Details:\n%r",

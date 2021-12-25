@@ -55,6 +55,7 @@ from typing import Any, Optional, Tuple
 
 import PyFunceble.cli.utils.testing
 import PyFunceble.facility
+import PyFunceble.factory
 from PyFunceble.checker.availability.domain_and_ip import DomainAndIPAvailabilityChecker
 from PyFunceble.checker.availability.url import URLAvailabilityChecker
 from PyFunceble.checker.base import CheckerBase
@@ -85,6 +86,7 @@ class TesterWorker(WorkerBase):
     testing_object: Optional[CheckerBase] = None
 
     known_testing_objects: dict = {}
+    initiated_testing_objects: dict = {}
 
     def __post_init__(self) -> None:
         self.continue_dataset = (
@@ -107,6 +109,18 @@ class TesterWorker(WorkerBase):
             "REPUTATION": {
                 "domain": DomainAndIPReputationChecker,
                 "url": URLReputationChecker,
+            },
+        }
+
+        self.initiated_testing_objects = {
+            "SYNTAX": {"domain": None, "url": None},
+            "AVAILABILITY": {
+                "domain": None,
+                "url": None,
+            },
+            "REPUTATION": {
+                "domain": None,
+                "url": None,
             },
         }
 
@@ -168,31 +182,25 @@ class TesterWorker(WorkerBase):
             When the given subject type is unknown.
         """
 
-        if checker_type in self.known_testing_objects:
-            if subject_type in self.known_testing_objects[checker_type]:
-                # Yes, we initialize before returning!
+        if checker_type not in self.known_testing_objects:
+            raise ValueError(f"<testing_mode> ({checker_type!r}) is unknown.")
 
-                if not isinstance(
-                    self.known_testing_objects[checker_type][subject_type],
-                    type(self.testing_object),
-                ):
-                    self.testing_object = self.known_testing_objects[checker_type][
-                        subject_type
-                    ](db_session=self.db_session)
-
-                    # We want to always check the syntax first (ONLY UNDER THE CLI)
-                    self.testing_object.set_do_syntax_check_first(
-                        not bool(
-                            PyFunceble.storage.CONFIGURATION.cli_testing.local_network
-                        )
-                    )
-
-                    return self.testing_object
-
-                return None
-
+        if subject_type not in self.known_testing_objects[checker_type]:
             raise ValueError(f"<subject_type> ({subject_type!r}) is unknown.")
-        raise ValueError(f"<testing_mode> ({checker_type!r}) is unknown.")
+
+        if not self.initiated_testing_objects[checker_type][subject_type]:
+            self.initiated_testing_objects[checker_type][
+                subject_type
+            ] = self.known_testing_objects[checker_type][subject_type](
+                db_session=self.db_session
+            ).set_do_syntax_check_first(
+                # We want to always check the syntax first (ONLY UNDER THE CLI)
+                not bool(PyFunceble.storage.CONFIGURATION.cli_testing.local_network)
+            )
+
+        self.testing_object = self.initiated_testing_objects[checker_type][subject_type]
+
+        return self.testing_object
 
     def target(self, consumed: dict) -> Optional[Tuple[Any, ...]]:
         """
@@ -200,6 +208,14 @@ class TesterWorker(WorkerBase):
         This method should return a result which will pu send to the output
         queue.
         """
+
+        if (
+            PyFunceble.factory.Requester.session
+            and "Connection" not in PyFunceble.factory.Requester.session.headers
+        ):
+            # Just close the connection immediately. This prevent potential infinite
+            # streams.
+            PyFunceble.factory.Requester.session.headers["Connection"] = "close"
 
         if not isinstance(consumed, dict):
             PyFunceble.facility.Logger.debug(
