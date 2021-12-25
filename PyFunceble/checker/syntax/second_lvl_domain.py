@@ -66,6 +66,7 @@ class SecondLvlDomainSyntaxChecker(DomainSyntaxCheckerBase):
 
     # pylint: disable=line-too-long
     REGEX_VALID_DOMAIN: str = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9-]{0,61}[a-z0-9]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
+    REGEX_VALID_RELAXED_DOMAIN: str = r"^(?=.{0,253}$)(([a-z0-9][a-z0-9_-]{0,61}[a-z0-9_-]|[a-z0-9])\.)+((?=.*[^0-9])([a-z0-9][a-z0-9-]{0,61}[a-z0-9](?:\.)?|[a-z0-9](?:\.)?))$"
 
     last_point_index: Optional[int] = None
     """
@@ -104,6 +105,8 @@ class SecondLvlDomainSyntaxChecker(DomainSyntaxCheckerBase):
                 return False
 
             return RegexHelper(self.REGEX_VALID_DOMAIN).match(
+                self.idna_subject, return_match=False
+            ) or RegexHelper(self.REGEX_VALID_RELAXED_DOMAIN).match(
                 self.idna_subject, return_match=False
             )
 
