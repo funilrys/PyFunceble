@@ -94,7 +94,7 @@ class TestURLSyntaxChecker(unittest.TestCase):
             "https://example.org:8080",
             "https://github.com:9999",
             "http://example.org:8099/hello/world",
-            "http://example.org:8939?hello=world"
+            "http://example.org:8939?hello=world",
         ]
 
         for subject in given:

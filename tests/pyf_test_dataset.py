@@ -183,7 +183,7 @@ VALID_SUBDOMAINS: List[str] = [
     "888.0769.com",
     "1661599812.hello.985.com",
     "hi.hello.example.world.s3.ap-northeast-2.amazonaws.com",
-    "world_hello.hello_world.co.uk"
+    "world_hello.hello_world.co.uk",
 ]
 
 NOT_VALID_SUBDOMAINS: List[str] = [
