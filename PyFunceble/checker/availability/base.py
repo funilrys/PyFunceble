@@ -513,12 +513,23 @@ class AvailabilityCheckerBase(CheckerBase):
     def should_we_continue_test(self, status_post_syntax_checker: str) -> bool:
         """
         Checks if we are allowed to continue a standard testing.
+
+        Rules:
+            1. No status available yet. Continue to next test method.
+            2. Status is/still INVALID. Continue to next test method.
+            3. Above are False. Not allowed to continue to next test method.
         """
 
-        return bool(
-            not self.status.status
-            or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
-        )
+        if not self.status.status:
+            return True
+
+        if (
+            status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
+            and self.status.status == PyFunceble.storage.STATUS.invalid
+        ):
+            return True
+
+        return False
 
     def guess_and_set_use_extra_rules(self) -> "AvailabilityCheckerBase":
         """
@@ -674,12 +685,10 @@ class AvailabilityCheckerBase(CheckerBase):
 
         if self.status.subdomain_syntax:
             lookup_order = ["NS", "A", "AAAA", "CNAME", "DNAME"]
-        elif self.status.domain_syntax:
-            lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
         elif self.status.ip_syntax:
             lookup_order = ["PTR"]
         else:
-            lookup_order = []
+            lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
 
         if lookup_order:
             for record_type in lookup_order:

@@ -81,6 +81,29 @@ class TestURLSyntaxChecker(unittest.TestCase):
 
             self.assertEqual(expected, actual, subject)
 
+    def test_is_valid_in_url_context(self) -> None:
+        """
+        Tests the syntax checker against some special use cases that are VALID
+        in URL context.
+        """
+
+        url_checker = URLSyntaxChecker()
+
+        expected = True
+        given = [
+            "https://example.org:8080",
+            "https://github.com:9999",
+            "http://example.org:8099/hello/world",
+            "http://example.org:8939?hello=world"
+        ]
+
+        for subject in given:
+            url_checker.subject = subject
+
+            actual = url_checker.is_valid()
+
+            self.assertEqual(expected, actual, subject)
+
     def test_is_valid_subdomain(self) -> None:
         """
         Tests the method which let us check if the given subject is valid for

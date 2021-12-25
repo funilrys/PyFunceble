@@ -858,7 +858,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         given = "INVALID"
         self.checker.status.status = "INACTIVE"
 
-        expected = True
+        expected = False
         actual = self.checker.should_we_continue_test(given)
 
         self.assertEqual(expected, actual)

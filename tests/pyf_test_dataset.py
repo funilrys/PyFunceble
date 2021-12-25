@@ -129,11 +129,12 @@ VALID_DOMAINS: List[str] = [
     "cṙyptopia.com",
     "985.com",
     "hello-world.example.msn.cn",
+    "hello_world.co.uk",
+    "_world._hello.eu.com",
+    "_world.hello_.eu.com",
 ]
 
 NOT_VALID_DOMAINS: List[str] = [
-    "_world._hello.eu.com",
-    "_world.hello_.eu.com",
     "-hello-.example.co.uk",
     "-hello-world_.example.co.uk",
     "-hello-world_all-mine_.hello.eu.com",
@@ -156,7 +157,6 @@ NOT_VALID_DOMAINS: List[str] = [
     "world-hello",
     "world.hello:80",
     "world@hello.com",
-    "hello_world.co.uk",
     "example.com\\",
     "ex\\ample.com",
 ]
@@ -183,6 +183,7 @@ VALID_SUBDOMAINS: List[str] = [
     "888.0769.com",
     "1661599812.hello.985.com",
     "hi.hello.example.world.s3.ap-northeast-2.amazonaws.com",
+    "world_hello.hello_world.co.uk"
 ]
 
 NOT_VALID_SUBDOMAINS: List[str] = [
