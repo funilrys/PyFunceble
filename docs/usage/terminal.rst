@@ -380,11 +380,12 @@ each test cycles is done.
 :code:`--local`
 """""""""""""""
 
-Activates or disables the consideration of the test(s) in or for a local or
-private network context.
+Activates or disables the consideration of the test(s) in or for a local
+or private network context.
 
-Want to run a test over a local or private network? This argument will disable
-the limitation which does not apply to private networks.
+This option is to include testing ability of records only availeble for 
+local and private network. This argument will enable this functionality
+by removing the usual limitation which do not apply to intranets.
 
 **Default value:** :code:`local_network: False`
 
@@ -966,7 +967,16 @@ Sets the IP to prefix each lines of the hosts file.
 
 You can configure the logging level to be outputted in STDOUT (screen)
 when you uses :code:`--no-files`. Default outputs to
-:code:`output/*_logging_/**.log`
+:code:`output/__pyfunceble_loggging__/*.log`
+
+Please notice this is a separated folder at the same lever as your
+tested sources.
+
+.. code-block:: console
+
+    ├── /tmp/pyfunceble/output/__pyfunceble_loggging__/
+    ├── /tmp/pyfunceble/output/my-blacklist/
+
 
 Optional values. (From less to more information)
 
