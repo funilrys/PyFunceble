@@ -1,0 +1,15 @@
+#!/usr/bin/env tuterm
+
+source config.sh.in
+
+run() {
+    c PyFunceble --version
+    c PyFunceble -d 9.9.9.9                         # Neutral stable
+    c PyFunceble -d 2620:fe::fe                     # quad9 IPv6 (As I recall GHA now supports IPv6)
+    c PyFunceble -d 194.187.99.221                  # Adult CDN: https://mypdns.org/my-privacy-dns/porn-records/-/issues?scope=all&state=all&label_name[]=IP%3A%3ABlackListing
+    c PyFunceble -d 45.136.204.40                   # 23 phis: https://github.com/mitchellkrogza/phishing/pull/67
+    c PyFunceble -u http://18.191.88.103/login.html # As we can do urls too, this is a inactive Phis
+    c exit
+}
+
+# vim: filetype=sh

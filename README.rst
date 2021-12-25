@@ -150,6 +150,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 
 -   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
+-   Haris Gušić - `@veracioux`_
 -   gwarser - `@gwarser`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Human Being - `@T145`_
@@ -296,6 +297,7 @@ License
 .. _@T145: https://github.com/T145
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
+.. _@veracioux: https://github.com/veracioux
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@yaml: https://github.com/yaml
