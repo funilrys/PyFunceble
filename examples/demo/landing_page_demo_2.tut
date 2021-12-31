@@ -4,7 +4,7 @@ source config.sh.in
 
 run() {
     c PyFunceble --version
-    c PyFunceble -d 9.9.9.9                         # Neutral stable
+    c PyFunceble -d 9.9.9.10                        # quad9 Neutral stable (unfiltered)
     c PyFunceble -d 2620:fe::fe                     # quad9 IPv6 (As I recall GHA now supports IPv6)
     c PyFunceble -d 194.187.99.221                  # Adult CDN: https://mypdns.org/my-privacy-dns/porn-records/-/issues?scope=all&state=all&label_name[]=IP%3A%3ABlackListing
     c PyFunceble -d 45.136.204.40                   # 23 phis: https://github.com/mitchellkrogza/phishing/pull/67
