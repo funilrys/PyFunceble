@@ -195,7 +195,7 @@ class TestURLSyntaxChecker(unittest.TestCase):
             "https://example.org:8888/hello-world": "example.org",
             "example.org:8080": None,
             "http:///hello-world": None,
-            "http://10.3.0.1/hello-world": "10.3.0.1"
+            "http://10.3.0.1/hello-world": "10.3.0.1",
         }
 
         for given, expected in given2expected.items():
