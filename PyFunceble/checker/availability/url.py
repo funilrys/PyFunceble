@@ -57,6 +57,7 @@ import PyFunceble.storage
 from PyFunceble.checker.availability.base import AvailabilityCheckerBase
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.reputation.url import URLReputationChecker
+from PyFunceble.checker.syntax.url import URLSyntaxChecker
 
 
 class URLAvailabilityChecker(AvailabilityCheckerBase):
@@ -96,9 +97,16 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         .. warning::
             You are not invited to run this method directly.
+
+        .. versionchanged:: 4.1.0b7.dev
+           DNS Lookup capability.
         """
 
         self.http_status_code_query_tool.set_subject(self.idna_subject)
+        self.dns_query_tool.set_subject(
+            URLSyntaxChecker.get_hostname_from_url(self.idna_subject)
+            or self.idna_subject
+        )
 
         self.domain_syntax_checker.subject = self.idna_subject
         self.ip_syntax_checker.subject = self.idna_subject
@@ -106,7 +114,7 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         self.status = AvailabilityCheckerStatus()
         self.status.params = self.params
-        self.status.dns_lookup_record = None
+        self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = None
 
         self.status.subject = self.subject
@@ -193,6 +201,35 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         return self
 
+    def try_to_query_status_from_dns(self) -> "AvailabilityCheckerBase":
+        """
+        Tries to query the status from the DNS lookup after switching the
+        idna subject to the url base.
+
+        .. warning::
+            This method does not answer as you may expect.
+
+            Indeed, if a DNS lookup failed, this method will overwrite the
+            standard response by setting the status to :code:`INACTIVE` and the
+            status source to :code:`DNSLOOKUP`.
+
+        .. versionadded:: 4.1.0b7
+           DNS Lookup as a "down" switcher.
+        """
+
+        result = super().try_to_query_status_from_dns()
+
+        if self.status.status == PyFunceble.storage.STATUS.up:
+            # DNS should only be use to take subject down.
+            # Therefore, switching back as if nothing happened.
+            self.status.status = None
+            self.status.status_source = None
+        else:
+            self.status.status = PyFunceble.storage.STATUS.down
+            self.status.status_source = "DNSLOOKUP"
+
+        return result
+
     @AvailabilityCheckerBase.ensure_subject_is_given
     @AvailabilityCheckerBase.update_status_date_after_query
     def query_status(
@@ -200,6 +237,9 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
     ) -> "URLAvailabilityChecker":  # pragma: no cover
         """
         Queries the result without anything more.
+
+        .. versionchanged:: 4.1.0b7.dev
+            DNS Query - first.
         """
 
         ## Test Methods are more important.
@@ -216,6 +256,9 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
             status_post_syntax_checker
         ):
             self.try_to_query_status_from_reputation()
+
+        if self.should_we_continue_test(status_post_syntax_checker):
+            self.try_to_query_status_from_dns()
 
         if self.should_we_continue_test(status_post_syntax_checker):
             self.try_to_query_status_from_http_status_code()

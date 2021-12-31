@@ -52,6 +52,7 @@ License:
 
 
 import urllib.parse
+from typing import Optional
 
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.base import SyntaxCheckerBase
@@ -67,6 +68,29 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         Optional, The subject to work with.
     """
 
+    @staticmethod
+    def get_hostname_from_url(url: str) -> Optional[str]:
+        """
+        Extract the hostname part of the given URL.
+
+        .. versionadded:: 4.1.0b7
+        """
+
+        parsed = urllib.parse.urlparse(url)
+
+        if not parsed.scheme or not parsed.netloc:
+            return None
+
+        if parsed.hostname:
+            if parsed.hostname != parsed.netloc:
+                hostname = parsed.hostname
+            else:
+                hostname = parsed.netloc
+        else:  ## pragma: no cover ## Safety check.
+            hostname = parsed.netloc
+
+        return hostname
+
     @CheckerBase.ensure_subject_is_given
     def is_valid(self) -> bool:
         """
@@ -74,20 +98,15 @@ class URLSyntaxChecker(SyntaxCheckerBase):
 
         .. versionchanged:: 4.1.0b5.dev
            URL with scheme and port are no longer :code:`INVALID`.
+
+        .. versionchanged:: 4.1.0b7.dev
+           Hostname taken from :code:`get_hostname_from_url`
         """
 
-        parsed = urllib.parse.urlparse(self.idna_subject)
+        hostname = self.get_hostname_from_url(self.idna_subject)
 
-        if not parsed.scheme or not parsed.netloc:
+        if not hostname:
             return False
-
-        if parsed.hostname:
-            if parsed.hostname != parsed.netloc:
-                hostname = parsed.hostname
-            else:
-                hostname = parsed.netloc
-        else:
-            hostname = parsed.netloc
 
         if (
             DomainSyntaxChecker(hostname).is_valid()

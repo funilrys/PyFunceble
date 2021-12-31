@@ -800,11 +800,14 @@ class AvailabilityCheckerBase(CheckerBase):
     def try_to_query_status_from_dns(self) -> "AvailabilityCheckerBase":
         """
         Tries to query the status from the DNS lookup.
+
+        .. versionchanged:: 4.1.0b7.dev
+           Logging return the correct subject.
         """
 
         PyFunceble.facility.Logger.info(
             "Started to try to query the status of %r from: DNS Lookup",
-            self.status.idna_subject,
+            self.dns_query_tool.subject,
         )
 
         lookup_result = self.query_dns_record()
@@ -816,12 +819,12 @@ class AvailabilityCheckerBase(CheckerBase):
 
             PyFunceble.facility.Logger.info(
                 "Could define the status of %r from: DNS Lookup",
-                self.status.idna_subject,
+                self.dns_query_tool.subject,
             )
 
         PyFunceble.facility.Logger.info(
             "Finished to try to query the status of %r from: DNS Lookup",
-            self.status.idna_subject,
+            self.dns_query_tool.subject,
         )
 
         return self

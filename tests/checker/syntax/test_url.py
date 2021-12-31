@@ -178,6 +178,31 @@ class TestURLSyntaxChecker(unittest.TestCase):
 
             self.assertEqual(expected, actual, subject)
 
+    def test_get_hostname_from_url(self) -> None:
+        """
+        Tests the method that let us get the hostname (or url base if you
+        prefer) of a given URL.
+
+        .. versionadded:: 4.1.0b7.
+        """
+
+        url_checker = URLSyntaxChecker()
+
+        given2expected = {
+            "https://example.org/hello-world": "example.org",
+            "example.org": None,
+            "://example.org/hello-world": None,
+            "https://example.org:8888/hello-world": "example.org",
+            "example.org:8080": None,
+            "http:///hello-world": None,
+            "http://10.3.0.1/hello-world": "10.3.0.1"
+        }
+
+        for given, expected in given2expected.items():
+            actual = url_checker.get_hostname_from_url(given)
+
+            self.assertEqual(expected, actual, given)
+
 
 if __name__ == "__main__":
     unittest.main()

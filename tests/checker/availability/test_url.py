@@ -82,11 +82,15 @@ class TestURLAvailabilityChecker(unittest.TestCase):
         """
         Tests that the subjects and its IDNA counterpart are correctly
         propagated.
+
+        .. versionchanged:: 4.1.0b7.dev
+           URL base propagation to allow DNS lookup.
         """
 
         given = "http://äxample.org"
         expected_subject = "http://äxample.org"
         expected_idna_subject = "http://xn--xample-9ta.org"
+        expected_base_url = "xn--xample-9ta.org"
 
         self.checker.subject = given
 
@@ -98,6 +102,7 @@ class TestURLAvailabilityChecker(unittest.TestCase):
         ]
 
         self.assertEqual(expected_subject, actual_subject)
+        self.assertEqual(expected_base_url, self.checker.dns_query_tool.subject)
 
         for actual in actual_idna_propagated:
             self.assertEqual(expected_idna_subject, actual)
@@ -197,6 +202,42 @@ class TestURLAvailabilityChecker(unittest.TestCase):
         self.assertEqual(expected_status, actual_status)
 
         expected_source = "REPUTATION"
+        actual_source = self.checker.status.status_source
+
+        self.assertEqual(expected_source, actual_source)
+
+    def test_try_to_query_status_from_dns(self) -> None:
+        """
+        Tests the method that tries to define the status from the DNS lookup.
+
+        .. versionadded:: 4.1.0b7.dev
+        """
+
+        # Let's test the case that no answer is given back.
+        # pylint: disable=unnecessary-lambda
+        self.checker.subject = "http://example.org"
+        self.checker.query_dns_record = (
+            lambda: dict()  # pylint: disable=use-dict-literal
+        )
+
+        self.checker.try_to_query_status_from_dns()
+
+        expected_status = "INACTIVE"
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
+
+        # Let's test the case that an answer is given back.
+        self.checker.query_dns_record = lambda: {"NS": ["ns1.example.org"]}
+
+        self.checker.try_to_query_status_from_dns()
+
+        expected_status = None
+        actual_status = self.checker.status.status
+
+        self.assertEqual(expected_status, actual_status)
+
+        expected_source = None
         actual_source = self.checker.status.status_source
 
         self.assertEqual(expected_source, actual_source)
