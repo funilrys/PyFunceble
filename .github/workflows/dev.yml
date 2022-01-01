@@ -383,10 +383,10 @@ jobs:
           if [[ $(python3 setup.py --name) == "PyFunceble-dev" ]]
           then
             licenseURL="https://raw.githubusercontent.com/funilrys/PyFunceble/dev/LICENSE"
-            newURL=$(curl -s https://pypi.org/pypi/PyFunceble-dev/json | jq ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
+            newURL=$(curl -s https://pypi.org/pypi/PyFunceble-dev/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
           else
             licenseURL="https://raw.githubusercontent.com/funilrys/PyFunceble/master/LICENSE"
-            newURL=$(curl -s https://pypi.org/pypi/PyFunceble/json | jq ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
+            newURL=$(curl -s https://pypi.org/pypi/PyFunceble/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
           fi
 
           git config --global user.name ${{ github.actor }}
@@ -407,7 +407,7 @@ jobs:
 
           sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
           sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
-          sed "/^source=/s/.*/source=('${newURL}' '${licenseURL}')/" -i PKGBUILD
+          sed "s,^source=(.*),source=('${newURL}' '${licenseURL}')," -i PKGBUILD
 
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO
