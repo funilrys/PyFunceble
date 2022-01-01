@@ -674,6 +674,9 @@ class AvailabilityCheckerBase(CheckerBase):
     def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:
         """
         Tries to query the DNS record(s) of the given subject.
+
+        .. versionchanged:: 4.1.0b8.dev
+           Lookup order relative to actual subject.
         """
 
         PyFunceble.facility.Logger.info(
@@ -683,9 +686,13 @@ class AvailabilityCheckerBase(CheckerBase):
 
         result = {}
 
-        if self.status.subdomain_syntax:
+        if self.status.idna_subject != self.dns_query_tool.subject:
+            self.domain_syntax_checker.set_subject(self.dns_query_tool.subject)
+            self.ip_syntax_checker.set_subject(self.dns_query_tool.subject)
+
+        if self.domain_syntax_checker.is_valid_subdomain():
             lookup_order = ["NS", "A", "AAAA", "CNAME", "DNAME"]
-        elif self.status.ip_syntax:
+        elif self.ip_syntax_checker.is_valid():
             lookup_order = ["PTR"]
         else:
             lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
@@ -700,6 +707,11 @@ class AvailabilityCheckerBase(CheckerBase):
                     result[record_type] = local_result
 
                     break
+
+        if self.status.idna_subject != self.dns_query_tool.subject:
+            # Switch back subject because we don't want to break subsequential calls.
+            self.domain_syntax_checker.set_subject(self.status.idna_subject)
+            self.ip_syntax_checker.set_subject(self.status.idna_subject)
 
         PyFunceble.facility.Logger.debug("DNS Record:\n%r", result)
 
