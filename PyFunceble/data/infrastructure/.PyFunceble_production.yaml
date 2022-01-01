@@ -258,6 +258,12 @@ dns:
 
   # Sets the list of server to communicate with.
   # It must be a list.
+  #
+  # WARNING:
+  #   IPv6 should be given in this format if a port is explicitly given:
+  #     [ip]:port
+  #   If you omit the braket, the port will be set to the default one (53).
+  #
   # As example:
   #   - first.dns
   #   - second.dns

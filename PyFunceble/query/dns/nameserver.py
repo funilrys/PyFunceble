@@ -100,12 +100,22 @@ class Nameservers:
         """
 
         if ":" in nameserver:
+            if nameserver.count(":") > 1:
+                if "]" not in nameserver:
+                    return nameserver, default_port
+
+                nameserver, port = nameserver.split("]:", 1)
+
+                if port.isdigit():
+                    return nameserver[1:], int(port)
+                return nameserver[1:], default_port
+
             splitted = nameserver.rsplit(":")
 
             if splitted[-1].isdigit():
                 return ":".join(splitted[:-1]), int(splitted[-1])
 
-            return ":".join(splitted), default_port
+            return ":".join(splitted[:-1]), default_port
         return nameserver, default_port
 
     @classmethod

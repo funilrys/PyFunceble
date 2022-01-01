@@ -383,7 +383,7 @@ each test cycles is done.
 Activates or disables the consideration of the test(s) in or for a local
 or private network context.
 
-This option is to include testing ability of records only availeble for 
+This option is to include testing ability of records only availeble for
 local and private network. This argument will enable this functionality
 by removing the usual limitation which do not apply to intranets.
 
@@ -648,6 +648,8 @@ You can also set default DNS servers used for testing within the
 
 .. note::
     You can specify the port number to be used on the DNS server if needed.
+
+    If you provide an IPv6, we are expecting the :code:`[ip]:port` format.
 
 
 ------
