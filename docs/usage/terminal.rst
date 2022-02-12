@@ -418,6 +418,16 @@ Want to take advantage of the collection API ? This argument is for you.
 
 ------
 
+:code:`--collection-lookup-only`
+""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the collection lookup as test
+method.
+
+------
+
 :code:`--dns-lookup`
 """"""""""""""""""""
 
@@ -427,6 +437,15 @@ Activates or disables the usage of the DNS lookup whether possible.
 
 Don't want to perform some DNS lookup? This argument is for you.
 
+------
+
+:code:`--dns-lookup-only`
+"""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the DNS lookup as test
+method.
 
 ------
 
@@ -439,6 +458,16 @@ This argument allows you to disable the HTTP status code checker!
 
 **Default value:** :code:`http_status_code: True`
 
+
+------
+
+:code:`--http-status-code-lookup-only`
+""""""""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the HTTP Status code lookup as test
+method.
 
 ------
 
@@ -455,6 +484,17 @@ Don't want to perform some netinfo lookup ? This argument is for you.
 
 ------
 
+
+:code:`--netinfo-lookup-only`
+"""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the NETINFO lookup as test
+method.
+
+------
+
 :code:`--special-lookup`
 """"""""""""""""""""""""
 
@@ -467,6 +507,17 @@ This argument disables them all.
 
 **Default value:** :code:`special: True`
 
+
+------
+
+
+:code:`--special-lookup-only`
+"""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the SPECIAL lookup as test
+method.
 
 ------
 
@@ -489,6 +540,17 @@ This argument allows you to disable it!
 
 ------
 
+
+:code:`--whois-lookup-only`
+"""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the WHOIS lookup as test
+method.
+
+------
+
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
 
@@ -502,6 +564,17 @@ Activates or disables the usage of the reputation dataset when possible.
 
 **Default value:** :code:`reputation: False`
 
+
+------
+
+
+:code:`--reputation-lookup-only`
+""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the Reputation lookup as test
+method.
 
 ------
 
@@ -1488,18 +1561,22 @@ Global overview
 
 ::
 
-    usage: PyFunceble [--show-completion {bash,zsh}] [-d DOMAINS [DOMAINS ...]]
-                    [-u URLS [URLS ...]] [-f FILES [FILES ...]]
-                    [-uf URL_FILES [URL_FILES ...]] [--adblock] [--cidr]
-                    [--complements] [--preload]
+    usage: PyFunceble [--show-completion {bash,zsh,tcsh}]
+                    [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
+                    [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
+                    [--adblock] [--cidr] [--complements] [--preload]
                     [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
-                    [--wildcard] [-c]
+                    [--wildcard] [--chancy] [-c]
                     [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
                     [--collection-preferred-origin {frequent,latest,recommended}]
-                    [--collection-lookup] [--dns-lookup] [--http]
-                    [--netinfo-lookup] [--special-lookup] [--whois-lookup]
-                    [--reputation-lookup] [--reputation] [--syntax]
-                    [-t LOOKUP__TIMEOUT] [-ua USER_AGENT__CUSTOM] [-vsc]
+                    [--collection-lookup] [--collection-lookup-only]
+                    [--dns-lookup] [--dns-lookup-only] [--http] [--http-only]
+                    [--netinfo-lookup] [--netinfo-lookup-only]
+                    [--special-lookup] [--special-lookup-only] [--whois-lookup]
+                    [--whois-lookup-only] [--reputation-lookup]
+                    [--reputation-lookup-only] [--reputation] [--syntax]
+                    [-t LOOKUP__TIMEOUT] [--max-http-retries MAX_HTTP_RETRIES]
+                    [-ua USER_AGENT__CUSTOM] [-vsc]
                     [--dns DNS__SERVER [DNS__SERVER ...]]
                     [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
                     [--trust-dns-server] [--dns-delay DNS__DELAY]
@@ -1525,8 +1602,8 @@ Global overview
 
     PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
-    optional arguments:
-        --show-completion {bash,zsh}
+    options:
+        --show-completion {bash,zsh,tcsh}
                                 Show Shell completion script and exit.
         --help                Show this help message and exit.
         -v, --version         Show the version of PyFunceble and exit.
@@ -1609,24 +1686,36 @@ Global overview
         --collection-lookup   Activates or disables the usage of the Collection lookup
                                 whether possible.
                                 Configured value: False
+        --collection-lookup-only
+                                Only perform a Collection lookup.
         --dns-lookup          Activates or disables the usage of the DNS lookup
                                 whether possible.
                                 Configured value: True
+        --dns-lookup-only     Only perform a DNS lookup.
         --http, --http-status-code-lookup
                                 Switch the value of the usage of HTTP code.
                                 Configured value: True
+        --http-only, --http-status-code-lookup-only
+                                Only perform a HTTP Code lookup.
         --netinfo-lookup      Activates or disables the usage of the network
                                 information (or network socket) whether possible.
                                 Configured value: True
+        --netinfo-lookup-only
+                                Only perform a network information (or networket socket) lookup.
         --special-lookup      Activates or disables the usage of our SPECIAL and
                                 extra rules whether possible.
                                 Configured value: True
+        --special-lookup-only
+                                Only perform a SPECIAL lookup.
         --whois-lookup        Activates or disables the usage of the WHOIS record
                                 (or better said the expiration date in it) whether possible.
                                 Configured value: True
+        --whois-lookup-only   Only perform a WHOIS lookup.
         --reputation-lookup   Activates or disables the usage of the reputation
                                 dataset whether possible.
                                 Configured value: False
+        --reputation-lookup-only
+                                Only perform a reputation lookup.
         --reputation          Activates or disables the reputation checker.
                                 Configured value: False
         --syntax              Activates or disables the syntax checker.
@@ -1637,7 +1726,7 @@ Global overview
                                 Configured value: 5
         --max-http-retries MAX_HTTP_RETRIES
                                 Sets the maximum number of retries for an HTTP request.
-                                Configured value: 3
+                                Configured value: 0
         -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
                                 Sets the user agent to use.
 
@@ -1655,7 +1744,7 @@ Global overview
                                 it as :port [ip:port].
 
                                 If no port is specified, the default DNS port (53) is used.
-                                Configured value: None
+                                Configured value: <BoxList: ['1.1.1.1']>
         --dns-protocol {UDP,TCP,HTTPS,TLS}
                                 Sets the protocol to use for the DNS queries.
                                 Configured value: 'UDP'
@@ -1681,7 +1770,7 @@ Global overview
     Databases:
         --inactive-db         Activates or disables the usage of a 'database' to
                                 store all 'INACTIVE' and 'INVALID'  subject for continuous retest.
-                                Configured value: True
+                                Configured value: False
         --database-type {csv,mariadb,mysql}
                                 Sets the database engine to use.
                                 You can choose between the following: `csv | mariadb | mysql`
@@ -1731,7 +1820,7 @@ Global overview
         --output-location OUTPUT_LOCATION
                                 Sets the location where we are supposed to generation
                                 the output directory from.
-                                Configured value: '/home/funilrys/repositories/github/source/PyFunceble'
+                                Configured value: '/home/pyfunceble-dev/repositories/github/source/PyFunceble'
         --unified-results     Activates or disables the generation of the unified
                                 results file instead of the divided ones.
                                 Configured value: False
@@ -1766,7 +1855,7 @@ Global overview
     Multiprocessing:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
                                 Sets the number of maximal workers to use.
-                                If not given, 40 (based on the current machine) will be applied.
+                                If not given, 20 (based on the current machine) will be applied.
                                 Configured value: None
 
     CI / CD:
@@ -1808,4 +1897,6 @@ Global overview
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
 
+
 .. _RPZ: https://www.mypdns.org/w/rpz/
+

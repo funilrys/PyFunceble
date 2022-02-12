@@ -390,6 +390,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--collection-lookup-only"],
+            {
+                "dest": "self_contained.lookup.collection",
+                "action": "store_true",
+                "help": "Only perform a Collection lookup.",
+            },
+        ),
+        (
             ["--dns-lookup"],
             {
                 "dest": "lookup.dns",
@@ -399,12 +407,28 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--dns-lookup-only"],
+            {
+                "dest": "self_contained.lookup.dns",
+                "action": "store_true",
+                "help": "Only perform a DNS lookup.",
+            },
+        ),
+        (
             ["--http", "--http-status-code-lookup"],
             {
                 "dest": "lookup.http_status_code",
                 "action": "store_true",
                 "help": "Switch the value of the usage of HTTP code. %s"
                 % get_configured_value("lookup.http_status_code"),
+            },
+        ),
+        (
+            ["--http-only", "--http-status-code-lookup-only"],
+            {
+                "dest": "self_contained.lookup.http_status_code",
+                "action": "store_true",
+                "help": "Only perform a HTTP Code lookup.",
             },
         ),
         (
@@ -420,6 +444,15 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--netinfo-lookup-only"],
+            {
+                "dest": "self_contained.lookup.netinfo",
+                "action": "store_true",
+                "help": "Only perform a network information (or networket "
+                "socket) lookup.",
+            },
+        ),
+        (
             [
                 "--special-lookup",
             ],
@@ -429,6 +462,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the usage of our SPECIAL and\n"
                 "extra rules whether possible. %s"
                 % get_configured_value("lookup.special"),
+            },
+        ),
+        (
+            ["--special-lookup-only"],
+            {
+                "dest": "self_contained.lookup.special",
+                "action": "store_true",
+                "help": "Only perform a SPECIAL lookup.",
             },
         ),
         (
@@ -444,6 +485,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--whois-lookup-only"],
+            {
+                "dest": "self_contained.lookup.whois",
+                "action": "store_true",
+                "help": "Only perform a WHOIS lookup.",
+            },
+        ),
+        (
             [
                 "--reputation-lookup",
             ],
@@ -453,6 +502,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the usage of the reputation\n"
                 "dataset whether possible. %s"
                 % get_configured_value("lookup.reputation"),
+            },
+        ),
+        (
+            ["--reputation-lookup-only"],
+            {
+                "dest": "self_contained.lookup.reputation",
+                "action": "store_true",
+                "help": "Only perform a reputation lookup.",
             },
         ),
         (
