@@ -15,6 +15,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
                                                      __/ |
                                                     |___/
 
+-   avatartw - `@avatartw`_
 -   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
 -   gwarser - `@gwarser`_
@@ -43,6 +44,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   ZeroDot1 - `@ZeroDot1`_
 
 .. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
+.. _@avatartw: https://github.com/avatartw
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX

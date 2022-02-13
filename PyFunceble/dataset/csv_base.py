@@ -76,7 +76,7 @@ class CSVDatasetBase(DBDatasetBase):
 
         add_header = not file_helper.exists()
 
-        file_handler = file_helper.open("a+", newline="")
+        file_handler = file_helper.open("a+", newline="", encoding="utf-8")
         writer = csv.DictWriter(file_handler, fieldnames=self.FIELDS)
 
         if add_header:

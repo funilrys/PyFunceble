@@ -148,10 +148,11 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
                                                      __/ |
                                                     |___/
 
+-   avatartw - `@avatartw`_
 -   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
--   Haris Gušić - `@veracioux`_
 -   gwarser - `@gwarser`_
+-   Haris Gušić - `@veracioux`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Human Being - `@T145`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -263,11 +264,12 @@ License
 .. _shtab: https://github.com/iterative/shtab
 .. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
-.. _yWorks: https://www.yworks.com/company
+.. _yWorks: https://www.yworks.com
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
 .. _@asciinema: https://github.com/asciinema
+.. _@avatartw: https://github.com/avatartw
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
