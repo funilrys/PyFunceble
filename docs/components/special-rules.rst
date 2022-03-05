@@ -36,6 +36,14 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.24.eu`
+"""""""""""""""
+
+Any subjects matching the given pattern and the :code:`503` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.angelfire.com`
 """""""""""""""""""""""
 
@@ -89,6 +97,14 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.godaddysites.com`
+""""""""""""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`404` status codes are
+supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.hpg.com.br`
 """"""""""""""""""""
 
@@ -114,6 +130,14 @@ supplied as :code:`INACTIVE`.
 ------
 
 :code:`*.tumblr.com`
+""""""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`404` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
+:code:`*.weebly.com`
 """"""""""""""""""""
 
 Any subjects matching the given pattern and the :code:`404` status code are
