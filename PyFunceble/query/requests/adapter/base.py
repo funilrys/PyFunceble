@@ -187,7 +187,6 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                 if "https" in rule and rule["https"]:
                     local_proxy["https"] = rule["https"]
 
-
                 if not local_proxy:
                     continue
 

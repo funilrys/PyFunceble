@@ -659,6 +659,7 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
     ]
 
+
 def get_proxy_control_group_data() -> List[Tuple[List[str], dict]]:
     """
     Provides the argument of the proxy control group.

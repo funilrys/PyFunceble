@@ -461,13 +461,7 @@ DEFAULT_CONFIG: dict = {
         "whois": True,
         "collection": False,
     },
-    "proxy": {
-        "global": {
-            "http": None,
-            "https": None
-        },
-        "rules": []
-    },
+    "proxy": {"global": {"http": None, "https": None}, "rules": []},
     "share_logs": False,
     "user_agent": {"browser": "chrome", "custom": None, "platform": "linux"},
     "verify_ssl_certificate": False,
