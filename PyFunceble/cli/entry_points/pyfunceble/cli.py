@@ -659,6 +659,36 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
         ),
     ]
 
+def get_proxy_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the proxy control group.
+    """
+
+    return [
+        (
+            [
+                "--http-proxy",
+            ],
+            {
+                "dest": "proxy.global.http",
+                "type": str,
+                "help": "Sets the proxy to use when testing subjects over HTTP. %s"
+                % get_configured_value("proxy.global.http"),
+            },
+        ),
+        (
+            [
+                "--https-proxy",
+            ],
+            {
+                "dest": "proxy.global.https",
+                "type": str,
+                "help": "Sets the proxy to use when testing subjects over HTTPS. %s"
+                % get_configured_value("proxy.global.https"),
+            },
+        ),
+    ]
+
 
 def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
     """
@@ -1241,6 +1271,7 @@ def tool() -> None:
     )
     test_control_group = parser.add_argument_group("Test control")
     dns_control_group = parser.add_argument_group("DNS control")
+    proxy_control_group = parser.add_argument_group("Proxy control")
     database_control_group = parser.add_argument_group("Databases")
     output_control_group = parser.add_argument_group("Output control")
     multiprocessing_group = parser.add_argument_group("Multiprocessing")
@@ -1251,6 +1282,7 @@ def tool() -> None:
         get_filtering_group_data,
         get_test_control_group_data,
         get_dns_control_group_data,
+        get_proxy_control_group_data,
         get_database_control_group_data,
         get_output_control_group_data,
         get_multiprocessing_group_data,

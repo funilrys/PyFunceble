@@ -333,7 +333,7 @@ return INVALID if :code:`--wildcard` is not set to true.
 
 This feature is related to the `--rpz <index.html#rpz>`_
 
-.. code-block:: bash
+.. code-block:: console
 
     '*.example.org'
     'example.org'
@@ -796,7 +796,7 @@ Activates or disable the trust mode.
 :code:`--dns-delay`
 """""""""""""""""""
 
-.. versionadded:: 4.0.0
+.. versionadded:: 4.1.0b12.dev
 
 Sets the delay to apply between each DNS query.
 
@@ -807,6 +807,79 @@ Sets the delay to apply between each DNS query.
     query.
 
     Otherwise, if equal to `0.0`, no delay will be applied.
+
+------
+
+Proxy control
+^^^^^^^^^^^^^
+
+.. _http-proxy:
+
+:code:`--http-proxy`
+""""""""""""""""""""
+
+.. versionadded:: 4.1.0b12.dev
+
+By default, PyFunceble will use the environment-wide Proxy Settings. This can be
+changed with the ability to configure which Proxy Server you like PyFunceble to
+use during the test of subject.
+
+You can set this up with the CLI command :code:`--http-proxy` **or** insert it
+into your personal :code:`.PyFunceble.overwrite.yaml`
+
+**Default value:** :code:`Follow HTTP_PROXY variable`
+
+.. code-block:: console
+
+    $ pyfunceble --http-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+
+You can also set default DNS servers used for testing within the
+:code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
+
+.. code-block:: yaml
+
+    global:
+        http: http://127.0.0.1:9899
+
+
+.. warning::
+    We expect a Proxy Server. If you add this flag but no valid Proxy Server is
+    given. You'll almost for certain get all results as :code:`INACTIVE`
+
+------
+
+.. _https-proxy:
+
+:code:`--https-proxy`
+"""""""""""""""""""""
+
+.. versionadded:: 4.1.0b12.dev
+
+By default, PyFunceble will use the environment-wide Proxy Settings. This can be
+changed with the ability to configure which Proxy Server you like PyFunceble to
+use during the test of subject.
+
+You can set this up with the CLI command :code:`--https-proxy` **or** insert it
+into your personal :code:`.PyFunceble.overwrite.yaml`
+
+**Default value:** :code:`Follow HTTPS_PROXY variable`
+
+.. code-block:: console
+
+    $ pyfunceble --https-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+
+You can also set default DNS servers used for testing within the
+:code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
+
+.. code-block:: yaml
+
+    global:
+        https: http://127.0.0.1:9899
+
+
+.. warning::
+    We expect a Proxy Server. If you add this flag but no valid Proxy Server is
+    given. You'll almost for certain get all results as :code:`INACTIVE`
 
 ------
 
@@ -1363,7 +1436,7 @@ supposed to store and push the final results.
 
 As an example, this allows us to have 2 branches:
 
-.. code-block:: bash
+.. code-block:: console
 
     --ci-branch processing # (CI branch), for the tests with PyFunceble.
     --ci-distribution-branch master # (CI distribution branch), for the
@@ -1561,7 +1634,7 @@ Global overview
 
 ::
 
-    usage: PyFunceble [--show-completion {bash,zsh,tcsh}]
+    usage: pyfunceble [--show-completion {bash,zsh,tcsh}]
                     [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
                     [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
                     [--adblock] [--cidr] [--complements] [--preload]
@@ -1580,7 +1653,9 @@ Global overview
                     [--dns DNS__SERVER [DNS__SERVER ...]]
                     [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
                     [--trust-dns-server] [--dns-delay DNS__DELAY]
-                    [--inactive-db] [--database-type {csv,mariadb,mysql}]
+                    [--http-proxy PROXY__GLOBAL__HTTP]
+                    [--https-proxy PROXY__GLOBAL__HTTPS] [--inactive-db]
+                    [--database-type {csv,mariadb,mysql}]
                     [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST] [-wdb] [-a]
                     [-ex] [--colour]
                     [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]]
@@ -1767,6 +1842,14 @@ Global overview
 
                                 Configured value: 0.0
 
+    Proxy control:
+        --http-proxy PROXY__GLOBAL__HTTP
+                                Sets the proxy to use when testing subjects over HTTP.
+                                Configured value: None
+        --https-proxy PROXY__GLOBAL__HTTPS
+                                Sets the proxy to use when testing subjects over HTTPS.
+                                Configured value: None
+
     Databases:
         --inactive-db         Activates or disables the usage of a 'database' to
                                 store all 'INACTIVE' and 'INVALID'  subject for continuous retest.
@@ -1897,6 +1980,4 @@ Global overview
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
 
-
 .. _RPZ: https://www.mypdns.org/w/rpz/
-

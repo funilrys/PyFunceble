@@ -295,6 +295,49 @@ user_agent:
   # WARNING: If given, this will be used systematically.
   custom: null
 
+proxy:
+  # Provides everything related to the proxy.
+  #
+  # The idea:
+  #   We have two main keys, "global" and "rules".
+  #   The system will always follow the global keys unless you define an explit
+  #   TLD.
+  #
+  # Example:
+  #
+  #   Let's say we want all HTTP requests to go through example.org but we want
+  #   all HTTP request for domains ending with `.com`, `.org` and `.dev` to go
+  #   through example.com. And, we want all domains ending with `.onion` to go
+  #   through example.dev.
+  #
+  #   This is how it will look like.
+  #
+  #       global:
+  #         http: http://example.org:8080
+  #         https: http://example.org:8080
+  #
+  #       rules:
+  #         - http: http://example.com:8080
+  #           https: http://example.org:8080
+  #           tld:
+  #             - com
+  #             - org
+  #             - dev
+  #         - http: socks5://example.dev:8080
+  #           https: socks5://example.dev:8080
+  #           tld:
+  #             - onion
+  #
+
+  global:
+    # Global HTTP proxy to use when no rule is given or matched.
+    http: null
+    # Global HTTPS proxy to use when no rule is given or matched.
+    https: null
+
+  rules: []
+
+
 # Activates the verification of the certificate.
 verify_ssl_certificate: False
 

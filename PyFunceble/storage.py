@@ -126,6 +126,7 @@ STATUS: Optional[Box] = Box(
 HTTP_CODES: Optional[Box] = Box({})
 COLLECTION: Optional[Box] = Box({})
 LINKS: Optional[Box] = Box({})
+PROXY: Optional[Box] = Box({})
 
 
 STD_HTTP_CODES: Optional[Box] = Box(

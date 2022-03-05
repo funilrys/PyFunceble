@@ -31,7 +31,7 @@ Execute the following and let's hack PyFunceble!
 .. note::
    After installing with:
 
-   ::
+   .. code-block:: console
 
       $ source venv/bin/activate
       $ pip3 install -e .

@@ -14,6 +14,7 @@ Components
 .. include:: databases.rst
 .. include:: directory-structure.rst
 .. include:: dns-lookup.rst
+.. include:: proxy-settings.rst
 .. include:: environment-variables.rst
 .. include:: execution-time.rst
 .. include:: expiration-date.rst

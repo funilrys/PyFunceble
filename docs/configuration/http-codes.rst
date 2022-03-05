@@ -30,7 +30,7 @@
 
     **Default value:**
 
-        ::
+        .. code-block:: yaml
 
             - 100
             - 101
@@ -57,7 +57,7 @@
 
     **Default value:**
 
-        ::
+        .. code-block:: yaml
 
             - 400
             - 402
@@ -80,7 +80,8 @@
     **Type:** :code:`list`
 
     **Default value:**
-        ::
+
+        .. code-block:: yaml
 
             - 000
             - 300

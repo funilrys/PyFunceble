@@ -10,6 +10,7 @@ This page will try to detail each configuration available into :code:`.PyFuncebl
 .. include:: cli-testing.rst
 .. include:: lookup.rst
 .. include:: dns.rst
+.. include:: proxy.rst
 .. include:: user-agent.rst
 .. include:: http-codes.rst
 .. include:: links.rst

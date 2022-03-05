@@ -398,9 +398,12 @@ class ConfigLoader:
         PyFunceble.storage.HTTP_CODES = Box(
             config["http_codes"],
         )
-        if "collection" in config:
+        if "collection" in config and config["collection"]:
             PyFunceble.storage.COLLECTION = Box(config["collection"])
         PyFunceble.storage.LINKS = Box(config["links"])
+
+        if "proxy" in config and config["proxy"]:
+            PyFunceble.storage.PROXY = Box(config["proxy"])
 
         return self
 
@@ -417,6 +420,7 @@ class ConfigLoader:
             PyFunceble.storage.HTTP_CODES = Box({})
             PyFunceble.storage.COLLECTION = Box({})
             PyFunceble.storage.LINKS = Box({})
+            PyFunceble.storage.PROXY = Box({})
         except (AttributeError, TypeError):  # pragma: no cover ## Safety.
             pass
 

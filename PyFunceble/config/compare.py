@@ -259,6 +259,7 @@ class ConfigComparison:
             or "not_found_default" in self.local_config["http_codes"]
             or "self_managed" not in self.local_config["http_codes"]
             or "dns" not in self.local_config
+            or "proxy" not in self.local_config
             or "follow_server_order" not in self.local_config["dns"]
             or "trust_server" not in self.local_config["dns"]
             or "collection" not in self.local_config

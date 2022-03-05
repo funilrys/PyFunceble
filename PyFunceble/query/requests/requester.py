@@ -78,6 +78,44 @@ class Requester:
         Optional, The timeout to apply to the query.
     :param int max_redirects:
         Optional, The maximum number of redirects to allow.
+    :param dns_query_tool:
+        Optional, The DNS Query tool to use.
+    :param proxy_pattern:
+        Optional, The proxy pattern to apply to each query.
+
+        Expected format:
+
+            ::
+                {
+                    "global": {
+                        # Everything under global will be used as default if no
+                        # rule matched.
+
+                        "http": "str" ## HTTP_PROXY
+                        "https": "str" ## HTTPS_PROXY
+                    },
+                    "rules":[
+                        # A set/list of rules to work with.
+
+                        {
+                            "http": "str" ## HTTP_PROXY when TLD is matched.
+                            "https": "str" ## HTTPS_PROXY when TLD is matched.
+                            "tld": [
+                                "str",
+                                "str",
+                                str
+                            ]
+                        },
+                        {
+                            "http": "str" ## HTTP_PROXY when TLD is matched.
+                            "https": "str" ## HTTPS_PROXY when TLD is matched.
+                            "tld": [
+                                "str",
+                                "str"
+                            ]
+                        },
+                    ]
+                }
     """
 
     STD_VERIFY_CERTIFICATE: bool = False
@@ -91,6 +129,7 @@ class Requester:
     _max_retries: int = 3
     _verify_certificate: bool = True
     _max_redirects: int = 60
+    _proxy_pattern: dict = {}
 
     session: Optional[requests.Session] = None
     dns_query_tool: Optional[DNSQueryTool] = None
@@ -103,6 +142,7 @@ class Requester:
         timeout: Optional[float] = None,
         max_redirects: Optional[int] = None,
         dns_query_tool: Optional[DNSQueryTool] = None,
+        proxy_pattern: Optional[dict] = None,
     ) -> None:
         if max_retries is not None:
             self.max_retries = max_retries
@@ -126,6 +166,11 @@ class Requester:
             self.dns_query_tool = dns_query_tool
         else:
             self.dns_query_tool = DNSQueryTool()
+
+        if proxy_pattern is not None:
+            self.proxy_pattern = proxy_pattern
+        else:
+            self.guess_and_set_proxy_pattern()
 
         self.session = self.get_session()
 
@@ -394,6 +439,58 @@ class Requester:
 
         return self
 
+    @property
+    def proxy_pattern(self) -> Optional[dict]:
+        """
+        Provides the current state of the :code:`_proxy_pattern` attribute.
+        """
+
+        return self._proxy_pattern
+
+    @proxy_pattern.setter
+    @recreate_session
+    def proxy_pattern(self, value: dict) -> None:
+        """
+        Overwrite the proxy pattern to use.
+
+        :param value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class`dict`.
+        """
+
+        if not isinstance(value, dict):
+            raise TypeError(f"<value> shoule be {dict}, {type(value)} given.")
+
+        self._proxy_pattern = value
+
+    def set_proxy_pattern(self, value: dict) -> "Requester":
+        """
+        Overwrite the proxy pattern.
+
+        :param value:
+            The value to set.
+        """
+
+        self.proxy_pattern = value
+
+        return self
+
+    def guess_and_set_proxy_pattern(self) -> "Requester":
+        """
+        Try to guess the value from the configuration and set it.
+        """
+
+        if PyFunceble.facility.ConfigLoader.is_already_loaded() and bool(
+            PyFunceble.storage.CONFIGURATION.proxy
+        ):
+            self.set_proxy_pattern(PyFunceble.storage.CONFIGURATION.proxy)
+        else:
+            self.set_proxy_pattern({})
+
+        return self
+
     def guess_all_settings(self) -> "Requester":
         """
         Try to guess all settings.
@@ -432,13 +529,13 @@ class Requester:
 
         session.verify = self.verify_certificate
         session.max_redirects = self.max_redirects
-
         session.mount(
             "https://",
             RequestHTTPSAdapter(
                 max_retries=self.max_retries,
                 timeout=self.timeout,
                 dns_query_tool=self.dns_query_tool,
+                proxy_pattern=self.proxy_pattern,
             ),
         )
         session.mount(
@@ -447,6 +544,7 @@ class Requester:
                 max_retries=self.max_retries,
                 timeout=self.timeout,
                 dns_query_tool=self.dns_query_tool,
+                proxy_pattern=self.proxy_pattern,
             ),
         )
 

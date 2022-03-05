@@ -4,7 +4,7 @@ Development version
 For development
 ^^^^^^^^^^^^^^^
 
-.. code-block:: bash
+.. code-block:: console
 
    $ cd PyFunceble && git checkout dev
    $ git fetch origin && git merge origin/dev
@@ -27,7 +27,7 @@ Using :code:`pip`
 From PyPi
 ~~~~~~~~~
 
-.. code-block:: bash
+.. code-block:: console
 
    $ pip3 install --user --upgrade PyFunceble-dev
 
@@ -44,7 +44,7 @@ From PyPi
 From GitHub
 ~~~~~~~~~~~
 
-.. code-block:: bash
+.. code-block:: console
 
    $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
 
@@ -63,7 +63,7 @@ Using the AUR (for Arch Linux users)
 With makepkg
 ~~~~~~~~~~~~
 
-.. code-block:: bash
+.. code-block:: console
 
    $ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble-dev -o PKGBUILD
    $ makepkg
@@ -78,7 +78,7 @@ With your favorite AUR helper
    For more information about your current (or any other) AUR helper please
    report to `the ArchWiki page`_.
 
-.. code-block:: bash
+.. code-block:: console
 
    $ yourFavoriteAurHelper -Syu python-pyfunceble-dev
 
@@ -87,7 +87,7 @@ Using docker (hub)
 
 The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble-dev
 
-.. code-block:: bash
+.. code-block:: console
 
    $ docker pull pyfunceble/pyfunceble-dev
 
@@ -97,7 +97,7 @@ Pure Python method
 
 Execute the following and enjoy PyFunceble!
 
-.. code-block:: bash
+.. code-block:: console
 
    $ cd PyFunceble && git checkout dev
    $ git fetch origin && git merge origin/dev

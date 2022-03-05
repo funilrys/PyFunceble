@@ -69,6 +69,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
     resolving_cache: dict = {}
     resolving_use_cache: bool = False
     timeout: float = 5.0
+    proxy_pattern: dict = {}
 
     def __init__(self, *args, **kwargs):
         if "timeout" in kwargs:
@@ -86,6 +87,12 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         else:
             self.dns_query_tool = DNSQueryTool()
 
+        if "proxy_pattern" in kwargs:
+            self.proxy_pattern = kwargs["proxy_pattern"]
+            del kwargs["proxy_pattern"]
+        else:
+            self.proxy_pattern = {}
+
         super().__init__(*args, **kwargs)
 
     @staticmethod
@@ -98,6 +105,100 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         raise PyFunceble.factory.Requester.exceptions.ConnectionError(
             "Could not resolve."
         )
+
+    @staticmethod
+    def extract_extension(subject: str) -> str:
+        """
+        Provides the extension of the given subject.
+
+        :param str subject:
+            The subject to get extract the extension from.
+
+        :raise TypeError:
+            When the given :code:`subject` is not a :py:class:`str`.
+        :raise ValueError:
+            When the given :code:`subject` is an empty :py:class:`str`.
+        """
+
+        if not isinstance(subject, str):
+            raise TypeError(f"<subject> should be {str}, type(subject) given.")
+
+        if not subject:
+            raise ValueError("<subject> should not be empty.")
+
+        if subject.endswith("."):
+            # Absolute needs a little correction.
+            last_point = subject[:-1].rfind(".")
+        else:
+            last_point = subject.rindex(".")
+
+        extension = subject[last_point + 1 :]
+
+        if extension.endswith("."):
+            return extension[:-1]
+        return extension
+
+    def fetch_proxy_from_pattern(self, subject: str) -> dict:
+        """
+        Provides the proxy settings to use for the given subject.
+
+        :param str subject:
+            The subject to work with.
+
+        :raise TypeError:
+            When the given :code:`subject` is not a :py:class:`str`.
+        :raise ValueError:
+            When the given :code:`subject` is an empty :py:class:`str`.
+        """
+
+        def correct_input(pattern_input: dict) -> dict:
+            result = {}
+
+            if "http" in pattern_input and pattern_input["http"]:
+                result["http"] = pattern_input["http"]
+
+            if "https" in pattern_input and pattern_input["https"]:
+                result["https"] = pattern_input["https"]
+
+            if "http" in result and "https" not in result:
+                result["https"] = result["http"]
+
+            if "https" in result and "http" not in result:
+                result["http"] = result["https"]
+
+            return result
+
+        if not isinstance(subject, str):
+            raise TypeError(f"<subject> should be {str}, type(subject) given.")
+
+        if not subject:
+            raise ValueError("<subject> should not be empty.")
+
+        extension = self.extract_extension(subject)
+
+        proxies = {}
+
+        if "rules" in self.proxy_pattern:
+            for rule in self.proxy_pattern["rules"]:
+                local_proxy = {}
+
+                if "http" in rule and rule["http"]:
+                    local_proxy["http"] = rule["http"]
+                if "https" in rule and rule["https"]:
+                    local_proxy["https"] = rule["https"]
+
+
+                if not local_proxy:
+                    continue
+
+                if "tld" in rule and extension in rule["tld"]:
+                    proxies = correct_input(local_proxy)
+                    break
+
+        if not proxies and "global" in self.proxy_pattern:
+            proxies = correct_input(self.proxy_pattern["global"])
+
+        return proxies
 
     def resolve_with_cache(self, hostname: str) -> Optional[str]:
         """
