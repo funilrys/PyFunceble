@@ -44,6 +44,16 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.altervista.org`
+""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b13
+
+Any subjects matching the given pattern and the :code:`403` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.angelfire.com`
 """""""""""""""""""""""
 
