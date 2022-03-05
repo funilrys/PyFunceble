@@ -9,7 +9,7 @@ PyMySQL
 python-box[all]>=5.0.0
 python-dotenv
 PyYAML
-requests[sock]<3
+requests[socks]<3
 setuptools
 shtab
 SQLAlchemy>=1.3.20
