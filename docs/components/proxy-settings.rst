@@ -49,7 +49,7 @@ Simply provides your own own settings into your personal
               - com
               - org
               - dev
-          - http: socks5://example.dev:8080
-            https: socks5://example.dev:8080
+          - http: socks5h://example.dev:8080
+            https: socks5h://example.dev:8080
             tld:
               - onion

@@ -72,8 +72,8 @@
                       tld:
                         - com
                         - org
-                    - http: socks5://example.org:8080
-                      https: socks5://example.org:8080
+                    - http: socks5h://example.org:8080
+                      https: socks5h://example.org:8080
                       tld:
                         - onion
 
@@ -85,11 +85,21 @@
 
               **Example**: :code:`example.com` and :code:`example.org`
 
-            - use :code:`socks5://example.org:8080` for any :code:`HTTP` and
+            - use :code:`socks5h://example.org:8080` for any :code:`HTTP` and
               :code:`HTTPS` requests to a subject that has the :code:`onion`
               Top-Level-Domain (TLD).
 
               **Example**: :code:`example.onion`
+
+              .. warning::
+
+                  If you explicitly want to use this feature to be able to test
+                  :code:`.onion` subjects, be sure to use the :code:`socks5h`
+                  instead of :code:`socks5` protocol.
+
+                  :code:`socks5h` will delegate the DNS lookup to the proxy when
+                  :code:`socks5` will delegate the DNS lookup to the locally
+                  defined DNS resolver or server.
 
             - use :code:`http://example.de` for any :code:`HTTP` and :code:`HTTPS`
               requests to any other subject that is not matching the previous
