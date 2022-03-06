@@ -72,6 +72,7 @@ class InactiveDatasetDeleteSourceColumnMigrator(CSVFileMigratorBase):
         "tested_at",
     ]
 
+    TO_ADD: List[str] = []
     TO_DELETE: List[str] = ["source"]
 
     def __post_init__(self) -> None:
