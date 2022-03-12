@@ -333,7 +333,7 @@ return INVALID if :code:`--wildcard` is not set to true.
 
 This feature is related to the `--rpz <index.html#rpz>`_
 
-.. code-block:: bash
+.. code-block:: console
 
     '*.example.org'
     'example.org'
@@ -343,6 +343,28 @@ This feature is related to the `--rpz <index.html#rpz>`_
 
 Test control
 ^^^^^^^^^^^^
+
+:code:`--chancy`
+""""""""""""""""
+
+.. versionadded:: 4.1.0b4.dev
+
+Activates a chancy mode that unleashes the safety workflow in place.
+
+**Default value**: :code:`chancy_tester: False`
+
+.. warning::
+    You shouldn't have to use this unless you feel really lucky and trust your
+    machine.
+
+    This mode makes things look 'fast', but it may produce some unexpected
+    results if :code:`N` process simultaneously write the same output file.
+
+    This mode makes the graphical CLI output unparsable - either.
+
+    **MAY THE FORCE BE WITH YOU!**
+
+------
 
 :code:`--cooldown-time`
 """""""""""""""""""""""
@@ -358,11 +380,12 @@ each test cycles is done.
 :code:`--local`
 """""""""""""""
 
-Activates or disables the consideration of the test(s) in or for a local or
-private network context.
+Activates or disables the consideration of the test(s) in or for a local
+or private network context.
 
-Want to run a test over a local or private network? This argument will disable
-the limitation which does not apply to private networks.
+This option is to include testing ability of records only availeble for
+local and private network. This argument will enable this functionality
+by removing the usual limitation which do not apply to intranets.
 
 **Default value:** :code:`local_network: False`
 
@@ -371,7 +394,7 @@ the limitation which does not apply to private networks.
 :code:`--collection-preferred-origin`
 """""""""""""""""""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Sets the preferred status origin.
 
@@ -385,13 +408,23 @@ Sets the preferred status origin.
 :code:`--collection-lookup`
 """""""""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Activates or disables the usage of the collection lookup whether possible.
 
 **Default value:** :code:`lookup.collection: False`
 
 Want to take advantage of the collection API ? This argument is for you.
+
+------
+
+:code:`--collection-lookup-only`
+""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the collection lookup as test
+method.
 
 ------
 
@@ -404,6 +437,15 @@ Activates or disables the usage of the DNS lookup whether possible.
 
 Don't want to perform some DNS lookup? This argument is for you.
 
+------
+
+:code:`--dns-lookup-only`
+"""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the DNS lookup as test
+method.
 
 ------
 
@@ -416,6 +458,16 @@ This argument allows you to disable the HTTP status code checker!
 
 **Default value:** :code:`http_status_code: True`
 
+
+------
+
+:code:`--http-status-code-lookup-only`
+""""""""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the HTTP Status code lookup as test
+method.
 
 ------
 
@@ -432,6 +484,17 @@ Don't want to perform some netinfo lookup ? This argument is for you.
 
 ------
 
+
+:code:`--netinfo-lookup-only`
+"""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the NETINFO lookup as test
+method.
+
+------
+
 :code:`--special-lookup`
 """"""""""""""""""""""""
 
@@ -444,6 +507,17 @@ This argument disables them all.
 
 **Default value:** :code:`special: True`
 
+
+------
+
+
+:code:`--special-lookup-only`
+"""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the SPECIAL lookup as test
+method.
 
 ------
 
@@ -466,6 +540,17 @@ This argument allows you to disable it!
 
 ------
 
+
+:code:`--whois-lookup-only`
+"""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the WHOIS lookup as test
+method.
+
+------
+
 :code:`--reputation-lookup`
 """""""""""""""""""""""""""
 
@@ -479,6 +564,17 @@ Activates or disables the usage of the reputation dataset when possible.
 
 **Default value:** :code:`reputation: False`
 
+
+------
+
+
+:code:`--reputation-lookup-only`
+""""""""""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b10
+
+Activates or disables the exclusive usage of the Reputation lookup as test
+method.
 
 ------
 
@@ -527,6 +623,17 @@ every time it is possible to define a timeout.
 
 **Default value:** :code:`timeout: 5` seconds
 
+------
+
+.. versionadded:: 4.0.3b1.dev
+
+:code:`--max-http-retries "number"`
+"""""""""""""""""""""""""""""""""""
+
+
+Sets the maximum number of retries for an HTTP request.
+
+**Default value:** :code:`max_http_retries: 3`
 
 ------
 
@@ -615,6 +722,8 @@ You can also set default DNS servers used for testing within the
 .. note::
     You can specify the port number to be used on the DNS server if needed.
 
+    If you provide an IPv6, we are expecting the :code:`[ip]:port` format.
+
 
 ------
 
@@ -687,7 +796,7 @@ Activates or disable the trust mode.
 :code:`--dns-delay`
 """""""""""""""""""
 
-.. versionadded:: 4.0.0
+.. versionadded:: 4.1.0b12.dev
 
 Sets the delay to apply between each DNS query.
 
@@ -698,6 +807,79 @@ Sets the delay to apply between each DNS query.
     query.
 
     Otherwise, if equal to `0.0`, no delay will be applied.
+
+------
+
+Proxy control
+^^^^^^^^^^^^^
+
+.. _http-proxy:
+
+:code:`--http-proxy`
+""""""""""""""""""""
+
+.. versionadded:: 4.1.0b12.dev
+
+By default, PyFunceble will use the environment-wide Proxy Settings. This can be
+changed with the ability to configure which Proxy Server you like PyFunceble to
+use during the test of subject.
+
+You can set this up with the CLI command :code:`--http-proxy` **or** insert it
+into your personal :code:`.PyFunceble.overwrite.yaml`
+
+**Default value:** :code:`Follow HTTP_PROXY variable`
+
+.. code-block:: console
+
+    $ pyfunceble --http-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+
+You can also set default DNS servers used for testing within the
+:code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
+
+.. code-block:: yaml
+
+    global:
+        http: http://127.0.0.1:9899
+
+
+.. warning::
+    We expect a Proxy Server. If you add this flag but no valid Proxy Server is
+    given. You'll almost for certain get all results as :code:`INACTIVE`
+
+------
+
+.. _https-proxy:
+
+:code:`--https-proxy`
+"""""""""""""""""""""
+
+.. versionadded:: 4.1.0b12.dev
+
+By default, PyFunceble will use the environment-wide Proxy Settings. This can be
+changed with the ability to configure which Proxy Server you like PyFunceble to
+use during the test of subject.
+
+You can set this up with the CLI command :code:`--https-proxy` **or** insert it
+into your personal :code:`.PyFunceble.overwrite.yaml`
+
+**Default value:** :code:`Follow HTTPS_PROXY variable`
+
+.. code-block:: console
+
+    $ pyfunceble --https-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+
+You can also set default DNS servers used for testing within the
+:code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
+
+.. code-block:: yaml
+
+    global:
+        https: http://127.0.0.1:9899
+
+
+.. warning::
+    We expect a Proxy Server. If you add this flag but no valid Proxy Server is
+    given. You'll almost for certain get all results as :code:`INACTIVE`
 
 ------
 
@@ -933,7 +1115,16 @@ Sets the IP to prefix each lines of the hosts file.
 
 You can configure the logging level to be outputted in STDOUT (screen)
 when you uses :code:`--no-files`. Default outputs to
-:code:`output/*_logging_/**.log`
+:code:`output/__pyfunceble_loggging__/*.log`
+
+Please notice this is a separated folder at the same lever as your
+tested sources.
+
+.. code-block:: console
+
+    ├── /tmp/pyfunceble/output/__pyfunceble_loggging__/
+    ├── /tmp/pyfunceble/output/my-blacklist/
+
 
 Optional values. (From less to more information)
 
@@ -1024,6 +1215,31 @@ percentage - file - of each status.
 This argument will disable or enable the generation of the percentage of each
 status.
 
+------
+
+:code:`--registrar`
+"""""""""""""""""""
+
+.. versionadded:: 4.1.0b1.dev
+
+Activates or disables the display and generation of the (top) registrar stats -
+file.
+
+**Default value:** :code:`registrar: False`
+
+------
+
+:code:`--max-registrar`
+"""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b1.dev
+
+Sets the maximum number of registrar to display.
+
+**Default value:** :code:`max_registrar: 15`
+
+.. note::
+    This option does not take effect on the generated file.
 
 ------
 
@@ -1070,9 +1286,9 @@ Activates or disables the display of output to the terminal.
 ------
 
 :code:`--push-collection`
-""""""""""""""""""""""""
+"""""""""""""""""""""""""
 
-.. versionadded: 4.0.0
+.. versionadded:: 4.0.0
 
 Activates or disables the push of the test results into the collection API.
 
@@ -1220,7 +1436,7 @@ supposed to store and push the final results.
 
 As an example, this allows us to have 2 branches:
 
-.. code-block:: bash
+.. code-block:: console
 
     --ci-branch processing # (CI branch), for the tests with PyFunceble.
     --ci-distribution-branch master # (CI distribution branch), for the
@@ -1418,18 +1634,52 @@ Global overview
 
 ::
 
-    usage: pyfunceble [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]] [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]] [--adblock] [--complements] [--preload] [--filter CLI_TESTING__FILE_FILTER] [--mining]
-                    [--rpz] [--wildcard] [-c] [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local] [--dns-lookup] [--http] [--netinfo-lookup] [--special-lookup] [--whois-lookup] [--reputation-lookup]
-                    [--reputation] [--syntax] [-t LOOKUP__TIMEOUT] [-ua USER_AGENT__CUSTOM] [-vsc] [--dns DNS__SERVER [DNS__SERVER ...]] [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
-                    [--trust-dns-server] [--inactive-db] [--database-type {csv,mariadb,mysql}] [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST] [-wdb] [-a] [-ex] [--colour]
-                    [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]] [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP] [--no-files]
-                    [--output-location OUTPUT_LOCATION] [--unified-results] [--percentage] [--plain] [--dots] [-q] [-s] [-w CLI_TESTING__MAX_WORKERS] [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
-                    [--ci-branch CLI_TESTING__CI__BRANCH] [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH] [--ci-command CLI_TESTING__CI__COMMAND] [--ci-end-command CLI_TESTING__CI__END_COMMAND]
-                    [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE] [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE] [--help] [-v]
+    usage: pyfunceble [--show-completion {bash,zsh,tcsh}]
+                    [-d DOMAINS [DOMAINS ...]] [-u URLS [URLS ...]]
+                    [-f FILES [FILES ...]] [-uf URL_FILES [URL_FILES ...]]
+                    [--adblock] [--cidr] [--complements] [--preload]
+                    [--filter CLI_TESTING__FILE_FILTER] [--mining] [--rpz]
+                    [--wildcard] [--chancy] [-c]
+                    [--cooldown-time CLI_TESTING__COOLDOWN_TIME] [--local]
+                    [--collection-preferred-origin {frequent,latest,recommended}]
+                    [--collection-lookup] [--collection-lookup-only]
+                    [--dns-lookup] [--dns-lookup-only] [--http] [--http-only]
+                    [--netinfo-lookup] [--netinfo-lookup-only]
+                    [--special-lookup] [--special-lookup-only] [--whois-lookup]
+                    [--whois-lookup-only] [--reputation-lookup]
+                    [--reputation-lookup-only] [--reputation] [--syntax]
+                    [-t LOOKUP__TIMEOUT] [--max-http-retries MAX_HTTP_RETRIES]
+                    [-ua USER_AGENT__CUSTOM] [-vsc]
+                    [--dns DNS__SERVER [DNS__SERVER ...]]
+                    [--dns-protocol {UDP,TCP,HTTPS,TLS}] [--follow-server-order]
+                    [--trust-dns-server] [--dns-delay DNS__DELAY]
+                    [--http-proxy PROXY__GLOBAL__HTTP]
+                    [--https-proxy PROXY__GLOBAL__HTTPS] [--inactive-db]
+                    [--database-type {csv,mariadb,mysql}]
+                    [-dbr CLI_TESTING__DAYS_BETWEEN__DB_RETEST] [-wdb] [-a]
+                    [-ex] [--colour]
+                    [--display-status {all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} [{all,ACTIVE,INACTIVE,VALID,INVALID,MALICIOUS,SANE} ...]]
+                    [--dots] [--hierarchical] [-h] [-ip CLI_TESTING__HOSTS_IP]
+                    [--merge-output] [--no-files]
+                    [--output-location OUTPUT_LOCATION] [--unified-results]
+                    [--percentage] [--registrar]
+                    [--max-registrar CLI_TESTING__DISPLAY_MODE__MAX_REGISTRAR]
+                    [--plain] [-q] [--push-collection] [-s]
+                    [-w CLI_TESTING__MAX_WORKERS]
+                    [--ci-max-minutes CLI_TESTING__CI__MAX_EXEC_MINUTES] [--ci]
+                    [--ci-branch CLI_TESTING__CI__BRANCH]
+                    [--ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH]
+                    [--ci-command CLI_TESTING__CI__COMMAND]
+                    [--ci-end-command CLI_TESTING__CI__END_COMMAND]
+                    [--ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE]
+                    [--ci-end-commit-message CLI_TESTING__CI__END_COMMIT_MESSAGE]
+                    [--help] [-v]
 
     PyFunceble - The tool to check the availability or syntax of domain, IP or URL.
 
-    optional arguments:
+    options:
+        --show-completion {bash,zsh,tcsh}
+                                Show Shell completion script and exit.
         --help                Show this help message and exit.
         -v, --version         Show the version of PyFunceble and exit.
 
@@ -1471,17 +1721,30 @@ Global overview
                                 Configured value: False
         --filter CLI_TESTING__FILE_FILTER
                                 Regex to match in order to test a given line.
-                                Configured value: ''
+                                Configured value: None
         --mining              Activates or disables the mining subsystem.
                                 Configured value: False
         --rpz                 Activates or disables the decoding of RPZ policies
                                 from each given input files.
                                 Configured value: False
         --wildcard            Activates or disables the decoding of wildcards for
-                            each given input files.
-                            Configured value: False
+                                each given input files.
+                                Configured value: False
 
     Test control:
+        --chancy, --ludicrous
+                                Activates a chancy mode that unleashes the safety
+                                workflow in place.
+
+                                WARNING: You shouldn't have to use this unless you feel really lucky
+                                and trust your machine. This mode makes things look 'fast',
+                                but it may produce some unexpected results if N process
+                                simultaneously write the same output file.
+                                This mode makes the graphical CLI output unparsable - either.
+
+                                MAY THE FORCE BE WITH YOU!
+
+                                Configured value: False
         -c, --auto-continue, --continue
                                 Activates or disables the autocontinue subsystem.
                                 Configured value: False
@@ -1493,29 +1756,41 @@ Global overview
                                 in or for a local or private network context.
                                 Configured value: False
         --collection-preferred-origin {frequent,latest,recommended}
-                              Sets the preferred status origin.
-                                Configured value: 'frequent'
+                                Sets the preferred status origin.
+                                Configured value: 'recommended'
         --collection-lookup   Activates or disables the usage of the Collection lookup
                                 whether possible.
                                 Configured value: False
+        --collection-lookup-only
+                                Only perform a Collection lookup.
         --dns-lookup          Activates or disables the usage of the DNS lookup
                                 whether possible.
                                 Configured value: True
+        --dns-lookup-only     Only perform a DNS lookup.
         --http, --http-status-code-lookup
                                 Switch the value of the usage of HTTP code.
                                 Configured value: True
+        --http-only, --http-status-code-lookup-only
+                                Only perform a HTTP Code lookup.
         --netinfo-lookup      Activates or disables the usage of the network
                                 information (or network socket) whether possible.
                                 Configured value: True
+        --netinfo-lookup-only
+                                Only perform a network information (or networket socket) lookup.
         --special-lookup      Activates or disables the usage of our SPECIAL and
                                 extra rules whether possible.
                                 Configured value: True
+        --special-lookup-only
+                                Only perform a SPECIAL lookup.
         --whois-lookup        Activates or disables the usage of the WHOIS record
                                 (or better said the expiration date in it) whether possible.
                                 Configured value: True
+        --whois-lookup-only   Only perform a WHOIS lookup.
         --reputation-lookup   Activates or disables the usage of the reputation
                                 dataset whether possible.
                                 Configured value: False
+        --reputation-lookup-only
+                                Only perform a reputation lookup.
         --reputation          Activates or disables the reputation checker.
                                 Configured value: False
         --syntax              Activates or disables the syntax checker.
@@ -1524,6 +1799,9 @@ Global overview
                                 Sets the default timeout to apply to each lookup
                                 utilities every time it is possible to define a timeout.
                                 Configured value: 5
+        --max-http-retries MAX_HTTP_RETRIES
+                                Sets the maximum number of retries for an HTTP request.
+                                Configured value: 0
         -ua USER_AGENT__CUSTOM, --user-agent USER_AGENT__CUSTOM
                                 Sets the user agent to use.
 
@@ -1541,17 +1819,18 @@ Global overview
                                 it as :port [ip:port].
 
                                 If no port is specified, the default DNS port (53) is used.
-                                Configured value: None
+                                Configured value: <BoxList: ['1.1.1.1']>
         --dns-protocol {UDP,TCP,HTTPS,TLS}
                                 Sets the protocol to use for the DNS queries.
                                 Configured value: 'UDP'
         --follow-server-order
-                                Let us follow or mix the order of usage of the given DNS server(s).
+                                Let us follow or mix the order of usage of the given
+                                or found DNS server(s).
                                 Configured value: True
         --trust-dns-server    Activates or disable the trust mode.
 
-                                When active, when the first read DNS server give us a negative response
-                                - without error - we take it as it it.
+                                When active, when the first read DNS server give us a negative
+                                response - without error - we take it as it it.
                                 Otherwise, if not active, when the first read DNS server give us
                                 a negative response - without error - we still consolidate by
                                 checking all given/found server.
@@ -1563,10 +1842,18 @@ Global overview
 
                                 Configured value: 0.0
 
+    Proxy control:
+        --http-proxy PROXY__GLOBAL__HTTP
+                                Sets the proxy to use when testing subjects over HTTP.
+                                Configured value: None
+        --https-proxy PROXY__GLOBAL__HTTPS
+                                Sets the proxy to use when testing subjects over HTTPS.
+                                Configured value: None
+
     Databases:
         --inactive-db         Activates or disables the usage of a 'database' to
                                 store all 'INACTIVE' and 'INVALID'  subject for continuous retest.
-                                Configured value: True
+                                Configured value: False
         --database-type {csv,mariadb,mysql}
                                 Sets the database engine to use.
                                 You can choose between the following: `csv | mariadb | mysql`
@@ -1594,48 +1881,64 @@ Global overview
 
                                 Multiple space separated statuses can be given.
                                 Configured value: 'all'
+        --dots                Activate or disables the display of dots or other
+                                characters when we skip the test of a subject.
+                                Configured value: False
         --hierarchical        Activates or disables the sorting of the files
                                 content (output) in a hierarchical order.
                                 Configured value: False
         -h, --host            Activates or disables the generation of the
                                 hosts file(s).
-                                Configured value: True
+                                Configured value: False
         -ip CLI_TESTING__HOSTS_IP, --hosts-ip CLI_TESTING__HOSTS_IP
                                 Sets the IP to prefix each lines of the hosts file.
                                 Configured value: '0.0.0.0'
+        --merge-output        Activates or disables the merging of the outputs of all
+                                inputted files inside a single subdirectory as opposed to the
+                                normal behavior.
+                                Configured value: False
         --no-files            Activates or disables the generation of any non-logs
                                 file(s).
                                 Configured value: False
         --output-location OUTPUT_LOCATION
                                 Sets the location where we are supposed to generation
                                 the output directory from.
-                                Configured value: '/home/funilrys/repositories/github/source/PyFunceble'
+                                Configured value: '/home/pyfunceble-dev/repositories/github/source/PyFunceble'
         --unified-results     Activates or disables the generation of the unified
                                 results file instead of the divided ones.
                                 Configured value: False
         --percentage          Activates or disables the display and generation
                                 of the percentage - file - of each status.
                                 Configured value: True
+        --registrar           Activates or disables the display and generation
+                                of the registrar - file - status at the end of a test.
+                                The registrar file contains the top domain registrar found
+                                while testing.
+                                Configured value: True
+        --max-registrar CLI_TESTING__DISPLAY_MODE__MAX_REGISTRAR
+                                Sets the maximal number of registrar to display.
+                                Note: This argument has no effect when the --registrar
+                                argument is not set. This argument only takes effect on
+                                display but not
+                                in the log file
+                                Configured value: 15
         --plain               Activates or disables the generation of the
                                 RAW file(s). What is meant is a list with only a list of
                                 subject (one per line).
-                                Configured value: False
-        --dots                Activate or disables the display of dots or other
-                                characters when we skip the test of a subject.
-                                Configured value: False
+                                Configured value: True
         -q, --quiet           Activates or disables the display of output to the
                                 terminal.
                                 Configured value: False
-        --push-collection     Activates or disables the push of the test results into the
+        --push-collection     Activates or disables the push of test result into the
                                 collection API.
                                 Configured value: False
         -s, --simple          Activates or disables the simple output mode.
-                            Configured value: False
+                                Configured value: False
 
     Multiprocessing:
         -w CLI_TESTING__MAX_WORKERS, --max-workers CLI_TESTING__MAX_WORKERS
                                 Sets the number of maximal workers to use.
-                                If not given, 40 (based on the current machine) will be applied.
+                                If not given, 20 (based on the current machine) will be applied.
                                 Configured value: None
 
     CI / CD:
@@ -1650,7 +1953,7 @@ Global overview
                                 Sets our git working branch. This is the branch
                                 from where we are supposed to store the tests
                                 (excepts the final results).
-                                Configured value: 'dev'
+                                Configured value: 'master'
         --ci-distribution-branch CLI_TESTING__CI__DISTRIBUTION_BRANCH
                                 Sets our git distributions branch. This is the
                                 branch from where we are supposed to store and push
@@ -1659,10 +1962,10 @@ Global overview
         --ci-command CLI_TESTING__CI__COMMAND
                                 Sets the command to execute before each commit
                                 (except the final one).
-                                Configured value: ''
+                                Configured value: None
         --ci-end-command CLI_TESTING__CI__END_COMMAND
                                 Sets the command to execute before the final commit.
-                                Configured value: ''
+                                Configured value: None
         --ci-commit-message CLI_TESTING__CI__COMMIT_MESSAGE
                                 Sets the commit message to apply every time we have
                                 to apply a commit except for the really last one.
@@ -1676,6 +1979,5 @@ Global overview
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
     https://git.io/JkUPS && https://git.io/JkUPF
-
 
 .. _RPZ: https://www.mypdns.org/w/rpz/

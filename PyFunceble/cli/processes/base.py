@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -74,6 +74,16 @@ class ProcessesManagerBase:
         STD_MAX_WORKER: int = 1
 
     WORKER_OBJ: Optional[WorkerBase] = None
+
+    input_datasets: Optional[List] = []
+    """
+    Use this variable if you want to differ the addition in the input queue.
+    """
+
+    output_datasets: Optional[List] = []
+    """
+    Use this variable if you want to differ the addition in the output queue.
+    """
 
     input_queue: Optional[queue.Queue] = None
     """
@@ -471,6 +481,14 @@ class ProcessesManagerBase:
                 pass
 
             self._running_workers.append(worker)
+
+        if self.input_datasets:
+            while self.input_datasets:
+                self.add_to_input_queue(self.input_datasets.pop())
+
+        if self.output_datasets:
+            while self.output_datasets:
+                self.add_to_output_queue(self.output_datasets.pop())
 
         PyFunceble.facility.Logger.info(
             "Started %r workers of %r. Details:\n%r",

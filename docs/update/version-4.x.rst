@@ -25,20 +25,20 @@ there will be:
 
    - :code:`inactive_db.json`
    - :code:`whois_db.json` (Very Very Very bad idea in the long run...)
-  
+
   However you will probably not benefit for by deleting the :code:`whois_db.json`
   as this is the definitive slowest lookup process in the test flow, do to the
   limitation in available API call you can do to :code:`WHOIS` servers before
   getting banned. Therefore we **CAN NOT** recommend deleting this file, rather
   than waiting for the conversion to finish.
-  
+
 - The output directory structure have been altered to work with the ability to
   test more than one source at the time.
-  Prior to version :code:`4.0.0.ax` the output hierarchy looked like 
+  Prior to version :code:`4.0.0.ax` the output hierarchy looked like
   :code:`output/domains/ACTIVE/list`.
   In Pyfunceble version :code:`>=4.x` this have been altered to include the source
   name and append to the folder structure.
-  From this version it will therefor looks like 
+  From this version it will therefor looks like
   :code:`output/{{ input_source_name }}/domains/ACTIVE list`.
 
 
@@ -47,7 +47,7 @@ there will be:
    As consequence of the time consuming conversion, we will advise you
    to run a simple pyfunceble command like:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       pyfunceble -d mypdns.org
 

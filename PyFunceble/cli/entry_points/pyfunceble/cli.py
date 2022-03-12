@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -315,6 +315,27 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
     return [
         (
             [
+                "--chancy",
+                "--ludicrous",
+            ],
+            {
+                "dest": "cli_testing.chancy_tester",
+                "action": "store_true",
+                "help": "Activates a chancy mode that unleashes the safety\n"
+                "workflow in place. \n\n"
+                f"{colorama.Fore.RED}WARNING: You shouldn't have to use this "
+                "unless you feel really lucky\n"
+                "and trust your machine. This mode makes things look 'fast',\n"
+                "but it may produce some unexpected results if N process\n"
+                "simultaneously write the same output file.\n"
+                "This mode makes the graphical CLI output unparsable - either.\n"
+                f"\n{colorama.Fore.GREEN}MAY THE FORCE BE WITH YOU!"
+                f"\n{colorama.Style.RESET_ALL}%s"
+                % get_configured_value("cli_testing.chancy_tester"),
+            },
+        ),
+        (
+            [
                 "-c",
                 "--auto-continue",
                 "--continue",
@@ -369,6 +390,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--collection-lookup-only"],
+            {
+                "dest": "self_contained.lookup.collection",
+                "action": "store_true",
+                "help": "Only perform a Collection lookup.",
+            },
+        ),
+        (
             ["--dns-lookup"],
             {
                 "dest": "lookup.dns",
@@ -378,12 +407,28 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--dns-lookup-only"],
+            {
+                "dest": "self_contained.lookup.dns",
+                "action": "store_true",
+                "help": "Only perform a DNS lookup.",
+            },
+        ),
+        (
             ["--http", "--http-status-code-lookup"],
             {
                 "dest": "lookup.http_status_code",
                 "action": "store_true",
                 "help": "Switch the value of the usage of HTTP code. %s"
                 % get_configured_value("lookup.http_status_code"),
+            },
+        ),
+        (
+            ["--http-only", "--http-status-code-lookup-only"],
+            {
+                "dest": "self_contained.lookup.http_status_code",
+                "action": "store_true",
+                "help": "Only perform a HTTP Code lookup.",
             },
         ),
         (
@@ -399,6 +444,15 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--netinfo-lookup-only"],
+            {
+                "dest": "self_contained.lookup.netinfo",
+                "action": "store_true",
+                "help": "Only perform a network information (or networket "
+                "socket) lookup.",
+            },
+        ),
+        (
             [
                 "--special-lookup",
             ],
@@ -408,6 +462,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the usage of our SPECIAL and\n"
                 "extra rules whether possible. %s"
                 % get_configured_value("lookup.special"),
+            },
+        ),
+        (
+            ["--special-lookup-only"],
+            {
+                "dest": "self_contained.lookup.special",
+                "action": "store_true",
+                "help": "Only perform a SPECIAL lookup.",
             },
         ),
         (
@@ -423,6 +485,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
             },
         ),
         (
+            ["--whois-lookup-only"],
+            {
+                "dest": "self_contained.lookup.whois",
+                "action": "store_true",
+                "help": "Only perform a WHOIS lookup.",
+            },
+        ),
+        (
             [
                 "--reputation-lookup",
             ],
@@ -432,6 +502,14 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the usage of the reputation\n"
                 "dataset whether possible. %s"
                 % get_configured_value("lookup.reputation"),
+            },
+        ),
+        (
+            ["--reputation-lookup-only"],
+            {
+                "dest": "self_contained.lookup.reputation",
+                "action": "store_true",
+                "help": "Only perform a reputation lookup.",
             },
         ),
         (
@@ -468,6 +546,18 @@ def get_test_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Sets the default timeout to apply to each lookup\n"
                 "utilities every time it is possible to define a timeout. %s"
                 % get_configured_value("lookup.timeout"),
+            },
+        ),
+        (
+            [
+                "--max-http-retries",
+            ],
+            {
+                "dest": "max_http_retries",
+                "type": int,
+                "default": 3,
+                "help": "Sets the maximum number of retries for an HTTP "
+                "request. %s" % get_configured_value("max_http_retries"),
             },
         ),
         (
@@ -565,6 +655,37 @@ def get_dns_control_group_data() -> List[Tuple[List[str], dict]]:
                 "type": float,
                 "help": "Sets the delay (in seconds) to apply between each DNS\n "
                 "queries.\n %s" % get_configured_value("dns.delay"),
+            },
+        ),
+    ]
+
+
+def get_proxy_control_group_data() -> List[Tuple[List[str], dict]]:
+    """
+    Provides the argument of the proxy control group.
+    """
+
+    return [
+        (
+            [
+                "--http-proxy",
+            ],
+            {
+                "dest": "proxy.global.http",
+                "type": str,
+                "help": "Sets the proxy to use when testing subjects over HTTP. %s"
+                % get_configured_value("proxy.global.http"),
+            },
+        ),
+        (
+            [
+                "--https-proxy",
+            ],
+            {
+                "dest": "proxy.global.https",
+                "type": str,
+                "help": "Sets the proxy to use when testing subjects over HTTPS. %s"
+                % get_configured_value("proxy.global.https"),
             },
         ),
     ]
@@ -804,6 +925,36 @@ def get_output_control_group_data() -> List[Tuple[List[str], dict]]:
                 "help": "Activates or disables the display and generation\n"
                 "of the percentage - file - of each status. %s"
                 % get_configured_value("cli_testing.display_mode.percentage"),
+            },
+        ),
+        (
+            [
+                "--registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.registrar",
+                "action": "store_true",
+                "help": "Activates or disables the display and generation\n"
+                "of the registrar - file - status at the end of a test.\n"
+                "The registrar file contains the top domain registrar found\n"
+                "while testing. %s"
+                % get_configured_value("cli_testing.display_mode.registrar"),
+            },
+        ),
+        (
+            [
+                "--max-registrar",
+            ],
+            {
+                "dest": "cli_testing.display_mode.max_registrar",
+                "type": int,
+                "default": 15,
+                "help": "Sets the maximal number of registrar to display.\n"
+                "Note: This argument has no effect when the --registrar\n"
+                "argument is not set. This argument only takes effect on\n"
+                "display but not\n"
+                "in the log file %s"
+                % get_configured_value("cli_testing.display_mode.max_registrar"),
             },
         ),
         (
@@ -1121,6 +1272,7 @@ def tool() -> None:
     )
     test_control_group = parser.add_argument_group("Test control")
     dns_control_group = parser.add_argument_group("DNS control")
+    proxy_control_group = parser.add_argument_group("Proxy control")
     database_control_group = parser.add_argument_group("Databases")
     output_control_group = parser.add_argument_group("Output control")
     multiprocessing_group = parser.add_argument_group("Multiprocessing")
@@ -1131,6 +1283,7 @@ def tool() -> None:
         get_filtering_group_data,
         get_test_control_group_data,
         get_dns_control_group_data,
+        get_proxy_control_group_data,
         get_database_control_group_data,
         get_output_control_group_data,
         get_multiprocessing_group_data,

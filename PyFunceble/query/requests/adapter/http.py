@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -84,12 +84,19 @@ class RequestHTTPAdapter(RequestAdapterBase):
         :param cert: (optional) Any user-provided SSL certificate to be trusted.
         :param proxies: (optional) The proxies dictionary to apply to the request.
         :rtype: requests.Response
+
+        .. versionchanged:: 4.1.0b16
+            When a proxy is given, it is acceptable to have an unresolvable
+            subject. The proxy should handle the situation and give us back a
+            proper status or error.
         """
 
         kwargs["timeout"] = self.timeout
 
         parsed_url = urllib.parse.urlparse(request.url)
         hostname_ip = self.resolve(parsed_url.hostname)
+
+        kwargs["proxies"] = self.fetch_proxy_from_pattern(parsed_url.hostname)
 
         PyFunceble.facility.Logger.debug("Parsed URL: %r", parsed_url)
         PyFunceble.facility.Logger.debug("Resolved IP: %r", hostname_ip)
@@ -98,11 +105,12 @@ class RequestHTTPAdapter(RequestAdapterBase):
             "Pool Manager: %r", self.poolmanager.connection_pool_kw
         )
 
-        if hostname_ip:
-            request.url = request.url.replace(
-                f"{parsed_url.scheme}://{parsed_url.hostname}",
-                f"{parsed_url.scheme}://{hostname_ip}",
-            )
+        if hostname_ip or kwargs["proxies"]:
+            if hostname_ip:
+                request.url = request.url.replace(
+                    f"{parsed_url.scheme}://{parsed_url.hostname}",
+                    f"{parsed_url.scheme}://{hostname_ip}",
+                )
 
             # Ensure that the Hosts header is present. Otherwise, connection might
             # not work.
@@ -117,7 +125,10 @@ class RequestHTTPAdapter(RequestAdapterBase):
 
             return self.fake_response()
 
+        # raise Exception(hostname_ip, parsed_url, parsed_url.hostname, kwargs)
         response = super().send(request, **kwargs)
-        response.url = response.url.replace(hostname_ip, parsed_url.hostname)
+
+        if hostname_ip:
+            response.url = response.url.replace(hostname_ip, parsed_url.hostname)
 
         return response

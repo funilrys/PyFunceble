@@ -97,7 +97,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -209,7 +209,7 @@ def get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setuptools.setup(
-        name="PyFunceble",
+        name="PyFunceble-dev",
         version=get_version(),
         python_requires=">=3.6, <4",
         install_requires=get_requirements(mode="standard"),

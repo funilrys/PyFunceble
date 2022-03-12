@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.query.dns.query_tool import DNSQueryTool
+from PyFunceble.query.whois.query_tool import WhoisQueryTool
 
 
 class TestAvailabilityCheckerBase(unittest.TestCase):
@@ -857,7 +858,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         given = "INVALID"
         self.checker.status.status = "INACTIVE"
 
-        expected = True
+        expected = False
         actual = self.checker.should_we_continue_test(given)
 
         self.assertEqual(expected, actual)
@@ -984,7 +985,10 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-    def test_try_to_query_status_from_whois(self) -> None:
+    @unittest.mock.patch.object(
+        WhoisQueryTool, "expiration_date", new_callable=unittest.mock.PropertyMock
+    )
+    def test_try_to_query_status_from_whois(self, expiration_date_mock) -> None:
         """
         Tests the method which tries to define the status from the WHOIS record.
         """
@@ -994,7 +998,8 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         self.checker.subject = "example.org"
 
         # Let's test the case that no expiration date is found.
-        self.checker.whois_query_tool.get_expiration_date = lambda: None
+        expiration_date_mock.return_value = None
+        # self.checker.whois_query_tool.get_expiration_date = lambda: None
         self.checker.whois_query_tool.lookup_record.record = None
 
         self.checker.try_to_query_status_from_whois()
@@ -1010,7 +1015,7 @@ class TestAvailabilityCheckerBase(unittest.TestCase):
         self.assertEqual(expected_whois_record, actual_whois_record)
 
         # Let's test the case that an expiration date is actually given.
-        self.checker.whois_query_tool.get_expiration_date = lambda: "10-nov-1971"
+        expiration_date_mock.return_value = "10-nov-1971"
         self.checker.whois_query_tool.lookup_record.record = "Hello, World!"
 
         self.checker.try_to_query_status_from_whois()

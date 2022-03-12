@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -80,11 +80,12 @@ class PrinterBase:
         "hours": 2,
         "minutes": 2,
         "seconds": 6,
+        "registrar": 30,
     }
 
     TEMPLATES: Dict[str, string.Template] = {
         "all": string.Template(
-            "$idna_subject $status $status_source $expiration_date "
+            "$idna_subject $status $status_source $expiration_date $registrar "
             "$http_status_code $checker_type"
         ),
         "less": string.Template("$idna_subject $status $status_source"),
@@ -95,6 +96,7 @@ class PrinterBase:
         "execution_time": string.Template(
             "\nExecution Time: $days:$hours:$minutes:$seconds\n"
         ),
+        "registrar": string.Template("$registrar $percentage $amount"),
     }
 
     HEADERS: Dict[str, str] = {
@@ -111,6 +113,7 @@ class PrinterBase:
         "hours": "Hours",
         "minutes": "Minutes",
         "seconds": "Seconds",
+        "registrar": "Registrar",
     }
 
     _template_to_use: Optional[str] = None

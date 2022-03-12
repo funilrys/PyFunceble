@@ -359,13 +359,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          curl -LO "https://repo.archlinuxcn.org/x86_64/${patched_glibc}" && \
-          bsdtar -C / -xvf "$patched_glibc" && \
-          rm ${patched_glibc} && \
           pacman -Syu --needed --noconfirm && \
-          pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools
-        env:
-          patched_glibc: glibc-linux4-2.33-4-x86_64.pkg.tar.zst
+          pacman -S --needed --noconfirm git binutils pacman-contrib openssh rsync python python-setuptools jq
 
       - uses: actions/checkout@v2
         name: Clone repository
@@ -379,6 +374,15 @@ jobs:
           buildDir="/tmp/build"
 
           latest=$(python3 setup.py --version)
+
+          if [[ $(python3 setup.py --name) == "PyFunceble-dev" ]]
+          then
+            licenseURL="https://raw.githubusercontent.com/funilrys/PyFunceble/dev/LICENSE"
+            newURL=$(curl -s https://pypi.org/pypi/PyFunceble-dev/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
+          else
+            licenseURL="https://raw.githubusercontent.com/funilrys/PyFunceble/master/LICENSE"
+            newURL=$(curl -s https://pypi.org/pypi/PyFunceble/json | jq -r ".releases.\"${latest}\"[] | select(.filename | strings | test(\".tar\")).url")
+          fi
 
           git config --global user.name ${{ github.actor }}
           git config --global user.email ${{ secrets.GIT_EMAIL }}
@@ -398,6 +402,7 @@ jobs:
 
           sed "/^pkgver=/s/.*/pkgver=${latest}/" -i PKGBUILD
           sed "/^pkgrel=/s/.*/pkgrel=1/" -i PKGBUILD
+          sed "s,^source=(.*),source=('${newURL}' '${licenseURL}')," -i PKGBUILD
 
           su makepkg -c "updpkgsums"
           su makepkg -c "makepkg --printsrcinfo" > .SRCINFO

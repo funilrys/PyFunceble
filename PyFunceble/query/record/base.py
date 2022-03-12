@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ License:
 """
 
 import dataclasses
+import json
 from typing import Any
 
 
@@ -73,3 +74,18 @@ class RecordBase:
             for x, y in self.__dict__.items()
             if not x.startswith("__")
         }
+
+    def to_json(self, *, pretty_print: bool = False) -> str:
+        """
+        Provides the JSON representation of the current object.
+
+        :param pretty_print:
+            If True, the JSON will be formatted.
+        """
+
+        return json.dumps(
+            self.to_dict(),
+            indent=4 if pretty_print else None,
+            ensure_ascii=False,
+            sort_keys=True if pretty_print else None,
+        )

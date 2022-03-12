@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -513,12 +513,23 @@ class AvailabilityCheckerBase(CheckerBase):
     def should_we_continue_test(self, status_post_syntax_checker: str) -> bool:
         """
         Checks if we are allowed to continue a standard testing.
+
+        Rules:
+            1. No status available yet. Continue to next test method.
+            2. Status is/still INVALID. Continue to next test method.
+            3. Above are False. Not allowed to continue to next test method.
         """
 
-        return bool(
-            not self.status.status
-            or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
-        )
+        if not self.status.status:
+            return True
+
+        if (
+            status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
+            and self.status.status == PyFunceble.storage.STATUS.invalid
+        ):
+            return True
+
+        return False
 
     def guess_and_set_use_extra_rules(self) -> "AvailabilityCheckerBase":
         """
@@ -663,6 +674,9 @@ class AvailabilityCheckerBase(CheckerBase):
     def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:
         """
         Tries to query the DNS record(s) of the given subject.
+
+        .. versionchanged:: 4.1.0b8.dev
+           Lookup order relative to actual subject.
         """
 
         PyFunceble.facility.Logger.info(
@@ -672,14 +686,16 @@ class AvailabilityCheckerBase(CheckerBase):
 
         result = {}
 
-        if self.status.subdomain_syntax:
+        if self.status.idna_subject != self.dns_query_tool.subject:
+            self.domain_syntax_checker.set_subject(self.dns_query_tool.subject)
+            self.ip_syntax_checker.set_subject(self.dns_query_tool.subject)
+
+        if self.domain_syntax_checker.is_valid_subdomain():
             lookup_order = ["NS", "A", "AAAA", "CNAME", "DNAME"]
-        elif self.status.domain_syntax:
-            lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
-        elif self.status.ip_syntax:
+        elif self.ip_syntax_checker.is_valid():
             lookup_order = ["PTR"]
         else:
-            lookup_order = []
+            lookup_order = ["NS", "CNAME", "A", "AAAA", "DNAME"]
 
         if lookup_order:
             for record_type in lookup_order:
@@ -691,6 +707,11 @@ class AvailabilityCheckerBase(CheckerBase):
                     result[record_type] = local_result
 
                     break
+
+        if self.status.idna_subject != self.dns_query_tool.subject:
+            # Switch back subject because we don't want to break subsequential calls.
+            self.domain_syntax_checker.set_subject(self.status.idna_subject)
+            self.ip_syntax_checker.set_subject(self.status.idna_subject)
 
         PyFunceble.facility.Logger.debug("DNS Record:\n%r", result)
 
@@ -741,9 +762,8 @@ class AvailabilityCheckerBase(CheckerBase):
             if not known_record:
                 # We assume that expired dataset are never saved into the
                 # dataset.
-                self.status.expiration_date = (
-                    self.whois_query_tool.get_expiration_date()
-                )
+                self.status.expiration_date = self.whois_query_tool.expiration_date
+                self.status.registrar = self.whois_query_tool.lookup_record.registrar
                 self.status.whois_record = self.whois_query_tool.lookup_record.record
 
                 if (
@@ -766,9 +786,11 @@ class AvailabilityCheckerBase(CheckerBase):
                     )
             else:
                 self.status.expiration_date = known_record["expiration_date"]
+                self.status.registrar = known_record["registrar"]
                 self.status.whois_record = None
         else:
-            self.status.expiration_date = self.whois_query_tool.get_expiration_date()
+            self.status.expiration_date = self.whois_query_tool.expiration_date
+            self.status.registrar = self.whois_query_tool.lookup_record.registrar
             self.status.whois_record = self.whois_query_tool.lookup_record.record
 
         if self.status.expiration_date:
@@ -790,11 +812,14 @@ class AvailabilityCheckerBase(CheckerBase):
     def try_to_query_status_from_dns(self) -> "AvailabilityCheckerBase":
         """
         Tries to query the status from the DNS lookup.
+
+        .. versionchanged:: 4.1.0b7.dev
+           Logging return the correct subject.
         """
 
         PyFunceble.facility.Logger.info(
             "Started to try to query the status of %r from: DNS Lookup",
-            self.status.idna_subject,
+            self.dns_query_tool.subject,
         )
 
         lookup_result = self.query_dns_record()
@@ -806,12 +831,12 @@ class AvailabilityCheckerBase(CheckerBase):
 
             PyFunceble.facility.Logger.info(
                 "Could define the status of %r from: DNS Lookup",
-                self.status.idna_subject,
+                self.dns_query_tool.subject,
             )
 
         PyFunceble.facility.Logger.info(
             "Finished to try to query the status of %r from: DNS Lookup",
-            self.status.idna_subject,
+            self.dns_query_tool.subject,
         )
 
         return self

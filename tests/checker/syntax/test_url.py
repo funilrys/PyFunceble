@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -76,6 +76,29 @@ class TestURLSyntaxChecker(unittest.TestCase):
 
         for subject in pyf_test_dataset.VALID_DOMAINS:
             url_checker.subject = f"https://{subject}/?is_admin=true"
+
+            actual = url_checker.is_valid()
+
+            self.assertEqual(expected, actual, subject)
+
+    def test_is_valid_in_url_context(self) -> None:
+        """
+        Tests the syntax checker against some special use cases that are VALID
+        in URL context.
+        """
+
+        url_checker = URLSyntaxChecker()
+
+        expected = True
+        given = [
+            "https://example.org:8080",
+            "https://github.com:9999",
+            "http://example.org:8099/hello/world",
+            "http://example.org:8939?hello=world",
+        ]
+
+        for subject in given:
+            url_checker.subject = subject
 
             actual = url_checker.is_valid()
 
@@ -154,6 +177,31 @@ class TestURLSyntaxChecker(unittest.TestCase):
             actual = url_checker.set_subject(subject).is_valid()
 
             self.assertEqual(expected, actual, subject)
+
+    def test_get_hostname_from_url(self) -> None:
+        """
+        Tests the method that let us get the hostname (or url base if you
+        prefer) of a given URL.
+
+        .. versionadded:: 4.1.0b7.
+        """
+
+        url_checker = URLSyntaxChecker()
+
+        given2expected = {
+            "https://example.org/hello-world": "example.org",
+            "example.org": None,
+            "://example.org/hello-world": None,
+            "https://example.org:8888/hello-world": "example.org",
+            "example.org:8080": None,
+            "http:///hello-world": None,
+            "http://10.3.0.1/hello-world": "10.3.0.1",
+        }
+
+        for given, expected in given2expected.items():
+            actual = url_checker.get_hostname_from_url(given)
+
+            self.assertEqual(expected, actual, given)
 
 
 if __name__ == "__main__":

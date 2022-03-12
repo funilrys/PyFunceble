@@ -140,6 +140,19 @@ class TestNameserver(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_split_nameserver_from_port_not_correct(self) -> None:
+        """
+        Tests the method which let us split the nameserver from the port for the
+        case that the port is incorrectly given.
+        """
+
+        given = "10.0.0.1:ed"
+
+        expected = ("10.0.0.1", 53)
+        actual = self.nameserver_provider.split_nameserver_from_port(given)
+
+        self.assertEqual(expected, actual)
+
     def test_split_nameserver_from_port_ipv6_no_port(self) -> None:
         """
         Tests the method which let us split the nameserver from the port for the
@@ -161,7 +174,36 @@ class TestNameserver(unittest.TestCase):
 
         given = f"{pyf_test_dataset.VALID_IPV6[1]}:55"
 
+        expected = (f"{pyf_test_dataset.VALID_IPV6[1]}:55", 53)
+        actual = self.nameserver_provider.split_nameserver_from_port(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_split_nameserver_from_port_ipv6_convention(self) -> None:
+        """
+        Tests the method which let us split the nameserver from the port.
+
+        In this case we are trying to follow the :code:`[ip]:port` convention.
+        """
+
+        given = f"[{pyf_test_dataset.VALID_IPV6[1]}]:55"
+
         expected = (pyf_test_dataset.VALID_IPV6[1], 55)
+        actual = self.nameserver_provider.split_nameserver_from_port(given)
+
+        self.assertEqual(expected, actual)
+
+    def test_split_nameserver_from_port_ipv6_convention_port_not_digit(self) -> None:
+        """
+        Tests the method which let us split the nameserver from the port.
+
+        In this case we are trying to follow the :code:`[ip]:port` convention
+        but the port is not a correct one..
+        """
+
+        given = f"[{pyf_test_dataset.VALID_IPV6[1]}]:ef"
+
+        expected = (pyf_test_dataset.VALID_IPV6[1], 53)
         actual = self.nameserver_provider.split_nameserver_from_port(given)
 
         self.assertEqual(expected, actual)

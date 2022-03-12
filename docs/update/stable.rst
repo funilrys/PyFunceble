@@ -8,7 +8,7 @@ Using :code:`pip`
 From PyPi
 """""""""
 
-.. code-block:: bash
+.. code-block:: console
 
    $ pip3 install --user --upgrade PyFunceble
 
@@ -24,7 +24,7 @@ From PyPi
 From GitHub
 """""""""""
 
-.. code-block:: bash
+.. code-block:: console
 
    $ pip3 install --user --upgrade git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
 
@@ -43,7 +43,7 @@ Using the AUR (for Arch Linux users)
 With makepkg
 """"""""""""
 
-.. code-block:: bash
+.. code-block:: console
 
    $ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=python-pyfunceble -o PKGBUILD
    $ makepkg
@@ -58,7 +58,7 @@ With your favorite AUR helper
    For more information about your current (or any other) AUR helper please
    report to `the ArchWiki page`_.
 
-.. code-block:: bash
+.. code-block:: console
 
    $ yourFavoriteAurHelper -Syu python-pyfunceble
 
@@ -67,7 +67,7 @@ Using docker (hub)
 
 The image description can be found at https://hub.docker.com/r/pyfunceble/pyfunceble
 
-.. code-block:: bash
+.. code-block:: console
 
    $ docker pull pyfunceble/pyfunceble
 
@@ -77,7 +77,7 @@ Pure Python method
 
 Execute the following and enjoy PyFunceble!
 
-.. code-block:: bash
+.. code-block:: console
 
    $ cd PyFunceble
    $ git checkout master && git fetch origin && git merge origin/master

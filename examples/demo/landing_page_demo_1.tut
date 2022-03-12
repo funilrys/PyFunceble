@@ -1,0 +1,14 @@
+#!/usr/bin/env tuterm
+
+source config.sh.in
+
+run() {
+    c PyFunceble --version
+    c PyFunceble -a -d example.org
+    c PyFunceble -a -d example.org --whois-lookup
+    c PyFunceble -a -d exampleee.com
+    c PyFunceble -a -d microsoft_google.com
+    c exit
+}
+
+# vim: filetype=sh

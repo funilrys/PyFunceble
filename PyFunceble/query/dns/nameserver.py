@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -100,12 +100,22 @@ class Nameservers:
         """
 
         if ":" in nameserver:
+            if nameserver.count(":") > 1:
+                if "]" not in nameserver:
+                    return nameserver, default_port
+
+                nameserver, port = nameserver.split("]:", 1)
+
+                if port.isdigit():
+                    return nameserver[1:], int(port)
+                return nameserver[1:], default_port
+
             splitted = nameserver.rsplit(":")
 
             if splitted[-1].isdigit():
                 return ":".join(splitted[:-1]), int(splitted[-1])
 
-            return ":".join(splitted), default_port
+            return ":".join(splitted[:-1]), default_port
         return nameserver, default_port
 
     @classmethod

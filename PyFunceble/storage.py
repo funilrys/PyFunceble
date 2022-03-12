@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.0.2. (Blue Duckling: Grandiflora)"
+PROJECT_VERSION: str = "4.1.0. (Blue Duckling: Ixora)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -126,6 +126,7 @@ STATUS: Optional[Box] = Box(
 HTTP_CODES: Optional[Box] = Box({})
 COLLECTION: Optional[Box] = Box({})
 LINKS: Optional[Box] = Box({})
+PROXY: Optional[Box] = Box({})
 
 
 STD_HTTP_CODES: Optional[Box] = Box(

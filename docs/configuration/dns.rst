@@ -17,7 +17,7 @@
 .. note::
     When a list is given the following format is expected.
 
-    ::
+    .. code-block:: yaml
 
         dns_server:
           - dns1.example.org
@@ -28,7 +28,7 @@
 
     As example:
 
-    ::
+    .. code-block:: yaml
 
         - 127.0.1.53:5353
 

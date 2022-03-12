@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ class InactiveDatasetDeleteSourceColumnMigrator(CSVFileMigratorBase):
         "tested_at",
     ]
 
+    TO_ADD: List[str] = []
     TO_DELETE: List[str] = ["source"]
 
     def __post_init__(self) -> None:

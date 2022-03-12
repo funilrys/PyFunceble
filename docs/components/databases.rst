@@ -55,7 +55,7 @@ How to use the :code:`mysql` or :code:`mariadb` format?
 
 3. Complete it with the following content (example)
 
-    ::
+    .. code-block:: console
 
         PYFUNCEBLE_DB_CHARSET=utf8mb4
         PYFUNCEBLE_DB_HOST=localhost
@@ -81,7 +81,7 @@ How to use the :code:`mysql` or :code:`mariadb` format?
         3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on
         local runs.
 
-            ::
+            .. code-block:: console
 
                 PYFUNCEBLE_DB_CHARSET=utf8mb4
                 PYFUNCEBLE_DB_HOST=/var/run/mysqld/mysqld.sock

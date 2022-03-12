@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,3 +64,4 @@ class WhoisRecord(SchemaBase):
     idna_subject = Column(Text, nullable=True, unique=False)
     expiration_date = Column(Text, nullable=False)
     epoch = Column(Integer, nullable=False)
+    registrar = Column(Text, nullable=True)

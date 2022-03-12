@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,8 +51,10 @@ License:
 """
 
 import functools
+from datetime import datetime
 from typing import Any, Generator, Optional
 
+import sqlalchemy.exc
 from sqlalchemy.orm import Session
 
 import PyFunceble.cli.factory
@@ -296,8 +298,22 @@ class MariaDBDatasetBase(DBDatasetBase):
         if isinstance(row, type(self.ORM_OBJ)):
             row = row.to_dict()
 
-        self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)
-        self.db_session.commit()
+        try:
+            self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)
+            self.db_session.commit()
+        except sqlalchemy.exc.DataError as exception:
+            if "expiration_date" not in row and "epoch" not in row:
+                raise exception
+
+            y2k38_limit = datetime(2037, 12, 31, 0, 0)
+            new_date = datetime.fromtimestamp(float(row["epoch"]))
+            new_date -= new_date - y2k38_limit
+
+            row["epoch"] = str(new_date.timestamp())
+            row["expiration_date"] = new_date.strftime("%d-%b-%Y")
+
+            self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)
+            self.db_session.commit()
 
         PyFunceble.facility.Logger.debug("Added row:\n%r", row)
         PyFunceble.facility.Logger.info("Finished to add row.")

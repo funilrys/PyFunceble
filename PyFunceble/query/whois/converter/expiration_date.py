@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,42 +64,37 @@ class ExpirationDateExtractor(ConverterBase):
     """
 
     PATTERNS: List[str] = [
-        r"expire:(.*)",
-        r"expire on:(.*)",
-        r"Expiry Date:(.*)",
-        r"free-date(.*)",
-        r"expires:(.*)",
-        r"Expiration date:(.*)",
-        r"Expiry date:(.*)",
-        r"Expire Date:(.*)",
-        r"renewal date:(.*)",
-        r"Expires:(.*)",
-        r"validity:(.*)",
-        r"Expiration Date             :(.*)",
-        r"Expiry :(.*)",
-        r"expires at:(.*)",
+        r"\[expires\s+on\](.*)",
+        r"data\s+de\s+expiração\s+\/\s+Expiration\s+Date\s+\(dd\/mm\/yyyy\):(.*)",
+        r"date\s+d'expiration:(.*)",
         r"domain_datebilleduntil:(.*)",
-        r"Data de expiração \/ Expiration Date \(dd\/mm\/yyyy\):(.*)",
-        r"Fecha de expiración \(Expiration date\):(.*)",
-        r"\[Expires on\](.*)",
-        r"Record expires on(.*)(\(YYYY-MM-DD\))",
-        r"status:      OK-UNTIL(.*)",
-        r"renewal:(.*)",
-        r"expires............:(.*)",
+        r"Exp\s+date:(.*)",
+        r"expiration:\.+(.*)",
+        r"expiration\s+date:(.*)",
+        r"expiration\s+date\s+:(.*)",
+        r"expiration\s+time:(.*)",
         r"expire-date:(.*)",
-        r"Exp date:(.*)",
-        r"Valid-date(.*)",
-        r"Expires On:(.*)",
-        r"Fecha de vencimiento:(.*)",
-        r"Expiration:.........(.*)",
-        r"Fecha de Vencimiento:(.*)",
-        r"Registry Expiry Date:(.*)",
-        r"Expires on..............:(.*)",
-        r"Expiration Time:(.*)",
-        r"Expiration Date:(.*)",
-        r"Expired:(.*)",
-        r"Date d'expiration:(.*)",
-        r"expiration date:(.*)",
+        r"expire:(.*)",
+        r"expire\s+date:(.*)",
+        r"expire\s+on:(.*)",
+        r"expired:(.*)",
+        r"expires:(.*)",
+        r"expires\.+:(.*)",
+        r"expires\s+at:(.*)",
+        r"expires\s+on:(.*)",
+        r"expires\s+on\.+:(.*)",
+        r"expiry\s+:(.*)",
+        r"expiry\s+date:(.*)",
+        r"fecha\s+de\s+expiración\s+\(expiration\s+date\):(.*)",
+        r"fecha\s+de\s+vencimiento:(.*)",
+        r"free-date(.*)",
+        r"record\s+expires\s+on(.*)(\(YYYY-MM-DD\))",
+        r"registry\s+expiry\s+date:(.*)",
+        r"renewal:(.*)",
+        r"renewal\s+date:(.*)",
+        r"status:\s+OK-UNTIL(.*)",
+        r"valid-date(.*)",
+        r"validity:(.*)",
     ]
     """
     Provides all our known patterns.
@@ -268,7 +263,7 @@ class ExpirationDateExtractor(ConverterBase):
         """
 
         for regex in self.PATTERNS:
-            expiration_date_line = RegexHelper(regex).match(
+            expiration_date_line = RegexHelper(r"(?i)" + regex).match(
                 self.data_to_convert, return_match=True, rematch=True, group=0
             )
 

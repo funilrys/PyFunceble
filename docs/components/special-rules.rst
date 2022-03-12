@@ -36,6 +36,24 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.24.eu`
+"""""""""""""""
+
+Any subjects matching the given pattern and the :code:`503` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
+:code:`*.altervista.org`
+""""""""""""""""""""""""
+
+.. versionadded:: 4.1.0b13
+
+Any subjects matching the given pattern and the :code:`403` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.angelfire.com`
 """""""""""""""""""""""
 
@@ -60,16 +78,24 @@ are supplied as :code:`INACTIVE`.
 :code:`*.canalblog.com`
 """""""""""""""""""""""
 
-Any subjects matching the given pattern and the :code:`404` status code are
-supplied as :code:`INACTIVE`.
+Any subjects matching the given pattern and the :code:`404` status code
+are supplied as :code:`INACTIVE`.
+
+------
+
+:code:`*.dr.ag`
+"""""""""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`503` status code
+are supplied as :code:`INACTIVE`.
 
 ------
 
 :code:`*.fc2.com`
 """""""""""""""""
 
-Any subjects matching the given pattern and the :code:`error.fc2.com` subdomain
-is into the `Location` headers are supplied as :code:`INACTIVE`.
+Any subjects matching the given pattern and the :code:`error.fc2.com`
+subdomain is into the `Location` headers are supplied as :code:`INACTIVE`.
 
 ------
 
@@ -77,6 +103,14 @@ is into the `Location` headers are supplied as :code:`INACTIVE`.
 """""""""""""""""""
 
 Any subjects matching the given pattern and the :code:`404` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
+:code:`*.godaddysites.com`
+""""""""""""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`404` status codes are
 supplied as :code:`INACTIVE`.
 
 ------
@@ -106,6 +140,14 @@ supplied as :code:`INACTIVE`.
 ------
 
 :code:`*.tumblr.com`
+""""""""""""""""""""
+
+Any subjects matching the given pattern and the :code:`404` status code are
+supplied as :code:`INACTIVE`.
+
+------
+
+:code:`*.weebly.com`
 """"""""""""""""""""
 
 Any subjects matching the given pattern and the :code:`404` status code are

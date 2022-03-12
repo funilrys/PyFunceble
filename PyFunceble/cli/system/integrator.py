@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -123,6 +123,7 @@ class SystemIntegrator(SystemBase):
         flatten_config = dict_helper.flatten()
 
         to_update = {}
+        reserved_lookup_mode = []
 
         for key, value in vars(self.args).items():
             if value in (False, None):
@@ -136,6 +137,18 @@ class SystemIntegrator(SystemBase):
                     to_update[key] = not flatten_config[key]
                 else:
                     to_update[key] = value
+            elif key.startswith("self_contained") and "lookup" in key:
+                reserved_lookup_mode.append(key[key.rfind(".") + 1 :])
+
+        if reserved_lookup_mode:
+            for lookup_key in PyFunceble.storage.CONFIGURATION.lookup.keys():
+                if lookup_key in {"timeout"}:
+                    continue
+
+                if lookup_key not in reserved_lookup_mode:
+                    to_update[f"lookup.{lookup_key}"] = False
+                else:
+                    to_update[f"lookup.{lookup_key}"] = True
 
         dict_helper.set_subject(to_update)
         unflatten_to_update = dict_helper.unflatten()

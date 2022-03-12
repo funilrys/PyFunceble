@@ -148,8 +148,11 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
                                                      __/ |
                                                     |___/
 
+-   avatartw - `@avatartw`_
 -   Avinash Reddy - `@AvinashReddy3108`_
 -   Daniel - `@dnmTX`_
+-   gwarser - `@gwarser`_
+-   Haris Gušić - `@veracioux`_
 -   hawkeye116477 - `@hawkeye116477`_
 -   Human Being - `@T145`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
@@ -231,7 +234,7 @@ License
 -------
 ::
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -261,17 +264,19 @@ License
 .. _shtab: https://github.com/iterative/shtab
 .. _Terminalizer: https://github.com/faressoft/terminalizer
 .. _yEd Graph Editor: https://www.yworks.com/products/yed
-.. _yWorks: https://www.yworks.com/company
+.. _yWorks: https://www.yworks.com
 
 .. _@adblockplus: https://github.com/adblockplus
 .. _@AnonymousPoster: https://www.mypdns.org/p/AnonymousPoster/
 .. _@asciinema: https://github.com/asciinema
+.. _@avatartw: https://github.com/avatartw
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
 .. _@faressoft: https://github.com/faressoft
 .. _@funilrys: https://github.com/funilrys
+.. _@gwarser: https://github.com/gwarser
 .. _@hawkeye116477: https://github.com/hawkeye116477
 .. _@jawz101: https://github.com/jawz101
 .. _@keczuppp: https://github.com/keczuppp
@@ -294,6 +299,7 @@ License
 .. _@T145: https://github.com/T145
 .. _@tartley: https://github.com/tartley
 .. _@theskumar: https://github.com/theskumar
+.. _@veracioux: https://github.com/veracioux
 .. _@Wally3K: https://github.com/WaLLy3K
 .. _@xxcriticxx: https://github.com/xxcriticxx
 .. _@yaml: https://github.com/yaml

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -98,6 +98,8 @@ class WorkerBase(multiprocessing.Process):
     _child_connection: Optional[multiprocessing.connection.Connection] = None
     _exception: Optional[multiprocessing.Pipe] = None
 
+    _params: Optional[dict] = {}
+
     def __init__(
         self,
         input_queue: Optional[queue.Queue],
@@ -109,13 +111,15 @@ class WorkerBase(multiprocessing.Process):
         continuous_integration: Optional[ContinuousIntegrationBase] = None,
         configuration: Optional[dict] = None,
     ) -> None:
-        self.configuration = configuration
-        self.input_queue = input_queue
-        self.output_queue = output_queue
+        self.configuration = self._params["configuration"] = configuration
+        self.input_queue = self._params["input_queue"] = input_queue
+        self.output_queue = self._params["output_queue"] = output_queue
 
-        self.continuous_integration = continuous_integration
+        self.continuous_integration = self._params[
+            "continuous_integration"
+        ] = continuous_integration
 
-        self.global_exit_event = global_exit_event
+        self.global_exit_event = self._params["global_exit_event"] = global_exit_event
         self.exit_it = multiprocessing.Event()
 
         self._parent_connection, self._child_connection = multiprocessing.Pipe()
@@ -278,7 +282,7 @@ class WorkerBase(multiprocessing.Process):
             PyFunceble.cli.factory.DBSession.init_db_sessions()
 
         # Be sure that all settings are loaded proprely!!
-        PyFunceble.factory.Requester.guess_all_settings()
+        PyFunceble.factory.Requester = PyFunceble.factory.requester()
 
         wait_for_stop = (
             bool(PyFunceble.storage.CONFIGURATION.cli_testing.mining) is True

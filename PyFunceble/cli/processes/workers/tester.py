@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ from typing import Any, Optional, Tuple
 
 import PyFunceble.cli.utils.testing
 import PyFunceble.facility
+import PyFunceble.factory
 from PyFunceble.checker.availability.domain_and_ip import DomainAndIPAvailabilityChecker
 from PyFunceble.checker.availability.url import URLAvailabilityChecker
 from PyFunceble.checker.base import CheckerBase
@@ -207,6 +208,14 @@ class TesterWorker(WorkerBase):
         This method should return a result which will pu send to the output
         queue.
         """
+
+        if (
+            PyFunceble.factory.Requester.session
+            and "Connection" not in PyFunceble.factory.Requester.session.headers
+        ):
+            # Just close the connection immediately. This prevent potential infinite
+            # streams.
+            PyFunceble.factory.Requester.session.headers["Connection"] = "close"
 
         if not isinstance(consumed, dict):
             PyFunceble.facility.Logger.debug(

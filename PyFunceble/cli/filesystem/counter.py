@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,20 +51,16 @@ License:
 """
 
 import copy
-import functools
-import os
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 import PyFunceble.cli.storage
 import PyFunceble.cli.utils.testing
 import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
-from PyFunceble.cli.filesystem.dir_base import FilesystemDirBase
-from PyFunceble.helpers.dict import DictHelper
-from PyFunceble.helpers.file import FileHelper
+from PyFunceble.cli.filesystem.json_base import FilesystemJSONBase
 
 
-class FilesystemCounter(FilesystemDirBase):
+class FilesystemCounter(FilesystemJSONBase):
     """
     Provides our counter.
     """
@@ -106,77 +102,9 @@ class FilesystemCounter(FilesystemDirBase):
         ],
     }
 
-    dataset: Dict[str, int] = {}
-    source_file: Optional[str] = None
+    SOURCE_FILE: str = PyFunceble.cli.storage.COUNTER_FILE
 
-    def update_source_file_beforehand(func):  # pylint: disable=no-self-argument
-        """
-        Updates the source file before launching the decorated method.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.source_file = os.path.join(
-                self.get_output_basedir(), PyFunceble.cli.storage.COUNTER_FILE
-            )
-
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
-
-    def fetch_dataset_beforehand(func):  # pylint: disable=no-self-argument
-        """
-        Updates the dataset to work with before launching the decorated method.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            self.fetch_dataset()
-
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
-
-    def save_dataset_afterwards(func):  # pylint: disable=no-self-argument
-        """
-        Saves the dataset after launching the decorated method.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
-            result = func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-            self.save_dataset()
-
-            return result
-
-        return wrapper
-
-    @update_source_file_beforehand
-    def fetch_dataset(self) -> "FilesystemCounter":
-        """
-        Fetches the source file into the current instance.
-        """
-
-        file_helper = FileHelper(self.source_file)
-
-        if file_helper.exists():
-            self.dataset = DictHelper().from_json_file(file_helper.path)
-        else:
-            self.dataset = copy.deepcopy(self.STD_DATASET)
-
-        return self
-
-    def save_dataset(self) -> "FilesystemCounter":
-        """
-        Saves the current dataset into it's final destination.
-        """
-
-        DictHelper(self.dataset).to_json_file(self.source_file)
-
-        return self
-
-    @fetch_dataset_beforehand
+    @FilesystemJSONBase.fetch_dataset_beforehand
     def get_dataset_for_printer(self) -> List[Dict[str, Union[str, int]]]:
         """
         Provides the dataset that the printer may understand.
@@ -212,9 +140,9 @@ class FilesystemCounter(FilesystemDirBase):
         # Apply the right order.
         return [result[x] for x in self.PERCENTAGE_STATUSES[testing_mode]]
 
-    @update_source_file_beforehand
-    @fetch_dataset_beforehand
-    @save_dataset_afterwards
+    @FilesystemJSONBase.update_source_file_path_beforehand
+    @FilesystemJSONBase.fetch_dataset_beforehand
+    @FilesystemJSONBase.save_dataset_afterwards
     def count(self, status: CheckerStatusBase) -> "FilesystemCounter":
         """
         Starts the counting process.
@@ -229,8 +157,7 @@ class FilesystemCounter(FilesystemDirBase):
             )
 
         if "counter" not in self.dataset:
-            self.dataset["counter"] = {}
-            self.dataset["percentage"] = {}
+            self.dataset = copy.deepcopy(self.STD_DATASET)
 
         self.dataset["counter"][status.status] += 1
         self.dataset["counter"]["total"] += 1
@@ -242,3 +169,5 @@ class FilesystemCounter(FilesystemDirBase):
         self.dataset["percentage"]["total"] = sum(
             [y for x, y in self.dataset["percentage"].items() if x != "total"]
         )
+
+        return self

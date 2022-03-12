@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ class CSVFileMigratorBase(MigratorBase):
     FIELDS: Optional[List[str]] = None
 
     TO_DELETE: Optional[List[str]] = None
+    TO_ADD: Optional[List[str]] = None
 
     def ensure_source_file_is_given(func):  # pylint: disable=no-self-argument
         """
@@ -102,7 +103,9 @@ class CSVFileMigratorBase(MigratorBase):
             with file_helper.open("r", encoding="utf-8") as file_stream:
                 first_line = next(file_stream)
 
-            if any(x in first_line for x in self.TO_DELETE):
+            if any(x in first_line for x in self.TO_DELETE) or any(
+                x not in first_line for x in self.TO_ADD
+            ):
                 temp_destination = tempfile.NamedTemporaryFile(
                     "a+", newline="", encoding="utf-8", delete=False
                 )
@@ -111,17 +114,26 @@ class CSVFileMigratorBase(MigratorBase):
                 reader = csv.DictReader(file_handler)
                 writer = csv.DictWriter(
                     temp_destination,
-                    fieldnames=[x for x in self.FIELDS if x not in self.TO_DELETE],
+                    fieldnames=[x for x in self.FIELDS if x not in self.TO_DELETE]
+                    + [x for x in self.TO_ADD if x not in self.FIELDS],
                 )
                 writer.writeheader()
 
                 keys_found = False
                 for row in reader:
                     row = dict(row)
+
                     for key in self.TO_DELETE:
                         if key in row:
                             del row[key]
                             keys_found = True
+
+                    for key in self.TO_ADD:
+                        if key not in row:
+                            row[key] = ""
+                            keys_found = True
+
+                    writer.writerow(row)
 
                     if not keys_found:
                         break

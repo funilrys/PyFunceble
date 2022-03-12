@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -85,9 +85,11 @@ class ExtraRulesHandler:
                 (self.__switch_to_down_if, 410),
             ],
             r"\.24\.eu$": [(self.__switch_to_down_if, 503)],
+            r"\.altervista\.org$": [(self.__switch_to_down_if, 403)],
             r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
             r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.dr\.ag$": [(self.__switch_to_down_if, 503)],
             r"\.fc2\.com$": [self.__handle_fc2_dot_com],
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
             r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],

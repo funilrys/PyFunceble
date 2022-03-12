@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ from PyFunceble.checker.utils.whois import get_whois_dataset_object
 from PyFunceble.cli.filesystem.counter import FilesystemCounter
 from PyFunceble.cli.filesystem.printer.file import FilePrinter
 from PyFunceble.cli.filesystem.printer.stdout import StdoutPrinter
+from PyFunceble.cli.filesystem.registrar_counter import RegistrarCounter
 from PyFunceble.cli.filesystem.status_file import StatusFileGenerator
 from PyFunceble.cli.processes.workers.base import WorkerBase
 from PyFunceble.cli.utils.stdout import get_template_to_use, print_single_line
@@ -93,6 +94,7 @@ class ProducerWorker(WorkerBase):
     continue_dataset: Optional[ContinueDatasetBase] = None
     status_file_generator: Optional[StatusFileGenerator] = None
     counter: Optional[FilesystemCounter] = None
+    registrar_counter: Optional[RegistrarCounter] = None
     collection_query_tool: Optional[CollectionQueryTool] = None
 
     header_already_printed: Optional[bool] = None
@@ -112,6 +114,7 @@ class ProducerWorker(WorkerBase):
         )
         self.status_file_generator = StatusFileGenerator().guess_all_settings()
         self.counter = FilesystemCounter()
+        self.registrar_counter = RegistrarCounter()
         self.collection_query_tool = CollectionQueryTool()
 
         self.header_already_printed = False
@@ -217,6 +220,7 @@ class ProducerWorker(WorkerBase):
                             test_result.expiration_date, "%d-%b-%Y"
                         ).timestamp()
                     ),
+                    "registrar": test_result.registrar,
                 }
             )
 
@@ -230,7 +234,7 @@ class ProducerWorker(WorkerBase):
         the dataset storage. Otherwise, we just keep it in there :-)
         """
 
-        if test_dataset["type"] != "single":
+        if test_dataset["type"] != "single" and self.inactive_dataset.authorized:
             dataset = test_result.to_dict()
             dataset.update(test_dataset)
 
@@ -259,7 +263,7 @@ class ProducerWorker(WorkerBase):
         Runs the backup or update of the auto-continue dataset storage.
         """
 
-        if test_dataset["type"] != "single":
+        if test_dataset["type"] != "single" and self.continue_dataset.authorized:
             dataset = test_result.to_dict()
             dataset.update(test_dataset)
 
@@ -348,11 +352,16 @@ class ProducerWorker(WorkerBase):
             test_dataset["destination"]
             and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
         ):
-            # Note: We don't want hiden data to be counted.
+            # Note: We don't want hidden data to be counted.
 
             self.counter.set_parent_dirname(test_dataset["destination"]).count(
                 test_result
             )
+
+            if hasattr(test_result, "registrar") and test_result.registrar:
+                self.registrar_counter.set_parent_dirname(
+                    test_dataset["destination"]
+                ).count(test_result.registrar)
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
         if not isinstance(consumed, tuple):
@@ -390,13 +399,16 @@ class ProducerWorker(WorkerBase):
         ):
             self.collection_query_tool.push(test_result)
 
-        self.run_whois_backup(test_result)
-        self.run_inactive_backup(test_dataset, test_result)
-        self.run_continue_backup(test_dataset, test_result)
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
+            self.run_whois_backup(test_result)
+            self.run_inactive_backup(test_dataset, test_result)
+            self.run_continue_backup(test_dataset, test_result)
 
         if not self.should_we_block_status_file_printer(test_dataset, test_result):
             self.run_status_file_printer(test_dataset, test_result)
-            self.run_counter(test_dataset, test_result)
+
+            if not PyFunceble.storage.CONFIGURATION.cli_testing.chancy_tester:
+                self.run_counter(test_dataset, test_result)
 
         self.run_stdout_printer(test_result)
         test_dataset["from_producer"] = True
