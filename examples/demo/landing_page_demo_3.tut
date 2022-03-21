@@ -1,13 +1,20 @@
 #!/usr/bin/env tuterm
 
-source config.sh.in
+# pyfunceble-io-title: PyFunceble gives you the availability of a URL!
+# asciinema-title: PyFunceble URL availability
+# asciinema-cols: 200
+# asciinema-rows: 20
+
+workDir="$(dirname $(realpath ${0}))"
+
+source "${workDir}/config.sh.in"
 
 run() {
-    c PyFunceble --version
-    c PyFunceble -u https://github.com/funilrys
-    c PyFunceble -u https://github.com/microsoft_google
-    c PyFunceble -u https://microsoft_google.com
-    c PyFunceble -u https://microsoft_google.com --local
+    c pyfunceble --version
+    c pyfunceble -u https://github.com/funilrys
+    c pyfunceble -u https://github.com/microsoft_google
+    c pyfunceble -u https://microsoft_google.com
+    c pyfunceble -u https://microsoft_google.com --local
     c exit
 }
 
