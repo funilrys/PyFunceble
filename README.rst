@@ -150,6 +150,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 
 -   avatartw - `@avatartw`_
 -   Avinash Reddy - `@AvinashReddy3108`_
+-   BigDargon - `@bigdargon`_
 -   Daniel - `@dnmTX`_
 -   gwarser - `@gwarser`_
 -   Haris Gušić - `@veracioux`_
@@ -271,6 +272,7 @@ License
 .. _@asciinema: https://github.com/asciinema
 .. _@avatartw: https://github.com/avatartw
 .. _@AvinashReddy3108: https://github.com/AvinashReddy3108
+.. _@bigdargon: https://github.com/bigdargon
 .. _@cdgriffith: https://github.com/cdgriffith
 .. _@DandelionSprout: https://github.com/DandelionSprout
 .. _@dnmTX: https://github.com/dnmTX
