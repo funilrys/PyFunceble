@@ -39,7 +39,7 @@ Example of how you can run PyFunceble inside Github Actions.
             - ubuntu-latest
 
         steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
             name: Clone repository
             with:
             token: "${{ secrets.BOT_REPO_PAT }}"
@@ -74,7 +74,7 @@ Example of how you can run PyFunceble inside Github Actions.
             - ubuntu-latest
 
         steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
             name: Clone repository
             with:
             token: "${{ secrets.BOT_REPO_PAT }}"
