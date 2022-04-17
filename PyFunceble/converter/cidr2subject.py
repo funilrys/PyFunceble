@@ -102,9 +102,6 @@ class CIDR2Subject(ConverterBase):
                         str(x) for x in IPv4Network(self.ip_syntax_checker.subject)
                     )
                 elif self.ip_syntax_checker.is_valid_v6_range():
-                    ...
-
-                    # Not Implemented yet.
                     result.add(subject)
                 else:
                     result.add(subject)

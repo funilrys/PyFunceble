@@ -114,8 +114,7 @@ class ReputationCheckerBase(CheckerBase):
             use_collection=use_collection,
         )
 
-    @staticmethod
-    def is_valid() -> bool:
+    def is_valid(self) -> bool:
         raise NotImplementedError()
 
     def subject_propagator(self) -> "CheckerBase":

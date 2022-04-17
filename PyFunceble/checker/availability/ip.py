@@ -174,6 +174,5 @@ class IPAvailabilityChecker(AvailabilityCheckerBase):
 
         return self
 
-    @staticmethod
-    def is_valid() -> bool:
+    def is_valid(self) -> bool:
         raise NotImplementedError()
