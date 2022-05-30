@@ -149,6 +149,7 @@ disable=print-statement,
 
         consider-using-with,
         consider-using-f-string,
+        too-many-function-args,
 
         # Temporary until pylint fix it
         unsubscriptable-object,
