@@ -137,7 +137,7 @@ class DireFileSorterWorker(FileSorterWorkerBase):
             or not consumed["directory"]
         ):
             PyFunceble.facility.Logger.info(
-                "Ignoring consumed data because no " "data to work with."
+                "Ignoring consumed data because no data to work with."
             )
 
             return None

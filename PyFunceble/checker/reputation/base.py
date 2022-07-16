@@ -115,7 +115,7 @@ class ReputationCheckerBase(CheckerBase):
         )
 
     @staticmethod
-    def is_valid() -> bool:
+    def is_valid() -> bool:  # pylint: disable=arguments-differ
         raise NotImplementedError()
 
     def subject_propagator(self) -> "CheckerBase":

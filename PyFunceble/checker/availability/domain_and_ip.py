@@ -113,5 +113,5 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
         return result
 
     @staticmethod
-    def is_valid() -> bool:
+    def is_valid() -> bool:  # pylint: disable=arguments-differ
         raise NotImplementedError()
