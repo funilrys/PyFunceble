@@ -275,5 +275,6 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         return self
 
-    def is_valid(self) -> bool:
+    @staticmethod
+    def is_valid() -> bool:  # pylint: disable=arguments-differ
         raise NotImplementedError()

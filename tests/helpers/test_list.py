@@ -238,10 +238,13 @@ class TestListHelper(unittest.TestCase):
         """
 
         given = copy.deepcopy(self.str_test_subject)
-        custom_method = lambda x: x[-1] if x else x
 
         expected = ["", " ", "!", "world!", "world", "hello", "hello", "Hello"]
-        actual = self.helper.set_subject(given).custom_sort(custom_method).subject
+        actual = (
+            self.helper.set_subject(given)
+            .custom_sort(lambda x: x[-1] if x else x)
+            .subject
+        )
 
         self.assertEqual(expected, actual)
 

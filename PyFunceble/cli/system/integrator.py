@@ -167,7 +167,7 @@ class SystemIntegrator(SystemBase):
         return self
 
     @SystemBase.ensure_args_is_given
-    def check_config(self) -> "SystemIntegrator":  # pylint: disable=no-self-use
+    def check_config(self) -> "SystemIntegrator":
         """
         Checks or do some sanity check of the configuration.
 
