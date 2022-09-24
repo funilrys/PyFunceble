@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
 
@@ -28,7 +28,7 @@ jobs:
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
 
@@ -61,7 +61,7 @@ jobs:
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -86,6 +86,7 @@ jobs:
           - "3.7"
           - "3.8"
           - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
           - macos-latest
@@ -96,7 +97,7 @@ jobs:
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -127,7 +128,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
 
@@ -150,7 +151,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
 
@@ -159,7 +160,7 @@ jobs:
         name: Clone repository
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -193,12 +194,12 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.9"
+          - "3.10"
         os:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.9"
+      DOCKER_PYTHON_VERSION: "3.10"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
@@ -215,7 +216,7 @@ jobs:
           path: ${{ env.BUILDER_CLONE_DIRNAME }}/
 
       - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
