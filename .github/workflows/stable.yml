@@ -110,7 +110,7 @@ jobs:
           tox -c tox.ini
 
       - name: Upload Coverage
-        scontinue-on-error: true
+        continue-on-error: true
         run: |
           coveralls
         env:
