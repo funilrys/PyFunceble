@@ -107,9 +107,12 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         )
 
     @staticmethod
-    def extract_extension(subject: str) -> str:
+    def extract_extension(subject: str) -> Optional[str]:
         """
         Provides the extension of the given subject.
+
+        .. versionchanged:: 4.1.1.dev
+            Handle the case that the given subject does not have a `.` (point).
 
         :param str subject:
             The subject to get extract the extension from.
@@ -126,6 +129,9 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
         if not subject:
             raise ValueError("<subject> should not be empty.")
 
+        if "." not in subject:
+            return None
+
         if subject.endswith("."):
             # Absolute needs a little correction.
             last_point = subject[:-1].rfind(".")
@@ -141,6 +147,9 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
     def fetch_proxy_from_pattern(self, subject: str) -> dict:
         """
         Provides the proxy settings to use for the given subject.
+
+        .. versionchanged:: 4.1.1.dev
+            Handle the case that the given subject has no extension/TLD.
 
         :param str subject:
             The subject to work with.
@@ -178,7 +187,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
 
         proxies = {}
 
-        if "rules" in self.proxy_pattern:
+        if extension and "rules" in self.proxy_pattern:
             for rule in self.proxy_pattern["rules"]:
                 local_proxy = {}
 

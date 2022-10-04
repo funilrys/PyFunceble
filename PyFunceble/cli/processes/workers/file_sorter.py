@@ -91,7 +91,7 @@ class FileSorterWorker(FileSorterWorkerBase):
             or not consumed["file"]
         ):
             PyFunceble.facility.Logger.info(
-                "Ignoring consumed data because no " "data to work with."
+                "Ignoring consumed data because no data to work with."
             )
 
             return None

@@ -202,7 +202,7 @@ class CSVDatasetBase(DBDatasetBase):
         file_helper = FileHelper(self.source_file)
 
         if file_helper.exists():
-            file_handler = file_helper.open(newline="")
+            file_handler = file_helper.open(newline="", encoding="utf-8")
             reader = csv.DictReader(file_handler)
 
             for row in reader:

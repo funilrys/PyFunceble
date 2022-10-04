@@ -26,7 +26,7 @@ Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/latest/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -151,7 +151,7 @@ class RegistrarCounter(FilesystemJSONBase):
             ) / self.dataset["counter"]["total"]
 
         self.dataset["percentage"]["total"] = sum(
-            [y for x, y in self.dataset["percentage"].items() if x != "total"]
+            y for x, y in self.dataset["percentage"].items() if x != "total"
         )
 
         return self
