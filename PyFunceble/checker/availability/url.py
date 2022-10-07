@@ -273,6 +273,9 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
                 self.status.status,
             )
 
+        if self.use_extra_rules:
+            self.try_to_query_status_from_extra_rules()
+
         return self
 
     @staticmethod

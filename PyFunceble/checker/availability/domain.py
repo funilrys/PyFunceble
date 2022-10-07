@@ -178,7 +178,7 @@ class DomainAvailabilityChecker(AvailabilityCheckerBase):
             )
 
         if self.use_extra_rules:
-            self.extra_rules_handler.set_status(self.status).start()
+            self.try_to_query_status_from_extra_rules()
 
         return self
 

@@ -62,7 +62,9 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
-from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
+from PyFunceble.checker.availability.extras.parked import ParkedRulesHandler
+from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
@@ -126,7 +128,7 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
-    extra_rules_handler: Optional[ExtraRulesHandler] = None
+    extra_rules_handlers: Optional[List[ExtraRuleHandlerBase]] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -162,7 +164,8 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
-        self.extra_rules_handler = ExtraRulesHandler()
+        # WARNING: Put the aggressive one first!
+        self.extra_rules_handlers = [ParkedRulesHandler(), ExtraRulesHandler()]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -1015,6 +1018,36 @@ class AvailabilityCheckerBase(CheckerBase):
             "Finished to try to query the status of %r from: Collection Lookup",
             self.status.idna_subject,
         )
+
+        return self
+
+    def try_to_query_status_from_extra_rules(self) -> "AvailabilityCheckerBase":
+        """
+        Tries to query the status from the extra rules.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        if self.use_extra_rules:
+            for rule_handler in self.extra_rules_handlers:
+                rule_handler.set_status(self.status).start()
+
+                if self.status.status_after_extra_rules:
+                    PyFunceble.facility.Logger.info(
+                        "Could define the status of %r from: Extra Rules Lookup",
+                        self.status.idna_subject,
+                    )
+                    break
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        return self
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query
