@@ -25,7 +25,7 @@ The tool to check the availability or syntax of domain, IP or URL.
 Welcome to PyFunceble!
 
 **PyFunceble** is a tool that aims to provide an accurate availability check
-through the usage of multiple sources which are for example - to only list them:
+through the usage of multiple sources which are for example - to only list a few:
 
 - the WHOIS record(s).
 - the DNS record(s).
