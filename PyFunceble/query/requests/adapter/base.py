@@ -123,12 +123,6 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             When the given :code:`subject` is an empty :py:class:`str`.
         """
 
-        if not isinstance(subject, str):
-            raise TypeError(f"<subject> should be {str}, type(subject) given.")
-
-        if not subject:
-            raise ValueError("<subject> should not be empty.")
-
         if "." not in subject:
             return None
 
@@ -176,12 +170,6 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
                 result["http"] = result["https"]
 
             return result
-
-        if not isinstance(subject, str):
-            raise TypeError(f"<subject> should be {str}, type(subject) given.")
-
-        if not subject:
-            raise ValueError("<subject> should not be empty.")
 
         extension = self.extract_extension(subject)
 
