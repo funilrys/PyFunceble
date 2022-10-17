@@ -123,7 +123,7 @@ class RequestAdapterBase(requests.adapters.HTTPAdapter):
             When the given :code:`subject` is an empty :py:class:`str`.
         """
 
-        if "." not in subject:
+        if not subject or "." not in subject:
             return None
 
         if subject.endswith("."):
