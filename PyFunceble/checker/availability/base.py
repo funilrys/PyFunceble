@@ -165,7 +165,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
         # WARNING: Put the aggressive one first!
-        self.extra_rules_handlers = [ParkedRulesHandler(), ExtraRulesHandler()]
+        self.extra_rules_handlers = [ExtraRulesHandler()]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
