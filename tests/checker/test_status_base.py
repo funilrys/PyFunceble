@@ -72,7 +72,7 @@ class TestCheckerStatusBase(unittest.TestCase):
         """
 
         self.status = CheckerStatusBase(
-            subject="example.org", idna_subject="example.org"
+            subject="example.org", idna_subject="example.org", netloc="example.org"
         )
 
     def tearDown(self) -> None:
@@ -97,6 +97,7 @@ class TestCheckerStatusBase(unittest.TestCase):
         expected = {
             "subject": "example.org",
             "idna_subject": "example.org",
+            "netloc": "example.org",
             "status": "ACTIVE",
             "status_source": "Funilrys",
             "tested_at": test_datetime,
@@ -121,6 +122,7 @@ class TestCheckerStatusBase(unittest.TestCase):
 
         expected = """{
     "idna_subject": "example.org",
+    "netloc": "example.org",
     "params": null,
     "status": "ACTIVE",
     "status_source": "Funilrys",

@@ -98,6 +98,9 @@ class DomainSyntaxChecker(DomainSyntaxCheckerBase, SyntaxCheckerBase):
 
         self.status.subject = self.subject
         self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
 
         return self
 

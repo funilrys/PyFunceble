@@ -63,14 +63,17 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
-from PyFunceble.checker.availability.extras.parked import ParkedRulesHandler
 from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.subject_switch import (
+    SubjectSwitchRulesHandler,
+)
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
@@ -129,6 +132,7 @@ class AvailabilityCheckerBase(CheckerBase):
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
     extra_rules_handlers: Optional[List[ExtraRuleHandlerBase]] = None
+    url2netloc: Optional[Url2Netloc] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -165,7 +169,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
         # WARNING: Put the aggressive one first!
-        self.extra_rules_handlers = [ExtraRulesHandler()]
+        self.extra_rules_handlers = [SubjectSwitchRulesHandler(), ExtraRulesHandler()]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -507,6 +511,9 @@ class AvailabilityCheckerBase(CheckerBase):
 
         self.status.subject = self.subject
         self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
         self.status.status = None
 
         self.query_syntax_checker()

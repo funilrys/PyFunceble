@@ -67,6 +67,7 @@ class CheckerStatusBase:
 
     subject: Optional[str] = None
     idna_subject: Optional[str] = None
+    netloc: Optional[str] = None
 
     status: Optional[str] = None
     status_source: Optional[str] = None

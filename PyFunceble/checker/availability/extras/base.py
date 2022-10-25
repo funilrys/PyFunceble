@@ -53,6 +53,8 @@ License:
 import functools
 from typing import Callable, Optional
 
+import requests
+
 import PyFunceble.factory
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 
@@ -68,6 +70,8 @@ class ExtraRuleHandlerBase:
     """
 
     _status: Optional[AvailabilityCheckerStatus] = None
+    req: Optional[requests.Response] = None
+    req_url: Optional[str] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
         if status is not None:
@@ -186,6 +190,25 @@ class ExtraRuleHandlerBase:
         """
 
         self.status = value
+
+        return self
+
+    def do_request(self, *, allow_redirects: bool = True) -> requests.Response:
+        """
+        Do a request and store its response into the `req` attribute.
+
+        :param bool allow_redirects:
+            Whether we shoold follow the redirection - or not.
+        """
+
+        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+            self.req_url = url = self.status.idna_subject
+        else:
+            self.req_url = url = f"http://{self.status.idna_subject}:80"
+
+        self.req = PyFunceble.factory.Requester.get(
+            url, allow_redirects=allow_redirects
+        )
 
         return self
 
