@@ -166,6 +166,7 @@ class ConfigLoader:
         if (
             "lookup" in config
             and "timeout" in config["lookup"]
+            and config["lookup"]["timeout"]
             and config["lookup"]["timeout"] < 0
         ):
             # If timeout is set to a negative digit, switch to the default one.
