@@ -148,13 +148,19 @@ class ConfigLoader:
             The configuration we are going to load.
         """
 
-        # Conditional autocontinue.
-        # If we are under continuous integration, the autocontinue should be
-        # activated.
 
-        if bool(config["cli_testing"]["ci"]["active"]) and not bool(
-            config["cli_testing"]["autocontinue"]
+        if (
+            "cli_testing" in config
+            and "ci" in config["cli_testing"]
+            and "active" in config["cli_testing"]["ci"]
+            and "autocontinue" in config["cli_testing"]
+            and bool(config["cli_testing"]["ci"]["active"])
+            and not bool(config["cli_testing"]["autocontinue"])
         ):
+            # Conditional autocontinue.
+            # If we are under continuous integration, the autocontinue should be
+            # activated.
+
             config["cli_testing"]["autocontinue"] = True
 
         return config
