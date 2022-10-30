@@ -148,7 +148,6 @@ class ConfigLoader:
             The configuration we are going to load.
         """
 
-
         if (
             "cli_testing" in config
             and "ci" in config["cli_testing"]
@@ -162,6 +161,14 @@ class ConfigLoader:
             # activated.
 
             config["cli_testing"]["autocontinue"] = True
+
+        if (
+            "lookup" in config
+            and "timeout" in config["lookup"]
+            and config["lookup"]["timeout"] < 0
+        ):
+            # If timeout is set to a negative digit, switch to the default one.
+            config["lookup"]["timeout"] = 5
 
         return config
 
