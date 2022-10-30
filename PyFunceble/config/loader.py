@@ -148,6 +148,7 @@ class ConfigLoader:
             The configuration we are going to load.
         """
 
+        # pylint: disable=too-many-boolean-expressions
         if (
             "cli_testing" in config
             and "ci" in config["cli_testing"]
