@@ -327,7 +327,10 @@ class ConfigLoader:
             config = self.dict_helper.from_yaml_file(self.path_to_config)
 
         if (
-            not config or self.merge_upstream or is_3_x_version(config)
+            not config
+            or not isinstance(config, dict)
+            or self.merge_upstream
+            or is_3_x_version(config)
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
 
             config = ConfigComparison(
@@ -344,7 +347,7 @@ class ConfigLoader:
                 self.path_to_overwrite_config
             )
 
-            if overwrite_data:
+            if isinstance(overwrite_data, dict):
                 config = Merge(
                     self.dict_helper.from_yaml_file(self.path_to_overwrite_config)
                 ).into(config)
