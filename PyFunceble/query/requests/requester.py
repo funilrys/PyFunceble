@@ -51,6 +51,7 @@ License:
 """
 
 import functools
+import logging
 import warnings
 from typing import Optional, Union
 
@@ -175,6 +176,8 @@ class Requester:
         self.session = self.get_session()
 
         warnings.simplefilter("ignore", urllib3.exceptions.InsecureRequestWarning)
+        logging.getLogger("requests.packages.urllib3").setLevel(logging.CRITICAL)
+        logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
     def recreate_session(func):  # pylint: disable=no-self-argument
         """
