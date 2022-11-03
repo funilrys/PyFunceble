@@ -411,8 +411,8 @@ class Requester:
         if not isinstance(value, (int, float)):
             raise TypeError(f"<value> shoule be {int} or {float}, {type(value)} given.")
 
-        if value < 1:
-            raise ValueError("<value> should not be less than 1.")
+        if value < 0:
+            raise ValueError("<value> should not be less than 0.")
 
         self._timeout = float(value)
 

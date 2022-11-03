@@ -68,7 +68,7 @@ class OurArgumentParser(argparse.ArgumentParser):
     ) -> argparse.Namespace:
         namespace = super().parse_args(args, namespace)
 
-        if namespace.lookup__timeout is not None and namespace.lookup__timeout <= 0:
+        if namespace.lookup__timeout is not None and namespace.lookup__timeout < 0:
             raise self.error("--timeout must be a positive digit.")
 
         if (
