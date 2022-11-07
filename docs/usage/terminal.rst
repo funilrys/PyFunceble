@@ -91,7 +91,7 @@ This argument takes one or more values.
 
 .. code-block:: console
 
-    $ PyFunceble -url https://example.org/AlIvE https://example.com/GoNe
+    $ PyFunceble --url https://example.org/AlIvE https://example.com/GoNe
 
 .. note::
     When we test the availability of a URL, we (only) check the HTTP status
