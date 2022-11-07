@@ -701,7 +701,7 @@ You can add several separated by spaces and they will all be used in a order.
 
 .. code-block:: console
 
-    $ pyfunceble -dns 127.0.1.53:5303 127.0.0.1 -f $DOMAIN_FILE
+    $ pyfunceble --dns 127.0.1.53:5303 127.0.0.1 -f $DOMAIN_FILE
 
 You can also set default DNS servers used for testing within the
 :code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
