@@ -91,7 +91,7 @@ This argument takes one or more values.
 
 .. code-block:: console
 
-    $ PyFunceble -url https://example.org/AlIvE https://example.com/GoNe
+    $ PyFunceble --url https://example.org/AlIvE https://example.com/GoNe
 
 .. note::
     When we test the availability of a URL, we (only) check the HTTP status
@@ -189,7 +189,7 @@ PyFunceble from where to obtain the given list.
 
 .. code-block:: console
 
-    $ pyfunceble --adblock -f "$ADBLOCK_FILES"
+    $ PyFunceble --adblock -f "$ADBLOCK_FILES"
 
 **Default value:** :code:`adblock: False`
 
@@ -233,7 +233,7 @@ this argument allows you to do that!
 
 .. code-block:: console
 
-    $ pyfunceble --filter '^\.blogspot\.(com|net)$' -f $DOMAIN_FILE
+    $ PyFunceble --filter '^\.blogspot\.(com|net)$' -f $DOMAIN_FILE
 
 
 ------
@@ -264,7 +264,7 @@ Activates or disables the decoding of RPZ policies from each given input source
 
 .. code-block:: console
 
-    $ pyfunceble --rpz -f $RPZ_FILES
+    $ PyFunceble --rpz -f $RPZ_FILES
 
 .. sectionauthor:: @spirillen
 
@@ -656,7 +656,7 @@ Example of how to change the default from CLI.
 
 .. code-block:: console
 
-    $ pyfunceble --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
+    $ PyFunceble --user-agent "Mozilla/5.0 (X11; U; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 
 
 
@@ -701,7 +701,7 @@ You can add several separated by spaces and they will all be used in a order.
 
 .. code-block:: console
 
-    $ pyfunceble -dns 127.0.1.53:5303 127.0.0.1 -f $DOMAIN_FILE
+    $ PyFunceble --dns 127.0.1.53:5303 127.0.0.1 -f $DOMAIN_FILE
 
 You can also set default DNS servers used for testing within the
 :code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
@@ -741,7 +741,7 @@ Case-Sensitive
 
 .. code-block:: console
 
-    $ pyfunceble --dns doh.powerdns.org --dns-protocol HTTPS -f $DOMAIN_FILE
+    $ PyFunceble --dns doh.powerdns.org --dns-protocol HTTPS -f $DOMAIN_FILE
 
 .. note:
     You can not mix protocols. IE. the following will only test on the
@@ -749,7 +749,7 @@ Case-Sensitive
 
 .. code-block:: console
 
-    $ pyfunceble --dns 192.0.2.2:53 --dns doh.powerdns.org --dns-protocol HTTPS
+    $ PyFunceble --dns 192.0.2.2:53 --dns doh.powerdns.org --dns-protocol HTTPS
 
 
 ------
@@ -831,7 +831,7 @@ into your personal :code:`.PyFunceble.overwrite.yaml`
 
 .. code-block:: console
 
-    $ pyfunceble --http-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+    $ PyFunceble --http-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
 
 You can also set default DNS servers used for testing within the
 :code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
@@ -866,7 +866,7 @@ into your personal :code:`.PyFunceble.overwrite.yaml`
 
 .. code-block:: console
 
-    $ pyfunceble --https-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
+    $ PyFunceble --https-proxy http://127.0.0.1:9899 -f $DOMAIN_FILE
 
 You can also set default DNS servers used for testing within the
 :code:`my_project/.PyFunceble.yaml` file. (No secondary indent)
@@ -1010,7 +1010,7 @@ Multiple space separated statuses can be given.
 
 .. code-block:: console
 
-    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup
+    $ PyFunceble -d google-analytics.com duckduckgo.com --whois-lookup
 
     Subject                                              Status      Source
     ---------------------------------------------------- ----------- ----------
@@ -1021,7 +1021,7 @@ Multiple space separated statuses can be given.
 
 .. code-block:: console
 
-    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup \
+    $ PyFunceble -d google-analytics.com duckduckgo.com --whois-lookup \
     --display-status INACTIVE ACTIVE
 
     Subject                                              Status      Source
@@ -1033,7 +1033,7 @@ Multiple space separated statuses can be given.
 
 .. code-block:: console
 
-    $ pyfunceble -d google-analytics.com duckduckgo.com --whois-lookup \
+    $ PyFunceble -d google-analytics.com duckduckgo.com --whois-lookup \
       --display-status INACTIVE
 
     Subject                                              Status      Source
@@ -1186,7 +1186,7 @@ append it directly to the CLI string.
 
 .. code-block:: console
 
-    $ pyfunceble --output-location /tmp/pyfunceble -f $DOMAIN_FILE
+    $ PyFunceble --output-location /tmp/pyfunceble -f $DOMAIN_FILE
 
 
 ------
