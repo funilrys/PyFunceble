@@ -225,6 +225,34 @@ class TestHTTPStatusCode(unittest.TestCase):
         """
 
         given = 0.5
+        expected = 0.5
+
+        query_tool = HTTPStatusCode(timeout=given)
+        actual = query_tool.timeout
+
+        self.assertEqual(expected, actual)
+
+    def test_set_timeout_equal_0(self) -> None:
+        """
+        Tests the method which let us set the timeout to work with for the case
+        that the given timeout is equal to 0.
+        """
+
+        given = 0
+        expected = 0.0
+
+        query_tool = HTTPStatusCode(timeout=given)
+        actual = query_tool.timeout
+
+        self.assertEqual(expected, actual)
+
+    def test_set_timeout_lower_0(self) -> None:
+        """
+        Tests the method which let us set the timeout to work with for the case
+        that the given timeout is lower then 0.
+        """
+
+        given = -3
 
         self.assertRaises(ValueError, lambda: self.query_tool.set_timeout(given))
 

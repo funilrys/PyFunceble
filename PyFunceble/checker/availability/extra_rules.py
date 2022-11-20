@@ -195,6 +195,7 @@ class ExtraRulesHandler:
                     method()
                     break
         except (
+            PyFunceble.factory.Requester.exceptions.RequestException,
             PyFunceble.factory.Requester.exceptions.InvalidURL,
             PyFunceble.factory.Requester.exceptions.Timeout,
             PyFunceble.factory.Requester.exceptions.ConnectionError,

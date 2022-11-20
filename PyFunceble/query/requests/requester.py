@@ -51,6 +51,7 @@ License:
 """
 
 import functools
+import logging
 import warnings
 from typing import Optional, Union
 
@@ -175,6 +176,8 @@ class Requester:
         self.session = self.get_session()
 
         warnings.simplefilter("ignore", urllib3.exceptions.InsecureRequestWarning)
+        logging.getLogger("requests.packages.urllib3").setLevel(logging.CRITICAL)
+        logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 
     def recreate_session(func):  # pylint: disable=no-self-argument
         """
@@ -408,8 +411,8 @@ class Requester:
         if not isinstance(value, (int, float)):
             raise TypeError(f"<value> shoule be {int} or {float}, {type(value)} given.")
 
-        if value < 1:
-            raise ValueError("<value> should not be less than 1.")
+        if value < 0:
+            raise ValueError("<value> should not be less than 0.")
 
         self._timeout = float(value)
 

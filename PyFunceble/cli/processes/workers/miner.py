@@ -107,6 +107,7 @@ class MinerWorker(WorkerBase):
 
             result.extend([x for x in req.history if isinstance(x, str)])
         except (
+            PyFunceble.factory.Requester.exceptions.RequestException,
             PyFunceble.factory.Requester.exceptions.ConnectionError,
             PyFunceble.factory.Requester.exceptions.Timeout,
             PyFunceble.factory.Requester.exceptions.InvalidURL,

@@ -191,8 +191,8 @@ class HTTPStatusCode:
         if not isinstance(value, (int, float)):
             raise TypeError(f"<value> should be {int} or {float}, {type(value)} given.")
 
-        if value < 1:
-            raise ValueError(f"<value> ({value!r}) should be less than 1.")
+        if value < 0:
+            raise ValueError(f"<value> ({value!r}) shouldn't be less than 0.")
 
         self._timeout = float(value)
 

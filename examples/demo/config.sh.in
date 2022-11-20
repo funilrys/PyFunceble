@@ -4,8 +4,8 @@ configure() {
     DELAY_SEP=0.22
     DELAY_PROMPT=0.6
 
-# No messages/warnings in the current versions of the scripts
-# but if we add them, their colors can be changed here
+    # No messages/warnings in the current versions of the scripts
+    # but if we add them, their colors can be changed here
     # COLOR_WARNING='1;91'
     # COLOR_MESSAGE='1;32'
 
@@ -15,7 +15,7 @@ configure() {
 }
 
 prompt() {
-# For a more colorful prompt, uncomment the following:
+    # For a more colorful prompt, uncomment the following:
     # echo -ne "\033[1;94m$TUTERM_NAME \033[1;35m$(pwd | sed "s:$HOME:~:")\033[0;33m $\033[0m "
-    echo -n '[funilrys@funilrys PyFunceble]$ '
+    echo -ne '\e[34m(tuterm)\e[m \e[33mpyfunceble\e[m @ \e[36mfunilrys\e[m \e[32m~\e[m $ '
 }

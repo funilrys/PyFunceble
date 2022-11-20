@@ -1,17 +1,43 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -e
 
-# Pre-warm PyFunceble for better performance
-echo Pre-warming for better recording performance
-for i in $(seq 1 10); do
-    PyFunceble --version >/dev/null
-done
+hash awk
+hash pyfunceble
 
-for file in "$@"; do
-    mkdir -p "/tmp/PyFunceble"
-    cast="/tmp/PyFunceble/$(basename "$file").cast"
-    rm -f "$cast"
-    stty cols 166 rows 45
-    asciinema rec -c "tuterm $file --mode demo" "$cast"
+tmpDir="/tmp/pyfunceble-demos"
+
+if [[ ! -d ${tmpDir} ]]
+then
+    mkdir -p "${tmpDir}"
+fi
+
+echo "Pre-warming for better recording performance"
+pyfunceble --version >/dev/null
+
+for file in "${@}"; do
+    castFile="${tmpDir}/$(basename "${file}").cast"
+    castTitle="$(fgrep "asciinema-title" ${file} | awk -v FS=": " '{ print $2}')"
+    castColumns="$(fgrep "asciinema-cols" ${file} | awk -v FS=": " '{ print $2}')"
+    castRows="$(fgrep "asciinema-rows" ${file} | awk -v FS=": " '{ print $2}')"
+
+    if [[ -z "${castTitle}" ]]
+    then
+        castTitle="PyFunceble"
+    fi
+
+    if [[ -z "${castColumns}" ]]
+    then
+        castColumns=200
+    fi
+
+    if [[ -z "${castRows}" ]]
+    then
+        castRows=20
+    fi
+
+    rm -f "${castFile}"
+
+    stty cols "${castColumns}" rows "${castRows}"
+    asciinema rec -t "${castTitle}" -c "tuterm ${file} --mode demo" "${castFile}"
 done

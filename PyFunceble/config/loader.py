@@ -60,7 +60,7 @@ except ImportError:  # pragma: no cover ## Retro compatibility
     import importlib_resources as package_resources
 
 from box import Box
-from yaml.constructor import ConstructorError
+from yaml.error import MarkedYAMLError
 
 import PyFunceble.cli.storage
 import PyFunceble.storage
@@ -148,14 +148,29 @@ class ConfigLoader:
             The configuration we are going to load.
         """
 
-        # Conditional autocontinue.
-        # If we are under continuous integration, the autocontinue should be
-        # activated.
-
-        if bool(config["cli_testing"]["ci"]["active"]) and not bool(
-            config["cli_testing"]["autocontinue"]
+        # pylint: disable=too-many-boolean-expressions
+        if (
+            "cli_testing" in config
+            and "ci" in config["cli_testing"]
+            and "active" in config["cli_testing"]["ci"]
+            and "autocontinue" in config["cli_testing"]
+            and bool(config["cli_testing"]["ci"]["active"])
+            and not bool(config["cli_testing"]["autocontinue"])
         ):
+            # Conditional autocontinue.
+            # If we are under continuous integration, the autocontinue should be
+            # activated.
+
             config["cli_testing"]["autocontinue"] = True
+
+        if (
+            "lookup" in config
+            and "timeout" in config["lookup"]
+            and config["lookup"]["timeout"]
+            and config["lookup"]["timeout"] < 0
+        ):
+            # If timeout is set to a negative digit, switch to the default one.
+            config["lookup"]["timeout"] = 5
 
         return config
 
@@ -320,14 +335,17 @@ class ConfigLoader:
 
         try:
             config = self.dict_helper.from_yaml_file(self.path_to_config)
-        except ConstructorError:
+        except MarkedYAMLError:
             self.file_helper.set_path(self.path_to_default_config).copy(
                 self.path_to_config
             )
             config = self.dict_helper.from_yaml_file(self.path_to_config)
 
         if (
-            not config or self.merge_upstream or is_3_x_version(config)
+            not config
+            or not isinstance(config, dict)
+            or self.merge_upstream
+            or is_3_x_version(config)
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
 
             config = ConfigComparison(
@@ -344,7 +362,7 @@ class ConfigLoader:
                 self.path_to_overwrite_config
             )
 
-            if overwrite_data:
+            if isinstance(overwrite_data, dict):
                 config = Merge(
                     self.dict_helper.from_yaml_file(self.path_to_overwrite_config)
                 ).into(config)
