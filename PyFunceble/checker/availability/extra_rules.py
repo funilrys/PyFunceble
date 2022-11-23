@@ -85,6 +85,7 @@ class ExtraRulesHandler:
                 (self.__switch_to_down_if, 410),
             ],
             r"\.24\.eu$": [(self.__switch_to_down_if, 503)],
+            r"\.4pu\.com$": [(self.__switch_to_down_if, 404)],
             r"\.altervista\.org$": [(self.__switch_to_down_if, 403)],
             r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
             r"\.blogspot\.": [self.__handle_blogspot],
