@@ -94,6 +94,8 @@ class ExtraRulesHandler:
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
             r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
             r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
+            r"^i\.imgur\.com$: [(self.__switch_to_down_if, 301)],
+            r"^i\.imgur\.com$: [(self.__switch_to_down_if, 302)],
             r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
             r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
             r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
