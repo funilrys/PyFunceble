@@ -61,6 +61,7 @@ import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.query.collection import CollectionQueryTool
 
 
@@ -86,6 +87,8 @@ class CheckerBase:
     _subject: Optional[str] = None
     _idna_subject: Optional[str] = None
 
+    url2netloc: Optional[Url2Netloc] = None
+
     db_session: Optional[Session] = None
     collection_query_tool: Optional[CollectionQueryTool] = None
 
@@ -101,6 +104,7 @@ class CheckerBase:
         use_collection: Optional[bool] = None,
     ) -> None:
         self.collection_query_tool = CollectionQueryTool()
+        self.url2netloc = Url2Netloc()
 
         if self.params is None:
             self.params = CheckerParamsBase()

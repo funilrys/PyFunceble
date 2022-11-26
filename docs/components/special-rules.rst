@@ -28,6 +28,13 @@ Please keep in mind that you can disable the usage those rules at any time.
 
 ------
 
+Parked Subjects
+"""""""""""""""
+
+Any subjects that are considered parked by PyFunceble are supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.000webhostapp.com`
 """""""""""""""""""""""""""
 

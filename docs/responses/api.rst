@@ -55,6 +55,7 @@ Availability Checker
         "ipv6_range_syntax": false,
         "ipv6_syntax": false,
         "netinfo": null,
+        "netloc": "example.com",
         "params": {
             "do_syntax_check_first": false,
             "use_dns_lookup": true,

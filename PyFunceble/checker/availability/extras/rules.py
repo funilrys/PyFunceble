@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the domains availability checker.
+Provides the extra rules handler based on the status code.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,7 +50,6 @@ License:
     limitations under the License.
 """
 
-import functools
 import socket
 from typing import Callable, List, Optional
 
@@ -59,11 +58,12 @@ from box import Box
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
+from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.helpers.regex import RegexHelper
 
 
-class ExtraRulesHandler:
+class ExtraRulesHandler(ExtraRuleHandlerBase):
     """
     Provides our very own extra rules handler.
 
@@ -73,13 +73,11 @@ class ExtraRulesHandler:
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
 
-    _status: Optional[AvailabilityCheckerStatus] = None
-
     regex_active2inactive: dict = {}
-
     http_codes_dataset: Optional[Box] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
+
         self.regex_active2inactive = {
             r"\.000webhostapp\.com": [
                 (self.__switch_to_down_if, 410),
@@ -107,73 +105,7 @@ class ExtraRulesHandler:
         else:
             self.http_codes_dataset = PyFunceble.storage.STD_HTTP_CODES
 
-        if status is not None:
-            self.status = status
-
-        # Be sure that all settings are loaded proprely!!
-        PyFunceble.factory.Requester.guess_all_settings()
-
-    def ensure_status_is_given(
-        func: Callable[..., "ExtraRulesHandler"]
-    ):  # pylint: disable=no-self-argument
-        """
-        Ensures that the status is given before running the decorated method.
-
-        :raise TypeError:
-            If the subject is not a string.
-        """
-
-        @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):  # pragma: no cover ## Safety!
-            if not self.status:
-                raise TypeError(
-                    f"<self.status> should be {AvailabilityCheckerStatus}, "
-                    f"{type(self.status)} given."
-                )
-
-            return func(self, *args, **kwargs)  # pylint: disable=not-callable
-
-        return wrapper
-
-    @property
-    def status(self) -> Optional[AvailabilityCheckerStatus]:
-        """
-        Provides the current state of the :code:`_status` attribute.
-        """
-
-        return self._status
-
-    @status.setter
-    def status(self, value: AvailabilityCheckerStatus) -> None:
-        """
-        Sets the status to work with.
-
-        :param value:
-            The status to work with.
-
-        :raise TypeError:
-            When the given :code:`value` is not a
-            :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`.
-        """
-
-        if not isinstance(value, AvailabilityCheckerStatus):
-            raise TypeError(
-                f"<value> should be {AvailabilityCheckerStatus}, {type(value)} given."
-            )
-
-        self._status = value
-
-    def set_status(self, value: AvailabilityCheckerStatus) -> "ExtraRulesHandler":
-        """
-        Sets the status to work with.
-
-        :param value:
-            The status to work with.
-        """
-
-        self.status = value
-
-        return self
+        super().__init__(status)
 
     def __web_regex_handler(
         self,
@@ -217,7 +149,9 @@ class ExtraRulesHandler:
         ) in regex_registry.items():
             broken = False
             for element in data:
-                if RegexHelper(regex).match(self.status.subject, return_match=False):
+                if RegexHelper(regex).match(
+                    self.status.idna_subject, return_match=False
+                ):
                     if isinstance(element, tuple):
                         element[0](*element[1:])
                     else:
@@ -231,16 +165,6 @@ class ExtraRulesHandler:
 
         return self
 
-    def __switch_to_down(self) -> "ExtraRulesHandler":
-        """
-        Switches the status to inactive.
-        """
-
-        self.status.status_after_extra_rules = PyFunceble.storage.STATUS.down
-        self.status.status_source_after_extra_rules = "SPECIAL"
-
-        return self
-
     def __switch_to_down_if(self, status_code: int) -> "ExtraRulesHandler":
         """
         Switches the status to inactive if the status code is matching the
@@ -248,17 +172,9 @@ class ExtraRulesHandler:
         """
 
         if self.status.http_status_code == status_code:
-            self.__switch_to_down()
+            self.switch_to_down()
 
         return self
-
-    def __switch_to_up(self) -> "ExtraRulesHandler":
-        """
-        Switches the status to active.
-        """
-
-        self.status.status_after_extra_rules = PyFunceble.storage.STATUS.up
-        self.status.status_source_after_extra_rules = "SPECIAL"
 
     def __handle_blogspot(self) -> "ExtraRulesHandler":
         """
@@ -270,12 +186,14 @@ class ExtraRulesHandler:
 
         regex_blogger = [r"create-blog.g?", r"87065", r"doesn&#8217;t&nbsp;exist"]
 
-        if self.status.subject.startswith("http:"):
-            url = self.status.subject
+        if self.status.idna_subject.startswith(
+            "http:"
+        ) or self.status.idna_subject.startswith("https://"):
+            url = self.status.idna_subject
         else:
-            url = f"http://{self.status.subject}:80"
+            url = f"http://{self.status.idna_subject}:80"
 
-        self.__web_regex_handler(url, regex_blogger, self.__switch_to_down)
+        self.__web_regex_handler(url, regex_blogger, self.switch_to_down)
 
         return self
 
@@ -289,12 +207,14 @@ class ExtraRulesHandler:
 
         regex_wordpress = [r"doesn&#8217;t&nbsp;exist"]
 
-        if self.status.subject.startswith("http:"):
-            url = self.status.subject
+        if self.status.idna_subject.startswith(
+            "http:"
+        ) or self.status.idna_subject.startswith("https://"):
+            url = self.status.idna_subject
         else:
-            url = f"http://{self.status.subject}:80"
+            url = f"http://{self.status.idna_subject}:80"
 
-        self.__web_regex_handler(url, regex_wordpress, self.__switch_to_down)
+        self.__web_regex_handler(url, regex_wordpress, self.switch_to_down)
 
         return self
 
@@ -306,15 +226,17 @@ class ExtraRulesHandler:
             This method assume that we know that we are handling a fc2 domain.
         """
 
-        if self.status.subject.startswith("http:"):
-            url = self.status.subject
+        if self.status.idna_subject.startswith(
+            "http:"
+        ) or self.status.idna_subject.startswith("https://"):
+            url = self.status.idna_subject
         else:
-            url = f"http://{self.status.subject}:80"
+            url = f"http://{self.status.idna_subject}:80"
 
         req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
 
         if "Location" in req.headers and "error.fc2.com" in req.headers["Location"]:
-            self.__switch_to_down()
+            self.switch_to_down()
 
         return self
 
@@ -328,19 +250,18 @@ class ExtraRulesHandler:
 
         return self
 
-    @ensure_status_is_given
+    @ExtraRuleHandlerBase.ensure_status_is_given
+    @ExtraRuleHandlerBase.setup_status_before
+    @ExtraRuleHandlerBase.setup_status_after
     def start(self) -> "ExtraRulesHandler":
         """
         Starts the process.
         """
 
         PyFunceble.facility.Logger.info(
-            "Started to check %r against our own set of rules.",
+            "Started to check %r against our own set of extra rules.",
             self.status.idna_subject,
         )
-
-        self.status.status_before_extra_rules = self.status.status
-        self.status.status_source_before_extra_rules = self.status.status_source
 
         if self.status.status_before_extra_rules == PyFunceble.storage.STATUS.up:
             self.__handle_active2inactive()
@@ -350,23 +271,11 @@ class ExtraRulesHandler:
             and self.status.status_before_extra_rules in PyFunceble.storage.STATUS.down
         ):
             if self.status.ipv4_range_syntax or self.status.ipv6_range_syntax:
-                self.__switch_to_up()
-
-        if self.status.status_after_extra_rules:
-            self.status.status = self.status.status_after_extra_rules
-            self.status.status_source = self.status.status_source_after_extra_rules
-
-            PyFunceble.facility.Logger.info(
-                "Could define the status of %r from our own set of rules.",
-                self.status.idna_subject,
-            )
-        else:
-            self.status.status_before_extra_rules = None
-            self.status.status_source_before_extra_rules = None
-            self.status.status_after_extra_rules = None
-            self.status.status_source_after_extra_rules = None
+                self.switch_to_up()
 
         PyFunceble.facility.Logger.info(
-            "Finished to check %r against our own set of rules.",
+            "Finished to check %r against our own set of extra rules.",
             self.status.idna_subject,
         )
+
+        return self

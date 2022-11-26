@@ -62,13 +62,18 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
-from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
+from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.subject_switch import (
+    SubjectSwitchRulesHandler,
+)
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
@@ -126,7 +131,8 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
-    extra_rules_handler: Optional[ExtraRulesHandler] = None
+    extra_rules_handlers: Optional[List[ExtraRuleHandlerBase]] = None
+    url2netloc: Optional[Url2Netloc] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -162,7 +168,8 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
-        self.extra_rules_handler = ExtraRulesHandler()
+        # WARNING: Put the aggressive one first!
+        self.extra_rules_handlers = [SubjectSwitchRulesHandler(), ExtraRulesHandler()]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -504,6 +511,9 @@ class AvailabilityCheckerBase(CheckerBase):
 
         self.status.subject = self.subject
         self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
         self.status.status = None
 
         self.query_syntax_checker()
@@ -1015,6 +1025,36 @@ class AvailabilityCheckerBase(CheckerBase):
             "Finished to try to query the status of %r from: Collection Lookup",
             self.status.idna_subject,
         )
+
+        return self
+
+    def try_to_query_status_from_extra_rules(self) -> "AvailabilityCheckerBase":
+        """
+        Tries to query the status from the extra rules.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        if self.use_extra_rules:
+            for rule_handler in self.extra_rules_handlers:
+                rule_handler.set_status(self.status).start()
+
+                if self.status.status_after_extra_rules:
+                    PyFunceble.facility.Logger.info(
+                        "Could define the status of %r from: Extra Rules Lookup",
+                        self.status.idna_subject,
+                    )
+                    break
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        return self
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query
