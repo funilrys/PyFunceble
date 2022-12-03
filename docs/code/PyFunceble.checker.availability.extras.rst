@@ -12,6 +12,14 @@ PyFunceble.checker.availability.extras.base module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.checker.availability.extras.dns module
+-------------------------------------------------
+
+.. automodule:: PyFunceble.checker.availability.extras.dns
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.checker.availability.extras.parked module
 ----------------------------------------------------
 
