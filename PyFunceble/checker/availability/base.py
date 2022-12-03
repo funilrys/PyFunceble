@@ -63,6 +63,7 @@ import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
+from PyFunceble.checker.availability.extras.dns import DNSRulesHandler
 from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
 from PyFunceble.checker.availability.extras.subject_switch import (
     SubjectSwitchRulesHandler,
@@ -169,7 +170,11 @@ class AvailabilityCheckerBase(CheckerBase):
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
         # WARNING: Put the aggressive one first!
-        self.extra_rules_handlers = [SubjectSwitchRulesHandler(), ExtraRulesHandler()]
+        self.extra_rules_handlers = [
+            SubjectSwitchRulesHandler(),
+            DNSRulesHandler(),
+            ExtraRulesHandler(),
+        ]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()

@@ -51,12 +51,13 @@ License:
 """
 
 import functools
-from typing import Callable, Optional
+from typing import Callable, List, Optional
 
 import requests
 
 import PyFunceble.factory
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
+from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 
 class ExtraRuleHandlerBase:
@@ -71,6 +72,7 @@ class ExtraRuleHandlerBase:
 
     _status: Optional[AvailabilityCheckerStatus] = None
     req: Optional[requests.Response] = None
+    dns_query_tool: Optional[DNSQueryTool] = None
     req_url: Optional[str] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
@@ -79,6 +81,7 @@ class ExtraRuleHandlerBase:
 
         # Be sure that all settings are loaded proprely!!
         PyFunceble.factory.Requester.guess_all_settings()
+        self.dns_query_tool = DNSQueryTool()
 
     def ensure_status_is_given(
         func: Callable[..., "ExtraRuleHandlerBase"]
@@ -211,6 +214,22 @@ class ExtraRuleHandlerBase:
         )
 
         return self
+
+    def do_dns_lookup(self, *, subject: str, query_type: str) -> List[str]:
+        """
+        Do a DNS lookup and return its response.
+
+        :param subject:
+            The subject to query.
+        :param query_type:
+            The query type.
+        """
+
+        return (
+            self.dns_query_tool.set_query_record_type(query_type)
+            .set_subject(subject)
+            .query()
+        )
 
     def start(self) -> "ExtraRuleHandlerBase":
         """
