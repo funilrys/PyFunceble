@@ -135,7 +135,7 @@ class DNSRulesHandler(ExtraRuleHandlerBase):
     @ExtraRuleHandlerBase.ensure_status_is_given
     @ExtraRuleHandlerBase.setup_status_before
     @ExtraRuleHandlerBase.setup_status_after
-    def start(self) -> "SubjectSwitchRulesHandler":
+    def start(self) -> "DNSRulesHandler":
         """
         Process the check and handling of the current subject.
         """
