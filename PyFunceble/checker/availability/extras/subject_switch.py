@@ -88,8 +88,12 @@ class SubjectSwitchRulesHandler(ExtraRuleHandlerBase):
                 self.status.netloc.replace("m.", "", 1),
             ]
         )
-        # The current netloc should be included in the variations
-        variations.remove(self.status.netloc)
+
+        try:
+            # The current netloc should be included in the variations
+            variations.remove(self.status.netloc)
+        except KeyError:
+            pass
 
         start_path = (
             self.url2netloc.set_data_to_convert(self.req_url)
