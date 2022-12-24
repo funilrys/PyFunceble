@@ -71,7 +71,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check
+        run: safety check -i 51668
 
   test:
     needs: [lint, deps_safety_check]
