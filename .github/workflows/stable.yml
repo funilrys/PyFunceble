@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -87,6 +87,7 @@ jobs:
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
           - macos-latest
@@ -111,7 +112,7 @@ jobs:
           tox -c tox.ini
 
       - name: Upload Coverage
-        scontinue-on-error: true
+        continue-on-error: true
         run: |
           coveralls
         env:
@@ -128,7 +129,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -151,7 +152,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -194,12 +195,12 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.10"
+      DOCKER_PYTHON_VERSION: "3.11"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
