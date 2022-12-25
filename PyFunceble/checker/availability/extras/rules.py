@@ -96,7 +96,10 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
             r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
             r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.wordpress\.com$": [self.__handle_wordpress_dot_com],
+            r"\.wordpress\.com$": [
+                (self.__switch_to_down_if, 410),
+                self.__handle_wordpress_dot_com,
+            ],
             r"\.weebly\.com$": [(self.__switch_to_down_if, 404)],
         }
 
@@ -149,14 +152,17 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         ) in regex_registry.items():
             broken = False
             for element in data:
-                if RegexHelper(regex).match(
+                if not RegexHelper(regex).match(
                     self.status.idna_subject, return_match=False
                 ):
-                    if isinstance(element, tuple):
-                        element[0](*element[1:])
-                    else:
-                        element()
+                    continue
 
+                if isinstance(element, tuple):
+                    element[0](*element[1:])
+                else:
+                    element()
+
+                if self.status.status_after_extra_rules:
                     broken = True
                     break
 
@@ -205,7 +211,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             This method assume that we know that we are handling a blogspot domain.
         """
 
-        regex_wordpress = [r"doesn&#8217;t&nbsp;exist"]
+        regex_wordpress = [r"doesn&#8217;t&nbsp;exist", r"no\slonger\savailable"]
 
         if self.status.idna_subject.startswith(
             "http:"
