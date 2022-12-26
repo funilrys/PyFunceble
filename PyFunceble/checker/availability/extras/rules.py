@@ -92,6 +92,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.github\.io$": [(self.__switch_to_down_if, 404)],
             r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
             r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
+            r"\.imgur\.com$": [self.__handle_imgur_dot_com],
             r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
             r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
             r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
@@ -153,7 +154,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             broken = False
             for element in data:
                 if not RegexHelper(regex).match(
-                    self.status.idna_subject, return_match=False
+                    self.status.netloc, return_match=False
                 ):
                     continue
 
@@ -243,6 +244,34 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         if "Location" in req.headers and "error.fc2.com" in req.headers["Location"]:
             self.switch_to_down()
+
+        return self
+
+    def __handle_imgur_dot_com(self) -> "ExtraRulesHandler":
+        """
+        Handles the :code:`imgur.com` case.
+
+        .. warning:.
+            This method assume that we know that we are handling a imgur.com
+            sub-domain.
+        """
+
+        if self.status.idna_subject.startswith(
+            "http:"
+        ) or self.status.idna_subject.startswith("https://"):
+            url = self.status.idna_subject
+        else:
+            url = f"https://{self.status.idna_subject}"
+
+
+        req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
+        username = self.status.netloc.replace(".imgur.com", "")
+
+        if "Location" in req.headers:
+            if (
+                req.headers["Location"].endswith(("/removed.png", f"/user/{username}"))
+            ):
+                self.switch_to_down()
 
         return self
 

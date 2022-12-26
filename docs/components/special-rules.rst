@@ -319,6 +319,17 @@ supplied as :code:`INACTIVE`.
 
 ------
 
+:code:`*.imgur.com`
+"""""""""""""""""""
+
+Any subjects matching the given pattern and:
+
+    - the :code:`/removed.png` path in the end URL (after redirect).
+
+are supplied as :code:`INACTIVE`.
+
+------
+
 :code:`*.liveadvert.com`
 """"""""""""""""""""""""
 
