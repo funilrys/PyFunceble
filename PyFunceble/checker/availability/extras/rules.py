@@ -251,10 +251,9 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             url = f"https://{self.status.idna_subject}"
 
         req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
-        username = self.status.netloc.replace(".imgur.com", "")
 
         if "Location" in req.headers:
-            if req.headers["Location"].endswith(("/removed.png", f"/user/{username}")):
+            if req.headers["Location"].endswith(("/removed.png")):
                 self.switch_to_down()
 
         return self
