@@ -80,28 +80,28 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         self.regex_active2inactive = {
             r"\.000webhostapp\.com": [
-                (self.__switch_to_down_if, 410),
+                (self.switch_to_down_if_status_code, 410),
             ],
-            r"\.24\.eu$": [(self.__switch_to_down_if, 503)],
-            r"\.altervista\.org$": [(self.__switch_to_down_if, 403)],
-            r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.blogspot\.": [self.__handle_blogspot],
-            r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.dr\.ag$": [(self.__switch_to_down_if, 503)],
-            r"\.fc2\.com$": [self.__handle_fc2_dot_com],
-            r"\.github\.io$": [(self.__switch_to_down_if, 404)],
-            r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
-            r"\.imgur\.com$": [self.__handle_imgur_dot_com],
-            r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.24\.eu$": [(self.switch_to_down_if_status_code, 503)],
+            r"\.altervista\.org$": [(self.switch_to_down_if_status_code, 403)],
+            r"\.angelfire\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.blogspot\.": [self.handle_blogspot],
+            r"\.canalblog\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.dr\.ag$": [(self.switch_to_down_if_status_code, 503)],
+            r"\.fc2\.com$": [self.handle_fc2_dot_com],
+            r"\.github\.io$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.godaddysites\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.hpg.com.br$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.imgur\.com$": [self.handle_imgur_dot_com],
+            r"\.liveadvert\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.skyrock\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.wix\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.wordpress\.com$": [
-                (self.__switch_to_down_if, 410),
-                self.__handle_wordpress_dot_com,
+                (self.switch_to_down_if_status_code, 410),
+                self.handle_wordpress_dot_com,
             ],
-            r"\.weebly\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.weebly\.com$": [(self.switch_to_down_if_status_code, 404)],
         }
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
@@ -153,9 +153,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         ) in regex_registry.items():
             broken = False
             for element in data:
-                if not RegexHelper(regex).match(
-                    self.status.netloc, return_match=False
-                ):
+                if not RegexHelper(regex).match(self.status.netloc, return_match=False):
                     continue
 
                 if isinstance(element, tuple):
@@ -172,18 +170,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def __switch_to_down_if(self, status_code: int) -> "ExtraRulesHandler":
-        """
-        Switches the status to inactive if the status code is matching the
-        given one.
-        """
-
-        if self.status.http_status_code == status_code:
-            self.switch_to_down()
-
-        return self
-
-    def __handle_blogspot(self) -> "ExtraRulesHandler":
+    def handle_blogspot(self) -> "ExtraRulesHandler":
         """
         Handles the :code:`blogspot.*` case.
 
@@ -204,7 +191,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def __handle_wordpress_dot_com(self) -> "ExtraRulesHandler":
+    def handle_wordpress_dot_com(self) -> "ExtraRulesHandler":
         """
         Handles the :code:`wordpress.com` case.
 
@@ -225,7 +212,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def __handle_fc2_dot_com(self) -> "ExtraRulesHandler":
+    def handle_fc2_dot_com(self) -> "ExtraRulesHandler":
         """
         Handles the :code:`fc2.com` case.
 
@@ -247,7 +234,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def __handle_imgur_dot_com(self) -> "ExtraRulesHandler":
+    def handle_imgur_dot_com(self) -> "ExtraRulesHandler":
         """
         Handles the :code:`imgur.com` case.
 
@@ -263,14 +250,11 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         else:
             url = f"https://{self.status.idna_subject}"
 
-
         req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
         username = self.status.netloc.replace(".imgur.com", "")
 
         if "Location" in req.headers:
-            if (
-                req.headers["Location"].endswith(("/removed.png", f"/user/{username}"))
-            ):
+            if req.headers["Location"].endswith(("/removed.png", f"/user/{username}")):
                 self.switch_to_down()
 
         return self

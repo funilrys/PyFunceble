@@ -51,7 +51,7 @@ License:
 """
 
 import functools
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 import requests
 
@@ -245,6 +245,22 @@ class ExtraRuleHandlerBase:
 
         self.status.status_after_extra_rules = PyFunceble.storage.STATUS.down
         self.status.status_source_after_extra_rules = "SPECIAL"
+
+        return self
+
+    def switch_to_down_if_status_code(
+        self, status_code: Union[int, List[int]]
+    ) -> "ExtraRuleHandlerBase":
+        """
+        Switches the status to inactive if the caught status code matches one
+        of the given one.
+        """
+
+        if not isinstance(status_code, (list, tuple)):
+            status_code = [status_code]
+
+        if any(self.status.http_status_code == x for x in status_code):
+            self.switch_to_down()
 
         return self
 
