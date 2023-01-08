@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the inactive DB (mysql) management.
+Provides the alembic data.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/#/special-thanks
+    https://pyfunceble.github.io/special-thanks.html
 
 Contributors:
-    https://pyfunceble.github.io/#/contributors
+    https://pyfunceble.github.io/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -49,12 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from PyFunceble.dataset.inactive.mariadb import MariaDBInactiveDataset
-
-
-class MySQLInactiveDataset(MariaDBInactiveDataset):
-    """
-    Provides tht interface for the management and the WHOIS dataset under
-    mysql.
-    """

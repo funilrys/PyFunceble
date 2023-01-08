@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the continue MySQL management.
+Provides our postgresql credential holder.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,11 +50,25 @@ License:
     limitations under the License.
 """
 
-from PyFunceble.dataset.autocontinue.mariadb import MariaDBContinueDataset
+from PyFunceble.database.credential.base import CredentialBase
 
 
-class MySQLContinueDataset(MariaDBContinueDataset):
+class PostgreSQLCredential(CredentialBase):
     """
-    Provides the interface for the management and the Continue dataset under
-    mysql.
+    Provides our PostgreSQL credential holder.
     """
+
+    STD_CHARSET: str = "utf8"
+    protocol: str = "postgresql+psycopg2"
+
+    @CredentialBase.ensure_protocol_is_given
+    def get_uri(self) -> str:
+        """
+        Provides the SQLAlchemy URI.
+        """
+
+        return (
+            f"{self.protocol}://{self.username}:{self.password}"
+            f"@{self.host}/{self.name}"
+            f"?client_encoding={self.charset}"
+        )

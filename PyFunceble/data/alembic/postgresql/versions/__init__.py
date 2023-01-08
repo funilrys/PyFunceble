@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the inactive DB (mariadb) management.
+Provides the alembic migrations files.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/#/special-thanks
+    https://pyfunceble.github.io/special-thanks.html
 
 Contributors:
-    https://pyfunceble.github.io/#/contributors
+    https://pyfunceble.github.io/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -49,41 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from datetime import datetime, timedelta
-from typing import Generator, Optional, Tuple
-
-from PyFunceble.database.sqlalchemy.all_schemas import Inactive
-from PyFunceble.dataset.inactive.base import InactiveDatasetBase
-from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
-
-
-class MariaDBInactiveDataset(MariaDBDatasetBase, InactiveDatasetBase):
-    """
-    Provides tht interface for the management and the WHOIS dataset under
-    mariadb.
-    """
-
-    ORM_OBJ: Inactive = Inactive
-
-    @MariaDBDatasetBase.execute_if_authorized(None)
-    @MariaDBDatasetBase.ensure_orm_obj_is_given
-    def get_to_retest(
-        self, destination: str, checker_type: str, *, min_days: Optional[int]
-    ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
-
-        days_ago = datetime.utcnow() - timedelta(days=min_days)
-
-        result = (
-            self.db_session.query(self.ORM_OBJ)
-            .filter(self.ORM_OBJ.destination == destination)
-            .filter(self.ORM_OBJ.checker_type == checker_type)
-            .filter(self.ORM_OBJ.tested_at < days_ago)
-        )
-
-        for row in result:
-            if not hasattr(row, "tested_at"):
-                # This is just a safety.
-                continue
-
-            yield row.to_dict()

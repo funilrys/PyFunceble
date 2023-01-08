@@ -60,8 +60,7 @@ from PyFunceble.dataset.base import DatasetBase
 from PyFunceble.dataset.csv_base import CSVDatasetBase
 from PyFunceble.dataset.db_base import DBDatasetBase
 from PyFunceble.dataset.whois.csv import CSVWhoisDataset
-from PyFunceble.dataset.whois.mariadb import MariaDBWhoisDataset
-from PyFunceble.dataset.whois.mysql import MySQLWhoisDataset
+from PyFunceble.dataset.whois.sql import SQLDBWhoisDataset
 
 
 def get_whois_dataset_object(
@@ -84,10 +83,12 @@ def get_whois_dataset_object(
 
         if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
             result = CSVWhoisDataset()
-        elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-            result = MariaDBWhoisDataset(db_session=db_session)
-        elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-            result = MySQLWhoisDataset(db_session=db_session)
+        elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
+            "mariadb",
+            "mysql",
+            "postgresql",
+        ):
+            result = SQLDBWhoisDataset(db_session=db_session)
 
         if result:
             result.set_authorized(

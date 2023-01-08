@@ -13,3 +13,4 @@ requests[socks]<3
 setuptools
 shtab
 SQLAlchemy~=1.4
+psycopg2

@@ -11,6 +11,7 @@ Here is the list of requirements:
 -   :code:`domain2idna`
 -   :code:`inflection`
 -   :code:`packaging`
+-   :code:`psycopg2`
 -   :code:`PyMySQL`
 -   :code:`python-box`
 -   :code:`python-dotenv`
@@ -74,6 +75,11 @@ tables name from our schema descriptions. This tool is a relief!
 
 we don't necessarily want to reinvent the wheel to compare the current with the
 latest (upstream) version. This module is a relief - too !
+
+:code:`psycopg2`
+^^^^^^^^^^^^^^^^
+
+As we propose the :code:`PostgreSQL` database types, :code:`psycopg2` is required.
 
 :code:`PyMySQL`
 ^^^^^^^^^^^^^^^

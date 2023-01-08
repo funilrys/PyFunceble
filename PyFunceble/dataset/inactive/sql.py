@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our database migration.
+Provides the interface for the inactive DB (mariadb) management.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,63 +50,40 @@ License:
     limitations under the License.
 """
 
-import functools
-from typing import Any
+from datetime import datetime, timedelta
+from typing import Generator, Optional, Tuple
 
-import sqlalchemy
-
-import PyFunceble.cli.facility
-import PyFunceble.cli.factory
-import PyFunceble.sessions
-from PyFunceble.cli.migrators.base import MigratorBase
+from PyFunceble.database.sqlalchemy.all_schemas import Inactive
+from PyFunceble.dataset.inactive.base import InactiveDatasetBase
+from PyFunceble.dataset.sql_base import SQLDBDatasetBase
 
 
-class DBMigratorBase(MigratorBase):
+class SQLDBInactiveDataset(SQLDBDatasetBase, InactiveDatasetBase):
     """
-    Provides the base of all our database migration.
+    Provides tht interface for the management and the WHOIS dataset under
+    mariadb.
     """
 
-    def __init__(self, print_action_to_stdout: bool = False) -> None:
-        super().__init__(print_action_to_stdout=print_action_to_stdout)
+    ORM_OBJ: Inactive = Inactive
 
-    def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
-        """
-        Executes the decorated method only if we are authorized to process.
-        Otherwise, apply the given :code:`default`.
-        """
+    @SQLDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.ensure_orm_obj_is_given
+    def get_to_retest(
+        self, destination: str, checker_type: str, *, min_days: Optional[int]
+    ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
 
-        def inner_metdhod(func):
-            @functools.wraps(func)
-            def wrapper(self, *args, **kwargs):
-                if self.authorized:
-                    return func(self, *args, **kwargs)  # pylint: disable=not-callable
-                return self if default is None else default
+        days_ago = datetime.utcnow() - timedelta(days=min_days)
 
-            return wrapper
+        result = (
+            self.db_session.query(self.ORM_OBJ)
+            .filter(self.ORM_OBJ.destination == destination)
+            .filter(self.ORM_OBJ.checker_type == checker_type)
+            .filter(self.ORM_OBJ.tested_at < days_ago)
+        )
 
-        return inner_metdhod
+        for row in result:
+            if not hasattr(row, "tested_at"):
+                # This is just a safety.
+                continue
 
-    @property
-    def authorized(self):
-        """
-        Provides the authorization to run.
-        """
-
-        return PyFunceble.cli.facility.CredentialLoader.is_already_loaded()
-
-    def does_table_exists(self, table_name: str) -> bool:
-        """
-        Checks if the table exists.
-
-        :param table_name:
-            The name of the table to check.
-        """
-
-        return sqlalchemy.inspect(PyFunceble.sessions.DB_ENGINE).has_table(table_name)
-
-    def start(self) -> "MigratorBase":
-        """
-        Starts the migration.
-        """
-
-        raise NotImplementedError()
+            yield row.to_dict()

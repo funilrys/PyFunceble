@@ -60,6 +60,7 @@ import PyFunceble.storage
 from PyFunceble.database.credential.base import CredentialBase
 from PyFunceble.database.credential.mariadb import MariaDBCredential
 from PyFunceble.database.credential.mysql import MySQLCredential
+from PyFunceble.database.credential.postgresql import PostgreSQLCredential
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 
@@ -79,6 +80,7 @@ class CredentialLoader:
         "csv": None,
         "mysql": MySQLCredential,
         "mariadb": MariaDBCredential,
+        "postgresql": PostgreSQLCredential,
     }
 
     credential: Optional[CredentialBase] = None

@@ -12,7 +12,7 @@ How to speed up the test process?
     * DNS Server response time.
     * CPU.
     * ISP's who blocks a big amount of connection to the outside world.
-    * Our databases management (do not apply for MySQL and MariaDB format).
+    * Our databases management (do not apply for PostgreSQL, MySQL and MariaDB format).
     * Amount of data to test.
     * Disk I/O in particular as PyFunceble is heavy on the I/O
       * RamDrives and NVME disks are very suitable for PyFunceble CSV db.

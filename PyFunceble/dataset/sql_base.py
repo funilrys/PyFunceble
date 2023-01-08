@@ -62,9 +62,9 @@ import PyFunceble.sessions
 from PyFunceble.dataset.db_base import DBDatasetBase
 
 
-class MariaDBDatasetBase(DBDatasetBase):
+class SQLDBDatasetBase(DBDatasetBase):
     """
-    Provides the base of all MariaDB stored dataset.
+    Provides the base of all SQLDB stored dataset.
     """
 
     STD_KEEP_SESSION_OPEN: bool = False

@@ -57,10 +57,10 @@ import PyFunceble.cli.factory
 import PyFunceble.sessions
 from PyFunceble.database.sqlalchemy.all_schemas import Continue
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
-from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
+from PyFunceble.dataset.sql_base import SQLDBDatasetBase
 
 
-class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
+class SQLDBContinueDataset(SQLDBDatasetBase, ContinueDatasetBase):
     """
     Provides the interface for the management and the Continue dataset unser
     mariadb.
@@ -68,7 +68,7 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
 
     ORM_OBJ: Continue = Continue
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     # pylint: disable=arguments-differ
     def cleanup(self, *, session_id: str) -> "MariaDBContinueDataset":
         """
@@ -92,7 +92,7 @@ class MariaDBContinueDataset(MariaDBDatasetBase, ContinueDatasetBase):
 
         return self
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
         twenty_years_ago = datetime.utcnow() - timedelta(days=365.25 * 20)
 

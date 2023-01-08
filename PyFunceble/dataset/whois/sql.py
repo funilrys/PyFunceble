@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the WHOIS DB (mariadb) management.
+Provides the interface for the WHOIS DB (sql) management.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -62,11 +62,11 @@ import PyFunceble.facility
 import PyFunceble.sessions
 import PyFunceble.storage
 from PyFunceble.database.sqlalchemy.all_schemas import WhoisRecord
-from PyFunceble.dataset.mariadb_base import MariaDBDatasetBase
+from PyFunceble.dataset.sql_base import SQLDBDatasetBase
 from PyFunceble.dataset.whois.base import WhoisDatasetBase
 
 
-class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
+class SQLDBWhoisDataset(SQLDBDatasetBase, WhoisDatasetBase):
     """
     Provides the interface for the management of the WHOIS database under
     (mariadb).
@@ -74,7 +74,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
     ORM_OBJ: WhoisRecord = WhoisRecord
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def __contains__(self, value: str) -> bool:
         try:
             return (
@@ -91,7 +91,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
         except ProgrammingError:
             return None
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def __getitem__(self, value: Any) -> Optional[WhoisRecord]:
         try:
             return (
@@ -107,7 +107,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
         except ProgrammingError:
             return None
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def get_content(self) -> Generator[dict, None, None]:
         """
         Provides a generator which provides the next dataset to read.
@@ -118,7 +118,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
             yield row
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def update(
         self, row: Union[dict, WhoisRecord], *, ignore_if_exist: bool = False
     ) -> "MariaDBWhoisDataset":
@@ -154,7 +154,7 @@ class MariaDBWhoisDataset(MariaDBDatasetBase, WhoisDatasetBase):
 
         return self
 
-    @MariaDBDatasetBase.execute_if_authorized(None)
+    @SQLDBDatasetBase.execute_if_authorized(None)
     def cleanup(self) -> "MariaDBWhoisDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are

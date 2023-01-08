@@ -907,7 +907,7 @@ Sets the database engine to use.
 
 **Default value:** :code:`db_type: csv`
 
-**Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`.
+**Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`, :code:`postgresql`.
 
 
 ------

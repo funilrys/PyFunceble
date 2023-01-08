@@ -52,7 +52,7 @@ cli_testing:
   cooldown_time: 0.0
 
   # Sets the Database Connector type to use.
-  # Available: csv | mariadb | mysql
+  # Available: csv | mariadb | mysql | postgresql
   db_type: csv
 
   # Sets the filter to apply while reading the given input.

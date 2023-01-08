@@ -106,7 +106,7 @@
 
     **Default value:** :code:`csv`
 
-    **Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`.
+    **Available values:** :code:`csv`, :code:`mariadb`, :code:`mysql`, :code:`postgresql`.
 
     **Description:** Sets the database type (or engine) to use everytime
     we create a database or a storage of a potentially huge dataset.

@@ -71,7 +71,7 @@ import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.sessions
-from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
+from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
 class Alembic:
@@ -80,14 +80,14 @@ class Alembic:
     """
 
     db_session: Optional[Session] = None
-    migrator_base: Optional[MariaDBMigratorBase] = None
+    migrator_base: Optional[DBMigratorBase] = None
 
     alembic_config: Optional[alembic.config.Config] = None
 
     def __init__(self, db_session: Session) -> None:
         self.db_session = db_session
 
-        self.migrator_base = MariaDBMigratorBase()
+        self.migrator_base = DBMigratorBase()
         self.migrator_base.db_session = db_session
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
@@ -127,7 +127,11 @@ class Alembic:
             f"PyFunceble.data.{PyFunceble.cli.storage.ALEMBIC_DIRECTORY_NAME}",
             "__init__.py",
         ) as file_path:
-            return os.path.split(file_path)[0]
+            result = os.path.split(file_path)[0]
+
+        if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "postgresql":
+            return os.path.join(result, "postgresql")
+        return os.path.join(result, "mysql")
 
     @execute_if_authorized(None)
     def configure(self) -> "Alembic":

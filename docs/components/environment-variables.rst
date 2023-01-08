@@ -40,17 +40,17 @@ are set.
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_AUTO_CONFIGURATION` | Tell us if we have to install/update the configuration file automatically.                                           |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the MySQL charset to use.                                                                                    |
+| :code:`PYFUNCEBLE_DB_CHARSET`         | Tell us the database charset or encoding to use.                                                                                    |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host or the Unix socket (absolute file path) of the MySQL database.                                      |
+| :code:`PYFUNCEBLE_DB_HOST`            | Tell us the host or the Unix socket (absolute path) of the database.                                                 |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_NAME`            | Tell us the name of the MySQL database to use.                                                                       |
+| :code:`PYFUNCEBLE_DB_NAME`            | Tell us the name of the database to use.                                                                       |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_PASSWORD`        | Tell us the MySQL user password to use.                                                                              |
+| :code:`PYFUNCEBLE_DB_PASSWORD`        | Tell us the database user password to use.                                                                              |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_PORT`            | Tell us the MySQL connection port to use.                                                                            |
+| :code:`PYFUNCEBLE_DB_PORT`            | Tell us the database connection port to use.                                                                            |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
-| :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the MySQL user-name to use.                                                                                  |
+| :code:`PYFUNCEBLE_DB_USERNAME`        | Tell us the database user-name to use.                                                                                  |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+
 | :code:`PYFUNCEBLE_DEBUG`              | Tell us to log everything into the :code:`output/logs/*.log` files.                                                  |
 +---------------------------------------+----------------------------------------------------------------------------------------------------------------------+

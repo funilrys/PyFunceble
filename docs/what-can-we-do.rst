@@ -18,7 +18,7 @@ What can PyFunceble do?
 - Test from a given raw link.
 - Test using multiprocessing (from CLI only).
 - Save test result(s) in file(s) (hosts file, plain text and/or JSON format).
-- Save test result(s) in a MySQL or MariaDB database.
+- Save test result(s) in a PostgreSQL, MySQL or MariaDB database.
 - Show test result(s) on screen.
 - Show percentage of each status (:code:`ACTIVE`, :code:`INACTIVE`,
   :code:`INVALID`)

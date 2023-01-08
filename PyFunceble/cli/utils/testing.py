@@ -65,14 +65,12 @@ from PyFunceble.converter.subject2complements import Subject2Complements
 from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
-from PyFunceble.dataset.autocontinue.mariadb import MariaDBContinueDataset
-from PyFunceble.dataset.autocontinue.mysql import MySQLContinueDataset
+from PyFunceble.dataset.autocontinue.sql import SQLDBContinueDataset
 from PyFunceble.dataset.base import DatasetBase
 from PyFunceble.dataset.csv_base import CSVDatasetBase
 from PyFunceble.dataset.db_base import DBDatasetBase
 from PyFunceble.dataset.inactive.csv import CSVInactiveDataset
-from PyFunceble.dataset.inactive.mariadb import MariaDBInactiveDataset
-from PyFunceble.dataset.inactive.mysql import MySQLInactiveDataset
+from PyFunceble.dataset.inactive.sql import SQLDBInactiveDataset
 from PyFunceble.helpers.list import ListHelper
 from PyFunceble.helpers.regex import RegexHelper
 
@@ -109,10 +107,12 @@ def get_continue_databaset_object(
 
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type in "csv":
         result = CSVContinueDataset()
-    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-        result = MariaDBContinueDataset(db_session=db_session)
-    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-        result = MySQLContinueDataset(db_session=db_session)
+    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
+        "mariadb",
+        "mysql",
+        "postgresql",
+    ):
+        result = SQLDBContinueDataset(db_session=db_session)
 
     if result:
         result.set_authorized(
@@ -144,10 +144,12 @@ def get_inactive_dataset_object(
 
     if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "csv":
         result = CSVInactiveDataset()
-    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mariadb":
-        result = MariaDBInactiveDataset(db_session=db_session)
-    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "mysql":
-        result = MySQLInactiveDataset(db_session=db_session)
+    elif PyFunceble.storage.CONFIGURATION.cli_testing.db_type in (
+        "mariadb",
+        "mysql",
+        "postgresql",
+    ):
+        result = SQLDBInactiveDataset(db_session=db_session)
 
     if result:
         result.set_authorized(

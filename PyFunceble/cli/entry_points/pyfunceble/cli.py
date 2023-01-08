@@ -718,10 +718,10 @@ def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.db_type",
                 "type": str,
-                "choices": ["csv", "mariadb", "mysql"],
+                "choices": ["csv", "mariadb", "mysql", "postgresql"],
                 "help": "Sets the database engine to use. "
                 "\nYou can choose between the following: "
-                "`csv | mariadb | mysql` %s"
+                "`csv | mariadb | mysql | postgresql` %s"
                 % get_configured_value("cli_testing.db_type"),
             },
         ),
