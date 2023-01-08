@@ -82,21 +82,21 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             r"\.000webhostapp\.com": [
                 (self.switch_to_down_if_status_code, 410),
             ],
-            r"\.24\.eu$": [(self.__switch_to_down_if, 503)],
-            r"\.altervista\.org$": [(self.__switch_to_down_if, 403)],
-            r"\.angelfire\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.blogspot\.": [self.__handle_blogspot],
-            r"\.canalblog\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.dr\.ag$": [(self.__switch_to_down_if, 503)],
-            r"\.fc2\.com$": [self.__handle_fc2_dot_com],
-            r"\.github\.io$": [(self.__switch_to_down_if, 404)],
-            r"\.godaddysites\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.hpg.com.br$": [(self.__switch_to_down_if, 404)],
-            r"\.imgur\.com$": [self.__handle_imgur_dot_com],
-            r"\.liveadvert\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.skyrock\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.tumblr\.com$": [(self.__switch_to_down_if, 404)],
-            r"\.wix\.com$": [(self.__switch_to_down_if, 404)],
+            r"\.24\.eu$": [(self.switch_to_down_if_status_code, 503)],
+            r"\.altervista\.org$": [(self.switch_to_down_if_status_code, 403)],
+            r"\.angelfire\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.blogspot\.": [self.handle_blogspot],
+            r"\.canalblog\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.dr\.ag$": [(self.switch_to_down_if_status_code, 503)],
+            r"\.fc2\.com$": [self.handle_fc2_dot_com],
+            r"\.github\.io$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.godaddysites\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.hpg.com.br$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.imgur\.com$": [self.handle_imgur_dot_com],
+            r"\.liveadvert\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.skyrock\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.tumblr\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.wix\.com$": [(self.switch_to_down_if_status_code, 404)],
             r"\.wordpress\.com$": [
                 (self.switch_to_down_if_status_code, 410),
                 self.handle_wordpress_dot_com,
@@ -234,7 +234,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         return self
 
-    def __handle_imgur_dot_com(self) -> "ExtraRulesHandler":
+    def handle_imgur_dot_com(self) -> "ExtraRulesHandler":
         """
         Handles the :code:`imgur.com` case.
 
