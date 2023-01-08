@@ -20,18 +20,10 @@ PyFunceble.dataset.inactive.csv module
    :undoc-members:
    :show-inheritance:
 
-PyFunceble.dataset.inactive.mariadb module
-------------------------------------------
+PyFunceble.dataset.inactive.sql module
+--------------------------------------
 
-.. automodule:: PyFunceble.dataset.inactive.mariadb
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyFunceble.dataset.inactive.mysql module
-----------------------------------------
-
-.. automodule:: PyFunceble.dataset.inactive.mysql
+.. automodule:: PyFunceble.dataset.inactive.sql
    :members:
    :undoc-members:
    :show-inheritance:

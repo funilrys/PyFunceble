@@ -7,18 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 5
 
-   PyFunceble.data.alembic.versions
-
-Submodules
-----------
-
-PyFunceble.data.alembic.env module
-----------------------------------
-
-.. automodule:: PyFunceble.data.alembic.env
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   PyFunceble.data.alembic.mysql
+   PyFunceble.data.alembic.postgresql
 
 Module contents
 ---------------

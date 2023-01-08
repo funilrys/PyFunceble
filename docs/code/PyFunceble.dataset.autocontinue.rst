@@ -20,18 +20,10 @@ PyFunceble.dataset.autocontinue.csv module
    :undoc-members:
    :show-inheritance:
 
-PyFunceble.dataset.autocontinue.mariadb module
-----------------------------------------------
+PyFunceble.dataset.autocontinue.sql module
+------------------------------------------
 
-.. automodule:: PyFunceble.dataset.autocontinue.mariadb
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyFunceble.dataset.autocontinue.mysql module
---------------------------------------------
-
-.. automodule:: PyFunceble.dataset.autocontinue.mysql
+.. automodule:: PyFunceble.dataset.autocontinue.sql
    :members:
    :undoc-members:
    :show-inheritance:
