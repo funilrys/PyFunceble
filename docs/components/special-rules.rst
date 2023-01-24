@@ -373,6 +373,6 @@ supplied as :code:`INACTIVE`.
 :code:`*.wordpress.com`
 """""""""""""""""""""""
 
-Any subjects matching the given pattern and the :code:`301` status code along
+Any subjects matching the given pattern and the :code:`301` and :code:`410` status code along
 with the pattern :code:`doesn’t exist` are supplied as :code:`INACTIVE`.
 
