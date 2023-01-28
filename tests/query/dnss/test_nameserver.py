@@ -62,8 +62,11 @@ from PyFunceble.query.dns.nameserver import Nameservers
 
 try:
     import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
+    try:
+        from .. import pyf_test_dataset
+    except (ModuleNotFoundError, ImportError):
+        from ... import pyf_test_dataset
 
 
 class TestNameserver(unittest.TestCase):

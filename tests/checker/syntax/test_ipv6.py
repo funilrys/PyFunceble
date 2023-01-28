@@ -56,8 +56,11 @@ from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker
 
 try:
     import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
+    try:
+        from .. import pyf_test_dataset
+    except (ModuleNotFoundError, ImportError):
+        from ... import pyf_test_dataset
 
 
 class TestIPv6SyntaxChecker(unittest.TestCase):
