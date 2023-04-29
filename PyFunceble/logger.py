@@ -122,7 +122,6 @@ class Logger:
         min_level: Optional[int] = None,
         output_dir: Optional[str] = None,
     ) -> None:
-
         if output_dir:
             self.output_directory = output_dir
         else:

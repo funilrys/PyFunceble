@@ -389,7 +389,6 @@ class WhoisQueryTool:
         """
 
         if self.lookup_record.record is None:
-
             if not self.server:
                 whois_server = self.get_whois_server()
             else:

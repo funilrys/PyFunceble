@@ -451,7 +451,6 @@ class FilePreloader:
                             url2netloc=self.url2netloc,
                             cidr2subject=self.cidr2subject,
                         ):
-
                             to_send = copy.deepcopy(self.protocol)
                             to_send["subject"] = subject
                             to_send["idna_subject"] = domain2idna(subject)

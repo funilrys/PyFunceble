@@ -263,7 +263,6 @@ class CredentialLoader:
         """
 
         if not isinstance(self.credential, CredentialBase) and self.authorized:
-
             # We directly share the credential object into the DBSession object.
             # This will let us use the DBSession without having to think about
             # any other headache.

@@ -90,7 +90,6 @@ class TestIPv4SyntaxChecker(unittest.TestCase):
         expected = False
 
         for subject in pyf_test_dataset.NOT_VALID_IPV4:
-
             actual = ipv4_checker.set_subject(subject).is_valid()
 
             self.assertEqual(expected, actual, subject)

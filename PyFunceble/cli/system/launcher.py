@@ -550,7 +550,6 @@ class SystemLauncher(SystemBase):
                 for subject in self.continue_dataset.get_to_test(
                     protocol["session_id"]
                 ):
-
                     self.ci_stop_in_the_middle_if_time_exceeded()
 
                     to_send = copy.deepcopy(protocol)

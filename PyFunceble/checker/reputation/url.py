@@ -80,7 +80,6 @@ class URLReputationChecker(ReputationCheckerBase):
         if ip_syntax_checker.is_valid_v6() or (
             url_base.startswith("[") and url_base.endswith("]")
         ):
-
             url_base = url_base.replace("[", "").replace("]", "")
 
             result = set()
