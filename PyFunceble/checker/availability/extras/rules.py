@@ -100,7 +100,7 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
                 (self.switch_to_down_if_status_code, 410),
                 self.handle_wordpress_dot_com,
             ],
-            r"\.weebly\.com$": [(self.switch_to_down_if_status_code, 404)],
+            r"\.weebly\.com$": [(self.switch_to_down_if_status_code, {"404", "406"})],
         }
 
         if PyFunceble.facility.ConfigLoader.is_already_loaded():
