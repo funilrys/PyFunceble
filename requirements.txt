@@ -2,7 +2,7 @@ alembic
 colorama
 cryptography>=3.3.2
 dnspython[DOH]~=2.0.0
-domain2idna>=1.12.0
+domain2idna~=1.12.0
 inflection
 packaging
 PyMySQL
@@ -10,7 +10,6 @@ python-box[all]~=6.0.0
 python-dotenv
 PyYAML
 requests[socks]<3
-setuptools
+setuptools>=65.5.1
 shtab
-SQLAlchemy~=1.4
-psycopg2
+SQLAlchemy~=2.0

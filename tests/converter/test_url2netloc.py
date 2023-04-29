@@ -52,6 +52,7 @@ License:
 
 import unittest
 import unittest.mock
+from urllib.parse import ParseResult
 
 from PyFunceble.converter.url2netloc import Url2Netloc
 
@@ -248,6 +249,16 @@ class TestUrl2Netloc(unittest.TestCase):
         actual = self.converter.get_converted()
 
         self.assertEqual(expected, actual)
+
+    def test_parse_single_url(self) -> None:
+        """
+        Tests the method which let us "quickly" parse a URL.
+        """
+
+        actual = self.converter.parse_single_url("http://example.org/hello/world")
+
+        self.assertIsInstance(actual, ParseResult)
+        self.assertEqual(self.converter.parse_single_url(None), None)
 
 
 if __name__ == "__main__":

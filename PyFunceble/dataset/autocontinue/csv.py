@@ -109,7 +109,6 @@ class CSVContinueDataset(CSVDatasetBase, ContinueDatasetBase):
 
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
-
             result = func(self, *args, **kwargs)  # pylint: disable=not-callable
 
             self.source_file = os.path.join(

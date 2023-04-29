@@ -73,7 +73,6 @@ class CommandHelper:
         *,
         encoding: Optional[str] = None,
     ) -> None:
-
         if command is not None:
             self.command = command
 

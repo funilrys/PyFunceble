@@ -215,11 +215,9 @@ class ProducerWorker(WorkerBase):
                     "subject": test_result.subject,
                     "idna_subject": test_result.idna_subject,
                     "expiration_date": test_result.expiration_date,
-                    "epoch": str(
-                        datetime.datetime.strptime(
-                            test_result.expiration_date, "%d-%b-%Y"
-                        ).timestamp()
-                    ),
+                    "epoch": datetime.datetime.strptime(
+                        test_result.expiration_date, "%d-%b-%Y"
+                    ).timestamp(),
                     "registrar": test_result.registrar,
                 }
             )

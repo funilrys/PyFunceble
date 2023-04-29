@@ -347,7 +347,6 @@ class ConfigLoader:
             or self.merge_upstream
             or is_3_x_version(config)
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
-
             config = ConfigComparison(
                 local_config=config,
                 upstream_config=self.dict_helper.from_yaml_file(

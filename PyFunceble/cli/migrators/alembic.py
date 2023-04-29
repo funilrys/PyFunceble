@@ -55,6 +55,7 @@ import os
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 try:
     import importlib.resources as package_resources
@@ -164,7 +165,9 @@ class Alembic:
             .revision
         )
 
-        statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
+        statement = text(
+            "SELECT * from alembic_version WHERE version_num = :db_revision"
+        )
 
         result = self.db_session.execute(statement, {"db_revision": revision_id})
 
@@ -208,7 +211,6 @@ class Alembic:
         if not self.migrator_base.does_table_exists(
             "alembic_version"
         ) or self.is_revision_different(revision):
-
             PyFunceble.facility.Logger.info(
                 "Started downgrade (%r) of the database schema(s).", revision
             )

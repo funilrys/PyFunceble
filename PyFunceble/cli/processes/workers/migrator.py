@@ -69,7 +69,6 @@ class MigratorWorker(WorkerBase):
 
     def run(self) -> None:
         try:
-
             try:
                 self.target(self.continuous_integration, db_session=self.db_session)
             except TypeError:
