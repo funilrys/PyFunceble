@@ -309,7 +309,7 @@ class SQLDBDatasetBase(DBDatasetBase):
             new_date = datetime.fromtimestamp(float(row["epoch"]))
             new_date -= new_date - y2k38_limit
 
-            row["epoch"] = str(new_date.timestamp())
+            row["epoch"] = new_date.timestamp()
             row["expiration_date"] = new_date.strftime("%d-%b-%Y")
 
             self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)

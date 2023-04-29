@@ -52,6 +52,7 @@ License:
 """
 
 import domain2idna
+from sqlalchemy.sql import text
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
@@ -143,7 +144,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
 
                 # pylint: disable=line-too-long
                 self.db_session.execute(
-                    f"DELETE from pyfunceble_status WHERE id = {status['id']}"
+                    text(f"DELETE from pyfunceble_status WHERE id = {status['id']}")
                 )
                 self.db_session.commit()
 
@@ -154,7 +155,7 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
             if drop_table:
                 # pylint: disable=line-too-long
                 self.db_session.execute(
-                    f"DELETE from pyfunceble_file WHERE id = {file_info['id']}"
+                    text(f"DELETE from pyfunceble_file WHERE id = {file_info['id']}")
                 )
                 self.db_session.commit()
 
@@ -167,12 +168,12 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
                 )
 
         if drop_table:
-            self.db_session.execute("DROP TABLE pyfunceble_file")
+            self.db_session.execute(text("DROP TABLE pyfunceble_file"))
             self.db_session.commit()
 
             PyFunceble.facility.Logger.debug("Deleted pyfunceble_file table.")
 
-            self.db_session.execute("DROP TABLE pyfunceble_status")
+            self.db_session.execute(text("DROP TABLE pyfunceble_status"))
             self.db_session.commit()
 
             PyFunceble.facility.Logger.debug("Deleted pyfunceble_status table.")

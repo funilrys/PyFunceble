@@ -53,6 +53,8 @@ License:
 import functools
 from typing import Any, Generator, Tuple
 
+from sqlalchemy.sql import text
+
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.sessions
@@ -94,7 +96,7 @@ class MariaDBMigratorBase(DBMigratorBase):
         statement += f" LIMIT {limit}"
 
         while True:
-            db_result = list(self.db_session.execute(statement).fetchall())
+            db_result = list(self.db_session.execute(text(statement)).fetchall())
 
             if not db_result:
                 break

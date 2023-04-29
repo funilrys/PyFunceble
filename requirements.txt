@@ -12,4 +12,4 @@ PyYAML
 requests[socks]<3
 setuptools>=65.5.1
 shtab
-SQLAlchemy~=1.4
+SQLAlchemy~=2.0
