@@ -87,13 +87,23 @@ class Url2Netloc(ConverterBase):
         # pylint: disable=no-member
         super(Url2Netloc, self.__class__).data_to_convert.fset(self, value)
 
+    @staticmethod
+    def parse_single_url(data) -> Optional[urllib.parse.ParseResult]:
+        """
+        Parses the URL.
+        """
+
+        if data:
+            return urllib.parse.urlparse(data)
+        return None
+
     def parse_url(self) -> "Url2Netloc":
         """
         Parses the URL.
         """
 
-        if self.data_to_convert:
-            self.parsed_url = urllib.parse.urlparse(self.data_to_convert)
+        self.parsed_url = self.parse_single_url(self.data_to_convert)
+
         return self
 
     def get_converted(self) -> str:
@@ -101,14 +111,27 @@ class Url2Netloc(ConverterBase):
         Provides the converted data (after conversion)
         """
 
+        # Retrocompatibility.
         self.parse_url()
 
-        if not self.parsed_url.netloc and self.parsed_url.path:
-            netloc = self.parsed_url.path
-        elif self.parsed_url.netloc:
-            netloc = self.parsed_url.netloc
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> str:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
+        parsed_url = self.parse_single_url(data)
+
+        if not parsed_url.netloc and parsed_url.path:
+            netloc = parsed_url.path
+        elif parsed_url.netloc:
+            netloc = parsed_url.netloc
         else:  # pragma: no cover ## Safety
-            netloc = self.data_to_convert
+            netloc = data
 
         if "//" in netloc:
             netloc = netloc[netloc.find("//") + 2 :]

@@ -67,15 +67,22 @@ class AdblockInputLine2Subject(ConverterBase):
 
     _aggressive: bool = False
 
-    __regex_helper: Optional[RegexHelper] = None
+    _regex_helper: Optional[RegexHelper] = None
 
     def __init__(
-        self, data_to_convert: Optional[Any] = None, aggressive: bool = False
+        self,
+        data_to_convert: Optional[Any] = None,
+        aggressive: bool = False,
+        *,
+        regex_helper: Optional[RegexHelper] = None,
     ) -> None:
         if aggressive is not None:
             self.aggressive = aggressive
 
-        self.__regex_helper = RegexHelper()
+        if regex_helper is None:
+            self._regex_helper = RegexHelper()
+        else:
+            self._regex_helper = regex_helper
 
         super().__init__(data_to_convert=data_to_convert)
 
@@ -168,7 +175,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         result = set()
 
-        rematch = self.__regex_helper.set_regex(r"((?:[^~\*,]+))").match(
+        rematch = self._regex_helper.set_regex(r"((?:[^~\*,]+))").match(
             decoded, rematch=True, return_match=True
         )
 
@@ -201,7 +208,7 @@ class AdblockInputLine2Subject(ConverterBase):
                 continue
 
             if "href" in rule:
-                matched = self.__regex_helper.set_regex(
+                matched = self._regex_helper.set_regex(
                     r"((?:\"|\')(.*)(?:\"|\'))"
                 ).match(rule, return_match=True, rematch=True, group=1)
 
@@ -269,7 +276,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return {x for x in result if "." in x}
 
-    def _decode_v3(self, line: str) -> Set[str]:
+    def _decode_v3(self, line: str, *, aggressive: bool = False) -> Set[str]:
         """
         Implementation of our third decoding mode.
 
@@ -282,6 +289,8 @@ class AdblockInputLine2Subject(ConverterBase):
 
         :param line:
             The line to decode.
+        :param aggressive:
+            Whether we should aggressively extract datasets.
         """
 
         result = set()
@@ -299,7 +308,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
             result.update(self._decode_v1(v1_mode))
 
-            if self.aggressive:
+            if aggressive:
                 result.update(self._decode_options(options.split(",")))
         elif "^" not in local_line:
             result.update(self._decode_v1(f"{local_line}^"))
@@ -308,7 +317,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return {x for x in result if "." in x}
 
-    def _decode_v4(self, line: str) -> Set[str]:
+    def _decode_v4(self, line: str, *, aggressive: bool = False) -> Set[str]:
         """
         Implementation of our fourth decoding mode.
 
@@ -320,13 +329,15 @@ class AdblockInputLine2Subject(ConverterBase):
 
         :param line:
             The line to decode.
+        :param aggressive:
+            Whether we should aggressively extract datasets.
         """
 
         result = set()
         local_line = line.strip()
 
         if (
-            not self.aggressive
+            not aggressive
             or not local_line.startswith("@@||")
             or "^$" not in local_line
         ):
@@ -342,7 +353,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return {x for x in result if "." in x}
 
-    def _decode_v5(self, line: str) -> Set[str]:
+    def _decode_v5(self, line: str, *, aggressive: bool = False) -> Set[str]:
         """
         Implementation of our fifth decoding mode.
 
@@ -357,12 +368,14 @@ class AdblockInputLine2Subject(ConverterBase):
 
         :param line:
             The line to decode.
+        :param aggressive:
+            Whether we should aggressively extract datasets.
         """
 
         local_line = line.strip()
         result = set()
 
-        if not self.aggressive:
+        if not aggressive:
             return result
 
         separators = ["##", "#@#", "#?#"]
@@ -379,7 +392,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return {x for x in result if "." in x}
 
-    def _decode_v6(self, line: str) -> Set[str]:
+    def _decode_v6(self, line: str, *, aggressive: bool = False) -> Set[str]:
         """
         Implementation of our sixth decoding mode.
 
@@ -392,12 +405,14 @@ class AdblockInputLine2Subject(ConverterBase):
 
         :param line:
             The line to decode.
+        :param aggressive:
+            Whether we should aggressively extract datasets.
         """
 
         local_line = line.strip()
         result = set()
 
-        if not self.aggressive:
+        if not aggressive:
             return result
 
         separators = ["$"]
@@ -417,15 +432,27 @@ class AdblockInputLine2Subject(ConverterBase):
         Provides the converted data.
         """
 
+        return self.convert(self.data_to_convert, aggressive=self.aggressive)
+
+    def convert(self, data: Any, *, aggressive: bool = False) -> List[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        :param aggressive:
+            Whether we should aggressively extract datasets.
+        """
+
         result = set()
 
-        if not self.should_be_ignored(self.data_to_convert.strip()):
-            result.update(self._decode_v1(self.data_to_convert))
-            result.update(self._decode_v2(self.data_to_convert))
-            result.update(self._decode_v3(self.data_to_convert))
-            result.update(self._decode_v5(self.data_to_convert))
-            result.update(self._decode_v6(self.data_to_convert))
+        if not self.should_be_ignored(data.strip()):
+            result.update(self._decode_v1(data))
+            result.update(self._decode_v2(data))
+            result.update(self._decode_v3(data, aggressive=aggressive))
+            result.update(self._decode_v5(data, aggressive=aggressive))
+            result.update(self._decode_v6(data, aggressive=aggressive))
 
-        result.update(self._decode_v4(self.data_to_convert))
+        result.update(self._decode_v4(data, aggressive=aggressive))
 
         return ListHelper(list(result)).sort().subject

@@ -84,7 +84,17 @@ class Wildcard2Subject(ConverterBase):
         Provides the converted data.
         """
 
-        subject = self.data_to_convert.strip()
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> str:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
+        subject = data.strip()
 
         if not subject:
             return None
