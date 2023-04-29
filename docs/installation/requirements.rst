@@ -11,7 +11,7 @@ Here is the list of requirements:
 -   :code:`domain2idna`
 -   :code:`inflection`
 -   :code:`packaging`
--   :code:`psycopg2`
+-   :code:`psycopg2` (optional)
 -   :code:`PyMySQL`
 -   :code:`python-box`
 -   :code:`python-dotenv`
@@ -76,10 +76,18 @@ tables name from our schema descriptions. This tool is a relief!
 we don't necessarily want to reinvent the wheel to compare the current with the
 latest (upstream) version. This module is a relief - too !
 
-:code:`psycopg2`
-^^^^^^^^^^^^^^^^
+:code:`psycopg2` (optopnal)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As we propose the :code:`PostgreSQL` database types, :code:`psycopg2` is required.
+
+.. warning::
+    This is an optional dependency. If you want to work with psql, you are
+    required to install the development headers then execute the following.
+
+    .. code-block:: shell
+
+        pip3 install --user pyfunceble[-dev][psql]
 
 :code:`PyMySQL`
 ^^^^^^^^^^^^^^^
