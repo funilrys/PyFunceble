@@ -67,6 +67,8 @@ class Nameservers:
     Provides an interface to get the right nameserver to communicate with.
     """
 
+    DEFAULT_NAMESERVERS: List[str] = ["1.1.1.1", "8.8.8.8", "9.9.9.9"]
+
     nameservers: Optional[List[str]] = None
     nameserver_ports: Optional[dict] = None
 
@@ -247,11 +249,19 @@ class Nameservers:
                 else:
                     self.set_nameservers([PyFunceble.storage.CONFIGURATION.dns.server])
             else:  # pragma: no cover
+                try:
+                    ## Well, I don't like playing with the default resolver.
+                    self.set_nameservers(
+                        dns.resolver.get_default_resolver().nameservers
+                    )
+                except dns.resolver.NoResolverConfiguration:
+                    self.set_nameservers(self.DEFAULT_NAMESERVERS)
+        else:  # pragma: no cover
+            try:
                 ## Well, I don't like playing with the default resolver.
                 self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
-        else:  # pragma: no cover
-            ## Well, I don't like playing with the default resolver.
-            self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
+            except dns.resolver.NoResolverConfiguration:
+                self.set_nameservers(self.DEFAULT_NAMESERVERS)
 
         return self
 

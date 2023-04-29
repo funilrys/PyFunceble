@@ -470,6 +470,41 @@ class TestNameserver(unittest.TestCase):
         self.assertEqual(expected_nameserver, actual)
         self.assertEqual(expected_nameserver_port, actual_nameserver_port)
 
+    @unittest.mock.patch.object(dns.resolver, "get_default_resolver")
+    def test_guess_and_set_nameservers_no_default_resolver(
+        self, get_default_resolver_patch
+    ) -> None:
+        """
+        Tests the method which let us guess the nameserver to use for the case that
+        no resolver has been found.
+        """
+
+        def fake_get_default_resolver(*args, **kwargs):
+            raise dns.resolver.dns.resolver.NoResolverConfiguration("no nameservers")
+
+        get_default_resolver_patch.side_effect = fake_get_default_resolver
+
+        expected_nameserver = [
+            "1.1.1.1",
+            "8.8.8.8",
+            "9.9.9.9",
+        ]
+        expected_nameserver_port = {
+            "1.1.1.1": 53,
+            "8.8.8.8": 53,
+            "9.9.9.9": 53,
+        }
+
+        self.config_loader.set_custom_config({"dns": {"server": []}}).start()
+
+        self.nameserver_provider.guess_and_set_nameservers()
+
+        actual = self.nameserver_provider.get_nameservers()
+        actual_nameserver_port = self.nameserver_provider.get_nameserver_ports()
+
+        self.assertEqual(expected_nameserver, actual)
+        self.assertEqual(expected_nameserver_port, actual_nameserver_port)
+
 
 if __name__ == "__main__":
     unittest.main()

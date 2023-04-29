@@ -62,6 +62,7 @@ except (ModuleNotFoundError, ImportError):  # pragma: no cover
     except (ModuleNotFoundError, ImportError):
         from ... import pyf_test_dataset
 
+
 class TestIPSyntaxChecker(unittest.TestCase):
     """
     Tests of our IP (v4 and v6) syntax checker.
