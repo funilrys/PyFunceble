@@ -130,16 +130,26 @@ class Subject2Complements(ConverterBase):
         Provides the converted data.
         """
 
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> List[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
         result = []
 
-        checker = DomainSyntaxChecker(self.data_to_convert)
+        checker = DomainSyntaxChecker(data)
 
-        if self.include_given and self.data_to_convert not in result:
-            result.append(self.data_to_convert)
+        if self.include_given and data not in result:
+            result.append(data)
 
-        if self.data_to_convert.startswith("www."):
-            result.append(self.data_to_convert[4:])
+        if data.startswith("www."):
+            result.append(data[4:])
         elif checker.is_valid_second_level():
-            result.append(f"www.{self.data_to_convert}")
+            result.append(f"www.{data}")
 
         return result

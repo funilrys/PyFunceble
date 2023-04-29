@@ -101,3 +101,10 @@ class ConverterBase:
         """
 
         raise NotImplementedError()
+
+    def convert(self, data: Any) -> Optional[Any]:
+        """
+        Converts the given dataset.
+        """
+
+        raise NotImplementedError()

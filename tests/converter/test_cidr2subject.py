@@ -53,6 +53,7 @@ License:
 import unittest
 from collections import Counter
 
+from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.converter.cidr2subject import CIDR2Subject
 
 
@@ -74,6 +75,17 @@ class TestCIDR2Subject(unittest.TestCase):
         """
 
         del self.converter
+
+    def test_init_with_helper(self) -> None:
+        """
+        Tests the initialization with our own helpers.
+        """
+
+        ip_syntax_checker = IPSyntaxChecker()
+        self.converter = CIDR2Subject(ip_syntax_checker=ip_syntax_checker)
+
+        self.assertIsInstance(self.converter.ip_syntax_checker, IPSyntaxChecker)
+        self.assertEqual(id(ip_syntax_checker), id(self.converter.ip_syntax_checker))
 
     def test_set_data_to_convert_no_string(self) -> None:
         """

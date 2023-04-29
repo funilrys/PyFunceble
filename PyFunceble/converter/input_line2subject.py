@@ -88,9 +88,19 @@ class InputLine2Subject(ConverterBase):
         Provides the subject to test.
         """
 
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> List[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
         result = []
 
-        subject = self.data_to_convert.strip()
+        subject = data.strip()
 
         if subject and (
             not subject.startswith(self.COMMENT)
