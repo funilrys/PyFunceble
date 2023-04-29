@@ -96,7 +96,6 @@ class FileAndStatusMigrator(MariaDBMigratorBase):
         drop_table = True
 
         for file_info in self.get_rows("SELECT * from pyfunceble_file"):
-
             if (
                 self.continuous_integration
                 and self.continuous_integration.is_time_exceeded()

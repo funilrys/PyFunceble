@@ -208,7 +208,6 @@ class Alembic:
         if not self.migrator_base.does_table_exists(
             "alembic_version"
         ) or self.is_revision_different(revision):
-
             PyFunceble.facility.Logger.info(
                 "Started downgrade (%r) of the database schema(s).", revision
             )

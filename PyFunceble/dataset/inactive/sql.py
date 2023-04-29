@@ -71,7 +71,6 @@ class SQLDBInactiveDataset(SQLDBDatasetBase, InactiveDatasetBase):
     def get_to_retest(
         self, destination: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
-
         days_ago = datetime.utcnow() - timedelta(days=min_days)
 
         result = (

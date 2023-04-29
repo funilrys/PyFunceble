@@ -115,7 +115,6 @@ class CollectionQueryTool:
         url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
     ) -> None:
-
         if token is not None:
             self.token = token
         else:

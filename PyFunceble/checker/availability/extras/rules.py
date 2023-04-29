@@ -77,7 +77,6 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
     http_codes_dataset: Optional[Box] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
-
         self.regex_active2inactive = {
             r"\.000webhostapp\.com": [
                 (self.switch_to_down_if_status_code, 410),

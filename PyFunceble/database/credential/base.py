@@ -110,7 +110,6 @@ class CredentialBase:
         password: Optional[str] = None,
         charset: Optional[str] = None,
     ) -> None:
-
         if host is not None:
             self.host = host
         else:

@@ -107,7 +107,6 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
                 reduced_path = self.get_path_without_base_dir(root)
 
                 if reduced_path not in backup and root != reduced_path:
-
                     dir_helper.set_path(root).delete()
 
                     PyFunceble.facility.Logger.debug(
