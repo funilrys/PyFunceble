@@ -140,6 +140,7 @@ def get_requirements(*, mode="standard"):
         "dev": ["requirements.dev.txt"],
         "docs": ["requirements.docs.txt"],
         "test": ["requirements.test.txt"],
+        "psql": ["requirements.txt"],
     }
 
     if is_win_platform():
@@ -175,6 +176,9 @@ def get_requirements(*, mode="standard"):
                     continue
 
                 result.add(line)
+
+    if mode == "psql":
+        result.add("psycopg2")
 
     return list(result)
 
@@ -217,6 +221,7 @@ if __name__ == "__main__":
             "docs": get_requirements(mode="docs"),
             "dev": get_requirements(mode="dev"),
             "test": get_requirements(mode="test"),
+            "psql": get_requirements(mode="psql"),
             "full": get_requirements(mode="full"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
