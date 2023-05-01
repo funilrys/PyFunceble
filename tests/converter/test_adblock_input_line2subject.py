@@ -54,6 +54,7 @@ import unittest
 from typing import List
 
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.helpers.regex import RegexHelper
 
 
@@ -274,6 +275,55 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
                 "aggressive": ["example.com", "example.net", "example.org"],
             },
         },
+        {
+            "subject": "|http://example.org/hello-world^$scripts,image",
+            "expected": {"aggressive": ["example.org"], "standard": ["example.org"]},
+        },
+        {
+            "subject": "|http://example.org/*",
+            "expected": {"aggressive": ["example.org"], "standard": ["example.org"]},
+        },
+        {
+            "subject": "|http://example.org^",
+            "expected": {"aggressive": ["example.org"], "standard": ["example.org"]},
+        },
+        {
+            "subject": "|http://example.org",
+            "expected": {"aggressive": ["example.org"], "standard": ["example.org"]},
+        },
+        {
+            "subject": "|https://example.org/^$domain=example.com",
+            "expected": {
+                "aggressive": ["example.com", "example.org"],
+                "standard": ["example.org"],
+            },
+        },
+        {
+            "subject": "|ftp://example.org$domain=example.com|example.net",
+            "expected": {
+                "aggressive": ["example.com", "example.net", "example.org"],
+                "standard": ["example.org"],
+            },
+        },
+        {
+            "subject": "|http://example.com$script,image,domain=example.org|foo.example.net",
+            "expected": {
+                "aggressive": ["example.com", "example.org", "foo.example.net"],
+                "standard": ["example.com"],
+            },
+        },
+        {
+            "subject": "|http://example.com,https://example.de$script,image,domain=example.org|foo.example.net",
+            "expected": {
+                "aggressive": [
+                    "example.com",
+                    "example.de",
+                    "example.org",
+                    "foo.example.net",
+                ],
+                "standard": ["example.com", "example.de"],
+            },
+        },
     ]
 
     def setUp(self) -> None:
@@ -296,11 +346,17 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
         """
 
         regex_helper = RegexHelper()
-        self.converter = AdblockInputLine2Subject(regex_helper=regex_helper)
+        url2netloc = Url2Netloc()
+        self.converter = AdblockInputLine2Subject(
+            regex_helper=regex_helper, url2netloc=url2netloc
+        )
 
         # pylint: disable=protected-access
         self.assertIsInstance(self.converter._regex_helper, RegexHelper)
         self.assertEqual(id(regex_helper), id(self.converter._regex_helper))
+
+        self.assertIsInstance(self.converter.url2netloc, Url2Netloc)
+        self.assertEqual(id(url2netloc), id(self.converter.url2netloc))
 
     def test_set_data_to_convert_no_string(self) -> None:
         """

@@ -51,7 +51,7 @@ License:
     limitations under the License.
 """
 
-from typing import Any, List, Optional, Set, Union
+from typing import Any, List, Optional, Set, Tuple, Union
 
 from PyFunceble.converter.base import ConverterBase
 from PyFunceble.converter.url2netloc import Url2Netloc
@@ -68,6 +68,7 @@ class AdblockInputLine2Subject(ConverterBase):
     _aggressive: bool = False
 
     _regex_helper: Optional[RegexHelper] = None
+    url2netloc: Optional[Url2Netloc] = None
 
     def __init__(
         self,
@@ -75,6 +76,7 @@ class AdblockInputLine2Subject(ConverterBase):
         aggressive: bool = False,
         *,
         regex_helper: Optional[RegexHelper] = None,
+        url2netloc: Optional[Url2Netloc] = None,
     ) -> None:
         if aggressive is not None:
             self.aggressive = aggressive
@@ -83,6 +85,11 @@ class AdblockInputLine2Subject(ConverterBase):
             self._regex_helper = RegexHelper()
         else:
             self._regex_helper = regex_helper
+
+        if url2netloc is None:
+            self.url2netloc = Url2Netloc()
+        else:
+            self.url2netloc = url2netloc
 
         super().__init__(data_to_convert=data_to_convert)
 
@@ -144,8 +151,7 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return any(line.startswith(x) for x in starting_chars)
 
-    @staticmethod
-    def extract_base(subject: Union[str, List[str]]) -> Union[str, List[str]]:
+    def extract_base(self, subject: Union[str, List[str]]) -> Union[str, List[str]]:
         """
         Extracts the base of the given subject (supposely URL).
 
@@ -160,9 +166,37 @@ class AdblockInputLine2Subject(ConverterBase):
         subject = subject.replace("*", "").replace("~", "")
 
         try:
+            # TODO: Fix this.
             return Url2Netloc(subject).get_converted()
         except ValueError:
             return subject
+
+    def split_seprators(self, line: str) -> Tuple[Set[str], str]:
+        """
+        Splits the separators providing the 2 possible parts: domains and body.
+
+        :param line:
+            The line to convert.
+
+        Example:
+
+            Given: :code:`"||example.com$script,domain=example.org` returns
+            :code:`({"example.org"}, {"script,domain=example.org"})`
+        """
+
+        separators = ["##", "#?#", "#@#", "#$#", "$"]
+
+        targets, options = set(), set()
+
+        for separator in separators:
+            if separator not in line:
+                continue
+
+            target, option = line.rsplit(separator, 1)
+            targets.add(target)
+            options.add(option)
+
+        return targets, options
 
     def _decode_multiple_subject(self, decoded: str) -> Set[str]:
         """
@@ -427,6 +461,50 @@ class AdblockInputLine2Subject(ConverterBase):
 
         return {x for x in result if "." in x}
 
+    def _decode_v7(self, line: str, *, aggressive: bool = False) -> Set[str]:
+        """
+        Implementation of our seventh decoding mode.
+
+        In this mode we try to decode the explicit URL:
+
+            |http://example.org/.*
+            |https://example.org/.*
+
+        :param line:
+            The line to decode.
+        """
+
+        local_line = line.strip()
+        result = set()
+
+        if (
+            local_line.startswith("||")
+            or (local_line.startswith("|") and local_line.endswith("|"))
+            or (not line.startswith("|"))
+        ):
+            return result
+
+        if local_line.startswith("|"):
+            local_line = local_line.replace("|", "", 1)
+
+        if local_line.endswith("^"):
+            local_line = local_line.rstrip("^")
+
+        targets, options = self.split_seprators(local_line)
+
+        for target in targets:
+            result.update(self._decode_multiple_subject(target))
+
+        if aggressive:
+            for option in options:
+                result.update(self._decode_options(option.split(",")))
+
+        if not options:
+            # Wish me luck :-)
+            result.update(self._decode_multiple_subject(local_line))
+
+        return {x for x in result if "." in x}
+
     def get_converted(self) -> List[str]:
         """
         Provides the converted data.
@@ -452,6 +530,7 @@ class AdblockInputLine2Subject(ConverterBase):
             result.update(self._decode_v3(data, aggressive=aggressive))
             result.update(self._decode_v5(data, aggressive=aggressive))
             result.update(self._decode_v6(data, aggressive=aggressive))
+            result.update(self._decode_v7(data, aggressive=aggressive))
 
         result.update(self._decode_v4(data, aggressive=aggressive))
 
