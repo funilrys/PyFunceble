@@ -226,6 +226,7 @@ if __name__ == "__main__":
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",
         long_description=get_long_description(),
+        long_description_content_type='text/markdown',
         author="funilrys",
         author_email="contact@funilrys.com",
         license="Apache 2.0",
