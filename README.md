@@ -156,6 +156,16 @@ Thanks to those awesome peoples for their awesome and crazy idea(s),
 contribution(s) and or issue report which made or make
 [PyFunceble](https://github.com/funilrys/PyFunceble) a better tool.
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+
 - avatartw - [@avatartw](https://github.com/avatartw)
 - Avinash Reddy -
   [@AvinashReddy3108](https://github.com/AvinashReddy3108)
