@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom User-Agent &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Custom User-Agent</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/components/custom-user-agent.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="custom-user-agent">
+<h1>Custom User-Agent<a class="headerlink" href="#custom-user-agent" title="Permalink to this heading"></a></h1>
+<section id="why-do-we-need-it">
+<h2>Why do we need it?<a class="headerlink" href="#why-do-we-need-it" title="Permalink to this heading"></a></h2>
+<p>As we need to be one in a middle of a connection to a webserver, the custom
+user agent is there for that!</p>
+</section>
+<section id="how-does-it-work">
+<h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading"></a></h2>
+<p>We set the user-agent every time we request something with the <code class="code docutils literal notranslate"><span class="pre">http</span></code>
+and <code class="code docutils literal notranslate"><span class="pre">https</span></code> protocols.</p>
+<p>If a custom user agent is given, it will be used.</p>
+<p>Otherwise, every 24 hours, we update our <a class="reference external" href="https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json">user-agents.json</a> file
+which will be fetched by your local version to determine the user-agent to use.</p>
+</section>
+<section id="how-to-use-it">
+<h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this heading"></a></h2>
+<p>Simply choose your browser and platform or provide us your custom one!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user_agent</span><span class="p">:</span>
+    <span class="n">browser</span><span class="p">:</span> <span class="n">chrome</span>
+    <span class="n">platform</span><span class="p">:</span> <span class="n">linux</span>
+    <span class="n">custom</span><span class="p">:</span> <span class="n">null</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--user-agent</span></code>
+(custom UA) argument from the CLI.</p>
+<section id="available-browser">
+<h3>Available Browser<a class="headerlink" href="#available-browser" title="Permalink to this heading"></a></h3>
+<p>Here is a list of available and accepted browsers at this time.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">chrome</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">edge</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">firefox</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">ie</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">opera</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">safari</span></code></p></li>
+</ul>
+</section>
+<section id="available-platform">
+<h3>Available Platform<a class="headerlink" href="#available-platform" title="Permalink to this heading"></a></h3>
+<p>Here is a list of available and accepted platform at this time.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">linux</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">macosx</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">win10</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="what-if-we-don-t-give-a-custom-user-agent">
+<h2>What if we don’t give a custom User-Agent?<a class="headerlink" href="#what-if-we-don-t-give-a-custom-user-agent" title="Permalink to this heading"></a></h2>
+<p>If you don’t set a custom User-Agent, we will try to get the latest one for the chosen
+browser and platform.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

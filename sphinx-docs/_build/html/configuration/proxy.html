@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>proxy &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="code docutils literal notranslate"><span class="pre">proxy</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/configuration/proxy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="proxy">
+<h1><code class="code docutils literal notranslate"><span class="pre">proxy</span></code><a class="headerlink" href="#proxy" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">New in version 4.1.0b12.dev.</span></p>
+</div>
+<p><strong>Type:</strong> <code class="code docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p><strong>Description:</strong> Configures everything related to the proxy settings.</p>
+</div></blockquote>
+<section id="proxy-global">
+<h2><code class="code docutils literal notranslate"><span class="pre">proxy[global]</span></code><a class="headerlink" href="#proxy-global" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">New in version 4.1.0b12.dev.</span></p>
+</div>
+<p><strong>Type:</strong> <code class="code docutils literal notranslate"><span class="pre">dict</span></code></p>
+<p><strong>Default value:</strong> <code class="code docutils literal notranslate"><span class="pre">{&quot;http&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;https&quot;:</span> <span class="pre">null}</span></code></p>
+<dl>
+<dt><strong>Description:</strong></dt><dd><p>The global proxy settings to use when no rules is matching.</p>
+<p>The proxy settings matcher works with rules, meaning that it will first
+try to match any of the given rules against the hostname that is being
+requested against. If none is matching, it will just take over
+<code class="code docutils literal notranslate"><span class="pre">proxy[global][http]</span></code> and <code class="code docutils literal notranslate"><span class="pre">proxy[global][https]</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both <code class="code docutils literal notranslate"><span class="pre">http</span></code> and <code class="code docutils literal notranslate"><span class="pre">https</span></code> keys are required. But, if one is missing
+and the other one is given, PyFunceble will take over the given one.</p>
+<p>If you give the following - as example:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+<span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The proxy settings matcher will read/use when no rules is matched:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+<span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</section>
+<section id="proxy-rules">
+<h2><code class="code docutils literal notranslate"><span class="pre">proxy[rules]</span></code><a class="headerlink" href="#proxy-rules" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><div class="versionadded">
+<p><span class="versionmodified added">New in version 4.1.0b12.dev.</span></p>
+</div>
+<p><strong>Type:</strong> <code class="code docutils literal notranslate"><span class="pre">list</span></code></p>
+<p><strong>Default value:</strong> <code class="code docutils literal notranslate"><span class="pre">[]</span></code> (None)</p>
+<dl>
+<dt><strong>Description:</strong></dt><dd><p>Sets the list of rules the proxy settings matcher has to follow.</p>
+<p>The proxy settings matcher will first look at the rules listed under
+this key.</p>
+<p>If you give the following - as example:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">global</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.de:8080</span>
+<span class="w">    </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.de:8080</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.dev:8080</span>
+<span class="w">      </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.dev:8080</span>
+<span class="w">      </span><span class="nt">tld</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">socks5h://example.org:8080</span>
+<span class="w">      </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">socks5h://example.org:8080</span>
+<span class="w">      </span><span class="nt">tld</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onion</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The proxy settings matcher will:</p>
+<blockquote>
+<div><ul>
+<li><p>use <code class="code docutils literal notranslate"><span class="pre">http://example.dev:8080</span></code> for any <code class="code docutils literal notranslate"><span class="pre">HTTP</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">HTTPS</span></code> requests to a subject that has the <code class="code docutils literal notranslate"><span class="pre">com</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">org</span></code> Top-Level-Domain (TLD).</p>
+<p><strong>Example</strong>: <code class="code docutils literal notranslate"><span class="pre">example.com</span></code> and <code class="code docutils literal notranslate"><span class="pre">example.org</span></code></p>
+</li>
+<li><p>use <code class="code docutils literal notranslate"><span class="pre">socks5h://example.org:8080</span></code> for any <code class="code docutils literal notranslate"><span class="pre">HTTP</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">HTTPS</span></code> requests to a subject that has the <code class="code docutils literal notranslate"><span class="pre">onion</span></code>
+Top-Level-Domain (TLD).</p>
+<p><strong>Example</strong>: <code class="code docutils literal notranslate"><span class="pre">example.onion</span></code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you explicitly want to use this feature to be able to test
+<code class="code docutils literal notranslate"><span class="pre">.onion</span></code> subjects, be sure to use the <code class="code docutils literal notranslate"><span class="pre">socks5h</span></code>
+instead of <code class="code docutils literal notranslate"><span class="pre">socks5</span></code> protocol.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">socks5h</span></code> will delegate the DNS lookup to the proxy when
+<code class="code docutils literal notranslate"><span class="pre">socks5</span></code> will delegate the DNS lookup to the locally
+defined DNS resolver or server.</p>
+</div>
+</li>
+<li><p>use <code class="code docutils literal notranslate"><span class="pre">http://example.de</span></code> for any <code class="code docutils literal notranslate"><span class="pre">HTTP</span></code> and <code class="code docutils literal notranslate"><span class="pre">HTTPS</span></code>
+requests to any other subject that is not matching the previous
+rules.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

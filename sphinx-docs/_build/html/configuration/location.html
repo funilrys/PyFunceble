@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Location &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Location</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/configuration/location.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="location">
+<h1>Location<a class="headerlink" href="#location" title="Permalink to this heading"></a></h1>
+<section id="problematics">
+<h2>Problematics<a class="headerlink" href="#problematics" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>How can we create a more efficient way to work with configuration?</p></li>
+<li><p>How can we make the configuration file(s) available globally so that
+PyFunceble can be run everywhere in the user workspace?</p></li>
+</ul>
+<p>To answer those problematics, we moved the configuration location
+elsewhere in the place where most users expect to have their
+configuration file(s).</p>
+</section>
+<section id="filename-s">
+<h2>Filename-s<a class="headerlink" href="#filename-s" title="Permalink to this heading"></a></h2>
+<p>At any of the listed configuration location, the following file will be
+read:</p>
+<ul>
+<li><dl>
+<dt><code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code></dt><dd><ul>
+<li><p>This file is generated automatically if missing.</p></li>
+<li><p>This file is automatically replaced if you choose to merge the
+upstream configuration when a features key is introduced or removed.</p>
+<p>This “new” behavior was introduced at the same time
+<cite>.PyFunceble.overwrite.yaml</cite> was. This is to ensure PyFunceble at
+all time is running on a fully compatible version of
+<cite>.PyFunceble.yaml</cite></p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">.PyFunceble.overwrite.yaml</span></code></dt><dd><ul class="simple">
+<li><p>This is the project specific configuration file for PyFunceble.
+This file is now taking presedence over <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code>
+which for sure previously was the file you used to alter for your
+pwn needs.</p></li>
+<li><p>This file can only be maintained by a human-controlled
+process. PyFunceble will never write into and never owerwrite this
+file, once it is created.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="repository-clone">
+<h2>Repository clone<a class="headerlink" href="#repository-clone" title="Permalink to this heading"></a></h2>
+<p>If you cloned the repository and you’re trying to test from a cloned
+directory (the one with for example <code class="code docutils literal notranslate"><span class="pre">CONTRIBUTING.md</span></code>) we consider
+the configuration directory as the current one.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This behavior allows us to not modify the way we develop PyFunceble.</p>
+</div>
+</section>
+<section id="travis-ci">
+<h2>Travis CI<a class="headerlink" href="#travis-ci" title="Permalink to this heading"></a></h2>
+<p>Under <a class="reference external" href="https://travis-ci.org/">Travis CI</a>, we search or initiate the configuration at the
+directory we are currently located.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We don’t care about the distribution, as long as the
+<code class="code docutils literal notranslate"><span class="pre">TRAVIS_BUILD_DIR</span></code> environment variable is set, we search or
+initiate the configuration in the current directory.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to force the directory where we should work, you can
+initiate the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_CONFIG_DIR</span></code> environment variable with
+the path where we should work.</p>
+</div>
+</section>
+<section id="gitlab-ci-cd">
+<h2>GitLab CI/CD<a class="headerlink" href="#gitlab-ci-cd" title="Permalink to this heading"></a></h2>
+<p>Under <a class="reference external" href="https://docs.gitlab.com/ee/ci/">GitLab CI/CD</a>, we search or initiate the configuration at the
+directory we are currently located.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We don’t care about the distribution, as long as the <code class="code docutils literal notranslate"><span class="pre">PROJECT_CI</span></code>
+and <code class="code docutils literal notranslate"><span class="pre">GITLAB_CI</span></code> environment variables are set, we search or
+initiate the configuration in the current directory.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to force the directory where we should work, you can
+initiate the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_CONFIG_DIR</span></code> environment variable with
+the path where we should work.</p>
+</div>
+</section>
+<section id="github-actions">
+<h2>GitHub Actions<a class="headerlink" href="#github-actions" title="Permalink to this heading"></a></h2>
+<p>Under <a class="reference external" href="https://github.com/features/actions">GitHub Actions</a>, we search or initiate the configuration at the
+directory we are currently located.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We don’t care about the distribution, as long as the
+<code class="code docutils literal notranslate"><span class="pre">GITHUB_ACTIONS</span></code> environment variable is set, we search or
+initiate the configuration in the current directory.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to force the directory where we should work, you can
+initiate the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_CONFIG_DIR</span></code> environment variable with
+the path where we should work.</p>
+</div>
+</section>
+<section id="jenkins-ci">
+<h2>Jenkins CI<a class="headerlink" href="#jenkins-ci" title="Permalink to this heading"></a></h2>
+<p>Under <a class="reference external" href="https://www.jenkins.io/">Jenkins CI</a>, we search or initiate the configuration at the
+directory we are currently located.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We don’t care about the distribution, as long as the
+<code class="code docutils literal notranslate"><span class="pre">JENKINS_URL</span></code> and <code class="code docutils literal notranslate"><span class="pre">JENKINS_HOME</span></code> environment variables
+are set, we search or initiate the configuration in the current
+directory.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to force the directory where we should work, you can
+initiate the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_CONFIG_DIR</span></code> environment variable with
+the path where we should work.</p>
+</div>
+</section>
+<section id="linux-and-macos-darwin-kernel">
+<h2>Linux and MacOS (Darwin Kernel)<a class="headerlink" href="#linux-and-macos-darwin-kernel" title="Permalink to this heading"></a></h2>
+<p>Under Linux and MacOS, we look for the following directories in their
+order.
+If any configuration directory is found, the system proposes you to
+install them automatically on the first configuration file.</p>
+<ol class="arabic simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">~/.config/PyFunceble</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">~/.PyFunceble</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">${PWD}</span></code></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the parent directory does not exist, we move to the next possible
+location in the given order.</p>
+<p>This means that under most Linux distributions and MacOS versions,
+we consider <code class="code docutils literal notranslate"><span class="pre">~/.config/PyFunceble</span></code> as the configuration
+location.
+But if the <code class="code docutils literal notranslate"><span class="pre">~/.config</span></code> directory does not exist, we fallback
+to <code class="code docutils literal notranslate"><span class="pre">~/.PyFunceble</span></code> as the configuration location.</p>
+</div>
+</section>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this heading"></a></h2>
+<p>As mentioned by <a class="reference external" href="https://blogs.msdn.microsoft.com/patricka/2010/03/18/where-should-i-store-my-data-and-configuration-files-if-i-target-multiple-os-versions/">Pat Altimore’s</a> Blog, we used the
+<code class="code docutils literal notranslate"><span class="pre">Per</span> <span class="pre">user</span> <span class="pre">configuration</span> <span class="pre">files</span> <span class="pre">synchronized</span> <span class="pre">across</span> <span class="pre">domain</span> <span class="pre">joined</span>
+<span class="pre">machines</span> <span class="pre">via</span> <span class="pre">Active</span> <span class="pre">Directory</span> <span class="pre">Roaming</span></code> section to understand what we
+should do to find our configuration directory.</p>
+<p>Under Windows, we look for the following directories in their order.
+If any configuration directory is found, the system proposes you to
+install them automatically on the first configuration file.</p>
+<ol class="arabic simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">%APPDATA%PyFunceble</span></code> (environnement variable)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">%CD%</span></code></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="code docutils literal notranslate"><span class="pre">%CD%</span></code> is explained by the set command (<code class="code docutils literal notranslate"><span class="pre">set</span> <span class="pre">/?</span></code>):</p>
+<blockquote>
+<div><p><code class="code docutils literal notranslate"><span class="pre">%CD%</span> <span class="pre">-</span> <span class="pre">expands</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">current</span> <span class="pre">directory</span> <span class="pre">string.</span></code></p>
+</div></blockquote>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the parent directory does not exist, we move to the next possible
+location in the given order.</p>
+<p>This means that under most Windows versions, we consider
+<code class="code docutils literal notranslate"><span class="pre">%APPDATA%PyFunceble</span></code> - also know as
+<code class="code docutils literal notranslate"><span class="pre">C:UsersuserNameAppDataRoamingPyFunceble</span></code>- as the
+configuration location.
+But if the <code class="code docutils literal notranslate"><span class="pre">%APPDATA%</span></code> directory does not exist, we fall back
+to the current directory as the configuration location.</p>
+</div>
+</section>
+<section id="custom-location">
+<h2>Custom location<a class="headerlink" href="#custom-location" title="Permalink to this heading"></a></h2>
+<p>Sometimes, you may find yourself in a position where you absolutely do
+not want PyFunceble to use its default configuration location.</p>
+<p>For that reason, if you set your desired configuration location along
+with the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_CONFIG_DIR</span></code> environment variable, we take
+that location as the (default) configuration location.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

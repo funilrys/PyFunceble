@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.query.dns.query_tool &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.query.dns.query_tool</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.query.dns.query_tool</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides an interface for the query.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># pylint: disable=too-many-lines</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">ipaddress</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dns.exception</span>
+<span class="kn">import</span> <span class="nn">dns.message</span>
+<span class="kn">import</span> <span class="nn">dns.name</span>
+<span class="kn">import</span> <span class="nn">dns.query</span>
+<span class="kn">import</span> <span class="nn">dns.rdataclass</span>
+<span class="kn">import</span> <span class="nn">dns.rdatatype</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.list</span> <span class="kn">import</span> <span class="n">ListHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.query.dns.nameserver</span> <span class="kn">import</span> <span class="n">Nameservers</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.query.record.dns</span> <span class="kn">import</span> <span class="n">DNSQueryToolRecord</span>
+
+
+<div class="viewcode-block" id="DNSQueryTool"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool">[docs]</a><span class="k">class</span> <span class="nc">DNSQueryTool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides our query tool.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># pylint: disable=too-many-public-methods</span>
+
+    <span class="n">STD_PROTOCOL</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;UDP&quot;</span>
+    <span class="n">STD_TIMEOUT</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">STD_FOLLOW_NAMESERVER_ORDER</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">STD_TRUST_SERVER</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">STD_DELAY</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">SUPPORTED_PROTOCOL</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TCP&quot;</span><span class="p">,</span> <span class="s2">&quot;UDP&quot;</span><span class="p">,</span> <span class="s2">&quot;HTTPS&quot;</span><span class="p">,</span> <span class="s2">&quot;TLS&quot;</span><span class="p">]</span>
+
+    <span class="n">value2rdata_type</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dns</span><span class="o">.</span><span class="n">rdatatype</span><span class="o">.</span><span class="n">RdataType</span>
+    <span class="p">}</span>
+    <span class="n">rdata_type2value</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dns</span><span class="o">.</span><span class="n">rdatatype</span><span class="o">.</span><span class="n">RdataType</span>
+    <span class="p">}</span>
+
+    <span class="n">nameservers</span><span class="p">:</span> <span class="n">Nameservers</span> <span class="o">=</span> <span class="n">Nameservers</span><span class="p">()</span>
+    <span class="n">_query_record_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">rdatatype</span><span class="o">.</span><span class="n">RdataType</span><span class="o">.</span><span class="n">ANY</span>
+
+    <span class="n">_subject</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_follow_nameserver_order</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_preferred_protocol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;UDP&quot;</span>
+    <span class="n">_query_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">_trust_server</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_delay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">dns_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">query_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">dns</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">QueryMessage</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">lookup_record</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DNSQueryToolRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">nameservers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">follow_nameserver_order</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">preferred_protocol</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">trust_server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nameservers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">set_nameservers</span><span class="p">(</span><span class="n">nameservers</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover ## I&#39;m not playing with system resolver.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">guess_and_set_nameservers</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">preferred_protocol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="n">preferred_protocol</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_preferred_protocol</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">follow_nameserver_order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="n">follow_nameserver_order</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_follow_nameserver_order</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">trust_server</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span> <span class="o">=</span> <span class="n">trust_server</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_trust_server</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">delay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_delay</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DNSQueryTool.prepare_query"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.prepare_query">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_query</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepare the query after running the decorated method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_record_type</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dns_name_from_subject_and_query_type</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">make_query</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_record_type</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.update_lookup_record"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.update_lookup_record">[docs]</a>    <span class="k">def</span> <span class="nf">update_lookup_record</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that a clean record is generated after the execution of</span>
+<span class="sd">        the decorated method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">subject</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span> <span class="o">=</span> <span class="n">DNSQueryToolRecord</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">dns_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">dns_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_human_query_record_type</span><span class="p">()</span>
+                <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">query_record_type</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">query_record_type</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">get_human_query_record_type</span><span class="p">()</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span>
+                <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">follow_nameserver_order</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">query_timeout</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">preferred_protocol</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span>
+
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.ensure_subject_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.ensure_subject_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_subject_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the subject to work with is given before running the</span>
+<span class="sd">        decorated method.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            If :code:`self.subject` is not a :py:class:`str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&lt;self.subject&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.update_lookup_record_response"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.update_lookup_record_response">[docs]</a>    <span class="k">def</span> <span class="nf">update_lookup_record_response</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the response of the decorated method is set as response</span>
+<span class="sd">        in our record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+            <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">response</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">result</span>
+
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.ignore_if_query_message_is_missing"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.ignore_if_query_message_is_missing">[docs]</a>    <span class="k">def</span> <span class="nf">ignore_if_query_message_is_missing</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ignores the call to the decorated method if the query message is</span>
+<span class="sd">        missing. Otherwise, return an empty list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+            <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># pragma: no cover ## Safety</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.get_dns_name_from_subject_and_query_type"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.get_dns_name_from_subject_and_query_type">[docs]</a>    <span class="nd">@ensure_subject_is_given</span>
+    <span class="k">def</span> <span class="nf">get_dns_name_from_subject_and_query_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the dns name based on the current subject and query type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_human_query_record_type</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ptr&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span>
+                        <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span><span class="o">.</span><span class="n">reverse_pointer</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">from_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span>
+            <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">LabelTooLong</span><span class="p">,</span>
+            <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">EmptyLabel</span><span class="p">,</span>
+            <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">BadEscape</span><span class="p">,</span>
+            <span class="n">dns</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">NameTooLong</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subject</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_subject` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subject</span>
+
+    <span class="nd">@subject</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@prepare_query</span>
+    <span class="nd">@update_lookup_record</span>
+    <span class="k">def</span> <span class="nf">subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the subject to work with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The subject to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subject</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_subject"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_subject">[docs]</a>    <span class="k">def</span> <span class="nf">set_subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the subject to work with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The subject to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.set_nameservers"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_nameservers">[docs]</a>    <span class="k">def</span> <span class="nf">set_nameservers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover ## Underlying already tested.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the nameservers to work with.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a list of :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">set_nameservers</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">follow_nameserver_order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_follow_nameserver_order`</span>
+<span class="sd">        attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_follow_nameserver_order</span>
+
+    <span class="nd">@follow_nameserver_order</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@update_lookup_record</span>
+    <span class="k">def</span> <span class="nf">follow_nameserver_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the :code:`follow_nameserver_order` variable.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`bool`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">bool</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_follow_nameserver_order</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_follow_nameserver_order"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_follow_nameserver_order">[docs]</a>    <span class="k">def</span> <span class="nf">set_follow_nameserver_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the :code:`follow_nameserver_order` variable.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">query_record_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_query_record_type` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_record_type</span>
+
+    <span class="nd">@query_record_type</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@prepare_query</span>
+    <span class="nd">@update_lookup_record</span>
+    <span class="k">def</span> <span class="nf">query_record_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the DNS record type to query.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set. It can be the human version (e.g AAAA) or an</span>
+<span class="sd">            integer as registered in the :code:`value2rdata_type` attribute.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str` nor</span>
+<span class="sd">            :py:class:`int`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is unknown or unsupported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">int</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdata_type2value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query_record_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rdata_type2value</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value2rdata_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query_record_type</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; (</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">) is unknown or unsupported.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_query_record_type"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_query_record_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_query_record_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the DNS record type to query.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set. It can be the human version (e.g AAAA) or an</span>
+<span class="sd">            integer as registered in the :code:`value2rdata_type` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_record_type</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.get_human_query_record_type"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.get_human_query_record_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_human_query_record_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the currently set record type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value2rdata_type</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">query_record_type</span><span class="p">]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">query_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_query_timeout` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_timeout</span>
+
+    <span class="nd">@query_timeout</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@update_lookup_record</span>
+    <span class="k">def</span> <span class="nf">query_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the timeout to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The timeout to apply.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`float`</span>
+<span class="sd">            nor :py:class.`int`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">float</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="nb">int</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query_timeout</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_timeout"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the timeout to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The timeout to apply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trust_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`trust_server` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trust_server</span>
+
+    <span class="nd">@trust_server</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">trust_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the value to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to apply.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`bool`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">bool</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trust_server</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_trust_server"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_trust_server">[docs]</a>    <span class="k">def</span> <span class="nf">set_trust_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the value to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to apply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_and_set_timeout"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_and_set_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess and set the timeout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">lookup</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">lookup</span><span class="o">.</span><span class="n">timeout</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_TIMEOUT</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_TIMEOUT</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">preferred_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_preferred_protocol` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preferred_protocol</span>
+
+    <span class="nd">@preferred_protocol</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">preferred_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the preferred protocol.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The protocol to use.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is unknown or unsupported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_PROTOCOL</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;value&gt; </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> is unknown or unsupported &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(supported: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_PROTOCOL</span><span class="si">!r}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preferred_protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">protocol</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_preferred_protocol"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_preferred_protocol">[docs]</a>    <span class="k">def</span> <span class="nf">set_preferred_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the preferred protocol.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The protocol to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_delay` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delay</span>
+
+    <span class="nd">@delay</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@update_lookup_record</span>
+    <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the delay to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The delay to apply.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`float`</span>
+<span class="sd">            nor :py:class.`int`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is not a positive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">float</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="nb">int</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be positive, </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delay</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DNSQueryTool.set_delay"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.set_delay">[docs]</a>    <span class="k">def</span> <span class="nf">set_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the delay to apply.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The delay to apply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_and_set_preferred_protocol"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_and_set_preferred_protocol">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_preferred_protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess and set the preferred procol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">protocol</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">protocol</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_PROTOCOL</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_PROTOCOL</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_and_set_follow_nameserver_order"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_and_set_follow_nameserver_order">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_follow_nameserver_order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess and authorize the mix of the nameserver before each</span>
+<span class="sd">        query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">follow_server_order</span><span class="p">,</span> <span class="nb">bool</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">follow_server_order</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_FOLLOW_NAMESERVER_ORDER</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_FOLLOW_NAMESERVER_ORDER</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_and_set_trust_server"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_and_set_trust_server">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_trust_server</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess and set the trust flag.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">trust_server</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">trust_server</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_TRUST_SERVER</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_TRUST_SERVER</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_and_set_delay"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_and_set_delay">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess and set the delay to apply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">delay</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">dns</span><span class="o">.</span><span class="n">delay</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_DELAY</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_DELAY</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.guess_all_settings"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.guess_all_settings">[docs]</a>    <span class="k">def</span> <span class="nf">guess_all_settings</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DNSQueryTool&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover ## Method themselves are more important</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess all settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;guess_all_settings&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">to_ignore</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">method</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;guess_&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">)()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.get_lookup_record"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.get_lookup_record">[docs]</a>    <span class="k">def</span> <span class="nf">get_lookup_record</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DNSQueryToolRecord</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current query record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_result_from_response</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">dns</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>  <span class="c1"># pragma: no cover ## This just reads upstream result</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a response, we return the best possible result.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">rrset</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get_rrset</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dns_name</span><span class="p">,</span>
+            <span class="n">dns</span><span class="o">.</span><span class="n">rdataclass</span><span class="o">.</span><span class="n">RdataClass</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">query_record_type</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rrset</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">to_text</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rrset</span><span class="p">])</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Result from response:</span><span class="se">\r</span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_mix_order</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>  <span class="c1"># pragma: no cover ## Just a shuffle :-)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a dataset, we mix its order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">follow_nameserver_order</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">dataset</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+                <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Mixed data:</span><span class="se">\n</span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataset</span>
+
+<div class="viewcode-block" id="DNSQueryTool.tcp"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.tcp">[docs]</a>    <span class="nd">@ensure_subject_is_given</span>
+    <span class="nd">@ignore_if_query_message_is_missing</span>
+    <span class="nd">@update_lookup_record_response</span>
+    <span class="k">def</span> <span class="nf">tcp</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request the chosen record through the TCP protocol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">used_protocol</span> <span class="o">=</span> <span class="s2">&quot;TCP&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nameserver</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mix_order</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">get_nameserver_ports</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Started to query information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">nameserver</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">tcp</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span><span class="p">,</span>
+                    <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">local_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">local_result</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">local_result</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">nameserver</span> <span class="o">=</span> <span class="n">nameserver</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Successfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">.&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                        <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">dns</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+                <span class="c1"># Example: Resource temporarily unavailable.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">UnexpectedSource</span><span class="p">:</span>
+                <span class="c1"># Example: got a response from XXX instead of XXX.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">BadResponse</span><span class="p">:</span>
+                <span class="c1"># Example: A DNS query response does not respond to the question</span>
+                <span class="c1"># asked.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># Example: Input is malformed.</span>
+                <span class="k">break</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Unsuccessfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">. Sleeping </span><span class="si">%f</span><span class="s2">s.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">nameserver</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ListHelper</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">subject</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.udp"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.udp">[docs]</a>    <span class="nd">@ensure_subject_is_given</span>
+    <span class="nd">@ignore_if_query_message_is_missing</span>
+    <span class="nd">@update_lookup_record_response</span>
+    <span class="k">def</span> <span class="nf">udp</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request the chosen record through the UTP protocol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">used_protocol</span> <span class="o">=</span> <span class="s2">&quot;UDP&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nameserver</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mix_order</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">get_nameserver_ports</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Started to query information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">nameserver</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">udp</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span><span class="p">,</span>
+                    <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">local_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">local_result</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">local_result</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">nameserver</span> <span class="o">=</span> <span class="n">nameserver</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Successfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">.&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                        <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">dns</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+                <span class="c1"># Example: Resource temporarily unavailable.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">UnexpectedSource</span><span class="p">:</span>
+                <span class="c1"># Example: got a response from XXX instead of XXX.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">BadResponse</span><span class="p">:</span>
+                <span class="c1"># Example: A DNS query response does not respond to the question</span>
+                <span class="c1"># asked.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># Example: Input is malformed.</span>
+                <span class="k">break</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Unsuccessfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">. Sleeping </span><span class="si">%f</span><span class="s2">s.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">nameserver</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ListHelper</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">subject</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.https"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.https">[docs]</a>    <span class="nd">@ensure_subject_is_given</span>
+    <span class="nd">@ignore_if_query_message_is_missing</span>
+    <span class="nd">@update_lookup_record_response</span>
+    <span class="k">def</span> <span class="nf">https</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request the chosen record through the https protocol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">used_protocol</span> <span class="o">=</span> <span class="s2">&quot;HTTPS&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nameserver</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mix_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">get_nameservers</span><span class="p">()):</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Started to query information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">nameserver</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">https</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span><span class="p">,</span> <span class="n">nameserver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span>
+                <span class="p">)</span>
+
+                <span class="n">local_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">local_result</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">local_result</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">nameserver</span> <span class="o">=</span> <span class="n">nameserver</span>
+
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Successfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">.&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                        <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">dns</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+                <span class="c1"># Example: Resource temporarily unavailable.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">UnexpectedSource</span><span class="p">:</span>
+                <span class="c1"># Example: got a response from XXX instead of XXX.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">BadResponse</span><span class="p">:</span>
+                <span class="c1"># Example: A DNS query response does not respond to the question</span>
+                <span class="c1"># asked.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># Example: Input is malformed.</span>
+                <span class="k">break</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Unsuccessfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">. Sleeping </span><span class="si">%f</span><span class="s2">s.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">nameserver</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ListHelper</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">subject</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.tls"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.tls">[docs]</a>    <span class="nd">@ensure_subject_is_given</span>
+    <span class="nd">@ignore_if_query_message_is_missing</span>
+    <span class="nd">@update_lookup_record_response</span>
+    <span class="k">def</span> <span class="nf">tls</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request the chosen record through the TLS protocol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">used_protocol</span> <span class="o">=</span> <span class="s2">&quot;TLS&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">nameserver</span><span class="p">,</span> <span class="n">port</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mix_order</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nameservers</span><span class="o">.</span><span class="n">get_nameserver_ports</span><span class="p">()</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Started to query information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">nameserver</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">port</span> <span class="o">==</span> <span class="mi">53</span><span class="p">:</span>
+                <span class="c1"># Default port for nameserver class is 53. So we ensure we</span>
+                <span class="c1"># overwrite with our own default.</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="mi">853</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">tls</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">query_message</span><span class="p">,</span>
+                    <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                    <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">query_timeout</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">local_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">local_result</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">local_result</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">nameserver</span> <span class="o">=</span> <span class="n">nameserver</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">lookup_record</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="s2">&quot;Successfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">.&quot;</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                        <span class="n">nameserver</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trust_server</span><span class="p">:</span>  <span class="c1"># pragma: no cover: Per case.</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">dns</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+                <span class="c1"># Example: Resource temporarily unavailable.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">UnexpectedSource</span><span class="p">:</span>
+                <span class="c1"># Example: got a response from XXX instead of XXX.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="n">dns</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">BadResponse</span><span class="p">:</span>
+                <span class="c1"># Example: A DNS query response does not respond to the question</span>
+                <span class="c1"># asked.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># Example: Input is malformed.</span>
+                <span class="k">break</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Unsuccessfully queried information of </span><span class="si">%r</span><span class="s2"> from </span><span class="si">%r</span><span class="s2">. Sleeping </span><span class="si">%f</span><span class="s2">s.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">nameserver</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ListHelper</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">subject</span></div>
+
+<div class="viewcode-block" id="DNSQueryTool.query"><a class="viewcode-back" href="../../../../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process the query based on the preferred protocol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_protocol</span><span class="o">.</span><span class="n">lower</span><span class="p">())()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

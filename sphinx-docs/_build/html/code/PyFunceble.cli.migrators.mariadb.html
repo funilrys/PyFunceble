@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.cli.migrators.mariadb package &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyFunceble.cli.processes package" href="PyFunceble.cli.processes.html" />
+    <link rel="prev" title="PyFunceble.cli.migrators.json2csv package" href="PyFunceble.cli.migrators.json2csv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyFunceble.html">PyFunceble package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="PyFunceble.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.checker.html">PyFunceble.checker package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.config.html">PyFunceble.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.converter.html">PyFunceble.converter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.data.html">PyFunceble.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.html">PyFunceble.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.dataset.html">PyFunceble.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.downloader.html">PyFunceble.downloader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.helpers.html">PyFunceble.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.html">PyFunceble.query package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.utils.html">PyFunceble.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.exceptions">PyFunceble.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.facility">PyFunceble.facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.factory">PyFunceble.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.logger">PyFunceble.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.sessions">PyFunceble.sessions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage">PyFunceble.storage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage_facility">PyFunceble.storage_facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Code Documentation</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.html">PyFunceble package</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.cli.migrators.html">PyFunceble.cli.migrators package</a></li>
+      <li class="breadcrumb-item active">PyFunceble.cli.migrators.mariadb package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/PyFunceble.cli.migrators.mariadb.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyfunceble-cli-migrators-mariadb-package">
+<h1>PyFunceble.cli.migrators.mariadb package<a class="headerlink" href="#pyfunceble-cli-migrators-mariadb-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-PyFunceble.cli.migrators.mariadb.base">
+<span id="pyfunceble-cli-migrators-mariadb-base-module"></span><h2>PyFunceble.cli.migrators.mariadb.base module<a class="headerlink" href="#module-PyFunceble.cli.migrators.mariadb.base" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides the base of all mariadb related migrations.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.migrators.mariadb.base.</span></span><span class="sig-name descname"><span class="pre">MariaDBMigratorBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_action_to_stdout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/base.html#MariaDBMigratorBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="PyFunceble.cli.migrators.html#PyFunceble.cli.migrators.db_base.DBMigratorBase" title="PyFunceble.cli.migrators.db_base.DBMigratorBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBMigratorBase</span></code></a></p>
+<p>Provides the base of all our mariadb migration.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.authorized">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">authorized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the authorization to process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.execute_if_authorized">
+<span class="sig-name descname"><span class="pre">execute_if_authorized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/base.html#MariaDBMigratorBase.execute_if_authorized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.execute_if_authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Executes the decorated method only if we are authorized to process.
+Otherwise, apply the given <code class="code docutils literal notranslate"><span class="pre">default</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.get_rows">
+<span class="sig-name descname"><span class="pre">get_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generator" title="(in Python v3.11)"><span class="pre">Generator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/base.html#MariaDBMigratorBase.get_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.get_rows" title="Permalink to this definition"></a></dt>
+<dd><p>Run the given statement with a defined limit, and yield each row.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you don’t delete the given rows, this method will be infinite.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.migrate">
+<span class="sig-name descname"><span class="pre">migrate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase" title="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase"><span class="pre">MariaDBMigratorBase</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/base.html#MariaDBMigratorBase.migrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.migrate" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the migration (itself).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase" title="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase"><span class="pre">MariaDBMigratorBase</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/base.html#MariaDBMigratorBase.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase.start" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the migration if wanted.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.migrators.mariadb.file_and_status">
+<span id="pyfunceble-cli-migrators-mariadb-file-and-status-module"></span><h2>PyFunceble.cli.migrators.mariadb.file_and_status module<a class="headerlink" href="#module-PyFunceble.cli.migrators.mariadb.file_and_status" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides the migrator of the <code class="code docutils literal notranslate"><span class="pre">pyfunceble_file</span></code> and <cite>pyfunceble_status</cite>
+tables.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.migrators.mariadb.file_and_status.</span></span><span class="sig-name descname"><span class="pre">FileAndStatusMigrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_action_to_stdout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/file_and_status.html#FileAndStatusMigrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase" title="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MariaDBMigratorBase</span></code></a></p>
+<p>Provides the interface which provides the migration of the
+<code class="code docutils literal notranslate"><span class="pre">pyfunceble_file</span></code> and <code class="code docutils literal notranslate"><span class="pre">pyfunceble_status</span></code>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator.authorized">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">authorized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator.authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the authorization to process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator.migrate">
+<span class="sig-name descname"><span class="pre">migrate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator" title="PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator"><span class="pre">FileAndStatusMigrator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/file_and_status.html#FileAndStatusMigrator.migrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.file_and_status.FileAndStatusMigrator.migrate" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the migration (itself).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.migrators.mariadb.whois_record_idna_subject">
+<span id="pyfunceble-cli-migrators-mariadb-whois-record-idna-subject-module"></span><h2>PyFunceble.cli.migrators.mariadb.whois_record_idna_subject module<a class="headerlink" href="#module-PyFunceble.cli.migrators.mariadb.whois_record_idna_subject" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides our WHOIS record migrator.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.</span></span><span class="sig-name descname"><span class="pre">WhoisRecordIDNASubjectMigrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_action_to_stdout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/whois_record_idna_subject.html#WhoisRecordIDNASubjectMigrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase" title="PyFunceble.cli.migrators.mariadb.base.MariaDBMigratorBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MariaDBMigratorBase</span></code></a></p>
+<p>Provides the interface which provides the completion of the missing
+IDNA subject column.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator.authorized">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">authorized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator.authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the authorization to process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator.migrate">
+<span class="sig-name descname"><span class="pre">migrate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator" title="PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator"><span class="pre">WhoisRecordIDNASubjectMigrator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/migrators/mariadb/whois_record_idna_subject.html#WhoisRecordIDNASubjectMigrator.migrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.migrators.mariadb.whois_record_idna_subject.WhoisRecordIDNASubjectMigrator.migrate" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the migration (itself).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.migrators.mariadb">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyFunceble.cli.migrators.mariadb" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides all our mariadb related migrations.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PyFunceble.cli.migrators.json2csv.html" class="btn btn-neutral float-left" title="PyFunceble.cli.migrators.json2csv package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PyFunceble.cli.processes.html" class="btn btn-neutral float-right" title="PyFunceble.cli.processes package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

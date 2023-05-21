@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.cli.filesystem package &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyFunceble.cli.filesystem.dir_structure package" href="PyFunceble.cli.filesystem.dir_structure.html" />
+    <link rel="prev" title="PyFunceble.cli.entry_points.pyfunceble package" href="PyFunceble.cli.entry_points.pyfunceble.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyFunceble.html">PyFunceble package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="PyFunceble.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.checker.html">PyFunceble.checker package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.config.html">PyFunceble.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.converter.html">PyFunceble.converter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.data.html">PyFunceble.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.html">PyFunceble.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.dataset.html">PyFunceble.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.downloader.html">PyFunceble.downloader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.helpers.html">PyFunceble.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.html">PyFunceble.query package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.utils.html">PyFunceble.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.exceptions">PyFunceble.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.facility">PyFunceble.facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.factory">PyFunceble.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.logger">PyFunceble.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.sessions">PyFunceble.sessions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage">PyFunceble.storage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage_facility">PyFunceble.storage_facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Code Documentation</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.html">PyFunceble package</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+      <li class="breadcrumb-item active">PyFunceble.cli.filesystem package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/PyFunceble.cli.filesystem.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyfunceble-cli-filesystem-package">
+<h1>PyFunceble.cli.filesystem package<a class="headerlink" href="#pyfunceble-cli-filesystem-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html">PyFunceble.cli.filesystem.dir_structure package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#module-PyFunceble.cli.filesystem.dir_structure.backup">PyFunceble.cli.filesystem.dir_structure.backup module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBackup</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup.get_backup_data"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBackup.get_backup_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup.start"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBackup.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup.store_backup"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBackup.store_backup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#module-PyFunceble.cli.filesystem.dir_structure.base">PyFunceble.cli.filesystem.dir_structure.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.cleanup"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.get_backup_data"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.get_backup_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.get_path_without_base_dir"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.get_path_without_base_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.set_source_file"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.set_source_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.source_file"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.source_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.start"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.base.DirectoryStructureBase.std_source_file"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureBase.std_source_file</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#module-PyFunceble.cli.filesystem.dir_structure.restore">PyFunceble.cli.filesystem.dir_structure.restore module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.restore.DirectoryStructureRestoration"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureRestoration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.restore.DirectoryStructureRestoration.get_backup_data"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureRestoration.get_backup_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.restore.DirectoryStructureRestoration.restore_from_backup"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureRestoration.restore_from_backup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.restore.DirectoryStructureRestoration.start"><code class="docutils literal notranslate"><span class="pre">DirectoryStructureRestoration.start()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.dir_structure.html#module-PyFunceble.cli.filesystem.dir_structure">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html">PyFunceble.cli.filesystem.printer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#module-PyFunceble.cli.filesystem.printer.base">PyFunceble.cli.filesystem.printer.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase"><code class="docutils literal notranslate"><span class="pre">PrinterBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.HEADERS"><code class="docutils literal notranslate"><span class="pre">PrinterBase.HEADERS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.STD_LENGTH"><code class="docutils literal notranslate"><span class="pre">PrinterBase.STD_LENGTH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.STD_UNKNOWN"><code class="docutils literal notranslate"><span class="pre">PrinterBase.STD_UNKNOWN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.TEMPLATES"><code class="docutils literal notranslate"><span class="pre">PrinterBase.TEMPLATES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.dataset"><code class="docutils literal notranslate"><span class="pre">PrinterBase.dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.ensure_dataset_is_given"><code class="docutils literal notranslate"><span class="pre">PrinterBase.ensure_dataset_is_given()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.ensure_template_to_use_is_given"><code class="docutils literal notranslate"><span class="pre">PrinterBase.ensure_template_to_use_is_given()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.get_header_to_print"><code class="docutils literal notranslate"><span class="pre">PrinterBase.get_header_to_print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.get_line_to_print"><code class="docutils literal notranslate"><span class="pre">PrinterBase.get_line_to_print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.print_header"><code class="docutils literal notranslate"><span class="pre">PrinterBase.print_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.print_interpolated_line"><code class="docutils literal notranslate"><span class="pre">PrinterBase.print_interpolated_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.set_dataset"><code class="docutils literal notranslate"><span class="pre">PrinterBase.set_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.set_template_to_use"><code class="docutils literal notranslate"><span class="pre">PrinterBase.set_template_to_use()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.base.PrinterBase.template_to_use"><code class="docutils literal notranslate"><span class="pre">PrinterBase.template_to_use</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#module-PyFunceble.cli.filesystem.printer.file">PyFunceble.cli.filesystem.printer.file module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter"><code class="docutils literal notranslate"><span class="pre">FilePrinter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.STD_FILE_GENERATION"><code class="docutils literal notranslate"><span class="pre">FilePrinter.STD_FILE_GENERATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.allow_coloration"><code class="docutils literal notranslate"><span class="pre">FilePrinter.allow_coloration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.destination"><code class="docutils literal notranslate"><span class="pre">FilePrinter.destination</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.ensure_destination_is_given"><code class="docutils literal notranslate"><span class="pre">FilePrinter.ensure_destination_is_given()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.file_helper"><code class="docutils literal notranslate"><span class="pre">FilePrinter.file_helper</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.get_generation_date_line"><code class="docutils literal notranslate"><span class="pre">FilePrinter.get_generation_date_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.print_interpolated_line"><code class="docutils literal notranslate"><span class="pre">FilePrinter.print_interpolated_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.propagate_destination"><code class="docutils literal notranslate"><span class="pre">FilePrinter.propagate_destination()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter.set_destination"><code class="docutils literal notranslate"><span class="pre">FilePrinter.set_destination()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#module-PyFunceble.cli.filesystem.printer.stdout">PyFunceble.cli.filesystem.printer.stdout module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.BACKGROUND_COLORATED"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.BACKGROUND_COLORATED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.FOREGROUND_COLORATED"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.FOREGROUND_COLORATED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.STATUS2BACKGROUND_COLOR"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.STATUS2BACKGROUND_COLOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.STATUS2FORGROUND_COLOR"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.STATUS2FORGROUND_COLOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.STD_ALLOW_COLORATION"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.STD_ALLOW_COLORATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.STD_FILE_HEADER"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.STD_FILE_HEADER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.allow_coloration"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.allow_coloration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.guess_allow_coloration"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.guess_allow_coloration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.print_interpolated_line"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.print_interpolated_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.stdout.StdoutPrinter.set_allow_coloration"><code class="docutils literal notranslate"><span class="pre">StdoutPrinter.set_allow_coloration()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#module-PyFunceble.cli.filesystem.printer">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-PyFunceble.cli.filesystem.cleanup">
+<span id="pyfunceble-cli-filesystem-cleanup-module"></span><h2>PyFunceble.cli.filesystem.cleanup module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.cleanup" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to the cleanup of the filesystem.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.cleanup.</span></span><span class="sig-name descname"><span class="pre">FilesystemCleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/cleanup.html#FilesystemCleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase" title="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemDirBase</span></code></a></p>
+<p>Provides the interface for the cleanup of the filesystem.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.clean_database">
+<span class="sig-name descname"><span class="pre">clean_database</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup" title="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup"><span class="pre">FilesystemCleanup</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/cleanup.html#FilesystemCleanup.clean_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.clean_database" title="Permalink to this definition"></a></dt>
+<dd><p>Cleanups the uneeded data that were stored in the database.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method cleans everything except the WHOIS records.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.clean_output_files">
+<span class="sig-name descname"><span class="pre">clean_output_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup" title="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup"><span class="pre">FilesystemCleanup</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/cleanup.html#FilesystemCleanup.clean_output_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.clean_output_files" title="Permalink to this definition"></a></dt>
+<dd><p>Cleanups the unneeded files from the output directory.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.file_helper">
+<span class="sig-name descname"><span class="pre">file_helper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.helpers.html#PyFunceble.helpers.file.FileHelper" title="PyFunceble.helpers.file.FileHelper"><span class="pre">FileHelper</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PyFunceble.helpers.file.FileHelper</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.file_helper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.output_files_to_delete">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_files_to_delete</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.output_files_to_delete" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the list of output files to delete.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup" title="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup"><span class="pre">FilesystemCleanup</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/cleanup.html#FilesystemCleanup.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup.start" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the cleanup of everything unneeded.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem.counter">
+<span id="pyfunceble-cli-filesystem-counter-module"></span><h2>PyFunceble.cli.filesystem.counter module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.counter" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to our counter tracker.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.counter.</span></span><span class="sig-name descname"><span class="pre">FilesystemCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/counter.html#FilesystemCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase" title="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemJSONBase</span></code></a></p>
+<p>Provides our counter.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter.PERCENTAGE_STATUSES">
+<span class="sig-name descname"><span class="pre">PERCENTAGE_STATUSES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'AVAILABILITY':</span> <span class="pre">['ACTIVE',</span> <span class="pre">'INACTIVE',</span> <span class="pre">'INVALID'],</span> <span class="pre">'REPUTATION':</span> <span class="pre">['SANE',</span> <span class="pre">'MALICIOUS'],</span> <span class="pre">'SYNTAX':</span> <span class="pre">['VALID',</span> <span class="pre">'INVALID']}</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter.PERCENTAGE_STATUSES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter.SOURCE_FILE">
+<span class="sig-name descname"><span class="pre">SOURCE_FILE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'counter.json'</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter.SOURCE_FILE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter.STD_DATASET">
+<span class="sig-name descname"><span class="pre">STD_DATASET</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'counter':</span> <span class="pre">{'ACTIVE':</span> <span class="pre">0,</span> <span class="pre">'INACTIVE':</span> <span class="pre">0,</span> <span class="pre">'INVALID':</span> <span class="pre">0,</span> <span class="pre">'MALICIOUS':</span> <span class="pre">0,</span> <span class="pre">'SANE':</span> <span class="pre">0,</span> <span class="pre">'VALID':</span> <span class="pre">0,</span> <span class="pre">'total':</span> <span class="pre">0},</span> <span class="pre">'percentage':</span> <span class="pre">{'ACTIVE':</span> <span class="pre">0,</span> <span class="pre">'INACTIVE':</span> <span class="pre">0,</span> <span class="pre">'INVALID':</span> <span class="pre">0,</span> <span class="pre">'MALICIOUS':</span> <span class="pre">0,</span> <span class="pre">'SANE':</span> <span class="pre">0,</span> <span class="pre">'VALID':</span> <span class="pre">0,</span> <span class="pre">'total':</span> <span class="pre">0}}</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter.STD_DATASET" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.checker.html#PyFunceble.checker.status_base.CheckerStatusBase" title="PyFunceble.checker.status_base.CheckerStatusBase"><span class="pre">CheckerStatusBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter" title="PyFunceble.cli.filesystem.counter.FilesystemCounter"><span class="pre">FilesystemCounter</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/counter.html#FilesystemCounter.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter.count" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the counting process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>status</strong> – The status to count into our dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.counter.FilesystemCounter.get_dataset_for_printer">
+<span class="sig-name descname"><span class="pre">get_dataset_for_printer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/counter.html#FilesystemCounter.get_dataset_for_printer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.counter.FilesystemCounter.get_dataset_for_printer" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the dataset that the printer may understand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the current testing mode is not supported (yet?).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem.dir_base">
+<span id="pyfunceble-cli-filesystem-dir-base-module"></span><h2>PyFunceble.cli.filesystem.dir_base module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.dir_base" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides a common base to the manipulation of the output directory.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.dir_base.</span></span><span class="sig-name descname"><span class="pre">FilesystemDirBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/dir_base.html#FilesystemDirBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides a common base for the manipulation of our output directory.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.db_session">
+<span class="sig-name descname"><span class="pre">db_session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.db_session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.get_output_basedir">
+<span class="sig-name descname"><span class="pre">get_output_basedir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/dir_base.html#FilesystemDirBase.get_output_basedir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.get_output_basedir" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the output base directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>create_if_missing</strong> – Authorizes the creation of the directory if it’s missing.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.parent_dirname">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent_dirname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.parent_dirname" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_parent_dirname</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.set_parent_dirname">
+<span class="sig-name descname"><span class="pre">set_parent_dirname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase" title="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase"><span class="pre">FilesystemDirBase</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/dir_base.html#FilesystemDirBase.set_parent_dirname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase.set_parent_dirname" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the parent dirname. The parent dirname is a directory which
+acts a parent into the output directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parm value<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem.json_base">
+<span id="pyfunceble-cli-filesystem-json-base-module"></span><h2>PyFunceble.cli.filesystem.json_base module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.json_base" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides a base for the manipulation of JSON files.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.json_base.</span></span><span class="sig-name descname"><span class="pre">FilesystemJSONBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase" title="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemDirBase</span></code></a></p>
+<p>A base interface for the manipulation of JSON files.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.SOURCE_FILE">
+<span class="sig-name descname"><span class="pre">SOURCE_FILE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.SOURCE_FILE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.STD_DATASET">
+<span class="sig-name descname"><span class="pre">STD_DATASET</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.STD_DATASET" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.fetch_dataset">
+<span class="sig-name descname"><span class="pre">fetch_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase" title="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase"><span class="pre">FilesystemJSONBase</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase.fetch_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.fetch_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch the dataset from the source file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.fetch_dataset_beforehand">
+<span class="sig-name descname"><span class="pre">fetch_dataset_beforehand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase.fetch_dataset_beforehand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.fetch_dataset_beforehand" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the dataset to work with before launching the decorated method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.save_dataset">
+<span class="sig-name descname"><span class="pre">save_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase" title="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase"><span class="pre">FilesystemJSONBase</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase.save_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.save_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the current dataset into it’s final destination.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.save_dataset_afterwards">
+<span class="sig-name descname"><span class="pre">save_dataset_afterwards</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase.save_dataset_afterwards"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.save_dataset_afterwards" title="Permalink to this definition"></a></dt>
+<dd><p>Saves the dataset after launching the decorated method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.source_file_path">
+<span class="sig-name descname"><span class="pre">source_file_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.source_file_path" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.update_source_file_path_beforehand">
+<span class="sig-name descname"><span class="pre">update_source_file_path_beforehand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/json_base.html#FilesystemJSONBase.update_source_file_path_beforehand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase.update_source_file_path_beforehand" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the source file before launching the decorated method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem.registrar_counter">
+<span id="pyfunceble-cli-filesystem-registrar-counter-module"></span><h2>PyFunceble.cli.filesystem.registrar_counter module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.registrar_counter" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to the registrar counter.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.registrar_counter.</span></span><span class="sig-name descname"><span class="pre">RegistrarCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.database.html#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/registrar_counter.html#RegistrarCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.filesystem.json_base.FilesystemJSONBase" title="PyFunceble.cli.filesystem.json_base.FilesystemJSONBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemJSONBase</span></code></a></p>
+<p>Provides our registrar stats counter.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.SOURCE_FILE">
+<span class="sig-name descname"><span class="pre">SOURCE_FILE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'registrar_counter.json'</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.SOURCE_FILE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.STD_DATASET">
+<span class="sig-name descname"><span class="pre">STD_DATASET</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'counter':</span> <span class="pre">{'total':</span> <span class="pre">0},</span> <span class="pre">'percentage':</span> <span class="pre">{'total':</span> <span class="pre">0}}</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.STD_DATASET" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.SUPPORTED_TEST_MODES">
+<span class="sig-name descname"><span class="pre">SUPPORTED_TEST_MODES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['AVAILABILITY']</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.SUPPORTED_TEST_MODES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter" title="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter"><span class="pre">RegistrarCounter</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/registrar_counter.html#RegistrarCounter.count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.count" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the counting process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>registrar</strong> – The registrar to count into our dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.get_dataset_for_printer">
+<span class="sig-name descname"><span class="pre">get_dataset_for_printer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.11)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/registrar_counter.html#RegistrarCounter.get_dataset_for_printer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.registrar_counter.RegistrarCounter.get_dataset_for_printer" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the dataset that the printer may understand.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> – <p>Maximum number of registrars to display.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If set to <code class="code docutils literal notranslate"><span class="pre">None</span></code>, all registrars will be displayed.</p>
+</div>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the current testing mode is not supported (yet?).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem.status_file">
+<span id="pyfunceble-cli-filesystem-status-file-module"></span><h2>PyFunceble.cli.filesystem.status_file module<a class="headerlink" href="#module-PyFunceble.cli.filesystem.status_file" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to our status file generation.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.cli.filesystem.status_file.</span></span><span class="sig-name descname"><span class="pre">StatusFileGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.checker.syntax.html#PyFunceble.checker.syntax.status.SyntaxCheckerStatus" title="PyFunceble.checker.syntax.status.SyntaxCheckerStatus"><span class="pre">SyntaxCheckerStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.checker.availability.html#PyFunceble.checker.availability.status.AvailabilityCheckerStatus" title="PyFunceble.checker.availability.status.AvailabilityCheckerStatus"><span class="pre">AvailabilityCheckerStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.checker.reputation.html#PyFunceble.checker.reputation.status.ReputationCheckerStatus" title="PyFunceble.checker.reputation.status.ReputationCheckerStatus"><span class="pre">ReputationCheckerStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_hosts_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_plain_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_analytic_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hosts_ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_unified_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyFunceble.cli.filesystem.dir_base.FilesystemDirBase" title="PyFunceble.cli.filesystem.dir_base.FilesystemDirBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemDirBase</span></code></a></p>
+<p>Provides an interface for the generation of the status file from
+a given status.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_ANALYTIC_FILES">
+<span class="sig-name descname"><span class="pre">STD_ALLOW_ANALYTIC_FILES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_ANALYTIC_FILES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_HOSTS_FILES">
+<span class="sig-name descname"><span class="pre">STD_ALLOW_HOSTS_FILES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_HOSTS_FILES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_PLAIN_FILES">
+<span class="sig-name descname"><span class="pre">STD_ALLOW_PLAIN_FILES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_PLAIN_FILES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_UNIFIED_FILE">
+<span class="sig-name descname"><span class="pre">STD_ALLOW_UNIFIED_FILE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_ALLOW_UNIFIED_FILE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_HOSTS_IP">
+<span class="sig-name descname"><span class="pre">STD_HOSTS_IP</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.0.0.0'</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.STD_HOSTS_IP" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_analytic_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">allow_analytic_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_analytic_files" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_allow_analytic_files</span></code>
+attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_hosts_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">allow_hosts_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_hosts_files" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_allow_hosts_files</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_plain_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">allow_plain_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_plain_files" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_allow_plain_file</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_unified_file">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">allow_unified_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.allow_unified_file" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">allow_unified_file</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.ensure_status_is_given">
+<span class="sig-name descname"><span class="pre">ensure_status_is_given</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.ensure_status_is_given"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.ensure_status_is_given" title="Permalink to this definition"></a></dt>
+<dd><p>Ensures that the status is given before launching the decorated method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – When <code class="code docutils literal notranslate"><span class="pre">self.status</span></code> is not set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.file_printer">
+<span class="sig-name descname"><span class="pre">file_printer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.cli.filesystem.printer.html#PyFunceble.cli.filesystem.printer.file.FilePrinter" title="PyFunceble.cli.filesystem.printer.file.FilePrinter"><span class="pre">FilePrinter</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PyFunceble.cli.filesystem.printer.file.FilePrinter</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.file_printer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_analytic_file">
+<span class="sig-name descname"><span class="pre">generate_analytic_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.generate_analytic_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_analytic_file" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the analytic files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_hosts_file">
+<span class="sig-name descname"><span class="pre">generate_hosts_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.generate_hosts_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_hosts_file" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the hosts file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_plain_file">
+<span class="sig-name descname"><span class="pre">generate_plain_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.generate_plain_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_plain_file" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the plain file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_splitted_status_file">
+<span class="sig-name descname"><span class="pre">generate_splitted_status_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.generate_splitted_status_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_splitted_status_file" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the splitted status file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_unified_status_file">
+<span class="sig-name descname"><span class="pre">generate_unified_status_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.generate_unified_status_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.generate_unified_status_file" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the unified status file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.get_output_basedir">
+<span class="sig-name descname"><span class="pre">get_output_basedir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.get_output_basedir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.get_output_basedir" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the output base directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>create_if_missing</strong> – Authorizes the creation of the directory if it’s missing.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_all_settings">
+<span class="sig-name descname"><span class="pre">guess_all_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_all_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_all_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Try to guess all settings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_analytic_files">
+<span class="sig-name descname"><span class="pre">guess_and_set_allow_analytic_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_and_set_allow_analytic_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_analytic_files" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to guess the value of the <code class="code docutils literal notranslate"><span class="pre">allow_analytic_files</span></code> from the
+configuration file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_hosts_files">
+<span class="sig-name descname"><span class="pre">guess_and_set_allow_hosts_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_and_set_allow_hosts_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_hosts_files" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to guess the value of the <code class="code docutils literal notranslate"><span class="pre">allow_hosts_files</span></code> from the
+configuration file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_plain_files">
+<span class="sig-name descname"><span class="pre">guess_and_set_allow_plain_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_and_set_allow_plain_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_plain_files" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to guess the value of the <code class="code docutils literal notranslate"><span class="pre">allow_plain_files</span></code> from the
+configuration file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_unified_file">
+<span class="sig-name descname"><span class="pre">guess_and_set_allow_unified_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_and_set_allow_unified_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_allow_unified_file" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to guess the value of the <code class="code docutils literal notranslate"><span class="pre">allow_unified_file</span></code> from the
+configuration file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_hosts_ip">
+<span class="sig-name descname"><span class="pre">guess_and_set_hosts_ip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.guess_and_set_hosts_ip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.guess_and_set_hosts_ip" title="Permalink to this definition"></a></dt>
+<dd><p>Tries to guess the value of the <code class="code docutils literal notranslate"><span class="pre">hosts_ip</span></code> from the
+configuration file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.hosts_ip">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hosts_ip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.hosts_ip" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_hosts_ip</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_analytic_files">
+<span class="sig-name descname"><span class="pre">set_allow_analytic_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_allow_analytic_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_analytic_files" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the authorization to generation of analytic files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_hosts_files">
+<span class="sig-name descname"><span class="pre">set_allow_hosts_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_allow_hosts_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_hosts_files" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the authorization to generation of hosts files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_plain_files">
+<span class="sig-name descname"><span class="pre">set_allow_plain_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_allow_plain_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_plain_files" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the authorization to generation of plain files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_unified_file">
+<span class="sig-name descname"><span class="pre">set_allow_unified_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_allow_unified_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_allow_unified_file" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the authorization to generation of the unified status file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_hosts_ip">
+<span class="sig-name descname"><span class="pre">set_hosts_ip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_hosts_ip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_hosts_ip" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the hosts IP to use while generating the hosts files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_status">
+<span class="sig-name descname"><span class="pre">set_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PyFunceble.checker.html#PyFunceble.checker.status_base.CheckerStatusBase" title="PyFunceble.checker.status_base.CheckerStatusBase"><span class="pre">CheckerStatusBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_status" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the status to work with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_test_dataset">
+<span class="sig-name descname"><span class="pre">set_test_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.set_test_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.set_test_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the test dataset which was given to the tester.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The value to set.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – When the given <code class="code docutils literal notranslate"><span class="pre">value</span></code> is not a :py:class`dict`.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator" title="PyFunceble.cli.filesystem.status_file.StatusFileGenerator"><span class="pre">StatusFileGenerator</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/cli/filesystem/status_file.html#StatusFileGenerator.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.start" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the generation of everything possible.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.status">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.checker.html#PyFunceble.checker.status_base.CheckerStatusBase" title="PyFunceble.checker.status_base.CheckerStatusBase"><span class="pre">CheckerStatusBase</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.status" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_status</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.cli.filesystem.status_file.StatusFileGenerator.test_dataset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.cli.filesystem.status_file.StatusFileGenerator.test_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_test_dataset</span></code> attribute.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.cli.filesystem">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyFunceble.cli.filesystem" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to our very own filesystem or output structure.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PyFunceble.cli.entry_points.pyfunceble.html" class="btn btn-neutral float-left" title="PyFunceble.cli.entry_points.pyfunceble package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PyFunceble.cli.filesystem.dir_structure.html" class="btn btn-neutral float-right" title="PyFunceble.cli.filesystem.dir_structure package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

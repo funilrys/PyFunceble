@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.query.whois package &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyFunceble.query.whois.converter package" href="PyFunceble.query.whois.converter.html" />
+    <link rel="prev" title="PyFunceble.query.requests.adapter package" href="PyFunceble.query.requests.adapter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyFunceble.html">PyFunceble package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="PyFunceble.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.checker.html">PyFunceble.checker package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.config.html">PyFunceble.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.converter.html">PyFunceble.converter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.data.html">PyFunceble.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.html">PyFunceble.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.dataset.html">PyFunceble.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.downloader.html">PyFunceble.downloader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.helpers.html">PyFunceble.helpers package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="PyFunceble.query.html">PyFunceble.query package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.utils.html">PyFunceble.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.exceptions">PyFunceble.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.facility">PyFunceble.facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.factory">PyFunceble.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.logger">PyFunceble.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.sessions">PyFunceble.sessions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage">PyFunceble.storage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage_facility">PyFunceble.storage_facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Code Documentation</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.html">PyFunceble package</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.query.html">PyFunceble.query package</a></li>
+      <li class="breadcrumb-item active">PyFunceble.query.whois package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/PyFunceble.query.whois.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyfunceble-query-whois-package">
+<h1>PyFunceble.query.whois package<a class="headerlink" href="#pyfunceble-query-whois-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.query.whois.converter.html">PyFunceble.query.whois.converter package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter.base">PyFunceble.query.whois.converter.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.base.ConverterBase"><code class="docutils literal notranslate"><span class="pre">ConverterBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.base.ConverterBase.data_to_convert"><code class="docutils literal notranslate"><span class="pre">ConverterBase.data_to_convert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.base.ConverterBase.ensure_data_to_convert_is_given"><code class="docutils literal notranslate"><span class="pre">ConverterBase.ensure_data_to_convert_is_given()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.base.ConverterBase.get_converted"><code class="docutils literal notranslate"><span class="pre">ConverterBase.get_converted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.base.ConverterBase.set_data_to_convert"><code class="docutils literal notranslate"><span class="pre">ConverterBase.set_data_to_convert()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter.digit2digits">PyFunceble.query.whois.converter.digit2digits module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.digit2digits.Digit2Digits"><code class="docutils literal notranslate"><span class="pre">Digit2Digits</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.digit2digits.Digit2Digits.data_to_convert"><code class="docutils literal notranslate"><span class="pre">Digit2Digits.data_to_convert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.digit2digits.Digit2Digits.get_converted"><code class="docutils literal notranslate"><span class="pre">Digit2Digits.get_converted()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter.expiration_date">PyFunceble.query.whois.converter.expiration_date module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.MARKER2DATE_REGEX"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.MARKER2DATE_REGEX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.PATTERNS"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.PATTERNS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.REGEX_DIGITS"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.REGEX_DIGITS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.REGEX_PARSE_MAP"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.REGEX_PARSE_MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.data_to_convert"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.data_to_convert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor.get_converted"><code class="docutils literal notranslate"><span class="pre">ExpirationDateExtractor.get_converted()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter.month2unified">PyFunceble.query.whois.converter.month2unified module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.month2unified.Month2Unified"><code class="docutils literal notranslate"><span class="pre">Month2Unified</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.month2unified.Month2Unified.MAP"><code class="docutils literal notranslate"><span class="pre">Month2Unified.MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.month2unified.Month2Unified.data_to_convert"><code class="docutils literal notranslate"><span class="pre">Month2Unified.data_to_convert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.month2unified.Month2Unified.get_converted"><code class="docutils literal notranslate"><span class="pre">Month2Unified.get_converted()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter.registrar">PyFunceble.query.whois.converter.registrar module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.registrar.RegistarExtractor"><code class="docutils literal notranslate"><span class="pre">RegistarExtractor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.registrar.RegistarExtractor.PATTERNS"><code class="docutils literal notranslate"><span class="pre">RegistarExtractor.PATTERNS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.registrar.RegistarExtractor.data_to_convert"><code class="docutils literal notranslate"><span class="pre">RegistarExtractor.data_to_convert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.registrar.RegistarExtractor.get_converted"><code class="docutils literal notranslate"><span class="pre">RegistarExtractor.get_converted()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.query.whois.converter.html#module-PyFunceble.query.whois.converter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-PyFunceble.query.whois.query_tool">
+<span id="pyfunceble-query-whois-query-tool-module"></span><h2>PyFunceble.query.whois.query_tool module<a class="headerlink" href="#module-PyFunceble.query.whois.query_tool" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides our interface for quering the WHOIS Record of a given subject.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.query.whois.query_tool.</span></span><span class="sig-name descname"><span class="pre">WhoisQueryTool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides the interface to get the WHOIS record of a given subject.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.BUFFER_SIZE">
+<span class="sig-name descname"><span class="pre">BUFFER_SIZE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4096</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.BUFFER_SIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.STD_PORT">
+<span class="sig-name descname"><span class="pre">STD_PORT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.STD_PORT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.ensure_subject_is_given">
+<span class="sig-name descname"><span class="pre">ensure_subject_is_given</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.ensure_subject_is_given"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.ensure_subject_is_given" title="Permalink to this definition"></a></dt>
+<dd><p>Ensures that the subject is given before running the decorated method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – If the subject is not a string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.expiration_date">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expiration_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.expiration_date" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_expiration_date</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.expiration_date_extractor">
+<span class="sig-name descname"><span class="pre">expiration_date_extractor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor" title="PyFunceble.query.whois.converter.expiration_date.ExpirationDateExtractor"><span class="pre">ExpirationDateExtractor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.expiration_date_extractor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.get_lookup_record">
+<span class="sig-name descname"><span class="pre">get_lookup_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="PyFunceble.query.record.html#PyFunceble.query.record.whois.WhoisQueryToolRecord" title="PyFunceble.query.record.whois.WhoisQueryToolRecord"><span class="pre">WhoisQueryToolRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.get_lookup_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.get_lookup_record" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current query record.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.get_record">
+<span class="sig-name descname"><span class="pre">get_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.get_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.get_record" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current record.</p>
+<dl class="simple">
+<dt>Side Effect:</dt><dd><p>The record will be queried if it is non existent.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.get_whois_server">
+<span class="sig-name descname"><span class="pre">get_whois_server</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.get_whois_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.get_whois_server" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the whois server to work with.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.iana_dataset">
+<span class="sig-name descname"><span class="pre">iana_dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.dataset.html#PyFunceble.dataset.iana.IanaDataset" title="PyFunceble.dataset.iana.IanaDataset"><span class="pre">IanaDataset</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.iana_dataset" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.lookup_record">
+<span class="sig-name descname"><span class="pre">lookup_record</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.query.record.html#PyFunceble.query.record.whois.WhoisQueryToolRecord" title="PyFunceble.query.record.whois.WhoisQueryToolRecord"><span class="pre">WhoisQueryToolRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.lookup_record" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.query" title="Permalink to this definition"></a></dt>
+<dd><p>Queries the WHOIS record and return the current object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.query_record">
+<span class="sig-name descname"><span class="pre">query_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.query_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.query_record" title="Permalink to this definition"></a></dt>
+<dd><p>Queries the record before executing the decorated method.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.query_timeout">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.query_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_query_timeout</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.record">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">record</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.record" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_record</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.registrar">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">registrar</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.registrar" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_registrar</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.registrar_extractor">
+<span class="sig-name descname"><span class="pre">registrar_extractor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.query.whois.converter.html#PyFunceble.query.whois.converter.registrar.RegistarExtractor" title="PyFunceble.query.whois.converter.registrar.RegistarExtractor"><span class="pre">RegistarExtractor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.registrar_extractor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.reset_record">
+<span class="sig-name descname"><span class="pre">reset_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.reset_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.reset_record" title="Permalink to this definition"></a></dt>
+<dd><p>Resets the record before executing the decorated method.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.server">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">server</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.server" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_server</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.set_query_timeout">
+<span class="sig-name descname"><span class="pre">set_query_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool" title="PyFunceble.query.whois.query_tool.WhoisQueryTool"><span class="pre">WhoisQueryTool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.set_query_timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.set_query_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the query_timeout to apply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The query_timeout to apply.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.set_server">
+<span class="sig-name descname"><span class="pre">set_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool" title="PyFunceble.query.whois.query_tool.WhoisQueryTool"><span class="pre">WhoisQueryTool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.set_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.set_server" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the server to communicate with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The server to work with.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.set_subject">
+<span class="sig-name descname"><span class="pre">set_subject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool" title="PyFunceble.query.whois.query_tool.WhoisQueryTool"><span class="pre">WhoisQueryTool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.set_subject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.set_subject" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the subject to work with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – The subject to set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.subject">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.subject" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_subject</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.query.whois.query_tool.WhoisQueryTool.update_lookup_record">
+<span class="sig-name descname"><span class="pre">update_lookup_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/query/whois/query_tool.html#WhoisQueryTool.update_lookup_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.query.whois.query_tool.WhoisQueryTool.update_lookup_record" title="Permalink to this definition"></a></dt>
+<dd><p>Ensures that a clean record is generated after the execution of
+the decorated method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.query.whois">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyFunceble.query.whois" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to the way we get or manipulate WHOIS record.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PyFunceble.query.requests.adapter.html" class="btn btn-neutral float-left" title="PyFunceble.query.requests.adapter package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PyFunceble.query.whois.converter.html" class="btn btn-neutral float-right" title="PyFunceble.query.whois.converter package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

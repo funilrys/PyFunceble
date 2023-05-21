@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.cli.scripts.production &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.cli.scripts.production</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.cli.scripts.production</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides some of our scripts.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.cli.storage</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.cli.filesystem.dir_structure.backup</span> <span class="kn">import</span> <span class="n">DirectoryStructureBackup</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.command</span> <span class="kn">import</span> <span class="n">CommandHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.dict</span> <span class="kn">import</span> <span class="n">DictHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.directory</span> <span class="kn">import</span> <span class="n">DirectoryHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.file</span> <span class="kn">import</span> <span class="n">FileHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.regex</span> <span class="kn">import</span> <span class="n">RegexHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.utils.version</span> <span class="kn">import</span> <span class="n">VersionUtility</span>
+
+
+<div class="viewcode-block" id="ProductionPrep"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep">[docs]</a><span class="k">class</span> <span class="nc">ProductionPrep</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides an interface for the production file modification.</span>
+<span class="sd">    The idea is that we always have 2 branches: the `dev` and the `master`</span>
+<span class="sd">    branch.</span>
+
+<span class="sd">    We want to fix all the URL to point to the right one, so this interface</span>
+<span class="sd">    just provides everything needed for that job.</span>
+
+<span class="sd">    Another important part is the cleanup of the production environment.</span>
+<span class="sd">    What is meant is the cleanup of the `output/` directory and the</span>
+<span class="sd">    construction of the dir_structure file.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        This class assumes that you know what you are doing. Meaning that</span>
+<span class="sd">        you should run this only if your are developing PyFunceble.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">VERSION_FILE_PATH</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span>
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">DISTRIBUTED_VERSION_FILENAME</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">AVAILABLE_BRANCHES</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">]</span>
+
+    <span class="n">regex_helper</span><span class="p">:</span> <span class="n">RegexHelper</span> <span class="o">=</span> <span class="n">RegexHelper</span><span class="p">()</span>
+    <span class="n">file_helper</span><span class="p">:</span> <span class="n">FileHelper</span> <span class="o">=</span> <span class="n">FileHelper</span><span class="p">()</span>
+    <span class="n">dict_helper</span><span class="p">:</span> <span class="n">DictHelper</span> <span class="o">=</span> <span class="n">DictHelper</span><span class="p">()</span>
+    <span class="n">version_utility</span><span class="p">:</span> <span class="n">VersionUtility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+
+    <span class="n">version_file_content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A copy of the local version file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">previous_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the previous version (from :code:`version_file_content`)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_helper</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VERSION_FILE_PATH</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_version</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span><span class="p">[</span><span class="s2">&quot;current_version&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">branch</span>
+
+<div class="viewcode-block" id="ProductionPrep.ensure_branch_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.ensure_branch_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_branch_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the branch is given before running the decorated method.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the :code:`self.branch` is not set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">branch</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&lt;self.branch&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">branch</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">branch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_branch` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_branch</span>
+
+    <span class="nd">@branch</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the branch to act with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_branch</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ProductionPrep.set_branch"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.set_branch">[docs]</a>    <span class="k">def</span> <span class="nf">set_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the branch to act with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.should_be_deprecated"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.should_be_deprecated">[docs]</a>    <span class="k">def</span> <span class="nf">should_be_deprecated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_version</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if we should deprecates the current version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">splitted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_utility</span><span class="o">.</span><span class="n">get_splitted</span><span class="p">(</span><span class="n">previous_version</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">local_splitted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_utility</span><span class="o">.</span><span class="n">get_splitted</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">version_utility</span><span class="o">.</span><span class="n">local_version</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">version_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splitted</span><span class="p">[:</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">version_part</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">local_splitted</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_urls"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_urls">[docs]</a>    <span class="nd">@ensure_branch_is_given</span>
+    <span class="k">def</span> <span class="nf">update_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the common URLS which are in the given file.</span>
+
+<span class="sd">        :param file:</span>
+<span class="sd">            The file to work with.</span>
+
+<span class="sd">        :raise FileNotFoundError:</span>
+<span class="sd">            When the given :code:`file` is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;dev&quot;</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;PyFunceble\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;PyFunceble/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/{1,}en\/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span> <span class="s2">&quot;/en/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/pyfunceble-dev.png&quot;</span><span class="p">,</span> <span class="s2">&quot;/pyfunceble-</span><span class="si">%s</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/project\/pyfunceble$&quot;</span><span class="p">,</span> <span class="s2">&quot;/project/pyfunceble-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;\/badge\/pyfunceble(/month|/week|)$&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;/badge/pyfunceble-</span><span class="si">%s</span><span class="se">\\</span><span class="s2">1&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/blob\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;/blob/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/pypi\/v\/pyfunceble\.png$&quot;</span><span class="p">,</span> <span class="s2">&quot;/pypi/v/pyfunceble-</span><span class="si">%s</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/(logo|graphmls|gifs\/raw)\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="se">\\</span><span class="s2">1/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/(PyFunceble\/tree)\/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="se">\\</span><span class="s2">1/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;master&quot;</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;PyFunceble\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;PyFunceble/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/{1,}en\/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;/en/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;latest&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/pyfunceble-dev.png&quot;</span><span class="p">,</span> <span class="s2">&quot;/pyfunceble-dev.png&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/project\/pyfunceble-</span><span class="si">%s</span><span class="s2">$&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;/project/pyfunceble&quot;</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;\/badge\/pyfunceble-</span><span class="si">%s</span><span class="s2">(/month|/week|)$&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;/badge/pyfunceble</span><span class="se">\\</span><span class="s2">1&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/blob\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;/blob/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;\/pypi\/v\/pyfunceble-</span><span class="si">%s</span><span class="s2">\.png$&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;/pypi/v/pyfunceble.png&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/(logo|graphmls|gifs\/raw)\/</span><span class="si">%s</span><span class="s2">\/&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="se">\\</span><span class="s2">1/</span><span class="si">%s</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\/(PyFunceble\/tree)\/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;/</span><span class="se">\\</span><span class="s2">1/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;master&quot;</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to update our URL into </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">path</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">to_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">regex</span><span class="p">,</span> <span class="n">replacement</span> <span class="ow">in</span> <span class="n">regexes</span><span class="p">:</span>
+            <span class="n">to_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regex_helper</span><span class="o">.</span><span class="n">set_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">replace_match</span><span class="p">(</span>
+                <span class="n">to_update</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">multiline</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">to_update</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Finished to update our URL into </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">path</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_docs_urls"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_docs_urls">[docs]</a>    <span class="k">def</span> <span class="nf">update_docs_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates all URL in the documentation files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;they-use-d-it.rst&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_urls</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;README.rst&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.rst&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">full_path</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">to_ignore</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_urls</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_code_format"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_code_format">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_code_format</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the format of the source code using black.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># pylint: disable=import-outside-toplevel, import-error</span>
+        <span class="kn">import</span> <span class="nn">black</span>
+        <span class="kn">import</span> <span class="nn">isort</span>
+
+        <span class="k">def</span> <span class="nf">format_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">isortconfig</span><span class="p">:</span> <span class="n">isort</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Formats the given file using black.</span>
+
+<span class="sd">            :param file:</span>
+<span class="sd">                The file to format.</span>
+<span class="sd">            :parm isortconfig:</span>
+<span class="sd">                The configuration to apply while sorting the imports.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="n">isort</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">sort_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">config</span><span class="o">=</span><span class="n">isortconfig</span><span class="p">)</span>
+
+            <span class="n">black</span><span class="o">.</span><span class="n">format_file_in_place</span><span class="p">(</span>
+                <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">),</span>
+                <span class="n">fast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="n">black</span><span class="o">.</span><span class="n">Mode</span><span class="p">(),</span>
+                <span class="n">write_back</span><span class="o">=</span><span class="n">black</span><span class="o">.</span><span class="n">WriteBack</span><span class="o">.</span><span class="n">YES</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Update format of </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="n">isort_config</span> <span class="o">=</span> <span class="n">isort</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">settings_file</span><span class="o">=</span><span class="s2">&quot;setup.cfg&quot;</span><span class="p">)</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">format_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">isort_config</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span>
+            <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;__pycache__&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">format_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">isort_config</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;tests&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;__pycache__&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">format_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">isort_config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_documentation"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_documentation">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_documentation</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the code documentation.</span>
+
+<span class="sd">        :raise RuntimeError:</span>
+<span class="sd">            When one of the wanted directory is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to update and generate the documentation.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">docs_dir_helper</span> <span class="o">=</span> <span class="n">DirectoryHelper</span><span class="p">(</span><span class="s2">&quot;docs&quot;</span><span class="p">)</span>
+        <span class="n">source_code_dir_helper</span> <span class="o">=</span> <span class="n">DirectoryHelper</span><span class="p">(</span><span class="s2">&quot;PyFunceble&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">docs_dir_helper</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">docs_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="si">!r}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">source_code_dir_helper</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source_code_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="si">!r}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;Code Documentation&quot;</span>
+        <span class="n">source_code_destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">docs_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">)</span>
+
+        <span class="n">CommandHelper</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;sphinx-apidoc -d 5 -f -H </span><span class="si">{</span><span class="n">header</span><span class="si">!r}</span><span class="s2"> -o &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source_code_destination</span><span class="si">!r}</span><span class="s2"> </span><span class="si">{</span><span class="n">source_code_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">raise_on_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">docs_destination</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">docs_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="p">,</span> <span class="s2">&quot;_build&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">)</span>
+
+        <span class="n">CommandHelper</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;sphinx-build -a -Q </span><span class="si">{</span><span class="n">docs_dir_helper</span><span class="o">.</span><span class="n">realpath</span><span class="si">!r}</span><span class="s2"> </span><span class="si">{</span><span class="n">docs_destination</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">raise_on_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Finished to update and generate the documentation.&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_code_urls"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_code_urls">[docs]</a>    <span class="k">def</span> <span class="nf">update_code_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates all URL in the source code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;.gitignore&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.keep&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_urls</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span>
+            <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;__pycache__&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">to_ignore</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_urls</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;tests&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;__pycache__&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">to_ignore</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_urls</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_setup_py"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_setup_py">[docs]</a>    <span class="nd">@ensure_branch_is_given</span>
+    <span class="k">def</span> <span class="nf">update_setup_py</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates content of :code:`setup.py`.</span>
+
+<span class="sd">        :raise FileNotFoundError:</span>
+<span class="sd">            When the :code:`setup.py` file does not exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to update setup.py.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;dev&quot;</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;name=&quot;.*&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;name=&quot;PyFunceble-dev&quot;&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&quot;Development\sStatus\s::.*&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;Development Status :: 4 - Beta&quot;&#39;</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">branch</span> <span class="o">==</span> <span class="s2">&quot;master&quot;</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;name=&quot;.*&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;name=&quot;PyFunceble-dev&quot;&#39;</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s1">&#39;&quot;Development\sStatus\s::.*&quot;&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;&quot;Development Status :: 5 - Production/Stable&quot;&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">regexes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;name=&quot;.*&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;name=&quot;PyFunceble-dev&quot;&#39;</span><span class="p">),</span>
+                <span class="p">(</span>
+                    <span class="sa">r</span><span class="s1">&#39;&quot;Development\sStatus\s::.*&quot;&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;&quot;Development Status :: 3 - Alpha&quot;&#39;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">to_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">regex</span><span class="p">,</span> <span class="n">replacement</span> <span class="ow">in</span> <span class="n">regexes</span><span class="p">:</span>
+            <span class="n">to_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regex_helper</span><span class="o">.</span><span class="n">set_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">replace_match</span><span class="p">(</span>
+                <span class="n">to_update</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">multiline</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_helper</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">to_update</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to update setup.py.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_version_file"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_version_file">[docs]</a>    <span class="k">def</span> <span class="nf">update_version_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the version file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to update version file.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_be_deprecated</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_version</span><span class="p">):</span>
+            <span class="n">to_append</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">version_utility</span><span class="o">.</span><span class="n">get_splitted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version_utility</span><span class="o">.</span><span class="n">local_version</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">to_append</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span><span class="p">[</span><span class="s2">&quot;deprecated&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span><span class="p">[</span><span class="s2">&quot;deprecated&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_append</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span><span class="p">[</span>
+            <span class="s2">&quot;current_version&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_helper</span><span class="o">.</span><span class="n">set_subject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version_file_content</span><span class="p">)</span><span class="o">.</span><span class="n">to_yaml_file</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VERSION_FILE_PATH</span>
+        <span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Finished to update version file.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.update_dir_structure_file"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.update_dir_structure_file">[docs]</a>    <span class="k">def</span> <span class="nf">update_dir_structure_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the directory structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">DirectoryStructureBackup</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProductionPrep.start"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.production.ProductionPrep.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ProductionPrep&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the production process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_setup_py</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">update_code_urls</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">update_code_format</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">update_version_file</span><span class="p">()</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

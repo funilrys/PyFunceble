@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.database package &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyFunceble.database.credential package" href="PyFunceble.database.credential.html" />
+    <link rel="prev" title="PyFunceble.data.infrastructure package" href="PyFunceble.data.infrastructure.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyFunceble.html">PyFunceble package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="PyFunceble.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.checker.html">PyFunceble.checker package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.config.html">PyFunceble.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.converter.html">PyFunceble.converter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.data.html">PyFunceble.data package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">PyFunceble.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.dataset.html">PyFunceble.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.downloader.html">PyFunceble.downloader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.helpers.html">PyFunceble.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.html">PyFunceble.query package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.utils.html">PyFunceble.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.exceptions">PyFunceble.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.facility">PyFunceble.facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.factory">PyFunceble.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.logger">PyFunceble.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.sessions">PyFunceble.sessions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage">PyFunceble.storage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage_facility">PyFunceble.storage_facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Code Documentation</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.html">PyFunceble package</a></li>
+      <li class="breadcrumb-item active">PyFunceble.database package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/PyFunceble.database.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyfunceble-database-package">
+<h1>PyFunceble.database package<a class="headerlink" href="#pyfunceble-database-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.database.credential.html">PyFunceble.database.credential package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#module-PyFunceble.database.credential.base">PyFunceble.database.credential.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase"><code class="docutils literal notranslate"><span class="pre">CredentialBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_CHARSET"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_CHARSET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_HOST"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_HOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_NAME"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_PASSWORD"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_PASSWORD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_PORT"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_PORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.STD_USERNAME"><code class="docutils literal notranslate"><span class="pre">CredentialBase.STD_USERNAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.VAR2ENV"><code class="docutils literal notranslate"><span class="pre">CredentialBase.VAR2ENV</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.charset"><code class="docutils literal notranslate"><span class="pre">CredentialBase.charset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.dotenv_locations"><code class="docutils literal notranslate"><span class="pre">CredentialBase.dotenv_locations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.ensure_protocol_is_given"><code class="docutils literal notranslate"><span class="pre">CredentialBase.ensure_protocol_is_given()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.get_dot_env_file"><code class="docutils literal notranslate"><span class="pre">CredentialBase.get_dot_env_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.get_uri"><code class="docutils literal notranslate"><span class="pre">CredentialBase.get_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.host"><code class="docutils literal notranslate"><span class="pre">CredentialBase.host</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.name"><code class="docutils literal notranslate"><span class="pre">CredentialBase.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.password"><code class="docutils literal notranslate"><span class="pre">CredentialBase.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.port"><code class="docutils literal notranslate"><span class="pre">CredentialBase.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.protocol"><code class="docutils literal notranslate"><span class="pre">CredentialBase.protocol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_charset"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_charset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_host"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_host()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_name"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_password"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_password()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_port"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_port()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.set_username"><code class="docutils literal notranslate"><span class="pre">CredentialBase.set_username()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase.username"><code class="docutils literal notranslate"><span class="pre">CredentialBase.username</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#module-PyFunceble.database.credential.mariadb">PyFunceble.database.credential.mariadb module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.mariadb.MariaDBCredential"><code class="docutils literal notranslate"><span class="pre">MariaDBCredential</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.mariadb.MariaDBCredential.protocol"><code class="docutils literal notranslate"><span class="pre">MariaDBCredential.protocol</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#module-PyFunceble.database.credential.mysql">PyFunceble.database.credential.mysql module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.mysql.MySQLCredential"><code class="docutils literal notranslate"><span class="pre">MySQLCredential</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.mysql.MySQLCredential.protocol"><code class="docutils literal notranslate"><span class="pre">MySQLCredential.protocol</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#module-PyFunceble.database.credential.postgresql">PyFunceble.database.credential.postgresql module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.postgresql.PostgreSQLCredential"><code class="docutils literal notranslate"><span class="pre">PostgreSQLCredential</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.postgresql.PostgreSQLCredential.STD_CHARSET"><code class="docutils literal notranslate"><span class="pre">PostgreSQLCredential.STD_CHARSET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.postgresql.PostgreSQLCredential.get_uri"><code class="docutils literal notranslate"><span class="pre">PostgreSQLCredential.get_uri()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.postgresql.PostgreSQLCredential.protocol"><code class="docutils literal notranslate"><span class="pre">PostgreSQLCredential.protocol</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.credential.html#module-PyFunceble.database.credential">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.database.schemas.html">PyFunceble.database.schemas package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#module-PyFunceble.database.schemas.autocontinue">PyFunceble.database.schemas.autocontinue module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue"><code class="docutils literal notranslate"><span class="pre">Continue</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.checker_type"><code class="docutils literal notranslate"><span class="pre">Continue.checker_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.created_at"><code class="docutils literal notranslate"><span class="pre">Continue.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.destination"><code class="docutils literal notranslate"><span class="pre">Continue.destination</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.id"><code class="docutils literal notranslate"><span class="pre">Continue.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.idna_subject"><code class="docutils literal notranslate"><span class="pre">Continue.idna_subject</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.modified_at"><code class="docutils literal notranslate"><span class="pre">Continue.modified_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.session_id"><code class="docutils literal notranslate"><span class="pre">Continue.session_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.source"><code class="docutils literal notranslate"><span class="pre">Continue.source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.autocontinue.Continue.tested_at"><code class="docutils literal notranslate"><span class="pre">Continue.tested_at</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#module-PyFunceble.database.schemas.inactive">PyFunceble.database.schemas.inactive module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive"><code class="docutils literal notranslate"><span class="pre">Inactive</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.checker_type"><code class="docutils literal notranslate"><span class="pre">Inactive.checker_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.created_at"><code class="docutils literal notranslate"><span class="pre">Inactive.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.destination"><code class="docutils literal notranslate"><span class="pre">Inactive.destination</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.id"><code class="docutils literal notranslate"><span class="pre">Inactive.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.idna_subject"><code class="docutils literal notranslate"><span class="pre">Inactive.idna_subject</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.modified_at"><code class="docutils literal notranslate"><span class="pre">Inactive.modified_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.inactive.Inactive.tested_at"><code class="docutils literal notranslate"><span class="pre">Inactive.tested_at</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#module-PyFunceble.database.schemas.status">PyFunceble.database.schemas.status module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status"><code class="docutils literal notranslate"><span class="pre">Status</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.created_at"><code class="docutils literal notranslate"><span class="pre">Status.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.domain_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.domain_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.expiration_date"><code class="docutils literal notranslate"><span class="pre">Status.expiration_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.file_id"><code class="docutils literal notranslate"><span class="pre">Status.file_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.http_status_code"><code class="docutils literal notranslate"><span class="pre">Status.http_status_code</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.id"><code class="docutils literal notranslate"><span class="pre">Status.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.ipv4_range_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.ipv4_range_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.ipv4_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.ipv4_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.ipv6_range_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.ipv6_range_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.ipv6_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.ipv6_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.is_complement"><code class="docutils literal notranslate"><span class="pre">Status.is_complement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.modified_at"><code class="docutils literal notranslate"><span class="pre">Status.modified_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.status"><code class="docutils literal notranslate"><span class="pre">Status.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.status_source"><code class="docutils literal notranslate"><span class="pre">Status.status_source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.subdomain_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.subdomain_syntax_validation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.test_completed"><code class="docutils literal notranslate"><span class="pre">Status.test_completed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.tested"><code class="docutils literal notranslate"><span class="pre">Status.tested</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.tested_at"><code class="docutils literal notranslate"><span class="pre">Status.tested_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.status.Status.url_syntax_validation"><code class="docutils literal notranslate"><span class="pre">Status.url_syntax_validation</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#module-PyFunceble.database.schemas.whois_record">PyFunceble.database.schemas.whois_record module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord"><code class="docutils literal notranslate"><span class="pre">WhoisRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.created_at"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.epoch"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.epoch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.expiration_date"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.expiration_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.id"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.idna_subject"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.idna_subject</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.modified_at"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.modified_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.registrar"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.registrar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.schemas.html#PyFunceble.database.schemas.whois_record.WhoisRecord.subject"><code class="docutils literal notranslate"><span class="pre">WhoisRecord.subject</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.schemas.html#module-PyFunceble.database.schemas">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html">PyFunceble.database.sqlalchemy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#module-PyFunceble.database.sqlalchemy.all_schemas">PyFunceble.database.sqlalchemy.all_schemas module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#module-PyFunceble.database.sqlalchemy.base_schema">PyFunceble.database.sqlalchemy.base_schema module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#PyFunceble.database.sqlalchemy.base_schema.OurSchemaBase"><code class="docutils literal notranslate"><span class="pre">OurSchemaBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#PyFunceble.database.sqlalchemy.base_schema.OurSchemaBase.created_at"><code class="docutils literal notranslate"><span class="pre">OurSchemaBase.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#PyFunceble.database.sqlalchemy.base_schema.OurSchemaBase.id"><code class="docutils literal notranslate"><span class="pre">OurSchemaBase.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#PyFunceble.database.sqlalchemy.base_schema.OurSchemaBase.modified_at"><code class="docutils literal notranslate"><span class="pre">OurSchemaBase.modified_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#PyFunceble.database.sqlalchemy.base_schema.OurSchemaBase.to_dict"><code class="docutils literal notranslate"><span class="pre">OurSchemaBase.to_dict()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PyFunceble.database.sqlalchemy.html#module-PyFunceble.database.sqlalchemy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-PyFunceble.database.session">
+<span id="pyfunceble-database-session-module"></span><h2>PyFunceble.database.session module<a class="headerlink" href="#module-PyFunceble.database.session" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides our database session interface.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.database.session.</span></span><span class="sig-name descname"><span class="pre">DBSession</span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides our very own database session interface and handler.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.authorized">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">authorized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.database.session.DBSession.authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the authorization to operate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.close" title="Permalink to this definition"></a></dt>
+<dd><p>Closes the session if exists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.credential">
+<span class="sig-name descname"><span class="pre">credential</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.database.credential.html#PyFunceble.database.credential.base.CredentialBase" title="PyFunceble.database.credential.base.CredentialBase"><span class="pre">CredentialBase</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.database.session.DBSession.credential" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.current_session">
+<span class="sig-name descname"><span class="pre">current_session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Session</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.database.session.DBSession.current_session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.ensure_credential_is_given">
+<span class="sig-name descname"><span class="pre">ensure_credential_is_given</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.ensure_credential_is_given"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.ensure_credential_is_given" title="Permalink to this definition"></a></dt>
+<dd><p>Ensures that a credential object is set before launching the
+decorated method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – When <code class="code docutils literal notranslate"><span class="pre">credential</span></code> is not correct.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.execute_if_authorized">
+<span class="sig-name descname"><span class="pre">execute_if_authorized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.execute_if_authorized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.execute_if_authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Executes the decorated method only if we are authorized to process.
+Otherwise, apply the given <code class="code docutils literal notranslate"><span class="pre">default</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.get_db_session">
+<span class="sig-name descname"><span class="pre">get_db_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.get_db_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.get_db_session" title="Permalink to this definition"></a></dt>
+<dd><p>Provides a new session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.get_new_pool_session">
+<span class="sig-name descname"><span class="pre">get_new_pool_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sessionmaker</span></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.get_new_pool_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.get_new_pool_session" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return a new session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.get_new_session">
+<span class="sig-name descname"><span class="pre">get_new_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">sessionmaker</span></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.get_new_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.get_new_session" title="Permalink to this definition"></a></dt>
+<dd><p>Creates and returns a new session.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method generate a new session without any pool of connections.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.init_db_sessions">
+<span class="sig-name descname"><span class="pre">init_db_sessions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.database.session.DBSession" title="PyFunceble.database.session.DBSession"><span class="pre">DBSession</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.init_db_sessions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.init_db_sessions" title="Permalink to this definition"></a></dt>
+<dd><p>Initiate the global session to work with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.database.session.DBSession.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/database/session.html#DBSession.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.database.session.DBSession.query" title="Permalink to this definition"></a></dt>
+<dd><p>Makes a query.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.database">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyFunceble.database" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides everything related to the structure and connection with external databases.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PyFunceble.data.infrastructure.html" class="btn btn-neutral float-left" title="PyFunceble.data.infrastructure package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PyFunceble.database.credential.html" class="btn btn-neutral float-right" title="PyFunceble.database.credential package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

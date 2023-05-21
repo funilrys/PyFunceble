@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.config package &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyFunceble.converter package" href="PyFunceble.converter.html" />
+    <link rel="prev" title="PyFunceble.cli.utils package" href="PyFunceble.cli.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Code Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="PyFunceble.html">PyFunceble package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="PyFunceble.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.checker.html">PyFunceble.checker package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.cli.html">PyFunceble.cli package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">PyFunceble.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.converter.html">PyFunceble.converter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.data.html">PyFunceble.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.database.html">PyFunceble.database package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.dataset.html">PyFunceble.dataset package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.downloader.html">PyFunceble.downloader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.helpers.html">PyFunceble.helpers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.query.html">PyFunceble.query package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PyFunceble.utils.html">PyFunceble.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.exceptions">PyFunceble.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.facility">PyFunceble.facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.factory">PyFunceble.factory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.logger">PyFunceble.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.sessions">PyFunceble.sessions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage">PyFunceble.storage module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble.storage_facility">PyFunceble.storage_facility module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PyFunceble.html#module-PyFunceble">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Code Documentation</a></li>
+          <li class="breadcrumb-item"><a href="PyFunceble.html">PyFunceble package</a></li>
+      <li class="breadcrumb-item active">PyFunceble.config package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/code/PyFunceble.config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pyfunceble-config-package">
+<h1>PyFunceble.config package<a class="headerlink" href="#pyfunceble-config-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-PyFunceble.config.compare">
+<span id="pyfunceble-config-compare-module"></span><h2>PyFunceble.config.compare module<a class="headerlink" href="#module-PyFunceble.config.compare" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides the configuration comparision interface.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.config.compare.</span></span><span class="sig-name descname"><span class="pre">ConfigComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upstream_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/config/compare.html#ConfigComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides an interface for comparing 2 configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.DELETED_CORE">
+<span class="sig-name descname"><span class="pre">DELETED_CORE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['dns_lookup_over_tcp',</span> <span class="pre">'generate_json',</span> <span class="pre">'header_printed',</span> <span class="pre">'iana_whois_server',</span> <span class="pre">'idna_conversion',</span> <span class="pre">'logs',</span> <span class="pre">'maximal_processes',</span> <span class="pre">'multiprocess_merging_mode',</span> <span class="pre">'multiprocess',</span> <span class="pre">'no_http_codes',</span> <span class="pre">'outputs',</span> <span class="pre">'shadow_file',</span> <span class="pre">'status',</span> <span class="pre">'store_whois_record',</span> <span class="pre">'unified']</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.DELETED_CORE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.DELETED_LINKS">
+<span class="sig-name descname"><span class="pre">DELETED_LINKS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['config',</span> <span class="pre">'dir_structure',</span> <span class="pre">'iana',</span> <span class="pre">'ipv4_reputation',</span> <span class="pre">'mariadb',</span> <span class="pre">'mysql',</span> <span class="pre">'psl',</span> <span class="pre">'repo',</span> <span class="pre">'requirements',</span> <span class="pre">'user_agents']</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.DELETED_LINKS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.NEW_STATUS_CODES">
+<span class="sig-name descname"><span class="pre">NEW_STATUS_CODES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'potentially_down':</span> <span class="pre">[451],</span> <span class="pre">'potentially_up':</span> <span class="pre">[308,</span> <span class="pre">403,</span> <span class="pre">418,</span> <span class="pre">421,</span> <span class="pre">422,</span> <span class="pre">423,</span> <span class="pre">424,</span> <span class="pre">426,</span> <span class="pre">428,</span> <span class="pre">431,</span> <span class="pre">506,</span> <span class="pre">507,</span> <span class="pre">508,</span> <span class="pre">510,</span> <span class="pre">511],</span> <span class="pre">'up':</span> <span class="pre">[102,</span> <span class="pre">207,</span> <span class="pre">208,</span> <span class="pre">226,</span> <span class="pre">429]}</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.NEW_STATUS_CODES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.OLD_TO_NEW">
+<span class="sig-name descname"><span class="pre">OLD_TO_NEW</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'adblock':</span> <span class="pre">'cli_decoding.adblock',</span> <span class="pre">'aggressive':</span> <span class="pre">'cli_decoding.adblock_aggressive',</span> <span class="pre">'auto_continue':</span> <span class="pre">'cli_testing.autocontinue',</span> <span class="pre">'ci':</span> <span class="pre">'cli_testing.ci.active',</span> <span class="pre">'ci_autosave_commit':</span> <span class="pre">'cli_testing.ci.commit_message',</span> <span class="pre">'ci_autosave_final_commit':</span> <span class="pre">'cli_testing.ci.end_commit_message',</span> <span class="pre">'ci_autosave_minutes':</span> <span class="pre">'cli_testing.ci.max_exec_minutes',</span> <span class="pre">'ci_branch':</span> <span class="pre">'cli_testing.ci.branch',</span> <span class="pre">'ci_distribution_branch':</span> <span class="pre">'cli_testing.ci.distribution_branch',</span> <span class="pre">'command':</span> <span class="pre">'cli_testing.ci.command',</span> <span class="pre">'command_before_end':</span> <span class="pre">'cli_testing.ci.end_command',</span> <span class="pre">'cooldown_time':</span> <span class="pre">'cli_testing.cooldown_time',</span> <span class="pre">'custom_ip':</span> <span class="pre">'cli_testing.hosts_ip',</span> <span class="pre">'days_between_db_retest':</span> <span class="pre">'cli_testing.days_between.db_retest',</span> <span class="pre">'days_between_inactive_db_clean':</span> <span class="pre">'cli_testing.days_between.db_clean',</span> <span class="pre">'db_type':</span> <span class="pre">'cli_testing.db_type',</span> <span class="pre">'debug':</span> <span class="pre">'debug.active',</span> <span class="pre">'dns_server':</span> <span class="pre">'dns.server',</span> <span class="pre">'filter':</span> <span class="pre">'cli_testing.file_filter',</span> <span class="pre">'generate_complements':</span> <span class="pre">'cli_testing.complements',</span> <span class="pre">'generate_hosts':</span> <span class="pre">'cli_testing.file_generation.hosts',</span> <span class="pre">'hierarchical_sorting':</span> <span class="pre">'cli_testing.sorting_mode.hierarchical',</span> <span class="pre">'inactive_database':</span> <span class="pre">'cli_testing.inactive_db',</span> <span class="pre">'less':</span> <span class="pre">'cli_testing.display_mode.less',</span> <span class="pre">'local':</span> <span class="pre">'cli_testing.local_network',</span> <span class="pre">'mining':</span> <span class="pre">'cli_testing.mining',</span> <span class="pre">'no_files':</span> <span class="pre">'cli_testing.file_generation.no_file',</span> <span class="pre">'plain_list_domain':</span> <span class="pre">'cli_testing.file_generation.plain',</span> <span class="pre">'print_dots':</span> <span class="pre">'cli_testing.display_mode.dots',</span> <span class="pre">'quiet':</span> <span class="pre">'cli_testing.display_mode.dots',</span> <span class="pre">'reputation':</span> <span class="pre">'lookup.reputation',</span> <span class="pre">'rpz':</span> <span class="pre">'cli_decoding.rpz',</span> <span class="pre">'show_execution_time':</span> <span class="pre">'cli_testing.display_mode.execution_time',</span> <span class="pre">'show_percentage':</span> <span class="pre">'cli_testing.display_mode.percentage',</span> <span class="pre">'simple':</span> <span class="pre">'cli_testing.display_mode.simple',</span> <span class="pre">'syntax':</span> <span class="pre">'cli_testing.testing_mode.syntax',</span> <span class="pre">'timeout':</span> <span class="pre">'lookup.timeout',</span> <span class="pre">'use_reputation_data':</span> <span class="pre">'lookup.reputation',</span> <span class="pre">'whois_database':</span> <span class="pre">'cli_testing.whois_db',</span> <span class="pre">'wildcard':</span> <span class="pre">'cli_decoding.wildcard'}</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.OLD_TO_NEW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.OLD_TO_NEW_NEGATE">
+<span class="sig-name descname"><span class="pre">OLD_TO_NEW_NEGATE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'no_special':</span> <span class="pre">'lookup.special',</span> <span class="pre">'no_whois':</span> <span class="pre">'lookup.whois',</span> <span class="pre">'split':</span> <span class="pre">'cli_testing.file_generation.unified_results'}</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.OLD_TO_NEW_NEGATE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.dict_helper">
+<span class="sig-name descname"><span class="pre">dict_helper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.helpers.html#PyFunceble.helpers.dict.DictHelper" title="PyFunceble.helpers.dict.DictHelper"><span class="pre">DictHelper</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PyFunceble.helpers.dict.DictHelper</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.dict_helper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.get_merged">
+<span class="sig-name descname"><span class="pre">get_merged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/compare.html#ConfigComparison.get_merged"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.get_merged" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the merged configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.is_local_identical">
+<span class="sig-name descname"><span class="pre">is_local_identical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/compare.html#ConfigComparison.is_local_identical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.is_local_identical" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the local configuration is identical to the upstream one.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.local_config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">local_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.local_config" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_local_config</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.set_local_config">
+<span class="sig-name descname"><span class="pre">set_local_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.compare.ConfigComparison" title="PyFunceble.config.compare.ConfigComparison"><span class="pre">ConfigComparison</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/compare.html#ConfigComparison.set_local_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.set_local_config" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the local configuration to work with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.set_upstream_config">
+<span class="sig-name descname"><span class="pre">set_upstream_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.compare.ConfigComparison" title="PyFunceble.config.compare.ConfigComparison"><span class="pre">ConfigComparison</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/compare.html#ConfigComparison.set_upstream_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.set_upstream_config" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the upstram configuration to work with.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.config.compare.ConfigComparison.upstream_config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upstream_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><a class="headerlink" href="#PyFunceble.config.compare.ConfigComparison.upstream_config" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_upstream_config</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.config.loader">
+<span id="pyfunceble-config-loader-module"></span><h2>PyFunceble.config.loader module<a class="headerlink" href="#module-PyFunceble.config.loader" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides the configuration loader.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PyFunceble.config.loader.</span></span><span class="sig-name descname"><span class="pre">ConfigLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_upstream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provides the interface which loads and updates the configuration (if needed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>merge_upstream</strong> – <p>Authorizes the merging of the upstream configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If value is set to <code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code> (default), we fallback to the
+<code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_AUTO_CONFIGURATION</span></code> environment variable.</p>
+</div>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.conditional_switch">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conditional_switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.conditional_switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.conditional_switch" title="Permalink to this definition"></a></dt>
+<dd><p>Given the configuration that we are going to load, switches some of
+setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – The configuration we are going to load.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.config_file_exist">
+<span class="sig-name descname"><span class="pre">config_file_exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.config_file_exist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.config_file_exist" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the config file exists.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.custom_config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">custom_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.custom_config" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_custom_config</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.default_config_file_exist">
+<span class="sig-name descname"><span class="pre">default_config_file_exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.default_config_file_exist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.default_config_file_exist" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the default configuration file exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.destroy">
+<span class="sig-name descname"><span class="pre">destroy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.destroy" title="Permalink to this definition"></a></dt>
+<dd><p>Destroys everything loaded.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.dict_helper">
+<span class="sig-name descname"><span class="pre">dict_helper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.helpers.html#PyFunceble.helpers.dict.DictHelper" title="PyFunceble.helpers.dict.DictHelper"><span class="pre">DictHelper</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PyFunceble.helpers.dict.DictHelper</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.dict_helper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.download_dynamic_infrastructure_files">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_dynamic_infrastructure_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.download_dynamic_infrastructure_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.download_dynamic_infrastructure_files" title="Permalink to this definition"></a></dt>
+<dd><p>Downloads all the dynamicly (generated) infrastructure files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Downloaded if missing:</dt><dd><ul class="simple">
+<li><p>The IANA dump file.</p></li>
+<li><p>The Public Suffix dump file.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.file_helper">
+<span class="sig-name descname"><span class="pre">file_helper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="PyFunceble.helpers.html#PyFunceble.helpers.file.FileHelper" title="PyFunceble.helpers.file.FileHelper"><span class="pre">FileHelper</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PyFunceble.helpers.file.FileHelper</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.file_helper" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.get_config_file_content">
+<span class="sig-name descname"><span class="pre">get_config_file_content</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.get_config_file_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.get_config_file_content" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the content of the configuration file or the one already loaded.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.get_configured_value">
+<span class="sig-name descname"><span class="pre">get_configured_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.get_configured_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.get_configured_value" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the currently configured value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entry</strong> – <p>An entry to check.</p>
+<p>multilevel should be separated with a point.</p>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.11)"><strong>RuntimeError</strong></a> – When the configuration is not loaded yet.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the given <code class="code docutils literal notranslate"><span class="pre">entry</span></code> is not found.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.install_missing_infrastructure_files">
+<span class="sig-name descname"><span class="pre">install_missing_infrastructure_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.install_missing_infrastructure_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.install_missing_infrastructure_files" title="Permalink to this definition"></a></dt>
+<dd><p>Installs the missing files (when needed).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Installed if missing:</dt><dd><ul class="simple">
+<li><p>The configuration file.</p></li>
+<li><p>The directory structure file.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.is_already_loaded">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_already_loaded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.is_already_loaded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.is_already_loaded" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the configuration was already loaded.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.merge_upstream">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_upstream</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.merge_upstream" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the current state of the <code class="code docutils literal notranslate"><span class="pre">_merge_upstream</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.path_to_config">
+<span class="sig-name descname"><span class="pre">path_to_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.path_to_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.path_to_default_config">
+<span class="sig-name descname"><span class="pre">path_to_default_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.path_to_default_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.path_to_overwrite_config">
+<span class="sig-name descname"><span class="pre">path_to_overwrite_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.path_to_overwrite_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.reload_config">
+<span class="sig-name descname"><span class="pre">reload_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.reload_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.reload_config" title="Permalink to this definition"></a></dt>
+<dd><p>Reload the configuration (if it was already loaded) after launching the
+decorated method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.set_custom_config">
+<span class="sig-name descname"><span class="pre">set_custom_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.set_custom_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.set_custom_config" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the custom configuration to set after loading.</p>
+<dl class="simple">
+<dt>Side Effect:</dt><dd><p>Directly inject into the configuration variables if it was already
+loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.set_merge_upstream">
+<span class="sig-name descname"><span class="pre">set_merge_upstream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.set_merge_upstream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.set_merge_upstream" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the value of <code class="code docutils literal notranslate"><span class="pre">_merge_upstream</span></code> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="PyFunceble.config.loader.ConfigLoader.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><span class="pre">ConfigLoader</span></a></span></span><a class="reference internal" href="../_modules/PyFunceble/config/loader.html#ConfigLoader.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#PyFunceble.config.loader.ConfigLoader.start" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the loading processIs.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-PyFunceble.config">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyFunceble.config" title="Permalink to this heading"></a></h2>
+<p>The tool to check the availability or syntax of domain, IP or URL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗
+██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝
+██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
+╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
+</pre></div>
+</div>
+<p>Provides the configuration related submodules.</p>
+<dl class="simple">
+<dt>Author:</dt><dd><p>Nissar Chababy, &#64;funilrys, contactTATAfunilrysTODTODcom</p>
+</dd>
+<dt>Special thanks:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/special-thanks">https://pyfunceble.github.io/#/special-thanks</a></p>
+</dd>
+<dt>Contributors:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/#/contributors">https://pyfunceble.github.io/#/contributors</a></p>
+</dd>
+<dt>Project link:</dt><dd><p><a class="reference external" href="https://github.com/funilrys/PyFunceble">https://github.com/funilrys/PyFunceble</a></p>
+</dd>
+<dt>Project documentation:</dt><dd><p><a class="reference external" href="https://pyfunceble.readthedocs.io/en/dev/">https://pyfunceble.readthedocs.io/en/dev/</a></p>
+</dd>
+<dt>Project homepage:</dt><dd><p><a class="reference external" href="https://pyfunceble.github.io/">https://pyfunceble.github.io/</a></p>
+</dd>
+</dl>
+<p>License:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">2018</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="mi">2020</span><span class="p">,</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">2023</span> <span class="n">Nissar</span> <span class="n">Chababy</span>
+
+<span class="n">Licensed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">Apache</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mf">2.0</span> <span class="p">(</span><span class="n">the</span> <span class="s2">&quot;License&quot;</span><span class="p">);</span>
+<span class="n">you</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">this</span> <span class="n">file</span> <span class="k">except</span> <span class="ow">in</span> <span class="n">compliance</span> <span class="k">with</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+<span class="n">You</span> <span class="n">may</span> <span class="n">obtain</span> <span class="n">a</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">License</span> <span class="n">at</span>
+
+    <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">licenses</span><span class="o">/</span><span class="n">LICENSE</span><span class="o">-</span><span class="mf">2.0</span>
+
+<span class="n">Unless</span> <span class="n">required</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span> <span class="ow">or</span> <span class="n">agreed</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">writing</span><span class="p">,</span> <span class="n">software</span>
+<span class="n">distributed</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span> <span class="ow">is</span> <span class="n">distributed</span> <span class="n">on</span> <span class="n">an</span> <span class="s2">&quot;AS IS&quot;</span> <span class="n">BASIS</span><span class="p">,</span>
+<span class="n">WITHOUT</span> <span class="n">WARRANTIES</span> <span class="n">OR</span> <span class="n">CONDITIONS</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">either</span> <span class="n">express</span> <span class="ow">or</span> <span class="n">implied</span><span class="o">.</span>
+<span class="n">See</span> <span class="n">the</span> <span class="n">License</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">language</span> <span class="n">governing</span> <span class="n">permissions</span> <span class="ow">and</span>
+<span class="n">limitations</span> <span class="n">under</span> <span class="n">the</span> <span class="n">License</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PyFunceble.cli.utils.html" class="btn btn-neutral float-left" title="PyFunceble.cli.utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PyFunceble.converter.html" class="btn btn-neutral float-right" title="PyFunceble.converter package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

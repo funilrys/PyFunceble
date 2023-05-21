@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.checker.availability.ip &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.checker.availability.ip</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.checker.availability.ip</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides the IP availability checker.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.factory</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.checker.availability.base</span> <span class="kn">import</span> <span class="n">AvailabilityCheckerBase</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.checker.reputation.ip</span> <span class="kn">import</span> <span class="n">IPReputationChecker</span>
+
+
+<div class="viewcode-block" id="IPAvailabilityChecker"><a class="viewcode-back" href="../../../../code/PyFunceble.checker.availability.html#PyFunceble.checker.availability.ip.IPAvailabilityChecker">[docs]</a><span class="k">class</span> <span class="nc">IPAvailabilityChecker</span><span class="p">(</span><span class="n">AvailabilityCheckerBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the interface for checking the availability of a given IP.</span>
+
+<span class="sd">    :param str subject:</span>
+<span class="sd">        Optional, The subject to work with.</span>
+<span class="sd">    :param bool use_extra_rules:</span>
+<span class="sd">        Optional, Activates/Disables the usage of our own set of extra rules.</span>
+<span class="sd">    :param bool use_whois_lookup:</span>
+<span class="sd">        Optional, Activates/Disables the usage of the WHOIS lookup to gather</span>
+<span class="sd">        the status of the given :code:`subject`.</span>
+<span class="sd">    :param bool use_dns_lookup:</span>
+<span class="sd">        Optional, Activates/Disables the usage of the DNS lookup to gather the</span>
+<span class="sd">        status of the given :code:`subject`.</span>
+<span class="sd">    :param bool use_netinfo_lookup:</span>
+<span class="sd">        Optional, Activates/Disables the usage of the network information</span>
+<span class="sd">        lookup module to gather the status of the given :code:`subject`.</span>
+<span class="sd">    :param bool use_http_code_lookup:</span>
+<span class="sd">        Optional, Activates/Disables the usage of the HTTP status code lookup</span>
+<span class="sd">        to gather the status of the given :code:`subject`.</span>
+<span class="sd">    :param bool use_reputation_lookup:</span>
+<span class="sd">        Optional, Activates/Disables the usage of the reputation dataset</span>
+<span class="sd">        lookup to gather the status of the given :code:`subject`.</span>
+<span class="sd">    :param bool do_syntax_check_first:</span>
+<span class="sd">        Optional, Activates/Disables the check of the status before the actual</span>
+<span class="sd">        status gathering.</span>
+<span class="sd">    :param bool use_whois_db:</span>
+<span class="sd">        Optional, Activates/Disable the usage of a local database to store the</span>
+<span class="sd">        WHOIS datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="IPAvailabilityChecker.try_to_query_status_from_reputation"><a class="viewcode-back" href="../../../../code/PyFunceble.checker.availability.html#PyFunceble.checker.availability.ip.IPAvailabilityChecker.try_to_query_status_from_reputation">[docs]</a>    <span class="k">def</span> <span class="nf">try_to_query_status_from_reputation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;IPAvailabilityChecker&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to query the status from the reputation lookup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to try to query the status of </span><span class="si">%r</span><span class="s2"> from: Reputation Lookup&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">lookup_result</span> <span class="o">=</span> <span class="n">IPReputationChecker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">)</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span>
+
+        <span class="c1"># pylint: disable=no-member</span>
+        <span class="k">if</span> <span class="n">lookup_result</span> <span class="ow">and</span> <span class="n">lookup_result</span><span class="o">.</span><span class="n">is_malicious</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">STATUS</span><span class="o">.</span><span class="n">up</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_source</span> <span class="o">=</span> <span class="s2">&quot;REPUTATION&quot;</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Could define the status of </span><span class="si">%r</span><span class="s2"> from: Reputation Lookup&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to try to query the status of </span><span class="si">%r</span><span class="s2"> from: Reputation Lookup&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="IPAvailabilityChecker.query_status"><a class="viewcode-back" href="../../../../code/PyFunceble.checker.availability.html#PyFunceble.checker.availability.ip.IPAvailabilityChecker.query_status">[docs]</a>    <span class="nd">@AvailabilityCheckerBase</span><span class="o">.</span><span class="n">ensure_subject_is_given</span>
+    <span class="nd">@AvailabilityCheckerBase</span><span class="o">.</span><span class="n">update_status_date_after_query</span>
+    <span class="k">def</span> <span class="nf">query_status</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;IPAvailabilityChecker&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Queries the result without anything more.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">## Test Methods are more important.</span>
+
+        <span class="n">status_post_syntax_checker</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_syntax_check_first</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_we_continue_test</span><span class="p">(</span>
+            <span class="n">status_post_syntax_checker</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_syntax_lookup</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span><span class="p">:</span>
+                <span class="n">status_post_syntax_checker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dns_lookup</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_we_continue_test</span><span class="p">(</span>
+            <span class="n">status_post_syntax_checker</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_dns</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_netinfo_lookup</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_we_continue_test</span><span class="p">(</span>
+            <span class="n">status_post_syntax_checker</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_netinfo</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_reputation_lookup</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_we_continue_test</span><span class="p">(</span>
+            <span class="n">status_post_syntax_checker</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_reputation</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_http_code_lookup</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">should_we_continue_test</span><span class="p">(</span>
+            <span class="n">status_post_syntax_checker</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_http_status_code</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">STATUS</span><span class="o">.</span><span class="n">down</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_source</span> <span class="o">=</span> <span class="s2">&quot;STDLOOKUP&quot;</span>
+
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Could not define status the status of </span><span class="si">%r</span><span class="s2">. Setting to </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_extra_rules</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">try_to_query_status_from_extra_rules</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="IPAvailabilityChecker.is_valid"><a class="viewcode-back" href="../../../../code/PyFunceble.checker.availability.html#PyFunceble.checker.availability.ip.IPAvailabilityChecker.is_valid">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

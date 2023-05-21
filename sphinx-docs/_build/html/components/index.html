@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Components &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contribute" href="../contributing/index.html" />
+    <link rel="prev" title="API Documentation" href="../api/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adblock-filter-list-decoding">AdBlock/Filter list decoding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-do-we-need-it">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-use-it">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#autocontinue">Autocontinue</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#certificate-verification">Certificate verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cleaning">Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-clean">How to clean?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#complements-generation">Complements Generation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-configure">How to configure?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#continuous-integration">Continuous Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-dns-protocol">Custom DNS Protocol</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-dns-server">Custom DNS Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-user-agent">Custom User-Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">How to use it?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#available-browser">Available Browser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#available-platform">Available Platform</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#what-if-we-don-t-give-a-custom-user-agent">What if we don’t give a custom User-Agent?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#databases">Databases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-do-we-use-databases">Why do we use “databases”?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-we-manage-them">How do we manage them?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#warnings-around-database-self-management">Warnings around Database (self) management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#databases-types">Databases types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#why-different-database-types">Why different database types?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-use-the-mysql-or-mariadb-format">How to use the <code class="code docutils literal notranslate"><span class="pre">mysql</span></code> or <code class="code docutils literal notranslate"><span class="pre">mariadb</span></code> format?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-use-the-postgresql-format">How to use the <code class="code docutils literal notranslate"><span class="pre">postgresql</span></code> format?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id27">How does it work?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dns-lookup">DNS Lookup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#for-domains">For domains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#for-ip">For IP</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id30">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#proxy-settings-matcher">Proxy Settings - Matcher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id33">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dotenv-files">Dotenv files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-do-we-use-and-why">What do we use and why ?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#execution-time">Execution time</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id36">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#expiration-date">Expiration Date</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id38">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id39">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-filtering">List filtering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id41">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id42">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#http-status-code">HTTP Status Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id44">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#as-active">As ACTIVE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#as-potentially-active">As potentially ACTIVE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#as-inactive-or-potentially-inactive">As INACTIVE or potentially INACTIVE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id45">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#iana-root-zone-database">IANA Root Zone Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id46">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id47">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-generate-it-manually">How to generate it manually?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#test-in-for-local-hostnames-ips-components">Test in/for local hostnames, IPs, components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id48">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id49">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id50">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logs-sharing">Logs Sharing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id51">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-collected">What is collected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-share-logs">How to share logs?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mining">Mining</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id52">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id53">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id54">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multiprocessing">Multiprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id55">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id56">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id57">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#outputted-files">Outputted Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id58">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id59">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#host-format">Host format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plain-format">Plain format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#percentage">Percentage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id60">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id61">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id62">How to use it?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-public-suffix-list">The Public Suffix List</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id63">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id64">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id65">How to generate it manually?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sorting">Sorting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id66">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id67">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#alphabetically">Alphabetically</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hierarchically">Hierarchically</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-activate-the-hierarchical-sorting">How to activate the hierarchical sorting?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#special-rules">SPECIAL rules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id68">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id69">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ip-range">IP range</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id70">How to use it?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parked-subjects">Parked Subjects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#changeip-com-platform-domains">ChangeIP.com Platform domains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#webhostapp-com"><code class="code docutils literal notranslate"><span class="pre">*.000webhostapp.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#eu"><code class="code docutils literal notranslate"><span class="pre">*.24.eu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#altervista-org"><code class="code docutils literal notranslate"><span class="pre">*.altervista.org</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#angelfire-com"><code class="code docutils literal notranslate"><span class="pre">*.angelfire.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blogspot"><code class="code docutils literal notranslate"><span class="pre">*.blogspot.*</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#canalblog-com"><code class="code docutils literal notranslate"><span class="pre">*.canalblog.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dr-ag"><code class="code docutils literal notranslate"><span class="pre">*.dr.ag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fc2-com"><code class="code docutils literal notranslate"><span class="pre">*.fc2.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#github-io"><code class="code docutils literal notranslate"><span class="pre">*.github.io</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#godaddysites-com"><code class="code docutils literal notranslate"><span class="pre">*.godaddysites.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpg-com-br"><code class="code docutils literal notranslate"><span class="pre">*.hpg.com.br</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#imgur-com"><code class="code docutils literal notranslate"><span class="pre">*.imgur.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#liveadvert-com"><code class="code docutils literal notranslate"><span class="pre">*.liveadvert.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#skyrock-com"><code class="code docutils literal notranslate"><span class="pre">*.skyrock.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tumblr-com"><code class="code docutils literal notranslate"><span class="pre">*.tumblr.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#weebly-com"><code class="code docutils literal notranslate"><span class="pre">*.weebly.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wix-com"><code class="code docutils literal notranslate"><span class="pre">*.wix.com</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wordpress-com"><code class="code docutils literal notranslate"><span class="pre">*.wordpress.com</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#status">Status</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id71">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id72">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#invalid">INVALID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#active">ACTIVE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#valid">VALID</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#malicious">MALICIOUS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sane">SANE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#status-source">Status Source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id73">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id74">How does it work?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#syntax">SYNTAX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dnslookup">DNSLOOKUP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#netinfo">NETINFO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-code">HTTP CODE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reputation">REPUTATION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#special">SPECIAL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#whois-lookup">Whois Lookup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id75">Why do we need it?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id76">How does it work?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id77">How to use it?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Components</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/components/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="components">
+<h1>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h1>
+<section id="adblock-filter-list-decoding">
+<h2>AdBlock/Filter list decoding<a class="headerlink" href="#adblock-filter-list-decoding" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="why-do-we-need-it">
+<h3>Why do we need it?<a class="headerlink" href="#why-do-we-need-it" title="Permalink to this heading"></a></h3>
+<p>As some people may want to test the content of their AdBlock/Filter list, we
+offer a way to decode them!</p>
+</section>
+<section id="how-does-it-work">
+<h3>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here:
+<a class="reference internal" href="../code/PyFunceble.converter.html#PyFunceble.converter.adblock_input_line2subject.AdblockInputLine2Subject" title="PyFunceble.converter.adblock_input_line2subject.AdblockInputLine2Subject"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdblockInputLine2Subject</span></code></a>!</p>
+</div>
+<p>We keep it simple by trying to comply with the
+<a class="reference external" href="https://adblockplus.org/filter-cheatsheet">Adblock Plus filters explained</a> documentation.
+For us, the relevant parts are the one which defines/explains which domains
+are being blocked from a given rule.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A more aggressive extraction might be planned in the future.</p>
+</div>
+</section>
+<section id="how-to-use-it">
+<h3>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this heading"></a></h3>
+<p>You can simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_decoding</span><span class="p">:</span>
+    <span class="n">adblock</span><span class="p">:</span> <span class="kc">False</span>
+
+    <span class="c1"># Activate this only if you want to get as much as possible.</span>
+    <span class="n">adblock_aggressive</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_decoding</span><span class="p">:</span>
+    <span class="n">adblock</span><span class="p">:</span> <span class="kc">False</span>
+
+    <span class="c1"># Activate this only if you want to get as much as possible.</span>
+    <span class="n">adblock_aggressive</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--adblock</span></code>
+argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="autocontinue">
+<h2>Autocontinue<a class="headerlink" href="#autocontinue" title="Permalink to this heading"></a></h2>
+<section id="id1">
+<h3>Why do we need it?<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>The auto-continue logic was originaly created for one purpose: Testing long
+files inside Travis CI.
+As Travis CI session has a time limit of 45 minutes, it became vital for us to
+be able to stop and continue the test from where we were under those 45 minutes.
+This is how it started.</p>
+<p>Today, - and it might be controversial - it is used by most people who aren’t
+under a Travis CI container to continue when the machine or tool crashes.</p>
+</section>
+<section id="id2">
+<h3>How does it work?<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here:
+<a class="reference internal" href="../code/PyFunceble.dataset.autocontinue.html#PyFunceble.dataset.autocontinue.base.ContinueDatasetBase" title="PyFunceble.dataset.autocontinue.base.ContinueDatasetBase"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ContinueDatasetBase()</span></code></a>!</p>
+</div>
+<p>We log every subject already tested previously and remove them completely
+when we are done with the test of the given file.</p>
+</section>
+<section id="id3">
+<h3>How to use it?<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>It is activated by default but you can simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">autocontinue</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">autocontinue</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--continue</span></code>
+argument from the CLI to reactivate it.</p>
+</section>
+</section>
+<section id="certificate-verification">
+<h2>Certificate verification<a class="headerlink" href="#certificate-verification" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id4">
+<h3>Why do we need it?<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<p>You might sometime be sure that every URL tested with PyFunceble have a
+valid certificate. This what it’s all about!</p>
+</section>
+<section id="id5">
+<h3>How does it work?<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<p>By default we don’t check the certificate, but if you choose to activate this,
+as soon as the verification is failed, an <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code> status will be
+returned while testing for URL.</p>
+</section>
+<section id="id6">
+<h3>How to use it?<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<p>Simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">verify_ssl_certificate</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">verify_ssl_certificate</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use
+the <code class="code docutils literal notranslate"><span class="pre">--verify-ssl-certificate</span></code> argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="cleaning">
+<h2>Cleaning<a class="headerlink" href="#cleaning" title="Permalink to this heading"></a></h2>
+<section id="id7">
+<h3>Why do we need it?<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<p>Because we constantly need to clean files which are not needed before starting
+a new test, we embedded our cleaning logic.</p>
+</section>
+<section id="id8">
+<h3>How does it work?<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.filesystem.html#PyFunceble.cli.filesystem.cleanup.FilesystemCleanup" title="PyFunceble.cli.filesystem.cleanup.FilesystemCleanup"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemCleanup</span></code></a>!</p>
+</div>
+<p>It has an internal map of what has to be deleted and how.</p>
+</section>
+<section id="how-to-clean">
+<h3>How to clean?<a class="headerlink" href="#how-to-clean" title="Permalink to this heading"></a></h3>
+<p>For a simple clean, run PyFunceble with the <code class="code docutils literal notranslate"><span class="pre">clean-pyfunceble</span></code> CLI tool.</p>
+<p>For a complete cleaning, run PyFunceble with the <code class="code docutils literal notranslate"><span class="pre">clean-pyfunceble</span></code> CLI
+tool along with the <code class="code docutils literal notranslate"><span class="pre">--all</span></code> argument.</p>
+</section>
+</section>
+<section id="complements-generation">
+<h2>Complements Generation<a class="headerlink" href="#complements-generation" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id9">
+<h3>Why do we need it?<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<p>Let’s say we have <code class="code docutils literal notranslate"><span class="pre">example.org</span></code> but <code class="code docutils literal notranslate"><span class="pre">www.example.org</span></code>
+(or vice-versa) is not into my list.
+This component (if activated) let us test <code class="code docutils literal notranslate"><span class="pre">www.example.org</span></code>
+(or vice-versa) even if it’s not into the input list.</p>
+</section>
+<section id="id10">
+<h3>How does it work?<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.converter.html#PyFunceble.converter.subject2complements.Subject2Complements" title="PyFunceble.converter.subject2complements.Subject2Complements"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subject2Complements</span></code></a>!</p>
+</div>
+<p>At the end of the normal test process, we generate the list of complements and
+test them.</p>
+</section>
+<section id="id11">
+<h3>How to use it?<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<p>You can simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="c1"># Activates the generation of complements.</span>
+    <span class="n">complements</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="c1"># Activates the generation of complements.</span>
+    <span class="n">complements</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--complements</span></code>
+argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
+<section id="id12">
+<h3>Why do we need it?<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<p>As we wanted to be able to manage the options without having to always update
+the CLI call, we introduced the configuration logic and file.</p>
+</section>
+<section id="id13">
+<h3>How does it work?<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the configuration loader code ?
+It’s here <a class="reference internal" href="../code/PyFunceble.config.html#PyFunceble.config.loader.ConfigLoader" title="PyFunceble.config.loader.ConfigLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigLoader</span></code></a>!</p>
+</div>
+<p>When you are using an argument from the CLI, what we actually do is parse them
+into our configuration logic.</p>
+<p>In the other side, if we first look for the <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> file.
+If not found, we get/generate it and then parse it to our system.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We also wanted to get rid of the configuration for an end-user
+point of view, therefore almost all configuration indexed can be updated
+from the CLI.</p>
+<p>In that case, we update the configuration with the different argument you gives
+us before parsing it to the system.</p>
+</div>
+</section>
+<section id="how-to-configure">
+<h3>How to configure?<a class="headerlink" href="#how-to-configure" title="Permalink to this heading"></a></h3>
+<p>Update the <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> file or use the CLI.</p>
+</section>
+</section>
+<section id="continuous-integration">
+<h2>Continuous Integration<a class="headerlink" href="#continuous-integration" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id14">
+<h3>Why do we need it?<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<p>The continuous integrations component is there to enable a continuous testing
+and integration in your workflow.</p>
+<p>The idea is that: If you can use any of the supported Continuous
+Integration engine, use it, and use PyFunceble to work along your workflow.</p>
+</section>
+<section id="id15">
+<h3>How does it work?<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase" title="PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousIntegrationBase</span></code></a>!</p>
+</div>
+<p>After a given amount of minutes, we stop the tool, generate the percentage,
+run a given command (if found), commit all the changes we made to the repository
+and finally, push to the git repository.</p>
+</section>
+<section id="id16">
+<h3>How to use it?<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<p>As of today, PyFunceble should work under Travis CI and GitLab CI.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Along with the configuration file or the CLI setting, you are required to
+give the following environment variables:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">GIT_EMAIL</span></code>: The email to use for the commit.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">GIT_NAME</span></code>: The name to use for the commit.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">GH_TOKEN</span></code>: The GitHub token if you use Travis CI.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">GL_TOKEN</span></code>: The GitLab token if you use GitLab CI.</p></li>
+</ul>
+</div>
+<p>The following from the configuration (or their equivalent from the CLI) are
+available for usage.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">ci</span><span class="p">:</span>
+        <span class="c1"># Provides everything related to the continuous integration.</span>
+
+        <span class="c1"># Activates the continuous integration mode.</span>
+        <span class="c1"># WARNING: Do not activate without asking or knowing what you are doing.</span>
+        <span class="n">active</span><span class="p">:</span> <span class="kc">False</span>
+
+        <span class="c1"># Sets the commit message to apply each time except for the last one.</span>
+        <span class="n">commit_message</span><span class="p">:</span> <span class="s2">&quot;PyFunceble - AutoSave&quot;</span>
+
+        <span class="c1"># Sets the commit message to apply at the very end of the test.</span>
+        <span class="n">end_commit_message</span><span class="p">:</span> <span class="s2">&quot;PyFunceble - Results&quot;</span>
+
+        <span class="c1"># Sets the number of minutes  to wait before sftarting to save and stop</span>
+        <span class="c1"># a session.</span>
+        <span class="n">max_exec_minutes</span><span class="p">:</span> <span class="mi">15</span>
+
+        <span class="c1"># Sets the working branch. This is the branch from where we are testing.</span>
+        <span class="n">branch</span><span class="p">:</span> <span class="n">master</span>
+
+        <span class="c1"># Sets the distribution branch. This is the branch that is going to get</span>
+        <span class="c1"># the (final) results.</span>
+        <span class="n">distribution_branch</span><span class="p">:</span> <span class="n">master</span>
+
+        <span class="c1"># Sets the command to execute before each commits except the last</span>
+        <span class="c1"># one.</span>
+        <span class="n">command</span><span class="p">:</span> <span class="n">null</span>
+
+        <span class="c1"># Sets the command to execute before the last commit.</span>
+        <span class="n">end_command</span><span class="p">:</span> <span class="n">null</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="custom-dns-protocol">
+<h2>Custom DNS Protocol<a class="headerlink" href="#custom-dns-protocol" title="Permalink to this heading"></a></h2>
+<section id="id17">
+<h3>Why do we need it?<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<p>Sometimes, your firewall may block the UDP protocol over port 53 or you simply
+want to use DNS-Over-TLS or why not DNS-Over-HTTPS and why not DNS-Over-TCP.</p>
+<p>Since PyFunceble 4.0.0, to simplify such situations, it is possible to define
+the protocol to use for the DNS queries.</p>
+</section>
+<section id="id18">
+<h3>How does it work?<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the DNS query tool source code ?
+It’s here <a class="reference internal" href="../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool" title="PyFunceble.query.dns.query_tool.DNSQueryTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">DNSQueryTool</span></code></a>!</p>
+</div>
+<p>We read your preferred protocol and use it.</p>
+</section>
+<section id="id19">
+<h3>How to use it?<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<p>By default, PyFunceble will use the UDP protocol. This can be
+changed with the ability to configure which DNS-Servers you like PyFunceble to
+use during the test.</p>
+<p>You set this up with the CLI command <code class="code docutils literal notranslate"><span class="pre">--dns-protocol</span></code> <strong>or</strong> insert it
+into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of today, here is the list of supported protocols.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">UDP</span></code> (default)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">TCP</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">HTTPS</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">TLS</span></code></p></li>
+</ul>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dns</span><span class="p">:</span>
+    <span class="c1"># Sets the protocol to use.</span>
+    <span class="c1"># Available: UDP | TCP | HTTPS | TLS</span>
+    <span class="n">protocol</span><span class="p">:</span> <span class="n">UDP</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dns</span><span class="p">:</span>
+    <span class="c1"># Sets the protocol to use.</span>
+    <span class="c1"># Available: UDP | TCP | HTTPS | TLS</span>
+    <span class="n">protocol</span><span class="p">:</span> <span class="n">TCP</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="custom-dns-server">
+<h2>Custom DNS Server<a class="headerlink" href="#custom-dns-server" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.3.0.</span></p>
+</div>
+<section id="id20">
+<h3>Why do we need it?<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<p>Our testing tool may sometime use a DNS-server which isn’t
+suited for PyFunceble. This could by example be your own DNS-Firewall.</p>
+<p>To avoid these situations, the program allows you to setup the DNS-Server that
+we need to use.</p>
+</section>
+<section id="id21">
+<h3>How does it work?<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the DNS query tool source code ?
+It’s here <a class="reference internal" href="../code/PyFunceble.query.dns.html#PyFunceble.query.dns.query_tool.DNSQueryTool" title="PyFunceble.query.dns.query_tool.DNSQueryTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">DNSQueryTool</span></code></a>!</p>
+</div>
+<p>What we do is that we parse and use your given server.</p>
+</section>
+<section id="id22">
+<h3>How to use it?<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<p>By default, PyFunceble will use the system-wide DNS settings. This can be
+changed with the ability to configure which DNS-Servers you like PyFunceble to
+use during the test.</p>
+<p>You set this up with the CLI command <code class="code docutils literal notranslate"><span class="pre">--dns</span></code> <strong>or</strong> insert it into your
+personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">dns;</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dns</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">server</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">88.198.70.39</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95.216.209.53</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">116.203.32.67</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">88.198.70.38</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.0.0.</span></p>
+</div>
+<p>It is now possible to assign a specific port to use with the DNS-Server.</p>
+<p>If you don’t append a port number, the default DNS port (53) will be used.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pyfunceble<span class="w"> </span>--dns<span class="w"> </span><span class="m">88</span>.198.70.38<span class="w"> </span><span class="m">95</span>.216.209.53:53<span class="w"> </span><span class="m">116</span>.203.32.67:853<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-f<span class="w"> </span><span class="nv">$DOMAIN_FILE</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="custom-user-agent">
+<h2>Custom User-Agent<a class="headerlink" href="#custom-user-agent" title="Permalink to this heading"></a></h2>
+<section id="id23">
+<h3>Why do we need it?<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<p>As we need to be one in a middle of a connection to a webserver, the custom
+user agent is there for that!</p>
+</section>
+<section id="id24">
+<h3>How does it work?<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<p>We set the user-agent every time we request something with the <code class="code docutils literal notranslate"><span class="pre">http</span></code>
+and <code class="code docutils literal notranslate"><span class="pre">https</span></code> protocols.</p>
+<p>If a custom user agent is given, it will be used.</p>
+<p>Otherwise, every 24 hours, we update our <a class="reference external" href="https://raw.githubusercontent.com/PyFunceble/user_agents/master/user_agents.json">user-agents.json</a> file
+which will be fetched by your local version to determine the user-agent to use.</p>
+</section>
+<section id="id25">
+<h3>How to use it?<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
+<p>Simply choose your browser and platform or provide us your custom one!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">user_agent</span><span class="p">:</span>
+    <span class="n">browser</span><span class="p">:</span> <span class="n">chrome</span>
+    <span class="n">platform</span><span class="p">:</span> <span class="n">linux</span>
+    <span class="n">custom</span><span class="p">:</span> <span class="n">null</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--user-agent</span></code>
+(custom UA) argument from the CLI.</p>
+<section id="available-browser">
+<h4>Available Browser<a class="headerlink" href="#available-browser" title="Permalink to this heading"></a></h4>
+<p>Here is a list of available and accepted browsers at this time.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">chrome</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">edge</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">firefox</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">ie</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">opera</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">safari</span></code></p></li>
+</ul>
+</section>
+<section id="available-platform">
+<h4>Available Platform<a class="headerlink" href="#available-platform" title="Permalink to this heading"></a></h4>
+<p>Here is a list of available and accepted platform at this time.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">linux</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">macosx</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">win10</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="what-if-we-don-t-give-a-custom-user-agent">
+<h3>What if we don’t give a custom User-Agent?<a class="headerlink" href="#what-if-we-don-t-give-a-custom-user-agent" title="Permalink to this heading"></a></h3>
+<p>If you don’t set a custom User-Agent, we will try to get the latest one for the chosen
+browser and platform.</p>
+</section>
+</section>
+<section id="databases">
+<h2>Databases<a class="headerlink" href="#databases" title="Permalink to this heading"></a></h2>
+<section id="why-do-we-use-databases">
+<h3>Why do we use “databases”?<a class="headerlink" href="#why-do-we-use-databases" title="Permalink to this heading"></a></h3>
+<p>We use databases to store data while we run the tests. When globally talking
+about databases, we are indirectly talking about the following subsystems.</p>
+<ul class="simple">
+<li><p>Autocontinue</p></li>
+<li><p>InactiveDB</p></li>
+<li><p>WhoisDB</p></li>
+</ul>
+</section>
+<section id="how-do-we-manage-them">
+<h3>How do we manage them?<a class="headerlink" href="#how-do-we-manage-them" title="Permalink to this heading"></a></h3>
+<p>They consist of simple CSV files which are read and updated on the fly.</p>
+</section>
+<section id="warnings-around-database-self-management">
+<h3>Warnings around Database (self) management<a class="headerlink" href="#warnings-around-database-self-management" title="Permalink to this heading"></a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you plan to delete everything and still manage to use PyFunceble in the
+future, please use the <code class="code docutils literal notranslate"><span class="pre">clean-pyfunceble</span></code> CLI.</p>
+<p>Indeed, it will delete everything that we generated,
+except the things like the WHOIS database file/table which saves (almost)
+static data which should be reused in the future.</p>
+<p>Deleting, for example, the WHOIS database file/table will just make
+your test run for a much longer time if you retest subject that used to be
+indexed into the whois database file/table.</p>
+</div>
+</section>
+<section id="databases-types">
+<h3>Databases types<a class="headerlink" href="#databases-types" title="Permalink to this heading"></a></h3>
+<p>Since PyFunceble <code class="code docutils literal notranslate"><span class="pre">2.0.0</span></code> (equivalent of <code class="code docutils literal notranslate"><span class="pre">&gt;=1.18.0.dev</span></code>),
+we offer multiple database types which are (as per configuration) <code class="code docutils literal notranslate"><span class="pre">csv</span></code>
+(default since <code class="code docutils literal notranslate"><span class="pre">4.0.0</span></code>), <code class="code docutils literal notranslate"><span class="pre">mariadb</span></code>, <code class="code docutils literal notranslate"><span class="pre">mysql</span></code> and <code class="code docutils literal notranslate"><span class="pre">postgresql</span></code>.</p>
+<section id="why-different-database-types">
+<h4>Why different database types?<a class="headerlink" href="#why-different-database-types" title="Permalink to this heading"></a></h4>
+<p>With the introduction of the multiprocessing logic, it became natural to
+introduce other database formats.</p>
+</section>
+<section id="how-to-use-the-mysql-or-mariadb-format">
+<h4>How to use the <code class="code docutils literal notranslate"><span class="pre">mysql</span></code> or <code class="code docutils literal notranslate"><span class="pre">mariadb</span></code> format?<a class="headerlink" href="#how-to-use-the-mysql-or-mariadb-format" title="Permalink to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Create a new user, password and database (optional) for PyFunceble to work
+with.</p></li>
+<li><p>Create a <code class="code docutils literal notranslate"><span class="pre">.pyfunceble-env</span></code> file at the root of your configuration
+directory.</p></li>
+<li><p>Complete it with the following content (example)</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PYFUNCEBLE_DB_CHARSET=utf8mb4</span>
+<span class="go">PYFUNCEBLE_DB_HOST=localhost</span>
+<span class="go">PYFUNCEBLE_DB_NAME=PyFunceble</span>
+<span class="go">PYFUNCEBLE_DB_PASSWORD=Hello,World!</span>
+<span class="go">PYFUNCEBLE_DB_PORT=3306</span>
+<span class="go">PYFUNCEBLE_DB_USERNAME=pyfunceble</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since version <code class="code docutils literal notranslate"><span class="pre">2.4.3.dev</span></code> it is possible to use the UNIX socket
+for the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_DB_HOST</span></code> environment variable.</p>
+<p>The typical location for <code class="code docutils literal notranslate"><span class="pre">mysqld.sock</span></code> is
+<code class="code docutils literal notranslate"><span class="pre">/var/run/mysqld/mysqld.sock</span></code>.</p>
+<p>This have been done to make</p>
+<p>1. It easier to use the <code class="code docutils literal notranslate"><span class="pre">socket</span></code> in conjunction with a supported CI
+environment/platform.</p>
+<ol class="arabic simple" start="2">
+<li><p>Leaving more space on the IP-stack on local DB installations.</p></li>
+</ol>
+<p>3. The <code class="code docutils literal notranslate"><span class="pre">UNIX:SOCKET</span></code> is usually faster than the IP connection on
+local runs.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PYFUNCEBLE_DB_CHARSET=utf8mb4</span>
+<span class="go">PYFUNCEBLE_DB_HOST=/var/run/mysqld/mysqld.sock</span>
+<span class="go">PYFUNCEBLE_DB_NAME=PyFunceble</span>
+<span class="go">PYFUNCEBLE_DB_PASSWORD=Hello,World!</span>
+<span class="go">PYFUNCEBLE_DB_PORT=3306</span>
+<span class="go">PYFUNCEBLE_DB_USERNAME=pyfunceble</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div></blockquote>
+</li>
+<li><p>Switch the <code class="code docutils literal notranslate"><span class="pre">db_type</span></code> index of your configuration file to <code class="code docutils literal notranslate"><span class="pre">mysql</span></code>
+or <code class="code docutils literal notranslate"><span class="pre">mariadb</span></code>.</p></li>
+<li><p>Play with PyFunceble!</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the environment variables are not found, you will be asked to prompt the
+information.</p>
+</div>
+</section>
+<section id="how-to-use-the-postgresql-format">
+<h4>How to use the <code class="code docutils literal notranslate"><span class="pre">postgresql</span></code> format?<a class="headerlink" href="#how-to-use-the-postgresql-format" title="Permalink to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Create a new user, password and database (optional) for PyFunceble to work
+with.</p></li>
+<li><p>Create a <code class="code docutils literal notranslate"><span class="pre">.pyfunceble-env</span></code> file at the root of your configuration
+directory.</p></li>
+<li><p>Complete it with the following content (example)</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PYFUNCEBLE_DB_CHARSET=utf8</span>
+<span class="go">PYFUNCEBLE_DB_HOST=localhost</span>
+<span class="go">PYFUNCEBLE_DB_NAME=PyFunceble</span>
+<span class="go">PYFUNCEBLE_DB_PASSWORD=Hello,World!</span>
+<span class="go">PYFUNCEBLE_DB_PORT=5432</span>
+<span class="go">PYFUNCEBLE_DB_USERNAME=pyfunceble</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since version <code class="code docutils literal notranslate"><span class="pre">2.4.3.dev</span></code> it is possible to use the UNIX socket
+for the <code class="code docutils literal notranslate"><span class="pre">PYFUNCEBLE_DB_HOST</span></code> environment variable.</p>
+<p>The typical location for <code class="code docutils literal notranslate"><span class="pre">s.PGSQL.5432</span></code> is
+<code class="code docutils literal notranslate"><span class="pre">/var/run/postgresql</span></code>.</p>
+<p>This have been done to make</p>
+<p>1. It easier to use the <code class="code docutils literal notranslate"><span class="pre">socket</span></code> in conjunction with a supported CI
+environment/platform.</p>
+<ol class="arabic simple" start="2">
+<li><p>Leaving more space on the IP-stack on local DB installations.</p></li>
+</ol>
+<p>3. The <code class="code docutils literal notranslate"><span class="pre">UNIX:SOCKET</span></code> is usually faster than the IP connection on
+local runs.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PYFUNCEBLE_DB_CHARSET=utf8</span>
+<span class="go">PYFUNCEBLE_DB_HOST=/var/run/postgresql</span>
+<span class="go">PYFUNCEBLE_DB_NAME=PyFunceble</span>
+<span class="go">PYFUNCEBLE_DB_PASSWORD=Hello,World!</span>
+<span class="go">PYFUNCEBLE_DB_PORT=5432</span>
+<span class="go">PYFUNCEBLE_DB_USERNAME=pyfunceble</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div></blockquote>
+</li>
+<li><p>Switch the <code class="code docutils literal notranslate"><span class="pre">db_type</span></code> index of your configuration file to <code class="code docutils literal notranslate"><span class="pre">postgresql</span></code>.</p></li>
+<li><p>Play with PyFunceble!</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the environment variables are not found, you will be asked to prompt the
+information.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="directory-structure">
+<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading"></a></h2>
+<section id="id26">
+<h3>Why do we need it?<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
+<p>As we wanted the end-user to be able to work from everywhere into the filesystem,
+we created a logic which will create and keep the <code class="code docutils literal notranslate"><span class="pre">output/</span></code> directory which
+complies with our source code.</p>
+</section>
+<section id="id27">
+<h3>How does it work?<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ?
+It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.filesystem.dir_structure.html#PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup" title="PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureBackup</span></code></a>
+and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PyFunceble.cli.filesystem.dir_structure.backup.DirectoryStructureRestoration</span></code>!</p>
+</div>
+<p>After each version, the maintainer run the <code class="code docutils literal notranslate"><span class="pre">production-pyfunceble</span></code> CLI
+which will prepare the repository for production.</p>
+<p>That has the side effect to map the maintainer’s version of the
+<code class="code docutils literal notranslate"><span class="pre">output/__pyfunceble_origin__</span></code> directory into a file called
+<code class="code docutils literal notranslate"><span class="pre">dir_structure_production.json</span></code> which is then bundled into the PyPI
+package.</p>
+<p>Once pushed, on the end-user side, when testing for file, that file is
+copied from the Python Package into
+a file called <code class="code docutils literal notranslate"><span class="pre">dir_structure.json</span></code> which is then used to restore/create a
+a perfect copy of the output directory the maintainer had when pushing the new
+version.</p>
+</section>
+</section>
+<section id="dns-lookup">
+<h2>DNS Lookup<a class="headerlink" href="#dns-lookup" title="Permalink to this heading"></a></h2>
+<section id="id28">
+<h3>Why do we need it?<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<p>As our main purpose is to check the availability of the given subjects, we make
+a DNS lookup to determine it.</p>
+</section>
+<section id="id29">
+<h3>How does it work?<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
+<section id="for-domains">
+<h4>For domains<a class="headerlink" href="#for-domains" title="Permalink to this heading"></a></h4>
+<p>In order:</p>
+<ol class="arabic simple">
+<li><p>Request the <code class="code docutils literal notranslate"><span class="pre">NS</span></code> record.</p></li>
+<li><p>If not found, request the <code class="code docutils literal notranslate"><span class="pre">A</span></code> record.</p></li>
+<li><p>If not found, request the <code class="code docutils literal notranslate"><span class="pre">AAAA</span></code> record.</p></li>
+<li><p>If not found, request the <code class="code docutils literal notranslate"><span class="pre">CNAME</span></code> record.</p></li>
+<li><p>If not found, request the <code class="code docutils literal notranslate"><span class="pre">DNAME</span></code> record.</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If none is found, we call the UNIX/C equivalent of <code class="code docutils literal notranslate"><span class="pre">getaddrinfo()</span></code>.</p>
+</div>
+</section>
+<section id="for-ip">
+<h4>For IP<a class="headerlink" href="#for-ip" title="Permalink to this heading"></a></h4>
+<p>We request the <code class="code docutils literal notranslate"><span class="pre">PTR</span></code> record for the IP.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If none is found, we call the UNIX/C equivalent of <code class="code docutils literal notranslate"><span class="pre">gethostbyaddr()</span></code>
+or <code class="code docutils literal notranslate"><span class="pre">getaddrinfo()</span></code>.</p>
+</div>
+</section>
+</section>
+<section id="id30">
+<h3>How to use it?<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h3>
+<p>It is activated by default but if not simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lookup</span><span class="p">:</span>
+    <span class="c1"># Activates the usage of the DNS lookup.</span>
+    <span class="n">dns</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lookup</span><span class="p">:</span>
+    <span class="c1"># Activates the usage of the DNS lookup.</span>
+    <span class="n">dns</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--no-whois</span></code>
+argument from the CLI to reactivate it.</p>
+</section>
+</section>
+<section id="proxy-settings-matcher">
+<h2>Proxy Settings - Matcher<a class="headerlink" href="#proxy-settings-matcher" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.1.0b12.dev.</span></p>
+</div>
+<section id="id31">
+<h3>Why do we need it?<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
+<p>The primary need is the ability to delegate HTTP(s) queries to a proxy.</p>
+<p>The secondary need is the ability to be able to delegate HTTPS(s) queries to
+a specif proxy server when a set of rules are matched.</p>
+</section>
+<section id="id32">
+<h3>How does it work?<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
+<p>The proxy settings matcher except a subject and return a JSON/dict with the
+proxy settings to use. The returned value is then use by our very own Request
+Adapter to process the request.</p>
+<p>It will first try to extract the extension from the given subject.
+As example, if <code class="code docutils literal notranslate"><span class="pre">example.org</span></code> is given, the extension will be <cite>org</cite>.</p>
+<p>Then, it will go through the list of rules and check if the given extension is
+listed inside the <code class="code docutils literal notranslate"><span class="pre">proxy[rules][N][tld]</span></code> list. If the extension is in
+the read list, the proxy settings matcher will return the provided
+<code class="code docutils literal notranslate"><span class="pre">proxy[rules][N][http]</span></code> and <code class="code docutils literal notranslate"><span class="pre">proxy[rules][N][https]</span></code> proxies.</p>
+<p>If no rules is was matched, it will return the provided <code class="code docutils literal notranslate"><span class="pre">proxy[global][http]</span></code>
+and <code class="code docutils literal notranslate"><span class="pre">proxy[global][https]</span></code> proxies.</p>
+</section>
+<section id="id33">
+<h3>How to use it?<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h3>
+<p>Simply provides your own own settings into your personal
+<code class="code docutils literal notranslate"><span class="pre">.PyFunceble.overwride.yaml</span></code> file.</p>
+<p><strong>Example:</strong></p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">global</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+<span class="w">  </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+<span class="nt">rules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.com:8080</span>
+<span class="w">    </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://example.org:8080</span>
+<span class="w">    </span><span class="nt">tld</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">http</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">socks5h://example.dev:8080</span>
+<span class="w">    </span><span class="nt">https</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">socks5h://example.dev:8080</span>
+<span class="w">    </span><span class="nt">tld</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">onion</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="environment-variables">
+<h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading"></a></h2>
+<section id="dotenv-files">
+<h3>Dotenv files<a class="headerlink" href="#dotenv-files" title="Permalink to this heading"></a></h3>
+<p>Since PyFunceble <code class="code docutils literal notranslate"><span class="pre">2.0.0</span></code> (equivalent of PyFunceble-dev <code class="code docutils literal notranslate"><span class="pre">&gt;=1.18.0</span></code>),
+we load (thanks to <a class="reference external" href="https://github.com/theskumar/python-dotenv">python-dotenv</a>) the content of
+the following files into the (local) list of environment variables.</p>
+<ol class="arabic simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">.env</span></code> (current directory)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">.pyfunceble-env</span></code> (current directory)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">.env</span></code> (configuration directory)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">.pyfunceble-env</span></code> (configuration directory)</p></li>
+</ol>
+<p>To quote the <a class="reference external" href="https://github.com/theskumar/python-dotenv">python-dotenv</a> documentation, a <code class="code docutils literal notranslate"><span class="pre">.env</span></code> should look
+like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># a comment and that will be ignored.</span>
+<span class="n">REDIS_ADDRESS</span><span class="o">=</span><span class="n">localhost</span><span class="p">:</span><span class="mi">6379</span>
+<span class="n">MEANING_OF_LIFE</span><span class="o">=</span><span class="mi">42</span>
+<span class="n">MULTILINE_VAR</span><span class="o">=</span><span class="s2">&quot;hello</span><span class="se">\n</span><span class="s2">world&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="what-do-we-use-and-why">
+<h3>What do we use and why ?<a class="headerlink" href="#what-do-we-use-and-why" title="Permalink to this heading"></a></h3>
+<p>Here is the list of environment variables we use and how we use them if they
+are set.</p>
+</section>
+</section>
+<section id="execution-time">
+<h2>Execution time<a class="headerlink" href="#execution-time" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id34">
+<h3>Why do we need it?<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
+<p>As it is always nice to see how long we worked, we added this logic!</p>
+</section>
+<section id="id35">
+<h3>How does it work?<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.html#PyFunceble.cli.execution_time.ExecutionTime" title="PyFunceble.cli.execution_time.ExecutionTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyFunceble.cli.execution_time.ExecutionTime</span></code></a>!</p>
+</div>
+<p>It shows the execution time on screen (<code class="code docutils literal notranslate"><span class="pre">stdout</span></code>).</p>
+</section>
+<section id="id36">
+<h3>How to use it?<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h3>
+<p>You can simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display_mode</span><span class="p">:</span>
+    <span class="c1"># Activates the printing of the execution time.</span>
+    <span class="n">execution_time</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display_mode</span><span class="p">:</span>
+    <span class="c1"># Activates the printing of the execution time.</span>
+    <span class="n">execution_time</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--execution</span></code>
+argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="expiration-date">
+<h2>Expiration Date<a class="headerlink" href="#expiration-date" title="Permalink to this heading"></a></h2>
+<section id="id37">
+<h3>Why do we need it?<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h3>
+<p>As we want to determine the availability from the WHOIS record - if available,
+we need to extract and provide the expiration date.</p>
+</section>
+<section id="id38">
+<h3>How does it work?<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h3>
+<p>After the query of the WHOIS record, it is parsed so that we can extract
+the expiration date.</p>
+<p>When successful, a date in the format <code class="code docutils literal notranslate"><span class="pre">09-oct-1970</span></code> is provided to the
+end-user. Otherwise, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided to those using the API and
+<code class="code docutils literal notranslate"><span class="pre">Unknown</span></code> to those using the CLI.</p>
+</section>
+<section id="id39">
+<h3>How to use it?<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h3>
+<p>You can simply allow the usage of the WHOIS lookup through:</p>
+<ul class="simple">
+<li><p>the (Python) API,</p></li>
+<li><p>the CLI argument,</p></li>
+<li><p>or, your configuration file.</p></li>
+</ul>
+</section>
+</section>
+<section id="list-filtering">
+<h2>List filtering<a class="headerlink" href="#list-filtering" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id40">
+<h3>Why do we need it?<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h3>
+<p>While testing for file, you may find yourself in a situation where you only want
+to test subject which matches a given pattern.
+That’s what this component do.</p>
+</section>
+<section id="id41">
+<h3>How does it work?<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h3>
+<p>We scan the list against the given pattern/regex and only test those who match it.</p>
+</section>
+<section id="id42">
+<h3>How to use it?<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h3>
+<p>You can simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="c1"># Sets the filter to apply while reading the given input.</span>
+    <span class="c1"># For example, if you give `\.info`, we will only test the subjects</span>
+    <span class="c1"># who match `\.info`.</span>
+    <span class="n">file_filter</span><span class="p">:</span> <span class="n">null</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="c1"># Sets the filter to apply while reading the given input.</span>
+    <span class="c1"># For example, if you give `\.info`, we will only test the subjects</span>
+    <span class="c1"># who match `\.info`.</span>
+    <span class="n">file_filter</span><span class="p">:</span> <span class="s2">&quot;\.org&quot;</span>
+</pre></div>
+</div>
+<p>(for example)</p>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--filter</span></code> argument from the CLI.</p>
+</section>
+</section>
+<section id="http-status-code">
+<h2>HTTP Status Code<a class="headerlink" href="#http-status-code" title="Permalink to this heading"></a></h2>
+<section id="id43">
+<h3>Why do we need it?<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h3>
+<p>As we want to determine the availability of a domain, IP, or URL; one of our
+testing method is the gathering of the HTTP status code.</p>
+</section>
+<section id="id44">
+<h3>How does it work?<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We never send a generic User-Agent. You can define your own or let
+PyFunceble choose one of the latest one of one of the major browser for
+you.</p>
+</div>
+<p>When it is the turn of the HTTP status code lookup tool to try to gather a
+status for the given subject, an HTTP query is made to the given IP, domain
+or subject.</p>
+<p>When testing for a domain, a successful HTTP response is considered as
+<code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>.</p>
+<p>Otherwise, the following default classification applies.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The classification can be changed by end-user through their configuration
+file.</p>
+</div>
+<section id="as-active">
+<h4>As ACTIVE<a class="headerlink" href="#as-active" title="Permalink to this heading"></a></h4>
+<p>Please note that the following HTTP status codes are considered as ACTIVE.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as ACTIVE officially and into your analytic files.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">100</span></code>: Continue</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">101</span></code>: Switching Protocols</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">102</span></code>: Processing</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">200</span></code>: OK</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">201</span></code>: Created</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">202</span></code>: Accepted</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">203</span></code>: Non-Authoritative Information</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">204</span></code>: No Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">205</span></code>: Reset Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">206</span></code>: Partial Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">207</span></code>: Multi-Status</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">208</span></code>: Already Reported</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">226</span></code>: IM User</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">429</span></code>: Too Many Request.</p></li>
+</ul>
+</section>
+<section id="as-potentially-active">
+<h4>As potentially ACTIVE<a class="headerlink" href="#as-potentially-active" title="Permalink to this heading"></a></h4>
+<p>Please note that the following HTTP status codes are considered as potentially
+ACTIVE but still officially reported as ACTIVE when caught.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as ACTIVE officially and into your analytic files as
+potentially ACTIVE.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">300</span></code>: Multiple Choices</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">301</span></code>: Moved Permanently</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">302</span></code>: Found</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">303</span></code>: See Other</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">304</span></code>: Not Modified</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">305</span></code>: Use Proxy</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">307</span></code>: Temporary Redirect</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">308</span></code>: Permanent Redirect</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">403</span></code>: Forbidden</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">405</span></code>: Method Not Allowed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">406</span></code>: Not Acceptable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">407</span></code>: Proxy Authentication Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">408</span></code>: Request Timeout</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">411</span></code>: Length Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">413</span></code>: Payload Too Large</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">417</span></code>: Expectation Failed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">418</span></code>: I’m a teapot</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">421</span></code>: Misdirect Request</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">422</span></code>: Unprocessable Entity</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">423</span></code>: Locked</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">424</span></code>: Failed Dependency</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">426</span></code>: Upgrade Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">428</span></code>: Precondition Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">431</span></code>: Request Header Fields Too Large</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">500</span></code>: Internal Server Error</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">501</span></code>: Not Implemented</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">502</span></code>: Bad Gateway</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">503</span></code>: Service Unavailable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">504</span></code>: Gateway Timeout</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">505</span></code>: HTTP Version Not Supported</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">506</span></code>: Variant Also Negotiates</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">507</span></code>: Insufficient Storage</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">508</span></code>: Loop Detected</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">510</span></code>: Not Extended</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">511</span></code>: Network Authentication Required</p></li>
+</ul>
+</section>
+<section id="as-inactive-or-potentially-inactive">
+<h4>As INACTIVE or potentially INACTIVE<a class="headerlink" href="#as-inactive-or-potentially-inactive" title="Permalink to this heading"></a></h4>
+<p>Please note that the following HTTP status codes are considered as INACTIVE or
+potentially INACTIVE. Therefore officially reported as INACTIVE when caught.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as INACTIVE officially and into your analytic files as
+potentially INACTIVE.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">400</span></code>: Bad Request</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">402</span></code>: Payment Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">404</span></code>: Not Found</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">409</span></code>: Conflict</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">410</span></code>: Gone</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">412</span></code>: Precondition Failed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">414</span></code>: Request-URI Too Long</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">415</span></code>: Unsupported Media Type</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">416</span></code>: Request Range Not Satisfiable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">451</span></code>: Unavailable For Legal Reasons</p></li>
+</ul>
+</section>
+</section>
+<section id="id45">
+<h3>How to use it?<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h3>
+<p>You can simply allow the usage of the HTTP status code lookup through:</p>
+<ul class="simple">
+<li><p>the (Python) API,</p></li>
+<li><p>the CLI argument,</p></li>
+<li><p>or, your configuration file.</p></li>
+</ul>
+</section>
+</section>
+<section id="iana-root-zone-database">
+<h2>IANA Root Zone Database<a class="headerlink" href="#iana-root-zone-database" title="Permalink to this heading"></a></h2>
+<section id="id46">
+<h3>Why do we need it?<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h3>
+<p>We use it to check if an extension is valid/exists.</p>
+</section>
+<section id="id47">
+<h3>How does it work?<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the parser code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.iana.IanaDBGenerator" title="PyFunceble.cli.scripts.iana.IanaDBGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">IanaDBGenerator</span></code></a>!</p>
+</div>
+<p>The root zone database is saved into the <code class="code docutils literal notranslate"><span class="pre">iana-domains-db.json</span></code> file.
+It is formatted like below and is automatically merged for the end-user before
+each test run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;extension&quot;</span><span class="p">:</span> <span class="s2">&quot;whois_server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In-app, while testing for a domain, we check if the extension is listed there
+before doing some extra verifications.
+If not, domain(s) will be flagged as <code class="code docutils literal notranslate"><span class="pre">INVALID</span></code>.</p>
+</section>
+<section id="how-to-generate-it-manually">
+<h3>How to generate it manually?<a class="headerlink" href="#how-to-generate-it-manually" title="Permalink to this heading"></a></h3>
+<p>You can’t and should not as we are automatically generating it every 24 hours.
+But using the <code class="code docutils literal notranslate"><span class="pre">iana-pyfunceble</span></code> CLI will do the job on purpose.</p>
+</section>
+</section>
+<section id="test-in-for-local-hostnames-ips-components">
+<h2>Test in/for local hostnames, IPs, components<a class="headerlink" href="#test-in-for-local-hostnames-ips-components" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id48">
+<h3>Why do we need it?<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h3>
+<p>As we may need to test for local hostnames, IPs, components in a local network,
+this component allows a less aggressive way of syntax validation.</p>
+</section>
+<section id="id49">
+<h3>How does it work?<a class="headerlink" href="#id49" title="Permalink to this heading"></a></h3>
+<p>We simply use a less aggressive syntax validation so that everything you give
+us is being tested.</p>
+</section>
+<section id="id50">
+<h3>How to use it?<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h3>
+<p>Simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+   <span class="c1"># Acknowleadges that we may test for local network component.</span>
+   <span class="c1"># NOTE: Activating this, will remove the syntax checker completely.</span>
+   <span class="n">local_network</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+   <span class="c1"># Acknowleadges that we may test for local network component.</span>
+   <span class="c1"># NOTE: Activating this, will remove the syntax checker completely.</span>
+   <span class="n">local_network</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--local</span></code> argument
+from the CLI to activate it.</p>
+</section>
+</section>
+<section id="logs-sharing">
+<h2>Logs Sharing<a class="headerlink" href="#logs-sharing" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id51">
+<h3>Why do we need it?<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h3>
+<p>We chose to initiate the logs sharing as some actions can really be random when
+working with millions of domains.</p>
+<p>The idea and purpose of this feature are <strong>ONLY</strong> to make PyFunceble a better
+tool.</p>
+</section>
+<section id="what-is-collected">
+<h3>What is collected<a class="headerlink" href="#what-is-collected" title="Permalink to this heading"></a></h3>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 4.0.0.</span></p>
+</div>
+<p>As of <code class="code docutils literal notranslate"><span class="pre">4.0.0</span></code>, we temporarly disabled and removed all data collection.</p>
+<p>Indeed, I need to rewrite the infrastructure behind it. Therefore, I refused
+to implement any of the data collection source code until the infrastructure
+behind it is ready.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The following table only represent the option as available in the <code class="code docutils literal notranslate"><span class="pre">3.x</span></code>
+version of PyFunceble.</p>
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Event</strong></p></td>
+<td><p><strong>Shared</strong></p></td>
+<td><p><strong>URL</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>No WHOIS server (referrer) is found.</p></td>
+<td><ul class="simple">
+<li><p>The extension of the currently tested domain.</p></li>
+</ul>
+</td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">https://pyfunceble.funilrys.com/api/no-referrer</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>The expiration date is not correctly formatted.</p></td>
+<td><ul class="simple">
+<li><p>The extracted expiration date.</p></li>
+<li><p>The currently tested domain.</p></li>
+<li><p>The currently used WHOIS server (DNS) name.</p></li>
+</ul>
+</td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">https://pyfunceble.funilrys.com/api/date-format</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-share-logs">
+<h3>How to share logs?<a class="headerlink" href="#how-to-share-logs" title="Permalink to this heading"></a></h3>
+<p>If you wish to share your logs simply change</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">share_logs</span><span class="p">:</span><span class="w">                   </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">share_logs</span><span class="p">:</span><span class="w">                   </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--share-logs</span></code>
+argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="mining">
+<h2>Mining<a class="headerlink" href="#mining" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is not activated by default.</p>
+</div>
+<section id="id52">
+<h3>Why do we need it?<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h3>
+<p>Sometimes you might, for example, want to get the list of domain(s) / URL(s) in
+a redirecting loop. This feature reveals them.</p>
+</section>
+<section id="id53">
+<h3>How does it work?<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.processes.workers.html#PyFunceble.cli.processes.workers.miner.MinerWorker" title="PyFunceble.cli.processes.workers.miner.MinerWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinerWorker</span></code></a>!</p>
+</div>
+<p>We access the given domain/URL and get the redirection history which we then
+test once we finished the normal test.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component might evolve with time.</p>
+</div>
+</section>
+<section id="id54">
+<h3>How to use it?<a class="headerlink" href="#id54" title="Permalink to this heading"></a></h3>
+<p>You can simply change</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cli_testing</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Activates the mining of data.</span>
+<span class="w">    </span><span class="nt">mining</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cli_testing</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Activates the mining of data.</span>
+<span class="w">    </span><span class="nt">mining</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--mining</span></code> argument
+from the CLI to activate it.</p>
+</section>
+</section>
+<section id="multiprocessing">
+<h2>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Permalink to this heading"></a></h2>
+<section id="id55">
+<h3>Why do we need it?<a class="headerlink" href="#id55" title="Permalink to this heading"></a></h3>
+<p>Many people around the web who talked about PyFunceble were talking about
+one thing: We take time to run.</p>
+<p>In the past, we implemented what was then called the “multiprocessing” method.
+As of <code class="code docutils literal notranslate"><span class="pre">4.0.0</span></code>, we went away from the original multiprocessing logic.
+The reason behind it was that the multiprocessing method we developed at the
+time was becoming a nightmare to manage because we always had to take into
+consideration that a process does not have access to the memory space of
+the main process.</p>
+<p>Therefore, we decided to rewrite it to be a bit more efficient.
+In the new layout, we work with queues to split the testing work
+through multiple test workers. That simplifies our data workflow and
+maintainability.</p>
+</section>
+<section id="id56">
+<h3>How does it work?<a class="headerlink" href="#id56" title="Permalink to this heading"></a></h3>
+<p>We read the given inputs, add them into some queues and generate some outputs
+through other queues or processes.</p>
+<p>Here is a short representation of the process model behind the CLI testing:</p>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/PyFunceble/draw.io/master/dist/Process_Model_PyFunceble_CLI.png"><img alt="PyFunceble CLI Thread Model" src="https://raw.githubusercontent.com/PyFunceble/draw.io/master/dist/Process_Model_PyFunceble_CLI.png" /></a>
+</section>
+<section id="id57">
+<h3>How to use it?<a class="headerlink" href="#id57" title="Permalink to this heading"></a></h3>
+<p>As of <code class="code docutils literal notranslate"><span class="pre">4.0.0</span></code>, you don’t have the choice. It is available and is
+systematically used as soon as you use the <cite>PyFunceble</cite> CLI.</p>
+<p>But, you can control the maximum about of test worker through the
+<code class="code docutils literal notranslate"><span class="pre">--max-workers</span></code> argument or its configuration counterpart:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cli_testing</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Sets the number of maximal workers to use.</span>
+<span class="w">    </span><span class="c1"># If set to null, the system use: CPU * Cores - 2</span>
+<span class="w">    </span><span class="nt">max_workers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="outputted-files">
+<h2>Outputted Files<a class="headerlink" href="#outputted-files" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section does not cover the log files.</p>
+</div>
+<section id="id58">
+<h3>Why do we need it?<a class="headerlink" href="#id58" title="Permalink to this heading"></a></h3>
+<p>We need a way to deliver our results.</p>
+</section>
+<section id="id59">
+<h3>How does it work?<a class="headerlink" href="#id59" title="Permalink to this heading"></a></h3>
+<p>After testing a given subject, we generate its output file based on what’s
+needed.</p>
+<section id="host-format">
+<h4>Host format<a class="headerlink" href="#host-format" title="Permalink to this heading"></a></h4>
+<p>This is the default output file.</p>
+<p>A line is formatted like <code class="code docutils literal notranslate"><span class="pre">0.0.0.0</span> <span class="pre">example.org</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A custom IP can be set with the help of the <code class="code docutils literal notranslate"><span class="pre">custom_ip</span></code> index or the
+<code class="code docutils literal notranslate"><span class="pre">--hosts-ip</span></code> argument from the CLI.</p>
+</div>
+<p>Don’t need it? Simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">file_generation</span><span class="p">:</span>
+        <span class="c1"># Activates the generation of the hosts file(s).</span>
+        <span class="n">hosts</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">file_generation</span><span class="p">:</span>
+        <span class="c1"># Activates the generation of the hosts file(s).</span>
+        <span class="n">hosts</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--hosts</span></code> argument
+from the CLI to deactivate it.</p>
+</section>
+<section id="plain-format">
+<h4>Plain format<a class="headerlink" href="#plain-format" title="Permalink to this heading"></a></h4>
+<p>A line is formatted like <code class="code docutils literal notranslate"><span class="pre">example.org</span></code>.</p>
+<p>Need it? Simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">file_generation</span><span class="p">:</span>
+        <span class="c1"># Activates the generation of the plain (or raw) file(s).</span>
+        <span class="n">plain</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+     <span class="n">file_generation</span><span class="p">:</span>
+         <span class="c1"># Activates the generation of the plain (or raw) file(s).</span>
+         <span class="n">plain</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--plain</span></code> argument
+from the CLI to activate it.</p>
+</section>
+</section>
+</section>
+<section id="percentage">
+<h2>Percentage<a class="headerlink" href="#percentage" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This component is activated by default while testing files.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The percentage doesn’t show up - by design - while testing for single
+subjects.</p>
+</div>
+<section id="id60">
+<h3>Why do we need it?<a class="headerlink" href="#id60" title="Permalink to this heading"></a></h3>
+<p>We need it in order to get information about the amount of data we just tested.</p>
+</section>
+<section id="id61">
+<h3>How does it work?<a class="headerlink" href="#id61" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.filesystem.html#PyFunceble.cli.filesystem.counter.FilesystemCounter" title="PyFunceble.cli.filesystem.counter.FilesystemCounter"><code class="xref py py-class docutils literal notranslate"><span class="pre">FilesystemCounter</span></code></a>!</p>
+</div>
+<p>Regularly or at the very end of a test we get the number of subjects for
+each status along with the number of tested subjects.
+We then generate and print the percentage calculation on the screen
+(<code class="code docutils literal notranslate"><span class="pre">stdout</span></code>) and into
+<code class="code docutils literal notranslate"><span class="pre">output/${input_file_name}/logs/percentage/percentage.txt</span></code></p>
+</section>
+<section id="id62">
+<h3>How to use it?<a class="headerlink" href="#id62" title="Permalink to this heading"></a></h3>
+<p>It is activated by default, but if not please update</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">display_mode</span><span class="p">:</span>
+        <span class="c1"># Activates the output of the percentage information.</span>
+        <span class="n">percentage</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">display_mode</span><span class="p">:</span>
+        <span class="c1"># Activates the output of the percentage information.</span>
+        <span class="n">percentage</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--percentage</span></code>
+argument from the CLI to reactivate it.</p>
+</section>
+</section>
+<section id="the-public-suffix-list">
+<h2>The Public Suffix List<a class="headerlink" href="#the-public-suffix-list" title="Permalink to this heading"></a></h2>
+<section id="id63">
+<h3>Why do we need it?<a class="headerlink" href="#id63" title="Permalink to this heading"></a></h3>
+<p>We use it in the process of checking the validity of domains.</p>
+</section>
+<section id="id64">
+<h3>How does it work?<a class="headerlink" href="#id64" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the parser code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.cli.scripts.html#PyFunceble.cli.scripts.public_suffix.PublicSuffixGenerator" title="PyFunceble.cli.scripts.public_suffix.PublicSuffixGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublicSuffixGenerator</span></code></a>!</p>
+</div>
+<p>The copy of the public suffix list we use is saved into the
+<code class="code docutils literal notranslate"><span class="pre">public-suffix.json</span></code> file.
+It is formatted like below and is (periodically) automatically merged for the
+end-user before each test run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;extension&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;suffix1.extension&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix2.extension&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix3.extension&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In-app, while testing for domain(s), we use it to know if we are
+checking for a subdomain or not.</p>
+</section>
+<section id="id65">
+<h3>How to generate it manually?<a class="headerlink" href="#id65" title="Permalink to this heading"></a></h3>
+<p>You can’t and should not as we are automatically generating it every 24 hours.
+But, using the <code class="code docutils literal notranslate"><span class="pre">public-suffix-pyfunceble</span></code> CLI will do the job on purpose.</p>
+</section>
+</section>
+<section id="sorting">
+<h2>Sorting<a class="headerlink" href="#sorting" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While using the multiprocessing option, the data are tested as given.</p>
+</div>
+<section id="id66">
+<h3>Why do we need it?<a class="headerlink" href="#id66" title="Permalink to this heading"></a></h3>
+<p>Because sorted is better, we sort by default!</p>
+</section>
+<section id="id67">
+<h3>How does it work?<a class="headerlink" href="#id67" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here:
+<a class="reference internal" href="../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.sort.standard" title="PyFunceble.cli.utils.sort.standard"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard()</span></code></a>
+and
+<a class="reference internal" href="../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.sort.hierarchical" title="PyFunceble.cli.utils.sort.hierarchical"><code class="xref py py-func docutils literal notranslate"><span class="pre">hierarchical()</span></code></a>!</p>
+</div>
+<section id="alphabetically">
+<h4>Alphabetically<a class="headerlink" href="#alphabetically" title="Permalink to this heading"></a></h4>
+<p>This is the default one. The <a class="reference internal" href="../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.sort.standard" title="PyFunceble.cli.utils.sort.standard"><code class="xref py py-func docutils literal notranslate"><span class="pre">standard()</span></code></a>
+function is used for that purpose.</p>
+</section>
+<section id="hierarchically">
+<h4>Hierarchically<a class="headerlink" href="#hierarchically" title="Permalink to this heading"></a></h4>
+<p>The objective of this is to provide sorting by service/domains.</p>
+<p>The <a class="reference internal" href="../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.sort.hierarchical" title="PyFunceble.cli.utils.sort.hierarchical"><code class="xref py py-func docutils literal notranslate"><span class="pre">hierarchical()</span></code></a>
+function is used for that purpose.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a simplified version of what we do.</p>
+</div>
+<ol class="arabic">
+<li><dl>
+<dt>Let’s say we have <code class="code docutils literal notranslate"><span class="pre">aaa.bbb.ccc.tdl</span></code>.</dt><dd><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The TDL part is determined. Indeed we first look at the
+IANA Root Zone database, then at the Public Suffix List.</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p>Let’s split the points. We then get a list <code class="code docutils literal notranslate"><span class="pre">[aaa,</span> <span class="pre">bbb,</span> <span class="pre">ccc,</span> <span class="pre">tdl]</span></code></p></li>
+<li><p>Put the TDL first. It will gives us <code class="code docutils literal notranslate"><span class="pre">[tdl,</span> <span class="pre">aaa,</span> <span class="pre">bbb,</span> <span class="pre">ccc]</span></code></p></li>
+<li><p>Reverse everything after the TDL. It will gives us <code class="code docutils literal notranslate"><span class="pre">[tdl,</span> <span class="pre">ccc,</span> <span class="pre">bbb,</span> <span class="pre">aaa]</span></code>.</p></li>
+<li><p>Get the string to use for sorting. It will gives us <code class="code docutils literal notranslate"><span class="pre">tdl.ccc.bbb.aaa</span></code>.</p></li>
+</ol>
+</section>
+</section>
+<section id="how-to-activate-the-hierarchical-sorting">
+<h3>How to activate the hierarchical sorting?<a class="headerlink" href="#how-to-activate-the-hierarchical-sorting" title="Permalink to this heading"></a></h3>
+<p>Simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">sorting_mode</span><span class="p">:</span>
+        <span class="c1"># Activates the hierarchical sorting.</span>
+        <span class="n">hierarchical</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cli_testing</span><span class="p">:</span>
+    <span class="n">sorting_mode</span><span class="p">:</span>
+        <span class="c1"># Activates the hierarchical sorting.</span>
+        <span class="n">hierarchical</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--hierarchical</span></code>
+argument from the CLI to activate it.</p>
+</section>
+</section>
+<section id="special-rules">
+<h2>SPECIAL rules<a class="headerlink" href="#special-rules" title="Permalink to this heading"></a></h2>
+<section id="id68">
+<h3>Why do we need it?<a class="headerlink" href="#id68" title="Permalink to this heading"></a></h3>
+<p>As PyFunceble grew up, I thought that a bit of filtering for special cases
+would be great to introduce. That where the idea came from.</p>
+</section>
+<section id="id69">
+<h3>How does it work?<a class="headerlink" href="#id69" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For any new suggestion of domains where a special rule can enhance
+PyFunceble please either open a new issue or make your
+<a class="reference external" href="../contributing/index.html#contribute">contribution</a> directly into the
+project.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Contribution to the SPECIAL rules</strong></p>
+<p>To add directly to the special rules please modify both the source code
+<a class="reference external" href="https://github.com/funilrys/PyFunceble/blob/dev/PyFunceble/checker/availability/extra_rules.py">extra_rules.py</a>
+and the documentation (here).</p>
+</div>
+<p>Below is the list of all special rules that are implemented into PyFunceble.
+Please keep in mind that you can disable the usage those rules at any time.</p>
+<hr class="docutils" />
+<section id="ip-range">
+<h4>IP range<a class="headerlink" href="#ip-range" title="Permalink to this heading"></a></h4>
+<p>Any IPv4 and IPv6 ranges are supplied as <code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id70">
+<h3>How to use it?<a class="headerlink" href="#id70" title="Permalink to this heading"></a></h3>
+<p>Special rules are activated by default, but you can switch its usage through:</p>
+<ul class="simple">
+<li><p>the (Python) API,</p></li>
+<li><p>the CLI argument,</p></li>
+<li><p>or, your configuration file.</p></li>
+</ul>
+<hr class="docutils" />
+<section id="parked-subjects">
+<h4>Parked Subjects<a class="headerlink" href="#parked-subjects" title="Permalink to this heading"></a></h4>
+<p><strong>WARNING:</strong> This optiona is not available yet.</p>
+<p>Any subjects that are considered parked by PyFunceble are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="changeip-com-platform-domains">
+<h4>ChangeIP.com Platform domains<a class="headerlink" href="#changeip-com-platform-domains" title="Permalink to this heading"></a></h4>
+<p>Any subjects that are part of the known ChangeIP.com platform domains which contain
+<code class="code docutils literal notranslate"><span class="pre">abuse.changeip.com.</span></code> in their <code class="code docutils literal notranslate"><span class="pre">SOA</span></code> record are supplied as
+<code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+<p>Here is a rough list of the affected domains:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>25u.com</p></li>
+<li><p>2waky.com</p></li>
+<li><p>3-a.net</p></li>
+<li><p>4dq.com</p></li>
+<li><p>4pu.com</p></li>
+<li><p>acmetoy.com</p></li>
+<li><p>almostmy.com</p></li>
+<li><p>americanunfinished.com</p></li>
+<li><p>as19557.net</p></li>
+<li><p>authorizeddns.net</p></li>
+<li><p>authorizeddns.org</p></li>
+<li><p>authorizeddns.us</p></li>
+<li><p>b0tnet.com</p></li>
+<li><p>bigmoney.biz</p></li>
+<li><p>changeip.biz</p></li>
+<li><p>changeip.co</p></li>
+<li><p>changeip.net</p></li>
+<li><p>changeip.org</p></li>
+<li><p>changeip.us</p></li>
+<li><p>cleansite.biz</p></li>
+<li><p>cleansite.info</p></li>
+<li><p>cleansite.us</p></li>
+<li><p>ddns.info</p></li>
+<li><p>ddns.mobi</p></li>
+<li><p>ddns.ms</p></li>
+<li><p>ddns.us</p></li>
+<li><p>dhcp.biz</p></li>
+<li><p>dns-dns.com</p></li>
+<li><p>dns-report.com</p></li>
+<li><p>dns-stuff.com</p></li>
+<li><p>dns04.com</p></li>
+<li><p>dns05.com</p></li>
+<li><p>dns1.us</p></li>
+<li><p>dns2.us</p></li>
+<li><p>dnset.com</p></li>
+<li><p>dnsfailover.net</p></li>
+<li><p>dnsrd.com</p></li>
+<li><p>dsmtp.biz</p></li>
+<li><p>dsmtp.com</p></li>
+<li><p>dubya.biz</p></li>
+<li><p>dubya.info</p></li>
+<li><p>dubya.net</p></li>
+<li><p>dubya.us</p></li>
+<li><p>dumb1.com</p></li>
+<li><p>dynamic-dns.net</p></li>
+<li><p>dynamicdns.biz</p></li>
+<li><p>dynssl.com</p></li>
+<li><p>edns.biz</p></li>
+<li><p>esmtp.biz</p></li>
+<li><p>ezua.com</p></li>
+<li><p>faqserv.com</p></li>
+<li><p>fartit.com</p></li>
+<li><p>freeddns.com</p></li>
+<li><p>freetcp.com</p></li>
+<li><p>freewww.biz</p></li>
+<li><p>freewww.info</p></li>
+<li><p>ftp1.biz</p></li>
+<li><p>ftpserver.biz</p></li>
+<li><p>gettrials.com</p></li>
+<li><p>got-game.org</p></li>
+<li><p>gr8domain.biz</p></li>
+<li><p>gr8name.biz</p></li>
+<li><p>homingbeacon.net</p></li>
+<li><p>https443.net</p></li>
+<li><p>https443.org</p></li>
+<li><p>ikwb.com</p></li>
+<li><p>instanthq.com</p></li>
+<li><p>iownyour.biz</p></li>
+<li><p>iownyour.org</p></li>
+<li><p>isasecret.com</p></li>
+<li><p>itemdb.com</p></li>
+<li><p>itsaol.com</p></li>
+<li><p>jetos.com</p></li>
+<li><p>jkub.com</p></li>
+<li><p>jungleheart.com</p></li>
+<li><p>justdied.com</p></li>
+<li><p>lflink.com</p></li>
+<li><p>lflinkup.com</p></li>
+<li><p>lflinkup.net</p></li>
+<li><p>lflinkup.org</p></li>
+<li><p>longmusic.com</p></li>
+<li><p>mefound.com</p></li>
+<li><p>misecure.com</p></li>
+<li><p>moneyhome.biz</p></li>
+<li><p>mrbasic.com</p></li>
+<li><p>mrbonus.com</p></li>
+<li><p>mrface.com</p></li>
+<li><p>mrslove.com</p></li>
+<li><p>my03.com</p></li>
+<li><p>mydad.info</p></li>
+<li><p>myddns.com</p></li>
+<li><p>myftp.info</p></li>
+<li><p>mylftv.com</p></li>
+<li><p>mymom.info</p></li>
+<li><p>mynetav.com</p></li>
+<li><p>mynetav.net</p></li>
+<li><p>mynetav.org</p></li>
+<li><p>mynumber.org</p></li>
+<li><p>mypicture.info</p></li>
+<li><p>mypop3.net</p></li>
+<li><p>mypop3.org</p></li>
+<li><p>mysecondarydns.com</p></li>
+<li><p>mywww.biz</p></li>
+<li><p>myz.info</p></li>
+<li><p>ninth.biz</p></li>
+<li><p>ns01.biz</p></li>
+<li><p>ns01.info</p></li>
+<li><p>ns01.us</p></li>
+<li><p>ns02.biz</p></li>
+<li><p>ns02.info</p></li>
+<li><p>ns02.us</p></li>
+<li><p>ns1.name</p></li>
+<li><p>ns2.name</p></li>
+<li><p>ns3.name</p></li>
+<li><p>ocry.com</p></li>
+<li><p>onedumb.com</p></li>
+<li><p>onmypc.biz</p></li>
+<li><p>onmypc.info</p></li>
+<li><p>onmypc.net</p></li>
+<li><p>onmypc.org</p></li>
+<li><p>onmypc.us</p></li>
+<li><p>organiccrap.com</p></li>
+<li><p>otzo.com</p></li>
+<li><p>ourhobby.com</p></li>
+<li><p>port25.biz</p></li>
+<li><p>proxydns.com</p></li>
+<li><p>qhigh.com</p></li>
+<li><p>qpoe.com</p></li>
+<li><p>rebatesrule.net</p></li>
+<li><p>sendsmtp.com</p></li>
+<li><p>serveuser.com</p></li>
+<li><p>serveusers.com</p></li>
+<li><p>sexidude.com</p></li>
+<li><p>sexxxy.biz</p></li>
+<li><p>sixth.biz</p></li>
+<li><p>squirly.info</p></li>
+<li><p>ssl443.org</p></li>
+<li><p>ssmailer.com</p></li>
+<li><p>toh.info</p></li>
+<li><p>toshibanetcam.com</p></li>
+<li><p>toythieves.com</p></li>
+<li><p>trickip.net</p></li>
+<li><p>trickip.org</p></li>
+<li><p>vizvaz.com</p></li>
+<li><p>wikaba.com</p></li>
+<li><p>www1.biz</p></li>
+<li><p>wwwhost.biz</p></li>
+<li><p>wwwhost.us</p></li>
+<li><p>x24hr.com</p></li>
+<li><p>xxuz.com</p></li>
+<li><p>xxxy.biz</p></li>
+<li><p>xxxy.info</p></li>
+<li><p>ygto.com</p></li>
+<li><p>youdontcare.com</p></li>
+<li><p>yourtrap.com</p></li>
+<li><p>zyns.com</p></li>
+<li><p>zzux.com</p></li>
+</ul>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="webhostapp-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.000webhostapp.com</span></code><a class="headerlink" href="#webhostapp-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">410</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="eu">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.24.eu</span></code><a class="headerlink" href="#eu" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">503</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="altervista-org">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.altervista.org</span></code><a class="headerlink" href="#altervista-org" title="Permalink to this heading"></a></h4>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.1.0b13.</span></p>
+</div>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">403</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="angelfire-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.angelfire.com</span></code><a class="headerlink" href="#angelfire-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="blogspot">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.blogspot.*</span></code><a class="headerlink" href="#blogspot" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and:</p>
+<ul class="simple">
+<li><p>the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code</p></li>
+<li><p>the <code class="code docutils literal notranslate"><span class="pre">301</span></code> status code that does not exists or are blocked by Google</p></li>
+<li><p>the <code class="code docutils literal notranslate"><span class="pre">303</span></code> status code that are blocked by Google</p></li>
+</ul>
+<p>are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="canalblog-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.canalblog.com</span></code><a class="headerlink" href="#canalblog-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code
+are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="dr-ag">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.dr.ag</span></code><a class="headerlink" href="#dr-ag" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">503</span></code> status code
+are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="fc2-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.fc2.com</span></code><a class="headerlink" href="#fc2-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">error.fc2.com</span></code>
+subdomain is into the <cite>Location</cite> headers are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="github-io">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.github.io</span></code><a class="headerlink" href="#github-io" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="godaddysites-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.godaddysites.com</span></code><a class="headerlink" href="#godaddysites-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status codes are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="hpg-com-br">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.hpg.com.br</span></code><a class="headerlink" href="#hpg-com-br" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="imgur-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.imgur.com</span></code><a class="headerlink" href="#imgur-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the <code class="code docutils literal notranslate"><span class="pre">/removed.png</span></code> path in the end URL (after redirect).</p></li>
+</ul>
+</div></blockquote>
+<p>are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="liveadvert-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.liveadvert.com</span></code><a class="headerlink" href="#liveadvert-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="skyrock-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.skyrock.com</span></code><a class="headerlink" href="#skyrock-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="tumblr-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.tumblr.com</span></code><a class="headerlink" href="#tumblr-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="weebly-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.weebly.com</span></code><a class="headerlink" href="#weebly-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="wix-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.wix.com</span></code><a class="headerlink" href="#wix-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">404</span></code> status code are
+supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="wordpress-com">
+<h4><code class="code docutils literal notranslate"><span class="pre">*.wordpress.com</span></code><a class="headerlink" href="#wordpress-com" title="Permalink to this heading"></a></h4>
+<p>Any subjects matching the given pattern and the <code class="code docutils literal notranslate"><span class="pre">301</span></code> status code along
+with the pattern <code class="code docutils literal notranslate"><span class="pre">doesn’t</span> <span class="pre">exist</span></code> are supplied as <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code>.</p>
+</section>
+</section>
+</section>
+<section id="status">
+<h2>Status<a class="headerlink" href="#status" title="Permalink to this heading"></a></h2>
+<section id="id71">
+<h3>Why do we need it?<a class="headerlink" href="#id71" title="Permalink to this heading"></a></h3>
+<p>We use it to provide a representation of the availability, syntax, or reputation
+of a given subject.</p>
+</section>
+<section id="id72">
+<h3>How does it work?<a class="headerlink" href="#id72" title="Permalink to this heading"></a></h3>
+<p>Multiple statuses are available to each checker. Each has its meaning and
+root.</p>
+<section id="invalid">
+<h4>INVALID<a class="headerlink" href="#invalid" title="Permalink to this heading"></a></h4>
+<p>This the status that is supplied by the <strong>availability</strong>, <strong>syntax</strong>, or
+<strong>reputation</strong> checkers when the given subject is INVALID.</p>
+<p>It is provided the subject does not pass our internal syntax checker.</p>
+<p>The internal syntax checker analyzes the following against the given subject:</p>
+<ul class="simple">
+<li><p>If you are testing for a domain, is the extension registered in the IANA
+Root Zone Database?</p></li>
+<li><p>If you are testing for an IP, is it a valid IP (v4 or v6)?</p></li>
+<li><p>If you are testing for a URL, is it a valid one?</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>While using the CLI against a local network, this is ignored.</p>
+</div>
+</section>
+<section id="active">
+<h4>ACTIVE<a class="headerlink" href="#active" title="Permalink to this heading"></a></h4>
+<p>This is the status that is supplied by the <strong>availability</strong> checker.</p>
+<p>It is provided when one of the following is effective:</p>
+<ul class="simple">
+<li><p>We could query the WHOIS record and extract the expiration date out of it.</p></li>
+<li><p>We could query any of the <code class="code docutils literal notranslate"><span class="pre">NS</span></code>, <code class="code docutils literal notranslate"><span class="pre">A</span></code>, <code class="code docutils literal notranslate"><span class="pre">AAAA</span></code>, <code class="code docutils literal notranslate"><span class="pre">CNAME</span></code>
+or <code class="code docutils literal notranslate"><span class="pre">DNAME</span></code> of the given subject.</p></li>
+<li><p>We could query the network information of the given subject.</p></li>
+<li><p>We could query the HTTP status code of the given subject.</p></li>
+</ul>
+</section>
+<section id="valid">
+<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading"></a></h4>
+<p>This is the status that is supplied by the <strong>syntax</strong> checker.</p>
+<p>It is provided when the syntax check of the given subject was successful.</p>
+<p>Consider it as the equivalent of <code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code> but for syntax checking.</p>
+</section>
+<section id="malicious">
+<h4>MALICIOUS<a class="headerlink" href="#malicious" title="Permalink to this heading"></a></h4>
+<p>This is the status that is supplied by the <strong>reputation</strong> checker.</p>
+<p>It is provided when the following is effective:</p>
+<ul class="simple">
+<li><p>If you are testing for a domain, is its IPv4 known to be malicious?</p></li>
+<li><p>If you are testing for an IP, is its IPv4 known to be malicious?</p></li>
+<li><p>If you are testing for a URL, is the IPv4 of the hostname known to be
+malicious?</p></li>
+</ul>
+</section>
+<section id="sane">
+<h4>SANE<a class="headerlink" href="#sane" title="Permalink to this heading"></a></h4>
+<p>This is the status that is supplied by the <strong>reputation</strong> checker when the
+<code class="code docutils literal notranslate"><span class="pre">MALICIOUS</span></code> status is not effective.</p>
+</section>
+</section>
+</section>
+<section id="status-source">
+<h2>Status Source<a class="headerlink" href="#status-source" title="Permalink to this heading"></a></h2>
+<section id="id73">
+<h3>Why do we need it?<a class="headerlink" href="#id73" title="Permalink to this heading"></a></h3>
+<p>We use it to provide a representation of the testing method that led to the
+status.</p>
+</section>
+<section id="id74">
+<h3>How does it work?<a class="headerlink" href="#id74" title="Permalink to this heading"></a></h3>
+<p>Multiple status sources are available. Each has its meaning and root.</p>
+<section id="syntax">
+<h4>SYNTAX<a class="headerlink" href="#syntax" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when the syntax is the reason behind
+the status. It is exclusively followed by the <code class="code docutils literal notranslate"><span class="pre">INVALID</span></code> status.</p>
+<p>You may find this status source behind the <strong>availability</strong>, <strong>syntax</strong>, or
+<strong>reputation</strong> checkers.</p>
+</section>
+<section id="dnslookup">
+<h4>DNSLOOKUP<a class="headerlink" href="#dnslookup" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when the DNS lookup is the reason
+behind the status. It is generally followed by either the <code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code> or
+<code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code> status.</p>
+<p>You will find this status source exclusively behind the <strong>availability</strong>
+checker.</p>
+</section>
+<section id="netinfo">
+<h4>NETINFO<a class="headerlink" href="#netinfo" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when the Network Information is the
+reason behind the status. It is exclusively followed by the <code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>
+status.</p>
+<p>You will find this status source exclusively behind the <strong>availability</strong>
+checker.</p>
+</section>
+<section id="http-code">
+<h4>HTTP CODE<a class="headerlink" href="#http-code" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when the HTTP Status Code is the
+reason behind the status. It is generally followed by either the
+<code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>, or <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code> status.</p>
+<p>You will find this status source exclusively behind the <strong>availability</strong>
+checker.</p>
+</section>
+<section id="reputation">
+<h4>REPUTATION<a class="headerlink" href="#reputation" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when the reputation lookup is the
+reason behind the status. It is generally followed by either the
+<code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>, <code class="code docutils literal notranslate"><span class="pre">SANE</span></code>, or <code class="code docutils literal notranslate"><span class="pre">MALICIOUS</span></code> status.</p>
+<p>You may find this status source behind the <strong>availability</strong> or <strong>reputation</strong>
+checkers.</p>
+</section>
+<section id="special">
+<h4>SPECIAL<a class="headerlink" href="#special" title="Permalink to this heading"></a></h4>
+<p>This is the status source that is supplied when our own sets of special rules
+are the reasons behind the status. It is generally followed by either the
+<code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>, or <code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code> status.</p>
+<p>You will find this status source exclusively behind the <strong>availability</strong>
+checker.</p>
+</section>
+</section>
+</section>
+<section id="whois-lookup">
+<h2>Whois Lookup<a class="headerlink" href="#whois-lookup" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While testing using PyFunceble, subdomains, IPv4 and IPv6 are not used
+against our whois lookup logic.</p>
+</div>
+<section id="id75">
+<h3>Why do we need it?<a class="headerlink" href="#id75" title="Permalink to this heading"></a></h3>
+<p>As our main purpose is to check the availability of the given subjects, we make
+a WHOIS lookup (if authorized) to determine it.</p>
+</section>
+<section id="id76">
+<h3>How does it work?<a class="headerlink" href="#id76" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Want to read the code ? It’s here
+<a class="reference internal" href="../code/PyFunceble.query.whois.html#PyFunceble.query.whois.query_tool.WhoisQueryTool" title="PyFunceble.query.whois.query_tool.WhoisQueryTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">WhoisQueryTool</span></code></a>!</p>
+</div>
+<p>For us the only relevant part is the extraction of the expiration date.
+Indeed, it’s an indicator if a domains is still owned by someone, we use it
+first to get the availability of domains.</p>
+</section>
+<section id="id77">
+<h3>How to use it?<a class="headerlink" href="#id77" title="Permalink to this heading"></a></h3>
+<p>It is activated by default but if not simply change</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lookup</span><span class="p">:</span>
+    <span class="c1"># Activates the usage of the WHOIS record.</span>
+    <span class="n">whois</span><span class="p">:</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lookup</span><span class="p">:</span>
+    <span class="c1"># Activates the usage of the WHOIS record.</span>
+    <span class="n">whois</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>into your personal <code class="code docutils literal notranslate"><span class="pre">.PyFunceble.yaml</span></code> or use the <code class="code docutils literal notranslate"><span class="pre">--no-whois</span></code>
+argument from the CLI to reactivate it.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api/index.html" class="btn btn-neutral float-left" title="API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contributing/index.html" class="btn btn-neutral float-right" title="Contribute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

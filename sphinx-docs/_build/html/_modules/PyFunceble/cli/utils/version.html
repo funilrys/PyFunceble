@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.cli.utils.version &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.cli.utils.version</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.cli.utils.version</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides the version comparison tool.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">colorama</span>
+<span class="kn">from</span> <span class="nn">box</span> <span class="kn">import</span> <span class="n">Box</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.cli.storage</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.cli.utils.stdout</span> <span class="kn">import</span> <span class="n">print_single_line</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.converter.internal_url</span> <span class="kn">import</span> <span class="n">InternalUrlConverter</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.dict</span> <span class="kn">import</span> <span class="n">DictHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.download</span> <span class="kn">import</span> <span class="n">DownloadHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.utils.version</span> <span class="kn">import</span> <span class="n">VersionUtility</span>
+
+
+<div class="viewcode-block" id="get_upstream_version"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.get_upstream_version">[docs]</a><span class="k">def</span> <span class="nf">get_upstream_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the state of the upstream version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">Box</span><span class="p">(</span>
+        <span class="n">DictHelper</span><span class="p">()</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span>
+            <span class="n">DownloadHelper</span><span class="p">(</span>
+                <span class="n">InternalUrlConverter</span><span class="p">(</span>
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">VERSION_DUMP_LINK</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">get_converted</span><span class="p">()</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">download_text</span><span class="p">()</span>
+        <span class="p">),</span>
+        <span class="n">frozen_box</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_local_version"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.get_local_version">[docs]</a><span class="k">def</span> <span class="nf">get_local_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the state of the local version file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">Box</span><span class="p">(</span>
+        <span class="n">DictHelper</span><span class="p">()</span><span class="o">.</span><span class="n">from_yaml_file</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIG_DIRECTORY</span><span class="p">,</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">DISTRIBUTED_VERSION_FILENAME</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">frozen_box</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="handle_force_update"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.handle_force_update">[docs]</a><span class="k">def</span> <span class="nf">handle_force_update</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if we should force the end-user to update.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version_utility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">()</span>
+        <span class="ow">and</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">colour</span>
+    <span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span><span class="si">}</span><span class="s2">A critical issue has &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;been fixed.</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="si">}</span><span class="s2">Please take the time to&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;A critical issue has been fixed.</span><span class="se">\n</span><span class="s2">Please take the time to &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">upstream_version</span><span class="o">.</span><span class="n">force_update</span><span class="o">.</span><span class="n">status</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">minimal</span> <span class="ow">in</span> <span class="n">upstream_version</span><span class="o">.</span><span class="n">force_update</span><span class="o">.</span><span class="n">minimal_version</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_older_than</span><span class="p">(</span><span class="n">minimal</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="handle_deprecated_version"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.handle_deprecated_version">[docs]</a><span class="k">def</span> <span class="nf">handle_deprecated_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the current version (local) is deprecated and provides a message</span>
+<span class="sd">    to the end-user.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        :py:class:`True` if local is deprecated. :py:class:`False` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version_utility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Version deprecated.&quot;</span>
+        <span class="k">elif</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">RED</span><span class="si">}</span><span class="s2">Your current version &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;is considered as deprecated.</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="si">}</span><span class="s2">Please take the &quot;</span>
+                <span class="s2">&quot;time to &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Your current version is considered as deprecated.</span><span class="se">\n</span><span class="s2">Please take &quot;</span>
+                <span class="s2">&quot;the time to &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!&quot;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Your current version is considered as deprecated.</span><span class="se">\n</span><span class="s2">Please take the &quot;</span>
+            <span class="s2">&quot;time to &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">deprecated</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_older_than</span><span class="p">(</span><span class="n">version</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="handle_greater_version"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.handle_greater_version">[docs]</a><span class="k">def</span> <span class="nf">handle_greater_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the current version (local) is more recent than the upstream one</span>
+<span class="sd">    and provides a message.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        :py:class:`True` if local is greater. :py:class:`False` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version_utility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span><span class="si">}</span><span class="s2">Your current version &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;is more recent!</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="si">}</span><span class="s2">You should &quot;</span>
+                <span class="s2">&quot;really consider to submit a Pull Request to &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}</span><span class="s2">Your version:</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}</span><span class="s2">Upstream version:</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Your current version is more recent!</span><span class="se">\n</span><span class="s2">You should really &quot;</span>
+                <span class="s2">&quot;consider to submit a Pull Request to  &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Your version: </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Upstream version: </span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Your current version is more recent!</span><span class="se">\n</span><span class="s2">You should really &quot;</span>
+            <span class="s2">&quot;consider to submit a Pull Request to  &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Your version: </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Upstream version: </span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_recent</span><span class="p">(</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="handle_older_version"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.handle_older_version">[docs]</a><span class="k">def</span> <span class="nf">handle_older_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the current version (local) is older than the upstream one</span>
+<span class="sd">    and provides a message to the end-user.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">        :py:class:`True` if local is older. :py:class:`False` otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version_utility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;New version available.&quot;</span>
+        <span class="k">elif</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">colour</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">GREEN</span><span class="si">}</span><span class="s2">Please take the &quot;</span>
+                <span class="s2">&quot;time to &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}</span><span class="s2">Your version:</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span><span class="si">}</span><span class="s2">Upstream version:</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Please take the time to update &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Your version: </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Upstream version: </span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Please take the time to &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;update </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_NAME</span><span class="si">}</span><span class="s2">!</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Your version: </span><span class="si">{</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Upstream version: </span><span class="si">{</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_older_than</span><span class="p">(</span><span class="n">upstream_version</span><span class="o">.</span><span class="n">current_version</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="handle_messages"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.handle_messages">[docs]</a><span class="k">def</span> <span class="nf">handle_messages</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handles and prints the upstream messages.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">version_utility</span> <span class="o">=</span> <span class="n">VersionUtility</span><span class="p">(</span><span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">PROJECT_VERSION</span><span class="p">)</span>
+    <span class="n">iso_dateformat</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span>
+
+    <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">quiet</span>
+            <span class="ow">or</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">display_mode</span><span class="o">.</span><span class="n">simple</span>
+        <span class="p">):</span>
+            <span class="n">authorized</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">authorized</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">authorized</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">authorized</span><span class="p">:</span>
+        <span class="n">local_timezone</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">tzinfo</span>
+
+        <span class="k">for</span> <span class="n">minimal_version</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">upstream_version</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_equal_to</span><span class="p">(</span>
+                <span class="n">minimal_version</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_recent</span><span class="p">(</span><span class="n">minimal_version</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="n">remaining_days</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">for</span> <span class="n">single_message</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;until_date&quot;</span> <span class="ow">in</span> <span class="n">single_message</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">remaining_days</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">single_message</span><span class="o">.</span><span class="n">until_date</span><span class="p">,</span> <span class="n">iso_dateformat</span><span class="p">)</span>
+                            <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">local_timezone</span><span class="p">)</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">days</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="n">remaining_days</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">if</span> <span class="n">remaining_days</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">remaining_days</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="s2">&quot;until&quot;</span> <span class="ow">in</span> <span class="n">single_message</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">version_utility</span><span class="o">.</span><span class="n">is_recent</span><span class="p">(</span><span class="n">single_message</span><span class="o">.</span><span class="n">until</span><span class="p">)</span>
+                    <span class="ow">or</span> <span class="n">version_utility</span><span class="o">.</span><span class="n">is_equal_to</span><span class="p">(</span><span class="n">single_message</span><span class="o">.</span><span class="n">until</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">single_message</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">single_message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;info&quot;</span><span class="p">:</span>
+                        <span class="n">coloration</span> <span class="o">=</span> <span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">YELLOW</span>
+                    <span class="k">elif</span> <span class="n">single_message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;warning&quot;</span><span class="p">:</span>
+                        <span class="n">coloration</span> <span class="o">=</span> <span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">MAGENTA</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">coloration</span> <span class="o">=</span> <span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">BLUE</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">coloration</span> <span class="o">=</span> <span class="n">colorama</span><span class="o">.</span><span class="n">Fore</span><span class="o">.</span><span class="n">CYAN</span>
+
+                <span class="n">coloration</span> <span class="o">+=</span> <span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">BRIGHT</span>
+
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coloration</span><span class="si">}{</span><span class="n">single_message</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">colorama</span><span class="o">.</span><span class="n">Style</span><span class="o">.</span><span class="n">RESET_ALL</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="print_central_messages"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.utils.html#PyFunceble.cli.utils.version.print_central_messages">[docs]</a><span class="k">def</span> <span class="nf">print_central_messages</span><span class="p">(</span><span class="n">check_force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Collect all possible messages from upstream and downstream and print them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">upstream_version</span> <span class="o">=</span> <span class="n">get_upstream_version</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">check_force_update</span><span class="p">:</span>
+        <span class="n">handle_force_update</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">)</span>
+
+    <span class="n">_</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="n">handle_deprecated_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">handle_greater_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">handle_older_version</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">handle_messages</span><span class="p">(</span><span class="n">upstream_version</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">extra_message</span> <span class="ow">in</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">EXTRA_MESSAGES</span><span class="p">:</span>
+        <span class="n">print_single_line</span><span class="p">(</span><span class="n">extra_message</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

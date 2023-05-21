@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Update &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration" href="../configuration/index.html" />
+    <link rel="prev" title="Installation" href="../installation/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Update</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stable-version">Stable version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-pip">Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#from-pypi">From PyPi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#from-github">From GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-aur-for-arch-linux-users">Using the AUR (for Arch Linux users)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#with-makepkg">With makepkg</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#with-your-favorite-aur-helper">With your favorite AUR helper</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-docker-hub">Using docker (hub)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pure-python-method">Pure Python method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-version">Development version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#for-development">For development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-usage">For usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Using the AUR (for Arch Linux users)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Using docker (hub)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Pure Python method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#important-information-for-pyfunceble-4-0-0">Important information for <code class="code docutils literal notranslate"><span class="pre">pyfunceble</span> <span class="pre">&gt;=</span> <span class="pre">4.0.0</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-long-time-does-it-take">How long time does it take</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#important-information-for-3-2-11">Important information for <code class="code docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">3.2.11</span></code></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Update</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/update/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="update">
+<h1>Update<a class="headerlink" href="#update" title="Permalink to this heading"></a></h1>
+<section id="stable-version">
+<h2>Stable version<a class="headerlink" href="#stable-version" title="Permalink to this heading"></a></h2>
+<section id="using-pip">
+<h3>Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code><a class="headerlink" href="#using-pip" title="Permalink to this heading"></a></h3>
+<section id="from-pypi">
+<h4>From PyPi<a class="headerlink" href="#from-pypi" title="Permalink to this heading"></a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+<section id="from-github">
+<h4>From GitHub<a class="headerlink" href="#from-github" title="Permalink to this heading"></a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>git+https://github.com/funilrys/PyFunceble.git@master#egg<span class="o">=</span>PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="using-the-aur-for-arch-linux-users">
+<h3>Using the AUR (for Arch Linux users)<a class="headerlink" href="#using-the-aur-for-arch-linux-users" title="Permalink to this heading"></a></h3>
+<section id="with-makepkg">
+<h4>With makepkg<a class="headerlink" href="#with-makepkg" title="Permalink to this heading"></a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h<span class="o">=</span>python-pyfunceble<span class="w"> </span>-o<span class="w"> </span>PKGBUILD
+<span class="gp">$ </span>makepkg
+<span class="gp">$ </span>sudo<span class="w"> </span>pacman<span class="w"> </span>-U<span class="w"> </span>python-pyfunceble*.tar.xz
+</pre></div>
+</div>
+</section>
+<section id="with-your-favorite-aur-helper">
+<h4>With your favorite AUR helper<a class="headerlink" href="#with-your-favorite-aur-helper" title="Permalink to this heading"></a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend any AUR helper but keep in mind that some AUR helpers
+are “better” than other.
+For more information about your current (or any other) AUR helper please
+report to <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">the ArchWiki page</a>.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yourFavoriteAurHelper<span class="w"> </span>-Syu<span class="w"> </span>python-pyfunceble
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-docker-hub">
+<h3>Using docker (hub)<a class="headerlink" href="#using-docker-hub" title="Permalink to this heading"></a></h3>
+<p>The image description can be found at <a class="reference external" href="https://hub.docker.com/r/pyfunceble/pyfunceble">https://hub.docker.com/r/pyfunceble/pyfunceble</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>pyfunceble/pyfunceble
+</pre></div>
+</div>
+</section>
+<section id="pure-python-method">
+<h3>Pure Python method<a class="headerlink" href="#pure-python-method" title="Permalink to this heading"></a></h3>
+<p>Execute the following and enjoy PyFunceble!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>PyFunceble
+<span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>master<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>merge<span class="w"> </span>origin/master
+<span class="gp">$ </span>python3<span class="w"> </span>setup.py<span class="w"> </span><span class="nb">test</span>
+<span class="gp">$ </span>python3<span class="w"> </span>setup.py<span class="w"> </span>install<span class="w"> </span><span class="c1"># Avoid this if you want to uninstall one day.</span>
+<span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span><span class="c1"># Prefer this method.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="development-version">
+<h2>Development version<a class="headerlink" href="#development-version" title="Permalink to this heading"></a></h2>
+<section id="for-development">
+<h3>For development<a class="headerlink" href="#for-development" title="Permalink to this heading"></a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>PyFunceble<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>dev
+<span class="gp">$ </span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>merge<span class="w"> </span>origin/dev
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As you previously installed with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ . venv/bin/activate &amp;&amp; pip3 install -e .
+</pre></div>
+</div>
+<p>Only code/repository update is required.</p>
+</div>
+</section>
+<section id="for-usage">
+<h3>For usage<a class="headerlink" href="#for-usage" title="Permalink to this heading"></a></h3>
+<section id="id1">
+<h4>Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code><a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<section id="id2">
+<h5>From PyPi<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h5>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>PyFunceble-dev
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+<section id="id3">
+<h5>From GitHub<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h5>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>git+https://github.com/funilrys/PyFunceble.git@dev#egg<span class="o">=</span>PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="id4">
+<h4>Using the AUR (for Arch Linux users)<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
+<section id="id5">
+<h5>With makepkg<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h5>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h<span class="o">=</span>python-pyfunceble-dev<span class="w"> </span>-o<span class="w"> </span>PKGBUILD
+<span class="gp">$ </span>makepkg
+<span class="gp">$ </span>sudo<span class="w"> </span>pacman<span class="w"> </span>-U<span class="w"> </span>python-pyfunceble-dev*.tar.xz
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h5>With your favorite AUR helper<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h5>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend any AUR helper but keep in mind that some AUR helpers
+are “better” than other.
+For more information about your current (or any other) AUR helper please
+report to <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">the ArchWiki page</a>.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>yourFavoriteAurHelper<span class="w"> </span>-Syu<span class="w"> </span>python-pyfunceble-dev
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h4>Using docker (hub)<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
+<p>The image description can be found at <a class="reference external" href="https://hub.docker.com/r/pyfunceble/pyfunceble-dev">https://hub.docker.com/r/pyfunceble/pyfunceble-dev</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>pyfunceble/pyfunceble-dev
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>Pure Python method<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h4>
+<p>Execute the following and enjoy PyFunceble!</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>PyFunceble<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>dev
+<span class="gp">$ </span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>merge<span class="w"> </span>origin/dev
+<span class="gp">$ </span>python3<span class="w"> </span>setup.py<span class="w"> </span><span class="nb">test</span>
+<span class="gp">$ </span>python3<span class="w"> </span>setup.py<span class="w"> </span>install<span class="w"> </span><span class="c1"># Avoid this if you want to uninstall one day.</span>
+<span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--upgrade<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span><span class="c1"># Prefer this method.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="important-information-for-pyfunceble-4-0-0">
+<h2>Important information for <code class="code docutils literal notranslate"><span class="pre">pyfunceble</span> <span class="pre">&gt;=</span> <span class="pre">4.0.0</span></code><a class="headerlink" href="#important-information-for-pyfunceble-4-0-0" title="Permalink to this heading"></a></h2>
+<p>When you upgrade PyFunceble from <code class="code docutils literal notranslate"><span class="pre">&lt;4.x</span></code> to any version <code class="code docutils literal notranslate"><span class="pre">4.x</span></code>
+there will be:</p>
+<ul>
+<li><p>a SQL conversion if you use the <code class="code docutils literal notranslate"><span class="pre">--database-type</span></code> <code class="code docutils literal notranslate"><span class="pre">mysql</span></code>
+or <code class="code docutils literal notranslate"><span class="pre">mariadb</span></code>.</p></li>
+<li><p>a JSON to CSV conversion if one of those files is found in your filesystem:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">inactive_db.json</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">whois_db.json</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The conversion of both SQL and json to CSV will take a “bit” of time as, it is
+done in a single process mode, to avoid any hick-ups instead of loading the entire
+file into memory. Loading the entire <code class="code docutils literal notranslate"><span class="pre">*.json</span></code> file into memory can have
+severe consequences depending on the size of the source file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once the job is done the <code class="code docutils literal notranslate"><span class="pre">json2csv</span></code> shouldn’t appear again for this or later
+<code class="code docutils literal notranslate"><span class="pre">4.x</span></code> releases.</p>
+</div>
+</li>
+<li><p>A workaround for waiting on the rather slow <code class="code docutils literal notranslate"><span class="pre">json2csv</span></code>, you can delete</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">inactive_db.json</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">whois_db.json</span></code> (Very Very Very bad idea in the long run…)</p></li>
+</ul>
+</div></blockquote>
+<p>However you will probably not benefit for by deleting the <code class="code docutils literal notranslate"><span class="pre">whois_db.json</span></code>
+as this is the definitive slowest lookup process in the test flow, do to the
+limitation in available API call you can do to <code class="code docutils literal notranslate"><span class="pre">WHOIS</span></code> servers before
+getting banned. Therefore we <strong>CAN NOT</strong> recommend deleting this file, rather
+than waiting for the conversion to finish.</p>
+</li>
+<li><p>The output directory structure have been altered to work with the ability to
+test more than one source at the time.
+Prior to version <code class="code docutils literal notranslate"><span class="pre">4.0.0.ax</span></code> the output hierarchy looked like
+<code class="code docutils literal notranslate"><span class="pre">output/domains/ACTIVE/list</span></code>.
+In Pyfunceble version <code class="code docutils literal notranslate"><span class="pre">&gt;=4.x</span></code> this have been altered to include the source
+name and append to the folder structure.
+From this version it will therefor looks like
+<code class="code docutils literal notranslate"><span class="pre">output/{{</span> <span class="pre">input_source_name</span> <span class="pre">}}/domains/ACTIVE</span> <span class="pre">list</span></code>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As consequence of the time consuming conversion, we will advise you
+to run a simple pyfunceble command like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pyfunceble -d mypdns.org</span>
+
+<span class="go">pyfunceble --database-type mariadb -d mypdns.org</span>
+</pre></div>
+</div>
+</div>
+<section id="how-long-time-does-it-take">
+<h3>How long time does it take<a class="headerlink" href="#how-long-time-does-it-take" title="Permalink to this heading"></a></h3>
+<p>A few numbers to help you schedule your upgrade process.</p>
+<p>We have tested the SQL conversion with the following specifications</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>2 Xeon CPU x86_64 (8 cores) 2 GHz</p></li>
+<li><p>48 GB ram.</p></li>
+<li><p>1 SSD Kingston KC-600</p></li>
+<li><p>Mariadb 10.5, default config</p></li>
+<li><p>Non dedicated</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>The database contains</dt><dd><ul class="simple">
+<li><p>Roughly <code class="code docutils literal notranslate"><span class="pre">265.000</span></code> records in the test tables</p></li>
+<li><p>Approximately <code class="code docutils literal notranslate"><span class="pre">1.000.000</span></code> records within the <code class="code docutils literal notranslate"><span class="pre">pyfunceble_whois</span></code> table.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This process toke about 10 hours to complete.</p>
+</section>
+</section>
+<section id="important-information-for-3-2-11">
+<h2>Important information for <code class="code docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">3.2.11</span></code><a class="headerlink" href="#important-information-for-3-2-11" title="Permalink to this heading"></a></h2>
+<p>When you update from dev&#64;&lt;=3.2.10 or master&#64;&lt;=3.2.2 to newer release, there
+will be made a SQL conversion of the databases table layout.
+This can take up a sagnificent amount of time based on the size of the
+database.</p>
+<p>The table layout converion is being made to:</p>
+<ol class="arabic simple">
+<li><p>Minimize the total size</p></li>
+<li><p>Optimize the sql flow and minimizing the read/write to save disk I/O.</p></li>
+<li><p>Minimize the number of SQL queries being made</p></li>
+</ol>
+<p>It have been seen taking days to convert these tables on very large
+installations.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../installation/index.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../configuration/index.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

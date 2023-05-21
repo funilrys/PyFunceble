@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Known issues &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Discovered an issue?" href="contact.html" />
+    <link rel="prev" title="Frequently Asked Questions" href="faq.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Known issues</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-3-7">Python &lt; 3.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ubuntu-20-04-1-lts-focal">Ubuntu 20.04.1 LTS Focal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#combination-of-f-uf-and-adblock">Combination of <code class="code docutils literal notranslate"><span class="pre">-f</span></code>, <code class="code docutils literal notranslate"><span class="pre">-uf</span></code> and <code class="code docutils literal notranslate"><span class="pre">--adblock</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sql-missing-default-data-in-whois-table">Sql Missing default data in <code class="code docutils literal notranslate"><span class="pre">whois</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows-powershell-with-python-or-cygwin">Windows Powershell with Python or Cygwin</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Known issues</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/facts/known_issues.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="known-issues">
+<h1>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this heading"></a></h1>
+<p>This is the list of issues which are not or will not be fixed (yet…).</p>
+<ul class="simple">
+<li><p>Under Travis CI the coloration may not be shown.</p></li>
+<li><p>Under GitLab CI/CD the coloration may not be shown.</p></li>
+</ul>
+<section id="python-3-7">
+<h2>Python &lt; 3.7<a class="headerlink" href="#python-3-7" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 4.0.0.</span></p>
+</div>
+</div></blockquote>
+<p>As of version 4 we no <a class="reference external" href="../installation/index.html#python-3-7-0">longer support</a>
+python prior to version 3.7.</p>
+<p>This means you actually are unable to run with any version below python 3.7
+as a number of build-in features are missing and first introduced in 3.7</p>
+<p>The error message you might experience can be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`Fatal Error: type object &#39;datetime.datetime&#39; has no attribute &#39;fromisoformat&#39;`
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`ModuleNotFoundError: No module named &#39;dataclasses&#39;`
+</pre></div>
+</div>
+<p>This can typically happens if you are using Ubuntu 18.x or 19.x</p>
+</section>
+<hr class="docutils" />
+<section id="ubuntu-20-04-1-lts-focal">
+<h2>Ubuntu 20.04.1 LTS Focal<a class="headerlink" href="#ubuntu-20-04-1-lts-focal" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.2.0.</span></p>
+</div>
+<p>In Ubuntu release 20.04 they have removed a package name
+<code class="code docutils literal notranslate"><span class="pre">libffi.so.6</span></code> and upgraded it with version <code class="code docutils literal notranslate"><span class="pre">libffi.so.7</span></code></p>
+<p>This means PyFunceble will trow an error like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ImportError: libffi.so.6: cannot open shared object file: No such file or directory</span>
+</pre></div>
+</div>
+<p>The fix for this issue is then rather simple, add a softlink between the
+versions with <code class="code docutils literal notranslate"><span class="pre">ln</span> <span class="pre">-s</span></code></p>
+<p>The complete line in my case was:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo ln -s /usr/lib/x86_64-linux-gnu/libffi.so.7 /usr/lib/x86_64-linux-gnu/libffi.so.6</span>
+</pre></div>
+</div>
+<p>However, the right way to do this is by first locate where your
+<code class="code docutils literal notranslate"><span class="pre">libffi.so.7</span></code> is with find</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">find /usr/lib/ -type f -iname &#39;libffi.so.*&#39;</span>
+</pre></div>
+</div>
+<p>Then apply the softlink to <code class="code docutils literal notranslate"><span class="pre">libffi.so.7</span></code></p>
+</section>
+<section id="combination-of-f-uf-and-adblock">
+<h2>Combination of <code class="code docutils literal notranslate"><span class="pre">-f</span></code>, <code class="code docutils literal notranslate"><span class="pre">-uf</span></code> and <code class="code docutils literal notranslate"><span class="pre">--adblock</span></code><a class="headerlink" href="#combination-of-f-uf-and-adblock" title="Permalink to this heading"></a></h2>
+<p>You can not combine the usage of <code class="code docutils literal notranslate"><span class="pre">-f</span></code>, <code class="code docutils literal notranslate"><span class="pre">-uf</span></code> with <code class="code docutils literal notranslate"><span class="pre">--adblock</span></code>
+simultaneously.</p>
+</section>
+<hr class="docutils" />
+<section id="sql-missing-default-data-in-whois-table">
+<h2>Sql Missing default data in <code class="code docutils literal notranslate"><span class="pre">whois</span></code> table<a class="headerlink" href="#sql-missing-default-data-in-whois-table" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 4.0.0.</span></p>
+</div>
+<p>If you are trying to move or restore your SQL database from a dump, you
+will see an error message that is looking something like this</p>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SQL</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">[</span><span class="mi">1364</span><span class="p">][</span><span class="n">HY000</span><span class="p">]:</span><span class="w"> </span><span class="p">(</span><span class="n">conn</span><span class="o">=</span><span class="mi">12345678</span><span class="p">)</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="s1">&#39;created_at&#39;</span><span class="w"> </span><span class="n">doesn</span><span class="s1">&#39;t have a default value</span>
+<span class="s1">  (conn=12345678) Field &#39;</span><span class="n">created_at</span><span class="s1">&#39; doesn&#39;</span><span class="n">t</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="n">value</span>
+<span class="w">  </span><span class="p">(</span><span class="n">conn</span><span class="o">=</span><span class="mi">12345678</span><span class="p">)</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="s1">&#39;created_at&#39;</span><span class="w"> </span><span class="n">doesn</span><span class="s1">&#39;t have a default value</span>
+<span class="s1">    Field &#39;</span><span class="n">created_at</span><span class="s1">&#39; doesn&#39;</span><span class="n">t</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="n">value</span>
+</pre></div>
+</div>
+<p>The issue arises from the way <a class="reference external" href="https://www.sqlalchemy.org/">SQLAlchemy</a> is creating the tables. The
+fact is PyFunceble is written to set a default <code class="code docutils literal notranslate"><span class="pre">date</span></code> for the
+:code:’created_at`.</p>
+<p>However, it isn’t set in the database.</p>
+<p>To solve this, you will have to manually set the default for <cite>created_at</cite>
+to for example <code class="code docutils literal notranslate"><span class="pre">2020-12-22</span> <span class="pre">09:09:50</span></code> in the
+<code class="code docutils literal notranslate"><span class="pre">DB_name.pyfunceble_whois_record</span></code>. You can for example use <a class="reference external" href="https://dbeaver.io/">dBeaver</a>
+to do this or manually run this SQL code insode your database.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">DB_name</span><span class="p">.</span><span class="n">pyfunceble_whois_record</span>
+<span class="w">    </span><span class="k">MODIFY</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="n">datetime</span>
+<span class="w">    </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;2020-12-22 09:09:50&#39;</span>
+<span class="w">    </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These changes will be reset next time you are running PyFunceble.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="windows-powershell-with-python-or-cygwin">
+<h2>Windows Powershell with Python or Cygwin<a class="headerlink" href="#windows-powershell-with-python-or-cygwin" title="Permalink to this heading"></a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version all.</span></p>
+</div>
+<p>There are a number of well Known limitation by running or even installing Python
+on a closed source Windows computer.</p>
+<p>Among these issues is the default settings for the installation programs,
+where we all know the users tend to just click next next next without reading
+the questions, and the path toward hell continues.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>To have Python to become installed within the system <code class="code docutils literal notranslate"><span class="pre">PATH:</span></code> by the
+installer, you are required to use the advanced install option.
+(<a class="reference external" href="https://mypdns.org/spirillen">spirillen</a> Was told).</p></li>
+<li><p>Cygwin do not INCLUDE- and therefore not exporting current <code class="code docutils literal notranslate"><span class="pre">PATH</span></code> to running
+environment. Full path is always required, to be set by your scripts or
+command line.</p></li>
+</ol>
+</div></blockquote>
+<p>Since any of these problems, ain’t &#64;PyFunceble related issues we have left a
+<a class="reference external" href="https://github.com/funilrys/PyFunceble/issues/127">Cygwin</a> related issue at github.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="faq.html" class="btn btn-neutral float-left" title="Frequently Asked Questions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contact.html" class="btn btn-neutral float-right" title="Discovered an issue?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

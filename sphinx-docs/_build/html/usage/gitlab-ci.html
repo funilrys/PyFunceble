@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitLab Runner CI/CD &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GitLab Runner CI/CD</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/usage/gitlab-ci.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gitlab-runner-ci-cd">
+<h1>GitLab Runner CI/CD<a class="headerlink" href="#gitlab-runner-ci-cd" title="Permalink to this heading"></a></h1>
+<p>As we offer an argument named <code class="code docutils literal notranslate"><span class="pre">--ci</span></code> which will
+autosave in a GitLab CI/CI environment, this document try to
+describe hot it works!</p>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
+<section id="personal-access-token">
+<h3>Personal Access Token<a class="headerlink" href="#personal-access-token" title="Permalink to this heading"></a></h3>
+<p>A personal access token is needed in order for PyFunceble to
+automatically push the results.</p>
+<p>You should get <a class="reference external" href="https://gitlab.com/profile/personal_access_tokens">a personal GitLab access token</a> with
+the <code class="code docutils literal notranslate"><span class="pre">read_repository</span></code> and <code class="code docutils literal notranslate"><span class="pre">write_repository</span></code> scopes.</p>
+<p>Once created and copied in a safe place, create <strong>a new masked variable</strong>
+named <code class="code docutils literal notranslate"><span class="pre">GL_TOKEN</span></code> inside the CI/CD settings of your project.
+The value of the variable should be the newly generated personal
+access token.</p>
+</section>
+<section id="gitlab-ci-yml">
+<h3><code class="code docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code><a class="headerlink" href="#gitlab-ci-yml" title="Permalink to this heading"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This part only present a commented <code class="code docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>.
+This is just an example do not take the following as
+necessarly true.</p>
+<p>You’re invited to submit changes if something stated in
+this document is wrong.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python needed, so we use the python image.</span>
+<span class="n">image</span><span class="p">:</span> <span class="n">python</span><span class="p">:</span><span class="n">latest</span>
+
+<span class="n">variables</span><span class="p">:</span>
+    <span class="c1"># This is the Git name we have to set. (git config user.name)</span>
+    <span class="n">GIT_EMAIL</span><span class="p">:</span> <span class="s2">&quot;dead-hosts@funilrys.com&quot;</span>
+    <span class="c1"># This is the Git Email we have to set. (git config user.email)</span>
+    <span class="n">GIT_NAME</span><span class="p">:</span> <span class="s2">&quot;GitLab CI/CD&quot;</span>
+
+<span class="n">before_script</span><span class="p">:</span>
+    <span class="c1"># We install the development version of PyFunceble.</span>
+    <span class="c1"># If you prefer the stable version replace `pyfunceble-dev`</span>
+    <span class="c1"># with `pyfunceble`.</span>
+    <span class="o">-</span> <span class="n">pip3</span> <span class="n">install</span> <span class="n">PyFunceble</span><span class="o">-</span><span class="n">dev</span>
+
+<span class="n">run</span><span class="p">:</span>
+    <span class="n">script</span><span class="p">:</span>
+        <span class="c1"># Let&#39;s say we want our results and our PyFunceble</span>
+        <span class="c1"># infrastructure to be saved in a directory called `PyFunceble-tests`</span>
+
+        <span class="c1"># We move inside it.</span>
+        <span class="o">-</span> <span class="n">cd</span> <span class="n">PyFunceble</span><span class="o">-</span><span class="n">tests</span>
+        <span class="c1"># We test the file `my_awesome_list` which is located inside the current directory.</span>
+        <span class="c1"># Note: we precise the `--ci` argument here,</span>
+        <span class="c1">#     but you work without it if you set `ci: true` inside your `.PyFunceble.yaml`</span>
+        <span class="o">-</span> <span class="n">PyFunceble</span> <span class="o">--</span><span class="n">ci</span> <span class="o">-</span><span class="n">f</span> <span class="n">my_awesome_list</span> <span class="o">--</span><span class="n">plain</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

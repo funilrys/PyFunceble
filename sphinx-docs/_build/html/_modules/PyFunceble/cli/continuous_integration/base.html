@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.cli.continuous_integration.base &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.cli.continuous_integration.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.cli.continuous_integration.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides the base of all our CI classes.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># pylint: disable=too-many-lines</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">secrets</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.cli.continuous_integration.exceptions</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.command</span> <span class="kn">import</span> <span class="n">CommandHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.environment_variable</span> <span class="kn">import</span> <span class="n">EnvironmentVariableHelper</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.regex</span> <span class="kn">import</span> <span class="n">RegexHelper</span>
+
+
+<div class="viewcode-block" id="ContinuousIntegrationBase"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase">[docs]</a><span class="k">class</span> <span class="nc">ContinuousIntegrationBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides the base of all continuous integration methods.</span>
+
+<span class="sd">    :param authorized:</span>
+<span class="sd">        The authorization to run.</span>
+<span class="sd">    :param git_email:</span>
+<span class="sd">        The email to apply while initilizing the git repository for push.</span>
+<span class="sd">    :param git_name:</span>
+<span class="sd">        The name to apply while initilizing the git repository for push.</span>
+<span class="sd">    :param git_branch:</span>
+<span class="sd">        The branch to use while testing.</span>
+<span class="sd">    :param git_distribution_branch:</span>
+<span class="sd">        The branch to push the results into.</span>
+<span class="sd">    :param token:</span>
+<span class="sd">        The token to apply while initilizing the git repository for push.</span>
+<span class="sd">    :param command:</span>
+<span class="sd">        The command to execute before each push (except the latest one).</span>
+<span class="sd">    :param end_command:</span>
+<span class="sd">        The commant to execute at the very end.</span>
+<span class="sd">    :param commit_message:</span>
+<span class="sd">        The commit message to apply before each push (except the latest one).</span>
+<span class="sd">    :param end_commit_message:</span>
+<span class="sd">        The commit message to apply at the very end.</span>
+<span class="sd">    :param max_exec_minutes:</span>
+<span class="sd">        The maximum of minutes to apply before considering the current</span>
+<span class="sd">        session as finished.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STD_AUTHORIZED</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">STD_GIT_EMAIL</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">STD_GIT_NAME</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">STD_GIT_BRANCH</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span>
+    <span class="n">STD_GIT_DISTRIBUTION_BRANCH</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span>
+    <span class="n">STD_COMMAND</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">STD_END_COMMAND</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">STD_COMMIT_MESSAGE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PyFunceble - AutoSave&quot;</span>
+    <span class="n">STD_END_COMMIT_MESSAGE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PyFunceble - Results&quot;</span>
+    <span class="n">STD_MAX_EXEC_MINUTES</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span>
+
+    <span class="n">end_commit_marker</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;[ci skip]&quot;</span>
+
+    <span class="n">_authorized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_git_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_git_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_git_branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_git_distribution_branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_end_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_commit_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_end_commit_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_max_exec_minutes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">start_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">expected_end_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">git_initialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">authorized</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">git_distribution_branch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">end_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">commit_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">end_commit_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_exec_minutes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">authorized</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="n">authorized</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_authorized</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">git_email</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_email</span> <span class="o">=</span> <span class="n">git_email</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_git_email</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">git_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span> <span class="o">=</span> <span class="n">git_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_git_name</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">git_branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span> <span class="o">=</span> <span class="n">git_branch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_git_branch</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">git_distribution_branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">=</span> <span class="n">git_distribution_branch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_git_distribution_branch</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_token</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">command</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_command</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">end_command</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end_command</span> <span class="o">=</span> <span class="n">end_command</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_end_command</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">commit_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span> <span class="o">=</span> <span class="n">commit_message</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_commit_message</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">end_commit_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span> <span class="o">=</span> <span class="n">end_commit_message</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_end_commit_message</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">max_exec_minutes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_exec_minutes</span> <span class="o">=</span> <span class="n">max_exec_minutes</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guess_and_set_max_exec_minutes</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.execute_if_authorized"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.execute_if_authorized">[docs]</a>    <span class="k">def</span> <span class="nf">execute_if_authorized</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Executes the decorated method only if we are authorized to process.</span>
+<span class="sd">        Otherwise, apply the given :code:`default`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">inner_metdhod</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+                <span class="k">return</span> <span class="bp">self</span> <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default</span>
+
+            <span class="k">return</span> <span class="n">wrapper</span>
+
+        <span class="k">return</span> <span class="n">inner_metdhod</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_git_email_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_git_email_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_git_email_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the Git Email is given before launching the decorated</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.GitEmailNotFound:</span>
+<span class="sd">            When the Git Email is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_email</span><span class="p">:</span>
+                <span class="c1"># pylint: disable=line-too-long</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">GitEmailNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_git_name_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_git_name_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_git_name_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the Git Name is given before launching the decorated</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.GitNameNotFound:</span>
+<span class="sd">            When the Git Name is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">GitNameNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_git_branch_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_git_branch_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_git_branch_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the Git Branch is given before launching the decorated</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.GitBranchNotFound:</span>
+<span class="sd">            When the Git Branch is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">GitNameNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_git_distribution_branch_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_git_distribution_branch_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_git_distribution_branch_is_given</span><span class="p">(</span>
+        <span class="n">func</span><span class="p">,</span>
+    <span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument,line-too-long</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the Git distribution Branch is given before launching the</span>
+<span class="sd">        decorated method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.GitDistributionBranchNotFound:</span>
+<span class="sd">            When the Git distribution Branch is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">GitNameNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_token_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_token_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_token_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the token is given before launching the decorated method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.TokenNotFound:</span>
+<span class="sd">            When the token is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">TokenNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.ensure_start_time_is_given"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.ensure_start_time_is_given">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_start_time_is_given</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>  <span class="c1"># pylint: disable=no-self-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensures that the starting time is given before launching the decorated</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.StartTimeNotFound:</span>
+<span class="sd">            When the token is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span>
+                <span class="c1"># pylint: disable=line-too-long</span>
+                <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">StartTimeNotFound</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># pylint: disable=not-callable</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">authorized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the currently state of the :code:`_authorized` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_authorized</span>
+
+    <span class="nd">@authorized</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">authorized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the value of the :code:`authorized` attribute.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`bool`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">bool</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_authorized</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_authorized"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_authorized">[docs]</a>    <span class="k">def</span> <span class="nf">set_authorized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the value of the :code:`authorized` attribute.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">git_email</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the currently state of the :code:`_git_email` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_git_email</span>
+
+    <span class="nd">@git_email</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">git_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Email to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise valueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_git_email</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_git_email"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_git_email">[docs]</a>    <span class="k">def</span> <span class="nf">set_git_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Email to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">git_email</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">git_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_git_name` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_git_name</span>
+
+    <span class="nd">@git_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">git_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Name to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise valueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_git_name</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_git_name"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_git_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_git_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Name to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">git_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_git_branch` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_git_branch</span>
+
+    <span class="nd">@git_branch</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">git_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Branch to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise valueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_git_branch</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_git_branch"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_git_branch">[docs]</a>    <span class="k">def</span> <span class="nf">set_git_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git Branch to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">git_distribution_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_git_distribution_branch`</span>
+<span class="sd">        attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_git_distribution_branch</span>
+
+    <span class="nd">@git_distribution_branch</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">git_distribution_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git distribution Branch to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise valueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_git_distribution_branch</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_git_distribution_branch"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_git_distribution_branch">[docs]</a>    <span class="k">def</span> <span class="nf">set_git_distribution_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Git distribution Branch to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">token</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_token` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span>
+
+    <span class="nd">@token</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the token to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise valueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empty.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_token"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_token">[docs]</a>    <span class="k">def</span> <span class="nf">set_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the token to use.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The value to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_command` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span>
+
+    <span class="nd">@command</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the command to work with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empy.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_command"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_command">[docs]</a>    <span class="k">def</span> <span class="nf">set_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the command to work with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_command</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_end_command` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_command</span>
+
+    <span class="nd">@end_command</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">end_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the command to execute at the really end of the process with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empy.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_command</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_end_command"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_end_command">[docs]</a>    <span class="k">def</span> <span class="nf">set_end_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the command to execute at the really end of the process with.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_command</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_commit_message` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit_message</span>
+
+    <span class="nd">@commit_message</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the commit message to apply to all commits except the final one.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The message to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empy.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commit_message</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_commit_message"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_commit_message">[docs]</a>    <span class="k">def</span> <span class="nf">set_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the commit message to apply to all commits except the final one.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The message to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_end_commit_message` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end_commit_message</span>
+
+    <span class="nd">@end_commit_message</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">end_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the commit message to apply to the final one.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The message to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`str`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">str</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should not be empy.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end_commit_message</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_end_commit_message"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_end_commit_message">[docs]</a>    <span class="k">def</span> <span class="nf">set_end_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the commit message to apply to the final one.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_exec_minutes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the current state of the :code:`_max_exec_minutes` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_exec_minutes</span>
+
+    <span class="nd">@max_exec_minutes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">max_exec_minutes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the maximum waiting time before considering the time as exceeded.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The message to set.</span>
+
+<span class="sd">        :raise TypeError:</span>
+<span class="sd">            When the given :code:`value` is not a :py:class:`int`.</span>
+<span class="sd">        :raise ValueError:</span>
+<span class="sd">            When the given :code:`value` is less than :code:`1`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;value&gt; should be </span><span class="si">{</span><span class="nb">int</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> given.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&lt;value&gt; should be greater or equal to 1.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_exec_minutes</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_max_exec_minutes"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_max_exec_minutes">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_exec_minutes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the maximum waiting time before considering the time as exceeded.</span>
+
+<span class="sd">        :param value:</span>
+<span class="sd">            The command to set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_exec_minutes</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.set_start_time"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.set_start_time">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the starting time to now.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span>
+            <span class="n">minutes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_exec_minutes</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.get_remote_destination"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.get_remote_destination">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_remote_destination</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the remote destination to use.</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.RemoteURLNotFound:</span>
+<span class="sd">            When we could not determine the remote destination.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(?:[a-z]+(?:\s+|\t+))(.*)(?:(?:\s+|\t+)\([a-z]+\))&quot;</span>
+        <span class="n">remote_of_interest</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CommandHelper</span><span class="p">(</span><span class="s2">&quot;git remote -v&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;(fetch)&quot;</span> <span class="ow">in</span> <span class="n">x</span>
+        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">RegexHelper</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+            <span class="n">remote_of_interest</span><span class="p">,</span> <span class="n">return_match</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">filtered</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">filtered</span><span class="p">[</span><span class="n">filtered</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+            <span class="k">if</span> <span class="s2">&quot;//&quot;</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">filtered</span><span class="p">[</span><span class="n">filtered</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;//&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:]</span>
+
+        <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RemoteURLNotFound</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.exec_command"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.exec_command">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exceutes the given command.</span>
+
+<span class="sd">        :param command:</span>
+<span class="sd">            The command to execute.</span>
+
+<span class="sd">        :param allow_stdout:</span>
+<span class="sd">            Allows us to return the command output to stdout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Executing </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+
+        <span class="n">command_helper</span> <span class="o">=</span> <span class="n">CommandHelper</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">allow_stdout</span><span class="p">:</span>
+            <span class="n">command_helper</span><span class="o">.</span><span class="n">run_to_stdout</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command_helper</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_authorized"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_authorized">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_authorized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess the authorization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">active</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_AUTHORIZED</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_git_email"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_git_email">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_git_email</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the Git Email.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">environment_var</span> <span class="o">=</span> <span class="n">EnvironmentVariableHelper</span><span class="p">(</span><span class="s2">&quot;GIT_EMAIL&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_email</span> <span class="o">=</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_git_name"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_git_name">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_git_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the Git Name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">environment_var</span> <span class="o">=</span> <span class="n">EnvironmentVariableHelper</span><span class="p">(</span><span class="s2">&quot;GIT_NAME&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_name</span> <span class="o">=</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_git_branch"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_git_branch">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_git_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the Git Branch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">environment_var</span> <span class="o">=</span> <span class="n">EnvironmentVariableHelper</span><span class="p">(</span><span class="s2">&quot;GIT_BRANCH&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span> <span class="o">=</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">branch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_GIT_BRANCH</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_git_distribution_branch"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_git_distribution_branch">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_git_distribution_branch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the Git distribution Branch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">environment_var</span> <span class="o">=</span> <span class="n">EnvironmentVariableHelper</span><span class="p">(</span><span class="s2">&quot;GIT_DISTRIBUTION_BRANCH&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">=</span> <span class="n">environment_var</span><span class="o">.</span><span class="n">get_value</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">distribution_branch</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_GIT_DISTRIBUTION_BRANCH</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_token"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_token">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_token</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the token.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_command"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_command">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_command</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the command to execute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">command</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">command</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_end_command"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_end_command">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_end_command</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the command to execute at the very end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">end_command</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end_command</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">end_command</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_commit_message"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_commit_message">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the commit message to apply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">commit_message</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">commit_message</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_COMMIT_MESSAGE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_COMMIT_MESSAGE</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_end_commit_message"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_end_commit_message">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_end_commit_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the commit message to apply at the very end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">end_commit_message</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">end_commit_message</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_END_COMMIT_MESSAGE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_END_COMMIT_MESSAGE</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_and_set_max_exec_minutes"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_and_set_max_exec_minutes">[docs]</a>    <span class="k">def</span> <span class="nf">guess_and_set_max_exec_minutes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to guess and set the maximum execution time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_exec_minutes</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">CONFIGURATION</span><span class="o">.</span><span class="n">cli_testing</span><span class="o">.</span><span class="n">ci</span><span class="o">.</span><span class="n">max_exec_minutes</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_exec_minutes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">STD_MAX_EXEC_MINUTES</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.guess_all_settings"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.guess_all_settings">[docs]</a>    <span class="k">def</span> <span class="nf">guess_all_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to guess all settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">to_ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;guess_all_settings&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">to_ignore</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">method</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;guess_&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">)()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.is_authorized"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.is_authorized">[docs]</a>    <span class="k">def</span> <span class="nf">is_authorized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the current object is authorized to run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorized</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.is_time_exceeded"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.is_time_exceeded">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nd">@ensure_start_time_is_given</span>
+    <span class="k">def</span> <span class="nf">is_time_exceeded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if we exceeded the allocated time we have.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_end_time</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.init_git_remote_with_token"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.init_git_remote_with_token">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@ensure_token_is_given</span>
+    <span class="k">def</span> <span class="nf">init_git_remote_with_token</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiates the git remote URL with the help of the given token.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">remote</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_remote_destination</span><span class="p">()</span>
+
+        <span class="c1"># Each entries should have a tuple containing the command to run and</span>
+        <span class="c1"># if we are authorized to print to STDOUT.</span>
+        <span class="n">commands_to_execute</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;git remote rm origin&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git remote add origin &quot;</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">remote</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git remote update&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git fetch&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span> <span class="ow">in</span> <span class="n">commands_to_execute</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.init_git"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.init_git">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="nd">@ensure_git_name_is_given</span>
+    <span class="nd">@ensure_git_email_is_given</span>
+    <span class="nd">@ensure_git_branch_is_given</span>
+    <span class="nd">@ensure_git_distribution_branch_is_given</span>
+    <span class="k">def</span> <span class="nf">init_git</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiate the git repository.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started initialization of GIT.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_git_remote_with_token</span><span class="p">()</span>
+
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;git config --local user.email &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_email</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;git config --local user.name &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_name</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config --local push.default simple&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config --local pull.rebase true&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config --local core.autocrlf true&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git config --local branch.autosetuprebase always&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;git checkout &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;git fetch origin&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;git rebase -X theirs &quot;</span> <span class="sa">f</span><span class="s2">&quot;origin/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="kc">False</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">git_initialized</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished initialization of GIT.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.fix_permissions"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.fix_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">fix_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method to overwrite when custom rules for permissions are needed.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This method is automatically called by the methods who apply</span>
+<span class="sd">            commits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.push_changes"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.push_changes">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">push_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">exit_it</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pushes the changes.</span>
+
+<span class="sd">        :param branch:</span>
+<span class="sd">            The branch to push.</span>
+
+<span class="sd">        :param exit_it:</span>
+<span class="sd">            Exits after the push ?</span>
+
+<span class="sd">        :raise PyFunceble.cli.continuous_integration.exceptions.StopExecution:</span>
+<span class="sd">            When the :code:`exit_it` is set to :code:`True`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started to push GIT changes.&quot;</span><span class="p">)</span>
+
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_initialized</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;git checkout &quot;</span><span class="si">{</span><span class="n">branch</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                        <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;git fetch origin&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                    <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git rebase -X theirs origin/</span><span class="si">{</span><span class="n">branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                    <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git push origin </span><span class="si">{</span><span class="n">branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">)</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished to push GIT changes.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">exit_it</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">StopExecution</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.apply_end_commit"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.apply_end_commit">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">apply_end_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the &quot;end&quot; commit and push.</span>
+
+<span class="sd">        Side effect:</span>
+<span class="sd">            It runs the declared command to execute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to prepare and apply final GIT commit.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fix_permissions</span><span class="p">()</span>
+
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span><span class="p">:</span>
+            <span class="n">branch_to_use</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">branch_to_use</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_command</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">end_command</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_initialized</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">(</span><span class="s2">&quot;git fetch origin&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                    <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;git rebase -X theirs origin/</span><span class="si">{</span><span class="n">branch_to_use</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;git add --all&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;git commit -a -m &quot;</span>
+                        <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end_commit_message</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end_commit_marker</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">secrets</span><span class="o">.</span><span class="n">token_urlsafe</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                        <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_command</span><span class="p">:</span>
+            <span class="c1"># Fix permissions because we met some strange behaviors in the past.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fix_permissions</span><span class="p">()</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Finished to prepare and apply final GIT commit.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_distribution_branch</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">push_changes</span><span class="p">(</span><span class="n">branch_to_use</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">push_changes</span><span class="p">(</span><span class="n">branch_to_use</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.apply_commit"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.apply_commit">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">apply_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the commit and push.</span>
+
+<span class="sd">        Side effect:</span>
+<span class="sd">            It runs the declared command to execute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started to prepare and apply GIT commit.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fix_permissions</span><span class="p">()</span>
+
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">git_initialized</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">(</span><span class="s2">&quot;git add --all&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;git commit -a -m &quot;</span>
+                        <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">commit_message</span><span class="si">}</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">secrets</span><span class="o">.</span><span class="n">token_urlsafe</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                        <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">allow_stdout</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">:</span>
+            <span class="c1"># Fix permissions because we met some strange behaviors in the past.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fix_permissions</span><span class="p">()</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished to prepare and apply GIT commit.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">push_changes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">git_branch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.bypass"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.bypass">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">bypass</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stops everything if the latest commit message match any of those:</span>
+
+<span class="sd">            - :code:`[PyFunceble skip]` (case insensitive)</span>
+<span class="sd">            - :code:`[PyFunceble-skip]` (case insensitive)</span>
+<span class="sd">            - :attr:`~PyFunceble.cli.continuous_integration.base.end_commit_marker`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">our_marker</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;[pyfunceble skip]&quot;</span><span class="p">,</span> <span class="s2">&quot;[pyfunceble-skip]&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_commit_marker</span><span class="p">]</span>
+        <span class="n">latest_commit</span> <span class="o">=</span> <span class="n">CommandHelper</span><span class="p">(</span><span class="s2">&quot;git log -1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">latest_commit</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">our_marker</span><span class="p">):</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Bypass marker caught. Saving and stopping process.&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">raise</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">continuous_integration</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">StopExecution</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ContinuousIntegrationBase.init"><a class="viewcode-back" href="../../../../code/PyFunceble.cli.continuous_integration.html#PyFunceble.cli.continuous_integration.base.ContinuousIntegrationBase.init">[docs]</a>    <span class="nd">@execute_if_authorized</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContinuousIntegrationBase&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiate our infrastructure for the current CI engine.</span>
+
+<span class="sd">        The purpose of this method is to be able to have some custom init based</span>
+<span class="sd">        on the CI we are currently on.</span>
+
+<span class="sd">        The init method should be manually started before runing any further</span>
+<span class="sd">        action.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            We assume that we are aware that you should run this method first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started initizalization of workflow.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_git</span><span class="p">()</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished initizalization of workflow.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

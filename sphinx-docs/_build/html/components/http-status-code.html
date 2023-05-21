@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTTP Status Code &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">HTTP Status Code</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/components/http-status-code.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="http-status-code">
+<h1>HTTP Status Code<a class="headerlink" href="#http-status-code" title="Permalink to this heading"></a></h1>
+<section id="why-do-we-need-it">
+<h2>Why do we need it?<a class="headerlink" href="#why-do-we-need-it" title="Permalink to this heading"></a></h2>
+<p>As we want to determine the availability of a domain, IP, or URL; one of our
+testing method is the gathering of the HTTP status code.</p>
+</section>
+<section id="how-does-it-work">
+<h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We never send a generic User-Agent. You can define your own or let
+PyFunceble choose one of the latest one of one of the major browser for
+you.</p>
+</div>
+<p>When it is the turn of the HTTP status code lookup tool to try to gather a
+status for the given subject, an HTTP query is made to the given IP, domain
+or subject.</p>
+<p>When testing for a domain, a successful HTTP response is considered as
+<code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code>.</p>
+<p>Otherwise, the following default classification applies.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The classification can be changed by end-user through their configuration
+file.</p>
+</div>
+<section id="as-active">
+<h3>As ACTIVE<a class="headerlink" href="#as-active" title="Permalink to this heading"></a></h3>
+<p>Please note that the following HTTP status codes are considered as ACTIVE.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as ACTIVE officially and into your analytic files.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">100</span></code>: Continue</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">101</span></code>: Switching Protocols</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">102</span></code>: Processing</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">200</span></code>: OK</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">201</span></code>: Created</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">202</span></code>: Accepted</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">203</span></code>: Non-Authoritative Information</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">204</span></code>: No Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">205</span></code>: Reset Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">206</span></code>: Partial Content</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">207</span></code>: Multi-Status</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">208</span></code>: Already Reported</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">226</span></code>: IM User</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">429</span></code>: Too Many Request.</p></li>
+</ul>
+</section>
+<section id="as-potentially-active">
+<h3>As potentially ACTIVE<a class="headerlink" href="#as-potentially-active" title="Permalink to this heading"></a></h3>
+<p>Please note that the following HTTP status codes are considered as potentially
+ACTIVE but still officially reported as ACTIVE when caught.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as ACTIVE officially and into your analytic files as
+potentially ACTIVE.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">300</span></code>: Multiple Choices</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">301</span></code>: Moved Permanently</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">302</span></code>: Found</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">303</span></code>: See Other</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">304</span></code>: Not Modified</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">305</span></code>: Use Proxy</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">307</span></code>: Temporary Redirect</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">308</span></code>: Permanent Redirect</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">403</span></code>: Forbidden</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">405</span></code>: Method Not Allowed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">406</span></code>: Not Acceptable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">407</span></code>: Proxy Authentication Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">408</span></code>: Request Timeout</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">411</span></code>: Length Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">413</span></code>: Payload Too Large</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">417</span></code>: Expectation Failed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">418</span></code>: I’m a teapot</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">421</span></code>: Misdirect Request</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">422</span></code>: Unprocessable Entity</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">423</span></code>: Locked</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">424</span></code>: Failed Dependency</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">426</span></code>: Upgrade Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">428</span></code>: Precondition Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">431</span></code>: Request Header Fields Too Large</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">500</span></code>: Internal Server Error</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">501</span></code>: Not Implemented</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">502</span></code>: Bad Gateway</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">503</span></code>: Service Unavailable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">504</span></code>: Gateway Timeout</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">505</span></code>: HTTP Version Not Supported</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">506</span></code>: Variant Also Negotiates</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">507</span></code>: Insufficient Storage</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">508</span></code>: Loop Detected</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">510</span></code>: Not Extended</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">511</span></code>: Network Authentication Required</p></li>
+</ul>
+</section>
+<section id="as-inactive-or-potentially-inactive">
+<h3>As INACTIVE or potentially INACTIVE<a class="headerlink" href="#as-inactive-or-potentially-inactive" title="Permalink to this heading"></a></h3>
+<p>Please note that the following HTTP status codes are considered as INACTIVE or
+potentially INACTIVE. Therefore officially reported as INACTIVE when caught.</p>
+<p>If you are using the CLI with the analytic files generated, you will get any
+matching subject flagged as INACTIVE officially and into your analytic files as
+potentially INACTIVE.</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">400</span></code>: Bad Request</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">402</span></code>: Payment Required</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">404</span></code>: Not Found</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">409</span></code>: Conflict</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">410</span></code>: Gone</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">412</span></code>: Precondition Failed</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">414</span></code>: Request-URI Too Long</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">415</span></code>: Unsupported Media Type</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">416</span></code>: Request Range Not Satisfiable</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">451</span></code>: Unavailable For Legal Reasons</p></li>
+</ul>
+</section>
+</section>
+<section id="how-to-use-it">
+<h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this heading"></a></h2>
+<p>You can simply allow the usage of the HTTP status code lookup through:</p>
+<ul class="simple">
+<li><p>the (Python) API,</p></li>
+<li><p>the CLI argument,</p></li>
+<li><p>or, your configuration file.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

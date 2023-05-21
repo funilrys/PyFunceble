@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Update" href="../update/index.html" />
+    <link rel="prev" title="Code of Conduct" href="../respect/code-of-conduct.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-3-7-0">Python 3.7.0+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alembic"><code class="code docutils literal notranslate"><span class="pre">alembic</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colorama"><code class="code docutils literal notranslate"><span class="pre">colorama</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cryptography"><code class="code docutils literal notranslate"><span class="pre">cryptography</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dnspython"><code class="code docutils literal notranslate"><span class="pre">dnspython</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#domain2idna"><code class="code docutils literal notranslate"><span class="pre">domain2idna</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inflection"><code class="code docutils literal notranslate"><span class="pre">inflection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#packaging"><code class="code docutils literal notranslate"><span class="pre">packaging</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#psycopg2-optopnal"><code class="code docutils literal notranslate"><span class="pre">psycopg2</span></code> (optopnal)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pymysql"><code class="code docutils literal notranslate"><span class="pre">PyMySQL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-box"><code class="code docutils literal notranslate"><span class="pre">python-box</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-dotenv"><code class="code docutils literal notranslate"><span class="pre">python-dotenv</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyyaml"><code class="code docutils literal notranslate"><span class="pre">PyYAML</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requests"><code class="code docutils literal notranslate"><span class="pre">requests</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setuptools"><code class="code docutils literal notranslate"><span class="pre">setuptools</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sqlalchemy"><code class="code docutils literal notranslate"><span class="pre">sqlalchemy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#stable-version">Stable version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-pip">Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#from-pypi">From PyPi</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#from-github">From GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-aur-for-arch-linux-users">Using the AUR (for Arch Linux users)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#with-makepkg">With makepkg</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#with-your-favorite-aur-helper">With your favorite AUR helper</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-docker-hub">Using docker (hub)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pure-python-method">Pure Python method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-version">Development version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#for-development">For development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-usage">For usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Using the AUR (for Arch Linux users)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Using docker (hub)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Pure Python method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#first-steps">First steps</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/installation/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<p>Here is the list of requirements:</p>
+<ul class="simple">
+<li><p>Python 3.7.0+</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">alembic</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">colorama</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cryptography</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">dnspython</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">domain2idna</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">inflection</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">packaging</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">psycopg2</span></code> (optional)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">PyMySQL</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">python-box</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">python-dotenv</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">PyYAML</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">requests</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">setuptools</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">sqlalchemy</span></code></p></li>
+</ul>
+<section id="python-3-7-0">
+<h3>Python 3.7.0+<a class="headerlink" href="#python-3-7-0" title="Permalink to this heading"></a></h3>
+<p>The specification <code class="code docutils literal notranslate"><span class="pre">3.7.0+</span></code> is because we test PyFunceble (daily)
+in all (<code class="code docutils literal notranslate"><span class="pre">3.x</span></code>) versions from <code class="code docutils literal notranslate"><span class="pre">3.7.0</span></code>.
+Otherwise, more semantically, PyFunceble is written for all Python 3.7+
+version.</p>
+</section>
+<section id="alembic">
+<h3><code class="code docutils literal notranslate"><span class="pre">alembic</span></code><a class="headerlink" href="#alembic" title="Permalink to this heading"></a></h3>
+<p>As we want to automate database (MySQL/MariaDB) schema migration, we
+chose <code class="code docutils literal notranslate"><span class="pre">alembic</span></code> for the job.</p>
+</section>
+<section id="colorama">
+<h3><code class="code docutils literal notranslate"><span class="pre">colorama</span></code><a class="headerlink" href="#colorama" title="Permalink to this heading"></a></h3>
+<p>As we use some coloration, <code class="code docutils literal notranslate"><span class="pre">colorama</span></code> is required.</p>
+</section>
+<section id="cryptography">
+<h3><code class="code docutils literal notranslate"><span class="pre">cryptography</span></code><a class="headerlink" href="#cryptography" title="Permalink to this heading"></a></h3>
+<p>As we use some cryptography algorithm for message hashing as example,
+<code class="code docutils literal notranslate"><span class="pre">cryptography</span></code> is required.</p>
+</section>
+<section id="dnspython">
+<h3><code class="code docutils literal notranslate"><span class="pre">dnspython</span></code><a class="headerlink" href="#dnspython" title="Permalink to this heading"></a></h3>
+<p>As we use it to do the DNS lookups, <code class="code docutils literal notranslate"><span class="pre">dnspython</span></code> is required.</p>
+</section>
+<section id="domain2idna">
+<h3><code class="code docutils literal notranslate"><span class="pre">domain2idna</span></code><a class="headerlink" href="#domain2idna" title="Permalink to this heading"></a></h3>
+<p>As we propose the conversion of domains to IDNA, <code class="code docutils literal notranslate"><span class="pre">domain2idna</span></code> is
+required.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="code docutils literal notranslate"><span class="pre">domain2idna</span></code> is maintained and developed by
+<a class="reference external" href="https://github.com/funilrys">Nissar Chababy (&#64;funilrys)</a>, the developer of PyFunceble.
+The source code can be found <a class="reference external" href="https://github.com/PyFunceble/domain2idna">on GitHub</a>.</p>
+</div>
+</section>
+<section id="inflection">
+<h3><code class="code docutils literal notranslate"><span class="pre">inflection</span></code><a class="headerlink" href="#inflection" title="Permalink to this heading"></a></h3>
+<p>We don’t necessarily want to reinvent the wheel while generating the (database)
+tables name from our schema descriptions. This tool is a relief!</p>
+</section>
+<section id="packaging">
+<h3><code class="code docutils literal notranslate"><span class="pre">packaging</span></code><a class="headerlink" href="#packaging" title="Permalink to this heading"></a></h3>
+<p>we don’t necessarily want to reinvent the wheel to compare the current with the
+latest (upstream) version. This module is a relief - too !</p>
+</section>
+<section id="psycopg2-optopnal">
+<h3><code class="code docutils literal notranslate"><span class="pre">psycopg2</span></code> (optopnal)<a class="headerlink" href="#psycopg2-optopnal" title="Permalink to this heading"></a></h3>
+<p>As we propose the <code class="code docutils literal notranslate"><span class="pre">PostgreSQL</span></code> database types, <code class="code docutils literal notranslate"><span class="pre">psycopg2</span></code> is required.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an optional dependency. If you want to work with psql, you are
+required to install the development headers then execute the following.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>pyfunceble<span class="o">[</span>-dev<span class="o">][</span>psql<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="pymysql">
+<h3><code class="code docutils literal notranslate"><span class="pre">PyMySQL</span></code><a class="headerlink" href="#pymysql" title="Permalink to this heading"></a></h3>
+<p>As we propose the <code class="code docutils literal notranslate"><span class="pre">MariaDB</span></code> or <code class="code docutils literal notranslate"><span class="pre">MySQL</span></code> database types,
+<code class="code docutils literal notranslate"><span class="pre">PyMySQL</span></code> is required.</p>
+</section>
+<section id="python-box">
+<h3><code class="code docutils literal notranslate"><span class="pre">python-box</span></code><a class="headerlink" href="#python-box" title="Permalink to this heading"></a></h3>
+<p>As we use <code class="code docutils literal notranslate"><span class="pre">python-box</span></code> for a better code access to the configuration,
+it is required.</p>
+</section>
+<section id="python-dotenv">
+<h3><code class="code docutils literal notranslate"><span class="pre">python-dotenv</span></code><a class="headerlink" href="#python-dotenv" title="Permalink to this heading"></a></h3>
+<p>As we are able to load dotenv files, <code class="code docutils literal notranslate"><span class="pre">python-dotenv</span></code> is required.</p>
+</section>
+<section id="pyyaml">
+<h3><code class="code docutils literal notranslate"><span class="pre">PyYAML</span></code><a class="headerlink" href="#pyyaml" title="Permalink to this heading"></a></h3>
+<p>As our configuration file is written in <code class="code docutils literal notranslate"><span class="pre">.yaml</span></code>, <code class="code docutils literal notranslate"><span class="pre">PyYAML</span></code> is
+required.</p>
+</section>
+<section id="requests">
+<h3><code class="code docutils literal notranslate"><span class="pre">requests</span></code><a class="headerlink" href="#requests" title="Permalink to this heading"></a></h3>
+<p>As we use <code class="code docutils literal notranslate"><span class="pre">requests</span></code> multiple times to communicate with webservices,
+<code class="code docutils literal notranslate"><span class="pre">requests</span></code> is required.</p>
+</section>
+<section id="setuptools">
+<h3><code class="code docutils literal notranslate"><span class="pre">setuptools</span></code><a class="headerlink" href="#setuptools" title="Permalink to this heading"></a></h3>
+<p>As we use <code class="code docutils literal notranslate"><span class="pre">install_requires=xx</span></code> inside our <code class="code docutils literal notranslate"><span class="pre">setup.py</span></code>,
+<code class="code docutils literal notranslate"><span class="pre">setuptools</span></code> is required.</p>
+</section>
+<section id="sqlalchemy">
+<h3><code class="code docutils literal notranslate"><span class="pre">sqlalchemy</span></code><a class="headerlink" href="#sqlalchemy" title="Permalink to this heading"></a></h3>
+<p>As we don’t want to maintain several RAW SQL files, we use <code class="code docutils literal notranslate"><span class="pre">sqlalchemy</span></code>
+for the database communication and manipulation.</p>
+</section>
+</section>
+<section id="stable-version">
+<h2>Stable version<a class="headerlink" href="#stable-version" title="Permalink to this heading"></a></h2>
+<section id="using-pip">
+<h3>Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code><a class="headerlink" href="#using-pip" title="Permalink to this heading"></a></h3>
+<section id="from-pypi">
+<h4>From PyPi<a class="headerlink" href="#from-pypi" title="Permalink to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install --user PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+<section id="from-github">
+<h4>From GitHub<a class="headerlink" href="#from-github" title="Permalink to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install --user git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on <a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="using-the-aur-for-arch-linux-users">
+<h3>Using the AUR (for Arch Linux users)<a class="headerlink" href="#using-the-aur-for-arch-linux-users" title="Permalink to this heading"></a></h3>
+<p>The package can be found at <a class="reference external" href="https://aur.archlinux.org/packages/pyfunceble/">https://aur.archlinux.org/packages/pyfunceble/</a>.</p>
+<section id="with-makepkg">
+<h4>With makepkg<a class="headerlink" href="#with-makepkg" title="Permalink to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble -o PKGBUILD
+$ makepkg
+$ sudo pacman -U pyfunceble*.tar.xz
+</pre></div>
+</div>
+</section>
+<section id="with-your-favorite-aur-helper">
+<h4>With your favorite AUR helper<a class="headerlink" href="#with-your-favorite-aur-helper" title="Permalink to this heading"></a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend any AUR helper but keep in mind that some AUR helpers
+are “better” than other.
+For more information about your current (or any other) AUR helper please
+report to <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">the ArchWiki page</a>.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ yourFavoriteAurHelper -S pyfunceble
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-docker-hub">
+<h3>Using docker (hub)<a class="headerlink" href="#using-docker-hub" title="Permalink to this heading"></a></h3>
+<p>The image description can be found at <a class="reference external" href="https://hub.docker.com/r/pyfunceble/pyfunceble">https://hub.docker.com/r/pyfunceble/pyfunceble</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker pull pyfunceble/pyfunceble
+</pre></div>
+</div>
+</section>
+<section id="pure-python-method">
+<h3>Pure Python method<a class="headerlink" href="#pure-python-method" title="Permalink to this heading"></a></h3>
+<p>Execute the following and enjoy PyFunceble!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/funilrys/PyFunceble.git
+$ cd PyFunceble
+$ python3 setup.py test
+$ python3 setup.py install # Avoid this if you want to uninstall or update one day.
+$ pip3 install --user -e . # Prefer this method.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="development-version">
+<h2>Development version<a class="headerlink" href="#development-version" title="Permalink to this heading"></a></h2>
+<p>The development version of PyFunceble represents the <code class="code docutils literal notranslate"><span class="pre">dev</span></code> branch.
+It’s intended for the development of next features
+but is always at a usable state.</p>
+<p>Indeed, We should not push to the <code class="code docutils literal notranslate"><span class="pre">dev</span></code> branch until
+we are sure that the new commit does not break or introduce
+critical issue under PyFunceble.</p>
+<section id="for-development">
+<h3>For development<a class="headerlink" href="#for-development" title="Permalink to this heading"></a></h3>
+<p>Execute the following and let’s hack PyFunceble!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We highly recommend you to develop PyFunceble under a <code class="code docutils literal notranslate"><span class="pre">virtualenv</span></code>.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/funilrys/PyFunceble.git
+$ cd PyFunceble
+$ git checkout dev
+$ virtualenv -p python3 venv
+$ source venv/bin/activate
+$ pip3 install -e .
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After installing with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+<span class="gp">$ </span>pip3<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>you only need to update the repository.</p></li>
+<li><p>you don’t have to rerun the <code class="code docutils literal notranslate"><span class="pre">pip</span></code> command.</p></li>
+</ul>
+</div>
+</section>
+<section id="for-usage">
+<h3>For usage<a class="headerlink" href="#for-usage" title="Permalink to this heading"></a></h3>
+<section id="id1">
+<h4>Using <code class="code docutils literal notranslate"><span class="pre">pip</span></code><a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>Execute one of the following and enjoy PyFunceble!</p>
+<section id="id2">
+<h5>From PyPi<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install --user PyFunceble-dev
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+<section id="id3">
+<h5>From GitHub<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip3 install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+<section id="id4">
+<h4>Using the AUR (for Arch Linux users)<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
+<p>The package can be found at <a class="reference external" href="https://aur.archlinux.org/packages/pyfunceble-dev/">https://aur.archlinux.org/packages/pyfunceble-dev/</a>.</p>
+<section id="id5">
+<h5>With makepkg<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pyfunceble-dev -o PKGBUILD
+$ makepkg
+$ sudo pacman -U pyfunceble-dev*.tar.xz
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h5>With your favorite AUR helper<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h5>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend any AUR helper but keep in mind that some AUR helpers
+are “better” than other.
+For more information about your current (or any other) AUR helper please
+report to <a class="reference external" href="https://wiki.archlinux.org/index.php/AUR_helpers">the ArchWiki page</a>.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ yourFavoriteAurHelper -S pyfunceble-dev
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h4>Using docker (hub)<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
+<p>The image description can be found at <a class="reference external" href="https://hub.docker.com/r/pyfunceble/pyfunceble-dev">https://hub.docker.com/r/pyfunceble/pyfunceble-dev</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker pull pyfunceble/pyfunceble-dev
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>Pure Python method<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h4>
+<p>Execute the following and enjoy PyFunceble!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/funilrys/PyFunceble.git
+$ cd PyFunceble &amp;&amp; git checkout dev
+$ tox # Run tests
+$ python3 setup.py install # Avoid this if you want to uninstall or update one day.
+$ pip3 install --user -e . # Prefer this method.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag which installs the required dependencies
+at the user level. More information about it can be found on
+<a class="reference external" href="https://pip.pypa.io/en/stable/reference/pip_install/?highlight=--user#cmdoption-user">pip documentation</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>We do not recommend the <code class="code docutils literal notranslate"><span class="pre">--user</span></code> flag when using <code class="code docutils literal notranslate"><span class="pre">PyFunceble</span></code>
+into containers or CI engines.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="first-steps">
+<h2>First steps<a class="headerlink" href="#first-steps" title="Permalink to this heading"></a></h2>
+<p>Make sure that you can run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PyFunceble --version
+</pre></div>
+</div>
+<p>and enjoy PyFunceble!!</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../respect/code-of-conduct.html" class="btn btn-neutral float-left" title="Code of Conduct" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../update/index.html" class="btn btn-neutral float-right" title="Update" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

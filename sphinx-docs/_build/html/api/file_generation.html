@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File generation while using the API &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">File generation while using the API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/file_generation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-generation-while-using-the-api">
+<h1>File generation while using the API<a class="headerlink" href="#file-generation-while-using-the-api" title="Permalink to this heading"></a></h1>
+<p>You may want to test using the API but still want the result structured normally like a CLI usage.
+For that case simply add the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is an example which let us manipulate the data and also generate the files</span>
+<span class="sd">as if it was the CLI.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">colorama</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble</span> <span class="kn">import</span> <span class="n">DomainAvailabilityChecker</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.cli.filesystem.dir_structure.restore</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DirectoryStructureRestoration</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.cli.processes.producer</span> <span class="kn">import</span> <span class="n">ProducerProcessesManager</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.cli.utils</span> <span class="kn">import</span> <span class="n">ascii_logo</span>
+
+<span class="c1"># We initiate the coloration.</span>
+<span class="n">colorama</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">autoreset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1"># We are in control, so we need to manually start the loading.</span>
+<span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">custom_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;cli_testing&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file_generation&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;plain&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span> <span class="s2">&quot;display_mode&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;quiet&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}}</span>
+<span class="p">}</span>
+<span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ascii_logo</span><span class="o">.</span><span class="n">get_home_representation</span><span class="p">())</span>
+
+<span class="c1"># This is needed as our idea is to communicate with the producer process instead</span>
+<span class="c1"># of trying to implement everything again.</span>
+<span class="c1"># So, this describes the dataset as they are sent to the tester process</span>
+<span class="c1"># (normally from the CLi).</span>
+<span class="n">STD_COMMUNICATION_DATASET</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;single&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subject_type&quot;</span><span class="p">:</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span>
+    <span class="c1"># Destination inside the output directory.</span>
+    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;my_awesome_pyfunceble_wrapper&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;idna_subject&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;my_awesome_pyfunceble_wrapper&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;output_dir&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># Will be handled automatically</span>
+    <span class="s2">&quot;checker_type&quot;</span><span class="p">:</span> <span class="s2">&quot;AVAILABILITY&quot;</span><span class="p">,</span>  <span class="c1"># Must be one of our supported one!!</span>
+<span class="p">}</span>
+
+<span class="n">DOMAINS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;twitter.com&quot;</span><span class="p">]</span>
+
+<span class="c1"># In this example, we are cleaning up and regenerating the output directory</span>
+<span class="c1"># at each run.</span>
+<span class="n">dir_structure_restoration</span> <span class="o">=</span> <span class="n">DirectoryStructureRestoration</span><span class="p">(</span>
+    <span class="n">parent_dirname</span><span class="o">=</span><span class="n">STD_COMMUNICATION_DATASET</span><span class="p">[</span><span class="s2">&quot;destination&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">restore_from_backup</span><span class="p">()</span>
+
+<span class="c1"># We start the producer process.</span>
+<span class="n">producer_proc</span> <span class="o">=</span> <span class="n">ProducerProcessesManager</span><span class="p">()</span>
+<span class="c1"># We start the process manager now that we are ready.</span>
+<span class="n">producer_proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># We start and configure our availability checker.</span>
+<span class="n">avail_checker</span> <span class="o">=</span> <span class="n">DomainAvailabilityChecker</span><span class="p">(</span><span class="n">use_whois_lookup</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">domain</span> <span class="ow">in</span> <span class="n">DOMAINS</span><span class="p">:</span>
+    <span class="c1"># We loop through our list of subject to test.</span>
+
+    <span class="c1"># We parse the current subject to the availability checker.</span>
+    <span class="n">avail_checker</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="n">domain</span>
+
+    <span class="c1"># Now we fetch the status object.</span>
+    <span class="n">test_result</span> <span class="o">=</span> <span class="n">avail_checker</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span>
+
+    <span class="c1"># We prepare our communication dataset.</span>
+    <span class="n">communication_dataset</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">STD_COMMUNICATION_DATASET</span><span class="p">)</span>
+    <span class="n">communication_dataset</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_result</span><span class="o">.</span><span class="n">subject</span>
+    <span class="n">communication_dataset</span><span class="p">[</span><span class="s2">&quot;idna_subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_result</span><span class="o">.</span><span class="n">idna_subject</span>
+
+    <span class="c1"># We print the result (for us as we call this script.)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">test_result</span><span class="o">.</span><span class="n">idna_subject</span><span class="si">}</span><span class="s2"> (IDNA: </span><span class="si">{</span><span class="n">test_result</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2">) &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;is </span><span class="si">{</span><span class="n">test_result</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># We order the generation of the status file by putting our information</span>
+    <span class="c1"># to the producer queue.</span>
+    <span class="n">producer_proc</span><span class="o">.</span><span class="n">add_to_input_queue</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">communication_dataset</span><span class="p">,</span> <span class="n">test_result</span><span class="p">),</span> <span class="n">worker_name</span><span class="o">=</span><span class="s2">&quot;main&quot;</span>
+    <span class="p">)</span>
+
+<span class="c1"># We are now done, it&#39;s time to send the stop signal.</span>
+<span class="c1"># The stop signal will inform the producer process that it needs to stop</span>
+<span class="c1"># listening to new order (from the time it reads the stop signal).</span>
+<span class="n">producer_proc</span><span class="o">.</span><span class="n">send_stop_signal</span><span class="p">()</span>
+
+<span class="c1"># Now we wait until it&#39;s done.</span>
+<span class="n">producer_proc</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># From here all files were generated we can do whatever we want with them.</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyFunceble.checker.availability.extras.rules &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+        <script src="../../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/index.html">Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../responses/index.html">Responses</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../../PyFunceble.html">PyFunceble</a></li>
+      <li class="breadcrumb-item active">PyFunceble.checker.availability.extras.rules</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for PyFunceble.checker.availability.extras.rules</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The tool to check the availability or syntax of domain, IP or URL.</span>
+
+<span class="sd">::</span>
+
+
+<span class="sd">    ██████╗ ██╗   ██╗███████╗██╗   ██╗███╗   ██╗ ██████╗███████╗██████╗ ██╗     ███████╗</span>
+<span class="sd">    ██╔══██╗╚██╗ ██╔╝██╔════╝██║   ██║████╗  ██║██╔════╝██╔════╝██╔══██╗██║     ██╔════╝</span>
+<span class="sd">    ██████╔╝ ╚████╔╝ █████╗  ██║   ██║██╔██╗ ██║██║     █████╗  ██████╔╝██║     █████╗</span>
+<span class="sd">    ██╔═══╝   ╚██╔╝  ██╔══╝  ██║   ██║██║╚██╗██║██║     ██╔══╝  ██╔══██╗██║     ██╔══╝</span>
+<span class="sd">    ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗</span>
+<span class="sd">    ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝</span>
+
+<span class="sd">Provides the extra rules handler based on the status code.</span>
+
+<span class="sd">Author:</span>
+<span class="sd">    Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom</span>
+
+<span class="sd">Special thanks:</span>
+<span class="sd">    https://pyfunceble.github.io/#/special-thanks</span>
+
+<span class="sd">Contributors:</span>
+<span class="sd">    https://pyfunceble.github.io/#/contributors</span>
+
+<span class="sd">Project link:</span>
+<span class="sd">    https://github.com/funilrys/PyFunceble</span>
+
+<span class="sd">Project documentation:</span>
+<span class="sd">    https://pyfunceble.readthedocs.io/en/dev/</span>
+
+<span class="sd">Project homepage:</span>
+<span class="sd">    https://pyfunceble.github.io/</span>
+
+<span class="sd">License:</span>
+<span class="sd">::</span>
+
+
+<span class="sd">    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">box</span> <span class="kn">import</span> <span class="n">Box</span>
+
+<span class="kn">import</span> <span class="nn">PyFunceble.facility</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.factory</span>
+<span class="kn">import</span> <span class="nn">PyFunceble.storage</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.checker.availability.extras.base</span> <span class="kn">import</span> <span class="n">ExtraRuleHandlerBase</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.checker.availability.status</span> <span class="kn">import</span> <span class="n">AvailabilityCheckerStatus</span>
+<span class="kn">from</span> <span class="nn">PyFunceble.helpers.regex</span> <span class="kn">import</span> <span class="n">RegexHelper</span>
+
+
+<div class="viewcode-block" id="ExtraRulesHandler"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler">[docs]</a><span class="k">class</span> <span class="nc">ExtraRulesHandler</span><span class="p">(</span><span class="n">ExtraRuleHandlerBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides our very own extra rules handler.</span>
+
+<span class="sd">    :param status:</span>
+<span class="sd">        The previously gathered status.</span>
+<span class="sd">    :type status:</span>
+<span class="sd">        :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">regex_active2inactive</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">http_codes_dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Box</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AvailabilityCheckerStatus</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regex_active2inactive</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sa">r</span><span class="s2">&quot;\.000webhostapp\.com&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">410</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.24\.eu$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">503</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.altervista\.org$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.angelfire\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.blogspot\.&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_blogspot</span><span class="p">],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.canalblog\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.dr\.ag$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">503</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.fc2\.com$&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_fc2_dot_com</span><span class="p">],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.github\.io$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.godaddysites\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.hpg.com.br$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.imgur\.com$&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_imgur_dot_com</span><span class="p">],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.liveadvert\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.skyrock\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.tumblr\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.wix\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.wordpress\.com$&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="mi">410</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_wordpress_dot_com</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="sa">r</span><span class="s2">&quot;\.weebly\.com$&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down_if_status_code</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;404&quot;</span><span class="p">,</span> <span class="s2">&quot;406&quot;</span><span class="p">})],</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">ConfigLoader</span><span class="o">.</span><span class="n">is_already_loaded</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http_codes_dataset</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">HTTP_CODES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http_codes_dataset</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">STD_HTTP_CODES</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__web_regex_handler</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">regex_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles a web request along with a regex filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">regex_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">regex</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">text</span> <span class="ow">or</span> <span class="n">RegexHelper</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+                    <span class="n">req</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">return_match</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">):</span>
+                    <span class="n">method</span><span class="p">()</span>
+                    <span class="k">break</span>
+        <span class="k">except</span> <span class="p">(</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">,</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">InvalidURL</span><span class="p">,</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">,</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span>
+            <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">urllib3_exceptions</span><span class="o">.</span><span class="n">InvalidHeader</span><span class="p">,</span>
+            <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__regex_registry_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regex_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the standard regex lookup case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="p">(</span>
+            <span class="n">regex</span><span class="p">,</span>
+            <span class="n">data</span><span class="p">,</span>
+        <span class="p">)</span> <span class="ow">in</span> <span class="n">regex_registry</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">broken</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">RegexHelper</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="n">return_match</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="n">element</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="o">*</span><span class="n">element</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">element</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_after_extra_rules</span><span class="p">:</span>
+                    <span class="n">broken</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">broken</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="ExtraRulesHandler.handle_blogspot"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler.handle_blogspot">[docs]</a>    <span class="k">def</span> <span class="nf">handle_blogspot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the :code:`blogspot.*` case.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This method assume that we know that we are handling a blogspot domain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">regex_blogger</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;create-blog.g?&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;87065&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;doesn&amp;#8217;t&amp;nbsp;exist&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="s2">&quot;http:&quot;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="si">}</span><span class="s2">:80&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__web_regex_handler</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">regex_blogger</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ExtraRulesHandler.handle_wordpress_dot_com"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler.handle_wordpress_dot_com">[docs]</a>    <span class="k">def</span> <span class="nf">handle_wordpress_dot_com</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the :code:`wordpress.com` case.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This method assume that we know that we are handling a blogspot domain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">regex_wordpress</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;doesn&amp;#8217;t&amp;nbsp;exist&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;no\slonger\savailable&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="s2">&quot;http:&quot;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="si">}</span><span class="s2">:80&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__web_regex_handler</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">regex_wordpress</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ExtraRulesHandler.handle_fc2_dot_com"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler.handle_fc2_dot_com">[docs]</a>    <span class="k">def</span> <span class="nf">handle_fc2_dot_com</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the :code:`fc2.com` case.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This method assume that we know that we are handling a fc2 domain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="s2">&quot;http:&quot;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="si">}</span><span class="s2">:80&quot;</span>
+
+        <span class="n">req</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Location&quot;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span> <span class="ow">and</span> <span class="s2">&quot;error.fc2.com&quot;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Location&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ExtraRulesHandler.handle_imgur_dot_com"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler.handle_imgur_dot_com">[docs]</a>    <span class="k">def</span> <span class="nf">handle_imgur_dot_com</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the :code:`imgur.com` case.</span>
+
+<span class="sd">        .. warning:.</span>
+<span class="sd">            This method assume that we know that we are handling a imgur.com</span>
+<span class="sd">            sub-domain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="s2">&quot;http:&quot;</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">req</span> <span class="o">=</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">Requester</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">netloc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.imgur.com&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Location&quot;</span> <span class="ow">in</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Location&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;/removed.png&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;/user/</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">switch_to_down</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">__handle_active2inactive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handles the status deescalation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">http_status_code</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__regex_registry_handler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regex_active2inactive</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="ExtraRulesHandler.start"><a class="viewcode-back" href="../../../../../code/PyFunceble.checker.availability.extras.html#PyFunceble.checker.availability.extras.rules.ExtraRulesHandler.start">[docs]</a>    <span class="nd">@ExtraRuleHandlerBase</span><span class="o">.</span><span class="n">ensure_status_is_given</span>
+    <span class="nd">@ExtraRuleHandlerBase</span><span class="o">.</span><span class="n">setup_status_before</span>
+    <span class="nd">@ExtraRuleHandlerBase</span><span class="o">.</span><span class="n">setup_status_after</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ExtraRulesHandler&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Started to check </span><span class="si">%r</span><span class="s2"> against our own set of extra rules.&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_before_extra_rules</span> <span class="o">==</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">STATUS</span><span class="o">.</span><span class="n">up</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__handle_active2inactive</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_after_extra_rules</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">status_before_extra_rules</span> <span class="ow">in</span> <span class="n">PyFunceble</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">STATUS</span><span class="o">.</span><span class="n">down</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">ipv4_range_syntax</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">ipv6_range_syntax</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">switch_to_up</span><span class="p">()</span>
+
+        <span class="n">PyFunceble</span><span class="o">.</span><span class="n">facility</span><span class="o">.</span><span class="n">Logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Finished to check </span><span class="si">%r</span><span class="s2"> against our own set of extra rules.&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">idna_subject</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

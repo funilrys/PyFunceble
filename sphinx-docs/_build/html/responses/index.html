@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responses &mdash; PyFunceble 4.2.0a9 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Documentation" href="../api/index.html" />
+    <link rel="prev" title="Usage" href="../usage/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PyFunceble
+          </a>
+              <div class="version">
+                4.2.0a9
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History of the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../what-can-we-do.html">What can PyFunceble do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../special-thanks.html">Special Thanks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supporting-the-project.html">Supporting the project</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../respect/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../respect/code-of-conduct.html">Code of Conduct</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../update/index.html">Update</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Responses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-responses">API Responses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#syntax-checker">Syntax Checker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#availability-checker">Availability Checker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reputation-checker">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-responses-explained">API Responses (explained)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#checker-type"><code class="code docutils literal notranslate"><span class="pre">checker_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#idna-subject"><code class="code docutils literal notranslate"><span class="pre">idna_subject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#params"><code class="code docutils literal notranslate"><span class="pre">params</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#status"><code class="code docutils literal notranslate"><span class="pre">status</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#registrar"><code class="code docutils literal notranslate"><span class="pre">registrar</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#status-after-extra-rules"><code class="code docutils literal notranslate"><span class="pre">status_after_extra_rules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-before-extra-rules"><code class="code docutils literal notranslate"><span class="pre">status_before_extra_rules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-source"><code class="code docutils literal notranslate"><span class="pre">status_source</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-source-after-extra-rules"><code class="code docutils literal notranslate"><span class="pre">status_source_after_extra_rules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-source-before-extra-rules"><code class="code docutils literal notranslate"><span class="pre">status_source_before_extra_rules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subject"><code class="code docutils literal notranslate"><span class="pre">subject</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tested-at"><code class="code docutils literal notranslate"><span class="pre">tested_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-lookup"><code class="code docutils literal notranslate"><span class="pre">dns_lookup</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id12">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dns-lookup-record"><code class="code docutils literal notranslate"><span class="pre">dns_lookup_record</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#availability-and-reputation-checker">Availability and Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#domain-syntax"><code class="code docutils literal notranslate"><span class="pre">domain_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#expiration-date"><code class="code docutils literal notranslate"><span class="pre">expiration_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-status-code"><code class="code docutils literal notranslate"><span class="pre">http_status_code</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-syntax"><code class="code docutils literal notranslate"><span class="pre">ip_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipv4-range-syntax"><code class="code docutils literal notranslate"><span class="pre">ipv4_range_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipv4-syntax"><code class="code docutils literal notranslate"><span class="pre">ipv4_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipv6-range-syntax"><code class="code docutils literal notranslate"><span class="pre">ipv6_range_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipv6-syntax"><code class="code docutils literal notranslate"><span class="pre">ipv6_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#second-level-domain-syntax"><code class="code docutils literal notranslate"><span class="pre">second_level_domain_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subdomain-syntax"><code class="code docutils literal notranslate"><span class="pre">subdomain_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#url-syntax"><code class="code docutils literal notranslate"><span class="pre">url_syntax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#netinfo"><code class="code docutils literal notranslate"><span class="pre">netinfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#netloc"><code class="code docutils literal notranslate"><span class="pre">netloc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#whois-lookup-record"><code class="code docutils literal notranslate"><span class="pre">whois_lookup_record</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id20">Syntax Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Availability Checker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">Reputation Checker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#whois-lookup"><code class="code docutils literal notranslate"><span class="pre">whois_lookup</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-responses">CLI Responses</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Subject</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id28">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source">Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Expiration Date</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#http-code">HTTP Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checker">Checker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../components/index.html">Components</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dead-hosts/index.html">Dead-Hosts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../facts/they-use-d-it.html">They use-d PyFunceble!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/known_issues.html">Known issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html">Discovered an issue?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-help">Need help?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facts/contact.html#need-information">Need information?</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code/modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFunceble</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Responses</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/responses/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="responses">
+<h1>Responses<a class="headerlink" href="#responses" title="Permalink to this heading"></a></h1>
+<section id="api-responses">
+<h2>API Responses<a class="headerlink" href="#api-responses" title="Permalink to this heading"></a></h2>
+<section id="syntax-checker">
+<h3>Syntax Checker<a class="headerlink" href="#syntax-checker" title="Permalink to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;checker_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SYNTAX&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;idna_subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;VALID&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SYNTAX&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;tested_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-03-09T17:43:24.477977&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="availability-checker">
+<h3>Availability Checker<a class="headerlink" href="#availability-checker" title="Permalink to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;checker_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AVAILABILITY&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dns_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;NS&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;a.iana-servers.net.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;b.iana-servers.net.&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;dns_lookup_record&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;dns_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com.&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;follow_nameserver_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;nameserver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9.9.9.9&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">53</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;preferred_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;query_record_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NS&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;query_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;a.iana-servers.net.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">&quot;b.iana-servers.net.&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;used_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;domain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;expiration_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;http_status_code&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;idna_subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ip_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv4_range_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv4_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv6_range_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv6_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;netinfo&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;netloc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;do_syntax_check_first&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_dns_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_http_code_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_netinfo_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_reputation_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_whois_db&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_whois_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_collection&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;registrar&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;second_level_domain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACTIVE&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_after_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_before_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;DNSLOOKUP&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_source_after_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_source_before_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subdomain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;tested_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-03-09T17:42:15.771647&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;url_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;whois_lookup_record&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;expiration_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">43</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;query_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;record&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;registrar&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;whois_record&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="reputation-checker">
+<h3>Reputation Checker<a class="headerlink" href="#reputation-checker" title="Permalink to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;checker_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REPUTATION&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;dns_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;93.184.216.34&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;dns_lookup_record&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;dns_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com.&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;follow_nameserver_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;nameserver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9.9.9.9&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">53</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;preferred_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;query_record_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;query_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">&quot;93.184.216.34&quot;</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;used_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;domain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;idna_subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ip_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv4_range_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv4_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv6_range_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ipv6_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;do_syntax_check_first&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;use_collection&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;second_level_domain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SANE&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status_source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;REPUTATION&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subdomain_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;tested_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-03-09T17:44:02.908452&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;url_syntax&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="api-responses-explained">
+<h2>API Responses (explained)<a class="headerlink" href="#api-responses-explained" title="Permalink to this heading"></a></h2>
+<p>In this page, we intend to explain the most useful parts of the API responses.</p>
+<section id="checker-type">
+<h3><code class="code docutils literal notranslate"><span class="pre">checker_type</span></code><a class="headerlink" href="#checker-type" title="Permalink to this heading"></a></h3>
+<p>The checker type. It describes the checker which was used to provide
+the given response.</p>
+<p>It should be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">SYNTAX</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">AVAILABILITY</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">REPUTATION</span></code></p></li>
+</ul>
+</section>
+<section id="idna-subject">
+<h3><code class="code docutils literal notranslate"><span class="pre">idna_subject</span></code><a class="headerlink" href="#idna-subject" title="Permalink to this heading"></a></h3>
+<p>The IDNA formatted subject. It is the subject that is internally exposed the all
+supported testing methods.</p>
+<p>You should consider this as the subject and consider the <code class="code docutils literal notranslate"><span class="pre">subject</span></code> key as
+a placeholder of what was given by you.</p>
+</section>
+<section id="params">
+<h3><code class="code docutils literal notranslate"><span class="pre">params</span></code><a class="headerlink" href="#params" title="Permalink to this heading"></a></h3>
+<p>The parameters. It describes the parameter applied to the checker. In most case,
+if you are using the Python API, you should be able to control most of them
+through the <strong>class constructor</strong> or their <strong>property setters</strong> with the same
+name.</p>
+<section id="id1">
+<h4>Syntax Checker<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>As of now, there is no known parameters.</p>
+</section>
+<section id="id2">
+<h4>Availability Checker<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, the following is provided.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;do_syntax_check_first&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_dns_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_extra_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_http_code_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_netinfo_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_reputation_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_whois_db&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_whois_lookup&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_collection&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="do-syntax-check-first">
+<h5><code class="code docutils literal notranslate"><span class="pre">do_syntax_check_first</span></code><a class="headerlink" href="#do-syntax-check-first" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it has to do a syntax check before
+starting an extensive test. Meaning that the status strongly depends on the
+caught syntax.</p>
+</section>
+<section id="use-dns-lookup">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_dns_lookup</span></code><a class="headerlink" href="#use-dns-lookup" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to perform some DNS
+lookup to determine the status of the given subject.</p>
+</section>
+<section id="use-extra-rules">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_extra_rules</span></code><a class="headerlink" href="#use-extra-rules" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to check against our own
+sets of SPECIAL rules in order to escalate or deescalate the status of the given
+subject.</p>
+</section>
+<section id="use-http-code-lookup">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_http_code_lookup</span></code><a class="headerlink" href="#use-http-code-lookup" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to gather and use the
+HTTP status code of the given subject to determine its status.</p>
+</section>
+<section id="use-netinfo-lookup">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_netinfo_lookup</span></code><a class="headerlink" href="#use-netinfo-lookup" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to perform a network
+information lookup to determine the status of the given subject.</p>
+</section>
+<section id="use-reputation-lookup">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_reputation_lookup</span></code><a class="headerlink" href="#use-reputation-lookup" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that is allowed to perform a reputation
+lookup to determine the status of the given subject.</p>
+</section>
+<section id="use-whois-db">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_whois_db</span></code><a class="headerlink" href="#use-whois-db" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to look at the WHOIS
+local WHOIS database before even trying to perform a WHOIS lookup to determine
+the status of the given subject.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the <code class="code docutils literal notranslate"><span class="pre">use_whois_lookup</span></code> parameter is deactivated, this parameter is
+ignored.</p>
+</div>
+</section>
+<section id="use-whois-lookup">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_whois_lookup</span></code><a class="headerlink" href="#use-whois-lookup" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that is it allowed to perform a WHOIS
+lookup to determine the status of the given subject.</p>
+</section>
+<section id="use-collection">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_collection</span></code><a class="headerlink" href="#use-collection" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to perform a lookup into
+the collection API before starting an extensive local test.</p>
+</section>
+</section>
+<section id="id3">
+<h4>Reputation Checker<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, the following is provided.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;do_syntax_check_first&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;use_collection&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="id4">
+<h5><code class="code docutils literal notranslate"><span class="pre">do_syntax_check_first</span></code><a class="headerlink" href="#id4" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it has to do a syntax check before
+starting an extensive test. Meaning that the status strongly depends on the
+caught syntax.</p>
+</section>
+<section id="id5">
+<h5><code class="code docutils literal notranslate"><span class="pre">use_collection</span></code><a class="headerlink" href="#id5" title="Permalink to this heading"></a></h5>
+<p>This parameter lets the checker know that it is allowed to perform a lookup into
+the collection API before starting an extensive local test.</p>
+</section>
+</section>
+</section>
+<section id="status">
+<h3><code class="code docutils literal notranslate"><span class="pre">status</span></code><a class="headerlink" href="#status" title="Permalink to this heading"></a></h3>
+<p>The status. It describes the final status gathered by the checker.</p>
+<section id="id6">
+<h4>Syntax Checker<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
+<p>With the syntax checker, it may be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">VALID</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">INVALID</span></code></p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>Availability Checker<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, it may be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">ACTIVE</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">INACTIVE</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">INVALID</span></code></p></li>
+</ul>
+</section>
+<section id="id8">
+<h4>Reputation Checker<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h4>
+<p>With the reputation checker, it may be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">SANE</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">MALICIOUS</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="registrar">
+<h3><code class="code docutils literal notranslate"><span class="pre">registrar</span></code><a class="headerlink" href="#registrar" title="Permalink to this heading"></a></h3>
+<p>The registrar. It describes the registrar of the given subject as described in
+its WHOIS record.</p>
+<section id="id9">
+<h4>Syntax Checker<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+<section id="id10">
+<h4>Availability Checker<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h4>
+<p>Provides the - found - registrar. Otherwise, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+</section>
+<section id="id11">
+<h4>Reputation Checker<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+</section>
+<section id="status-after-extra-rules">
+<h3><code class="code docutils literal notranslate"><span class="pre">status_after_extra_rules</span></code><a class="headerlink" href="#status-after-extra-rules" title="Permalink to this heading"></a></h3>
+<p>The status after our extra rules lookup. It describes the status after the
+lookup against our own sets of rules.</p>
+<p>If no rules were matched, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="status-before-extra-rules">
+<h3><code class="code docutils literal notranslate"><span class="pre">status_before_extra_rules</span></code><a class="headerlink" href="#status-before-extra-rules" title="Permalink to this heading"></a></h3>
+<p>The status before our extra rules lookup. It describes the status before the
+lookup against our own sets of rules. In other words, it is the status provided
+by our standard status lookup strategy.</p>
+<p>If no rules were matched, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="status-source">
+<h3><code class="code docutils literal notranslate"><span class="pre">status_source</span></code><a class="headerlink" href="#status-source" title="Permalink to this heading"></a></h3>
+<p>The status source. It describes the test method that led to the given status.</p>
+<p>It should be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">SYNTAX</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">WHOIS</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">DNSLOOKUP</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">NETINFO</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">CODE</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">SPECIAL</span></code> (extra rules)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">COLLECTION</span></code></p></li>
+</ul>
+</section>
+<section id="status-source-after-extra-rules">
+<h3><code class="code docutils literal notranslate"><span class="pre">status_source_after_extra_rules</span></code><a class="headerlink" href="#status-source-after-extra-rules" title="Permalink to this heading"></a></h3>
+<p>The status source after our extra rules lookup. It describes the status source
+after the lookup against our own sets of rules.</p>
+<p>It should be <code class="code docutils literal notranslate"><span class="pre">SPECIAL</span></code>.</p>
+<p>If no rules were matched, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="status-source-before-extra-rules">
+<h3><code class="code docutils literal notranslate"><span class="pre">status_source_before_extra_rules</span></code><a class="headerlink" href="#status-source-before-extra-rules" title="Permalink to this heading"></a></h3>
+<p>The status source before our extra rules lookup. It describes the status source
+before the lookup against our own sets of rules.</p>
+<p>In other words, it is the status source provided by our standard status
+lookup strategy.</p>
+<p>It should be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">SYNTAX</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">WHOIS</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">DNSLOOKUP</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">NETINFO</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">CODE</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">COLLECTION</span></code></p></li>
+</ul>
+<p>If no rules were matched, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="subject">
+<h3><code class="code docutils literal notranslate"><span class="pre">subject</span></code><a class="headerlink" href="#subject" title="Permalink to this heading"></a></h3>
+<p>The subject. It describes the subject that was given by you.</p>
+</section>
+<section id="tested-at">
+<h3><code class="code docutils literal notranslate"><span class="pre">tested_at</span></code><a class="headerlink" href="#tested-at" title="Permalink to this heading"></a></h3>
+<p>The test date. It may not be useful to everyone, but it describes the date and
+time of the generation of the given output.</p>
+</section>
+<section id="dns-lookup">
+<h3><code class="code docutils literal notranslate"><span class="pre">dns_lookup</span></code><a class="headerlink" href="#dns-lookup" title="Permalink to this heading"></a></h3>
+<p>The DNS lookup summary. It describes the summary of the DNS Lookup that was
+performed.</p>
+<section id="id12">
+<h4>Syntax Checker<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+<section id="id13">
+<h4>Availability Checker<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, the following format (or <code class="code docutils literal notranslate"><span class="pre">null</span></code>) is provided:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;QUERY TYPE&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;string&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where <code class="code docutils literal notranslate"><span class="pre">QUERY</span> <span class="pre">TYPE</span></code> is one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">NS</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">A</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">AAAA</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">CNAME</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">DNAME</span></code></p></li>
+</ul>
+</section>
+<section id="id14">
+<h4>Reputation Checker<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h4>
+<p>With the reputation checker, the following format (or <code class="code docutils literal notranslate"><span class="pre">null</span></code>) is provided:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;string&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>It is just a simple list of IPs that we check against. When the given
+subject is an IPv4, <code class="code docutils literal notranslate"><span class="pre">null</span></code> is provided.</p>
+</section>
+</section>
+<section id="dns-lookup-record">
+<h3><code class="code docutils literal notranslate"><span class="pre">dns_lookup_record</span></code><a class="headerlink" href="#dns-lookup-record" title="Permalink to this heading"></a></h3>
+<p>The DNS lookup record. It describes the latest performed DNS lookup record.</p>
+<section id="id15">
+<h4>Syntax Checker<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+<section id="availability-and-reputation-checker">
+<h4>Availability and Reputation Checker<a class="headerlink" href="#availability-and-reputation-checker" title="Permalink to this heading"></a></h4>
+<p>With the availability or reputation checker, the following is provided.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;dns_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com.&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;follow_nameserver_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;nameserver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9.9.9.9&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">53</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;preferred_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;query_record_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NS&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;query_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;response&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;a.iana-servers.net.&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;b.iana-servers.net.&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;used_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;UDP&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="dns-name">
+<h5><code class="code docutils literal notranslate"><span class="pre">dns_name</span></code><a class="headerlink" href="#dns-name" title="Permalink to this heading"></a></h5>
+<p>The DNS name. It describes the DNS name that was queried.</p>
+</section>
+<section id="follow-nameserver-order">
+<h5><code class="code docutils literal notranslate"><span class="pre">follow_nameserver_order</span></code><a class="headerlink" href="#follow-nameserver-order" title="Permalink to this heading"></a></h5>
+<p>It describes if we followed the nameserver order.</p>
+</section>
+<section id="nameserver">
+<h5><code class="code docutils literal notranslate"><span class="pre">nameserver</span></code><a class="headerlink" href="#nameserver" title="Permalink to this heading"></a></h5>
+<p>The nameserver. It describes the nameserver that was queried last.</p>
+</section>
+<section id="port">
+<h5><code class="code docutils literal notranslate"><span class="pre">port</span></code><a class="headerlink" href="#port" title="Permalink to this heading"></a></h5>
+<p>The port. It describes the port that was used to communicate with the
+nameserver.</p>
+</section>
+<section id="query-record-type">
+<h5><code class="code docutils literal notranslate"><span class="pre">query_record_type</span></code><a class="headerlink" href="#query-record-type" title="Permalink to this heading"></a></h5>
+<p>The query record type. It describes the record type that was queried last.</p>
+</section>
+<section id="query-timeout">
+<h5><code class="code docutils literal notranslate"><span class="pre">query_timeout</span></code><a class="headerlink" href="#query-timeout" title="Permalink to this heading"></a></h5>
+<p>The query timeout. It describes the query timeout that was used to perform the
+query.</p>
+</section>
+<section id="response">
+<h5><code class="code docutils literal notranslate"><span class="pre">response</span></code><a class="headerlink" href="#response" title="Permalink to this heading"></a></h5>
+<p>The response. It describes a list of domains or IPs given by the nameserver as
+response.</p>
+</section>
+<section id="id16">
+<h5><code class="code docutils literal notranslate"><span class="pre">subject</span></code><a class="headerlink" href="#id16" title="Permalink to this heading"></a></h5>
+<p>The subject. It describes the subject that was given to the query tool.</p>
+</section>
+<section id="used-protocol">
+<h5><code class="code docutils literal notranslate"><span class="pre">used_protocol</span></code><a class="headerlink" href="#used-protocol" title="Permalink to this heading"></a></h5>
+<p>The used protocol. It describes the used protocol.</p>
+<p>It should be one of the following:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">UDP</span></code> (default)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">TCP</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">HTTPS</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">TLS</span></code></p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="domain-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">domain_syntax</span></code><a class="headerlink" href="#domain-syntax" title="Permalink to this heading"></a></h3>
+<p>The domain syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is a 2nd level
+domain or a subdomain.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="expiration-date">
+<h3><code class="code docutils literal notranslate"><span class="pre">expiration_date</span></code><a class="headerlink" href="#expiration-date" title="Permalink to this heading"></a></h3>
+<p>The expiration date. It describes the expiration date of the given subject as
+extracted from the WHOIS record.</p>
+<p>If none is found, <code class="code docutils literal notranslate"><span class="pre">null</span></code> will be provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="http-status-code">
+<h3><code class="code docutils literal notranslate"><span class="pre">http_status_code</span></code><a class="headerlink" href="#http-status-code" title="Permalink to this heading"></a></h3>
+<p>The HTTP status code. It describes the HTTP status code which was discovered.</p>
+<p>If none is found, <code class="code docutils literal notranslate"><span class="pre">null</span></code> or <code class="code docutils literal notranslate"><span class="pre">0</span></code> will be provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+<section id="ip-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">ip_syntax</span></code><a class="headerlink" href="#ip-syntax" title="Permalink to this heading"></a></h3>
+<p>The IP syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is an IPv4 or
+an IPv6 (range excluded).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="ipv4-range-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">ipv4_range_syntax</span></code><a class="headerlink" href="#ipv4-range-syntax" title="Permalink to this heading"></a></h3>
+<p>The IPv4 range syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is an IPv4
+range.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="ipv4-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">ipv4_syntax</span></code><a class="headerlink" href="#ipv4-syntax" title="Permalink to this heading"></a></h3>
+<p>The IPv4 syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is an IPv4
+(range excluded).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="ipv6-range-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">ipv6_range_syntax</span></code><a class="headerlink" href="#ipv6-range-syntax" title="Permalink to this heading"></a></h3>
+<p>The IPv6 range syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is an IPv6
+range.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="ipv6-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">ipv6_syntax</span></code><a class="headerlink" href="#ipv6-syntax" title="Permalink to this heading"></a></h3>
+<p>The IPv6 syntax. It describes through a boolean the state of the given
+subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is an IPv6
+(range excluded).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="second-level-domain-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">second_level_domain_syntax</span></code><a class="headerlink" href="#second-level-domain-syntax" title="Permalink to this heading"></a></h3>
+<p>The 2nd level domain syntax. It describes through a boolean the state of the
+given subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is a 2nd level
+domain.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="subdomain-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">subdomain_syntax</span></code><a class="headerlink" href="#subdomain-syntax" title="Permalink to this heading"></a></h3>
+<p>The subdomain syntax. It describes through a boolean the state of the
+given subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is a subdomain.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="url-syntax">
+<h3><code class="code docutils literal notranslate"><span class="pre">url_syntax</span></code><a class="headerlink" href="#url-syntax" title="Permalink to this heading"></a></h3>
+<p>The subdomain syntax. It describes through a boolean the state of the
+given subject.</p>
+<p>In other words: <code class="code docutils literal notranslate"><span class="pre">true</span></code> is provided when the given subject is a URL.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This key may give you a <code class="code docutils literal notranslate"><span class="pre">null</span></code> if nothing was performed (yet).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> and <strong>reputation</strong>
+checkers.</p>
+</div>
+</section>
+<section id="netinfo">
+<h3><code class="code docutils literal notranslate"><span class="pre">netinfo</span></code><a class="headerlink" href="#netinfo" title="Permalink to this heading"></a></h3>
+<p>The network information summary. It describes the summary of the network
+information lookup.</p>
+<section id="id17">
+<h4>Syntax Checker<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+<section id="id18">
+<h4>Availability Checker<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, the following format (or <code class="code docutils literal notranslate"><span class="pre">null</span></code>) is
+provided:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;string&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>It is just a simple list of IPs or domains that were found. Otherwise,
+<code class="code docutils literal notranslate"><span class="pre">null</span></code> will be supplied.</p>
+</section>
+<section id="id19">
+<h4>Reputation Checker<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+</section>
+<section id="netloc">
+<h3><code class="code docutils literal notranslate"><span class="pre">netloc</span></code><a class="headerlink" href="#netloc" title="Permalink to this heading"></a></h3>
+<p>The network location. It describe the network location of the tested subject.
+This can be useful when working with URLs. When working with URLs the value of
+<code class="code docutils literal notranslate"><span class="pre">netloc</span></code> will be in the <code class="code docutils literal notranslate"><span class="pre">domain:port</span></code> formet if the port is
+explicitly given and <code class="code docutils literal notranslate"><span class="pre">domain</span></code> otherwise.</p>
+</section>
+<section id="whois-lookup-record">
+<h3><code class="code docutils literal notranslate"><span class="pre">whois_lookup_record</span></code><a class="headerlink" href="#whois-lookup-record" title="Permalink to this heading"></a></h3>
+<p>The WHOIS lookup record. It describes the latest performed WHOIS lookup record.</p>
+<section id="id20">
+<h4>Syntax Checker<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+<section id="id21">
+<h4>Availability Checker<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h4>
+<p>With the availability checker, the following is provided.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;expiration_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">43</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;query_timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;record&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subject&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="id22">
+<h5><code class="code docutils literal notranslate"><span class="pre">expiration_date</span></code><a class="headerlink" href="#id22" title="Permalink to this heading"></a></h5>
+<p>The expiration date. It describes the extracted expiration date.</p>
+<p>It should be a string if the format <cite>09-oct-1970</cite> or <code class="code docutils literal notranslate"><span class="pre">null</span></code> otherwise.</p>
+</section>
+<section id="id23">
+<h5><code class="code docutils literal notranslate"><span class="pre">port</span></code><a class="headerlink" href="#id23" title="Permalink to this heading"></a></h5>
+<p>The port. It describes the port used to communicate with the WHOIS server.</p>
+</section>
+<section id="id24">
+<h5><code class="code docutils literal notranslate"><span class="pre">query_timeout</span></code><a class="headerlink" href="#id24" title="Permalink to this heading"></a></h5>
+<p>The query timeout. It describes the query timeout that was applied during the
+query.</p>
+</section>
+<section id="record">
+<h5><code class="code docutils literal notranslate"><span class="pre">record</span></code><a class="headerlink" href="#record" title="Permalink to this heading"></a></h5>
+<p>The WHOIS record. It describes the record or response of the WHOIS server.</p>
+</section>
+<section id="id25">
+<h5><code class="code docutils literal notranslate"><span class="pre">subject</span></code><a class="headerlink" href="#id25" title="Permalink to this heading"></a></h5>
+<p>The subject. It describes the subject which was queried.</p>
+</section>
+</section>
+<section id="id26">
+<h4>Reputation Checker<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h4>
+<p>Non-existent.</p>
+</section>
+</section>
+<section id="whois-lookup">
+<h3><code class="code docutils literal notranslate"><span class="pre">whois_lookup</span></code><a class="headerlink" href="#whois-lookup" title="Permalink to this heading"></a></h3>
+<p>The WHOIS record. It describes the WHOIS record as given by the (root) WHOIS
+server.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Beware, this is only provided by the <strong>availability</strong> checker.</p>
+</div>
+</section>
+</section>
+<section id="cli-responses">
+<h2>CLI Responses<a class="headerlink" href="#cli-responses" title="Permalink to this heading"></a></h2>
+<p>From the CLI, there is a lot less information available to the end-user.
+This patch intend to shortly preset each column of the CLI stdout outputs.</p>
+<section id="id27">
+<h3>Subject<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<p>The subject. It describes the given or decoded subject after conversion to IDNA.</p>
+</section>
+<section id="id28">
+<h3>Status<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<p>The status. It describes the official status of the tested subject.</p>
+</section>
+<section id="source">
+<h3>Source<a class="headerlink" href="#source" title="Permalink to this heading"></a></h3>
+<p>The status source. It describes the method that let to the given status.</p>
+</section>
+<section id="id29">
+<h3>Expiration Date<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
+<p>The expiration date. It describes the expiration date extracted from the WHOIS
+record - if found. Otherwise, <code class="code docutils literal notranslate"><span class="pre">Unknown</span></code> is supplied.</p>
+</section>
+<section id="http-code">
+<h3>HTTP Code<a class="headerlink" href="#http-code" title="Permalink to this heading"></a></h3>
+<p>The HTTP status code. It describes the HTTP status code - if found. Otherwise,
+<code class="code docutils literal notranslate"><span class="pre">Unknown</span></code> is supplied.</p>
+</section>
+<section id="checker">
+<h3>Checker<a class="headerlink" href="#checker" title="Permalink to this heading"></a></h3>
+<p>The checker. It describes the checker used to gather the status.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../usage/index.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api/index.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, 2018, 2019, 2020, 2021 Nissar Chababy (@funilrys).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
