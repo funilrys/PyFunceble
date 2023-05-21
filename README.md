@@ -43,8 +43,11 @@ Happy testing with PyFunceble!
 
 # Installation
 
-## Package
-The PyFunceble project is distributed as 2 packages that reflects our 2 deployment
+## Packages & Versioning
+
+This project follows the semver standard.
+
+PyFunceble is distributed through 2 packages that reflects our 2 deployment
 branches. Both packages are stable but with 2 different phylosophies.
 Therefore, the choice is up to you.
 
