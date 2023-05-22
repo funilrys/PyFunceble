@@ -1,0 +1,1 @@
+::: PyFunceble.database.credential.postgresql

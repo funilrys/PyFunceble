@@ -4,7 +4,10 @@ sphinx_rtd_theme
 Pygments>=2.0
 
 # Mkdocs
-mkdocs
+mkdocs~=1.4.4
 mkdocstrings[python]
 mkdocs-material
 mkdocs-git-revision-date-localized-plugin
+mkdocs-gen-files
+mkdocs-literate-nav
+mkdocs-section-index

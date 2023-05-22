@@ -1,0 +1,1 @@
+::: PyFunceble.config.compare

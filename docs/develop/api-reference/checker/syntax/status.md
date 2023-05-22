@@ -1,0 +1,1 @@
+::: PyFunceble.checker.syntax.status
