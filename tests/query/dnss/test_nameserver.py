@@ -487,12 +487,14 @@ class TestNameserver(unittest.TestCase):
         expected_nameserver = [
             "9.9.9.10",
             "149.112.112.10",
-            "2620:fe::10, 2620:fe::fe:10"
+            "2620:fe::10",
+            "2620:fe::fe:10",
         ]
         expected_nameserver_port = {
             "9.9.9.10": 53,
             "149.112.112.10": 53,
-            "2620:fe::10, 2620:fe::fe:10": 53
+            "2620:fe::10": 53,
+            "2620:fe::fe:10": 53,
         }
 
         self.config_loader.set_custom_config({"dns": {"server": []}}).start()

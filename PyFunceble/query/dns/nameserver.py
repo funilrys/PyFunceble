@@ -67,7 +67,12 @@ class Nameservers:
     Provides an interface to get the right nameserver to communicate with.
     """
 
-    DEFAULT_NAMESERVERS: List[str] = ["9.9.9.10", "149.112.112.10"]
+    DEFAULT_NAMESERVERS: List[str] = [
+        "9.9.9.10",
+        "149.112.112.10",
+        "2620:fe::10",
+        "2620:fe::fe:10",
+    ]
 
     nameservers: Optional[List[str]] = None
     nameserver_ports: Optional[dict] = None
