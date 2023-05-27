@@ -81,6 +81,7 @@ from PyFunceble.query.http_status_code import HTTPStatusCode
 from PyFunceble.query.netinfo.address import AddressInfo
 from PyFunceble.query.netinfo.hostbyaddr import HostByAddrInfo
 from PyFunceble.query.whois.query_tool import WhoisQueryTool
+from PyFunceble.checker.availability.extras.etoxic import EToxicHandler
 
 
 class AvailabilityCheckerBase(CheckerBase):
@@ -173,6 +174,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.extra_rules_handlers = [
             SubjectSwitchRulesHandler(),
             DNSRulesHandler(),
+            EToxicHandler(),
             ExtraRulesHandler(),
         ]
         self.db_session = db_session

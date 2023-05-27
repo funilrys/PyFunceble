@@ -316,8 +316,9 @@ class ExtraRuleHandlerBase:
             matches2search_result = {}
 
             for header, loc_matches in matches:
+                matches2search_result[header] = False
+
                 if header not in _req.headers:
-                    matches2search_result[header] = False
                     continue
 
                 if matcher(
@@ -329,22 +330,23 @@ class ExtraRuleHandlerBase:
                     matches2search_result[header] = True
                     continue
 
-            if matcher(matches2search_result.values()):
+            if matcher(x for x in matches2search_result.values()):
                 method()
 
         def handle_string_match_mode(_req: requests.Response):
             matches2search_result = {}
 
-            for header, loc_matches in matches:
+            for header, loc_matches in matches.items():
+                matches2search_result[header] = False
+
                 if header not in _req.headers:
-                    matches2search_result[header] = False
                     continue
 
                 if matcher(x in _req.headers[header] for x in loc_matches):
                     matches2search_result[header] = True
                     continue
 
-            if matcher(matches2search_result.values()):
+            if matcher(x for x in matches2search_result.values()):
                 method()
 
         try:
