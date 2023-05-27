@@ -67,9 +67,9 @@ if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
         f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
         f"{colorama.Style.RESET_ALL} "
         f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"https://pyfunceble.github.io/#/contributors{colorama.Style.RESET_ALL} "
         f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+        f"https://pyfunceble.github.io/#/special-thanks{colorama.Style.RESET_ALL}"
     )
 
     ASCII_PYFUNCEBLE = """
@@ -88,9 +88,9 @@ else:
         f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
         f"{colorama.Style.RESET_ALL} "
         f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"https://pyfunceble.github.io/#/contributors{colorama.Style.RESET_ALL} "
         f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+        f"https://pyfunceble.github.io/#/special-thanks{colorama.Style.RESET_ALL}"
     )
     ASCII_PYFUNCEBLE = """
     ########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
