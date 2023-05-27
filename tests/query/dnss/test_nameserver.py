@@ -485,14 +485,16 @@ class TestNameserver(unittest.TestCase):
         get_default_resolver_patch.side_effect = fake_get_default_resolver
 
         expected_nameserver = [
-            "1.1.1.1",
-            "8.8.8.8",
-            "9.9.9.9",
+            "9.9.9.10",
+            "149.112.112.10",
+            "2620:fe::10",
+            "2620:fe::fe:10",
         ]
         expected_nameserver_port = {
-            "1.1.1.1": 53,
-            "8.8.8.8": 53,
-            "9.9.9.9": 53,
+            "9.9.9.10": 53,
+            "149.112.112.10": 53,
+            "2620:fe::10": 53,
+            "2620:fe::fe:10": 53,
         }
 
         self.config_loader.set_custom_config({"dns": {"server": []}}).start()
