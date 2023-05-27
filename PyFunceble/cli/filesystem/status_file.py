@@ -576,12 +576,27 @@ class StatusFileGenerator(FilesystemDirBase):
         Generates the plain file.
         """
 
+        location = None
+
         if not hasattr(self.status, "ip_syntax") or not self.status.ip_syntax:
             location = os.path.join(
                 self.get_output_basedir(),
                 PyFunceble.cli.storage.OUTPUTS.domains.directory,
                 self.status.status.upper(),
                 PyFunceble.cli.storage.OUTPUTS.domains.filename,
+            )
+
+            self.file_printer.destination = location
+            self.file_printer.dataset = self.status.to_dict()
+            self.file_printer.template_to_use = "plain"
+            self.file_printer.print_interpolated_line()
+
+        if self.status.ip_syntax:
+            location = os.path.join(
+                self.get_output_basedir(),
+                PyFunceble.cli.storage.OUTPUTS.ips.directory,
+                self.status.status.upper(),
+                PyFunceble.cli.storage.OUTPUTS.ips.filename,
             )
 
             self.file_printer.destination = location

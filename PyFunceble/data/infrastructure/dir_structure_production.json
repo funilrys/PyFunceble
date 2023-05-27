@@ -113,6 +113,48 @@
             "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
         }
     },
+    "ips": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n!/ACTIVE/\n!/INACTIVE/\n!/INVALID/\n!/MALICIOUS/\n!/SANE/\n!/VALID/\n",
+            "hash": "a273966a13322ad4da9fbad4bd7247ca046de503de543c6f909e5e2b"
+        }
+    },
+    "ips/ACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "ips/INACTIVE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "ips/INVALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "ips/MALICIOUS": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "ips/SANE": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
+    "ips/VALID": {
+        ".gitignore": {
+            "content": "*\n!.gitignore\n",
+            "hash": "0bd551cb904befcee06b7a99ef7ac54dba91ee21b5944c78759c1e4b"
+        }
+    },
     "logs": {
         ".gitignore": {
             "content": "*\n!.gitignore\n!/date_format/\n!/no_referrer/\n!/percentage/\n!/whois/\n",

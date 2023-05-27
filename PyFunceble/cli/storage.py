@@ -134,6 +134,7 @@ STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 
 UNIX_OUTPUTS: dict = {
     "domains": {"filename": "list"},
+    "ips": {"filename": "list"},
     "hosts": {"filename": "hosts", "ip_filename": "ips"},
     "analytic": {
         "filenames": {
@@ -152,6 +153,7 @@ UNIX_OUTPUTS: dict = {
 
 WIN_OUTPUTS: dict = {
     "domains": {"filename": "list.txt"},
+    "ips": {"filename": "list.txt"},
     "hosts": {"filename": "hosts.txt", "ip_filename": "ips.txt"},
     "analytic": {
         "filenames": {
@@ -170,6 +172,7 @@ WIN_OUTPUTS: dict = {
 
 UNIVERSAL_OUTPUTS: dict = {
     "domains": {"directory": "domains", "filename": "list"},
+    "ips": {"directory": "ips", "filename": "list"},
     "hosts": {"directory": "hosts", "filename": "hosts", "ip_filename": "ips"},
     "analytic": {
         "directories": {
