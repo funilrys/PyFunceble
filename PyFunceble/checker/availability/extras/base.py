@@ -220,6 +220,20 @@ class ExtraRuleHandlerBase:
 
         return self
 
+    def do_request(self, *, allow_redirects: bool = True) -> requests.Response:
+        """
+        Do a request and store its response into the `req` attribute.
+
+        :param bool allow_redirects:
+            Whether we shoold follow the redirection - or not.
+        """
+
+        self.req = PyFunceble.factory.Requester.get(
+            self.req_url, allow_redirects=allow_redirects
+        )
+
+        return self
+
     def do_on_body_match(
         self,
         url: str,
