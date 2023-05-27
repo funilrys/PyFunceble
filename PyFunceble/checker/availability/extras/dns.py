@@ -55,7 +55,6 @@ from typing import Optional
 import PyFunceble.facility
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
-from PyFunceble.helpers.regex import RegexHelper
 
 
 class DNSRulesHandler(ExtraRuleHandlerBase):
@@ -107,30 +106,11 @@ class DNSRulesHandler(ExtraRuleHandlerBase):
             r"wwwhost\.biz|wwwhost\.us|x24hr\.com|xxuz\.com|xxxy\.biz|"
             r"xxxy\.info|ygto\.com|youdontcare\.com|yourtrap\.com|"
             r"zyns\.com|zzux\.com)(\.|)$": [
-                (self._switch_down_if_match, ("SOA", ["abuse.changeip.com."]))
+                (self.switch_down_if_dns_match, ("SOA", ["abuse.changeip.com."]))
             ]
         }
 
         super().__init__(status)
-
-    def _switch_down_if_match(
-        self, query_type: str, matches: list
-    ) -> "DNSRulesHandler":
-        """
-        Tries to switch the status :code:`INACTIVE` if the query matched.
-        """
-
-        result = (
-            self.dns_query_tool.set_query_record_type(query_type)
-            .set_subject(self.status.netloc)
-            .query()
-        )
-
-        for record in result:
-            for match in matches:
-                if match in record:
-                    self.switch_to_down()
-                    break
 
     @ExtraRuleHandlerBase.ensure_status_is_given
     @ExtraRuleHandlerBase.setup_status_before
@@ -149,7 +129,9 @@ class DNSRulesHandler(ExtraRuleHandlerBase):
             if self.status.status_after_extra_rules:
                 break
 
-            if not RegexHelper(regex).match(self.status.netloc, return_match=False):
+            if not self.regex_helper.set_regex(regex).match(
+                self.status.netloc, return_match=False
+            ):
                 break
 
             for ruler, params in rulesets:
