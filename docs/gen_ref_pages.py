@@ -2,12 +2,14 @@
 Generate the code reference pages.
 """
 
+import os
 from pathlib import Path
 
 import mkdocs_gen_files
 
 CODE_PATHS = ["PyFunceble"]
 DOCPATH = "develop/api-references"
+EXCLUDE_MODULES = ["PyFunceble.data"]
 
 nav = mkdocs_gen_files.Nav()
 
@@ -27,9 +29,15 @@ for code_path in CODE_PATHS:
             continue
 
         nav[parts] = doc_path.as_posix()
+        identifier = ".".join(parts)
+
+        if any(f"{x}." in identifier for x in EXCLUDE_MODULES):
+            if os.path.exists(full_doc_path):
+                os.remove(full_doc_path)
+
+            continue
 
         with mkdocs_gen_files.open(full_doc_path, "w") as file_stream:
-            identifier = ".".join(parts)
             print("::: " + identifier, file=file_stream)
 
         mkdocs_gen_files.set_edit_path(full_doc_path, path)

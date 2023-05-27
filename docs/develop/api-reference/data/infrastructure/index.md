@@ -1,1 +1,0 @@
-::: PyFunceble.data.infrastructure

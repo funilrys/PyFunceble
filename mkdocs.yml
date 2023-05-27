@@ -1,0 +1,103 @@
+site_name: PyFunceble
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+  logo: https://github.com/PyFunceble/logo/raw/master/Green/HD/Logomark.png
+  favicon: https://github.com/PyFunceble/logo/raw/master/Green/Favicons/75x75.png
+  features:
+    - navigation.footer
+    - content.action.edit
+    - content.code.copy
+    - navigation.tabs
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+# TOOD: Switch to main branch.
+edit_uri: edit/switch-to-mkdocs/docs/
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/pyfunceble
+
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/u/pyfunceble
+
+copyright: >
+  Copyright &copy; 2017 - 2023 Nissar Chababy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: yes
+      line_spans: __span
+      pygments_lang_class: yes
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: yes
+  - footnotes
+  - tables
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins:
+  - search
+  - offline
+  - autorefs
+  - mkdocstrings:
+      default_handler: python
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - git-revision-date-localized:
+      enable_creation_date: yes
+      fallback_to_build_date: yes
+  - termynal
+
+repo_name: funilrys/PyFunceble
+repo_url: https://github.com/funilrys/PyFunceble
+
+nav:
+  - Home:
+    - index.md
+    - Installation: use/installation.md
+    - Update: use/update.md
+  - User Guides:
+      - Installation: use/installation.md
+      - Update: use/update.md
+      - FAQ: use/faq.md
+      - Known Issues: use/known-issues.md
+  - Developer Guides:
+      - Getting Started: develop/getting-started.md
+      - Checker Reponses: develop/checker-responses.md
+      - Examples:
+        - Domain Availability: develop/examples/domain-availability.md
+        - Domain Syntax: develop/examples/domain-syntax.md
+        - Domain & IP Availability: develop/examples/domain-ip-availability.md
+        - IP Availability: develop/examples/ip-availability.md
+        - IP Syntax: develop/examples/ip-syntax.md
+        - URL Availability: develop/examples/url-availability.md
+        - URL Syntax: develop/examples/url-syntax.md
+        - File Generation: develop/examples/file-generation.md
+      - Code References: develop/api-references/
+  - Contribution Guides:
+      - Contributing: contributing/contributing.md
+      - Code of Conduct: contributing/code-of-conduct.md
+  - About:
+      - History & Origins: about/history.md
+      - License: about/license.md
+      - Contributors: about/contributors.md
+      - Special Thanks: about/special-thanks.md
+  - Get Help: help.md
+  - Support: support.md

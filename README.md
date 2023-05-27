@@ -41,14 +41,43 @@ Happy testing with PyFunceble!
 
 [![image](https://github.com/PyFunceble/gifs/raw/dev/domain.gif)](https://github.com/PyFunceble/gifs/raw/dev/domain.gif)
 
+# Table of Content
+
+- [Installation](#installation)
+  - [Packages \& Versioning](#packages--versioning)
+  - [PyPi - Python Package Index](#pypi---python-package-index)
+    - [pyfunceble](#pyfunceble)
+    - [pyfunceble-dev](#pyfunceble-dev)
+  - [Container Image Registry](#container-image-registry)
+    - [pyfunceble](#pyfunceble-1)
+      - [Docker Hub](#docker-hub)
+    - [pyfunceble-dev](#pyfunceble-dev-1)
+      - [Docker Hub](#docker-hub-1)
+  - [ArchLinux](#archlinux)
+  - [Git Repository](#git-repository)
+    - [pyfunceble](#pyfunceble-2)
+      - [GitHub](#github)
+      - [GitLab](#gitlab)
+    - [pyfunceble-dev](#pyfunceble-dev-2)
+      - [GitHub](#github-1)
+      - [GitLab](#gitlab-1)
+  - [From Source](#from-source)
+- [Usage](#usage)
+- [Documentation as the place to be!](#documentation-as-the-place-to-be)
+- [Supporting the project](#supporting-the-project)
+- [Contributors](#contributors)
+- [Special Thanks](#special-thanks)
+- [License](#license)
+
+
 # Installation
 
 ## Packages & Versioning
 
 This project follows the semver standard.
 
-PyFunceble is distributed through 2 packages that reflects our 2 deployment
-branches. Both packages are stable but with 2 different phylosophies.
+PyFunceble is distributed through 2 packages that reflects our 2 main development and
+deployment branches. Both packages are stable but with 2 different phylosophies.
 Therefore, the choice is up to you.
 
 The 2 packages are `pyfunceble` and `pyfunceble-dev`.
@@ -70,34 +99,70 @@ you should prefer the `pyfunceble-dev` package.
 
 ## PyPi - Python Package Index
 
-For the **`pyfunceble`** package:
+Installing from the Python Package Index is for most people the prefered one - after
+the OS specific packages _(see below)_.
+
+Here is an overview of the packages and where they are hosted.
+
+| Package        | PyPi Link                                |
+|----------------|------------------------------------------|
+| pyfunceble     | https://pypi.org/project/PyFunceble      |
+| pyfunceble-dev | https://pypi.org/project/PyFunceblee-dev |
+
+### pyfunceble
+
+You can install the **pyfunceble** through `pip3`:
 
 ```shell
-pip install --upgrade --pre pyfunceble
-pyfunceble --version
+pip3 install --user pyfunceble
 ```
 
-For the **`pyfunceble-dev`** package:
+### pyfunceble-dev
+
+You can install the  **pyfunceble-dev** package through `pip3`:
 
 ```shell
-pip install --upgrade --pre pyfunceble-dev
-pyfunceble --version
+pip3 install --user pyfunceble-dev
 ```
 
-## Docker Hub
+If you want to help and use the unstable pre-releases, you should install with
+the `--pre` argument.
 
-For the **`pyfunceble`** package:
+```shell
+pip3 install --user --pre pyfunceble-dev
+```
+
+## Container Image Registry
+
+Installing from a Container Image Registry is the way to go if you are in a
+hurry or always want the best from the beat without having to look if an update
+is available. :smile:
+
+Here is an overview of the packages and where they are hosted.
+
+| Host       | Package        | Link                                                                                                     |
+|------------|----------------|----------------------------------------------------------------------------------------------------------|
+| Docker Hub | pyfunceble     | [https://hub.docker.com/r/pyfunceble/pyfunceble](https://hub.docker.com/r/pyfunceble/pyfunceble)         |
+| Docker Hub | pyfunceble-dev | [https://hub.docker.com/r/pyfunceble/pyfunceble-dev](https://hub.docker.com/r/pyfunceble/pyfunceble-dev) |
+
+### pyfunceble
+
+#### Docker Hub
+
+You can install the **pyfunceble** image from Docker Hub through `docker`:
 
 ```shell
 docker pull pyfunceble/pyfunceble
-docker run -it pyfunceble/pyfunceble --version
 ```
 
-For the **`pyfunceble-dev`** package:
+### pyfunceble-dev
+
+#### Docker Hub
+
+You can install the **pyfunceble-dev** image from Docker Hub through `docker`:
 
 ```shell
 docker pull pyfunceble/pyfunceble-dev
-docker run -it pyfunceble/pyfunceble-dev --version
 ```
 
 ## ArchLinux
@@ -105,16 +170,138 @@ docker run -it pyfunceble/pyfunceble-dev --version
 For the **`pyfunceble`** package:
 
 ```shell
-[aur-helper] -S pyfunceble
+aur-helper -S pyfunceble
 pyfunceble --version
 ```
 
 For the **`pyfunceble-dev`** package:
 
 ```shell
-[aur-helper] -S pyfunceble-dev
+aur-helper -S pyfunceble-dev
 pyfunceble --version
 ```
+
+## Git Repository
+
+Installing from a Git Repository with `pip3` is not recommended for general user as
+you will get the latest development patches even before they get published. But if you
+are one of those who always want to be in sync with the latest development patches,
+this is probably for you.
+
+Here is an overview of the packages and where they are hosted.
+
+| Host   | Package        | Repository                                                              |
+|--------|----------------|-------------------------------------------------------------------------|
+| GitHub | pyfunceble     | `git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |
+| GitHub | pyfunceble-dev | `git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev` |
+| GitLab | pyfunceble     | `git+https://gitlab.com/funilrys/PyFunceble.git@master#egg=PyFunceble`  |
+| GitLab | pyfunceble-dev | `git+https://gitlab.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev` |
+
+### pyfunceble
+
+#### GitHub
+
+You can install the **pyfunceble** package from GitHub through `pip3`:
+
+```shell
+pip3 install --user git+https://github.com/funilrys/PyFunceble.git@master#egg=PyFunceble
+```
+
+#### GitLab
+
+You can install the **pyfunceble** package from GitLab through `pip3`:
+
+```shell
+pip3 install --user git+https://gitlab.com/funilrys/PyFunceble.git@master#egg=PyFunceble
+```
+
+### pyfunceble-dev
+
+#### GitHub
+
+You can install the **pyfunceble-dev** package from GitHub through `pip3`:
+
+```shell
+pip3 install --user git+https://github.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev
+```
+
+#### GitLab
+
+You can install the **pyfunceble-dev** package from GitLab through `pip3`:
+
+```shell
+pip3 install --user git+https://gitlab.com/funilrys/PyFunceble.git@dev#egg=PyFunceble-dev
+```
+
+## From Source
+
+Installing from source is not recommended at all as you may need to keep the repository
+up-to-date by yourself.
+
+Here is an overview of the packages and where they are hosted.
+
+| Host   | Package        | Repository                                                              |
+|--------|----------------|------------------------------------------------------------------------------------------------------------|
+| GitHub | pyfunceble     | [https://github.com/funilrys/PyFunceble/tree/master](https://github.com/funilrys/PyFunceble/tree/master)  |
+| GitHub | pyfunceble-dev | [https://github.com/funilrys/PyFunceble/tree/dev](https://github.com/funilrys/PyFunceble/tree/dev)        |
+| GitLab | pyfunceble     | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master)  |
+| GitLab | pyfunceble-dev | [https://gitlab.com/funilrys/PyFunceble/tree/master](https://gitlab.com/funilrys/PyFunceble/tree/master) |
+
+You can install the package from source through `pip3`:
+
+```shell
+cd /path/to/source
+pip3 install --user .
+```
+
+# Usage
+
+After installing PyFunceble, you can use the CLI through the `pyfunceble`
+executable. Here are some examples to get started.
+
+Check the availability of 'example.com'.
+
+    $ pyfunceble -d example.com
+
+Check the availability of 'example.com' with a simple (stdout) output.
+
+    $ pyfunceble -s -d example.com
+
+Check the availability of 'example.com' with extended (stdout) output.
+
+    $ pyfunceble -a -d example.com
+
+Check the availability of 'example.com' and 'example.org'.
+
+    $ pyfunceble -d example.com example.org
+
+Check the availability of 'https://example.com'.
+
+    $ pyfunceble -u https://example.com
+
+Check the availability of 'https://example.com' and 'https://example.org'.
+
+    $ pyfunceble -u https://example.com https://example.com
+
+Check the syntax of 'example.com'.
+
+    $ pyfunceble --syntax -d example.com
+
+Check the reputation of 'example.com'.
+
+    $ pyfunceble --reputation -d example.com
+
+Check the availability of all subjects in the 'myhosts' file.
+
+    $ pyfunceble -f myhosts
+
+Check the availability of all subjects in the 'myhosts' and 'yourhosts' files.
+
+    $ pyfunceble -f myhosts yourhosts
+
+Check the availability of all (decoded) subject of the adblock filter list 'myadblock'.
+
+    $ pyfunceble --adblock -f myadblock
 
 # Documentation as the place to be!
 
@@ -128,12 +315,10 @@ Simply run the following and enjoy the documentation!
 ```shell
 # Install dependencies.
 pip install --user -r requirements.docs.txt
-# Move into the docs directory.
-cd docs/
-# Build Documentation
-make clean html
-# Open Documentation with browser
-palemoon _build/html/index.html
+# Serve documentation locally.
+mkdocs serve
+# Open Documentation with browser.
+palemoon http://127.0.0.1:8000
 ```
 
 **NOTE:** You are also invited to submit changes and improvement to the
