@@ -166,7 +166,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
         for subject in pyf_test_dataset.VALID_SECOND_LVL_DOMAINS:
             self.checker.subject = subject
 
-            self.checker.query_syntax_checker()
+            self.checker.query_common_checker()
 
             # pylint: disable=line-too-long
             expected_true = {

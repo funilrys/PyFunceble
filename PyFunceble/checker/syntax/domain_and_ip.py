@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the base of all our status classes.
+Provides the domains and IP syntax checker.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,48 +50,43 @@ License:
     limitations under the License.
 """
 
-import dataclasses
-import datetime
-from typing import Optional
+from typing import Union
 
-from PyFunceble.checker.complex_json_encoder import ComplexJsonEncoder
-from PyFunceble.checker.params_base import CheckerParamsBase
-from PyFunceble.helpers.dict import DictHelper
+from PyFunceble.checker.syntax.base import SyntaxCheckerBase
+from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 
 
-@dataclasses.dataclass
-class CheckerStatusBase:
+class DomainAndIPSyntaxChecker(SyntaxCheckerBase):
     """
-    Provides the base of all status classes.
+    Provides the interface for checking the syntax of an IP or domain.
+
+    :param str subject:
+        Optional, The subject to work with.
     """
 
-    subject_kind: Optional[str] = None
-
-    subject: Optional[str] = None
-    idna_subject: Optional[str] = None
-    netloc: Optional[str] = None
-
-    status: Optional[str] = None
-    status_source: Optional[str] = None
-
-    tested_at: Optional[datetime.datetime] = None
-
-    params: Optional[CheckerParamsBase] = None
-
-    def to_dict(self) -> dict:
+    @SyntaxCheckerBase.ensure_subject_is_given
+    @SyntaxCheckerBase.update_status_date_after_query
+    def query_status(
+        self,
+    ) -> "DomainAndIPSyntaxChecker":  # pragma: no cover ## Just a switch.
         """
-        Converts the current object to dict.
+        Queries the result without anything more.
         """
 
-        return {
-            x: y if not hasattr(y, "to_dict") else y.to_dict()
-            for x, y in self.__dict__.items()
-            if not x.startswith("__")
-        }
+        query_object: Union[IPSyntaxChecker, DomainSyntaxChecker] = None
 
-    def to_json(self) -> str:
-        """
-        Converts the current object to JSON.
-        """
+        ip_checker = IPSyntaxChecker(self.subject)
 
-        return DictHelper(self.to_dict()).to_json(own_class=ComplexJsonEncoder)
+        if ip_checker.is_valid():
+            query_object = ip_checker
+        else:
+            query_object = DomainSyntaxChecker(self.subject, db_session=self.db_session)
+
+        query_object.collection_query_tool = self.collection_query_tool
+
+        result = query_object.query_status()
+
+        self.__dict__.update(query_object.__dict__)
+
+        return result

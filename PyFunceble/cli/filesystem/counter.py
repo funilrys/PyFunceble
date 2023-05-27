@@ -51,13 +51,14 @@ License:
 """
 
 import copy
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 import PyFunceble.cli.storage
 import PyFunceble.cli.utils.testing
 import PyFunceble.storage
 from PyFunceble.checker.status_base import CheckerStatusBase
 from PyFunceble.cli.filesystem.json_base import FilesystemJSONBase
+from PyFunceble.helpers.list import ListHelper
 
 
 class FilesystemCounter(FilesystemJSONBase):
@@ -103,6 +104,20 @@ class FilesystemCounter(FilesystemJSONBase):
     }
 
     SOURCE_FILE: str = PyFunceble.cli.storage.COUNTER_FILE
+
+    @FilesystemJSONBase.fetch_dataset_beforehand
+    def get_sorted_dataset(self) -> List[Tuple[str, float]]:
+        """
+        Provides the datasets in a sorted manner.
+        """
+
+        return (
+            ListHelper(
+                [(x, y) for x, y in self.dataset["percentage"].items() if x != "total"]
+            )
+            .custom_sort(key_method=lambda x: x[-1], reverse=True)
+            .subject
+        )
 
     @FilesystemJSONBase.fetch_dataset_beforehand
     def get_dataset_for_printer(self) -> List[Dict[str, Union[str, int]]]:
@@ -162,9 +177,13 @@ class FilesystemCounter(FilesystemJSONBase):
         self.dataset["counter"][status.status] += 1
         self.dataset["counter"]["total"] += 1
 
-        self.dataset["percentage"][status.status] = (
-            self.dataset["counter"][status.status] * 100
-        ) / self.dataset["counter"]["total"]
+        for key in self.dataset["percentage"]:
+            if key == "total":
+                continue
+
+            self.dataset["percentage"][key] = (
+                self.dataset["counter"][key] * 100
+            ) / self.dataset["counter"]["total"]
 
         self.dataset["percentage"]["total"] = sum(
             y for x, y in self.dataset["percentage"].items() if x != "total"

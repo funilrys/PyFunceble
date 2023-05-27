@@ -61,7 +61,7 @@ from PyFunceble.checker.availability.url import URLAvailabilityChecker
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.reputation.domain_and_ip import DomainAndIPReputationChecker
 from PyFunceble.checker.reputation.url import URLReputationChecker
-from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.domain_and_ip import DomainAndIPSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
 from PyFunceble.cli.processes.workers.base import WorkerBase
@@ -101,7 +101,7 @@ class TesterWorker(WorkerBase):
         )
 
         self.known_testing_objects = {
-            "SYNTAX": {"domain": DomainSyntaxChecker, "url": URLSyntaxChecker},
+            "SYNTAX": {"domain": DomainAndIPSyntaxChecker, "url": URLSyntaxChecker},
             "AVAILABILITY": {
                 "domain": DomainAndIPAvailabilityChecker,
                 "url": URLAvailabilityChecker,

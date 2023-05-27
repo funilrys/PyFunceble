@@ -50,6 +50,7 @@ License:
     limitations under the License.
 """
 
+import logging
 import os
 from typing import Any, Optional, Union
 
@@ -73,6 +74,8 @@ class EnvironmentVariableHelper:
 
         if env_file_path is not None:
             self.env_file_path = env_file_path
+
+        logging.getLogger("dotenv").setLevel(logging.CRITICAL)
 
     @property
     def name(self) -> Optional[str]:

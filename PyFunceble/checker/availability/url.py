@@ -125,7 +125,7 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         self.status.status = None
 
-        self.query_syntax_checker()
+        self.query_common_checker()
 
         return self
 

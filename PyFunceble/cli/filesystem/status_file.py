@@ -591,7 +591,7 @@ class StatusFileGenerator(FilesystemDirBase):
             self.file_printer.template_to_use = "plain"
             self.file_printer.print_interpolated_line()
 
-        if self.status.ip_syntax:
+        if not hasattr(self.status, "ip_syntax") or self.status.subject_kind == "ip":
             location = os.path.join(
                 self.get_output_basedir(),
                 PyFunceble.cli.storage.OUTPUTS.ips.directory,

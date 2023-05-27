@@ -68,6 +68,11 @@ class URLSyntaxChecker(SyntaxCheckerBase):
         Optional, The subject to work with.
     """
 
+    def subject_propagator(self) -> CheckerBase:
+        self.status.subject_kind = "url"
+
+        return super().subject_propagator()
+
     @staticmethod
     def get_hostname_from_url(url: str) -> Optional[str]:
         """

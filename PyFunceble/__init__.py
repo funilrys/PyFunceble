@@ -63,6 +63,7 @@ from PyFunceble.checker.reputation.domain_and_ip import DomainAndIPReputationChe
 from PyFunceble.checker.reputation.ip import IPReputationChecker
 from PyFunceble.checker.reputation.url import URLReputationChecker
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.domain_and_ip import DomainAndIPSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.ipv4 import IPv4SyntaxChecker
 from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker
