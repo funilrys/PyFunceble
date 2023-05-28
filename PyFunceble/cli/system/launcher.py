@@ -61,7 +61,7 @@ import os
 import secrets
 import sys
 import traceback
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 
 import colorama
 import domain2idna
