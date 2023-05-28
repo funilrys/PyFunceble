@@ -284,9 +284,6 @@ share_logs: False
 
 user_agent:
   # Provides everything related to the user agent choice.
-  # Note:
-  #   Please report to https://git.io/JLWe5 for more insight about the
-  #   browser and platform available..
 
   browser: chrome
   platform: linux

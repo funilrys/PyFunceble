@@ -85,7 +85,7 @@ USER_AGENT_DUMP_LINK: str = (
 )
 IPV4_REPUTATION_DUMP_LINK: str = "https://reputation.alienvault.com/reputation.data"
 
-SHORT_REPO_LINK: str = "https://git.io/vpZoI"
+SHORT_REPO_LINK: str = "https://pyfunceble.github.io"
 REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
 NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"
