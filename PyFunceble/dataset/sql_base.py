@@ -121,7 +121,7 @@ class SQLDBDatasetBase(DBDatasetBase):
             yield row
 
     @DBDatasetBase.execute_if_authorized(None)
-    def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
+    def update(self, row, *, ignore_if_exist: bool = False) -> "SQLDBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
@@ -168,7 +168,7 @@ class SQLDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def remove(self, row) -> "MariaDBDatasetBase":
+    def remove(self, row) -> "SQLDBDatasetBase":
         """
         Removes the given dataset from the database.
 
@@ -276,7 +276,7 @@ class SQLDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def add(self, row) -> "MariaDBDatasetBase":
+    def add(self, row) -> "SQLDBDatasetBase":
         """
         Adds the given dataset into the database.
 

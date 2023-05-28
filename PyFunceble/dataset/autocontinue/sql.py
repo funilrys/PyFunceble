@@ -70,7 +70,7 @@ class SQLDBContinueDataset(SQLDBDatasetBase, ContinueDatasetBase):
 
     @SQLDBDatasetBase.execute_if_authorized(None)
     # pylint: disable=arguments-differ
-    def cleanup(self, *, session_id: str) -> "MariaDBContinueDataset":
+    def cleanup(self, *, session_id: str) -> "SQLDBContinueDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are
         needed anymore.

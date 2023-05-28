@@ -57,8 +57,8 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 import PyFunceble.cli.facility
+import PyFunceble.database.sqlalchemy.all_schemas
 import PyFunceble.facility
-from PyFunceble.database.sqlalchemy.all_schemas import Continue, Inactive, WhoisRecord
 from PyFunceble.database.sqlalchemy.base_schema import SchemaBase
 
 config = context.config
