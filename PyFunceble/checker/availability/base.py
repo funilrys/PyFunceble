@@ -64,6 +64,7 @@ import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
 from PyFunceble.checker.availability.extras.dns import DNSRulesHandler
+from PyFunceble.checker.availability.extras.etoxic import EToxicHandler
 from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
 from PyFunceble.checker.availability.extras.subject_switch import (
     SubjectSwitchRulesHandler,
@@ -173,6 +174,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.extra_rules_handlers = [
             SubjectSwitchRulesHandler(),
             DNSRulesHandler(),
+            EToxicHandler(),
             ExtraRulesHandler(),
         ]
         self.db_session = db_session
@@ -514,16 +516,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = self.whois_query_tool.lookup_record
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-        self.status.netloc = self.url2netloc.set_data_to_convert(
-            self.idna_subject
-        ).get_converted()
-        self.status.status = None
-
-        self.query_syntax_checker()
-
-        return self
+        return super().subject_propagator()
 
     def should_we_continue_test(self, status_post_syntax_checker: str) -> bool:
         """
@@ -655,7 +648,7 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    def query_syntax_checker(self) -> "AvailabilityCheckerBase":
+    def query_common_checker(self) -> "AvailabilityCheckerBase":
         """
         Queries the syntax checker.
         """
@@ -683,7 +676,7 @@ class AvailabilityCheckerBase(CheckerBase):
             "Finished to check the syntax of %r", self.status.idna_subject
         )
 
-        return self
+        return super().query_common_checker()
 
     @CheckerBase.ensure_subject_is_given
     def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:

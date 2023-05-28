@@ -3,7 +3,7 @@ Requirements
 
 Here is the list of requirements:
 
--   Python 3.7.0+
+-   Python 3.8.0+
 -   :code:`alembic`
 -   :code:`colorama`
 -   :code:`cryptography`
@@ -20,12 +20,12 @@ Here is the list of requirements:
 -   :code:`setuptools`
 -   :code:`sqlalchemy`
 
-Python 3.7.0+
+Python 3.8.0+
 ^^^^^^^^^^^^^^
 
-The specification :code:`3.7.0+` is because we test PyFunceble (daily)
-in all (:code:`3.x`) versions from :code:`3.7.0`.
-Otherwise, more semantically, PyFunceble is written for all Python 3.7+
+The specification :code:`3.8.0+` is because we test PyFunceble (daily)
+in all (:code:`3.x`) versions from :code:`3.8.0`.
+Otherwise, more semantically, PyFunceble is written for all Python 3.8+
 version.
 
 :code:`alembic`

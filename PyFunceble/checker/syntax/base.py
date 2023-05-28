@@ -96,13 +96,7 @@ class SyntaxCheckerBase(CheckerBase):
 
         self.status = SyntaxCheckerStatus()
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-        self.status.netloc = self.url2netloc.set_data_to_convert(
-            self.idna_subject
-        ).get_converted()
-
-        return self
+        return super().subject_propagator()
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query

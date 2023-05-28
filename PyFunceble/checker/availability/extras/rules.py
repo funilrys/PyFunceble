@@ -50,8 +50,7 @@ License:
     limitations under the License.
 """
 
-import socket
-from typing import Callable, List, Optional
+from typing import Optional
 
 from box import Box
 
@@ -110,41 +109,12 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         super().__init__(status)
 
-    def __web_regex_handler(
-        self,
-        url: str,
-        regex_list: List[str],
-        method: Callable[..., "ExtraRulesHandler"],
-    ) -> "ExtraRulesHandler":
-        """
-        Handles a web request along with a regex filter.
-        """
-
-        try:
-            req = PyFunceble.factory.Requester.get(url, allow_redirects=True)
-
-            for regex in regex_list:
-                if regex in req.text or RegexHelper(regex).match(
-                    req.text, return_match=False
-                ):
-                    method()
-                    break
-        except (
-            PyFunceble.factory.Requester.exceptions.RequestException,
-            PyFunceble.factory.Requester.exceptions.InvalidURL,
-            PyFunceble.factory.Requester.exceptions.Timeout,
-            PyFunceble.factory.Requester.exceptions.ConnectionError,
-            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
-            socket.timeout,
-        ):
-            pass
-
-        return self
-
     def __regex_registry_handler(self, regex_registry: dict) -> "ExtraRulesHandler":
         """
         Handles the standard regex lookup case.
         """
+
+        regex_helper = RegexHelper()
 
         for (
             regex,
@@ -152,7 +122,9 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
         ) in regex_registry.items():
             broken = False
             for element in data:
-                if not RegexHelper(regex).match(self.status.netloc, return_match=False):
+                if not regex_helper.set_regex(regex).match(
+                    self.status.netloc, return_match=False
+                ):
                     continue
 
                 if isinstance(element, tuple):
@@ -179,14 +151,12 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         regex_blogger = [r"create-blog.g?", r"87065", r"doesn&#8217;t&nbsp;exist"]
 
-        if self.status.idna_subject.startswith(
-            "http:"
-        ) or self.status.idna_subject.startswith("https://"):
-            url = self.status.idna_subject
-        else:
-            url = f"http://{self.status.idna_subject}:80"
-
-        self.__web_regex_handler(url, regex_blogger, self.switch_to_down)
+        self.do_on_body_match(
+            self.req_url,
+            regex_blogger,
+            method=self.switch_to_down,
+            allow_redirects=True,
+        )
 
         return self
 
@@ -200,14 +170,12 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
 
         regex_wordpress = [r"doesn&#8217;t&nbsp;exist", r"no\slonger\savailable"]
 
-        if self.status.idna_subject.startswith(
-            "http:"
-        ) or self.status.idna_subject.startswith("https://"):
-            url = self.status.idna_subject
-        else:
-            url = f"http://{self.status.idna_subject}:80"
-
-        self.__web_regex_handler(url, regex_wordpress, self.switch_to_down)
+        self.do_on_body_match(
+            self.req_url,
+            regex_wordpress,
+            method=self.switch_to_down,
+            allow_redirects=True,
+        )
 
         return self
 
@@ -219,17 +187,14 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             This method assume that we know that we are handling a fc2 domain.
         """
 
-        if self.status.idna_subject.startswith(
-            "http:"
-        ) or self.status.idna_subject.startswith("https://"):
-            url = self.status.idna_subject
-        else:
-            url = f"http://{self.status.idna_subject}:80"
-
-        req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
-
-        if "Location" in req.headers and "error.fc2.com" in req.headers["Location"]:
-            self.switch_to_down()
+        self.do_on_header_match(
+            self.req_url,
+            {"location": ["error.fc2.com"]},
+            method=self.switch_to_down,
+            match_mode="std",
+            strict=True,
+            allow_redirects=False,
+        )
 
         return self
 
@@ -242,14 +207,9 @@ class ExtraRulesHandler(ExtraRuleHandlerBase):
             sub-domain.
         """
 
-        if self.status.idna_subject.startswith(
-            "http:"
-        ) or self.status.idna_subject.startswith("https://"):
-            url = self.status.idna_subject
-        else:
-            url = f"https://{self.status.idna_subject}"
-
-        req = PyFunceble.factory.Requester.get(url, allow_redirects=False)
+        req = PyFunceble.factory.Requester.get(
+            self.req_url_https, allow_redirects=False
+        )
         username = self.status.netloc.replace(".imgur.com", "")
 
         if "Location" in req.headers:

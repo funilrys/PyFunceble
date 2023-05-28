@@ -65,6 +65,8 @@ class CheckerStatusBase:
     Provides the base of all status classes.
     """
 
+    subject_kind: Optional[str] = None
+
     subject: Optional[str] = None
     idna_subject: Optional[str] = None
     netloc: Optional[str] = None

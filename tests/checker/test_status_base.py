@@ -96,6 +96,7 @@ class TestCheckerStatusBase(unittest.TestCase):
 
         expected = {
             "subject": "example.org",
+            "subject_kind": None,
             "idna_subject": "example.org",
             "netloc": "example.org",
             "status": "ACTIVE",
@@ -127,6 +128,7 @@ class TestCheckerStatusBase(unittest.TestCase):
     "status": "ACTIVE",
     "status_source": "Funilrys",
     "subject": "example.org",
+    "subject_kind": null,
     "tested_at": "1970-01-01T00:00:00+00:00"
 }"""
 

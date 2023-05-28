@@ -94,6 +94,11 @@ class Url2Netloc(ConverterBase):
         """
 
         if data:
+            if "[" in data and "]" not in data or "]" in data and "[" not in data:
+                # Own wrapper around "Invalid IPv6 URL" when
+                # http://example.org."] is given (for example.)
+                data = data.replace("[", "").replace("]", "")
+
             return urllib.parse.urlparse(data)
         return None
 

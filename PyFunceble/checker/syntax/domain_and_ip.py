@@ -11,7 +11,7 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the MariaDB management.
+Provides the domains and IP syntax checker.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
@@ -50,60 +50,43 @@ License:
     limitations under the License.
 """
 
-from datetime import datetime, timedelta
-from typing import Generator, Tuple
+from typing import Union
 
-import PyFunceble.cli.factory
-import PyFunceble.sessions
-from PyFunceble.database.sqlalchemy.all_schemas import Continue
-from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
-from PyFunceble.dataset.sql_base import SQLDBDatasetBase
+from PyFunceble.checker.syntax.base import SyntaxCheckerBase
+from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 
 
-class SQLDBContinueDataset(SQLDBDatasetBase, ContinueDatasetBase):
+class DomainAndIPSyntaxChecker(SyntaxCheckerBase):
     """
-    Provides the interface for the management and the Continue dataset unser
-    mariadb.
+    Provides the interface for checking the syntax of an IP or domain.
+
+    :param str subject:
+        Optional, The subject to work with.
     """
 
-    ORM_OBJ: Continue = Continue
-
-    @SQLDBDatasetBase.execute_if_authorized(None)
-    # pylint: disable=arguments-differ
-    def cleanup(self, *, session_id: str) -> "SQLDBContinueDataset":
+    @SyntaxCheckerBase.ensure_subject_is_given
+    @SyntaxCheckerBase.update_status_date_after_query
+    def query_status(
+        self,
+    ) -> "DomainAndIPSyntaxChecker":  # pragma: no cover ## Just a switch.
         """
-        Cleanups the dataset. Meaning that we delete every entries which are
-        needed anymore.
-
-        :param source:
-            The source to delete.
-        :param session_id:
-            The session ID to cleanup.
+        Queries the result without anything more.
         """
 
-        self.db_session.query(self.ORM_OBJ).filter(
-            self.ORM_OBJ.session_id == session_id
-        ).delete(synchronize_session=False)
-        self.db_session.commit()
+        query_object: Union[IPSyntaxChecker, DomainSyntaxChecker] = None
 
-        PyFunceble.facility.Logger.debug(
-            "Deleted data related to %s (session_id", session_id
-        )
+        ip_checker = IPSyntaxChecker(self.subject)
 
-        return self
+        if ip_checker.is_valid():
+            query_object = ip_checker
+        else:
+            query_object = DomainSyntaxChecker(self.subject, db_session=self.db_session)
 
-    @SQLDBDatasetBase.execute_if_authorized(None)
-    def get_to_test(self, session_id: str) -> Generator[Tuple[str], str, None]:
-        twenty_years_ago = datetime.utcnow() - timedelta(days=365.25 * 20)
+        query_object.collection_query_tool = self.collection_query_tool
 
-        result = (
-            self.db_session.query(self.ORM_OBJ)
-            .filter(self.ORM_OBJ.session_id == session_id)
-            .filter(self.ORM_OBJ.tested_at < twenty_years_ago)
-        )
+        result = query_object.query_status()
 
-        for row in result:
-            if not row.idna_subject:
-                continue
+        self.__dict__.update(query_object.__dict__)
 
-            yield row.idna_subject
+        return result

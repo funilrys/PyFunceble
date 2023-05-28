@@ -210,6 +210,7 @@ class TestDBDatasetBase(unittest.TestCase):
         """
 
         self.dataset.authorized = True
+        # pylint: disable=invalid-name
         self.dataset.FIELDS = ["hello", "world", "fun", "state"]
         self.dataset.COMPARISON_FIELDS = ["hello"]
 

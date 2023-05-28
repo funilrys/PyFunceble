@@ -50,13 +50,16 @@ License:
     limitations under the License.
 """
 
+
 import functools
-from typing import Callable, List, Optional, Union
+import socket
+from typing import Callable, Dict, List, Optional, Union
 
 import requests
 
 import PyFunceble.factory
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
+from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 
 
@@ -73,7 +76,7 @@ class ExtraRuleHandlerBase:
     _status: Optional[AvailabilityCheckerStatus] = None
     req: Optional[requests.Response] = None
     dns_query_tool: Optional[DNSQueryTool] = None
-    req_url: Optional[str] = None
+    regex_helper: Optional[RegexHelper] = None
 
     def __init__(self, status: Optional[AvailabilityCheckerStatus] = None) -> None:
         if status is not None:
@@ -82,6 +85,7 @@ class ExtraRuleHandlerBase:
         # Be sure that all settings are loaded proprely!!
         PyFunceble.factory.Requester.guess_all_settings()
         self.dns_query_tool = DNSQueryTool()
+        self.regex_helper = RegexHelper()
 
     def ensure_status_is_given(
         func: Callable[..., "ExtraRuleHandlerBase"]
@@ -157,6 +161,26 @@ class ExtraRuleHandlerBase:
         return wrapper
 
     @property
+    def req_url(self) -> Optional[str]:
+        """
+        Provides a viable request URL.
+        """
+
+        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+            return self.status.idna_subject
+        return f"http://{self.status.idna_subject}:80"
+
+    @property
+    def req_url_https(self) -> Optional[str]:
+        """
+        Provides a viable request URL that default to an HTTPS URL.
+        """
+
+        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
+            return self.status.idna_subject
+        return f"https://{self.status.idna_subject}:443"
+
+    @property
     def status(self) -> Optional[AvailabilityCheckerStatus]:
         """
         Provides the current state of the :code:`_status` attribute.
@@ -204,14 +228,157 @@ class ExtraRuleHandlerBase:
             Whether we shoold follow the redirection - or not.
         """
 
-        if any(self.status.idna_subject.startswith(x) for x in ("http:", "https:")):
-            self.req_url = url = self.status.idna_subject
-        else:
-            self.req_url = url = f"http://{self.status.idna_subject}:80"
-
         self.req = PyFunceble.factory.Requester.get(
-            url, allow_redirects=allow_redirects
+            self.req_url, allow_redirects=allow_redirects
         )
+
+        return self
+
+    def do_on_body_match(
+        self,
+        url: str,
+        matches: List[str],
+        *,
+        method: Callable[..., "ExtraRuleHandlerBase"],
+        match_mode: str = "regex",
+        strict: bool = False,
+        allow_redirects: bool = False,
+    ) -> "ExtraRuleHandlerBase":
+        """
+        Make a request to the given :code:`url` and run the given :code:`method`,
+        if one of the given :code:`matches` matches.
+
+        :param url:
+            The URL to query.
+        :param matches:
+            A list of strings to match.
+        :param match_mode:
+            A matching mode. Use :code:`regex` for a regex match, and anything
+            else for a string match.
+        :param strict:
+            Whether we should match any (:code:`False`) or all (:code:`True`).
+        """
+
+        matcher = any if not strict else all
+
+        def handle_regex_match_mode(_req: requests.Response):
+            if matcher(
+                self.regex_helper.set_regex(x).match(_req.text, return_match=False)
+                for x in matches
+            ):
+                method()
+
+        def handle_string_match_mode(_req: requests.Response):
+            if matcher(x in _req.text for x in matches):
+                method()
+
+        try:
+            req = PyFunceble.factory.Requester.get(url, allow_redirects=allow_redirects)
+
+            if match_mode == "regex":
+                handle_regex_match_mode(req)
+            else:
+                handle_string_match_mode(req)
+        except (
+            PyFunceble.factory.Requester.exceptions.RequestException,
+            PyFunceble.factory.Requester.exceptions.InvalidURL,
+            PyFunceble.factory.Requester.exceptions.Timeout,
+            PyFunceble.factory.Requester.exceptions.ConnectionError,
+            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            socket.timeout,
+        ):
+            pass
+
+        return self
+
+    def do_on_header_match(
+        self,
+        url: str,
+        matches: Dict[str, List[str]],
+        *,
+        method: Callable[..., "ExtraRuleHandlerBase"],
+        match_mode: str = "regex",
+        strict: bool = False,
+        allow_redirects: bool = True,
+    ) -> "ExtraRuleHandlerBase":
+        """
+        Make a request to the given :code:`url` and run the given :code:`method`,
+        if one of the chosen header matches any of the given matches.
+
+        :param url:
+            The URL to query.
+        :param matches:
+            A dict representing the match.
+
+            .. example::
+
+                {
+                    "Location": ["foo", "bar"] // try to match foo or bar
+                }
+        :param match_mode:
+            A matching mode. Use :code:`regex` for a regex match, and anything
+            else for a string match.
+        :param strict:
+            Whether we should match any (:code:`False`) or all (:code:`True`).
+        :param allow_redirects:
+            Whether we should allow redirect.
+        """
+
+        matcher = any if not strict else all
+
+        def handle_regex_match_mode(_req: requests.Response):
+            matches2search_result = {}
+
+            for header, loc_matches in matches:
+                matches2search_result[header] = False
+
+                if header not in _req.headers:
+                    continue
+
+                if matcher(
+                    self.regex_helper.set_regex(x).match(
+                        _req.headers[header], return_match=False
+                    )
+                    for x in loc_matches
+                ):
+                    matches2search_result[header] = True
+                    continue
+
+            if matcher(x for x in matches2search_result.values()):
+                method()
+
+        def handle_string_match_mode(_req: requests.Response):
+            matches2search_result = {}
+
+            for header, loc_matches in matches.items():
+                matches2search_result[header] = False
+
+                if header not in _req.headers:
+                    continue
+
+                if matcher(x in _req.headers[header] for x in loc_matches):
+                    matches2search_result[header] = True
+                    continue
+
+            if matcher(x for x in matches2search_result.values()):
+                method()
+
+        try:
+            req = PyFunceble.factory.Requester.get(url, allow_redirects=allow_redirects)
+
+            if match_mode == "regex":
+                handle_regex_match_mode(req)
+            else:
+                handle_string_match_mode(req)
+        except (
+            PyFunceble.factory.Requester.exceptions.RequestException,
+            PyFunceble.factory.Requester.exceptions.InvalidURL,
+            PyFunceble.factory.Requester.exceptions.Timeout,
+            PyFunceble.factory.Requester.exceptions.ConnectionError,
+            PyFunceble.factory.Requester.urllib3_exceptions.InvalidHeader,
+            socket.timeout,
+        ):
+            pass
 
         return self
 
@@ -261,6 +428,31 @@ class ExtraRuleHandlerBase:
 
         if any(self.status.http_status_code == x for x in status_code):
             self.switch_to_down()
+
+        return self
+
+    def switch_down_if_dns_match(
+        self, query_type: str, matches: list
+    ) -> "ExtraRuleHandlerBase":
+        """
+        Switches the status to inactive if the DNS query of the type :code:`query_type`
+        matches any of the given :code:`matches`.
+
+        :param query_type:
+            A DNS query type.
+        :param matches:
+            A list of string (not regex) to match.
+        """
+
+        for record in (
+            self.dns_query_tool.set_query_record_type(query_type)
+            .set_subject(self.status.netloc)
+            .query()
+        ):
+            for match in matches:
+                if match in record:
+                    self.switch_to_down()
+                    break
 
         return self
 

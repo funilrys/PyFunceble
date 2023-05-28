@@ -50,10 +50,6 @@ License:
     limitations under the License.
 """
 
-from typing import Optional
-
-import requests
-
 import PyFunceble.factory
 import PyFunceble.storage
 from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
@@ -69,29 +65,6 @@ class ParkedRulesHandler(ExtraRuleHandlerBase):
     :type status:
         :class:`~PyFunceble.checker.availability.status.AvailabilityCheckerStatus`
     """
-
-    req: Optional[requests.Response] = None
-
-    def _do_request(self, *, allow_redirects: bool = True) -> "ParkedRulesHandler":
-        """
-        Do a request and store its response into the `req` attribute.
-
-        :param bool allow_redirects:
-            Whether we shoold follow the redirection - or not.
-        """
-
-        if self.status.idna_subject.startswith(
-            "http:"
-        ) or self.status.idna_subject.startswith("https://"):
-            url = self.status.idna_subject
-        else:
-            url = f"http://{self.status.idna_subject}:80"
-
-        self.req = PyFunceble.factory.Requester.get(
-            url, allow_redirects=allow_redirects
-        )
-
-        return self
 
     def _switch_down_by_cookie(self) -> "ParkedRulesHandler":
         """
@@ -142,7 +115,7 @@ class ParkedRulesHandler(ExtraRuleHandlerBase):
         )
 
         try:
-            self._do_request()
+            self.do_request()
 
             if self.status.status_before_extra_rules == PyFunceble.storage.STATUS.up:
                 self._switch_down_by_cookie()

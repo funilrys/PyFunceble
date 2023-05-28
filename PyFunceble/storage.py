@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 from PyFunceble.storage_facility import get_config_directory
 
 PROJECT_NAME: str = "PyFunceble"
-PROJECT_VERSION: str = "4.2.0a9.dev (Blue Duckling: Ixora)"
+PROJECT_VERSION: str = "4.2.0a12.dev (Blue Duckling: Ixora)"
 
 DISTRIBUTED_CONFIGURATION_FILENAME: str = ".PyFunceble_production.yaml"
 DISTRIBUTED_DIR_STRUCTURE_FILENAME: str = "dir_structure_production.json"
@@ -85,7 +85,7 @@ USER_AGENT_DUMP_LINK: str = (
 )
 IPV4_REPUTATION_DUMP_LINK: str = "https://reputation.alienvault.com/reputation.data"
 
-SHORT_REPO_LINK: str = "https://git.io/vpZoI"
+SHORT_REPO_LINK: str = "https://pyfunceble.github.io"
 REPO_LINK: str = "https://github.com/funilrys/PyFunceble"
 
 NOT_RESOLVED_STD_HOSTNAME: str = f"pyfunceble-{secrets.token_hex(12)}.com"

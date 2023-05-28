@@ -7,28 +7,16 @@ This is the list of issues which are not or will not be fixed (yet...).
 * Under GitLab CI/CD the coloration may not be shown.
 
 
-Python < 3.7
+Python < 3.8
 ^^^^^^^^^^^^
 
-    .. versionchanged:: 4.0.0
+    .. versionchanged:: 4.2.0
 
-As of version 4 we no `longer support <../installation/index.html#python-3-7-0>`_
-python prior to version 3.7.
+As of version 4.2.0 we no `longer support <../installation/index.html#python-3-8-0>`_
+python prior to version 3.8.
 
-This means you actually are unable to run with any version below python 3.7
-as a number of build-in features are missing and first introduced in 3.7
-
-The error message you might experience can be:
-
-.. code-block::
-
-    `Fatal Error: type object 'datetime.datetime' has no attribute 'fromisoformat'`
-
-.. code-block::
-
-    `ModuleNotFoundError: No module named 'dataclasses'`
-
-This can typically happens if you are using Ubuntu 18.x or 19.x
+This means you actually are unable to run with any version below python 3.8
+as a number of build-in features may be missing or first introduced in 3.8.
 
 ------
 

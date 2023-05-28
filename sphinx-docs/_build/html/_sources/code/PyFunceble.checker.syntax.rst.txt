@@ -20,6 +20,14 @@ PyFunceble.checker.syntax.domain module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.checker.syntax.domain\_and\_ip module
+------------------------------------------------
+
+.. automodule:: PyFunceble.checker.syntax.domain_and_ip
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.checker.syntax.domain\_base module
 ---------------------------------------------
 

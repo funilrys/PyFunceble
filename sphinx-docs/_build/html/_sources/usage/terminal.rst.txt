@@ -1978,6 +1978,6 @@ Global overview
     you should read the documentation at https://pyfunceble.readthedocs.io/en/dev/
 
     Crafted with ♥ by Nissar Chababy (@funilrys) with the help of
-    https://git.io/JkUPS && https://git.io/JkUPF
+    https://pyfunceble.github.io/#/contributors && https://pyfunceble.github.io/#/special-thanks
 
 .. _RPZ: https://www.mypdns.org/w/rpz/

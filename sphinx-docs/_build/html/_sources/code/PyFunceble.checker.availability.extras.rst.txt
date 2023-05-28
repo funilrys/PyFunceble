@@ -20,6 +20,14 @@ PyFunceble.checker.availability.extras.dns module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.checker.availability.extras.etoxic module
+----------------------------------------------------
+
+.. automodule:: PyFunceble.checker.availability.extras.etoxic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 PyFunceble.checker.availability.extras.parked module
 ----------------------------------------------------
 

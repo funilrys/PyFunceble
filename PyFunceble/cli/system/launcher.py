@@ -116,6 +116,7 @@ from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 from PyFunceble.dataset.autocontinue.base import ContinueDatasetBase
 from PyFunceble.dataset.autocontinue.csv import CSVContinueDataset
 from PyFunceble.dataset.inactive.base import InactiveDatasetBase
+from PyFunceble.helpers.directory import DirectoryHelper
 from PyFunceble.helpers.download import DownloadHelper
 from PyFunceble.helpers.file import FileHelper
 
@@ -654,13 +655,15 @@ class SystemLauncher(SystemBase):
         are proceeses.
         """
 
-        def generate_percentage_file(parent_dirname: str) -> None:
+        def generate_percentage_file(parent_dirname: Union[str, None]) -> None:
             """
             Generates the percentage file.
             """
 
             if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
-                self.counter.set_parent_dirname(parent_dirname)
+                self.counter.set_differ_to_inline(True).set_parent_dirname(
+                    parent_dirname
+                )
 
                 destination = os.path.join(
                     self.counter.get_output_basedir(),
@@ -691,13 +694,15 @@ class SystemLauncher(SystemBase):
 
                         self.stdout_printer.print_interpolated_line()
 
-        def generate_registrar_file(parent_dirname: str) -> None:
+        def generate_registrar_file(parent_dirname: Union[str, None]) -> None:
             """
             Generates the registrar file.
             """
 
             if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
-                self.registrar_counter.set_parent_dirname(parent_dirname)
+                self.registrar_counter.set_differ_to_inline(True).set_parent_dirname(
+                    parent_dirname
+                )
 
                 destination = os.path.join(
                     self.counter.get_output_basedir(),
@@ -732,14 +737,49 @@ class SystemLauncher(SystemBase):
                         self.stdout_printer.print_interpolated_line()
                         registrar_limit += 1
 
+        def print_result_ascii(parent_dirname: Union[str, None]) -> None:
+            """
+            Generates the result repr.
+            """
+
+            # pylint: disable=line-too-long
+            if (
+                not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
+                and not PyFunceble.storage.CONFIGURATION.cli_testing.display_mode.quiet
+                and PyFunceble.cli.utils.stdout.get_template_to_use() != "simple"
+            ):
+                self.counter.set_differ_to_inline(True).set_parent_dirname(
+                    parent_dirname
+                )
+
+                print(
+                    PyFunceble.cli.utils.ascii_logo.get_result_representation(
+                        self.counter.get_sorted_dataset()[0][0]
+                    )
+                )
+
+        no_destination_found = []
+        amount_protocol_without_dest = len(
+            [x["destination"] for x in self.testing_protocol if not x["destination"]]
+        )
+
         for protocol in self.testing_protocol:
             if not protocol["destination"]:
-                continue
+                if any(no_destination_found):
+                    continue
 
-            generate_percentage_file(protocol["destination"])
+                if amount_protocol_without_dest >= 2:
+                    # Show percentage, only if the amount of subjects is > 2.
+                    generate_percentage_file(protocol["destination"])
+            else:
+                generate_percentage_file(protocol["destination"])
 
             if protocol["checker_type"] in self.registrar_counter.SUPPORTED_TEST_MODES:
                 generate_registrar_file(protocol["destination"])
+
+            print_result_ascii(protocol["destination"])
+
+            no_destination_found.append(not protocol["destination"])
 
             # pylint: disable=line-too-long
             if (
@@ -831,6 +871,21 @@ class SystemLauncher(SystemBase):
                 ).delete()
                 PyFunceble.facility.Logger.debug("Deleted: %r.", file_helper.path)
 
+        def remove_inline_dest(protocol: dict) -> None:
+            """
+            Remove the inline destination - when necessary.
+
+            :param protocl:
+                The protocol to work with.
+            """
+
+            if not protocol["destination"]:
+                DirectoryHelper(
+                    self.counter.set_differ_to_inline(True)
+                    .set_parent_dirname(protocol["destination"])
+                    .get_output_basedir()
+                ).delete()
+
         file_helper = FileHelper()
 
         for protocol in self.testing_protocol:
@@ -840,6 +895,7 @@ class SystemLauncher(SystemBase):
 
                 remove_continue_dataset(protocol)
                 remove_preload_dataset(protocol)
+                remove_inline_dest(protocol)
 
         return self
 
@@ -997,6 +1053,7 @@ class SystemLauncher(SystemBase):
                 self.run_ci_end_saving_instructions()
             else:
                 self.run_standard_end_instructions()
+
         except (KeyboardInterrupt, StopExecution):
             pass
         except Exception as exception:  # pylint: disable=broad-except

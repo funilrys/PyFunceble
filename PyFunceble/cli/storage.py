@@ -67,9 +67,9 @@ if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
         f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
         f"{colorama.Style.RESET_ALL} "
         f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"https://pyfunceble.github.io/#/contributors{colorama.Style.RESET_ALL} "
         f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+        f"https://pyfunceble.github.io/#/special-thanks{colorama.Style.RESET_ALL}"
     )
 
     ASCII_PYFUNCEBLE = """
@@ -80,6 +80,28 @@ if PlatformUtility.is_unix() and sys.stdin.encoding == "utf-8":
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
     """
+
+    ASCII_PYUNCEBLE_RESULT = """
+                          █
+                        ████    ██
+                     ███ ██   █████   ███
+               ███ █████    █████   █████
+             ██████████   █████   █████
+           ██████████   █████   ██████   ██
+         ██████████   █████   ██████   ████
+       ███████████████████████████   █████
+      ██████████████████████████   ████
+     ████████ █████ ██████████   █████
+     ███████   ███   ███████   █████
+     █████████████████████   █████
+     ████████████████████  █████
+     ███████         █████████
+      ████████     █████████
+        ██████████████████
+          ██████████████
+               ████
+
+    """
     DONE: str = f"{colorama.Fore.GREEN}✔"
     ERROR: str = f"{colorama.Fore.RED}✘"
 else:
@@ -88,9 +110,9 @@ else:
         f"{colorama.Style.BRIGHT}{colorama.Fore.CYAN}Nissar Chababy (@funilrys)"
         f"{colorama.Style.RESET_ALL} "
         f"with the help of\n{colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPS{colorama.Style.RESET_ALL} "
+        f"https://pyfunceble.github.io/#/contributors{colorama.Style.RESET_ALL} "
         f"&& {colorama.Style.BRIGHT}{colorama.Fore.GREEN}"
-        f"https://git.io/JkUPF{colorama.Style.RESET_ALL}"
+        f"https://pyfunceble.github.io/#/special-thanks{colorama.Style.RESET_ALL}"
     )
     ASCII_PYFUNCEBLE = """
     ########  ##    ## ######## ##     ## ##    ##  ######  ######## ########  ##       ########
@@ -100,7 +122,27 @@ else:
     ##           ##    ##       ##     ## ##  #### ##       ##       ##     ## ##       ##
     ##           ##    ##       ##     ## ##   ### ##    ## ##       ##     ## ##       ##
     ##           ##    ##        #######  ##    ##  ######  ######## ########  ######## ########
-"""
+    """
+    ASCII_PYUNCEBLE_RESULT = """
+                          .
+                        :==:    ::
+                     .:. ..   :-=-.   .:.
+               .:. .-==-    :-=-:   .-==:
+             .-==--==-.   :-=-:   .-==:
+           .-===-==-.   :-=-:   .-==:.   ..
+         .-==-====:   :-==.   .-==:.   :==-
+       .-==--=====-::-==-=:..-==:.   ..--.
+      :===============-=======:.   :-=:
+     :=-===:  .-=-. .-======:.   :==-.
+     -=====.   --:   -====-.   :==-.
+     =======--=====-====:.   :==-.
+     -=====---:::::---==.  :==-.
+     .==--=.         -===-==-.
+      .-==--:      .-=-===-.
+        :-====-----=====-.
+          .:-=======--:.
+               ....
+    """
     DONE: str = f"{colorama.Fore.GREEN}DONE"
     ERROR: str = f"{colorama.Fore.RED}ERROR"
 
@@ -134,6 +176,7 @@ STD_LOGGING_DIRNAME: str = "__pyfunceble_loggging__"
 
 UNIX_OUTPUTS: dict = {
     "domains": {"filename": "list"},
+    "ips": {"filename": "list"},
     "hosts": {"filename": "hosts", "ip_filename": "ips"},
     "analytic": {
         "filenames": {
@@ -152,6 +195,7 @@ UNIX_OUTPUTS: dict = {
 
 WIN_OUTPUTS: dict = {
     "domains": {"filename": "list.txt"},
+    "ips": {"filename": "list.txt"},
     "hosts": {"filename": "hosts.txt", "ip_filename": "ips.txt"},
     "analytic": {
         "filenames": {
@@ -170,6 +214,7 @@ WIN_OUTPUTS: dict = {
 
 UNIVERSAL_OUTPUTS: dict = {
     "domains": {"directory": "domains", "filename": "list"},
+    "ips": {"directory": "ips", "filename": "list"},
     "hosts": {"directory": "hosts", "filename": "hosts", "ip_filename": "ips"},
     "analytic": {
         "directories": {

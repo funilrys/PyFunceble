@@ -346,20 +346,23 @@ class ProducerWorker(WorkerBase):
         Runs the counter of the current file.
         """
 
-        if (
-            test_dataset["destination"]
-            and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
-        ):
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
             # Note: We don't want hidden data to be counted.
 
-            self.counter.set_parent_dirname(test_dataset["destination"]).count(
-                test_result
+            self.counter.set_differ_to_inline(True).set_parent_dirname(
+                test_dataset["destination"]
+            )
+            self.registrar_counter.set_differ_to_inline(True).set_parent_dirname(
+                test_dataset["destination"]
             )
 
+            self.counter.count(test_result)
+
             if hasattr(test_result, "registrar") and test_result.registrar:
-                self.registrar_counter.set_parent_dirname(
-                    test_dataset["destination"]
-                ).count(test_result.registrar)
+                self.registrar_counter.count(test_result.registrar)
+
+            self.counter.set_differ_to_inline(False)
+            self.registrar_counter.set_differ_to_inline(False)
 
     def target(self, consumed: Any) -> Optional[Tuple[Any, ...]]:
         if not isinstance(consumed, tuple):

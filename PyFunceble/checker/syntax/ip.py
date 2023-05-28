@@ -88,14 +88,9 @@ class IPSyntaxChecker(SyntaxCheckerBase):
         self.ipv6_checker.subject = self.idna_subject
 
         self.status = SyntaxCheckerStatus()
+        self.status.subject_kind = "ip"
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-        self.status.netloc = self.url2netloc.set_data_to_convert(
-            self.idna_subject
-        ).get_converted()
-
-        return self
+        return super().subject_propagator()
 
     @CheckerBase.ensure_subject_is_given
     def is_valid(self) -> bool:

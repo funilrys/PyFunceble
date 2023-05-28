@@ -374,11 +374,42 @@ class CheckerBase:
         Propagate the currently set subject.
 
         .. warning::
-            You are not invited to run this method directly.
-
-            Only the :code:`propagate_subject` decorator should call this
-            method.
+            Be sure to use setup your status first.
         """
+
+        self.status.subject = self.subject
+        self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
+        self.status.status = None
+
+        return self.query_common_checker()
+
+    def query_common_checker(self) -> "CheckerBase":
+        """
+        Queries the common checkers.
+
+        .. warning::
+            Be sure to use setup your status first.
+        """
+
+        if not self.status.subject_kind:
+            cls_name = self.__class__.__name__.lower()
+            if (
+                hasattr(self.status, "ip_syntax") and self.status.ip_syntax
+            ) or "ip" in cls_name:
+                self.status.subject_kind = "ip"
+            elif (
+                hasattr(self.status, "url_syntax") and self.status.url_syntax
+            ) or "url" in cls_name:
+                self.status.subject_kind = "url"
+            elif (
+                hasattr(self.status, "domain_syntax") and self.status.domain_syntax
+            ) or "domain" in cls_name:
+                self.status.subject_kind = "domain"
+            else:
+                self.status.subject_kind = "unknown"
 
         return self
 

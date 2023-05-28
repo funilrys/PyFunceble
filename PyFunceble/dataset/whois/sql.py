@@ -121,7 +121,7 @@ class SQLDBWhoisDataset(SQLDBDatasetBase, WhoisDatasetBase):
     @SQLDBDatasetBase.execute_if_authorized(None)
     def update(
         self, row: Union[dict, WhoisRecord], *, ignore_if_exist: bool = False
-    ) -> "MariaDBWhoisDataset":
+    ) -> "SQLDBWhoisDataset":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
@@ -155,7 +155,7 @@ class SQLDBWhoisDataset(SQLDBDatasetBase, WhoisDatasetBase):
         return self
 
     @SQLDBDatasetBase.execute_if_authorized(None)
-    def cleanup(self) -> "MariaDBWhoisDataset":
+    def cleanup(self) -> "SQLDBWhoisDataset":
         """
         Cleanups the dataset. Meaning that we delete every entries which are
         in the past.
