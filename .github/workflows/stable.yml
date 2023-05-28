@@ -260,7 +260,7 @@ jobs:
 
       - name: Get time for cache
         id: cache_time
-        run: echo "::set-output name=time::$(date +%F-%T)"
+        run: echo "time=$(date +%F-%T)" >> ${$GITHUB_OUTPUT}
 
       - name: Set up cache
         uses: actions/cache@master
