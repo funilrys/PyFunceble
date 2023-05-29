@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -347,7 +347,6 @@ class ConfigLoader:
             or self.merge_upstream
             or is_3_x_version(config)
         ):  # pragma: no cover ## Testing the underlying comparison method is sufficent
-
             config = ConfigComparison(
                 local_config=config,
                 upstream_config=self.dict_helper.from_yaml_file(

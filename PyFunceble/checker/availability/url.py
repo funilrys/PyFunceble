@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -119,9 +119,13 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
 
         self.status.subject = self.subject
         self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
+
         self.status.status = None
 
-        self.query_syntax_checker()
+        self.query_common_checker()
 
         return self
 
@@ -272,6 +276,9 @@ class URLAvailabilityChecker(AvailabilityCheckerBase):
                 self.status.idna_subject,
                 self.status.status,
             )
+
+        if self.use_extra_rules:
+            self.try_to_query_status_from_extra_rules()
 
         return self
 

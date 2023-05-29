@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -77,7 +77,6 @@ class CSVInactiveDataset(CSVDatasetBase, InactiveDatasetBase):
     def get_to_retest(
         self, destination: str, checker_type: str, *, min_days: Optional[int]
     ) -> Generator[Tuple[str, str, Optional[int]], dict, None]:
-
         days_ago = datetime.utcnow() - timedelta(days=min_days)
 
         for dataset in self.get_filtered_content(

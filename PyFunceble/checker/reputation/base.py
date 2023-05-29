@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -136,12 +136,7 @@ class ReputationCheckerBase(CheckerBase):
         self.status.params = self.params
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-
-        self.query_syntax_checker()
-
-        return self
+        return super().subject_propagator()
 
     def should_we_continue_test(self, status_post_syntax_checker: str) -> bool:
         """
@@ -153,17 +148,17 @@ class ReputationCheckerBase(CheckerBase):
             or status_post_syntax_checker == PyFunceble.storage.STATUS.invalid
         )
 
-    def query_syntax_checker(self) -> "ReputationCheckerBase":
+    def query_common_checker(self) -> "ReputationCheckerBase":
         """
-        Queries the syntax checker.
+        Queries the common checkers.
         """
 
         self.status.second_level_domain_syntax = (
             self.domain_syntax_checker.is_valid_second_level()
         )
         self.status.subdomain_syntax = self.domain_syntax_checker.is_valid_subdomain()
-        self.status.domain_syntax = bool(
-            self.status.subdomain_syntax or self.status.second_level_domain_syntax
+        self.status.domain_syntax = bool(self.status.subdomain_syntax) or bool(
+            self.status.second_level_domain_syntax
         )
 
         self.status.ipv4_syntax = self.ip_syntax_checker.is_valid_v4()
@@ -173,7 +168,7 @@ class ReputationCheckerBase(CheckerBase):
         self.status.ip_syntax = bool(self.status.ipv4_syntax or self.status.ipv6_syntax)
         self.status.url_syntax = self.url_syntax_checker.is_valid()
 
-        return self
+        return super().query_common_checker()
 
     def query_a_record(self) -> Optional[List[str]]:
         """

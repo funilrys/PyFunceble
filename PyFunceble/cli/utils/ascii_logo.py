@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ import PyFunceble.facility
 import PyFunceble.storage
 
 
-def colorify(color: str) -> str:
+def colorify(color: str, *, text=None) -> str:
     """
     Colorify the logo with the given color.
 
@@ -74,13 +74,16 @@ def colorify(color: str) -> str:
 
     color = color.upper()
 
+    if not text:
+        to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
+    else:
+        to_color = text
+
     if not hasattr(colorama.Fore, color):
         raise ValueError(f"<color> ({color!r}) is not supported.")
 
     color_to_apply = getattr(colorama.Fore, color)
     result = []
-
-    to_color = PyFunceble.cli.storage.ASCII_PYFUNCEBLE
 
     if (
         PyFunceble.facility.ConfigLoader.is_already_loaded()
@@ -99,3 +102,25 @@ def get_home_representation() -> str:
     """
 
     return colorify("yellow")
+
+
+def get_result_representation(status: str) -> str:
+    """
+    Provides our result ASCII logo representation.
+    """
+
+    if status in (
+        PyFunceble.storage.STATUS.up,
+        PyFunceble.storage.STATUS.valid,
+        PyFunceble.storage.STATUS.sane,
+    ):
+        color = "green"
+    elif status in (
+        PyFunceble.storage.STATUS.down,
+        PyFunceble.storage.STATUS.malicious,
+    ):
+        color = "red"
+    else:
+        color = "cyan"
+
+    return colorify(color, text=PyFunceble.cli.storage.ASCII_PYUNCEBLE_RESULT)

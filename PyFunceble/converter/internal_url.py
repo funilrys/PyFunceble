@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -87,6 +87,16 @@ class InternalUrlConverter(ConverterBase):
         Provides the converted data (after conversion)
         """
 
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> str:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
         if VersionUtility(PyFunceble.storage.PROJECT_VERSION).is_dev():
-            return self.data_to_convert.replace("master", "dev")
-        return self.data_to_convert.replace("dev", "master")
+            return data.replace("master", "dev")
+        return data.replace("dev", "master")

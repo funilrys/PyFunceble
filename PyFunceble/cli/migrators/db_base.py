@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,6 +52,8 @@ License:
 
 import functools
 from typing import Any
+
+import sqlalchemy
 
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
@@ -100,27 +102,7 @@ class DBMigratorBase(MigratorBase):
             The name of the table to check.
         """
 
-        statement = (
-            "SELECT COUNT(*) "
-            "FROM information_schema.tables "
-            "WHERE table_schema = :database_name "
-            "AND table_name = :table_name "
-        )
-
-        result = self.db_session.execute(
-            statement,
-            {
-                # pylint: disable=line-too-long
-                "database_name": PyFunceble.cli.facility.CredentialLoader.credential.name,
-                "table_name": table_name,
-            },
-        )
-
-        result = dict(result.fetchone())
-
-        if result["COUNT(*)"] != 1:
-            return False
-        return True
+        return sqlalchemy.inspect(PyFunceble.sessions.DB_ENGINE).has_table(table_name)
 
     def start(self) -> "MigratorBase":
         """

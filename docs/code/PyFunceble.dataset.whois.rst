@@ -20,18 +20,10 @@ PyFunceble.dataset.whois.csv module
    :undoc-members:
    :show-inheritance:
 
-PyFunceble.dataset.whois.mariadb module
----------------------------------------
+PyFunceble.dataset.whois.sql module
+-----------------------------------
 
-.. automodule:: PyFunceble.dataset.whois.mariadb
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyFunceble.dataset.whois.mysql module
--------------------------------------
-
-.. automodule:: PyFunceble.dataset.whois.mysql
+.. automodule:: PyFunceble.dataset.whois.sql
    :members:
    :undoc-members:
    :show-inheritance:

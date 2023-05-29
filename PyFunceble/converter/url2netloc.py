@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ License:
 """
 
 import urllib.parse
-from typing import Any
+from typing import Any, Optional
 
 from PyFunceble.converter.base import ConverterBase
 
@@ -60,6 +60,11 @@ class Url2Netloc(ConverterBase):
     """
     Provides the interface for the conversion/extration of the network location
     of a given URL.
+    """
+
+    parsed_url: Optional[urllib.parse.ParseResult] = None
+    """
+    Expose the parsed URL.
     """
 
     @ConverterBase.data_to_convert.setter
@@ -82,19 +87,56 @@ class Url2Netloc(ConverterBase):
         # pylint: disable=no-member
         super(Url2Netloc, self.__class__).data_to_convert.fset(self, value)
 
+    @staticmethod
+    def parse_single_url(data) -> Optional[urllib.parse.ParseResult]:
+        """
+        Parses the URL.
+        """
+
+        if data:
+            if "[" in data and "]" not in data or "]" in data and "[" not in data:
+                # Own wrapper around "Invalid IPv6 URL" when
+                # http://example.org."] is given (for example.)
+                data = data.replace("[", "").replace("]", "")
+
+            return urllib.parse.urlparse(data)
+        return None
+
+    def parse_url(self) -> "Url2Netloc":
+        """
+        Parses the URL.
+        """
+
+        self.parsed_url = self.parse_single_url(self.data_to_convert)
+
+        return self
+
     def get_converted(self) -> str:
         """
         Provides the converted data (after conversion)
         """
 
-        parsed_url = urllib.parse.urlparse(self.data_to_convert)
+        # Retrocompatibility.
+        self.parse_url()
+
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> str:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
+        parsed_url = self.parse_single_url(data)
 
         if not parsed_url.netloc and parsed_url.path:
             netloc = parsed_url.path
         elif parsed_url.netloc:
             netloc = parsed_url.netloc
         else:  # pragma: no cover ## Safety
-            netloc = self.data_to_convert
+            netloc = data
 
         if "//" in netloc:
             netloc = netloc[netloc.find("//") + 2 :]

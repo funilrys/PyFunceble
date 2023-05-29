@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ import PyFunceble.storage
 from PyFunceble.database.credential.base import CredentialBase
 from PyFunceble.database.credential.mariadb import MariaDBCredential
 from PyFunceble.database.credential.mysql import MySQLCredential
+from PyFunceble.database.credential.postgresql import PostgreSQLCredential
 from PyFunceble.helpers.environment_variable import EnvironmentVariableHelper
 
 
@@ -79,6 +80,7 @@ class CredentialLoader:
         "csv": None,
         "mysql": MySQLCredential,
         "mariadb": MariaDBCredential,
+        "postgresql": PostgreSQLCredential,
     }
 
     credential: Optional[CredentialBase] = None
@@ -261,7 +263,6 @@ class CredentialLoader:
         """
 
         if not isinstance(self.credential, CredentialBase) and self.authorized:
-
             # We directly share the credential object into the DBSession object.
             # This will let us use the DBSession without having to think about
             # any other headache.

@@ -54,18 +54,18 @@ PyFunceble.dataset.ipv4\_reputation module
    :undoc-members:
    :show-inheritance:
 
-PyFunceble.dataset.mariadb\_base module
----------------------------------------
-
-.. automodule:: PyFunceble.dataset.mariadb_base
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 PyFunceble.dataset.public\_suffix module
 ----------------------------------------
 
 .. automodule:: PyFunceble.dataset.public_suffix
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+PyFunceble.dataset.sql\_base module
+-----------------------------------
+
+.. automodule:: PyFunceble.dataset.sql_base
    :members:
    :undoc-members:
    :show-inheritance:

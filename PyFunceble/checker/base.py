@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -61,6 +61,7 @@ import PyFunceble.facility
 import PyFunceble.storage
 from PyFunceble.checker.params_base import CheckerParamsBase
 from PyFunceble.checker.status_base import CheckerStatusBase
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.query.collection import CollectionQueryTool
 
 
@@ -86,6 +87,8 @@ class CheckerBase:
     _subject: Optional[str] = None
     _idna_subject: Optional[str] = None
 
+    url2netloc: Optional[Url2Netloc] = None
+
     db_session: Optional[Session] = None
     collection_query_tool: Optional[CollectionQueryTool] = None
 
@@ -101,6 +104,7 @@ class CheckerBase:
         use_collection: Optional[bool] = None,
     ) -> None:
         self.collection_query_tool = CollectionQueryTool()
+        self.url2netloc = Url2Netloc()
 
         if self.params is None:
             self.params = CheckerParamsBase()
@@ -370,11 +374,42 @@ class CheckerBase:
         Propagate the currently set subject.
 
         .. warning::
-            You are not invited to run this method directly.
-
-            Only the :code:`propagate_subject` decorator should call this
-            method.
+            Be sure to use setup your status first.
         """
+
+        self.status.subject = self.subject
+        self.status.idna_subject = self.idna_subject
+        self.status.netloc = self.url2netloc.set_data_to_convert(
+            self.idna_subject
+        ).get_converted()
+        self.status.status = None
+
+        return self.query_common_checker()
+
+    def query_common_checker(self) -> "CheckerBase":
+        """
+        Queries the common checkers.
+
+        .. warning::
+            Be sure to use setup your status first.
+        """
+
+        if not self.status.subject_kind:
+            cls_name = self.__class__.__name__.lower()
+            if (
+                hasattr(self.status, "ip_syntax") and self.status.ip_syntax
+            ) or "ip" in cls_name:
+                self.status.subject_kind = "ip"
+            elif (
+                hasattr(self.status, "url_syntax") and self.status.url_syntax
+            ) or "url" in cls_name:
+                self.status.subject_kind = "url"
+            elif (
+                hasattr(self.status, "domain_syntax") and self.status.domain_syntax
+            ) or "domain" in cls_name:
+                self.status.subject_kind = "domain"
+            else:
+                self.status.subject_kind = "unknown"
 
         return self
 

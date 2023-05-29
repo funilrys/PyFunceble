@@ -28,6 +28,14 @@ PyFunceble.database.credential.mysql module
    :undoc-members:
    :show-inheritance:
 
+PyFunceble.database.credential.postgresql module
+------------------------------------------------
+
+.. automodule:: PyFunceble.database.credential.postgresql
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ License:
 """
 
 import argparse
-from typing import Optional, Sequence, Text
+from typing import Optional, Sequence
 
 # pylint: disable=raising-bad-type
 
@@ -63,7 +63,7 @@ class OurArgumentParser(argparse.ArgumentParser):
 
     def parse_args(
         self,
-        args: Optional[Sequence[Text]] = None,
+        args: Optional[Sequence[str]] = None,
         namespace: Optional[argparse.Namespace] = None,
     ) -> argparse.Namespace:
         namespace = super().parse_args(args, namespace)

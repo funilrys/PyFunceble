@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -107,7 +107,6 @@ class DirectoryStructureRestoration(DirectoryStructureBase):
                 reduced_path = self.get_path_without_base_dir(root)
 
                 if reduced_path not in backup and root != reduced_path:
-
                     dir_helper.set_path(root).delete()
 
                     PyFunceble.facility.Logger.debug(

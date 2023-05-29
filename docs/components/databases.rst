@@ -36,7 +36,7 @@ Databases types
 
 Since PyFunceble :code:`2.0.0` (equivalent of :code:`>=1.18.0.dev`),
 we offer multiple database types which are (as per configuration) :code:`csv`
-(default since :code:`4.0.0`), :code:`mariadb` and :code:`mysql`.
+(default since :code:`4.0.0`), :code:`mariadb`, :code:`mysql` and :code:`postgresql`.
 
 Why different database types?
 """""""""""""""""""""""""""""
@@ -92,6 +92,61 @@ How to use the :code:`mysql` or :code:`mariadb` format?
 
 4. Switch the :code:`db_type` index of your configuration file to :code:`mysql`
    or :code:`mariadb`.
+5. Play with PyFunceble!
+
+.. note::
+    If the environment variables are not found, you will be asked to prompt the
+    information.
+
+
+How to use the :code:`postgresql` format?
+"""""""""""""""""""""""""""""""""""""""""
+
+1. Create a new user, password and database (optional) for PyFunceble to work
+   with.
+
+2. Create a :code:`.pyfunceble-env` file at the root of your configuration
+   directory.
+
+3. Complete it with the following content (example)
+
+    .. code-block:: console
+
+        PYFUNCEBLE_DB_CHARSET=utf8
+        PYFUNCEBLE_DB_HOST=localhost
+        PYFUNCEBLE_DB_NAME=PyFunceble
+        PYFUNCEBLE_DB_PASSWORD=Hello,World!
+        PYFUNCEBLE_DB_PORT=5432
+        PYFUNCEBLE_DB_USERNAME=pyfunceble
+
+    .. note::
+        Since version :code:`2.4.3.dev` it is possible to use the UNIX socket
+        for the :code:`PYFUNCEBLE_DB_HOST` environment variable.
+
+        The typical location for :code:`s.PGSQL.5432` is
+        :code:`/var/run/postgresql`.
+
+        This have been done to make
+
+        1. It easier to use the :code:`socket` in conjunction with a supported CI
+        environment/platform.
+
+        2. Leaving more space on the IP-stack on local DB installations.
+
+        3. The :code:`UNIX:SOCKET` is usually faster than the IP connection on
+        local runs.
+
+            .. code-block:: console
+
+                PYFUNCEBLE_DB_CHARSET=utf8
+                PYFUNCEBLE_DB_HOST=/var/run/postgresql
+                PYFUNCEBLE_DB_NAME=PyFunceble
+                PYFUNCEBLE_DB_PASSWORD=Hello,World!
+                PYFUNCEBLE_DB_PORT=5432
+                PYFUNCEBLE_DB_USERNAME=pyfunceble
+
+4. Switch the :code:`db_type` index of your configuration file to :code:`postgresql`.
+
 5. Play with PyFunceble!
 
 .. note::

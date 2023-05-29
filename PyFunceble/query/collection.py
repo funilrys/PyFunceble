@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -115,7 +115,6 @@ class CollectionQueryTool:
         url_base: Optional[str] = None,
         preferred_status_origin: Optional[str] = None,
     ) -> None:
-
         if token is not None:
             self.token = token
         else:

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -74,11 +74,23 @@ class DomainAndIPReputationChecker(ReputationCheckerBase):
         """
 
         if self.status.ip_syntax:
-            query_object = IPReputationChecker()
+            query_object = IPReputationChecker(
+                self.subject,
+                do_syntax_check_first=self.do_syntax_check_first,
+                db_session=self.db_session,
+                use_collection=self.use_collection,
+            )
         else:
-            query_object = DomainReputationChecker()
+            query_object = DomainReputationChecker(
+                self.subject,
+                do_syntax_check_first=self.do_syntax_check_first,
+                db_session=self.db_session,
+                use_collection=self.use_collection,
+            )
 
-        query_object.__dict__ = self.__dict__
+        query_object.ipv4_reputation_query_tool = self.ipv4_reputation_query_tool
+        query_object.collection_query_tool = self.collection_query_tool
+        query_object.dns_query_tool = self.dns_query_tool
 
         result = query_object.query_status()
 

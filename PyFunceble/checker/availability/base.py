@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -62,13 +62,20 @@ import PyFunceble.checker.utils.whois
 import PyFunceble.facility
 import PyFunceble.factory
 import PyFunceble.storage
-from PyFunceble.checker.availability.extra_rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.base import ExtraRuleHandlerBase
+from PyFunceble.checker.availability.extras.dns import DNSRulesHandler
+from PyFunceble.checker.availability.extras.etoxic import EToxicHandler
+from PyFunceble.checker.availability.extras.rules import ExtraRulesHandler
+from PyFunceble.checker.availability.extras.subject_switch import (
+    SubjectSwitchRulesHandler,
+)
 from PyFunceble.checker.availability.params import AvailabilityCheckerParams
 from PyFunceble.checker.availability.status import AvailabilityCheckerStatus
 from PyFunceble.checker.base import CheckerBase
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.url import URLSyntaxChecker
+from PyFunceble.converter.url2netloc import Url2Netloc
 from PyFunceble.helpers.regex import RegexHelper
 from PyFunceble.query.dns.query_tool import DNSQueryTool
 from PyFunceble.query.http_status_code import HTTPStatusCode
@@ -126,7 +133,8 @@ class AvailabilityCheckerBase(CheckerBase):
     domain_syntax_checker: Optional[DomainSyntaxChecker] = None
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
     url_syntax_checker: Optional[URLSyntaxChecker] = None
-    extra_rules_handler: Optional[ExtraRulesHandler] = None
+    extra_rules_handlers: Optional[List[ExtraRuleHandlerBase]] = None
+    url2netloc: Optional[Url2Netloc] = None
 
     _use_extra_rules: bool = False
     _use_whois_lookup: bool = False
@@ -162,7 +170,13 @@ class AvailabilityCheckerBase(CheckerBase):
         self.domain_syntax_checker = DomainSyntaxChecker()
         self.ip_syntax_checker = IPSyntaxChecker()
         self.url_syntax_checker = URLSyntaxChecker()
-        self.extra_rules_handler = ExtraRulesHandler()
+        # WARNING: Put the aggressive one first!
+        self.extra_rules_handlers = [
+            SubjectSwitchRulesHandler(),
+            DNSRulesHandler(),
+            EToxicHandler(),
+            ExtraRulesHandler(),
+        ]
         self.db_session = db_session
 
         self.params = AvailabilityCheckerParams()
@@ -502,13 +516,7 @@ class AvailabilityCheckerBase(CheckerBase):
         self.status.dns_lookup_record = self.dns_query_tool.lookup_record
         self.status.whois_lookup_record = self.whois_query_tool.lookup_record
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-        self.status.status = None
-
-        self.query_syntax_checker()
-
-        return self
+        return super().subject_propagator()
 
     def should_we_continue_test(self, status_post_syntax_checker: str) -> bool:
         """
@@ -640,7 +648,7 @@ class AvailabilityCheckerBase(CheckerBase):
 
         return self
 
-    def query_syntax_checker(self) -> "AvailabilityCheckerBase":
+    def query_common_checker(self) -> "AvailabilityCheckerBase":
         """
         Queries the syntax checker.
         """
@@ -668,7 +676,7 @@ class AvailabilityCheckerBase(CheckerBase):
             "Finished to check the syntax of %r", self.status.idna_subject
         )
 
-        return self
+        return super().query_common_checker()
 
     @CheckerBase.ensure_subject_is_given
     def query_dns_record(self) -> Optional[Dict[str, Optional[List[str]]]]:
@@ -1015,6 +1023,36 @@ class AvailabilityCheckerBase(CheckerBase):
             "Finished to try to query the status of %r from: Collection Lookup",
             self.status.idna_subject,
         )
+
+        return self
+
+    def try_to_query_status_from_extra_rules(self) -> "AvailabilityCheckerBase":
+        """
+        Tries to query the status from the extra rules.
+        """
+
+        PyFunceble.facility.Logger.info(
+            "Started to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        if self.use_extra_rules:
+            for rule_handler in self.extra_rules_handlers:
+                rule_handler.set_status(self.status).start()
+
+                if self.status.status_after_extra_rules:
+                    PyFunceble.facility.Logger.info(
+                        "Could define the status of %r from: Extra Rules Lookup",
+                        self.status.idna_subject,
+                    )
+                    break
+
+        PyFunceble.facility.Logger.info(
+            "Finished to try to query the status of %r from: Extra Rules Lookup",
+            self.status.idna_subject,
+        )
+
+        return self
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query

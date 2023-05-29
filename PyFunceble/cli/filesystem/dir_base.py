@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,10 +51,11 @@ License:
 """
 
 import os
-from typing import Optional
+from typing import Optional, Union
 
 import PyFunceble.cli.storage
 from PyFunceble.database.session import DBSession
+from PyFunceble.helpers.directory import DirectoryHelper
 
 
 class FilesystemDirBase:
@@ -64,6 +65,10 @@ class FilesystemDirBase:
 
     _parent_dirname: Optional[str] = None
     db_session: Optional[DBSession] = None
+    # Setting this to true will let you differ to the inline directory.
+    _differ_to_inline: bool = False
+
+    INLINE_DEST: str = "_inline_"
 
     def __init__(
         self,
@@ -87,7 +92,7 @@ class FilesystemDirBase:
         return self._parent_dirname
 
     @parent_dirname.setter
-    def parent_dirname(self, value: str) -> None:
+    def parent_dirname(self, value: Union[str, None]) -> None:
         """
         Sets the parent dirname. The parent dirname is a directory which
         acts a parent into the output directory.
@@ -96,15 +101,15 @@ class FilesystemDirBase:
             The value to set.
 
         :raise TypeError:
-            When the given :code:`value` is not a :py:class:`str`.
+            When the given :code:`value` is not a :py:class:`str` or :py:class:`None`.
         :raise ValueError:
             When the given :code:`value` is empty.
         """
 
-        if not isinstance(value, str):
+        if not isinstance(value, (str, type(None))):
             raise TypeError(f"<value> should be {str}, {type(value)} given.")
 
-        if not value:
+        if value is not None and not value:
             raise ValueError("<value> should not be empty.")
 
         self._parent_dirname = value
@@ -122,6 +127,47 @@ class FilesystemDirBase:
 
         return self
 
+    @property
+    def differ_to_inline(self) -> bool:
+        """
+        Provides the current state of the :code:`_differ_to_inline` attribute.
+        """
+
+        return self._differ_to_inline
+
+    @differ_to_inline.setter
+    def differ_to_inline(self, value: bool) -> None:
+        """
+        Allows/Disallow the split to the inline directory. The attribute can be set
+        when you want to overwrite the behavior of the :code:`get_output_basedir`
+        method.
+
+        :parm value:
+            The value to set.
+
+        :raise TypeError:
+            When the given :code:`value` is not a :py:class:`bool`.
+        """
+
+        if not isinstance(value, bool):
+            raise TypeError(f"<value> should be {bool}, {type(value)} given.")
+
+        self._differ_to_inline = value
+
+    def set_differ_to_inline(self, value: bool) -> "FilesystemDirBase":
+        """
+        Allows/Disallow the split to the inline directory. The attribute can be set
+        when you want to overwrite the behavior of the :code:`get_output_basedir`
+        method.
+
+        :parm value:
+            The value to set.
+        """
+
+        self.differ_to_inline = value
+
+        return self
+
     def get_output_basedir(self) -> str:
         """
         Provides the output base directory.
@@ -131,7 +177,15 @@ class FilesystemDirBase:
         """
 
         if self.parent_dirname:
-            return os.path.join(
+            result = os.path.join(
                 PyFunceble.cli.storage.OUTPUT_DIRECTORY, self.parent_dirname
             )
-        return PyFunceble.cli.storage.OUTPUT_DIRECTORY
+        elif self.differ_to_inline:
+            result = os.path.join(
+                PyFunceble.cli.storage.OUTPUT_DIRECTORY, self.INLINE_DEST
+            )
+        else:
+            result = PyFunceble.cli.storage.OUTPUT_DIRECTORY
+
+        DirectoryHelper(result).create()
+        return result

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,8 +55,7 @@ import unittest
 from PyFunceble.checker.utils import whois
 from PyFunceble.config.loader import ConfigLoader
 from PyFunceble.dataset.whois.csv import CSVWhoisDataset
-from PyFunceble.dataset.whois.mariadb import MariaDBWhoisDataset
-from PyFunceble.dataset.whois.mysql import MySQLWhoisDataset
+from PyFunceble.dataset.whois.sql import SQLDBWhoisDataset
 
 # pylint: disable=unnecessary-lambda
 
@@ -114,7 +113,7 @@ class TestCheckerWhoisUtils(unittest.TestCase):
             {"cli_testing": {"db_type": "mariadb"}}
         ).start()
 
-        expected = MariaDBWhoisDataset
+        expected = SQLDBWhoisDataset
         actual = whois.get_whois_dataset_object()
 
         self.assertIsInstance(actual, expected)
@@ -130,7 +129,23 @@ class TestCheckerWhoisUtils(unittest.TestCase):
             {"cli_testing": {"db_type": "mysql"}}
         ).start()
 
-        expected = MySQLWhoisDataset
+        expected = SQLDBWhoisDataset
+        actual = whois.get_whois_dataset_object()
+
+        self.assertIsInstance(actual, expected)
+
+    def test_get_whois_dataset_obj_postgresql(self) -> None:
+        """
+        Tests of the function which let us get a new WHOIS dataset object.
+
+        In this case, we check the case that the PostgreSQL was declared.
+        """
+
+        self.config_loader.set_custom_config(
+            {"cli_testing": {"db_type": "postgresql"}}
+        ).start()
+
+        expected = SQLDBWhoisDataset
         actual = whois.get_whois_dataset_object()
 
         self.assertIsInstance(actual, expected)

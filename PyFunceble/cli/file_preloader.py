@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -451,7 +451,6 @@ class FilePreloader:
                             url2netloc=self.url2netloc,
                             cidr2subject=self.cidr2subject,
                         ):
-
                             to_send = copy.deepcopy(self.protocol)
                             to_send["subject"] = subject
                             to_send["idna_subject"] = domain2idna(subject)

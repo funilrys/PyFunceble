@@ -1,10 +1,11 @@
-current_version: '4.1.3. (Blue Duckling: Dahlia)'
+current_version: '4.2.0a12.dev (Blue Duckling: Ixora)'
 deprecated:
 - 3.0.21
 - 3.1.20
 - 3.2.13
 - 4.0.0a1
 - 4.1.0b1
+- 4.2.0a1
 force_update:
     minimal_version:
     - 2.58.0
@@ -18,26 +19,6 @@ messages:
             '
         type: info
         until_date: '2021-02-01T00:01:00+00:00'
-    1.0.1:
-    -   message: 'All versions of PyFunceble before 4.0.0a1 (excluded) are soon going
-
-            to reach their End Of Life (EOL).
-
-            Please find more information about it in https://git.io/Jtl6W .
-
-            '
-        type: info
-        until: 3.999.999
-    3.2.0:
-    -   message: '🚨 ⚠️ ⚡ 🚨 A critical bug has been fixed.
-
-            We recommend you to update to PyFunceble v3.2.2 or later!
-
-            Find more about it at: https://git.io/Jfdo
-
-            '
-        type: warning
-        until: 3.2.2
     4.0.0a1:
     -   message: 'You are using the Alpha version of PyFunceble 4.0.0!
 

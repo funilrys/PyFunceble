@@ -11,22 +11,22 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the alembic migrations files.
+Provides our postgresql credential holder.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/special-thanks.html
+    https://pyfunceble.github.io/#/special-thanks
 
 Contributors:
-    https://pyfunceble.github.io/contributors.html
+    https://pyfunceble.github.io/#/contributors
 
 Project link:
     https://github.com/funilrys/PyFunceble
 
 Project documentation:
-    https://pyfunceble.readthedocs.io/en/latest/
+    https://pyfunceble.readthedocs.io/en/dev/
 
 Project homepage:
     https://pyfunceble.github.io/
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,3 +49,26 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
+from PyFunceble.database.credential.base import CredentialBase
+
+
+class PostgreSQLCredential(CredentialBase):
+    """
+    Provides our PostgreSQL credential holder.
+    """
+
+    STD_CHARSET: str = "utf8"
+    protocol: str = "postgresql+psycopg2"
+
+    @CredentialBase.ensure_protocol_is_given
+    def get_uri(self) -> str:
+        """
+        Provides the SQLAlchemy URI.
+        """
+
+        return (
+            f"{self.protocol}://{self.username}:{self.password}"
+            f"@{self.host}/{self.name}"
+            f"?client_encoding={self.charset}"
+        )

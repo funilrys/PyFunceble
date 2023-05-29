@@ -158,6 +158,7 @@ contribution(s) and or issue report which made or make `PyFunceble`_ a better to
 -   Human Being - `@T145`_
 -   Imre Kristoffer Eilertsen - `@DandelionSprout`_
 -   jawz101 - `@jawz101`_
+-   Josenilson Ferreira da SIlva - `@Nilsonfsilva`_
 -   keczuppp - `@keczuppp`_
 -   kowith337 - `@kowith337`_
 -   Mitchell Krog - `@mitchellkrogza`_
@@ -235,7 +236,7 @@ License
 -------
 ::
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -286,6 +287,7 @@ License
 .. _@kowith337: https://github.com/kowith337
 .. _@mitchellkrogza: https://github.com/mitchellkrogza
 .. _@NeolithEra: https://github.com/NeolithEra
+.. _@Nilsonfsilva: https://github.com/Nilsonfsilva
 .. _@Odyseus: https://github.com/Odyseus
 .. _@opav: https://github.com/opav
 .. _@pi-hole: https://github.com/pi-hole/pi-hole

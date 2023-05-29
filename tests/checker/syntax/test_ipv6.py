@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,8 +56,11 @@ from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker
 
 try:
     import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
+    try:
+        from .. import pyf_test_dataset
+    except (ModuleNotFoundError, ImportError):
+        from ... import pyf_test_dataset
 
 
 class TestIPv6SyntaxChecker(unittest.TestCase):

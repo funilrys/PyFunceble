@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -100,11 +100,40 @@ class DomainAndIPAvailabilityChecker(AvailabilityCheckerBase):
         query_object: Union[IPAvailabilityChecker, DomainAvailabilityChecker] = None
 
         if self.status.ip_syntax:
-            query_object = IPAvailabilityChecker()
+            query_object = IPAvailabilityChecker(
+                self.subject,
+                use_extra_rules=self.use_extra_rules,
+                use_whois_lookup=self.use_whois_lookup,
+                use_dns_lookup=self.use_dns_lookup,
+                use_netinfo_lookup=self.use_netinfo_lookup,
+                use_http_code_lookup=self.use_http_code_lookup,
+                use_reputation_lookup=self.use_reputation_lookup,
+                do_syntax_check_first=self.do_syntax_check_first,
+                db_session=self.db_session,
+                use_whois_db=self.use_whois_db,
+                use_collection=self.use_collection,
+            )
         else:
-            query_object = DomainAvailabilityChecker()
+            query_object = DomainAvailabilityChecker(
+                self.subject,
+                use_extra_rules=self.use_extra_rules,
+                use_whois_lookup=self.use_whois_lookup,
+                use_dns_lookup=self.use_dns_lookup,
+                use_netinfo_lookup=self.use_netinfo_lookup,
+                use_http_code_lookup=self.use_http_code_lookup,
+                use_reputation_lookup=self.use_reputation_lookup,
+                do_syntax_check_first=self.do_syntax_check_first,
+                db_session=self.db_session,
+                use_whois_db=self.use_whois_db,
+                use_collection=self.use_collection,
+            )
 
-        query_object.__dict__ = self.__dict__
+        query_object.dns_query_tool = self.dns_query_tool
+        query_object.whois_query_tool = self.whois_query_tool
+        query_object.collection_query_tool = self.collection_query_tool
+        query_object.hostbyaddr_query_tool = self.hostbyaddr_query_tool
+        query_object.addressinfo_query_tool = self.addressinfo_query_tool
+        query_object.http_status_code_query_tool = self.http_status_code_query_tool
 
         result = query_object.query_status()
 

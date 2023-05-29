@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ License:
 """
 # pylint: enable=line-too-long
 
-from typing import List
+from typing import Any, List
 
 from PyFunceble.converter.input_line2subject import InputLine2Subject
 
@@ -70,8 +70,18 @@ class RPZInputLine2Subject(InputLine2Subject):
         Provides the converted data.
         """
 
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> List[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
         result = []
-        subject = self.data_to_convert.strip()
+        subject = data.strip()
 
         if (
             subject

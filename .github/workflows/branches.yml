@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -56,7 +56,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -75,7 +75,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check
+        run: safety check -i 51668
 
   test:
     needs: [lint, deps_safety_check]
@@ -87,10 +87,10 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
           - macos-latest
@@ -132,7 +132,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -153,10 +153,10 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
           - macos-latest
@@ -209,10 +209,10 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -232,3 +232,57 @@ jobs:
 
       - name: Run PyFunceble as defined by tox_run_mariadb.ini
         run: tox -c tox_run_mariadb.ini
+
+  run_cli_postgresql:
+    needs: test
+    name: "[${{ matrix.os }}] Run PyFunceble (with postgresql) with Python ${{ matrix.python_version }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    services:
+      mariadb:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: pyfunceble
+          POSTGRES_PASSWORD: my_pyfunceble_password
+          POSTGRES_DB: pyfunceble
+          MYSQL_ROOT_PASSWORD: my_awesome_root_password
+        options: --health-cmd="pg_isready --host=localhost --username=pyfunceble --port=5432" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    env:
+      PYFUNCEBLE_DB_CHARSET: utf8
+      PYFUNCEBLE_DB_HOST: "127.0.0.1"
+      PYFUNCEBLE_DB_NAME: pyfunceble
+      PYFUNCEBLE_DB_PASSWORD: my_pyfunceble_password
+      PYFUNCEBLE_DB_PORT: "3306"
+      PYFUNCEBLE_DB_USERNAME: pyfunceble
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Clone repository
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install tox psycopg2
+
+      - name: Run PyFunceble as defined by tox_run_postgresql.ini
+        run: tox -c tox_run_postgresql.ini

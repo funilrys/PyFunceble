@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -96,10 +96,7 @@ class SyntaxCheckerBase(CheckerBase):
 
         self.status = SyntaxCheckerStatus()
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-
-        return self
+        return super().subject_propagator()
 
     @CheckerBase.ensure_subject_is_given
     @CheckerBase.update_status_date_after_query

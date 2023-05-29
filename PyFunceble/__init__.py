@@ -34,7 +34,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ from PyFunceble.checker.reputation.domain_and_ip import DomainAndIPReputationChe
 from PyFunceble.checker.reputation.ip import IPReputationChecker
 from PyFunceble.checker.reputation.url import URLReputationChecker
 from PyFunceble.checker.syntax.domain import DomainSyntaxChecker
+from PyFunceble.checker.syntax.domain_and_ip import DomainAndIPSyntaxChecker
 from PyFunceble.checker.syntax.ip import IPSyntaxChecker
 from PyFunceble.checker.syntax.ipv4 import IPv4SyntaxChecker
 from PyFunceble.checker.syntax.ipv6 import IPv6SyntaxChecker

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -53,13 +53,15 @@ License:
 import functools
 from typing import Any, Generator, Tuple
 
+from sqlalchemy.sql import text
+
 import PyFunceble.cli.facility
 import PyFunceble.cli.factory
 import PyFunceble.sessions
-from PyFunceble.cli.migrators.base import MigratorBase
+from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
-class MariaDBMigratorBase(MigratorBase):
+class MariaDBMigratorBase(DBMigratorBase):
     """
     Provides the base of all our mariadb migration.
     """
@@ -81,28 +83,6 @@ class MariaDBMigratorBase(MigratorBase):
 
         return inner_metdhod
 
-    def does_table_exists(self, name: str) -> bool:
-        """
-        Checks if the given table name exists.
-        """
-
-        statement = (
-            "SELECT COUNT(*) "
-            "FROM information_schema.tables "
-            "WHERE table_schema = :database_name "
-            "AND table_name = :table_name "
-        )
-
-        result = self.db_session.execute(
-            statement,
-            {
-                "database_name": PyFunceble.cli.factory.DBSession.credential.name,
-                "table_name": name,
-            },
-        ).fetchone()
-
-        return result["COUNT(*)"] == 1
-
     def get_rows(
         self, statement: str, limit: int = 20
     ) -> Generator[Tuple[str, int], dict, None]:
@@ -116,7 +96,7 @@ class MariaDBMigratorBase(MigratorBase):
         statement += f" LIMIT {limit}"
 
         while True:
-            db_result = list(self.db_session.execute(statement).fetchall())
+            db_result = list(self.db_session.execute(text(statement)).fetchall())
 
             if not db_result:
                 break

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -718,10 +718,10 @@ def get_database_control_group_data() -> List[Tuple[List[str], dict]]:
             {
                 "dest": "cli_testing.db_type",
                 "type": str,
-                "choices": ["csv", "mariadb", "mysql"],
+                "choices": ["csv", "mariadb", "mysql", "postgresql"],
                 "help": "Sets the database engine to use. "
                 "\nYou can choose between the following: "
-                "`csv | mariadb | mysql` %s"
+                "`csv | mariadb | mysql | postgresql` %s"
                 % get_configured_value("cli_testing.db_type"),
             },
         ),

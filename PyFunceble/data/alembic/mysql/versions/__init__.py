@@ -11,16 +11,16 @@ The tool to check the availability or syntax of domain, IP or URL.
     ██║        ██║   ██║     ╚██████╔╝██║ ╚████║╚██████╗███████╗██████╔╝███████╗███████╗
     ╚═╝        ╚═╝   ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚══════╝╚═════╝ ╚══════╝╚══════╝
 
-Provides the interface for the WHOIS DB (mysql) management.
+Provides the alembic migrations files.
 
 Author:
     Nissar Chababy, @funilrys, contactTATAfunilrysTODTODcom
 
 Special thanks:
-    https://pyfunceble.github.io/#/special-thanks
+    https://pyfunceble.github.io/special-thanks.html
 
 Contributors:
-    https://pyfunceble.github.io/#/contributors
+    https://pyfunceble.github.io/contributors.html
 
 Project link:
     https://github.com/funilrys/PyFunceble
@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,12 +49,3 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-from PyFunceble.dataset.whois.mariadb import MariaDBWhoisDataset
-
-
-class MySQLWhoisDataset(MariaDBWhoisDataset):
-    """
-    Provides the interface for the management of the WHOIS database under
-    mysql.
-    """

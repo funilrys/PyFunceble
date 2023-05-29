@@ -97,7 +97,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -140,6 +140,7 @@ def get_requirements(*, mode="standard"):
         "dev": ["requirements.dev.txt"],
         "docs": ["requirements.docs.txt"],
         "test": ["requirements.test.txt"],
+        "psql": ["requirements.txt"],
     }
 
     if is_win_platform():
@@ -176,6 +177,9 @@ def get_requirements(*, mode="standard"):
 
                 result.add(line)
 
+    if mode == "psql":
+        result.add("psycopg2")
+
     return list(result)
 
 
@@ -211,12 +215,13 @@ if __name__ == "__main__":
     setuptools.setup(
         name="PyFunceble",
         version=get_version(),
-        python_requires=">=3.6, <4",
+        python_requires=">=3.8, <4",
         install_requires=get_requirements(mode="standard"),
         extras_require={
             "docs": get_requirements(mode="docs"),
             "dev": get_requirements(mode="dev"),
             "test": get_requirements(mode="test"),
+            "psql": get_requirements(mode="psql"),
             "full": get_requirements(mode="full"),
         },
         description="The tool to check the availability or syntax of domain, IP or URL.",

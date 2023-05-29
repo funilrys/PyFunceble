@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -71,7 +71,7 @@ jobs:
           pip install safety
 
       - name: Check the safety of our dependencies.
-        run: safety check
+        run: safety check -i 51668
 
   test:
     needs: [lint, deps_safety_check]
@@ -83,10 +83,10 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
           - macos-latest
@@ -128,7 +128,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -151,7 +151,7 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
@@ -177,7 +177,7 @@ jobs:
           twine check dist/*
 
       - name: Publish 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
           skip_existing: true
@@ -194,12 +194,12 @@ jobs:
       fail-fast: false
       matrix:
         python_version:
-          - "3.10"
+          - "3.11"
         os:
           - ubuntu-latest
 
     env:
-      DOCKER_PYTHON_VERSION: "3.10"
+      DOCKER_PYTHON_VERSION: "3.11"
       BUILDER_CLONE_DIRNAME: pyfunceble_docker
       OUR_DOCKER_USERNAME: ${{ secrets.OUR_DOCKER_USERNAME }}
       OUR_DOCKER_PASSWORD: ${{ secrets.OUR_DOCKER_PASSWORD }}
@@ -260,7 +260,7 @@ jobs:
 
       - name: Get time for cache
         id: cache_time
-        run: echo "::set-output name=time::$(date +%F-%T)"
+        run: echo "time=$(date +%F-%T)" >> ${$GITHUB_OUTPUT}
 
       - name: Set up cache
         uses: actions/cache@master

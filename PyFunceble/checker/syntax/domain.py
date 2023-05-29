@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -95,11 +95,9 @@ class DomainSyntaxChecker(DomainSyntaxCheckerBase, SyntaxCheckerBase):
         self.subdomain_checker.subject = self.idna_subject
 
         self.status = SyntaxCheckerStatus()
+        self.status.subject_kind = "domain"
 
-        self.status.subject = self.subject
-        self.status.idna_subject = self.idna_subject
-
-        return self
+        return super().subject_propagator()
 
     @DomainSyntaxCheckerBase.ensure_subject_is_given
     def is_valid(self) -> bool:

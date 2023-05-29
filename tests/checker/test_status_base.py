@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ class TestCheckerStatusBase(unittest.TestCase):
         """
 
         self.status = CheckerStatusBase(
-            subject="example.org", idna_subject="example.org"
+            subject="example.org", idna_subject="example.org", netloc="example.org"
         )
 
     def tearDown(self) -> None:
@@ -96,7 +96,9 @@ class TestCheckerStatusBase(unittest.TestCase):
 
         expected = {
             "subject": "example.org",
+            "subject_kind": None,
             "idna_subject": "example.org",
+            "netloc": "example.org",
             "status": "ACTIVE",
             "status_source": "Funilrys",
             "tested_at": test_datetime,
@@ -121,10 +123,12 @@ class TestCheckerStatusBase(unittest.TestCase):
 
         expected = """{
     "idna_subject": "example.org",
+    "netloc": "example.org",
     "params": null,
     "status": "ACTIVE",
     "status_source": "Funilrys",
     "subject": "example.org",
+    "subject_kind": null,
     "tested_at": "1970-01-01T00:00:00+00:00"
 }"""
 

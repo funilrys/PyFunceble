@@ -52,7 +52,7 @@ cli_testing:
   cooldown_time: 0.0
 
   # Sets the Database Connector type to use.
-  # Available: csv | mariadb | mysql
+  # Available: csv | mariadb | mysql | postgresql
   db_type: csv
 
   # Sets the filter to apply while reading the given input.
@@ -284,9 +284,6 @@ share_logs: False
 
 user_agent:
   # Provides everything related to the user agent choice.
-  # Note:
-  #   Please report to https://git.io/JLWe5 for more insight about the
-  #   browser and platform available..
 
   browser: chrome
   platform: linux

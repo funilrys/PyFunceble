@@ -1,6 +1,14 @@
 PyFunceble.checker.availability package
 =======================================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 5
+
+   PyFunceble.checker.availability.extras
+
 Submodules
 ----------
 
@@ -24,14 +32,6 @@ PyFunceble.checker.availability.domain\_and\_ip module
 ------------------------------------------------------
 
 .. automodule:: PyFunceble.checker.availability.domain_and_ip
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyFunceble.checker.availability.extra\_rules module
----------------------------------------------------
-
-.. automodule:: PyFunceble.checker.availability.extra_rules
    :members:
    :undoc-members:
    :show-inheritance:

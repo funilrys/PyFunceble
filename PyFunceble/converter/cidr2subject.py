@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -65,10 +65,18 @@ class CIDR2Subject(ConverterBase):
 
     ip_syntax_checker: Optional[IPSyntaxChecker] = None
 
-    def __init__(self, data_to_convert: Optional[Any] = None) -> None:
+    def __init__(
+        self,
+        data_to_convert: Optional[Any] = None,
+        *,
+        ip_syntax_checker: Optional[IPSyntaxChecker] = None,
+    ) -> None:
         super().__init__(data_to_convert=data_to_convert)
 
-        self.ip_syntax_checker = IPSyntaxChecker()
+        if ip_syntax_checker is None:
+            self.ip_syntax_checker = IPSyntaxChecker()
+        else:
+            self.ip_syntax_checker = ip_syntax_checker
 
     @ConverterBase.data_to_convert.setter
     def data_to_convert(self, value: Any) -> None:
@@ -90,9 +98,19 @@ class CIDR2Subject(ConverterBase):
         Provides the subject-s to test.
         """
 
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> List[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
         result = set()
 
-        subject = self.data_to_convert.strip()
+        subject = data.strip()
 
         if subject:
             try:

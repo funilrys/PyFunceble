@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ import unittest
 from typing import List
 
 from PyFunceble.converter.adblock_input_line2subject import AdblockInputLine2Subject
+from PyFunceble.helpers.regex import RegexHelper
 
 
 class TestAdblockInputLine2Subject(unittest.TestCase):
@@ -289,6 +290,18 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
 
         del self.converter
 
+    def test_init_with_helper(self) -> None:
+        """
+        Tests the initialization with our own helpers.
+        """
+
+        regex_helper = RegexHelper()
+        self.converter = AdblockInputLine2Subject(regex_helper=regex_helper)
+
+        # pylint: disable=protected-access
+        self.assertIsInstance(self.converter._regex_helper, RegexHelper)
+        self.assertEqual(id(regex_helper), id(self.converter._regex_helper))
+
     def test_set_data_to_convert_no_string(self) -> None:
         """
         Tests the method which let us set the data to work with for the case
@@ -389,6 +402,32 @@ class TestAdblockInputLine2Subject(unittest.TestCase):
                 expected_std,
                 actual,
                 f"Aggressive: {self.converter.aggressive} | {given}",
+            )
+
+    def test_convert(self) -> None:
+        """
+        Tests the method which let us convert some data.
+        """
+
+        for test_dataset in self.EXTENDED_TEST_SUBJECT:
+            given = test_dataset["subject"]
+            expected_std = test_dataset["expected"]["standard"]
+            expected_aggressive = test_dataset["expected"]["aggressive"]
+
+            actual = self.converter.convert(given, aggressive=True)
+
+            self.assertEqual(
+                expected_aggressive,
+                actual,
+                f"Aggressive: yes | {given}",
+            )
+
+            actual = self.converter.convert(given, aggressive=False)
+
+            self.assertEqual(
+                expected_std,
+                actual,
+                f"Aggressive: No | {given}",
             )
 
     def test_extract_base(self) -> None:

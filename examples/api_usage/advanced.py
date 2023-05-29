@@ -4,7 +4,7 @@ This is an advanced example which get more information about the tested element.
 
 from PyFunceble import DomainAndIPAvailabilityChecker, URLAvailabilityChecker
 
-SUBJECTS = ["google.com", "github.com", "example.org", "8.8.8.8", "8.8.4.4"]
+SUBJECTS = ["google.com", "github.com", "example.org", "9.9.9.10", "149.112.112.10"]
 
 
 if __name__ == "__main__":

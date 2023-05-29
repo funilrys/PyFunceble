@@ -2,6 +2,7 @@
 !.gitignore
 !Analytic/
 !domains/
+!ips/
 !hosts/
 !logs/
 !splitted/

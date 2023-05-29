@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ import os
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 try:
     import importlib.resources as package_resources
@@ -71,7 +72,7 @@ import PyFunceble.cli.factory
 import PyFunceble.cli.storage
 import PyFunceble.facility
 import PyFunceble.sessions
-from PyFunceble.cli.migrators.mariadb.base import MariaDBMigratorBase
+from PyFunceble.cli.migrators.db_base import DBMigratorBase
 
 
 class Alembic:
@@ -80,14 +81,14 @@ class Alembic:
     """
 
     db_session: Optional[Session] = None
-    migrator_base: Optional[MariaDBMigratorBase] = None
+    migrator_base: Optional[DBMigratorBase] = None
 
     alembic_config: Optional[alembic.config.Config] = None
 
     def __init__(self, db_session: Session) -> None:
         self.db_session = db_session
 
-        self.migrator_base = MariaDBMigratorBase()
+        self.migrator_base = DBMigratorBase()
         self.migrator_base.db_session = db_session
 
     def execute_if_authorized(default: Any = None):  # pylint: disable=no-self-argument
@@ -127,7 +128,11 @@ class Alembic:
             f"PyFunceble.data.{PyFunceble.cli.storage.ALEMBIC_DIRECTORY_NAME}",
             "__init__.py",
         ) as file_path:
-            return os.path.split(file_path)[0]
+            result = os.path.split(file_path)[0]
+
+        if PyFunceble.storage.CONFIGURATION.cli_testing.db_type == "postgresql":
+            return os.path.join(result, "postgresql")
+        return os.path.join(result, "mysql")
 
     @execute_if_authorized(None)
     def configure(self) -> "Alembic":
@@ -160,7 +165,9 @@ class Alembic:
             .revision
         )
 
-        statement = "SELECT * from alembic_version WHERE version_num = :db_revision"
+        statement = text(
+            "SELECT * from alembic_version WHERE version_num = :db_revision"
+        )
 
         result = self.db_session.execute(statement, {"db_revision": revision_id})
 
@@ -204,7 +211,6 @@ class Alembic:
         if not self.migrator_base.does_table_exists(
             "alembic_version"
         ) or self.is_revision_different(revision):
-
             PyFunceble.facility.Logger.info(
                 "Started downgrade (%r) of the database schema(s).", revision
             )

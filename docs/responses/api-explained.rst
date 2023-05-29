@@ -611,6 +611,13 @@ Reputation Checker
 
 Non-existent.
 
+:code:`netloc`
+^^^^^^^^^^^^^^
+
+The network location. It describe the network location of the tested subject.
+This can be useful when working with URLs. When working with URLs the value of
+:code:`netloc` will be in the :code:`domain:port` formet if the port is
+explicitly given and :code:`domain` otherwise.
 
 :code:`whois_lookup_record`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

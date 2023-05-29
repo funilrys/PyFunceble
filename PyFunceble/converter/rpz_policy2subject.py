@@ -36,7 +36,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -68,19 +68,26 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
 
     _soa: Optional[str] = None
     _soas: List[str] = []
+    wilcard2subject: Optional[Wildcard2Subject] = None
 
     def __init__(
         self,
         data_to_convert: Optional[Any] = None,
         soas: Optional[List[str]] = None,
         soa: Optional[str] = None,
+        *,
+        wildcard2subject: Optional[Wildcard2Subject] = None,
     ) -> None:
-
         if soas is not None:
             self.soas = soas
 
         if soa is not None:
             self.soa = soa
+
+        if wildcard2subject is not None:
+            self.wilcard2subject = wildcard2subject
+        else:
+            self.wilcard2subject = Wildcard2Subject()
 
         super().__init__(data_to_convert=data_to_convert)
 
@@ -257,7 +264,17 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
         Provides the converted data.
         """
 
-        subject = self.data_to_convert.strip()
+        return self.convert(self.data_to_convert)
+
+    def convert(self, data: Any) -> Optional[str]:
+        """
+        Converts the given dataset.
+
+        :param data:
+            The data to convert.
+        """
+
+        subject = data.strip()
 
         if (
             subject
@@ -268,7 +285,7 @@ class RPZPolicy2Subject(RPZInputLine2Subject):
                 if comment_sign in subject:
                     subject = self.remove_marker(subject, comment_sign).strip()
 
-            subject = Wildcard2Subject(subject).get_converted()
+            subject = self.wilcard2subject.convert(subject)
 
             if self._soas:
                 for soa in self._soas:

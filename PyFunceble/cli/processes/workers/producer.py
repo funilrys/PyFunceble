@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -215,11 +215,9 @@ class ProducerWorker(WorkerBase):
                     "subject": test_result.subject,
                     "idna_subject": test_result.idna_subject,
                     "expiration_date": test_result.expiration_date,
-                    "epoch": str(
-                        datetime.datetime.strptime(
-                            test_result.expiration_date, "%d-%b-%Y"
-                        ).timestamp()
-                    ),
+                    "epoch": datetime.datetime.strptime(
+                        test_result.expiration_date, "%d-%b-%Y"
+                    ).timestamp(),
                     "registrar": test_result.registrar,
                 }
             )
@@ -348,15 +346,23 @@ class ProducerWorker(WorkerBase):
         Runs the counter of the current file.
         """
 
-        if (
-            test_dataset["destination"]
-            and not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file
-        ):
+        if not PyFunceble.storage.CONFIGURATION.cli_testing.file_generation.no_file:
             # Note: We don't want hidden data to be counted.
 
-            self.counter.set_parent_dirname(test_dataset["destination"]).count(
-                test_result
+            self.counter.set_differ_to_inline(True).set_parent_dirname(
+                test_dataset["destination"]
             )
+            self.registrar_counter.set_differ_to_inline(True).set_parent_dirname(
+                test_dataset["destination"]
+            )
+
+            self.counter.count(test_result)
+
+            if hasattr(test_result, "registrar") and test_result.registrar:
+                self.registrar_counter.count(test_result.registrar)
+
+            self.counter.set_differ_to_inline(False)
+            self.registrar_counter.set_differ_to_inline(False)
 
             if hasattr(test_result, "registrar") and test_result.registrar:
                 self.registrar_counter.set_parent_dirname(

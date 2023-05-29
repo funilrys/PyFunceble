@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -62,9 +62,9 @@ import PyFunceble.sessions
 from PyFunceble.dataset.db_base import DBDatasetBase
 
 
-class MariaDBDatasetBase(DBDatasetBase):
+class SQLDBDatasetBase(DBDatasetBase):
     """
-    Provides the base of all MariaDB stored dataset.
+    Provides the base of all SQLDB stored dataset.
     """
 
     STD_KEEP_SESSION_OPEN: bool = False
@@ -121,7 +121,7 @@ class MariaDBDatasetBase(DBDatasetBase):
             yield row
 
     @DBDatasetBase.execute_if_authorized(None)
-    def update(self, row, *, ignore_if_exist: bool = False) -> "MariaDBDatasetBase":
+    def update(self, row, *, ignore_if_exist: bool = False) -> "SQLDBDatasetBase":
         """
         Adds the given dataset into the database if it does not exists.
         Update otherwise.
@@ -168,7 +168,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def remove(self, row) -> "MariaDBDatasetBase":
+    def remove(self, row) -> "SQLDBDatasetBase":
         """
         Removes the given dataset from the database.
 
@@ -276,7 +276,7 @@ class MariaDBDatasetBase(DBDatasetBase):
 
     @DBDatasetBase.execute_if_authorized(None)
     @ensure_orm_obj_is_given
-    def add(self, row) -> "MariaDBDatasetBase":
+    def add(self, row) -> "SQLDBDatasetBase":
         """
         Adds the given dataset into the database.
 
@@ -309,7 +309,7 @@ class MariaDBDatasetBase(DBDatasetBase):
             new_date = datetime.fromtimestamp(float(row["epoch"]))
             new_date -= new_date - y2k38_limit
 
-            row["epoch"] = str(new_date.timestamp())
+            row["epoch"] = new_date.timestamp()
             row["expiration_date"] = new_date.strftime("%d-%b-%Y")
 
             self.db_session.execute(self.ORM_OBJ.__table__.insert(), row)

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -56,8 +56,11 @@ from PyFunceble.checker.reputation.base import ReputationCheckerStatus
 
 try:
     import pyf_test_dataset
-except ModuleNotFoundError:  # pragma: no cover
-    from .. import pyf_test_dataset
+except (ModuleNotFoundError, ImportError):  # pragma: no cover
+    try:
+        from .. import pyf_test_dataset
+    except (ModuleNotFoundError, ImportError):
+        from ... import pyf_test_dataset
 
 
 try:
@@ -163,7 +166,7 @@ class TestReputationCheckerBase(reputation_test_base.ReputationCheckerTestBase):
         for subject in pyf_test_dataset.VALID_SECOND_LVL_DOMAINS:
             self.checker.subject = subject
 
-            self.checker.query_syntax_checker()
+            self.checker.query_common_checker()
 
             # pylint: disable=line-too-long
             expected_true = {

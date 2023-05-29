@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ License:
 import unittest
 
 from PyFunceble.converter.rpz_policy2subject import RPZPolicy2Subject
+from PyFunceble.converter.wildcard2subject import Wildcard2Subject
 
 try:
     import pyf_test_dataset
@@ -80,6 +81,17 @@ class TestRPZPolicy2Subject(unittest.TestCase):
         """
 
         del self.converter
+
+    def test_init_with_helper(self) -> None:
+        """
+        Tests the initialization with our own helpers.
+        """
+
+        wildcard2subject = Wildcard2Subject()
+        self.converter = RPZPolicy2Subject(wildcard2subject=wildcard2subject)
+
+        self.assertIsInstance(self.converter.wilcard2subject, Wildcard2Subject)
+        self.assertEqual(id(wildcard2subject), id(self.converter.wilcard2subject))
 
     def test_remove_marker(self) -> None:
         """

@@ -35,7 +35,7 @@ License:
 ::
 
 
-    Copyright 2017, 2018, 2019, 2020, 2022 Nissar Chababy
+    Copyright 2017, 2018, 2019, 2020, 2022, 2023 Nissar Chababy
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -66,6 +66,13 @@ class Nameservers:
     """
     Provides an interface to get the right nameserver to communicate with.
     """
+
+    DEFAULT_NAMESERVERS: List[str] = [
+        "9.9.9.10",
+        "149.112.112.10",
+        "2620:fe::10",
+        "2620:fe::fe:10",
+    ]
 
     nameservers: Optional[List[str]] = None
     nameserver_ports: Optional[dict] = None
@@ -247,11 +254,19 @@ class Nameservers:
                 else:
                     self.set_nameservers([PyFunceble.storage.CONFIGURATION.dns.server])
             else:  # pragma: no cover
+                try:
+                    ## Well, I don't like playing with the default resolver.
+                    self.set_nameservers(
+                        dns.resolver.get_default_resolver().nameservers
+                    )
+                except dns.resolver.NoResolverConfiguration:
+                    self.set_nameservers(self.DEFAULT_NAMESERVERS)
+        else:  # pragma: no cover
+            try:
                 ## Well, I don't like playing with the default resolver.
                 self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
-        else:  # pragma: no cover
-            ## Well, I don't like playing with the default resolver.
-            self.set_nameservers(dns.resolver.get_default_resolver().nameservers)
+            except dns.resolver.NoResolverConfiguration:
+                self.set_nameservers(self.DEFAULT_NAMESERVERS)
 
         return self
 
