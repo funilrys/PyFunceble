@@ -213,7 +213,7 @@ def get_long_description():  # pragma: no cover
 
 if __name__ == "__main__":
     setuptools.setup(
-        name="PyFunceble-dev",
+        name="PyFunceble",
         version=get_version(),
         python_requires=">=3.8, <4",
         install_requires=get_requirements(mode="standard"),
