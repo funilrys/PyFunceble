@@ -2,9 +2,9 @@
 
 On this page, you will find any issues that are known and not fixed - yet.
 
-## Language Support
+## Python Support
 
-Any Python version lower than `3.7` are not compatible with PyFunble.
+Any Python version lower than `3.7` are not compatible with PyFunceble.
 
 This means you actually are unable to run any version below Python 3.7 as a
 number of used builtin features are missing and were first introduced in Python 3.7.

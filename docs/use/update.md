@@ -54,7 +54,7 @@ pip3 install --user --pre --upgrade pyfunceble-dev
 ## Container Image Registry
 
 Updating from a Container Image Registry is easier. If you allowed your container
-engine to automatically pull the `lastest` tag, you have nothing to do. The new
+engine to automatically pull the `latest` tag, you have nothing to do. The new
 layers are downloaded before you run PyFunceble.
 
 Here is an overview of the packages and where they are hosted.

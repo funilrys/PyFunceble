@@ -63,6 +63,10 @@ Happy testing with PyFunceble!
       - [GitLab](#gitlab-1)
   - [From Source](#from-source)
 - [Usage](#usage)
+  - [Common Setups](#common-setups)
+  - [Container Image Setups](#container-image-setups)
+    - [Data Persitence](#data-persitence)
+  - [Common Examples](#common-examples)
 - [Documentation as the place to be!](#documentation-as-the-place-to-be)
 - [Supporting the project](#supporting-the-project)
 - [Contributors](#contributors)
@@ -256,8 +260,43 @@ pip3 install --user .
 
 # Usage
 
-After installing PyFunceble, you can use the CLI through the `pyfunceble`
-executable. Here are some examples to get started.
+## Common Setups
+
+If you installed PyFunceble through any other method that doesn't involve a container image, you can use PyFunceble "normally" through the `pyfunceble` executable.
+
+```sh
+pyfunceble --help
+```
+
+
+## Container Image Setups
+
+
+If you installed PyFunceble through the container image registry method, you can run pyfunceble through:
+
+```sh
+docker run -it pyfunceble/pyfunceble[-dev] --help
+```
+
+**Beware:** if the first parameter starts with a slash (`/`), the entrypoint will assume that you want to run a command within the container.
+
+### Data Persitence
+
+If you wish to persist your data, you simply have to mount a volume to the `/home/pyfunceble` directory.
+
+Example:
+
+```sh
+mkdir -p pyf-data
+echo "example.com" > pyf-data/test.list
+
+docker run -v pyf-data:/home/pyfunceble -it pyfunceble/pyfunceble[-dev] -f /home/pyf-data/test.list
+```
+
+
+## Common Examples
+
+Here are some examples to get started.
 
 Check the availability of 'example.com'.
 
